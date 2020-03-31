@@ -1,0 +1,907 @@
+#All are Country Scope unless otherwise stated.
+
+#Sets flags to use when generating advisors, must be used in immediate = { } and be followed by erase_advisor_flags_effect in after = {}
+check_if_non_state_advisor_effect = {
+	#Needs these arguments:
+	#chance_of_primary = State religion
+	#chance_of_secondary = 
+	#chance_of_tertiary = Remaining Heathen Religions
+	#Note: These are not actual chances, they are just weights, the script then uses them differently depending on what region you are in. There is a higher or lower chance of variety depending on where minorities where big historically.
+	
+	hidden_effect = { #Variety - Religious Minorities
+		if = { #Europe
+			limit = {
+				capital_scope = {
+					continent = europe
+				}
+			}
+			random_list = {
+				$chance_of_secondary$ = { set_country_flag = jewish_advisor }
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_secondary$ = { set_country_flag = protestant_or_coptic_advisor }
+				$chance_of_secondary$ = { set_country_flag = reformed_or_orthodox_advisor }
+				$chance_of_tertiary$ = { set_country_flag = heathen_advisor }
+			}
+		}
+		else_if = { #Near East
+			limit = {
+				capital_scope = {
+					OR = {
+						superregion = near_east_superregion
+						region = horn_of_africa_region
+						region = egypt_region
+						region = maghreb_region
+						region = sahel_region
+						region = niger_region
+					}
+				}
+			}
+			random_list = {
+				$chance_of_secondary$ = { set_country_flag = jewish_advisor }
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_secondary$ = { set_country_flag = sunni_advisor }
+				$chance_of_secondary$ = { set_country_flag = shia_advisor }
+				$chance_of_secondary$ = { set_country_flag = ibadi_advisor }
+				$chance_of_secondary$ = { set_country_flag = coptic_advisor }
+				$chance_of_tertiary$ = { set_country_flag = heathen_advisor }
+			}
+		}
+		else_if = { #India and Persia + Fallback for Muslim and Dharmic Groups
+			limit = {
+				capital_scope = {
+					OR = {
+						superregion = persia_superregion
+						superregion = india_superregion
+						religion_group = muslim
+						religion_group = dharmic
+					}
+				}
+			}
+			random_list = { #India and Persia, Somewhat higher chance of non-state
+				$chance_of_tertiary$ = { set_country_flag = jewish_advisor }
+				$chance_of_secondary$ = { set_country_flag = zoroastrian_advisor }
+				$chance_of_secondary$ = { set_country_flag = sikh_advisor }
+				$chance_of_secondary$ = { set_country_flag = sunni_advisor }
+				$chance_of_secondary$ = { set_country_flag = shia_advisor }
+				$chance_of_tertiary$ = { set_country_flag = ibadi_advisor }
+				$chance_of_secondary$ = { set_country_flag = hinduism_advisor }
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_tertiary$ = { set_country_flag = heathen_advisor }
+			}
+		}
+		else_if = { #Sinosphere
+			limit = {
+				NOT = { religion_group = christian }
+				NOT = { religion_group = muslim }
+				capital_scope = {
+					continent = asia #Except the above parts of it
+				}
+			}
+			random_list = { #East Asia has highest chance of non state.
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_primary$ = { set_country_flag = confucian_advisor }
+				$chance_of_secondary$ = { set_country_flag = shinto_advisor }
+				$chance_of_primary$ = { set_country_flag = theravada_advisor }
+				$chance_of_primary$ = { set_country_flag = mahayana_advisor }
+				$chance_of_primary$ = { set_country_flag = vajrayana_advisor }
+				$chance_of_tertiary$ = { set_country_flag = catholic_advisor }
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					continent = new_world #RNW
+				}
+			}
+			random_list = { #East Asia has highest chance of non state.
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_tertiary$ = { set_country_flag = norse_advisor }
+				$chance_of_primary$ = { set_country_flag = totemism_advisor }
+				$chance_of_secondary$ = { set_country_flag = animism_advisor }
+				$chance_of_secondary$ = { set_country_flag = mayan_advisor }
+				$chance_of_secondary$ = { set_country_flag = inca_advisor }
+				$chance_of_secondary$ = { set_country_flag = nahuatl_advisor }
+			}
+		}
+		else_if = {
+			limit = {
+				religion_group = christian #This one is mostly the same as the Europe one.
+			}
+			random_list = {
+				$chance_of_secondary$ = { set_country_flag = jewish_advisor }
+				$chance_of_primary$ = { set_country_flag = state_religion_advisor }
+				$chance_of_secondary$ = { set_country_flag = protestant_or_coptic_advisor }
+				$chance_of_secondary$ = { set_country_flag = reformed_or_orthodox_advisor }
+				$chance_of_tertiary$ = { set_country_flag = heathen_advisor }
+				$chance_of_tertiary$ = { set_country_flag = zoroastrian_advisor }
+			}
+		}
+		else = {
+			set_country_flag = state_religion_advisor
+		}
+	}
+}
+
+erase_advisor_flags_effect = { #Goes into the after = {} effect after check_if_non_state_advisor_effect
+	trigger_switch = {
+		on_trigger = has_country_flag
+		state_religion_advisor = { clr_country_flag = state_religion_advisor }
+		jewish_advisor = { clr_country_flag = jewish_advisor }
+		protestant_or_coptic_advisor = { clr_country_flag = protestant_or_coptic_advisor }
+		reformed_or_orthodox_advisor = { clr_country_flag = reformed_or_orthodox_advisor }
+		heathen_advisor = { clr_country_flag = heathen_advisor }
+		zoroastrian_advisor = { clr_country_flag = zoroastrian_advisor }
+		sikh_advisor = { clr_country_flag = sikh_advisor }
+		confucian_advisor = { clr_country_flag = confucian_advisor }
+		shinto_advisor = { clr_country_flag = shinto_advisor }
+		theravada_advisor = { clr_country_flag = theravada_advisor }
+		mahayana_advisor = { clr_country_flag = mahayana_advisor }
+		vajrayana_advisor = { clr_country_flag = vajrayana_advisor }
+		catholic_advisor = { clr_country_flag = catholic_advisor }
+		hinduism_advisor = { clr_country_flag = hinduism_advisor }
+		ibadi_advisor = { clr_country_flag = ibadi_advisor }
+		shia_advisor = { clr_country_flag = shia_advisor }
+		sunni_advisor = { clr_country_flag = sunni_advisor }
+		coptic_advisor = { clr_country_flag = coptic_advisor }
+		norse_advisor = { clr_country_flag = norse_advisor }
+		animism_advisor = { clr_country_flag = animism_advisor }
+		totemism_advisor = { clr_country_flag = totemism_advisor }
+		inca_advisor = { clr_country_flag = inca_advisor }
+		nahuatl_advisor = { clr_country_flag = nahuatl_advisor }
+		mayan_advisor = { clr_country_flag = mayan_advisor }
+	}
+}
+
+internal_advisor_generation_effect = { #Only used within generate_advisor_of_type_and_semi_random_religion_effect
+#Requires check_if_non_state_advisor_effect in immediate as that gives the arguments to generate_advisor_of_type_and_semi_random_religion_effect that then passes it on to this.
+#$advisor_type$ = Advisor type if state religion.
+#$advisor_type_if_not_state$ = Advisor type if non-state religion.
+#$skill$ = Skill Level
+#$discount$ = yes/no for discount
+	trigger_switch = {
+		on_trigger = has_country_flag #Flags set by check_if_non_state_advisor_effect
+		state_religion_advisor = {
+			define_advisor = {
+				type = $advisor_type$
+				skill = $skill$
+				discount = $discount$
+			}
+		}
+		jewish_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				discount = $discount$
+				religion = jewish
+			}
+		}
+		protestant_or_coptic_advisor = {
+			if = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = reformed
+					}
+					is_religion_enabled = protestant
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = protestant
+				}
+			}
+			else_if = {
+				limit = {
+					religion = catholic
+					NOT = { is_religion_enabled = protestant }
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = orthodox
+				}
+			}
+			else_if = {
+				limit = {
+					religion = protestant
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = catholic
+				}
+			}
+			else_if = {
+				limit = {
+					religion = orthodox
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = coptic
+				}
+			}
+			else_if = {
+				limit = {
+					religion = coptic
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = jewish
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		reformed_or_orthodox_advisor = {
+			if = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = protestant
+					}
+					is_religion_enabled = reformed
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = reformed
+				}
+			}
+			else_if = {
+				limit = {
+					religion = catholic
+					NOT = { is_religion_enabled = reformed }
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = orthodox
+				}
+			}
+			else_if = {
+				limit = {
+					religion = reformed
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = catholic
+				}
+			}
+			else_if = {
+				limit = {
+					religion = orthodox
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = coptic
+				}
+			}
+			else_if = {
+				limit = {
+					religion = coptic
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = orthodox
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		heathen_advisor = {
+			if = {
+				limit = {
+					religion_group = christian
+					capital_scope = { continent = europe }
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = jewish
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = christian
+					capital_scope = { continent = asia }
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = sunni
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = christian
+					capital_scope = { continent = africa }
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = sunni
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = muslim
+					continent = europe
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = catholic
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = muslim
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = coptic
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = eastern #Most likely won't come here but could.
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = animism
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = dharmic #Most likely won't come here but could.
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = animism
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = dharmic #Most likely won't come here but could.
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = animism
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		heathen_advisor = {
+			if = {
+				limit = { religion_group = christian }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = sunni
+				}
+			}
+			else_if = {
+				limit = {
+					religion_group = muslim
+					capital_scope = {
+						OR = {
+							superregion = near_east_superregion
+							continent = europe
+							region = horn_of_africa_region
+						}
+					}
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = catholic
+				}
+			}
+			else_if = {
+				limit = { religion_group = muslim }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = zoroastrian
+				}
+			}
+			else_if = {
+				limit = { religion_group = dharmic }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+					religion = shiite
+					culture = persian
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		zoroastrian_advisor = {
+			if = {
+				limit = { NOT = { religion = zoroastrian } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = zoroastrian
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = hinduism
+					discount = $discount$
+				}
+			}
+		}
+		sikh_advisor = {
+			if = {
+				limit = { religion = sikhism }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = hinduism
+					discount = $discount$
+				}
+			}
+			else_if = {
+				limit = { is_religion_enabled = sikhism }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = sikhism
+					discount = $discount$
+				}
+			}
+			else_if = {
+				limit = { religion = hinduism }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = zoroastrian
+					discount = $discount$
+				}
+			}
+			else_if = {
+				limit = { religion_group = muslim }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = hinduism
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		confucian_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				religion = confucianism
+				discount = $discount$
+			}
+		}
+		shinto_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				religion = shinto
+				discount = $discount$
+			}
+		}
+		theravada_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				religion = buddhism
+				discount = $discount$
+			}
+		}
+		mahayana_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				religion = mahayana
+				discount = $discount$
+			}
+		}
+		vajrayana_advisor = {
+			define_advisor = {
+				type = $advisor_type_if_not_state$
+				skill = $skill$
+				religion = vajrayana
+				discount = $discount$
+			}
+		}
+		catholic_advisor = {
+			if = {
+				limit = {
+					any_province = {
+						religion = catholic
+						has_discovered = ROOT
+					}
+				}
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = catholic
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					discount = $discount$
+				}
+			}
+		}
+		hinduism_advisor = {
+			if = {
+				limit = { NOT = { religion = hinduism } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = hinduism
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = sunni
+					discount = $discount$
+				}
+			}
+		}
+		ibadi_advisor = {
+			if = {
+				limit = { NOT = { religion = ibadi } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = ibadi
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = shiite
+					discount = $discount$
+				}
+			}
+		}
+		shia_advisor = {
+			if = {
+				limit = { NOT = { religion = shiite } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = shiite
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = ibadi
+					discount = $discount$
+				}
+			}
+		}
+		sunni_advisor = {
+			if = {
+				limit = { NOT = { religion = sunni } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = sunni
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = shiite
+					discount = $discount$
+				}
+			}
+		}
+		coptic_advisor = {
+			if = {
+				limit = { NOT = { religion = coptic } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = coptic
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = jewish
+					discount = $discount$
+				}
+			}
+		}
+		norse_advisor = {
+			if = {
+				limit = { NOT = { religion = norse_pagan_reformed } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = norse_pagan_reformed
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = totemism
+					discount = $discount$
+				}
+			}
+		}
+		animism_advisor = {
+			if = {
+				limit = { NOT = { religion = animism } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = animism
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = totemism
+					discount = $discount$
+				}
+			}
+		}
+		totemism_advisor = {
+			if = {
+				limit = { NOT = { religion = totemism } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = totemism
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = animism
+					discount = $discount$
+				}
+			}
+		}
+		mayan_advisor = {
+			if = {
+				limit = { NOT = { religion = mesoamerican_religion } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = mesoamerican_religion
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = nahuatl
+					discount = $discount$
+				}
+			}
+		}
+		nahuatl_advisor = {
+			if = {
+				limit = { NOT = { religion = nahuatl } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = nahuatl
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = mesoamerican_religion
+					discount = $discount$
+				}
+			}
+		}
+		inca_advisor = {
+			if = {
+				limit = { NOT = { religion = inti } }
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = inti
+					discount = $discount$
+				}
+			}
+			else = {
+				define_advisor = {
+					type = $advisor_type_if_not_state$
+					skill = $skill$
+					religion = animism
+					discount = $discount$
+				}
+			}
+		}
+	}
+}
+
+generate_advisor_of_type_and_semi_random_religion_effect = {
+#Actual work is done by internal_advisor_generation_effect above but it goes through this first.
+#Requires check_if_non_state_advisor_effect in immediate.
+#$advisor_type$ = Advisor type if state religion.
+#$advisor_type_if_not_state$ = Advisor type if non-state religion.
+#$scaled_skill$ = yes/no
+#$skill$ = Skill Level
+#$discount$ = yes/no for discount
+	
+	[[scaled_skill]
+		if = {
+			limit = {
+				NOT = { monthly_income = 15 }
+			}
+			internal_advisor_generation_effect = {
+				advisor_type = $advisor_type$
+				advisor_type_if_not_state = $advisor_type_if_not_state$
+				skill = 1
+				discount = $discount$
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { monthly_income = 25 }
+			}
+			internal_advisor_generation_effect = {
+				advisor_type = $advisor_type$
+				advisor_type_if_not_state = $advisor_type_if_not_state$
+				skill = 2
+				discount = $discount$
+			}
+		}
+		else = {
+			internal_advisor_generation_effect = {
+				advisor_type = $advisor_type$
+				advisor_type_if_not_state = $advisor_type_if_not_state$
+				skill = 3
+				discount = $discount$
+			}
+		}
+	]
+	[[skill]
+		internal_advisor_generation_effect = {
+			advisor_type = $advisor_type$
+			advisor_type_if_not_state = $advisor_type_if_not_state$
+			skill = $skill$
+			discount = $discount$
+		}
+	]
+}
+
+
+remove_advisor_adm_effect = {
+	if = {
+		limit = {
+			advisor = inquisitor
+		}
+		remove_advisor = inquisitor
+	}
+	if = {
+		limit = {
+			advisor = natural_scientist
+		}
+		remove_advisor = natural_scientist
+	}
+	if = {
+		limit = {
+			advisor = master_of_mint
+		}
+		remove_advisor = master_of_mint
+	}
+	if = {
+		limit = {
+			advisor = theologian
+		}
+		remove_advisor = theologian
+	}
+	if = { 
+		limit = {
+			advisor = artist
+		}
+		remove_advisor = artist
+	}
+	if = {
+		limit = {
+			advisor = philosopher
+		}
+		remove_advisor = philosopher
+	}
+	if = {
+		limit = { 
+			advisor = treasurer
+		}
+		remove_advisor = treasurer
+	}
+}
+
