@@ -1,0 +1,143 @@
+# Completely scripted peace treaties are made here
+
+# THIS is the Taker and FROM the Giver in all scopes unless otherwise stated
+
+# This functionality was made to fully support modded subject types. It can probably also be used for other things, but has the following limitations: 
+# These treaties don't support having a different Taker/Giver than the two countries that are negotiating.
+# Nor do they support setting provinces (like cede province) or third party countries (like annull treaties) as targets.
+
+# Example:
+make_puppet_state = {
+	# The following strings need localization: 
+	#		"make_puppet_state_desc" (uses text processing, supporting bracket notation) ("[FROM.GetName] becomes a [THIS.GetName] Dummy")
+	#		"CB_ALLOWED_make_puppet_state" (uses plain localization) ("Enforced Dumbness")
+	#		"PEACE_make_puppet_state" (uses plain localization, but with support for $TAKER$, $TAKERS$, $GIVER$ and $GIVERS$) ("Become $TAKERS$ Dummy")
+
+	# Values default to 0 or "no" unless otherwise stated
+	
+	category = 6 # Any number between 0 and 6. Represents the tab under which it will be listed. 6 corresponds to "treaties". This value currently defaults to 6.
+	power_projection = vassalized_rival # "power_projection" will only be applied if giver is your rival.
+	power_cost_base = 0.0735 # Base factor for diplomatic power cost when treaty is not allowed by casus belli. Scales with war score cost.
+	prestige_base = 0.0322 # Base factor for prestige gain and loss. Scales with war score cost.
+	ae_base = 0.0998 # Base factor for aggressive expansion. Scales with war score cost.
+	warscore_cost = {
+		# Which of the giver's provinces' war score costs are included and by how much. All entries default to 0. Any combination of entries can be used. Try negative values at your own risk.
+		all_provinces = 0.0 # All the giver's provinces
+		no_provinces = 0.0 # This is just a constant. Equivalent to a single province with with war score cost 1
+		owner_keeps = 1.0 # The provinces that are not of any of the types below
+		conquered = 0.0 # Provinces that are selected by a Demand Province treaty
+		returned_core = 0.0 # Provinces that are selected by a Return Core treaty
+		released_nation = 0.0 # Provinces that will become a part of a selected released-to-be nation
+		cancelled_subject = 0.0 # This one should not be relevant here since Giver can't be a cancelled subject. Including anyway for completeness
+		concede_colonial_region = 0.0 # Ditto
+	}
+	warscore_cap = -1 # Warscore cost will never go above this value. Only enabled if non-negative. This value defaults to -1.
+	requires_demand_independence = yes # Whether this can be demanded by the former subject in an independence war without also demanding independence.
+	is_make_subject = yes # This will make the treaty mutually exclusive with other treaties that makes the giver a subject, or that explicitly frees the giver from their current overlord.
+	requires_is_allowed = no # If set to "yes", treaty will only be visible when explicitly allowed by casus belli. If not, it will be available but cost diplomatic power.
+	
+	is_visible = { # Defaults to equivalent of "always = yes"
+		NOT = { current_age = great_war_age }
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = puppet_state
+		}
+	}
+	is_allowed = { # Defaults to equivalent of "always = yes"
+		FROM = {
+			capital_scope = { trade_range = ROOT }
+		}
+	}
+	effect = { # Defaults to empty effect (which makes error log entry but is safe)
+		reverse_add_opinion = {
+			who = FROM
+			modifier = puppet_state_forced
+		}
+		create_subject = {
+			subject = FROM
+			subject_type = puppet_state
+		}
+		FROM = {
+			if = {
+				limit = {
+					government = monarchy
+				}
+				set_country_flag = was_monarchy_flag
+			}
+			else_if = {
+				limit = {
+					government = theocracy
+				}
+				set_country_flag = was_theocracy_flag
+			}
+			change_government = republic
+			add_government_reform = presidential_despot_reform
+		}
+	}
+	ai_weight = { # Defaults to always evaluate to 0
+		export_to_variable = {
+			variable_name = ai_value # Mandatory to have entry called "ai_value". Its value at the end of the ai_weight scope is what will be used
+			value = 10
+		}
+		limit = {
+			OR = {
+				current_age = great_war_age
+				NOT = {
+					border_distance = {
+						who = FROM
+						distance = 100
+					}
+				}
+			}
+			num_of_free_diplomatic_relations = 1
+			FROM = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						OR = {
+							is_claim = ROOT
+							is_core = ROOT
+						}
+					}
+				}
+				num_of_cities = 5
+				NOT = { total_development = 300 }
+			}
+			is_revolution_target = no
+			OR = {
+				is_neighbor_of = FROM
+				any_rival_country = {
+					is_neighbor_of = FROM
+				}
+			}
+			OR = {
+				NOT = { great_power_rank = 4 }
+				tag = USA
+				tag = ENG
+				tag = GBR
+				tag = RUS
+				tag = SOV
+				# Fascist Government Type
+				has_reform = fascist_government
+				has_reform = military_government
+				has_reform = presidential_despot_reform
+				# Communist Government Type
+				has_reform = peasants_republic
+				has_reform = communist_government
+				# Capitalist Government Type
+				has_reform = administrative_monarchy
+				has_reform = constitutional_monarchy
+				has_reform = merchants_reform
+				has_reform = oligarchy_reform
+				has_reform = administrative_republic
+				has_reform = constitutional_republic
+				has_reform = bureaucratic_despotism
+				has_reform = english_monarchy
+				has_reform = trading_city
+				has_reform = dutch_republic
+				has_reform = american_republic
+				has_reform = federal_republic
+			}
+		}
+	}
+}

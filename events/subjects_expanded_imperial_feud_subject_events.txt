@@ -1,0 +1,428 @@
+namespace = subjects_expanded_imperial_feud_subject_events
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.1
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME1
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC1
+	picture = BAD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events1.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		tooltip = {
+			FROM = {
+				grant_independence = yes
+			}
+			add_truce_with = FROM
+			if = {
+				limit = {
+					can_be_overlord = imperial_feud_subject
+				}
+				add_casus_belli = {
+					target = FROM
+					type = cb_disloyal_imperial_feud_subject
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.2
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME2
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC2
+	picture = HRE_eventPicture
+	
+	trigger = {
+		is_emperor = yes
+		can_be_overlord = imperial_feud_subject
+		any_country = {
+			is_subject_of_type = imperial_feud_subject
+			NOT = { is_subject_of = ROOT }
+			NOT = { has_country_flag = deciding_about_imperial_feud_subject_status }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		every_country = {
+			limit = {
+				NOT = { is_subject_of = ROOT }
+				is_subject_of_type = imperial_feud_subject
+			}
+			set_country_flag = deciding_about_imperial_feud_subject_status
+			country_event = { id = subjects_expanded_imperial_feud_subject_events.3 }
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.3
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME3
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC3
+	picture = HRE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events3.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 0.1
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 10
+				has_opinion = {
+					who = FROM
+					value = 100
+				}
+			}
+		}
+		
+		FROM = {
+			create_subject = {
+				subject = ROOT
+				subject_type = imperial_feud_subject
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events3.EVTOPT2
+		
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 10
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0.1
+				has_opinion = {
+					who = FROM
+					value = 100
+				}
+			}
+		}
+		
+		overlord = {
+			ROOT = {
+				grant_independence = yes
+			}
+		}
+		FROM = {
+			add_casus_belli = {
+				target = ROOT
+				type = cb_disloyal_imperial_feud_subject
+			}
+		}
+	}
+	
+	after = {
+		clr_country_flag = deciding_about_imperial_feud_subject_status
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.4
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME4
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC4
+	picture = HRE_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = imperial_feud_subject
+		overlord = {
+			is_emperor = no
+		}
+		OR = {
+			NOT = { hre_size = 1 }
+			emperor = {
+				NOT = { can_be_overlord = imperial_feud_subject }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			overlord = {
+				country_event = { id = subjects_expanded_imperial_feud_subject_events.1 }
+				ROOT = {
+					grant_independence = yes
+					add_truce_with = PREV
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events4.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.5
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME5
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC5
+	picture = HRE_eventPicture
+	
+	major = yes
+	fire_only_once = yes
+	
+	trigger = {
+		tag = TEU
+		is_subject = no
+		hre_size = 1
+		is_year = 1200
+		NOT = { is_year = 1450 }
+		emperor = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = imperial_feud_subject
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events5.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 3
+				emperor = { alliance_with = ROOT }
+			}
+			modifier = {
+				factor = 1.1
+				any_ally = {
+					is_part_of_hre = yes
+				}
+			}
+			modifier = {
+				factor = 1.15
+				any_ally = {
+					is_elector = yes
+				}
+			}
+			modifier = {
+				factor = 1.5
+				emperor = {
+					reverse_has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				emperor = {
+					reverse_has_opinion = {
+						who = ROOT
+						value = 50
+					}
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
+		}
+		
+		emperor = {
+			create_subject = {
+				subject = ROOT
+				subject_type = imperial_feud_subject
+			}
+		}
+		custom_tooltip = " "
+		custom_tooltip = display_imperial_feud_subject_title_tt
+		custom_tooltip = display_imperial_feud_subject_desc_tt
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events5.EVTOPT2
+		
+		ai_chance = {
+			factor = 0.66
+			modifier = {
+				factor = 3
+				emperor = {
+					OR = {
+						is_rival = ROOT
+						is_enemy = ROOT
+					}
+				}
+			}
+			modifier = {
+				factor = 1.5
+				emperor = {
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = -50
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				emperor = {
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = 0
+						}
+					}
+				}
+			}
+		}
+		
+		add_prestige = -5
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.6
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME6
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC6
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		is_subject_of_type = imperial_feud_subject
+		war_with = FROM
+		overlord = {
+			NOT = {
+				is_in_war = {
+					participants = FROM
+					participants = THIS
+				}
+			}
+		}
+		overlord = {
+			reverse_has_opinion_modifier = {
+				modifier = refused_join_war
+				who = ROOT
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			overlord = {
+				every_country = {
+					limit = {
+						NOT = { war_with = PREV }
+						NOT = { war_with = ROOT }
+						OR = {
+							is_part_of_hre = yes
+							AND = {
+								is_subject_of = PREV
+								is_subject_of_type = imperial_feud_subject
+							}
+						}
+					}
+					add_opinion = {
+						who = PREV
+						modifier = refused_to_defend_empire
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events6.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_feud_subject_events.7
+	title = subjects_expanded_imperial_feud_subject_events.EVTNAME7
+	desc = subjects_expanded_imperial_feud_subject_events.EVTDESC7
+	picture = HRE_eventPicture
+	
+	trigger = {
+		is_subject_of_type = imperial_feud_subject
+		hre_reform_level = 7
+		overlord = {
+			is_emperor = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events7.EVTOPT1
+		
+		ai_chance = { factor = 0.33 }
+		
+		set_in_empire = yes
+		overlord = {
+			vassalize = ROOT
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_feud_subject_events7.EVTOPT2
+		
+		ai_chance = { factor = 0.66 }
+		
+		overlord = {
+			ROOT = {
+				grant_independence = yes
+			}
+			add_casus_belli = {
+				target = ROOT
+				type = cb_disloyal_vassal
+			}
+			hidden_effect = {
+				country_event = { id = subjects_expanded_imperial_feud_subject_events.1 }
+			}
+		}
+	}
+}

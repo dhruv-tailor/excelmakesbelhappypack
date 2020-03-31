@@ -1,0 +1,111 @@
+# Audax Validator "!" Ignore_1006
+transfer_subjects_of_type_to = {
+	set_country_flag = transfer_subjects_of_type_$type$
+	if = {
+		limit = {
+			any_subject_country = {
+				is_subject_of_type = $type$
+			}
+		}
+		every_subject_country = {
+			limit = {
+				OR = {
+					is_subject_of_type = $type$
+					AND = {
+						PREV = { has_country_flag = transfer_subjects_of_type_dominion }
+						is_subject_of_type = dominion_tc
+					}
+					AND = {
+						PREV = { has_country_flag = transfer_subjects_of_type_autonomous_dominion }
+						is_subject_of_type = autonomous_dominion_tc
+					}
+				}
+			}
+			grant_independence = yes
+			$who$ = {
+				create_subject = {
+					subject = PREV
+					subject_type = $type$
+				}
+			}
+		}
+	}
+	clr_country_flag = transfer_subjects_of_type_$type$
+}
+
+count_num_of_subjects_of_type = {
+	set_global_flag = count_num_of_subjects_of_type_$type$
+	REB = {
+		set_variable = { which = num_of_subjects_of_type_$type$ value = 0 }
+		every_country = {
+			limit = {
+				OR = {
+					is_subject_of_type = $type$
+					AND = {
+						has_global_flag = count_num_of_subjects_of_type_dominion
+						is_subject_of_type = dominion_tc
+					}
+					AND = {
+						has_global_flag = count_num_of_subjects_of_type_autonomous_dominion
+						is_subject_of_type = autonomous_dominion_tc
+					}
+				}
+			}
+			PREV = {
+				change_variable = { which = num_of_subjects_of_type_$type$ value = 1 }
+			}
+		}
+	}
+	clr_global_flag = count_num_of_subjects_of_type_$type$
+}
+
+display_subjects_of_type = {
+	if = {
+		limit = {
+			REB = {
+				NOT = { check_variable = { which = num_of_subjects_of_type_$type$ value = 10 } }
+			}
+		}
+		custom_tooltip = display_$type$_title_tt
+		custom_tooltip = display_$type$_desc_tt
+	}
+	if = {
+		limit = {
+			REB = {
+				check_variable = { which = num_of_subjects_of_type_$type$ value = 1 }
+			}
+		}
+		every_province = {
+			limit = {
+				is_capital = yes
+				owner = {
+					OR = {
+						is_subject_of_type = $type$
+						AND = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									which = $type$_var
+									value = 1
+								}
+								check_variable = { which = dominion_var value = 1 }
+							}
+							is_subject_of_type = dominion_tc
+						}
+						AND = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									which = $type$_var
+									value = 1
+								}
+								check_variable = { which = autonomous_dominion_var value = 1 }
+							}
+							is_subject_of_type = autonomous_dominion_tc
+						}
+					}
+				}
+			}
+			custom_tooltip = DISPLAY_SUBJECTS_OF_TYPE_TT_OWNER_IS_SUBJECT_OF_TYPE
+		}
+		custom_tooltip = " "
+	}
+}

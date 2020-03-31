@@ -1,0 +1,140 @@
+establish_voivodeship = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = voivodeship
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = voivodeship
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = voivodeship
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = voivodeship
+			}
+			if = {
+				limit = {
+					NOT = {
+						OR = {
+							culture_group = FROM
+							accepted_culture = FROM
+							FROM = {
+								accepted_culture = ROOT
+							}
+						}
+					}
+				}
+				add_stability = -1
+				add_prestige = -10
+			}
+		}
+	}
+	
+	ai_will_do = {
+		is_emperor = no
+		OR = {
+			culture_group = FROM
+			accepted_culture = FROM
+			FROM = {
+				accepted_culture = ROOT
+			}
+		}
+		FROM = {
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+		}
+	}
+}
+
+cancel_voivodeship = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = voivodeship
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = voivodeship
+			}
+		}
+		NOT = { truce_with = FROM }
+		prestige = 0
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = voivodeship
+				}
+				NOT = { truce_with = FROM }
+				prestige = 0
+			}
+			FROM = {
+				if = {
+					limit = {
+						NOT = { liberty_desire = 50 }
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_abandoned
+					}
+				}
+				grant_independence = yes
+				add_truce_with = ROOT
+			}
+			add_truce_with = FROM
+			add_prestige = -25
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			liberty_desire = 100
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 25
+				all_subject_country = yes
+			}
+		}
+	}
+}

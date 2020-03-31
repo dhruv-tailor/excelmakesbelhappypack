@@ -1,0 +1,149 @@
+establish_integrated_tribe_subject = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = integrated_tribe_subject
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = integrated_tribe_subject
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = integrated_tribe_subject
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = integrated_tribe_subject
+			}
+		}
+	}
+	
+	ai_will_do = {
+		OR = {
+			AND = {
+				tag = GAZ
+				FROM = {
+					tag = AVR
+				}
+			}
+			AND = {
+				government = tribal
+				capital_scope = {
+					continent = north_america
+				}
+				FROM = {
+					government = tribal
+					capital_scope = {
+						continent = north_america
+					}
+				}
+			}
+		}
+		FROM = {
+			NOT = { liberty_desire = 30 }
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+		}
+	}
+}
+
+integrated_tribe_subject_give_additional_tribute_to_overlord = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		is_subject_of_type = integrated_tribe_subject
+		is_subject_of = FROM
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			is_subject_of_type = integrated_tribe_subject
+			is_subject_of = FROM
+		}
+		manpower_percentage = 0.2
+		is_at_war = no
+		FROM = { is_at_war = no }
+		custom_trigger_tooltip = {
+			tooltip = INTEGRATED_TRIBE_SUBJECT_DID_NOT_SEND_ADDITIONAL_TRIBUTE_WITHIN_LAST_5_YEARS
+			NOT = { has_country_modifier = cooldown_integrated_tribe_subject_give_additional_tribute_to_overlord }
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				is_subject_of_type = integrated_tribe_subject
+				is_subject_of = FROM
+				manpower_percentage = 0.2
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { has_country_modifier = cooldown_integrated_tribe_subject_give_additional_tribute_to_overlord }
+			}
+			ms_calculate_yearly_manpower = yes
+			set_variable = { which = integrated_tribe_subject_yearly_manpower_var which = autonomous_dominion_global_manpower_var }
+			divide_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10 }
+			add_yearly_manpower = -0.1
+			FROM = {
+				country_event = { id = subjects_expanded_integrated_tribe_subject_events.1 }
+				add_opinion = {
+					who = ROOT
+					modifier = integrated_tribe_subject_paid_additional_tribute
+				}
+			}
+			add_country_modifier = {
+				name = cooldown_integrated_tribe_subject_give_additional_tribute_to_overlord
+				duration = 1825
+				hidden = yes
+			}
+		}
+	}
+	
+	ai_will_do = {
+		has_scutage = yes
+		NOT = { liberty_desire = 50 }
+		manpower_percentage = 0.5
+		FROM = {
+			OR = {
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = 25
+					}
+				}
+				AND = {
+					is_at_war = yes
+					NOT = { manpower = 5 }
+				}
+			}
+		}
+	}
+}

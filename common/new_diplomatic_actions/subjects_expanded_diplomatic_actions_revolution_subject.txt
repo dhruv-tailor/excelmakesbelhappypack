@@ -1,0 +1,65 @@
+cancel_revolution_subject = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		NOT = { has_dlc = "Rights of Man" }
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = revolution_subject
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			NOT = { has_dlc = "Rights of Man" }
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = revolution_subject
+			}
+		}
+		NOT = { truce_with = FROM }
+		prestige = 0
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				NOT = { has_dlc = "Rights of Man" }
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = revolution_subject
+				}
+				NOT = { truce_with = FROM }
+				prestige = 0
+			}
+			FROM = {
+				if = {
+					limit = {
+						NOT = { liberty_desire = 50 }
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_abandoned
+					}
+				}
+				grant_independence = yes
+				add_truce_with = ROOT
+			}
+			add_truce_with = FROM
+			add_prestige = -25
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			liberty_desire = 100
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 25
+				all_subject_country = yes
+			}
+		}
+	}
+}

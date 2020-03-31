@@ -1,0 +1,213 @@
+namespace = subjects_expanded_imperial_tributary_state_events
+
+country_event = {
+	id = subjects_expanded_imperial_tributary_state_events.1
+	title = subjects_expanded_imperial_tributary_state_events.EVTNAME1
+	desc = subjects_expanded_imperial_tributary_state_events.EVTDESC1
+	picture = DEATH_OF_HEIR_eventPicture
+	
+	major = yes
+	
+	trigger = {
+		is_subject_of_type = imperial_tributary_state
+		OR = {
+			AND = {
+				has_heir = no
+				has_country_flag = imperial_tributary_state_no_heir
+				NOT = { has_ruler_flag = imperial_tributary_state_heir_will_be_new_ruler }
+			}
+			AND = {
+				has_regency = yes
+				NOT = { heir_age = 12 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	option = {
+		name = subjects_expanded_imperial_tributary_state_events1.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		trigger = {
+			capital_scope = {
+				OR = {
+					trade_company_region = trade_company_west_india
+					trade_company_region = trade_company_deccan
+					trade_company_region = trade_company_east_india
+					trade_company_region = trade_company_coromandel
+					trade_company_region = trade_company_north_india
+				}
+			}
+			overlord = {
+				any_subject_country = {
+					is_any_dominion_subject = yes
+					is_dominion_tag_in_india = yes
+				}
+			}
+		}
+		
+		overlord = {
+			random_subject_country = {
+				limit = {
+					is_any_dominion_subject = yes
+					is_dominion_tag_in_india = yes
+				}
+				inherit = ROOT
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_tributary_state_events1.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		trigger = {
+			NOT = {
+				capital_scope = {
+					OR = {
+						trade_company_region = trade_company_west_india
+						trade_company_region = trade_company_deccan
+						trade_company_region = trade_company_east_india
+						trade_company_region = trade_company_coromandel
+						trade_company_region = trade_company_north_india
+					}
+				}
+				overlord = {
+					any_subject_country = {
+						is_any_dominion_subject = yes
+						is_dominion_tag_in_india = yes
+					}
+				}
+			}
+		}
+		
+		overlord = {
+			inherit = ROOT
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_tributary_state_events1.EVTOPT2
+		
+		ai_chance = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				NOT = { liberty_desire = 50 }
+			}
+		}
+		
+		overlord = {
+			ROOT = {
+				hidden_effect = {
+					add_casus_belli = {
+						target = PREV
+						type = cb_independence_war
+					}
+				}
+				declare_war_with_cb = {
+					who = PREV
+					casus_belli = cb_independence_war
+				}
+			}
+		}
+		
+		hidden_effect = {
+			clr_country_flag = imperial_tributary_state_no_heir
+			clr_heir_flag = imperial_tributary_state_heir_will_be_new_ruler
+			clr_ruler_flag = imperial_tributary_state_heir_will_be_new_ruler
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_tributary_state_events.2
+	title = subjects_expanded_imperial_tributary_state_events.EVTNAME2
+	desc = subjects_expanded_imperial_tributary_state_events.EVTDESC2
+	picture = DEATH_OF_HEIR_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = imperial_tributary_state
+		OR = {
+			AND = {
+				has_heir = no
+				NOT = { has_country_flag = imperial_tributary_state_no_heir }
+			}
+			AND = {
+				has_heir = yes
+				OR = {
+					has_country_flag = imperial_tributary_state_no_heir
+					NOT = { has_heir_flag = imperial_tributary_state_heir_will_be_new_ruler }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_heir = no
+					NOT = { has_country_flag = imperial_tributary_state_no_heir }
+				}
+				set_country_flag = imperial_tributary_state_no_heir
+			}
+			else = {
+				clr_country_flag = imperial_tributary_state_no_heir
+				set_heir_flag = imperial_tributary_state_heir_will_be_new_ruler
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_tributary_state_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = subjects_expanded_imperial_tributary_state_events.3
+	title = subjects_expanded_imperial_tributary_state_events.EVTNAME3
+	desc = subjects_expanded_imperial_tributary_state_events.EVTDESC3
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = imperial_tributary_state
+		NOT = { government = monarchy }
+		NOT = { has_country_flag = executing_subjects_expanded_imperial_tributary_state_events_3 }
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = executing_subjects_expanded_imperial_tributary_state_events_3
+			if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_imperial_tributary_state_events3.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		clr_country_flag = executing_subjects_expanded_imperial_tributary_state_events_3
+	}
+}

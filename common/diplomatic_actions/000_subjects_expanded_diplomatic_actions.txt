@@ -1,0 +1,364 @@
+declarewar = {
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_OVERLORD_ALLY
+		potential = {
+			OR = {
+				is_subject_of_type = protectorate
+				is_subject_of_type = sister_republic
+			}
+		}
+		allow = {
+			overlord = {
+				NOT = { alliance_with = FROM }
+				NOT = { has_guaranteed = FROM }
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_SISTER_REPUBLIC_ALLY
+		potential = {
+			any_subject_country = {
+				is_subject_of_type = sister_republic
+				OR = {
+					alliance_with = FROM
+					has_guaranteed = FROM
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_NEIGHBOR_PUPPET_STATE_OF_RIVAL_WITHOUT_CORE_CLAIM
+		potential = {
+			FROM = {
+				is_subject_of_type = puppet_state
+				is_neighbor_of = ROOT
+				overlord = {
+					NOT = { is_neighbor_of = ROOT }
+					is_neighbor_of = FROM
+					OR = {
+						is_rival = ROOT
+						is_enemy = ROOT
+					}
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				any_owned_province = {
+					is_core = ROOT
+					any_neighbor_province = {
+						owned_by = ROOT
+						is_core = ROOT
+					}
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_NON_PRIMITIVE_NON_INTEGRATED_TRIBE
+		potential = {
+			is_subject_of_type = integrated_tribe_subject
+		}
+		allow = {
+			is_neighbor_of = FROM
+			FROM = {
+				OR = {
+					AND = {
+						NOT = { is_subject_of_type = integrated_tribe_subject }
+						primitives = yes
+					}
+					AND = {
+						is_subject_of_type = integrated_tribe_subject
+						overlord = {
+							NOT = { overlord_of = ROOT }
+						}
+					}
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_DUTCH_PROVINCE_OF_SAME_OVERLORD
+		potential = {
+			is_subject_of_type = dutch_province_subject
+			has_global_flag = dutch_province_subject_no_internal_war
+		}
+		allow = {
+			FROM = {
+				OR = {
+					NOT = { is_subject_of_type = dutch_province_subject }
+					overlord = {
+						NOT = { overlord_of = ROOT }
+					}
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_WITHOUT_SCUTAGE_WHEN_DUTCH_PROVINCES_EXTERNAL_WAR_WAS_DISALLOWED
+		potential = {
+			is_subject_of_type = dutch_province_subject
+		}
+		allow = {
+			OR = {
+				NOT = { has_global_flag = dutch_province_subject_no_external_war }
+				AND = {
+					has_global_flag = dutch_province_subject_no_external_war
+					has_scutage = yes
+				}
+				is_subject_of = FROM
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_DECLARE_WAR_ON_OVERLORD_BEFORE_THIRD_DUTCH_PROVINCES_REFORM
+		potential = {
+			is_subject_of_type = dutch_province_subject
+			is_subject_of = FROM
+		}
+		allow = {
+			has_global_flag = dutch_province_subject_no_leader_election
+		}
+	}
+	effect = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of_type = protectorate
+					overlord = {
+						NOT = {
+							is_in_war = {
+								participants = ROOT
+								participants = THIS
+							}
+						}
+					}
+				}
+			}
+			FROM = {
+				country_event = { id = subjects_expanded_protectorate_events.3 days = 70 }
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of_type = imperial_feud_subject
+					overlord = {
+						NOT = {
+							is_in_war = {
+								participants = ROOT
+								participants = THIS
+							}
+						}
+					}
+				}
+			}
+			FROM = {
+				country_event = { id = subjects_expanded_imperial_feud_subject_events.6 days = 70 }
+			}
+		}
+		if = {
+			limit = {
+				FROM = {
+					has_country_flag = marked_for_war_by_@ROOT
+				}
+			}
+			FROM = {
+				clr_country_flag = marked_for_war_by_@ROOT
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = marked_for_war_by_@FROM
+			}
+			clr_country_flag = marked_for_war_by_@FROM
+		}
+		
+		# Needed for Extended Timeline
+		if = {
+			limit = {
+				OR = {
+					has_casus_belli = { type = cb_spread_communism target = FROM }
+					has_casus_belli = { type = cb_spread_fascism target = FROM }
+					has_casus_belli = { type = cb_spread_democracy target = FROM }
+				}
+			}
+			set_country_flag = forcing_government
+		}
+		
+		# Needed for Missions Expanded
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = missions }
+			}
+			if = {
+				limit = {
+					mission_completed = sweden_support_the_roman_church
+					FROM = {
+						NOT = { religion = catholic }
+					}
+				}
+				change_variable = { which = swe_num_of_wars_against_non_catholics value = 1 }
+			}
+		}
+	}
+}
+
+allianceaction = {
+	condition = {
+		tooltip = CANNOT_ALLY_OVERLORD_RIVAL
+		potential = {
+			is_subject_of_type = sister_republic
+		}
+		allow = {
+			overlord = {
+				is_rival = FROM
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_ALLY_SISTER_REPUBLIC_RIVAL
+		potential = {
+			any_subject_country = {
+				is_subject_of_type = sister_republic
+				is_rival = FROM
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+}
+
+callaction = {
+	condition = {
+		tooltip = CANNOT_CALL_DUTCH_PROVINCE_AGAINST_ITS_OVERLORD
+		potential = {
+			FROM = {
+				is_subject_of_type = dutch_province_subject
+			}
+		}
+		allow = {
+			FROM = {
+				overlord = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_CALL_PERSIAN_SATRAPY_INTO_OFFENSIVE_WAR
+		potential = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = persian_satrapy
+			}
+		}
+		allow = {
+			NOT = {
+				is_in_war = {
+					attacker_leader = ROOT
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_CALL_PAPAL_SANCTUARY_AGAINST_ITS_OVERLORD
+		potential = {
+			FROM = {
+				religion = catholic
+				is_subject_of_type = papal_sanctuary_subject
+				overlord = {
+					religion = catholic
+					is_papal_controller = yes
+				}
+			}
+		}
+		allow = {
+			FROM = {
+				overlord = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
+	}
+}
+
+annexationaction = {
+	condition = {
+		tooltip = ANNEX_TOO_LOW
+		potential = {
+			FROM = {
+				vassal_of = ROOT
+			}
+		}
+		allow = {
+			FROM = {
+				has_opinion = {
+					who = ROOT
+					value = 190
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_ANNEX_IQTA_VASSAL_IF_NOT_PREPARED_ANNEXATION
+		potential = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = iqta_vassal
+			}
+		}
+		allow = {
+			FROM = {
+				has_country_modifier = iqta_vassal_allow_annex_modifier
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_ANNEX_IQTA_VASSAL_OF_OTHER_RELIGION
+		potential = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = iqta_vassal
+			}
+		}
+		allow = {
+			FROM = {
+				religion = ROOT
+			}
+		}
+	}
+	condition = {
+		tooltip = CANNOT_ANNEX_IQTA_VASSAL_WITH_LOW_RELIGIOUS_UNITY
+		potential = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = iqta_vassal
+			}
+		}
+		allow = {
+			FROM = {
+				religious_unity = 0.25
+			}
+		}
+	}
+	effect = {
+		FROM = {
+			if = {
+				limit = {
+					is_subject_of = ROOT
+					is_subject_of_type = iqta_vassal
+				}
+				add_country_modifier = {
+					name = iqta_vassal_is_getting_annexed_modifier
+					duration = -1
+					hidden = yes
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,324 @@
+establish_crusader_state_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = crusader_state_vassal
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = crusader_state_vassal
+		}
+		if = {
+			limit = {
+				tag = PAP
+			}
+			OR = {
+				any_country = {
+					is_crusade_target = yes
+				}
+				is_papal_controller = yes
+				religious_unity = 1
+			}
+		}
+		else = {
+			papal_influence = 20
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+		FROM = {
+			variable_arithmetic_trigger = {
+				custom_tooltip = HAS_LESS_THAN_HALF_OF_PREV_TOTAL_DEVELOPMENT
+				export_to_variable = {
+					which = our_total_dev
+					value = trigger_value:total_development
+				}
+				subtract_variable = { which = our_total_dev value = 1 }
+				export_to_variable = {
+					which = their_total_dev
+					value = trigger_value:total_development
+					who = PREV
+				}
+				subtract_variable = { which = their_total_dev value = 1 }
+				divide_variable = { which = their_total_dev value = 2 }
+				NOT = { check_variable = { which = our_total_dev which = their_total_dev } }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = crusader_state_vassal
+				}
+				if = {
+					limit = {
+						tag = PAP
+					}
+					OR = {
+						any_country = {
+							is_crusade_target = yes
+						}
+						is_papal_controller = yes
+						religious_unity = 1
+					}
+				}
+				else = {
+					papal_influence = 20
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			if = {
+				limit = {
+					NOT = { tag = PAP }
+				}
+				add_papal_influence = -20
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = crusader_state_vassal
+			}
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+		}
+		any_country = {
+			is_crusade_target = yes
+		}
+	}
+}
+
+send_crusader_knights_to_crusader_state_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		religion = catholic
+		FROM = {
+			religion = catholic
+			is_subject_of = ROOT
+			is_subject_of_type = crusader_state_vassal
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			religion = catholic
+			FROM = {
+				religion = catholic
+				is_subject_of = ROOT
+				is_subject_of_type = crusader_state_vassal
+			}
+		}
+		manpower = 1
+		treasury = 500
+		FROM = {
+			is_at_war = yes
+		}
+		FROM = { NOT = { liberty_desire = 50 } }
+		FROM = {
+			NOT = { has_country_modifier = send_crusader_knights_to_crusader_state_vassal }
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				religion = catholic
+				FROM = {
+					religion = catholic
+					is_subject_of = ROOT
+					is_subject_of_type = crusader_state_vassal
+				}
+				FROM = {
+					is_at_war = yes
+				}
+				FROM = { NOT = { liberty_desire = 50 } }
+				FROM = {
+					NOT = { has_country_modifier = send_crusader_knights_to_crusader_state_vassal }
+				}
+			}
+			add_manpower = -1
+			add_treasury = -500
+			FROM = {
+				add_manpower = 1
+				add_treasury = 500
+				add_country_modifier = {
+					name = send_crusader_knights_to_crusader_state_vassal
+					duration = 1825
+				}
+			}
+		}
+	}
+	
+	ai_will_do = {
+		crusade_target = {
+			war_with = FROM
+		}
+		manpower = 10000
+		treasury = 1500
+	}
+}
+
+invite_missionars_from_crusader_state_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		religion = catholic
+		FROM = {
+			religion = catholic
+			is_subject_of = ROOT
+			is_subject_of_type = crusader_state_vassal
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			religion = catholic
+			FROM = {
+				religion = catholic
+				is_subject_of = ROOT
+				is_subject_of_type = crusader_state_vassal
+			}
+		}
+		treasury = 1000
+		is_at_war = no
+		NOT = { num_of_missionaries = 4 }
+		NOT = { has_country_modifier = invite_missionars_from_crusader_state_vassal }
+		FROM = {
+			is_at_war = no
+		}
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				religion = catholic
+				FROM = {
+					religion = catholic
+					is_subject_of = ROOT
+					is_subject_of_type = crusader_state_vassal
+				}
+				treasury = 1000
+				is_at_war = no
+				NOT = { num_of_missionaries = 4 }
+				NOT = { has_country_modifier = invite_missionars_from_crusader_state_vassal }
+				FROM = {
+					is_at_war = no
+				}
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			add_treasury = -1000
+			add_country_modifier = {
+				name = invite_missionars_from_crusader_state_vassal
+				duration = 1825
+			}
+			FROM = {
+				add_treasury = 1000
+				add_liberty_desire = 25
+			}
+		}
+	}
+	
+	ai_will_do = {
+		treasury = 2000
+		NOT = { num_of_missionaries = 3 }
+		FROM = {
+			NOT = { liberty_desire = 25 }
+		}
+		NOT = { religious_unity = 0.5 }
+	}
+}
+
+make_crusader_state_vassal_to_theocracy = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		religion = catholic
+		government = theocracy
+		FROM = {
+			religion = catholic
+			NOT = { government = theocracy }
+			is_subject_of = ROOT
+			is_subject_of_type = crusader_state_vassal
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			religion = catholic
+			government = theocracy
+			FROM = {
+				religion = catholic
+				NOT = { government = theocracy }
+				is_subject_of = ROOT
+				is_subject_of_type = crusader_state_vassal
+			}
+		}
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				religion = catholic
+				government = theocracy
+				FROM = {
+					religion = catholic
+					NOT = { government = theocracy }
+					is_subject_of = ROOT
+					is_subject_of_type = crusader_state_vassal
+				}
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			FROM = {
+				change_government = theocracy
+				add_government_reform = leading_clergy_reform
+				add_liberty_desire = 25
+			}
+		}
+	}
+	
+	ai_will_do = {
+		tag = PAP
+		FROM = {
+			NOT = { liberty_desire = 25 }
+		}
+	}
+}

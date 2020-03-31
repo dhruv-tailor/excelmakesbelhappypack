@@ -1,0 +1,169 @@
+namespace = subjects_expanded_brother_kingdom_events
+
+country_event = {
+	id = subjects_expanded_brother_kingdom_events.1
+	title = subjects_expanded_brother_kingdom_events.EVTNAME1
+	desc = subjects_expanded_brother_kingdom_events.EVTDESC1
+	picture = BAD_WITH_MONARCH_eventPicture
+	
+	trigger = {
+		any_subject_country = {
+			is_subject_of_type = brother_kingdom
+			NOT = { dynasty = ROOT }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_subject_country = {
+				limit = {
+					is_subject_of_type = brother_kingdom
+					NOT = { dynasty = ROOT }
+				}
+				save_event_target_as = invalid_brother_kingdom
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_brother_kingdom_events1.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		event_target:invalid_brother_kingdom = {
+			grant_independence = yes
+			if = {
+				limit = {
+					NOT = { marriage_with = ROOT }
+				}
+				create_marriage = ROOT
+			}
+			create_alliance = ROOT
+			add_ruler_modifier = {
+				name = ruler_just_canceled_to_be_brother_kingdom
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_brother_kingdom_events1.EVTOPT2
+		
+		trigger = {
+			religion_group = christian
+			has_regency = no
+			event_target:invalid_brother_kingdom = {
+				religion_group = christian
+			}
+		}
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_legitimacy = -25
+		event_target:invalid_brother_kingdom = {
+			add_liberty_desire = 100
+			if = {
+				limit = {
+					marriage_with = ROOT
+				}
+				break_marriage = ROOT
+			}
+			tooltip = {
+				kill_ruler = yes
+				if = {
+					limit = {
+						has_heir = yes
+					}
+					kill_heir = yes
+				}
+			}
+			define_ruler = {
+				claim = 10
+				religion = ROOT
+				culture = ROOT
+				dynasty = ROOT
+				male = yes
+				max_random_adm = 2
+				max_random_dip = 2
+				max_random_mil = 2
+				age = 20
+			}
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_brother_kingdom_events.2
+	title = subjects_expanded_brother_kingdom_events.EVTNAME2
+	desc = subjects_expanded_brother_kingdom_events.EVTDESC2
+	picture = BATTLE_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_brother_kingdom_events2.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 3
+				army_strength = { who = FROM value = 1.5 }
+			}
+			modifier = {
+				factor = 10
+				is_at_war = yes
+				NOT = { war_score = 0 }
+			}
+			modifier = {
+				factor = 2
+				war_exhaustion = 5
+			}
+			modifier = {
+				factor = 2
+				war_exhaustion = 10
+			}
+		}
+		
+		add_prestige = -5
+		FROM = {
+			grant_independence = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_brother_kingdom_events2.EVTOPT2
+		
+		ai_chance = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 3
+				army_strength = { who = FROM value = 1.5 }
+			}
+			modifier = {
+				factor = 5
+				army_strength = { who = FROM value = 3 }
+			}
+		}
+		
+		FROM = {
+			hidden_effect = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_independence_war
+				}
+			}
+			declare_war_with_cb = {
+				who = ROOT
+				casus_belli = cb_independence_war
+			}
+		}
+	}
+}

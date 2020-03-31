@@ -1,0 +1,1508 @@
+establish_brother_kingdom = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = establish_brother_kingdom_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = brother_kingdom
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = brother_kingdom
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		is_female = no
+		FROM = {
+			is_female = no
+		}
+		months_of_ruling = 24
+		FROM = {
+			months_of_ruling = 24
+		}
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+				}
+			}
+			FROM = {
+				NOT = { liberty_desire = 50 }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = brother_kingdom
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				is_female = no
+				FROM = {
+					is_female = no
+				}
+				if = {
+					limit = {
+						FROM = {
+							is_subject_of = ROOT
+						}
+					}
+					FROM = {
+						NOT = { liberty_desire = 50 }
+					}
+				}
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = brother_kingdom
+			}
+			add_truce_with = FROM
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = brother_kingdom
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				is_female = no
+				FROM = {
+					is_female = no
+				}
+				if = {
+					limit = {
+						FROM = {
+							is_subject_of = ROOT
+						}
+					}
+					FROM = {
+						NOT = { liberty_desire = 50 }
+					}
+				}
+			}
+			FROM = {
+				clr_country_flag = declined_establish_brother_kingdom_@ROOT
+				set_country_flag = declined_establish_brother_kingdom_@ROOT
+			}
+			add_opinion = {
+				who = FROM
+				modifier = declined_establish_brother_kingdom_opinion
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = FROM_IS_VASSAL_OF_ROOT
+			limit = {
+				overlord_of = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+		}
+		add_entry = {
+			name = FROM_LIBERTY_DESIRE_TOO_HIGH
+			limit = {
+				overlord_of = FROM
+				FROM = {
+					liberty_desire = 50
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				NOT = { overlord_of = FROM }
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_allied }
+						ai_attitude = { who = ROOT attitude = attitude_friendly }
+						ai_attitude = { who = ROOT attitude = attitude_threatened }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				NOT = { overlord_of = FROM }
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_neutral }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				NOT = { overlord_of = FROM }
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_hostile }
+						ai_attitude = { who = ROOT attitude = attitude_outraged }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 30
+					}
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			multiply_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 2000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+		add_entry = {
+			name = FROM_IS_EMPIRE_RANK
+			limit = {
+				NOT = { government_rank = 3 }
+				FROM = {
+					government_rank = 3
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_EMPIRE_RANK
+			limit = {
+				government_rank = 3
+				FROM = {
+					government_rank = 3
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_KINGDOM_RANK
+			limit = {
+				FROM = {
+					government_rank = 2
+					NOT = { government_rank = 3 }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				NOT = { overlord_of = FROM }
+				religion_group = FROM
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_mil_tech
+						value = trigger_value:mil_tech
+					}
+					export_to_variable = {
+						which = their_mil_tech
+						value = trigger_value:mil_tech
+						who = FROM
+					}
+					export_to_variable = {
+						which = our_army_size
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army_size
+						value = trigger_value:army_size
+						who = FROM
+					}
+					export_to_variable = {
+						which = military_power
+						value = 0
+					}
+					divide_variable = { which = our_army_size value = 10 }
+					divide_variable = { which = their_army_size value = -10 }
+					change_variable = { which = our_army_size which = their_army_size }
+					multiply_variable = { which = their_mil_tech value = -1 }
+					change_variable = { which = our_mil_tech which = their_mil_tech }
+					multiply_variable = { which = our_mil_tech value = 3 }
+					change_variable = { which = military_power which = our_army_size }
+					change_variable = { which = military_power which = our_mil_tech }
+					
+					NOT = { check_variable = { which = military_power value = -39 } }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 40
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_mil_tech
+						value = trigger_value:mil_tech
+					}
+					export_to_variable = {
+						which = their_mil_tech
+						value = trigger_value:mil_tech
+						who = FROM
+					}
+					export_to_variable = {
+						which = our_army_size
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army_size
+						value = trigger_value:army_size
+						who = FROM
+					}
+					export_to_variable = {
+						which = military_power
+						value = 0
+					}
+					divide_variable = { which = our_army_size value = 10 }
+					divide_variable = { which = their_army_size value = -10 }
+					change_variable = { which = our_army_size which = their_army_size }
+					multiply_variable = { which = their_mil_tech value = -1 }
+					change_variable = { which = our_mil_tech which = their_mil_tech }
+					multiply_variable = { which = our_mil_tech value = 3 }
+					change_variable = { which = military_power which = our_army_size }
+					change_variable = { which = military_power which = our_mil_tech }
+					
+					check_variable = { which = military_power value = -39 }
+					NOT = { check_variable = { which = military_power value = 30 } }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 0
+			}
+			export_to_variable = {
+				which = our_mil_tech
+				value = trigger_value:mil_tech
+			}
+			export_to_variable = {
+				which = their_mil_tech
+				value = trigger_value:mil_tech
+				who = FROM
+			}
+			export_to_variable = {
+				which = our_army_size
+				value = trigger_value:army_size
+			}
+			export_to_variable = {
+				which = their_army_size
+				value = trigger_value:army_size
+				who = FROM
+			}
+			divide_variable = { which = our_army_size value = 10 }
+			divide_variable = { which = their_army_size value = -10 }
+			change_variable = { which = our_army_size which = their_army_size }
+			multiply_variable = { which = their_mil_tech value = -1 }
+			change_variable = { which = our_mil_tech which = their_mil_tech }
+			multiply_variable = { which = our_mil_tech value = 3 }
+			change_variable = { which = ai_value which = our_army_size }
+			change_variable = { which = ai_value which = our_mil_tech }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_mil_tech
+						value = trigger_value:mil_tech
+					}
+					export_to_variable = {
+						which = their_mil_tech
+						value = trigger_value:mil_tech
+						who = FROM
+					}
+					export_to_variable = {
+						which = our_army_size
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army_size
+						value = trigger_value:army_size
+						who = FROM
+					}
+					export_to_variable = {
+						which = military_power
+						value = 0
+					}
+					divide_variable = { which = our_army_size value = 10 }
+					divide_variable = { which = their_army_size value = -10 }
+					change_variable = { which = our_army_size which = their_army_size }
+					multiply_variable = { which = their_mil_tech value = -1 }
+					change_variable = { which = our_mil_tech which = their_mil_tech }
+					multiply_variable = { which = our_mil_tech value = 3 }
+					change_variable = { which = military_power which = our_army_size }
+					change_variable = { which = military_power which = our_mil_tech }	
+					check_variable = { which = military_power value = 30 }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+		}
+		add_entry = {
+			name = FROM_IS_HRE_MEMBER
+			limit = {
+				is_part_of_hre = no
+				FROM = {
+					is_part_of_hre = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_HRE_ELECTOR
+			limit = {
+				FROM = {
+					is_elector = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_EMPEROR
+			limit = {
+				FROM = {
+					is_emperor = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_SUBJECTS
+			limit = {
+				NOT = { overlord_of = FROM }
+				FROM = {
+					num_of_subjects = 1
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_CURIA_CONTROLLER
+			limit = {
+				FROM = {
+					is_papal_controller = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_DEVELOPMENT
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -3 }
+		}
+		add_entry = {
+			name = ROOT_OWNS_FROM_CORE_PROVINCES
+			limit = {
+				any_owned_province = {
+					is_core = FROM
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = BORDER_DISTANCE
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = border_distance
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = FROM_WAR_EXHAUSTION
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:war_exhaustion
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_ARE_ALLIED
+			limit = {
+				alliance_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = ROOT_FROM_RULER_STATS_COMPARED
+			export_to_variable = {
+				which = ai_value
+				value = 0
+			}
+			export_to_variable = {
+				which = their_ruler_adm
+				value = ADM
+				who = FROM
+			}
+			export_to_variable = {
+				which = their_ruler_dip
+				value = DIP
+				who = FROM
+			}
+			export_to_variable = {
+				which = their_ruler_mil
+				value = MIL
+				who = FROM
+			}
+			export_to_variable = {
+				which = our_ruler_adm
+				value = ADM
+			}
+			export_to_variable = {
+				which = our_ruler_dip
+				value = DIP
+			}
+			export_to_variable = {
+				which = our_ruler_mil
+				value = MIL
+			}
+			change_variable = { which = ai_value which = our_ruler_adm }
+			change_variable = { which = ai_value which = our_ruler_dip }
+			change_variable = { which = ai_value which = our_ruler_mil }
+			subtract_variable = { which = ai_value which = their_ruler_adm }
+			subtract_variable = { which = ai_value which = their_ruler_dip }
+			subtract_variable = { which = ai_value which = their_ruler_mil }
+			multiply_variable = { which = ai_value value = 10 }
+		}
+		add_entry = {
+			name = FROM_RULER_IS_OLDER
+			limit = {
+				NOT = { ruler_age = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_LEGITIMACY_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+				NOT = { legitimacy = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:legitimacy
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:legitimacy
+				who = FROM
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_LEGITIMACY_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+				legitimacy = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:legitimacy
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:legitimacy
+				who = FROM
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+			divide_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = FROM_ROOT_ARE_RIVALS
+			limit = {
+				OR = {
+					is_rival = FROM
+					is_enemy = FROM
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			divide_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_A_HEIR
+			limit = {
+				FROM = {
+					has_heir = yes
+					heir_has_ruler_dynasty = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			divide_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_HEIR_FROM_HAS_NO_HEIR
+			limit = {
+				has_heir = yes
+				heir_has_ruler_dynasty = yes
+				FROM = {
+					has_heir = no
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = FROM_JUST_CANCELED_BROTHER_KINGDOM
+			limit = {
+				FROM = {
+					has_ruler_modifier = ruler_just_canceled_to_be_brother_kingdom
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		NOT = { personal_union = 2 }
+		FROM = {
+			is_emperor = no
+			OR = {
+				NOT = { has_country_flag = declined_establish_brother_kingdom_@ROOT }
+				had_country_flag = { flag = declined_establish_brother_kingdom_@ROOT days = 1825 }
+			}
+			NOT = { is_subject_of = ROOT }
+		}
+		OR = {
+			marriage_with = FROM
+			alliance_with = FROM
+			has_casus_belli = {
+				target = FROM
+				type = cb_salic_reunification
+			}
+		}
+	}
+}
+
+make_brother_kingdom_to_personal_union = {
+	category = influence
+	
+	alert_index = 2
+	alert_tooltip = make_brother_kingdom_to_personal_union_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = brother_kingdom
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = brother_kingdom
+			}
+		}
+		has_regency = no
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		months_of_ruling = 24
+		FROM = {
+			months_of_ruling = 24
+		}
+		FROM = {
+			NOT = { liberty_desire = 50 }
+		}
+		FROM = {
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 25
+				all_subject_country = yes
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = brother_kingdom
+				}
+				has_regency = no
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				months_of_ruling = 24
+				FROM = {
+					months_of_ruling = 24
+				}
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					years_in_vassalage_under = {
+						who = ROOT
+						years = 25
+						all_subject_country = yes
+					}
+				}
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = personal_union
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = brother_kingdom
+				}
+				has_regency = no
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				months_of_ruling = 24
+				FROM = {
+					months_of_ruling = 24
+				}
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					years_in_vassalage_under = {
+						who = ROOT
+						years = 25
+						all_subject_country = yes
+					}
+				}
+			}
+			add_prestige = -10
+			FROM = {
+				add_legitimacy = -5
+				clr_country_flag = make_brother_kingdom_to_personal_union_@ROOT
+				set_country_flag = make_brother_kingdom_to_personal_union_@ROOT
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = FROM_LIBERTY_DESIRE_TOO_HIGH
+			limit = {
+				overlord_of = FROM
+				FROM = {
+					liberty_desire = 50
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 30
+					}
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			multiply_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 2000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				NOT = { overlord_of = FROM }
+				religion_group = FROM
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_HRE_ELECTOR
+			limit = {
+				FROM = {
+					is_elector = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_EMPEROR
+			limit = {
+				FROM = {
+					is_emperor = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_CURIA_CONTROLLER
+			limit = {
+				FROM = {
+					is_papal_controller = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_DEVELOPMENT
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -5 }
+		}
+		add_entry = {
+			name = BORDER_DISTANCE
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = border_distance
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = FROM_WAR_EXHAUSTION
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:war_exhaustion
+			}
+			subtract_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_RULER_STATS_COMPARED
+			export_to_variable = {
+				which = ai_value
+				value = 0
+			}
+			export_to_variable = {
+				which = their_ruler_adm
+				value = ADM
+				who = FROM
+			}
+			export_to_variable = {
+				which = their_ruler_dip
+				value = DIP
+				who = FROM
+			}
+			export_to_variable = {
+				which = their_ruler_mil
+				value = MIL
+				who = FROM
+			}
+			export_to_variable = {
+				which = our_ruler_adm
+				value = ADM
+			}
+			export_to_variable = {
+				which = our_ruler_dip
+				value = DIP
+			}
+			export_to_variable = {
+				which = our_ruler_mil
+				value = MIL
+			}
+			change_variable = { which = ai_value which = our_ruler_adm }
+			change_variable = { which = ai_value which = our_ruler_dip }
+			change_variable = { which = ai_value which = our_ruler_mil }
+			subtract_variable = { which = ai_value which = their_ruler_adm }
+			subtract_variable = { which = ai_value which = their_ruler_dip }
+			subtract_variable = { which = ai_value which = their_ruler_mil }
+			multiply_variable = { which = ai_value value = 15 }
+		}
+		add_entry = {
+			name = FROM_RULER_IS_OLDER
+			limit = {
+				NOT = { ruler_age = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_LEGITIMACY_COMPARED
+			limit = {
+				NOT = { overlord_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:legitimacy
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:legitimacy
+				who = FROM
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+		}
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = FROM_HAS_A_HEIR
+			limit = {
+				FROM = {
+					has_heir = yes
+					heir_has_ruler_dynasty = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 15
+			}
+			divide_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_HEIR_FROM_HAS_NO_HEIR
+			limit = {
+				has_heir = yes
+				heir_has_ruler_dynasty = yes
+				FROM = {
+					has_heir = no
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_REGENCY
+			limit = {
+				FROM = {
+					OR = {
+						has_regency = yes
+						has_consort_regency = yes
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+		}
+	}
+	
+	ai_will_do = {
+		prestige = 1
+		FROM = {
+			has_opinion = {
+				who = ROOT
+				value = 50
+			}
+		}
+	}
+}
+
+make_personal_union_to_brother_kingdom = {
+	category = influence
+	
+	require_acceptance = no
+	
+	is_visible = {
+		can_be_overlord = brother_kingdom
+		has_reform = salic_reform
+		FROM = {
+			is_subject_of = ROOT
+			OR = {
+				is_subject_of_type = personal_union
+				is_subject_of_type = salic_personal_union
+			}
+			government = monarchy
+			religion_group = christian
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			can_be_overlord = brother_kingdom
+			has_reform = salic_reform
+			FROM = {
+				is_subject_of = ROOT
+				OR = {
+					is_subject_of_type = personal_union
+					is_subject_of_type = salic_personal_union
+				}
+				government = monarchy
+				religion_group = christian
+			}
+		}
+		has_regency = no
+		months_of_ruling = 60
+		legitimacy = 80
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		OR = {
+			has_country_modifier = two_sons
+			has_country_modifier = three_sons
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_be_overlord = brother_kingdom
+				has_reform = salic_reform
+				FROM = {
+					is_subject_of = ROOT
+					OR = {
+						is_subject_of_type = personal_union
+						is_subject_of_type = salic_personal_union
+					}
+					government = monarchy
+					religion_group = christian
+				}
+				has_regency = no
+				months_of_ruling = 60
+				legitimacy = 80
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				OR = {
+					has_country_modifier = two_sons
+					has_country_modifier = three_sons
+				}
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = brother_kingdom
+			}
+			FROM = {
+				define_ruler = {
+					dynasty = ROOT
+					claim = 80
+					age = 20
+					male = yes
+				}
+			}
+			if = {
+				limit = {
+					has_country_modifier = three_sons
+				}
+				remove_country_modifier = three_sons
+				add_country_modifier = {
+					name = two_sons
+					duration = -1
+				}
+			}
+			else = {
+				remove_country_modifier = two_sons
+			}
+		}
+	}
+	
+	ai_will_do = {
+		ruler_age = 60
+		has_country_modifier = three_sons
+		calc_true_if = {
+			all_subject_country = {
+				OR = {
+					is_subject_of_type = personal_union
+					is_subject_of_type = salic_personal_union
+				}
+			}
+			amount = 2
+		}
+		FROM = {
+			NOT = { total_development = 300 }
+			OR = {
+				AND = {
+					is_subject_of_type = personal_union
+					NOT = {
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 50
+							all_subject_country = yes
+						}
+					}
+				}
+				AND = {
+					is_subject_of_type = salic_personal_union
+					NOT = {
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 10
+							all_subject_country = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+brother_kingdom_become_independent = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		is_subject_of = FROM
+		is_subject_of_type = brother_kingdom
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			is_subject_of = FROM
+			is_subject_of_type = brother_kingdom
+		}
+		NOT = { truce_with = FROM }
+		liberty_desire = 50
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				is_subject_of = FROM
+				is_subject_of_type = brother_kingdom
+				NOT = { truce_with = FROM }
+				liberty_desire = 50
+			}
+			add_stability = -1
+			add_ruler_modifier = {
+				name = ruler_just_canceled_to_be_brother_kingdom
+				duration = -1
+				hidden = yes
+			}
+			FROM = {
+				country_event = { id = subjects_expanded_brother_kingdom_events.2 }
+			}
+		}
+	}
+	
+	ai_will_do = {
+		stability = 1
+		NOT = { war_exhaustion = 1 }
+		manpower_percentage = 0.75
+		OR = {
+			num_of_allies = 2
+			army_size = FROM
+		}
+		OR = {
+			liberty_desire = 60
+			army_size = FROM
+			total_development = FROM
+		}
+		OR = {
+			is_at_war = no
+			AND = {
+				NOT = {
+					is_in_war = {
+						attacker_leader = ROOT
+					}
+				}
+				NOT = {
+					is_in_war = {
+						defender_leader = ROOT
+					}
+				}
+				all_owned_province = {
+					OR = {
+						controlled_by = ROOT
+						controlled_by = REB
+					}
+				}
+				NOT = { num_of_rebel_armies = 2 }
+				NOT = { num_of_rebel_controlled_provinces = 3 }
+			}
+		}
+	}
+}
+
+cancel_brother_kingdom = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = brother_kingdom
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = brother_kingdom
+			}
+		}
+		NOT = { truce_with = FROM }
+		prestige = 0
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = brother_kingdom
+				}
+				NOT = { truce_with = FROM }
+				prestige = 0
+			}
+			FROM = {
+				if = {
+					limit = {
+						NOT = { liberty_desire = 50 }
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_abandoned
+					}
+				}
+				grant_independence = yes
+				add_truce_with = ROOT
+				add_ruler_modifier = {
+					name = ruler_just_canceled_to_be_brother_kingdom
+					duration = -1
+					hidden = yes
+				}
+			}
+			add_truce_with = FROM
+			add_prestige = -25
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			liberty_desire = 100
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 50
+			}
+		}
+	}
+}

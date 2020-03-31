@@ -1,0 +1,489 @@
+establish_imperial_tributary_state = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = imperial_tributary_state
+		}
+		FROM = {
+			is_subject_of = ROOT
+			capital_scope = { trade_range = ROOT }
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = imperial_tributary_state
+		}
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				capital_scope = { trade_range = ROOT }
+			}
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 90 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = imperial_tributary_state
+				}
+				FROM = {
+					is_subject_of = ROOT
+					capital_scope = { trade_range = ROOT }
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 90 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = imperial_tributary_state
+			}
+			FROM = {
+				add_liberty_desire = -25
+			}
+		}
+	}
+	
+	ai_will_do = {
+		OR = {
+			AND = {
+				tag = GBR
+				FROM = {
+					capital_scope = {
+						OR = {
+							trade_company_region = trade_company_west_india
+							trade_company_region = trade_company_deccan
+							trade_company_region = trade_company_east_india
+							trade_company_region = trade_company_coromandel
+							trade_company_region = trade_company_north_india
+						}
+					}
+				}
+			}
+			AND = {
+				tag = ROM
+				FROM = {
+					government = tribal
+				}
+			}
+		}
+		FROM = {
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+		}
+		OR = {
+			FROM = { liberty_desire = 60 }
+			NOT = {
+				calc_true_if = {
+					all_subject_country = {
+						is_subject_of_type = imperial_tributary_state
+					}
+					amount = 2
+				}
+			}
+		}
+	}
+}
+
+ask_for_imperial_tributary_state = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = ask_for_imperial_tributary_state_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = imperial_tributary_state
+			}
+		}
+		is_subject_of = FROM
+		capital_scope = { trade_range = FROM }
+	}
+	
+	is_allowed = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = imperial_tributary_state
+			}
+		}
+		hidden_trigger = {
+			is_subject_of = FROM
+			capital_scope = { trade_range = FROM }
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		NOT = { liberty_desire = 90 }
+		custom_trigger_tooltip = {
+			tooltip = DID_NOT_GED_DENIED_TO_BECOME_IMPERIAL_TRIBUTARY_STATE_WITHIN_LAST_5_YEARS
+			OR = {
+				NOT = { has_country_flag = ask_for_imperial_tributary_state_declined }
+				had_country_flag = { flag = ask_for_imperial_tributary_state_declined days = 1825 }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = imperial_tributary_state
+					}
+				}
+				is_subject_of = FROM
+				capital_scope = { trade_range = FROM }
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 90 }
+				OR = {
+					NOT = { has_country_flag = ask_for_imperial_tributary_state_declined }
+					had_country_flag = { flag = ask_for_imperial_tributary_state_declined days = 1825 }
+				}
+			}
+			FROM = {
+				create_subject = {
+					subject = ROOT
+					subject_type = imperial_tributary_state
+				}
+			}
+			add_liberty_desire = -25
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = imperial_tributary_state
+					}
+				}
+				is_subject_of = FROM
+				capital_scope = { trade_range = FROM }
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 90 }
+				OR = {
+					NOT = { has_country_flag = ask_for_imperial_tributary_state_declined }
+					had_country_flag = { flag = ask_for_imperial_tributary_state_declined days = 1825 }
+				}
+			}
+			add_liberty_desire = 10
+			clr_country_flag = ask_for_imperial_tributary_state_declined
+			set_country_flag = ask_for_imperial_tributary_state_declined
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = STATEGIC_VALUE
+			limit = {
+				NOT = {
+					OR = {
+						AND = {
+							tag = GBR
+							FROM = {
+								capital_scope = {
+									OR = {
+										trade_company_region = trade_company_west_india
+										trade_company_region = trade_company_deccan
+										trade_company_region = trade_company_east_india
+										trade_company_region = trade_company_coromandel
+										trade_company_region = trade_company_north_india
+									}
+								}
+							}
+						}
+						AND = {
+							tag = ROM
+							FROM = {
+								government = tribal
+							}
+						}
+					}
+					FROM = {
+						NOT = {
+							years_in_vassalage_under = {
+								who = ROOT
+								years = 10
+								all_subject_country = yes
+							}
+						}
+					}
+					OR = {
+						FROM = { liberty_desire = 60 }
+						NOT = {
+							calc_true_if = {
+								all_subject_country = {
+									is_subject_of_type = imperial_tributary_state
+								}
+								amount = 2
+							}
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_LIBERTY_DESIRE
+			limit = {
+				liberty_desire = 50
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = ROOT_LIBERTY_DESIRE
+			limit = {
+				NOT = { liberty_desire = 50 }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+			}
+			subtract_variable = { which = ai_value value = 101 }
+		}
+		add_entry = {
+			name = FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 30
+					}
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			multiply_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 2000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION_GROUP
+			limit = {
+				NOT = { religion_group = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				religion_group = FROM
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_MERCHANT_REPUBLIC
+			limit = {
+				FROM = {
+					has_reform = merchants_reform
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_MERCHANT_REPUBLIC
+			limit = {
+				has_reform = merchants_reform
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		liberty_desire = 60
+		has_heir = yes
+		has_regency = no
+	}
+}
+
+cancel_imperial_tributary_state = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = imperial_tributary_state
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = imperial_tributary_state
+			}
+		}
+		NOT = { truce_with = FROM }
+		prestige = 0
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = imperial_tributary_state
+				}
+				NOT = { truce_with = FROM }
+				prestige = 0
+			}
+			FROM = {
+				if = {
+					limit = {
+						NOT = { liberty_desire = 50 }
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_abandoned
+					}
+				}
+				grant_independence = yes
+				add_truce_with = ROOT
+			}
+			add_truce_with = FROM
+			add_prestige = -25
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			liberty_desire = 100
+			has_heir = yes
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 30
+				all_subject_country = yes
+			}
+			OR = {
+				is_neighbor_of = ROOT
+				any_country = {
+					is_subject_of = ROOT
+					NOT = { tag = FROM }
+					is_neighbor_of = FROM
+				}
+			}
+		}
+	}
+}

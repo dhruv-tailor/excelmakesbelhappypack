@@ -1,0 +1,2014 @@
+establish_dutch_province_subject = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = establish_dutch_province_subject_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = dutch_province_subject
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = dutch_province_subject
+		}
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		army_size = FROM
+		total_base_tax = FROM
+		is_month = 1
+		if = {
+			limit = {
+				FROM = {
+					NOT = { is_subject_of = ROOT }
+				}
+			}
+			alliance_with = FROM
+		}
+		else = {
+			FROM = {
+				NOT = { liberty_desire = 50 }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = dutch_province_subject
+				}
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				army_size = FROM
+				total_base_tax = FROM
+				is_month = 1
+				if = {
+					limit = {
+						FROM = {
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+					alliance_with = FROM
+				}
+				else = {
+					FROM = {
+						NOT = { liberty_desire = 50 }
+					}
+				}
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = dutch_province_subject
+			}
+			add_truce_with = FROM
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = dutch_province_subject
+				}
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				army_size = FROM
+				total_base_tax = FROM
+				is_month = 1
+				if = {
+					limit = {
+						FROM = {
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+					alliance_with = FROM
+				}
+				else = {
+					FROM = {
+						NOT = { liberty_desire = 50 }
+					}
+				}
+			}
+			FROM = {
+				clr_country_flag = declined_establish_dutch_province_subject_@ROOT
+				set_country_flag = declined_establish_dutch_province_subject_@ROOT
+			}
+			add_opinion = {
+				who = FROM
+				modifier = declined_establish_dutch_province_subject_opinion
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = FROM_IS_VASSAL_OF_ROOT
+			limit = {
+				overlord_of = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+		}
+		add_entry = {
+			name = FROM_LIBERTY_DESIRE_TOO_HIGH
+			limit = {
+				overlord_of = FROM
+				FROM = {
+					liberty_desire = 50
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_allied }
+						ai_attitude = { who = ROOT attitude = attitude_friendly }
+						ai_attitude = { who = ROOT attitude = attitude_threatened }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_neutral }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_hostile }
+						ai_attitude = { who = ROOT attitude = attitude_outraged }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 30
+					}
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			multiply_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 2000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+		add_entry = {
+			name = ROOT_FROM_DIFF_OF_GOV_RANKS
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:government_rank
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:government_rank
+				who = FROM
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+			multiply_variable = { which = ai_value value = 10 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION_GROUP
+			limit = {
+				NOT = { religion_group = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				religion_group = FROM
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_MERCHANT_REPUBLIC
+			limit = {
+				FROM = {
+					has_reform = merchants_reform
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_MERCHANT_REPUBLIC
+			limit = {
+				has_reform = merchants_reform
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			export_to_variable = {
+				which = ai_value
+				value = army_size
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = army_size
+				who = FROM
+			}
+			multiply_variable = { which = ai_value_2 value = 1.5 }
+			subtract_variable = { which = ai_value which = ai_value_2 }
+		}
+		add_entry = {
+			name = FROM_IS_HRE_MEMBER
+			limit = {
+				is_part_of_hre = no
+				FROM = {
+					is_part_of_hre = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 75
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_HRE_MEMBER
+			limit = {
+				is_part_of_hre = yes
+				FROM = {
+					is_part_of_hre = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_HRE_ELECTOR
+			limit = {
+				FROM = {
+					is_elector = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_SUBJECTS
+			limit = {
+				NOT = { overlord_of = FROM }
+				FROM = {
+					num_of_subjects = 1
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_PAPAL_STATE
+			limit = {
+				FROM = {
+					tag = PAP
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_OWNS_FROM_CORE_PROVINCES
+			limit = {
+				NOT = { overlord_of = FROM }
+				any_owned_province = {
+					is_core = FROM
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = BORDER_DISTANCE
+			export_to_variable = {
+				which = ai_value
+				value = border_distance
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_HAVE_SAME_PRIMARY_CULTURE
+			limit = {
+				primary_culture = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_IS_IMPERIAL_CITY
+			limit = {
+				FROM = {
+					has_reform = free_city
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_EMPEROR
+			limit = {
+				FROM = {
+					is_emperor = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_DEVELOPMENT
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = FROM_NUM_OF_PROVINCES
+			export_to_variable = {
+				which = ai_value
+				value = num_of_cities
+				who = FROM
+			}
+			multiply_variable = { which = ai_value value = -5 }
+		}
+	}
+	
+	ai_will_do = {
+		NOT = { has_country_flag = formed_netherlands_flag }
+		OR = {
+			tag = HOL
+			tag = UTR
+			tag = GEL
+			any_subject_country = {
+				is_subject_of_type = dutch_province_subject
+			}
+		}
+		OR = {
+			owns = 95
+			owns = 96
+			owns = 97
+			owns = 98
+			owns = 99
+			owns = 100
+			owns = 4383
+		}
+		FROM = {
+			OR = {
+				owns = 95
+				owns = 96
+				owns = 97
+				owns = 98
+				owns = 99
+				owns = 100
+				owns = 4383
+			}
+			OR = {
+				NOT = { has_country_flag = declined_establish_dutch_province_subject_@ROOT }
+				had_country_flag = { flag = declined_establish_dutch_province_subject_@ROOT days = 1825 }
+			}
+		}
+	}
+}
+
+ask_for_dutch_province_subject = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = ask_for_dutch_province_subject_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = dutch_province_subject
+			}
+		}
+	}
+	
+	is_allowed = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = dutch_province_subject
+			}
+		}
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+		FROM = {
+			army_size = ROOT
+		}
+		FROM = {
+			total_base_tax = ROOT
+		}
+		is_month = 1
+		if = {
+			limit = {
+				NOT = { is_subject_of = FROM }
+			}
+			alliance_with = FROM
+		}
+		else = {
+			NOT = { liberty_desire = 50 }
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = dutch_province_subject
+					}
+				}
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				FROM = {
+					army_size = ROOT
+				}
+				FROM = {
+					total_base_tax = ROOT
+				}
+				is_month = 1
+				if = {
+					limit = {
+						NOT = { is_subject_of = FROM }
+					}
+					alliance_with = FROM
+				}
+				else = {
+					NOT = { liberty_desire = 50 }
+				}
+			}
+			FROM = {
+				create_subject = {
+					subject = ROOT
+					subject_type = dutch_province_subject
+				}
+				add_truce_with = ROOT
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = dutch_province_subject
+					}
+				}
+				is_at_war = no
+				FROM = {
+					is_at_war = no
+				}
+				FROM = {
+					army_size = ROOT
+				}
+				FROM = {
+					total_base_tax = ROOT
+				}
+				is_month = 1
+				if = {
+					limit = {
+						NOT = { is_subject_of = FROM }
+					}
+					alliance_with = FROM
+				}
+				else = {
+					NOT = { liberty_desire = 50 }
+				}
+			}
+			clr_country_flag = declined_establish_dutch_province_subject_@FROM
+			set_country_flag = declined_establish_dutch_province_subject_@FROM
+			add_opinion = {
+				who = FROM
+				modifier = declined_ask_for_dutch_province_subject_opinion
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = ROOT_IS_VASSAL_OF_FROM
+			limit = {
+				is_subject_of = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+		}
+		add_entry = {
+			name = ROOT_LIBERTY_DESIRE_TOO_HIGH
+			limit = {
+				is_subject_of = FROM
+				liberty_desire = 50
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_allied }
+						ai_attitude = { who = ROOT attitude = attitude_friendly }
+						ai_attitude = { who = ROOT attitude = attitude_threatened }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_neutral }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_hostile }
+						ai_attitude = { who = ROOT attitude = attitude_outraged }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					trust = {
+						who = ROOT
+						value = 30
+					}
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trust
+				who = FROM
+				with = ROOT
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			multiply_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = TRUST
+			limit = {
+				FROM = {
+					NOT = {
+						trust = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 2000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+		add_entry = {
+			name = ROOT_FROM_DIFF_OF_GOV_RANKS
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:government_rank
+				who = FROM
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:government_rank
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+			multiply_variable = { which = ai_value value = 10 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION_GROUP
+			limit = {
+				NOT = { religion_group = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				religion_group = FROM
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_IS_MERCHANT_REPUBLIC
+			limit = {
+				FROM = {
+					has_reform = merchants_reform
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_MERCHANT_REPUBLIC
+			limit = {
+				has_reform = merchants_reform
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			export_to_variable = {
+				which = ai_value
+				value = army_size
+				who = FROM
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = army_size
+			}
+			multiply_variable = { which = ai_value_2 value = 1.5 }
+			subtract_variable = { which = ai_value which = ai_value_2 }
+		}
+		add_entry = {
+			name = ROOT_OWNS_FROM_CORE_PROVINCES
+			limit = {
+				NOT = { is_subject_of = FROM }
+				any_owned_province = {
+					is_core = FROM
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = BORDER_DISTANCE
+			export_to_variable = {
+				which = ai_value
+				value = border_distance
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_HAVE_SAME_PRIMARY_CULTURE
+			limit = {
+				primary_culture = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = ROOT_DEVELOPMENT
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:total_development
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -3 }
+		}
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = ROOT_NUM_OF_PROVINCES
+			export_to_variable = {
+				which = ai_value
+				value = num_of_cities
+			}
+			multiply_variable = { which = ai_value value = -4 }
+		}
+		add_entry = {
+			name = STRATEGIC_INTEREST
+			limit = {
+				NOT = {
+					FROM = {
+						NOT = { has_country_flag = formed_netherlands_flag }
+						OR = {
+							tag = HOL
+							tag = UTR
+							tag = GEL
+							any_subject_country = {
+								is_subject_of_type = dutch_province_subject
+							}
+						}
+						OR = {
+							owns = 95
+							owns = 96
+							owns = 97
+							owns = 98
+							owns = 99
+							owns = 100
+							owns = 4383
+						}
+					}
+					OR = {
+						owns = 95
+						owns = 96
+						owns = 97
+						owns = 98
+						owns = 99
+						owns = 100
+						owns = 4383
+					}
+					OR = {
+						NOT = { has_country_flag = declined_establish_dutch_province_subject_@FROM }
+						had_country_flag = { flag = declined_establish_dutch_province_subject_@FROM days = 1825 }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		OR = {
+			owns = 95
+			owns = 96
+			owns = 97
+			owns = 98
+			owns = 99
+			owns = 100
+			owns = 4383
+		}
+		OR = {
+			NOT = { has_country_flag = declined_establish_dutch_province_subject_@FROM }
+			had_country_flag = { flag = declined_establish_dutch_province_subject_@FROM days = 1825 }
+		}
+		NOT = { has_reform = free_city }
+		is_emperor = no
+		NOT = { num_of_subjects = 1 }
+		NOT = { num_of_cities = 20 }
+		NOT = { num_of_cities = FROM }
+		FROM = {
+			NOT = { has_country_flag = formed_netherlands_flag }
+			OR = {
+				tag = HOL
+				tag = UTR
+				tag = GEL
+				overlord_of = ROOT
+				any_subject_country = {
+					is_subject_of_type = dutch_province_subject
+				}
+			}
+			OR = {
+				owns = 95
+				owns = 96
+				owns = 97
+				owns = 98
+				owns = 99
+				owns = 100
+				owns = 4383
+			}
+		}
+	}
+}
+
+dutch_province_subject_ask_for_independence = {
+	category = influence
+	
+	alert_index = 2
+	alert_tooltip = dutch_province_subject_ask_for_independence_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+		is_subject_of = FROM
+		is_subject_of_type = dutch_province_subject
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+			is_subject_of = FROM
+			is_subject_of_type = dutch_province_subject
+		}
+		is_at_war = no
+		liberty_desire = 50
+		NOT = { truce_with = FROM }
+		is_month = 1
+		custom_trigger_tooltip = {
+			tooltip = DID_NOT_ASK_FOR_INDEPENDENCE_WITHIN_LAST_6_MONTHS
+			NOT = { has_country_modifier = cooldown_dutch_province_subject_ask_for_independence }
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+				is_subject_of = FROM
+				is_subject_of_type = dutch_province_subject
+				is_at_war = no
+				liberty_desire = 50
+				NOT = { truce_with = FROM }
+				is_month = 1
+			}
+			FROM = {
+				ROOT = { grant_independence = yes }
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+				is_subject_of = FROM
+				is_subject_of_type = dutch_province_subject
+				is_at_war = no
+				liberty_desire = 50
+				NOT = { truce_with = FROM }
+				is_month = 1
+			}
+			add_liberty_desire = 50
+			add_opinion = {
+				who = FROM
+				modifier = dutch_province_subject_declined_freedom
+			}
+			add_country_modifier = {
+				name = cooldown_dutch_province_subject_ask_for_independence
+				duration = 183
+				hidden = yes
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = ROOT_LIBERTY_DESIRE_TOO_LOW
+			limit = {
+				NOT = { liberty_desire = 50 }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_LIBERTY_DESIRE
+			limit = {
+				liberty_desire = 50
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+			}
+			subtract_variable = { which = ai_value value = 51 }
+			divide_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = ROOT_FROM_MILITARY_POWER_COMPARED
+			export_to_variable = {
+				which = ai_value
+				value = army_size
+				who = FROM
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = army_size
+			}
+			divide_variable = { which = ai_value value = 2 }
+			subtract_variable = { which = ai_value which = ai_value_2 }
+		}
+		add_entry = {
+			name = ROOT_AMOUNT_OF_ALLIANCES
+			limit = {
+				num_of_allies = 1
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:num_of_allies
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			multiply_variable = { which = ai_value value = 10 }
+		}
+		add_entry = {
+			name = FROM_AMOUNT_OF_ALLIANCES
+			limit = {
+				num_of_allies = 1
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:num_of_allies
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			multiply_variable = { which = ai_value value = -3 }
+		}
+		add_entry = {
+			name = ROOT_HAS_NO_ALLIANCES
+			limit = {
+				NOT = { num_of_allies = 1 }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_DEVELOPMENT
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:total_development
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -5 }
+		}
+		add_entry = {
+			name = ROOT_FROM_ARE_HISTORICAL_FRIENDS
+			limit = {
+				historical_friend_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 3 }
+		}
+		add_entry = {
+			name = FROM_COULD_PERHAPS_ENACT_A_REFORM
+			limit = {
+				FROM = {
+					OR = {
+						NOT = { has_global_flag = dutch_province_subject_no_internal_war }
+						AND = {
+							NOT = { has_global_flag = dutch_province_subject_no_external_war }
+							had_global_flag = { flag = dutch_province_subject_no_internal_war days = 1460 }
+						}
+						AND = {
+							NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+							had_global_flag = { flag = dutch_province_subject_no_external_war days = 1460 }
+						}
+					}
+					is_subject = no
+					is_nomad = no
+					stability = 1
+					adm_power = 150
+					dip_power = 150
+					mil_power = 150
+					calc_true_if = {
+						all_subject_country = {
+							is_subject_of_type = dutch_province_subject
+						}
+						amount = 2
+					}
+				}
+				years_in_vassalage_under = {
+					who = FROM
+					years = 1
+					all_subject_country = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = NUM_OF_DUTCH_PROVINCES_REFORMS_PASSED
+			limit = {
+				has_global_flag = dutch_province_subject_no_internal_war
+				NOT = { has_global_flag = dutch_province_subject_no_external_war }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = NUM_OF_DUTCH_PROVINCES_REFORMS_PASSED
+			limit = {
+				has_global_flag = dutch_province_subject_no_external_war
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		num_of_allies = 1
+		liberty_desire = 70
+	}
+}
+
+dutch_province_subject_force_white_peace = {
+	category = influence
+	
+	alert_index = 2
+	alert_tooltip = dutch_province_subject_force_white_peace_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		has_global_flag = dutch_province_subject_no_leader_election
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = dutch_province_subject
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			has_global_flag = dutch_province_subject_no_leader_election
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = dutch_province_subject
+			}
+		}
+		is_at_war = no
+		FROM = {
+			NOT = { liberty_desire = 50 }
+		}
+		FROM = {
+			custom_trigger_tooltip = {
+				tooltip = WAS_NOT_FORCED_TO_DO_WHITE_PEACE_WITHIN_LAST_YEAR
+				NOT = { has_country_modifier = cooldown_dutch_province_subject_force_white_peace }
+			}
+		}
+		FROM = {
+			is_at_war = yes
+			custom_trigger_tooltip = {
+				tooltip = IS_AT_LEAST_IN_ONE_WAR_WHERE_THEY_ARE_NOT_WARLEADER
+				any_country = {
+					war_with = FROM
+					NOT = {
+						is_in_war = {
+							participants = THIS
+							participants = FROM
+							attacker_leader = FROM
+						}
+					}
+					NOT = {
+						is_in_war = {
+							participants = THIS
+							participants = FROM
+							defender_leader = FROM
+						}
+					}
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = HAS_LARGER_ARMY_SIZE_THAN_ALL_WAR_LEADERS_AGAINST_FROM
+			all_country = {
+				OR = {
+					NOT = { war_with = FROM }
+					NOT = {
+						OR = {
+							is_in_war = {
+								participants = THIS
+								participants = FROM
+								attacker_leader = THIS
+							}
+							is_in_war = {
+								participants = THIS
+								participants = FROM
+								defender_leader = THIS
+							}
+						}
+					}
+					ROOT = { army_size = PREV }
+				}
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				has_global_flag = dutch_province_subject_no_leader_election
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = dutch_province_subject
+				}
+				is_at_war = no
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					NOT = { has_country_modifier = cooldown_dutch_province_subject_force_white_peace }
+				}
+				FROM = {
+					is_at_war = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_AT_LEAST_IN_ONE_WAR_WHERE_THEY_ARE_NOT_WARLEADER
+						any_country = {
+							war_with = PREV
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = PREV
+									attacker_leader = PREV
+								}
+							}
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = PREV
+									defender_leader = PREV
+								}
+							}
+						}
+					}
+				}
+				all_country = {
+					OR = {
+						NOT = { war_with = FROM }
+						NOT = {
+							OR = {
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									attacker_leader = THIS
+								}
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									defender_leader = THIS
+								}
+							}
+						}
+						ROOT = { army_size = PREV }
+					}
+				}
+			}
+			FROM = {
+				add_liberty_desire = 50
+				add_country_modifier = {
+					name = cooldown_dutch_province_subject_force_white_peace
+					duration = 365
+					hidden = yes
+				}
+				every_owned_province = {
+					limit = {
+						NOT = { controlled_by = PREV }
+						NOT = { controlled_by = REB }
+						NOT = { is_permanent_claim = controller }
+						NOT = { is_core = controller }
+					}
+					controller = {
+						add_claim = PREV
+					}
+				}
+				every_country = {
+					limit = {
+						war_with = PREV
+						NOT = {
+							is_in_war = {
+								participants = THIS
+								participants = PREV
+								attacker_leader = PREV
+							}
+						}
+						NOT = {
+							is_in_war = {
+								participants = THIS
+								participants = PREV
+								defender_leader = PREV
+							}
+						}
+					}
+					white_peace = PREV
+				}
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				has_global_flag = dutch_province_subject_no_leader_election
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = dutch_province_subject
+				}
+				is_at_war = no
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					NOT = { has_country_modifier = cooldown_dutch_province_subject_force_white_peace }
+				}
+				FROM = {
+					is_at_war = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_AT_LEAST_IN_ONE_WAR_WHERE_THEY_ARE_NOT_WARLEADER
+						any_country = {
+							war_with = PREV
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = PREV
+									attacker_leader = PREV
+								}
+							}
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = PREV
+									defender_leader = PREV
+								}
+							}
+						}
+					}
+				}
+				all_country = {
+					OR = {
+						NOT = { war_with = FROM }
+						NOT = {
+							OR = {
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									attacker_leader = THIS
+								}
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									defender_leader = THIS
+								}
+							}
+						}
+						ROOT = { army_size = PREV }
+					}
+				}
+			}
+			FROM = {
+				add_liberty_desire = 25
+				add_country_modifier = {
+					name = cooldown_dutch_province_subject_force_white_peace
+					duration = 365
+					hidden = yes
+				}
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = base_values
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					any_owned_province = {
+						NOT = { controlled_by = PREV }
+						NOT = { controlled_by = REB }
+					}
+					NOT = {
+						calc_true_if = {
+							all_owned_province = {
+								NOT = { controlled_by = PREV }
+								NOT = { controlled_by = REB }
+							}
+							amount = 2
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					calc_true_if = {
+						all_owned_province = {
+							NOT = { controlled_by = PREV }
+							NOT = { controlled_by = REB }
+						}
+						amount = 2
+					}
+					NOT = {
+						calc_true_if = {
+							all_owned_province = {
+								NOT = { controlled_by = PREV }
+								NOT = { controlled_by = REB }
+							}
+							amount = 4
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					calc_true_if = {
+						all_owned_province = {
+							NOT = { controlled_by = PREV }
+							NOT = { controlled_by = REB }
+						}
+						amount = 4
+					}
+					NOT = {
+						calc_true_if = {
+							all_owned_province = {
+								NOT = { controlled_by = PREV }
+								NOT = { controlled_by = REB }
+							}
+							amount = 6
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					calc_true_if = {
+						all_owned_province = {
+							NOT = { controlled_by = PREV }
+							NOT = { controlled_by = REB }
+						}
+						amount = 6
+					}
+					NOT = {
+						calc_true_if = {
+							all_owned_province = {
+								NOT = { controlled_by = PREV }
+								NOT = { controlled_by = REB }
+							}
+							amount = 8
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 40
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					calc_true_if = {
+						all_owned_province = {
+							NOT = { controlled_by = PREV }
+							NOT = { controlled_by = REB }
+						}
+						amount = 8
+					}
+					NOT = {
+						calc_true_if = {
+							all_owned_province = {
+								NOT = { controlled_by = PREV }
+								NOT = { controlled_by = REB }
+							}
+							amount = 10
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+		}
+		add_entry = {
+			name = FROM_HAS_ENEMY_CONTROLLED_PROVINCES
+			limit = {
+				FROM = {
+					calc_true_if = {
+						all_owned_province = {
+							NOT = { controlled_by = PREV }
+							NOT = { controlled_by = REB }
+						}
+						amount = 10
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 75
+			}
+		}
+		add_entry = {
+			name = FROM_NUM_OF_PROVINCES
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:num_of_cities
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -3 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				any_province = {
+					NOT = { owned_by = FROM }
+					controlled_by = FROM
+				}
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							NOT = { owned_by = FROM }
+							controlled_by = FROM
+						}
+						amount = 2
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				calc_true_if = {
+					all_province = {
+						NOT = { owned_by = FROM }
+						controlled_by = FROM
+					}
+					amount = 2
+				}
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							NOT = { owned_by = FROM }
+							controlled_by = FROM
+						}
+						amount = 4
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				calc_true_if = {
+					all_province = {
+						NOT = { owned_by = FROM }
+						controlled_by = FROM
+					}
+					amount = 4
+				}
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							NOT = { owned_by = FROM }
+							controlled_by = FROM
+						}
+						amount = 6
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				calc_true_if = {
+					all_province = {
+						NOT = { owned_by = FROM }
+						controlled_by = FROM
+					}
+					amount = 6
+				}
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							NOT = { owned_by = FROM }
+							controlled_by = FROM
+						}
+						amount = 8
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 40
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				calc_true_if = {
+					all_province = {
+						NOT = { owned_by = FROM }
+						controlled_by = FROM
+					}
+					amount = 8
+				}
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							NOT = { owned_by = FROM }
+							controlled_by = FROM
+						}
+						amount = 10
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_HAS_OWN_CONTROLLED_PROVINCES
+			limit = {
+				calc_true_if = {
+					all_province = {
+						NOT = { owned_by = FROM }
+						controlled_by = FROM
+					}
+					amount = 10
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = FROM_CAPITAL_CONTROLLED_BY_ENEMY
+			limit = {
+				FROM = {
+					capital_scope = {
+						NOT = { controlled_by = PREV }
+						NOT = { controlled_by = REB }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+		}
+		add_entry = {
+			name = FROM_ENEMY_ARMIES_ON_CORE_TERRITORY
+			limit = {
+				FROM = {
+					any_owned_province = {
+						is_core = PREV
+						any_country = {
+							war_with = FROM
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									attacker_leader = FROM
+								}
+							}
+							NOT = {
+								is_in_war = {
+									participants = THIS
+									participants = FROM
+									defender_leader = FROM
+								}
+							}
+							PREV = {
+								num_of_units_in_province = {
+									who = PREV
+									amount = 5
+								}
+							}
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = FROM_ARMY_SIZE
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:army_size
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -2 }
+		}
+		add_entry = {
+			name = FROM_LIBERTY_DESIRE
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 1 }
+			divide_variable = { which = ai_value value = -2 }
+		}
+	}
+	
+	ai_will_do = {
+		calc_true_if = {
+			all_subject_country = {
+				is_subject_of_type = dutch_province_subject
+			}
+			amount = 2
+		}
+		NOT = {
+			calc_true_if = {
+				all_subject_country = {
+					is_subject_of_type = dutch_province_subject
+				}
+				amount = 3
+			}
+		}
+		FROM = {
+			any_owned_province = {
+				NOT = { controlled_by = PREV }
+				NOT = { controlled_by = REB }
+			}
+		}
+	}
+}
+
+cancel_dutch_province_subject = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = dutch_province_subject
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = dutch_province_subject
+			}
+		}
+		NOT = { truce_with = FROM }
+		prestige = 0
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = dutch_province_subject
+				}
+				NOT = { truce_with = FROM }
+				prestige = 0
+			}
+			FROM = {
+				if = {
+					limit = {
+						NOT = { liberty_desire = 50 }
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = vassal_abandoned
+					}
+				}
+				grant_independence = yes
+				add_truce_with = ROOT
+			}
+			add_truce_with = FROM
+			add_prestige = -25
+		}
+	}
+	
+	ai_will_do = {
+		OR = {
+			AND = {
+				exists = NED
+				NOT = { tag = NED }
+			}
+			FROM = {
+				liberty_desire = 100
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 50
+					all_subject_country = yes
+				}
+			}
+		}
+	}
+}

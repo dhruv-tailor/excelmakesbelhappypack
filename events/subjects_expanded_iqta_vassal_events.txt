@@ -1,0 +1,241 @@
+namespace = subjects_expanded_iqta_vassal_events
+
+country_event = {
+	id = subjects_expanded_iqta_vassal_events.1
+	title = subjects_expanded_iqta_vassal_events.EVTNAME1
+	desc = subjects_expanded_iqta_vassal_events.EVTDESC1
+	picture = RELIGIOUS_eventPicture
+	
+	trigger = {
+		is_subject_of_type = iqta_vassal
+		NOT = { religion_group = muslim }
+		overlord = {
+			religion_group = muslim
+		}
+	}
+	
+	mean_time_to_happen = { months = 1 }
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events1.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		overlord = {
+			ROOT = {
+				change_religion = PREV
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events1.EVTOPT2
+		
+		ai_chance = { factor = 0 }
+		
+		overlord = {
+			ROOT = {
+				hidden_effect = {
+					add_casus_belli = {
+						target = PREV
+						type = cb_independence_war
+					}
+				}
+				declare_war_with_cb = {
+					who = PREV
+					casus_belli = cb_independence_war
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_iqta_vassal_events.2
+	title = subjects_expanded_iqta_vassal_events.EVTNAME2
+	desc = subjects_expanded_iqta_vassal_events.EVTDESC2
+	picture = RELIGIOUS_eventPicture
+	
+	trigger = {
+		NOT = { religion_group = muslim }
+		any_subject_country = {
+			is_subject_of_type = iqta_vassal
+		}
+	}
+	
+	mean_time_to_happen = { months = 1 }
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = iqta_vassal
+			}
+			ROOT = {
+				vassalize = PREV
+			}
+			add_liberty_desire = 10
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_iqta_vassal_events.3
+	title = subjects_expanded_iqta_vassal_events.EVTNAME3
+	desc = subjects_expanded_iqta_vassal_events.EVTDESC3
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = iqta_vassal
+		NOT = { government = monarchy }
+		NOT = { has_country_flag = executing_subjects_expanded_iqta_vassal_events_3 }
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = executing_subjects_expanded_iqta_vassal_events_3
+			if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events3.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		clr_country_flag = executing_subjects_expanded_iqta_vassal_events_3
+	}
+}
+
+country_event = {
+	id = subjects_expanded_iqta_vassal_events.4
+	title = subjects_expanded_iqta_vassal_events.EVTNAME4
+	desc = subjects_expanded_iqta_vassal_events.EVTDESC4
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		NOT = { is_subject_of_type = iqta_vassal }
+		OR = {
+			has_country_modifier = iqta_vassal_allow_annex_modifier
+			has_country_modifier = iqta_vassal_is_getting_annexed_modifier
+		}
+	}
+	
+	mean_time_to_happen = { months = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = iqta_vassal_allow_annex_modifier
+			remove_country_modifier = iqta_vassal_is_getting_annexed_modifier
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events4.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+province_event = {
+	id = subjects_expanded_iqta_vassal_events.5
+	title = subjects_expanded_iqta_vassal_events.EVTNAME5
+	desc = subjects_expanded_iqta_vassal_events.EVTDESC5
+	picture = DIPLOMACY_eventPicture
+	
+	trigger = {
+		NOT = { religion_group = muslim }
+		controlled_by = owner
+		owner = {
+			is_subject_of_type = iqta_vassal
+			religion_group = muslim
+			overlord = {
+				religion_group = muslim
+				NOT = { religion = ROOT }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.75
+			owner = {
+				OR = {
+					has_idea_group = religious_ideas
+					overlord = {
+						has_idea_group = religious_ideas
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.8
+			owner = {
+				has_country_modifier = iqta_vassal_scutage_modifier
+			}
+		}
+		modifier = {
+			factor = 1.5
+			owner = {
+				stability = 0
+			}
+		}
+		modifier = {
+			factor = 5
+			owner = {
+				liberty_desire = 50
+			}
+		}
+		modifier = {
+			factor = 1.5
+			has_dlc = "The Cossacks"
+			owner = {
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 25
+				}
+			}
+		}
+		modifier = {
+			factor = 1.1
+			num_of_cities = 20
+		}
+		modifier = {
+			factor = 1.5
+			num_of_cities = 50
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			owner = {
+				overlord = {
+					save_event_target_as = province_owner_overlord
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_iqta_vassal_events5.EVTOPT1
+		
+		change_religion = event_target:province_owner_overlord
+	}
+}

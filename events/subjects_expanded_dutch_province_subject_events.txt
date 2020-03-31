@@ -1,0 +1,1381 @@
+namespace = subjects_expanded_dutch_province_subject_events
+
+# 1st Reform
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.1
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME1
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC1
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events1.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		custom_tooltip = DUTCH_PROVINCE_SUBJECT_NO_INTERNAL_WAR_TT
+	}
+}
+
+# 2nd Reform
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.2
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME2
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC2
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		custom_tooltip = DUTCH_PROVINCE_SUBJECT_NO_EXTERNAL_WAR_TT
+	}
+}
+
+# 3rd Reform
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.3
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME3
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC3
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events3.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		custom_tooltip = DUTCH_PROVINCE_SUBJECT_NO_LEADER_ELECTION_TT
+	}
+}
+
+# AI Election
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.4
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME4
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC4
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+		NOT = { is_month = 1 }
+		NOT = { has_country_modifier = cooldown_dutch_provinces_election }
+		any_subject_country = {
+			is_subject_of_type = dutch_province_subject
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = cooldown_dutch_provinces_election
+				duration = 50
+				hidden = yes
+			}
+			if = {
+				limit = {
+					ai = yes
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.5 }
+			}
+			every_subject_country = {
+				limit = {
+					ai = yes
+					is_subject_of_type = dutch_province_subject
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.5 }
+			}
+			
+			if = {
+				limit = {
+					ai = yes
+					NOT = { has_country_flag = elected_as_dutch_province_overlord_by_@THIS }
+					any_country = {
+						PREV = { has_country_flag = elected_as_dutch_province_overlord_by_@PREV }
+					}
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.6 }
+			}
+			every_subject_country = {
+				limit = {
+					ai = yes
+					is_subject_of_type = dutch_province_subject
+					NOT = { has_country_flag = elected_as_dutch_province_overlord_by_@THIS }
+					any_country = {
+						PREV = { has_country_flag = elected_as_dutch_province_overlord_by_@PREV }
+					}
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.6 }
+			}
+			
+			if = {
+				limit = {
+					ai = yes
+					has_country_flag = elected_as_dutch_province_overlord_by_@THIS
+					check_variable = { which = dutch_province_election_variable value = 0 }
+					NOT = {
+						any_country = {
+							PREV = { has_country_flag = elected_as_dutch_province_overlord_by_@PREV }
+						}
+					}
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.5 }
+			}
+			every_subject_country = {
+				limit = {
+					ai = yes
+					has_country_flag = elected_as_dutch_province_overlord_by_@THIS
+					check_variable = { which = dutch_province_election_variable value = 0 }
+					NOT = {
+						any_country = {
+							PREV = { has_country_flag = elected_as_dutch_province_overlord_by_@PREV }
+						}
+					}
+				}
+				country_event = { id = subjects_expanded_dutch_province_subject_events.5 }
+			}
+			
+			country_event = { id = subjects_expanded_dutch_province_subject_events.7 days = 1 }
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events4.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.5
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME5
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC5
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			AI_dutch_province_select_elected_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events5.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.6
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME6
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC6
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events6.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Election Finished
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.7
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME7
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC7
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			find_new_dutch_province_overlord = yes
+			set_country_flag = part_of_dutch_province_election_of_@ROOT
+			every_subject_country = {
+				limit = {
+					is_subject_of_type = dutch_province_subject
+				}
+				set_country_flag = part_of_dutch_province_election_of_@ROOT
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events7.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = {
+				has_country_flag = new_overlord_of_dutch_provinces
+			}
+			custom_tooltip = THIS_IS_NEW_OVERLORD_OF_DUTCH_PROVINCES
+			hidden_effect = {
+				save_event_target_as = new_dutch_provinces_overlord
+				clr_country_flag = new_overlord_of_dutch_provinces
+			}
+		}
+		else = {
+			random_subject_country = {
+				limit = {
+					has_country_flag = new_overlord_of_dutch_provinces
+				}
+				custom_tooltip = THIS_IS_NEW_OVERLORD_OF_DUTCH_PROVINCES
+				hidden_effect = {
+					save_event_target_as = new_dutch_provinces_overlord
+					make_new_overlord_of_dutch_provinces = yes
+					clr_country_flag = new_overlord_of_dutch_provinces
+				}
+			}
+		}
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = part_of_dutch_province_election_of_@ROOT
+				}
+				if = {
+					limit = {
+						ai = no
+					}
+					country_event = { id = subjects_expanded_dutch_province_subject_events.8 }
+				}
+				clr_country_flag = part_of_dutch_province_election_of_@ROOT
+			}
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.8
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME8
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC8
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_1_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_1
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_1_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_1_rival
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_2_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_2
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_2_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_2_rival
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_3_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_3
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_3_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_3_rival
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_4_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_4
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_4_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_4_rival
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_5_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_5
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_5_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_5_rival
+					}
+				}
+				every_country = {
+					limit = {
+						has_country_flag = election_value_of_dutch_province_6_@ROOT
+					}
+					save_event_target_as = election_value_of_dutch_province_6
+					every_country = {
+						limit = {
+							has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_6_target
+					}
+					every_country = {
+						limit = {
+							OR = {
+								AND = {
+									has_country_flag = election_value_of_dutch_province_1_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_2_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_3_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_4_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_5_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+								}
+								AND = {
+									has_country_flag = election_value_of_dutch_province_6_@PREV
+									PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+								}
+							}
+						}
+						save_event_target_as = election_value_of_dutch_province_6_rival
+					}
+				}
+			}
+			else = {
+				random_country = {
+					limit = {
+						ai = yes
+						OR = {
+							tag = event_target:new_dutch_provinces_overlord
+							AND = {
+								event_target:new_dutch_provinces_overlord = { overlord_of = PREV }
+								is_subject_of_type = dutch_province_subject
+							}
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_1_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_1
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_1_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_1_rival
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_2_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_2
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_2_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_2_rival
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_3_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_3
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_3_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_3_rival
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_4_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_4
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_4_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_4_rival
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_5_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_5
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_5_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_5_rival
+						}
+					}
+					every_country = {
+						limit = {
+							has_country_flag = election_value_of_dutch_province_6_@PREV
+						}
+						save_event_target_as = election_value_of_dutch_province_6
+						every_country = {
+							limit = {
+								has_country_flag = elected_as_dutch_province_overlord_by_@PREV
+							}
+							save_event_target_as = election_value_of_dutch_province_6_target
+						}
+						every_country = {
+							limit = {
+								OR = {
+									AND = {
+										has_country_flag = election_value_of_dutch_province_1_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_1 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_2_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_2 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_3_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_3 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_4_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_4 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_5_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_5 } }
+									}
+									AND = {
+										has_country_flag = election_value_of_dutch_province_6_@PREV
+										PREV = { is_variable_equal = { which = dutch_province_dutch_province_election_variable_rival which = election_value_of_dutch_province_6 } }
+									}
+								}
+							}
+							save_event_target_as = election_value_of_dutch_province_6_rival
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events8.EVTOPT1
+		
+		event_target:new_dutch_provinces_overlord = {
+			custom_tooltip = THIS_IS_NEW_OVERLORD_OF_DUTCH_PROVINCES
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_1
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_1_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_1_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_1
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_1
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_1
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_1_NO_RIVAL
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_2
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_2_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_2_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_2
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_2
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_2
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_2_NO_RIVAL
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_3
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_3_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_3_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_3
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_3
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_3
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_3_NO_RIVAL
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_4
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_4_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_4_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_4
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_4
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_4
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_4_NO_RIVAL
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_5
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_5_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_5_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_5
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_5
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_5
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_5_NO_RIVAL
+		}
+		
+		if = {
+			limit = {
+				any_country = {
+					ai = yes
+					tag = event_target:election_value_of_dutch_province_6
+				}
+				OR = {
+					tag = event_target:election_value_of_dutch_province_6_rival
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_6_rival
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_6
+		}
+		else_if = {
+			limit = {
+				OR = {
+					tag = event_target:election_value_of_dutch_province_6
+					any_country = {
+						tag = event_target:election_value_of_dutch_province_6
+					}
+				}
+			}
+			custom_tooltip = DUTCH_PROVINCES_OVERLORD_ELECTION_INDIVIDUAL_RESULT_TT_6_NO_RIVAL
+		}
+	}
+}
+
+# Player Election
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.9
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME9
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC9
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_subject_of_type = dutch_province_subject
+				}
+				overlord = {
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_1
+					random_subject_country = {
+						limit = {
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+						}
+						save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_2
+					}
+					random_subject_country = {
+						limit = {
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+						}
+						save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_3
+					}
+					random_subject_country = {
+						limit = {
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+						}
+						save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_4
+					}
+					random_subject_country = {
+						limit = {
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+						}
+						save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_5
+					}
+					random_subject_country = {
+						limit = {
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+							NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+						}
+						save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_6
+					}
+				}
+			}
+			else = {
+				save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_1
+				random_subject_country = {
+					limit = {
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+					}
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_2
+				}
+				random_subject_country = {
+					limit = {
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+					}
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_3
+				}
+				random_subject_country = {
+					limit = {
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+					}
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_4
+				}
+				random_subject_country = {
+					limit = {
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+					}
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_5
+				}
+				random_subject_country = {
+					limit = {
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 }
+						NOT = { tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 }
+					}
+					save_event_target_as = possible_country_to_elect_for_dutch_provinces_overlord_6
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT1
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_1
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_1 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT2
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_2
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_2 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT3
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_3
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_3 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT4
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_4
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_4 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT5
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_5
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_5 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT6
+		
+		trigger = {
+			OR = {
+				tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6
+				any_country = {
+					tag = event_target:possible_country_to_elect_for_dutch_provinces_overlord_6
+				}
+			}
+		}
+		
+		ai_chance = { factor = 0 }
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+				}
+				clr_country_flag = elected_as_dutch_province_overlord_by_@ROOT
+			}
+		}
+		
+		event_target:possible_country_to_elect_for_dutch_provinces_overlord_6 = {
+			elect_this_as_dutch_province_overlord = yes
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events9.EVTOPT7
+		
+		ai_chance = { factor = 100 }
+	}
+	
+	after = {
+		clr_country_flag = has_dutch_provinces_player_election
+	}
+}
+
+country_event = {
+	id = subjects_expanded_dutch_province_subject_events.10
+	title = subjects_expanded_dutch_province_subject_events.EVTNAME10
+	desc = subjects_expanded_dutch_province_subject_events.EVTDESC10
+	picture = DIPLOMACY_eventPicture
+	
+	trigger = {
+		any_subject_country = {
+			is_subject_of_type = dutch_province_subject
+		}
+		OR = {
+			AND = {
+				NOT = { primary_culture = dutch }
+				NOT = { primary_culture = flemish }
+			}
+			capital_scope = {
+				NOT = { region = low_countries_region }
+			}
+			any_subject_country = {
+				is_subject_of_type = dutch_province_subject
+				OR = {
+					AND = {
+						NOT = { primary_culture = dutch }
+						NOT = { primary_culture = flemish }
+					}
+					capital_scope = {
+						NOT = { region = low_countries_region }
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	option = {
+		name = subjects_expanded_dutch_province_subject_events10.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = {
+				OR = {
+					AND = {
+						NOT = { primary_culture = dutch }
+						NOT = { primary_culture = flemish }
+					}
+					capital_scope = {
+						NOT = { region = low_countries_region }
+					}
+				}
+			}
+			every_subject_country = {
+				limit = {
+					is_subject_of_type = dutch_province_subject
+				}
+				grant_independence = yes
+			}
+		}
+		else = {
+			every_subject_country = {
+				limit = {
+					is_subject_of_type = dutch_province_subject
+					OR = {
+						AND = {
+							NOT = { primary_culture = dutch }
+							NOT = { primary_culture = flemish }
+						}
+						capital_scope = {
+							NOT = { region = low_countries_region }
+						}
+					}
+				}
+				grant_independence = yes
+			}
+		}
+	}
+}

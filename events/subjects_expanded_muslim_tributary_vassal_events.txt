@@ -1,0 +1,207 @@
+namespace = subjects_expanded_muslim_tributary_vassal_events
+
+country_event = {
+	id = subjects_expanded_muslim_tributary_vassal_events.1
+	title = subjects_expanded_muslim_tributary_vassal_events.EVTNAME1
+	desc = subjects_expanded_muslim_tributary_vassal_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = muslim_tributary_vassal
+		NOT = { government = monarchy }
+		NOT = { has_country_flag = executing_subjects_expanded_muslim_tributary_vassal_events_1 }
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = executing_subjects_expanded_muslim_tributary_vassal_events_1
+			if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_muslim_tributary_vassal_events1.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		clr_country_flag = executing_subjects_expanded_muslim_tributary_vassal_events_1
+	}
+}
+
+country_event = {
+	id = subjects_expanded_muslim_tributary_vassal_events.2
+	title = subjects_expanded_muslim_tributary_vassal_events.EVTNAME2
+	desc = subjects_expanded_muslim_tributary_vassal_events.EVTDESC2
+	picture = BAD_WITH_MONARCH_eventPicture
+	
+	trigger = {
+		any_subject_country = {
+			is_subject_of_type = muslim_tributary_vassal
+			ROOT = {
+				OR = {
+					NOT = { religion_group = muslim }
+					religion_group = PREV
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+		
+		modifier = {
+			factor = 0.01
+			NOT = { religion_group = muslim }
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_muslim_tributary_vassal_events2.EVTOPT1
+		
+		trigger = {
+			religion_group = muslim
+		}
+		
+		ai_chance = { factor = 100 }
+		
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = muslim_tributary_vassal
+				religion_group = ROOT
+			}
+			ROOT = {
+				vassalize = PREV
+			}
+			add_liberty_desire = 25
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_muslim_tributary_vassal_events2.EVTOPT2
+		
+		ai_chance = { factor = 100 }
+		
+		add_prestige = -20
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = muslim_tributary_vassal
+				ROOT = {
+					OR = {
+						NOT = { religion_group = muslim }
+						religion_group = PREV
+					}
+				}
+			}
+			grant_independence = yes
+		}
+	}
+}
+
+province_event = {
+	id = subjects_expanded_muslim_tributary_vassal_events.3
+	title = subjects_expanded_muslim_tributary_vassal_events.EVTNAME3
+	desc = subjects_expanded_muslim_tributary_vassal_events.EVTDESC3
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		religion_group = muslim
+		NOT = { has_province_modifier = religious_zeal_at_conv }
+		owner = {
+			is_subject_of_type = muslim_tributary_vassal
+			NOT = { religion_group = muslim }
+			OR = {
+				AND = {
+					ROOT = { religion = sunni }
+					overlord = { religion = sunni }
+				}
+				AND = {
+					ROOT = { religion = shiite }
+					overlord = { religion = shiite }
+				}
+				AND = {
+					ROOT = { religion = ibadi }
+					overlord = { religion = ibadi }
+				}
+			}
+			overlord = {
+				religion_group = muslim
+				any_owned_province = {
+					has_owner_religion = yes
+					is_in_capital_area = yes
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = { months = 600 }
+	
+	option = {
+		name = subjects_expanded_muslim_tributary_vassal_events3.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		change_religion = owner
+		if = {
+			limit = {
+				base_tax = 2
+			}
+			add_base_tax = -1
+		}
+		else = {
+			add_devastation = 5
+		}
+		if = {
+			limit = {
+				base_production = 2
+			}
+			add_base_production = -1
+		}
+		else = {
+			add_devastation = 5
+		}
+		if = {
+			limit = {
+				base_manpower = 2
+			}
+			add_base_manpower = -1
+		}
+		else = {
+			add_devastation = 5
+		}
+		owner = {
+			overlord = {
+				random_owned_province = {
+					limit = {
+						has_owner_religion = yes
+						is_in_capital_area = yes
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_muslim_tributary_vassal_events3.EVTOPT2
+		
+		ai_chance = { factor = 100 }
+		
+		add_unrest = 5
+		add_province_modifier = {
+			name = religious_zeal_at_conv
+			duration = 3650
+		}
+	}
+}

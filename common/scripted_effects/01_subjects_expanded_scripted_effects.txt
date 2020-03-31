@@ -1,0 +1,121 @@
+# Audax Validator "!" Ignore_1006
+ms_calculate_yearly_manpower = {
+	# Calculate province manpower
+	set_variable = { which = autonomous_dominion_local_manpower_var value = 0 }
+	set_variable = { which = autonomous_dominion_global_manpower_var value = 0 }
+	every_owned_province = {
+		export_to_variable = {
+			which = autonomous_dominion_local_manpower_modifier_var
+			value = modifier:local_manpower_modifier
+		}
+		export_to_variable = {
+			which = autonomous_dominion_global_manpower_modifier_var
+			value = modifier:global_manpower_modifier
+			who = ROOT
+		}
+		change_variable = { which = autonomous_dominion_local_manpower_modifier_var which = autonomous_dominion_global_manpower_modifier_var }
+		export_to_variable = {
+			which = autonomous_dominion_local_manpower_var
+			value = trigger_value:base_manpower
+		}
+		multiply_variable = { which = autonomous_dominion_local_manpower_var value = 250 }
+		multiply_variable = { which = autonomous_dominion_local_manpower_var which = autonomous_dominion_local_manpower_modifier_var }
+		if = {
+			limit = {
+				NOT = { has_estate = estate_cossacks }
+				NOT = { has_estate = estate_nobles }
+				NOT = { has_estate = estate_nomadic_tribes }
+				NOT = { has_estate = estate_maratha }
+				NOT = { has_estate = estate_rajput }
+			}
+			export_to_variable = {
+				which = autonomous_dominion_local_autonomy_var
+				value = trigger_value:local_autonomy
+			}
+			divide_variable = { which = autonomous_dominion_local_autonomy_var value = -100 }
+			change_variable = { which = autonomous_dominion_local_autonomy_var value = 1 }
+			multiply_variable = { which = autonomous_dominion_local_manpower_var which = autonomous_dominion_local_autonomy_var }
+		}
+		ROOT = {
+			change_variable = { which = autonomous_dominion_local_manpower_var which = PREV }
+		}
+	}
+	change_variable = { which = autonomous_dominion_global_manpower_var which = autonomous_dominion_local_manpower_var }
+	divide_variable = { which = autonomous_dominion_global_manpower_var value = 1000 }
+	multiply_variable = { which = autonomous_dominion_global_manpower_var value = 1000 }
+	# Calculate yearly manpower
+	export_to_variable = {
+		which = autonomous_dominion_manpower_recovery_speed_var
+		value = modifier:manpower_recovery_speed
+	}
+	change_variable = { which = autonomous_dominion_manpower_recovery_speed_var value = 1 }
+	multiply_variable = { which = autonomous_dominion_global_manpower_var which = autonomous_dominion_manpower_recovery_speed_var }
+	export_to_variable = {
+		which = autonomous_dominion_max_manpower_var
+		value = modifier:global_manpower
+	}
+	multiply_variable = { which = autonomous_dominion_max_manpower_var value = 1000 }
+	change_variable = { which = autonomous_dominion_global_manpower_var which = autonomous_dominion_max_manpower_var }
+	divide_variable = { which = autonomous_dominion_global_manpower_var value = 10 }
+	divide_variable = { which = autonomous_dominion_global_manpower_var value = 1000 }
+	multiply_variable = { which = autonomous_dominion_global_manpower_var value = 1000 }
+}
+
+ms_calculate_yearly_sailors = {
+	# Calculate province sailors
+	set_variable = { which = autonomous_dominion_local_sailors_var value = 0 }
+	set_variable = { which = autonomous_dominion_global_sailors_var value = 0 }
+	every_owned_province = {
+		limit = {
+			has_port = yes
+		}
+		export_to_variable = {
+			which = autonomous_dominion_local_sailors_modifier_var
+			value = modifier:local_sailors_modifier
+		}
+		export_to_variable = {
+			which = autonomous_dominion_global_sailors_modifier_var
+			value = modifier:global_sailors_modifier
+			who = ROOT
+		}
+		change_variable = { which = autonomous_dominion_local_sailors_modifier_var which = autonomous_dominion_global_sailors_modifier_var }
+		export_to_variable = {
+			which = autonomous_dominion_local_sailors_var
+			value = modifier:local_sailors
+		}
+		multiply_variable = { which = autonomous_dominion_local_sailors_var which = autonomous_dominion_local_sailors_modifier_var }
+		if = {
+			limit = {
+				NOT = { has_estate = estate_burghers }
+			}
+			export_to_variable = {
+				which = autonomous_dominion_local_autonomy_var
+				value = trigger_value:local_autonomy
+			}
+			divide_variable = { which = autonomous_dominion_local_autonomy_var value = -100 }
+			change_variable = { which = autonomous_dominion_local_autonomy_var value = 1 }
+			multiply_variable = { which = autonomous_dominion_local_sailors_var which = autonomous_dominion_local_autonomy_var }
+		}
+		ROOT = {
+			change_variable = { which = autonomous_dominion_local_sailors_var which = PREV }
+		}
+	}
+	change_variable = { which = autonomous_dominion_global_sailors_var which = autonomous_dominion_local_sailors_var }
+	divide_variable = { which = autonomous_dominion_global_sailors_var value = 1000 }
+	multiply_variable = { which = autonomous_dominion_global_sailors_var value = 1000 }
+	# Calculate yearly sailors
+	export_to_variable = {
+		which = autonomous_dominion_sailors_recovery_speed_var
+		value = modifier:sailors_recovery_speed
+	}
+	change_variable = { which = autonomous_dominion_sailors_recovery_speed_var value = 1 }
+	multiply_variable = { which = autonomous_dominion_global_sailors_var which = autonomous_dominion_sailors_recovery_speed_var }
+	export_to_variable = {
+		which = autonomous_dominion_max_sailors_var
+		value = modifier:global_sailors
+	}
+	change_variable = { which = autonomous_dominion_global_sailors_var which = autonomous_dominion_max_sailors_var }
+	divide_variable = { which = autonomous_dominion_global_sailors_var value = 10 }
+	divide_variable = { which = autonomous_dominion_global_sailors_var value = 1000 }
+	multiply_variable = { which = autonomous_dominion_global_sailors_var value = 1000 }
+}

@@ -1,0 +1,566 @@
+establish_pagan_chiefdom = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = pagan_chiefdom
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = pagan_chiefdom
+		}
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = pagan_chiefdom
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = pagan_chiefdom
+			}
+		}
+	}
+	
+	ai_will_do = {
+		army_size = 15
+		FROM = {
+			NOT = { army_strength = { who = ROOT value = 0.75 } }
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+			any_neighbor_country = {
+				OR = {
+					is_rival = ROOT
+					is_enemy = ROOT
+				}
+			}
+		}
+	}
+}
+
+ask_to_become_pagan_chiefdom = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = ask_to_become_pagan_chiefdom_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = pagan_chiefdom
+			}
+		}
+	}
+	
+	is_allowed = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = pagan_chiefdom
+			}
+		}
+		is_at_war = no
+		FROM = { is_at_war = no }
+		NOT = { liberty_desire = 50 }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = pagan_chiefdom
+					}
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 50 }
+			}
+			FROM = {
+				create_subject = {
+					subject = ROOT
+					subject_type = pagan_chiefdom
+				}
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = pagan_chiefdom
+					}
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 50 }
+			}
+			FROM = {
+				clr_country_flag = declined_become_pagan_chiefdom_@ROOT
+				set_country_flag = declined_become_pagan_chiefdom_@ROOT
+			}
+			add_opinion = {
+				who = FROM
+				modifier = declined_ask_to_become_pagan_chiefdom
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 15
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_VASSAL_FOR_AT_LEAST_10_YEARS
+			limit = {
+				years_in_vassalage_under = {
+					who = FROM
+					years = 10
+					all_subject_country = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_NOT_A_NEIGHBOR_OF_FROMS_RIVALS
+			limit = {
+				NOT = {
+					any_neighbor_country = {
+						OR = {
+							is_rival = FROM
+							is_enemy = FROM
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_ARMY_SIZE
+			limit = {
+				army_strength = { who = FROM value = 0.75 }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		religion = FROM
+		any_neighbor_country = {
+			OR = {
+				is_rival = FROM
+				is_enemy = FROM
+			}
+		}
+		FROM = {
+			OR = {
+				NOT = { has_country_flag = declined_become_pagan_chiefdom_@ROOT }
+				had_country_flag = { flag = declined_become_pagan_chiefdom_@ROOT days = 1825 }
+			}
+		}
+	}
+}
+
+increase_looting_speed_with_pagan_chiefdom = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		has_dlc = "The Cossacks"
+		is_nomad = yes
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = pagan_chiefdom
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			has_dlc = "The Cossacks"
+			is_nomad = yes
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = pagan_chiefdom
+			}
+		}
+		horde_unity = 5
+		FROM = {
+			NOT = { liberty_desire = 50 }
+		}
+		FROM = {
+			custom_trigger_tooltip = {
+				tooltip = DID_NOT_INCREASE_LOOTING_SPEED_WITH_THIS_PAGAN_CHIEFDOM_WITHIN_LAST_10_YEARS
+				NOT = { has_country_modifier = increase_looting_speed_with_pagan_chiefdom_cooldown }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				has_dlc = "The Cossacks"
+				is_nomad = yes
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = pagan_chiefdom
+				}
+				horde_unity = 5
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					NOT = { has_country_modifier = increase_looting_speed_with_pagan_chiefdom_cooldown }
+				}
+			}
+			add_horde_unity = -5
+			FROM = {
+				add_country_modifier = {
+					name = increase_looting_speed_with_pagan_chiefdom_cooldown
+					duration = 3650
+					hidden = yes
+				}
+			}
+		}
+	}
+	
+	ai_will_do = {
+		horde_unity = 60
+		is_at_war = yes
+		OR = {
+			NOT = {
+				is_in_war = {
+					attach_leader = ROOT
+				}
+			}
+			NOT = {
+				any_country = {
+					is_in_war = {
+						attach_leader = ROOT
+						defenders = THIS
+					}
+					num_of_owned_provinces_with = {
+						value = 2
+						is_claim = ROOT
+					}
+				}
+			}
+		}
+		NOT = {
+			calc_true_if = {
+				all_subject_country = {
+					is_subject_of_type = pagan_chiefdom
+					has_country_modifier = increase_looting_speed_with_pagan_chiefdom_cooldown
+				}
+				amount = 2
+			}
+		}
+	}
+}
+
+increase_horde_unity_with_pagan_chiefdom = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		has_dlc = "The Cossacks"
+		is_nomad = yes
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = pagan_chiefdom
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			has_dlc = "The Cossacks"
+			is_nomad = yes
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = pagan_chiefdom
+			}
+		}
+		NOT = { horde_unity = 100 }
+		FROM = {
+			NOT = { liberty_desire = 50 }
+		}
+		FROM = {
+			custom_trigger_tooltip = {
+				tooltip = DID_NOT_INCREASE_HORDE_UNITY_WITH_THIS_PAGAN_CHIEFDOM_WITHIN_LAST_5_YEARS
+				NOT = { has_country_modifier = increase_horde_unity_with_pagan_chiefdom_cooldown }
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				has_dlc = "The Cossacks"
+				is_nomad = yes
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = pagan_chiefdom
+				}
+				NOT = { horde_unity = 100 }
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					NOT = { has_country_modifier = increase_horde_unity_with_pagan_chiefdom_cooldown }
+				}
+			}
+			FROM = {
+				if = {
+					limit = {
+						total_development = 200
+					}
+					add_liberty_desire = 20
+					ROOT = { add_horde_unity = 20 }
+				}
+				else_if = {
+					limit = {
+						total_development = 190
+					}
+					add_liberty_desire = 19
+					ROOT = { add_horde_unity = 19 }
+				}
+				else_if = {
+					limit = {
+						total_development = 180
+					}
+					add_liberty_desire = 18
+					ROOT = { add_horde_unity = 18 }
+				}
+				else_if = {
+					limit = {
+						total_development = 170
+					}
+					add_liberty_desire = 17
+					ROOT = { add_horde_unity = 17 }
+				}
+				else_if = {
+					limit = {
+						total_development = 160
+					}
+					add_liberty_desire = 16
+					ROOT = { add_horde_unity = 16 }
+				}
+				else_if = {
+					limit = {
+						total_development = 150
+					}
+					add_liberty_desire = 15
+					ROOT = { add_horde_unity = 15 }
+				}
+				else_if = {
+					limit = {
+						total_development = 140
+					}
+					add_liberty_desire = 14
+					ROOT = { add_horde_unity = 14 }
+				}
+				else_if = {
+					limit = {
+						total_development = 130
+					}
+					add_liberty_desire = 13
+					ROOT = { add_horde_unity = 13 }
+				}
+				else_if = {
+					limit = {
+						total_development = 120
+					}
+					add_liberty_desire = 12
+					ROOT = { add_horde_unity = 12 }
+				}
+				else_if = {
+					limit = {
+						total_development = 110
+					}
+					add_liberty_desire = 11
+					ROOT = { add_horde_unity = 11 }
+				}
+				else_if = {
+					limit = {
+						total_development = 100
+					}
+					add_liberty_desire = 10
+					ROOT = { add_horde_unity = 10 }
+				}
+				else_if = {
+					limit = {
+						total_development = 90
+					}
+					add_liberty_desire = 9
+					ROOT = { add_horde_unity = 9 }
+				}
+				else_if = {
+					limit = {
+						total_development = 80
+					}
+					add_liberty_desire = 8
+					ROOT = { add_horde_unity = 8 }
+				}
+				else_if = {
+					limit = {
+						total_development = 70
+					}
+					add_liberty_desire = 7
+					ROOT = { add_horde_unity = 7 }
+				}
+				else_if = {
+					limit = {
+						total_development = 60
+					}
+					add_liberty_desire = 6
+					ROOT = { add_horde_unity = 6 }
+				}
+				else_if = {
+					limit = {
+						total_development = 50
+					}
+					add_liberty_desire = 5
+					ROOT = { add_horde_unity = 5 }
+				}
+				else_if = {
+					limit = {
+						total_development = 40
+					}
+					add_liberty_desire = 4
+					ROOT = { add_horde_unity = 4 }
+				}
+				else_if = {
+					limit = {
+						total_development = 30
+					}
+					add_liberty_desire = 3
+					ROOT = { add_horde_unity = 3 }
+				}
+				else_if = {
+					limit = {
+						total_development = 20
+					}
+					add_liberty_desire = 2
+					ROOT = { add_horde_unity = 2 }
+				}
+				else = {
+					add_liberty_desire = 1
+					ROOT = { add_horde_unity = 1 }
+				}
+				add_country_modifier = {
+					name = increase_horde_unity_with_pagan_chiefdom_cooldown
+					duration = 1825
+					hidden = yes
+				}
+			}
+		}
+	}
+	
+	ai_will_do = {
+		NOT = { horde_unity = 50 }
+		is_at_war = no
+		FROM = {
+			OR = {
+				AND = {
+					total_development = 200
+					NOT = { liberty_desire = 25 }
+				}
+				AND = {
+					total_development = 150
+					NOT = { total_development = 200 }
+					NOT = { liberty_desire = 30 }
+				}
+				AND = {
+					total_development = 100
+					NOT = { total_development = 150 }
+					NOT = { liberty_desire = 35 }
+				}
+				AND = {
+					total_development = 50
+					NOT = { total_development = 100 }
+					NOT = { liberty_desire = 40 }
+				}
+				AND = {
+					NOT = { total_development = 50 }
+					NOT = { liberty_desire = 45 }
+				}
+			}
+		}
+		NOT = {
+			calc_true_if = {
+				all_subject_country = {
+					is_subject_of_type = pagan_chiefdom
+					has_country_modifier = increase_horde_unity_with_pagan_chiefdom_cooldown
+				}
+				amount = 2
+			}
+		}
+	}
+}

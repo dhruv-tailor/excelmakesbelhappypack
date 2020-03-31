@@ -1,0 +1,231 @@
+establish_naval_march = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = naval_march
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = naval_march
+		}
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = naval_march
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = naval_march
+			}
+		}
+	}
+	
+	ai_will_do = {
+		navy_size = 50
+		FROM = {
+			NOT = { development_of_overlord_fraction = 0.25 }
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+			any_neighbor_country = {
+				OR = {
+					is_rival = ROOT
+					is_enemy = ROOT
+				}
+			}
+		}
+	}
+}
+
+ask_to_become_naval_march = {
+	category = influence
+	
+	alert_index = 6
+	alert_tooltip = ask_to_become_naval_march_alert_tooltip
+	
+	require_acceptance = yes
+	
+	is_visible = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = naval_march
+			}
+		}
+	}
+	
+	is_allowed = {
+		FROM = {
+			can_create_subject_type = {
+				subject = ROOT
+				subject_type = naval_march
+			}
+		}
+		is_at_war = no
+		FROM = { is_at_war = no }
+		NOT = { liberty_desire = 50 }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = naval_march
+					}
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 50 }
+			}
+			FROM = {
+				create_subject = {
+					subject = ROOT
+					subject_type = naval_march
+				}
+			}
+		}
+	}
+	
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = naval_march
+					}
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+				NOT = { liberty_desire = 50 }
+			}
+			FROM = {
+				clr_country_flag = declined_become_naval_march_@ROOT
+				set_country_flag = declined_become_naval_march_@ROOT
+			}
+			add_opinion = {
+				who = FROM
+				modifier = declined_ask_to_become_naval_march
+			}
+		}
+	}
+	
+	ai_acceptance = {
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = FROM_NAVY_SIZE_TOO_SMALL
+			limit = {
+				FROM = {
+					NOT = { navy_size = 50 }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_VASSAL_FOR_AT_LEAST_10_YEARS
+			limit = {
+				years_in_vassalage_under = {
+					who = FROM
+					years = 10
+					all_subject_country = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_NOT_A_NEIGHBOR_OF_FROMS_RIVALS
+			limit = {
+				NOT = {
+					any_neighbor_country = {
+						OR = {
+							is_rival = FROM
+							is_enemy = FROM
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_MORE_THAN_25_PERCENT_OF_OVERLORD_DEVELOPMENT
+			limit = {
+				development_of_overlord_fraction = 0.25
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+	
+	ai_will_do = {
+		num_of_ports = 5
+		navy_size = 20
+		any_neighbor_country = {
+			OR = {
+				is_rival = FROM
+				is_enemy = FROM
+			}
+		}
+		FROM = {
+			OR = {
+				NOT = { has_country_flag = declined_become_naval_march_@ROOT }
+				had_country_flag = { flag = declined_become_naval_march_@ROOT days = 1825 }
+			}
+		}
+	}
+}

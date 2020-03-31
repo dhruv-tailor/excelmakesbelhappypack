@@ -1,0 +1,147 @@
+namespace = subjects_expanded_integrated_tribe_subject_events
+
+country_event = {
+	id = subjects_expanded_integrated_tribe_subject_events.1
+	title = subjects_expanded_integrated_tribe_subject_events.EVTNAME1
+	desc = subjects_expanded_integrated_tribe_subject_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = subjects_expanded_integrated_tribe_subject_events1.EVTOPT1
+		
+		custom_tooltip = INTEGRATED_TRIBE_SUBJECT_PAYS_YEARLY_MANPOWER
+		hidden_effect = {
+			while = {
+				limit = {
+					FROM = {
+						check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10000 }
+					}
+				}
+				FROM = {
+					change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -10000 }
+				}
+				add_manpower = 10
+			}
+			while = {
+				limit = {
+					FROM = {
+						check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 1000 }
+					}
+				}
+				FROM = {
+					change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -1000 }
+				}
+				add_manpower = 1
+			}
+			while = {
+				limit = {
+					FROM = {
+						check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 100 }
+					}
+				}
+				FROM = {
+					change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -100 }
+				}
+				add_manpower = 0.1
+			}
+			while = {
+				limit = {
+					FROM = {
+						check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10 }
+					}
+				}
+				FROM = {
+					change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -10 }
+				}
+				add_manpower = 0.01
+			}
+		}
+	}
+}
+
+country_event = {
+	id = subjects_expanded_integrated_tribe_subject_events.2
+	title = subjects_expanded_integrated_tribe_subject_events.EVTNAME2
+	desc = subjects_expanded_integrated_tribe_subject_events.EVTDESC2
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_subject_of_type = integrated_tribe_subject
+		has_scutage = yes
+		NOT = { is_month = 1 }
+		NOT = { has_country_modifier = cooldown_integrated_tribe_subject_paid_tribute }
+	}
+	
+	mean_time_to_happen = { days = 1 }
+	
+	immediate = {
+		hidden_effect = {
+			ms_calculate_yearly_manpower = yes
+			set_variable = { which = integrated_tribe_subject_yearly_manpower_var which = autonomous_dominion_global_manpower_var }
+			if = {
+				limit = {
+					overlord = {
+						primary_culture = ROOT
+					}
+				}
+				divide_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 4 }
+				add_yearly_manpower = -0.25
+			}
+			else = {
+				divide_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10 }
+				add_yearly_manpower = -0.1
+			}
+			while = {
+				limit = {
+					check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10000 }
+				}
+				change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -10000 }
+				overlord = {
+					add_manpower = 10
+				}
+			}
+			while = {
+				limit = {
+					check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 1000 }
+				}
+				change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -1000 }
+				overlord = {
+					add_manpower = 1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 100 }
+				}
+				change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -100 }
+				overlord = {
+					add_manpower = 0.1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = { which = integrated_tribe_subject_yearly_manpower_var value = 10 }
+				}
+				change_variable = { which = integrated_tribe_subject_yearly_manpower_var value = -10 }
+				overlord = {
+					add_manpower = 0.01
+				}
+			}
+			add_country_modifier = {
+				name = cooldown_integrated_tribe_subject_paid_tribute
+				duration = 60
+				hidden = yes
+			}
+		}
+	}
+	
+	option = {
+		name = subjects_expanded_integrated_tribe_subject_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}

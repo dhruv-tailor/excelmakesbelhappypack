@@ -1,0 +1,127 @@
+establish_pirate_brotherhood_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = pirate_brotherhood_vassal
+		}
+		FROM = {
+			is_subject_of = ROOT
+		}
+	}
+	
+	is_allowed = {
+		can_create_subject_type = {
+			subject = FROM
+			subject_type = pirate_brotherhood_vassal
+		}
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+			}
+		}
+		FROM = {
+			capital_scope = { trade_range = ROOT }
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				can_create_subject_type = {
+					subject = FROM
+					subject_type = pirate_brotherhood_vassal
+				}
+				FROM = {
+					is_subject_of = ROOT
+				}
+				FROM = {
+					capital_scope = { trade_range = ROOT }
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			create_subject = {
+				subject = FROM
+				subject_type = pirate_brotherhood_vassal
+			}
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			NOT = {
+				years_in_vassalage_under = {
+					who = ROOT
+					years = 10
+					all_subject_country = yes
+				}
+			}
+		}
+	}
+}
+
+cancel_pirate_brotherhood_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = pirate_brotherhood_vassal
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				is_subject_of_type = pirate_brotherhood_vassal
+			}
+		}
+		NOT = { truce_with = FROM }
+		is_at_war = no
+		FROM = { is_at_war = no }
+		FROM = { NOT = { liberty_desire = 50 } }
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = pirate_brotherhood_vassal
+				}
+				NOT = { truce_with = FROM }
+				is_at_war = no
+				FROM = { is_at_war = no }
+				FROM = { NOT = { liberty_desire = 50 } }
+			}
+			FROM = {
+				grant_independence = yes
+				create_alliance = ROOT
+			}
+		}
+	}
+	
+	ai_will_do = {
+		FROM = {
+			liberty_desire = 100
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 25
+				all_subject_country = yes
+			}
+		}
+	}
+}

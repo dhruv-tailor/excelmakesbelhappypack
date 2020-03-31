@@ -1,0 +1,183 @@
+return_subject_to_vassal = {
+	category = influence
+
+	require_acceptance = no
+	
+	is_visible = {
+		FROM = {
+			is_subject_of = ROOT
+			OR = {
+				is_similar_vassal_subject = yes
+				is_similar_march_subject = yes
+			}
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				OR = {
+					is_similar_vassal_subject = yes
+					is_similar_march_subject = yes
+				}
+			}
+		}
+		prestige = 0
+		if = {
+			limit = {
+				OR = {
+					NOT = { religion = nahuatl }
+					is_religion_reformed = yes
+				}
+				FROM = {
+					is_subject_of_type = nahuatl_vassal
+				}
+			}
+			FROM = {
+				NOT = { liberty_desire = 90 }
+			}
+		}
+		else = {
+			FROM = {
+				NOT = { liberty_desire = 50 }
+			}
+		}
+		FROM = {
+			has_opinion = {
+				who = ROOT
+				value = 100
+			}
+		}
+		is_at_war = no
+		FROM = {
+			is_at_war = no
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject_of = ROOT
+					OR = {
+						is_similar_vassal_subject = yes
+						is_similar_march_subject = yes
+					}
+				}
+				prestige = 0
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+				FROM = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { full_idea_group = diplomatic_ideas }
+					FROM = {
+						is_subject_of_type = naval_march
+					}
+				}
+				add_stability = -1
+			}
+			FROM = {
+				add_opinion = {
+					who = ROOT
+					modifier = returned_to_vassal
+				}
+				grant_independence = yes
+			}
+			vassalize = FROM
+			add_prestige = -10
+			FROM = {
+				add_liberty_desire = 25
+			}
+		}
+	}
+	
+	ai_will_do = {
+		NOT = { truce_with = FROM }
+		OR = {
+			AND = {
+				OR = {
+					is_year = 1700
+					current_age = age_of_absolutism
+					NOT = { religion = catholic }
+				}
+				FROM = {
+					OR = {
+						ROOT = { NOT = { religion = catholic } }
+						NOT = { liberty_desire = 33 }
+					}
+					is_subject_of_type = crusader_state_vassal
+				}
+			}
+			AND = {
+				OR = {
+					NOT = { religion = nahuatl }
+					is_religion_reformed = yes
+				}
+				FROM = {
+					is_subject_of_type = nahuatl_vassal
+				}
+			}
+			AND = {
+				europe = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				FROM = {
+					is_subject_of_type = muslim_tributary_vassal
+				}
+			}
+			FROM = {
+				is_subject_of_type = naval_march
+				OR = {
+					development_of_overlord_fraction = 0.35
+					NOT = {
+						any_neighbor_country = {
+							is_subject = no
+							NOT = { tag = ROOT }
+							OR = {
+								is_great_power = yes
+								total_development = 300
+								is_rival = ROOT
+								is_enemy = ROOT
+							}
+						}
+					}
+				}
+			}
+			FROM = {
+				is_subject_of_type = pagan_chiefdom
+				OR = {
+					AND = {
+						liberty_desire = 70
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 5
+							all_subject_country = yes
+						}
+					}
+					NOT = {
+						any_neighbor_country = {
+							is_subject = no
+							NOT = { tag = ROOT }
+							OR = {
+								is_great_power = yes
+								total_development = 300
+								is_rival = ROOT
+								is_enemy = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

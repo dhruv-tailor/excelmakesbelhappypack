@@ -1,0 +1,653 @@
+is_possible_subject_of_subject_type_vassal = {
+	NOT = { is_subject_of_type = vassal }
+	is_possible_vassal = yes
+}
+
+is_possible_subject_of_subject_type_march = {
+	NOT = { is_subject_of_type = march }
+	is_possible_march = yes
+}
+
+is_possible_subject_of_subject_type_daimyo_vassal = {
+	NOT = { is_subject_of_type = daimyo_vassal }
+}
+
+is_possible_subject_of_subject_type_personal_union = {
+	NOT = { is_subject_of_type = personal_union }
+	is_subject = no
+}
+
+is_possible_subject_of_subject_type_client_vassal = {
+	NOT = { is_subject_of_type = client_vassal }
+}
+
+is_possible_subject_of_subject_type_client_march = {
+	NOT = { is_subject_of_type = client_march }
+	is_subject_of = PREV
+	is_subject_of_type = client_vassal
+	primitives = no
+}
+
+is_possible_subject_of_subject_type_colony = {
+	NOT = { is_subject_of_type = colony }
+}
+
+is_possible_subject_of_subject_type_tributary_state = {
+	has_dlc = "Mandate of Heaven"
+	NOT = { is_subject_of_type = tributary_state }
+}
+
+is_possible_subject_of_subject_type_protectorate = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = protectorate }
+	is_subject = no
+	NOT = { technology_group = western }
+	NOT = { technology_group = eastern }
+	NOT = { technology_group = roman_group }
+	NOT = { technology_group = muslim }
+	PREV = {
+		NOT = { same_continent = PREV }
+	}
+	is_nomad = no
+	OR = {
+		PREV = { institution_difference = { who = PREV value = 3 } }
+		# THIS is at least 9 techs behind PREV
+		variable_arithmetic_trigger = {
+			export_to_variable = {
+				which = our_adm_tech_level
+				value = trigger_value:adm_tech
+			}
+			export_to_variable = {
+				which = our_dip_tech_level
+				value = trigger_value:dip_tech
+			}
+			export_to_variable = {
+				which = our_mil_tech_level
+				value = trigger_value:mil_tech
+			}
+			export_to_variable = {
+				which = their_adm_tech_level
+				value = trigger_value:adm_tech
+				who = PREV
+			}
+			export_to_variable = {
+				which = their_dip_tech_level
+				value = trigger_value:dip_tech
+				who = PREV
+			}
+			export_to_variable = {
+				which = their_mil_tech_level
+				value = trigger_value:mil_tech
+				who = PREV
+			}
+			export_to_variable = {
+				which = our_total_tech_level
+				value = 0
+			}
+			export_to_variable = {
+				which = their_total_tech_level
+				value = 0
+			}
+			change_variable = { which = our_total_tech_level which = our_adm_tech_level }
+			change_variable = { which = our_total_tech_level which = our_dip_tech_level }
+			change_variable = { which = our_total_tech_level which = our_mil_tech_level }
+			change_variable = { which = their_total_tech_level which = their_adm_tech_level }
+			change_variable = { which = their_total_tech_level which = their_dip_tech_level }
+			change_variable = { which = their_total_tech_level which = their_mil_tech_level }
+			change_variable = { which = their_total_tech_level value = -9 }
+			check_variable = { which = their_total_tech_level which = our_total_tech_level }
+		}
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_puppet_state = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = puppet_state }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_subject_of_type = client_vassal
+		}
+	}
+	is_nomad = no
+	is_tribal = no
+	primitives = no
+	is_great_power = no
+	OR = {
+		war_with = PREV
+		is_subject_of = PREV
+		has_opinion_modifier = {
+			modifier = released_in_peace
+			who = PREV
+		}
+	}
+	OR = {
+		is_year = 1700
+		current_age = age_of_absolutism
+		PREV = {
+			has_casus_belli = { type = cb_imperial target = PREV }
+		}
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_dominion = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_dominion_or_similar_subject = yes }
+	is_subject_of = PREV
+	OR = {
+		is_subject_of_type = colony
+		is_autonomous_dominion_or_similar_subject = yes
+	}
+	total_development = 100
+	OR = {
+		is_year = 1700
+		current_age = age_of_absolutism
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_dominion_tc = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_dominion_or_similar_subject = yes }
+	is_subject_of = PREV
+	OR = {
+		is_subject_of_type = colony
+		is_autonomous_dominion_or_similar_subject = yes
+	}
+	total_development = 100
+	capital_scope = {
+		is_node_in_trade_company_region = yes
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_autonomous_dominion = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_autonomous_dominion_or_similar_subject = yes }
+	is_subject_of = PREV
+	is_dominion_or_similar_subject = yes
+	total_development = 300
+	OR = {
+		is_year = 1700
+		current_age = age_of_absolutism
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_autonomous_dominion_tc = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_autonomous_dominion_or_similar_subject = yes }
+	is_subject_of = PREV
+	is_dominion_or_similar_subject = yes
+	total_development = 300
+	capital_scope = {
+		is_node_in_trade_company_region = yes
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_roman_client_kingdom = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = roman_client_kingdom }
+	OR = {
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+			government = monarchy
+		}
+		war_with = PREV
+	}
+}
+
+is_possible_subject_of_subject_type_voivodeship = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = voivodeship }
+	is_subject_of = PREV
+	is_vassal_or_similar_subject = yes
+	is_neighbor_of = PREV
+}
+
+is_possible_subject_of_subject_type_fief_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = fief_subject }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+		}
+	}
+	OR = {
+		primary_culture = PREV
+		AND = {
+			culture_group = PREV
+			PREV = {
+				OR = {
+					accepted_culture = PREV
+					government_rank = 3
+					AND = {
+						NOT = { has_dlc = "Common Sense" }
+						total_development = 1000
+					}
+				}
+			}
+		}
+		AND = {
+			is_subject_of = PREV
+			PREV = {
+				accepted_culture = PREV
+			}
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_crusader_state_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = crusader_state_vassal }
+	is_subject_of = PREV
+	is_vassal_or_similar_subject = yes
+	is_excommunicated = no
+	religion = catholic
+	capital_scope = {
+		OR = {
+			continent = europe
+			province_id = 379
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_salic_personal_union = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = salic_personal_union }
+	is_subject = no
+	has_reform = salic_reform
+	OR = {
+		is_in_war = {
+			attacker_leader = PREV
+			defender_leader = THIS
+			casus_belli = cb_salic_reunification
+		}
+		is_in_war = {
+			attacker_leader = THIS
+			defender_leader = PREV
+			casus_belli = cb_salic_reunification
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_nahuatl_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = nahuatl_vassal }
+	is_subject_of = PREV
+	is_vassal_or_similar_subject = yes
+	capital_scope = {
+		OR = {
+			region = california_region
+			region = mexico_region
+			region = rio_grande_region
+			region = central_america_region
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_peasant_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = peasant_vassal }
+	is_subject = no
+	primitives = no
+	government = republic
+	same_continent = PREV
+}
+
+is_possible_subject_of_subject_type_pirate_brotherhood_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = pirate_brotherhood_vassal }
+	num_of_ports = 3
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+			OR = {
+				has_reform = pirate_republic_reform
+				has_reform = pirate_king_reform
+				has_reform = war_against_the_world_doctrine_reform
+			}
+		}
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_imperial_tributary_state = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = imperial_tributary_state }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+			government = monarchy
+		}
+	}
+	OR = {
+		government = tribal
+		capital_scope = {
+			OR = {
+				trade_company_region = trade_company_west_india
+				trade_company_region = trade_company_deccan
+				trade_company_region = trade_company_east_india
+				trade_company_region = trade_company_coromandel
+				trade_company_region = trade_company_north_india
+			}
+		}
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_sister_republic = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = sister_republic }
+	OR = {
+		AND = {
+			government = republic
+			PREV = { government = republic }
+		}
+		AND = {
+			government = theocracy
+			PREV = { government = theocracy }
+		}
+	}
+	OR = {
+		religion = PREV
+		AND = {
+			religion_group = PREV
+			PREV = {
+				has_global_modifier_value = {
+					which = tolerance_heretic
+					value = 2
+				}
+			}
+		}
+	}
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+		}
+	}
+	same_continent = PREV
+}
+
+is_possible_subject_of_subject_type_muslim_tributary_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = muslim_tributary_vassal }
+	is_subject = no
+	NOT = { religion_group = muslim }
+	is_neighbor_of = PREV
+	variable_arithmetic_trigger = {
+		export_to_variable = {
+			which = our_total_development
+			value = trigger_value:total_development
+		}
+		subtract_variable = { which = our_total_development value = 1 }
+		export_to_variable = {
+			which = their_total_development
+			value = trigger_value:total_development
+			who = PREV
+		}
+		subtract_variable = { which = their_total_development value = 1 }
+		divide_variable = { which = their_total_development value = 3 }
+		NOT = { check_variable = { which = our_total_development which = their_total_development } }
+	}
+}
+
+is_possible_subject_of_subject_type_mandala_trade_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	OR = {
+		is_subject = no
+		is_subject_of_type = tributary_state
+		is_subject_of_type = mandala_trade_vassal
+	}
+	OR = {
+		PREV = {
+			NOT = { is_subject_of_type = mandala_trade_vassal }
+		}
+		overlord_of = PREV
+	}
+	capital_scope = {
+		continent = asia
+	}
+	NOT = { is_subject_of = PREV }
+}
+
+is_possible_subject_of_subject_type_integrated_tribe_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = integrated_tribe_subject }
+	is_subject_of = PREV
+	is_vassal_or_similar_subject = yes
+	OR = {
+		government = tribal
+		AND = {
+			culture_group = caucasian
+			capital_scope = {
+				region = caucasia_region
+			}
+		}
+	}
+	same_continent = PREV
+}
+
+is_possible_subject_of_subject_type_dutch_province_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = dutch_province_subject }
+	NOT = { has_global_flag = dutch_province_subject_no_leader_election }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+		}
+	}
+	OR = {
+		primary_culture = dutch
+		primary_culture = flemish
+	}
+	capital_scope = {
+		region = low_countries_region
+	}
+}
+
+is_possible_subject_of_subject_type_revolution_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = revolution_subject }
+	is_subject = no
+	same_continent = PREV
+	OR = {
+		government = monarchy
+		government = republic
+	}
+}
+
+is_possible_subject_of_subject_type_persian_satrapy = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = persian_satrapy }
+	is_neighbor_of = PREV
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_naval_march = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = naval_march }
+	vassal_of = PREV
+	num_of_ports = 1
+	primitives = no
+}
+
+is_possible_subject_of_subject_type_trade_outpost = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = trade_outpost }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+		}
+	}
+	NOT = { num_of_cities = 2 }
+	capital_scope = {
+		has_port = yes
+		development = 30
+		OR = {
+			region = south_china_region
+			region = north_china_region
+			region = korea_region
+			region = japan_region
+			area = liaoning_area
+		}
+	}
+	# Capital in Trade Range of possible Overlord has to be checked additionally
+}
+
+is_possible_subject_of_subject_type_integrated_personal_union = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = integrated_personal_union }
+	is_subject_of = PREV
+	is_subject_of_type = personal_union
+	years_in_union_under = {
+		who = PREV
+		years = 50
+	}
+}
+
+is_possible_subject_of_subject_type_brother_kingdom = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = brother_kingdom }
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			OR = {
+				is_subject_of_type = vassal
+				is_subject_of_type = client_vassal
+			}
+		}
+	}
+	government = monarchy
+	dynasty = PREV
+	has_regency = no
+	religion_group = christian
+}
+
+is_possible_subject_of_subject_type_iqta_vassal = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = iqta_vassal }
+	religion_group = muslim
+	is_neighbor_of = PREV
+	OR = {
+		is_subject = no
+		AND = {
+			is_subject_of = PREV
+			is_vassal_or_similar_subject = yes
+			religion = PREV
+			PREV = {
+				is_defender_of_faith = yes
+			}
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_papal_sanctuary_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = papal_sanctuary_subject }
+	is_subject = no
+	religion = PREV
+	same_continent = PREV
+	NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+	is_excommunicated = no
+}
+
+is_possible_subject_of_subject_type_imperial_feud_subject = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = imperial_feud_subject }
+	is_subject = no
+	is_part_of_hre = no
+	capital_scope = {
+		continent = europe
+	}
+	OR = {
+		AND = {
+			OR = {
+				NOT = { has_dlc = "Art of War" }
+				hre_religion_locked = no
+			}
+			OR = {
+				religion = catholic
+				religion = protestant
+				religion = reformed
+			}
+		}
+		AND = {
+			has_dlc = "Art of War"
+			hre_religion_locked = yes
+			religion = PREV
+		}
+	}
+	any_owned_province = {
+		OR = {
+			any_neighbor_province = {
+				is_part_of_hre = yes
+				owner = {
+					is_part_of_hre = yes
+				}
+			}
+			AND = {
+				has_port = yes
+				sea_zone = {
+					any_neighbor_province = {
+						has_port = yes
+						is_part_of_hre = yes
+						owner = {
+							is_part_of_hre = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+is_possible_subject_of_subject_type_pagan_chiefdom = {
+	# PREVs in THIS scope refer to possible overlord
+	NOT = { is_subject_of_type = pagan_chiefdom }
+	vassal_of = PREV
+	OR = {
+		religion_group = pagan
+		# Extended Timeline religions
+		religion = druidism
+		religion = zamolxism
+		religion_group = american_pagan
+		religion_group = slavic_pagan
+		religion_group = german_pagan
+		religion = shamanism
+	}
+}
+
+can_create_subject_type = {
+	can_be_overlord = $subject_type$
+	$subject$ = {
+		custom_trigger_tooltip = {
+			tooltip = IS_POSSIBLE_SUBJECT_OF_SUBJECT_TYPE_$subject_type$
+			is_possible_subject_of_subject_type_$subject_type$ = yes
+		}
+	}
+}
