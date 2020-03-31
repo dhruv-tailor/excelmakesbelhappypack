@@ -1,0 +1,161 @@
+namespace = missions_expanded_events
+
+# Choose whether to use Paradox' missions or ME missions
+country_event = {
+	id = missions_expanded_events.1
+	title = missions_expanded_events.EVTNAME1
+	desc = missions_expanded_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		country_has_both_paradox_and_me_missions = yes
+		NOT = { has_country_flag = selected_either_paradox_or_me_missions_@ROOT }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = choosing_me_or_paradox_missions
+		}
+	}
+	
+	option = { # Choose ME missions (highligted)
+		name = missions_expanded_events1.EVTOPT1
+		
+		highlight = yes
+		
+		trigger = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		custom_tooltip = CHOOSE_ME_MISSIONS
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = use_missions_expanded_missions_instead_of_paradox }
+				}
+				set_country_flag = use_missions_expanded_missions_instead_of_paradox
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+	
+	option = { # Choose ME missions
+		name = missions_expanded_events1.EVTOPT1
+		
+		trigger = {
+			NOT = { has_country_flag = use_missions_expanded_missions_instead_of_paradox }
+		}
+		
+		ai_chance = {
+			factor = 100
+		}
+		
+		custom_tooltip = CHOOSE_ME_MISSIONS
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = use_missions_expanded_missions_instead_of_paradox }
+				}
+				set_country_flag = use_missions_expanded_missions_instead_of_paradox
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+	
+	option = { # Choose paradox' missions (highlighted)
+		name = missions_expanded_events1.EVTOPT2
+		
+		highlight = yes
+		
+		trigger = {
+			NOT = { has_country_flag = use_missions_expanded_missions_instead_of_paradox }
+		}
+		
+		ai_chance = {
+			factor = 0
+		}
+		
+		custom_tooltip = CHOOSE_PARADOX_MISSIONS
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				}
+				clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+	
+	option = { # Choose paradox' missions
+		name = missions_expanded_events1.EVTOPT2
+		
+		trigger = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		
+		ai_chance = {
+			factor = 0
+		}
+		
+		custom_tooltip = CHOOSE_PARADOX_MISSIONS
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				}
+				clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+	
+	after = {
+		clr_country_flag = choosing_me_or_paradox_missions
+		# You can't swap missions again for the same country, but you may want to do it, if you changed tag
+		# to another country that has both, Paradox' and ME missions:
+		if = {
+			limit = {
+				NOT = { has_country_flag = selected_either_paradox_or_me_missions_@ROOT }
+			}
+			set_country_flag = selected_either_paradox_or_me_missions_@ROOT
+		}
+	}
+}
+
+# Set ME global flag
+country_event = {
+	id = missions_expanded_events.2
+	title = missions_expanded_events.EVTNAME2
+	desc = missions_expanded_events.EVTDESC2
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	fire_only_once = yes
+	
+	trigger = {
+		always = yes
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_global_flag = missions_expanded_mod_active
+		}
+	}
+	
+	option = {
+		name = missions_expanded_events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}

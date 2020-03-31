@@ -1,0 +1,2499 @@
+# For Government Reforms to identify properly influence and loyalty modifiers, remember to put disqualifying triggers before the has_reform
+
+estate_maratha = {
+	icon = 7
+	
+	color = { 230 145 20 } #Orange/Saphron
+
+	# Used for when declaring independence
+	independence_trigger = {
+		OR = {
+			has_estate = estate_maratha
+			AND = {
+				culture = marathi
+				NOT = {
+					owner = { primary_culture = marathi }
+				}
+			}
+			any_neighbor_province = {
+				has_estate = estate_maratha
+				owned_by = ROOT
+			}
+		}
+	}
+	
+	# Is estate kept in control of province on conquest?
+	keep_on_conquest = no	
+
+	# If true, country will get estate
+	trigger = {
+		has_dlc = "Dharma"
+		OR = {
+			culture_group = western_aryan
+			culture_group = dravidian
+			primary_culture = sinhala
+		}
+		technology_group = indian
+		NOT = { primary_culture = rajput }
+		NOT = { primary_culture = malvi }
+		NOT = { has_reform = pirate_republic_reform }
+		NOT = { has_government_attribute = is_merchant_republic }
+		NOT = { has_reform = trading_city }
+		NOT = { has_reform = revolutionary_republic_reform }
+		NOT = { government = native }
+		NOT = { has_reform = siberian_tribe }
+		NOT = { has_reform = veche_republic }
+		NOT = { has_reform = cossacks_reform }
+		NOT = { has_reform = celestial_empire }
+		is_nomad = no
+		is_colonial_nation = no
+	}
+	
+	# If true, province can be granted to estate
+	province_trigger = {
+		religion = hinduism
+	}
+
+	# Is used to weigh importance compared to other estates
+	start_territory_weight = 50
+	
+	# Min autonomy in estate provinces
+	min_autonomy = 0
+	
+	# Estate cancels out the following multiplicative local autonomy effects:
+	#autonomy_does_not_affect = local_manpower_modifier
+	#autonomy_does_not_affect = land_forcelimit_modifier
+
+	# These scale with loyalty & power
+	country_modifier_happy = {
+	
+		cavalry_power = 0.1
+		army_tradition = 1
+		#rat_1_1_aristo_influence = 0.1
+		#rat_2_1_aristo_influence = 0.1 
+		#rat_3_1_aristo_influence = 0.1 
+	}
+	country_modifier_neutral = {
+		army_tradition = 0.5
+		#rat_1_1_aristo_influence = 0.2
+		#rat_2_1_aristo_influence = 0.2 
+		#rat_3_1_aristo_influence = 0.2
+	}	
+	country_modifier_angry = {
+		army_tradition = -0.5
+		stability_cost_modifier = 0.33
+		#rat_1_1_aristo_influence = 0.33
+		#rat_2_1_aristo_influence = 0.33 
+		#rat_3_1_aristo_influence = 0.33 
+	}
+	
+	# These do not scale, but only applied in provinces owned by the estate
+	province_modifier_happy = {
+		local_missionary_strength = -1
+		local_manpower_modifier = 0.15
+		local_defensiveness = 0.15
+		local_autonomy = -0.1
+	}
+	province_modifier_neutral = {
+		local_missionary_strength = -1
+		local_autonomy = 0.1
+	}		
+	province_modifier_angry = {
+		local_unrest = 5
+		local_missionary_strength = -1	
+		local_autonomy = 0.2	
+	}
+	
+	# Influence modifiers
+	base_influence = 0
+	influence_modifier = {
+		desc = EST_VAL_PROMOTED_MARATHI_CULTURE
+		trigger = {
+			OR = {
+				accepted_culture = marathi
+				primary_culture = marathi
+			}
+		}
+		influence = 10		
+	}
+	influence_modifier = {
+		desc = EST_VAL_RULED_BY_NON_HINDU
+		trigger = {
+			NOT = { religion = hinduism }
+			any_owned_province = {
+				NOT = { religion_group = muslim }
+			}
+		}
+		influence = -5
+	}
+	
+	influence_modifier = {
+		desc = EST_VAL_FEUDALISM
+		trigger = {
+			NOT = { has_estate = estate_nobles }
+			has_reform = feudalism_reform
+		}
+		influence = 5
+	}
+	influence_modifier = {
+		desc = EST_VAL_CURTAILED_NOBLE_PRIVILEGES
+		trigger = {
+			NOT = { has_estate = estate_nobles }
+			has_reform = quash_noble_power_reform
+		}
+		influence = -10
+	}
+	influence_modifier = {
+		desc = EST_VAL_PERMANENT_MARATHAS_COUNCIL
+		trigger = {
+			has_iv_gov_estate_9 = yes
+		}
+		influence = 10
+	}
+	influence_modifier = {
+		desc = EST_VAL_MERITOCRATIC_RECRUITMENT
+		trigger = {
+			religion_group = muslim
+			has_reform = meritocratic_focus_reform
+		}
+		influence = 10
+	}
+	influence_modifier = {
+		desc = EST_VAL_OTHER_ESTATE_IN_POWER
+		trigger = {
+			OR = {
+				has_disaster = estate_nobility_disaster
+				has_disaster = estate_church_disaster
+				has_disaster = estate_burghers_disaster
+				has_disaster = estate_brahmins_disaster
+				has_disaster = estate_vaisyas_disaster
+				has_disaster = estate_jains_disaster
+			}
+		}
+		influence = -40
+	}
+	
+	#Loyalty Modifiers
+	loyalty_modifier = {
+		desc = EST_VAL_OTHER_ESTATE_IN_POWER_LOY
+		trigger = {
+			OR = {
+				has_disaster = estate_nobility_disaster
+				has_disaster = estate_church_disaster
+				has_disaster = estate_burghers_disaster
+				has_disaster = estate_brahmins_disaster
+				has_disaster = estate_vaisyas_disaster
+				has_disaster = estate_jains_disaster
+			}
+		}
+		loyalty = -20
+	}
+	
+	loyalty_modifier = {
+		desc = EST_VAL_PERMANENT_MARATHAS_COUNTIL_LOY
+		trigger = {
+			has_iv_gov_estate_9 = yes
+		}
+		loyalty = 5
+	}
+	
+	#Marathi Culture Promoted
+	loyalty_modifier = {
+		desc = EST_VAL_PROMOTED_MARATHI_CULTURE_LOY
+		trigger = {
+			OR = {
+				accepted_culture = marathi
+				primary_culture = marathi
+			}
+		}
+		loyalty = 5
+	}
+	
+	# Does the AI want to give any extra territory beyond the minimum?
+	ai_territory_modifier = {
+		trigger = {
+			num_of_cities = 10
+		}
+		value = 100 # Code has a sanity check against pushing influence too high
+	}
+	
+	
+	# For province assignment
+	ai_grant_province = {
+		factor = 1
+		modifier = {
+			factor = 10
+			has_owner_religion = no
+			tolerance_to_this = 1
+		}
+		modifier = {
+			factor = 4
+			local_autonomy = 26
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { local_autonomy = 26 }
+		}
+	}
+	
+	# Special interactions
+	
+	interaction = {
+		name = "PROMOTE_MARATHA_NOBILITY"
+		icon = 25
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		effect = {
+			add_prestige = -5
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = EST_VAL_PROMOTED_MARATHAS
+				influence = 10
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 15
+			}
+			
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				add_estate_loyalty = {
+					estate = estate_nobles
+					loyalty = -15
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_maratha
+					influence = 60
+				}				
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 30
+				}				
+			}			
+		}
+	}
+	
+	interaction = {
+		name = "RECRUIT_MINISTER"
+		icon = 10
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			any_owned_province = {
+				has_estate = estate_maratha
+			}
+		}
+		
+		effect = {
+			
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 100
+				}
+				create_general = { tradition = 100 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 90
+					NOT = { army_tradition = 100 }
+				}
+				create_general = { tradition = 90 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 80
+					NOT = { army_tradition = 90 }
+				}
+				create_general = { tradition = 80 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 70
+					NOT = { army_tradition = 80 }
+				}
+				create_general = { tradition = 70 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 60
+					NOT = { army_tradition = 70 }
+				}
+				create_general = { tradition = 60 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 50
+					NOT = { army_tradition = 60 }
+				}
+				create_general = { tradition = 50 add_shock = 1 }
+			}
+			if = {
+				limit = { 
+					has_iv_gov_estate_9 = yes
+					army_tradition = 0
+					NOT = { army_tradition = 50 }
+				}
+				create_general = { tradition = 40 add_shock = 1 }
+			}
+			
+			
+			if = {
+				limit = {
+					NOT = { has_iv_gov_estate_9 = yes }
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = commandant
+					skill = 3
+					culture = event_target:estate_estate_province
+					religion = event_target:estate_estate_province
+					location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { 
+				NOT = { 
+					OR = {
+						has_iv_gov_estate_9 = yes 
+						monthly_income = 25 
+						} 
+					}
+				}
+				define_advisor = {
+					type = commandant
+					skill = 2
+					culture = event_target:estate_estate_province
+					religion = event_target:estate_estate_province
+					location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -5
+			}
+
+		}
+		
+		ai_will_do = {
+			factor = 0			
+		}
+	}
+	interaction = {
+		name = "RECRUIT_MARATHI_TROOPS"
+		icon = 23
+		
+		years_between_use = 25
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 50
+						}	
+					}
+				}
+				add_yearly_manpower = 1
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 50
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 75
+						}	
+					}
+				}
+				add_yearly_manpower = 1.5
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 75
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 100
+						}	
+					}
+				}
+				add_yearly_manpower = 2
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 100
+					}
+				}
+				add_yearly_manpower = 2.5
+			}	
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_maratha
+						loyalty = 50
+					}	
+				}
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25				
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}			
+		}
+	}
+	interaction = {
+		name = "DEMAND_SUPPORT_MARATHAS"
+		icon = 4
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_estate = estate_nobles }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 50
+						}	
+					}
+				}
+				add_mil_power = 50
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 50
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 75
+						}	
+					}
+				}
+				add_mil_power = 100
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 75
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_maratha
+							influence = 100
+						}	
+					}
+				}
+				add_mil_power = 150
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_maratha
+						influence = 100
+					}
+				}
+				add_mil_power = 200
+			}				
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -20
+			}
+		}
+		
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	interaction = {
+		name = "GRANT_AUTONOMY_MARATHA"
+		icon = 24
+		
+		years_between_use = 10
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			custom_tooltip = maratha_tax_burden_autonomy_tooltip
+			hidden_effect = {
+				every_owned_province = {
+					limit = { has_estate = estate_maratha }
+					add_local_autonomy = 15
+					add_province_modifier = {
+						name = "maratha_benign_neglect"
+						duration = 3650
+					}
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 25
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				add_estate_loyalty = {
+					estate = estate_nobles
+					loyalty = -25
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = EST_VAL_MARATHA_AUTONOMY
+				influence = 10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 30
+				}				
+			}
+		}
+	}
+	
+##########################################################################
+####### Idea Variation Estate Start
+##########################################################################
+
+
+#############################################
+####### Influence/Loyalty Modifiers
+#############################################
+
+#############################################
+####### Monarchy
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_2_estate_1_9
+		}		
+		influence = 10
+	}
+
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_3_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_4_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_5_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_6_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_7_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_8_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_9_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_10_estate_1_9
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_11_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_12_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_13_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_14_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_15_estate_1_9
+		}		
+		influence = 10
+	}	
+	
+#############################################
+####### Republic
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_2_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_3_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_4_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_5_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_6_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_7_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_8_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_9_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_10_estate_1_9
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_11_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_12_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_13_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_14_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_15_estate_1_9
+		}		
+		influence = 10
+	}	
+
+#############################################
+####### Theocracy
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_2_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_3_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_4_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_5_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_6_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_7_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_8_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_9_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_10_estate_1_9
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_11_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_12_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_13_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_14_estate_1_9
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_15_estate_1_9
+		}		
+		influence = 10
+	}		
+	
+#############################################
+####### Monarchy
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_2_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_3_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_4_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_5_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_6_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_7_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_8_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_9_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_10_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_11_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_12_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_13_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_14_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = monarchy_tier_15_estate_1_9
+		}
+		loyalty = 500
+	}	
+
+#############################################
+####### Republic
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_2_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_3_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_4_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_5_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_6_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_7_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_8_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_9_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_10_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_11_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_12_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_13_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_14_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = republic_tier_15_estate_1_9
+		}
+		loyalty = 500
+	}		
+	
+#############################################
+####### Theocracy
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_2_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_3_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_4_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_5_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_6_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_7_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_8_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_9_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_10_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_11_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_12_estate_1_9
+		}
+		loyalty = 500
+	}	
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_13_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_14_estate_1_9
+		}
+		loyalty = 500
+	}
+loyalty_modifier = {
+		desc = estate_influ_20
+		trigger = {
+					has_reform = theocracy_tier_15_estate_1_9
+		}
+		loyalty = 500
+	}		
+
+#############################################
+####### Checks & Balances Reforms
+#############################################
+
+#############################################
+####### Monarchy
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_2_checks_1_1
+		}		
+		influence = 10
+	}
+
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_3_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_4_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_5_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_6_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_7_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_8_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_9_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_10_checks_1_1
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_11_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_12_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_13_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_14_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_15_checks_1_1
+		}		
+		influence = 10
+	}
+	
+#############################################
+####### Republic
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_2_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_3_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_4_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_5_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_6_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_7_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_8_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_9_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_10_checks_1_1
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_11_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_12_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_13_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_14_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_15_checks_1_1
+		}		
+		influence = 10
+	}	
+
+#############################################
+####### Theocracy
+#############################################
+
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_2_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_3_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_4_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_5_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_6_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_7_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_8_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_9_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_10_checks_1_1
+		}		
+		influence = 10
+	}	
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_11_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_12_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_13_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_14_checks_1_1
+		}		
+		influence = 10
+	}
+influence_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_15_checks_1_1
+		}		
+		influence = 10
+	}		
+	
+#############################################
+####### Monarchy
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_2_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_3_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_4_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_5_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_6_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_7_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_8_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_9_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_10_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_11_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_12_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_13_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_14_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = monarchy_tier_15_checks_1_1
+		}
+		loyalty = 250
+	}	
+
+#############################################
+####### Republic
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_2_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_3_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_4_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_5_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_6_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_7_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_8_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_9_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_10_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_11_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_12_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_13_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_14_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = republic_tier_15_checks_1_1
+		}
+		loyalty = 250
+	}		
+	
+#############################################
+####### Theocracy
+#############################################
+	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_2_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_3_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_4_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_5_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_6_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_7_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_8_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_9_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_10_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_11_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_12_checks_1_1
+		}
+		loyalty = 250
+	}	
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_13_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_14_checks_1_1
+		}
+		loyalty = 250
+	}
+loyalty_modifier = {
+		desc = estate_influ_27
+		trigger = {
+					has_reform = theocracy_tier_15_checks_1_1
+		}
+		loyalty = 250
+	}	
+
+#############################################
+####### Interactions 
+#############################################
+
+#############################################
+####### Government Interaction 
+#############################################
+
+
+
+#############################################
+####### Limit Influence 
+#############################################
+
+	interaction = {
+		name = "Mara_2"
+		icon = 24
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			has_advisor = yes
+		}
+		
+		effect = {
+			random_list = {
+			33 = { remove_advisor_by_category = ADM }
+			34 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = MIL }
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_1
+				influence = -10
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+
+#############################################
+####### Execute Important Person
+#############################################
+
+	interaction = {
+		name = "Mara_3"
+		icon = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
+		
+		trigger = {
+			stability = -2
+		}
+		
+		effect = {
+			add_stability = -1
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_2
+				influence = -20
+				duration = 7300
+			}
+			reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Mara_4"
+		icon = 1
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			OR = {
+			legitimacy = 50
+			republican_tradition = 50
+			devotion = 50
+			}
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -10
+			add_devotion = -10	
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Mara_5"
+		icon = 31
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			prestige = 0
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Make Promises
+#############################################
+
+	interaction = {
+		name = "Mara_6"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 5
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+	
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Mara_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_ENDTIER
+			NOT = { has_iv_endgame_gov_tier = yes }
+			}
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 15
+			}
+			#reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Grant a Favour
+#############################################
+
+	interaction = {
+		name = "Mara_8"
+		icon = 25
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			random_list = {
+			33 = { add_adm_power = -50 }
+			34 = { add_dip_power = -50 }
+			33 = { add_mil_power = -50 }
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_7
+				influence = 15
+				duration = 7300
+			}
+			#reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Underline Privileges
+#############################################
+
+	interaction = {
+		name = "Mara_9"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_INTERACTION_9
+			 has_iv_gov_estate_9 = yes 
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_8
+				influence = 10
+				duration = 7300
+			}
+			reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Recruit Minister
+#############################################
+
+	interaction = {
+		name = "Mara_10"
+		icon = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = idea_var_advisor_11
+					skill = 3
+					culture = event_target:estate_estate_province
+					religion = event_target:estate_estate_province
+					location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = idea_var_advisor_11
+					skill = 2
+					culture = event_target:estate_estate_province
+					religion = event_target:estate_estate_province
+					location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_24
+				influence = 15
+				duration = 7300
+			}
+			reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Impose a Tax
+#############################################
+
+	interaction = {
+		name = "Mara_11"
+		icon = 8
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_territory = {
+						estate = estate_maratha
+						territory = 15
+						}	
+					}
+				}
+				add_years_of_income = 0.25
+			}
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_maratha
+						territory = 15
+						}
+					NOT = {
+						estate_territory = {
+						estate = estate_maratha
+						territory = 20
+						}	
+					}
+				}
+				add_years_of_income = 0.5
+			}
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_maratha
+						territory = 20
+						}
+					NOT = {
+						estate_territory = {
+						estate = estate_maratha
+						territory = 30
+						}	
+					}
+				}
+				add_years_of_income = 0.75
+			}
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_maratha
+						territory = 30
+						}
+				}
+				add_years_of_income = 1
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_10
+				influence = -5
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Recruit from their Domain
+#############################################
+
+	interaction = {
+		name = "Mara_12"
+		icon = 12
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_8
+				any_owned_province = {
+					has_estate = estate_maratha
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "idea_variation_estate_8"
+				duration = 3650
+			}
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_9
+				influence = -10
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+#############################################
+####### Confiscation of Lands
+#############################################
+
+	interaction = {
+		name = "Mara_13"
+		icon = 24
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 25
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_25
+				influence = -25
+				duration = 7300
+			}
+			reduce_loyal_without_mara = yes
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}	
+
+#############################################
+####### Ask for Reform Support
+#############################################
+
+	interaction = {
+		name = "Mara_14"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
+		
+		trigger = {
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_maratha
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_maratha
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			reduce_loyal_without_mara = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 1825
+			}
+			
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+
+
+##########################################################################
+####### Idea Variation End
+##########################################################################
+	
+}

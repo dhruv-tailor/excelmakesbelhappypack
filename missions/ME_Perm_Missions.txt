@@ -1,0 +1,796 @@
+perm_missions_1 = {
+	slot = 1	
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRM
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+
+	perm_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 6
+		trigger = {
+			army_size_percentage = 1.25
+		}
+		effect = {
+			1755 = {
+				if = {
+					limit = {
+						NOT = {	owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				else_if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	
+	perm_independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { perm_army }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 1755
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_subject = no
+			1755 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_stability = 2
+			galich_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vologda_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kama_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kazan_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			arkhangelsk_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			pomor_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_galich_vologda = {
+		icon = mission_cannons_firing
+		required_missions = { perm_independence }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = galich_area
+				area = vologda_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			NOT = { truce_with = MOS }
+			galich_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			vologda_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			yaroslavl_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			suzdal_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_yaroslavl_suzdal = {
+		icon = mission_conquer_50_development
+		required_missions = { perm_galich_vologda }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = yaroslavl_area
+				area = suzdal_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			NOT = { truce_with = MOS }
+			yaroslavl_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			suzdal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = MOS
+				}
+				add_casus_belli = {
+					target = MOS
+					type = cb_vassalize_mission
+				}
+			}
+			else = {
+				moscow_area = {
+					limit = {
+						NOT = {	owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+				vladimir_area = {
+					limit = {
+						NOT = {	owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+				tver_area = {
+					limit = {
+						NOT = {	owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	perm_vassalize_muscovy = {
+		icon = mission_have_two_subjects
+		required_missions = { perm_yaroslavl_suzdal }
+		position = 10
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					NOT = { exists = MOS }
+				}
+				OR = {
+					area = moscow_area
+					area = vladimir_area
+					area = tver_area
+				}
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			else = {
+				always = no
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = MOS
+				}
+				overlord_of = MOS
+				NOT = { has_country_modifier = loyal_subjects }
+				MOS = {
+					years_in_vassalage_under = {
+						who = ROOT
+						years = 10
+					}
+				}
+			}
+			else = {
+				moscow_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				vladimir_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				tver_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = loyal_subjects
+				duration = 3650
+			}
+			oka_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+perm_missions_2 = {
+	slot = 2	
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRM
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	perm_build_army_buildings = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { perm_army }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_army_buildings
+				duration = 7300
+			}
+			add_mil_power = 100
+		}
+	}
+	
+	perm_kama_kazan = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { perm_independence }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = kama_area
+				area = kazan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kama_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kazan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			volga_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			samara_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_volga_samara = {
+		icon = me_mission_army
+		required_missions = { perm_kama_kazan }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = volga_area
+				area = samara_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			volga_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			samara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			saratov_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bashkiria_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_saratov_bashkiria = {
+		icon = mission_assemble_an_army
+		required_missions = { perm_volga_samara }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = saratov_area
+				area = bashkiria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			saratov_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bashkiria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tambov_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ryazan_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_conquer_russia = {
+		icon = mission_unite_home_region
+		required_missions = { perm_vassalize_muscovy perm_saratov_bashkiria perm_south_karelia_novgorod }
+		position = 11
+		provinces_to_highlight = {
+			region = russia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			russia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_country_modifier = {
+				name = perm_conquer_russia_modifier
+				duration = 7300
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						is_core = ROOT
+						region = russia_region
+						has_owner_culture = no
+						has_owner_accepted_culture = no
+					}
+				}
+				every_owned_province = {
+					limit = {
+						is_core = ROOT
+						region = russia_region
+						has_owner_culture = no
+						has_owner_accepted_culture = no
+					}
+					add_nationalism = -3
+				}
+			}
+			else = {
+				custom_tooltip = REDUCE_NATIONALISM_IN_PERM_RUSSIA_PROVINCES
+			}
+		}
+	}
+}
+
+perm_missions_3 = {
+	slot = 3	
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRM
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	perm_arkhangelsk_pomor = {
+		icon = mission_conquer_5_states
+		required_missions = { perm_independence }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = arkhangelsk_area
+				area = pomor_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			arkhangelsk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			pomor_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			north_karelia = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			beloozero_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_north_karelia_beloozero = {
+		icon = mission_cannons_firing
+		required_missions = { perm_arkhangelsk_pomor }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = north_karelia
+				area = beloozero_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			north_karelia = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			beloozero_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			karelia_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			novgorod_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	perm_south_karelia_novgorod = {
+		icon = mission_conquer_50_development
+		required_missions = { perm_north_karelia_beloozero }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = karelia_area
+				area = novgorod_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			karelia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			novgorod_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			pskov_area = {
+				limit = {
+					NOT = {	owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+perm_missions_4 = {
+	slot = 4	
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRM
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	perm_start_ural = {
+		icon = mission_conquer_50_development
+		required_missions = { perm_independence perm_have_colonists }
+		position = 8
+		provinces_to_highlight = {
+			area = ural_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			ural_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_eastern_colonies_small
+				duration = 3650
+			}
+		}
+	}
+	
+	perm_finish_ural = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { perm_start_ural }
+		position = 9
+		provinces_to_highlight = {
+			area = ural_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			ural_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_eastern_colonies_middle
+				duration = 5475
+			}
+		}
+	}
+	
+	perm_eastern_colonies = {
+		icon = mission_colonial
+		required_missions = { perm_finish_ural }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = kara_area
+				area = central_siberia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			central_siberia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_eastern_colonies_big
+				duration = 7300
+			}
+		}
+	}
+}
+
+perm_missions_5 = {
+	slot = 5	
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRM
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	perm_build_tax_buildings = {
+		icon = mission_european_church
+		required_missions = { }
+		position = 3
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_tax_buildings
+				duration = 7300
+			}
+			add_adm_power = 50
+		}
+	}
+	
+	perm_build_trade_buildings = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { perm_build_tax_buildings }
+		position = 4
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_trade_buildings
+				duration = 7300
+			}
+			add_dip_power = 50
+		}
+	}
+	
+	perm_build_production_buildings = {
+		icon = mission_high_income
+		required_missions = { perm_build_trade_buildings }
+		position = 5
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_production_buildings
+				duration = 7300
+			}
+			add_dip_power = 50
+		}
+	}
+	
+	perm_build_government_buildings = {
+		icon = mission_early_game_buildings
+		required_missions = { perm_build_production_buildings }
+		position = 6
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+					has_building = university
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_government_buildings
+				duration = 7300
+			}
+			add_adm_power = 50
+		}
+	}
+	
+	perm_have_colonists = {
+		icon = mission_colonial
+		required_missions = { perm_build_government_buildings }
+		position = 7
+		trigger = {
+			num_of_colonists = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = perm_eastern_colonies_very_small
+				duration = 1825
+			}
+		}
+	}
+}

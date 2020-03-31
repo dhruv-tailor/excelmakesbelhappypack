@@ -1,0 +1,3839 @@
+#Made by claivin for Missions Expanded
+#With some missions designed by ABA
+
+# Kazan & Tatarstan shared Missions
+KAZ_TRN_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = KAZ
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = TRN
+		}
+	}
+	has_country_shield = yes
+	
+	KAZ_aba_revitalise = { #start GOL wars
+		icon = mission_non-western_cavalry_raid
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size = 20
+			num_of_cavalry = 8
+		}
+		effect = {
+			saratov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tambov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_don_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_prestige = 10
+			add_country_modifier = {
+				name = kaz_revitalised_horde
+				duration = 3650
+			}
+			define_general = {
+				name = "Olug Moxumatt"
+				fire = 1
+				shock = 5
+				manuever = 5
+				siege = 1
+			}
+		}
+	}
+	
+	KAZ_aba_sieze_astrakhan = { #start GOL wars
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_aba_revitalise
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = astrakhan_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			astrakhan_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT 
+			}
+			legitimacy_equivalent = 100
+			treasury = 250
+		}
+		effect = {
+			dagestan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			circassia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { id = ME_Kazan_Events.5 }
+		}
+	}
+	
+	KAZ_horde_wars_3 = { #kill great horde
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_aba_sieze_astrakhan
+		}
+		position = 5
+		trigger = {
+			NOT = { exists = GOL }
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_kill_gol
+				duration = 3650
+			}
+			if = {
+				limit = {
+					exists = CRI
+				}
+				CRI = {
+					every_owned_province = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	KAZ_horde_wars_9 = { #kill crimea
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_3
+		}
+		position = 6
+		trigger = {
+			NOT = { exists = CRI }
+		}
+		effect = {
+			286 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2410 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			285 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			2447 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = kaz_victory_crimea
+				duration = 7300
+			}
+		}
+	}
+	
+	KAZ_rus_wars_14 = { #subjugate circassia
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_9
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2195
+				province_id = 463
+				province_id = 2197
+				province_id = 2201
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 2195
+			owns_or_non_sovereign_subject_of = 463
+			owns_or_non_sovereign_subject_of = 2197
+			owns_or_non_sovereign_subject_of = 2201
+		}
+		effect = {
+			add_yearly_manpower = 1.0
+			add_army_tradition = 5
+		}
+	}
+	
+	KAZ_plc_1 = { #fite plc
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_14
+		}
+		position = 9
+		trigger = {
+			OR = {
+				offensive_war_with = LIT
+				offensive_war_with = POL
+				offensive_war_with = PLC
+				AND = {
+					NOT = { exists = LIT }
+					NOT = { exists = PLC }
+					NOT = { exists = POL }
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = plc_skirmish_tooltip_1
+			custom_tooltip = plc_skirmish_tooltip_2
+			custom_tooltip = plc_skirmish_tooltip_3
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								exists = POL
+								is_neighbor_of = POL
+							}
+							AND = {
+								exists = PLC
+								is_neighbor_of = PLC
+							}
+							AND = {
+								exists = LIT
+								is_neighbor_of = LIT
+							}
+						}
+					}
+					every_owned_province = {
+						limit = {
+							any_neighbor_province = {
+								OR = {
+									owned_by = POL
+									owned_by = PLC
+									owned_by = LIT
+								}
+							}
+						}
+						every_neighbor_province = {
+							limit = {
+								OR = {
+									owned_by = POL
+									owned_by = PLC
+									owned_by = LIT
+								}
+							}
+							add_devastation = 30
+							add_province_modifier = {
+								name = kaz_strategic_skirmish
+								duration = 3650
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = LIT
+						is_neighbor_of = LIT
+					}
+					LIT = {
+						every_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = ROOT
+								}
+							}
+							every_neighbor_province = {
+								limit = {
+									owned_by = ROOT
+								}
+								add_province_modifier = {
+									name = kaz_strategic_skirmish
+									duration = 3650
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = POL
+						is_neighbor_of = POL
+					}
+					POL = {
+						every_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = ROOT
+								}
+							}
+							every_neighbor_province = {
+								limit = {
+									owned_by = ROOT
+								}
+								add_province_modifier = {
+									name = kaz_strategic_skirmish
+									duration = 3650
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = PLC
+						is_neighbor_of = PLC
+					}
+					PLC = {
+						every_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = ROOT
+								}
+							}
+							every_neighbor_province = {
+								limit = {
+									owned_by = ROOT
+								}
+								add_province_modifier = {
+									name = kaz_strategic_skirmish
+									duration = 3650
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+KAZ_TRN_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = KAZ
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = TRN
+		}
+	}
+	has_country_shield = yes
+	
+	KAZ_religion = {
+		icon = mission_non-western_cavalry_raid
+		position = 1
+		trigger = {
+			grown_by_development = 300
+			religious_unity = 1.0
+		}
+		effect = {
+			capital_scope = {
+				add_base_tax = 2
+				add_base_production = 2 
+				add_base_manpower = 2
+			}
+			add_piety = 0.5
+		}
+	}
+	
+	KAZ_rus_wars_2 = { #build to FL
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_1
+		}
+		position = 2
+		trigger = {
+			army_size_percentage = 1.0
+		}
+		effect = {
+			add_yearly_manpower = 3.0
+			add_country_modifier = {
+				name = kaz_mobilized_horses
+				duration = 9125
+			}
+		}
+	}
+	
+	KAZ_feudalism_1 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_2
+		}
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				estate_loyalty = {
+					estate = estate_nomadic_tribes
+					loyalty = 65
+				}
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				capital_scope = {
+					development = 20
+				}
+			}
+			else = {
+				capital_scope = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
+			}
+			is_institution_enabled = feudalism
+		}
+		effect = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = feudalism
+					value = 25
+				}
+			}
+			custom_tooltip = feudalism_tooltip
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						is_capital = no
+					}
+					add_institution_embracement = {
+						which = feudalism
+						value = 10
+					}
+				}
+			}
+		}
+	}
+	
+	KAZ_rus_wars_6 = { #subj ryazan
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_5
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 300
+				province_id = 301
+				province_id = 4255
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 300
+			owns_or_non_sovereign_subject_of = 301
+			owns_or_non_sovereign_subject_of = 4255
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = RYA
+				}
+				RYA = {
+					every_owned_province = {
+						add_devastation = 30
+					}
+				}
+			}
+			capital_scope = {
+				add_base_manpower = 2
+			}
+			add_army_tradition = 10
+			4116 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	KAZ_rus_wars_7 = { #subj odoyev
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_6
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 4116
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 4116
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = OKA
+				}
+				OKA = {
+					every_owned_province = {
+						add_devastation = 30
+					}
+				}
+			}
+			add_mil_power = 10
+			add_dip_power = 10
+			add_adm_power = 10
+			add_army_tradition = 10
+		}
+	}
+	
+	KAZ_rus_wars_11 = { #invade tver
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_7
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4249
+				province_id = 294
+				province_id = 4248
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 4249
+			owns_or_non_sovereign_subject_of = 294
+			owns_or_non_sovereign_subject_of = 4248
+		}
+		effect = {
+			add_yearly_manpower = 1.0
+		}
+	}
+	
+	KAZ_rus_wars_13 = { #invade perm
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_8
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					exists = PRM
+					owned_by = PRM
+				}
+				AND = {
+					NOT = { exists = PRM }
+					area = perm_area
+				}
+			}
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = PRM
+				}
+				PRM = {
+					all_owned_province = {
+						controlled_by = ROOT
+					}
+				}
+			}
+			else = {
+				perm_area = {
+					type = all
+					controlled_by = ROOT
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Kazan_Events.4 }
+		}
+	}
+	
+	KAZ_rus_wars_15 = { #subjugate dagestan
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_14
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2198
+				province_id = 2199
+				province_id = 4306
+				province_id = 425
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 2198
+			owns_or_non_sovereign_subject_of = 2199
+			owns_or_non_sovereign_subject_of = 4306
+			owns_or_non_sovereign_subject_of = 425
+		}
+		effect = {
+			add_yearly_manpower = 1.0
+			add_army_tradition = 5
+		}
+	}
+	
+	KAZ_georgia_1 = { #subjugate shirvan
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_15
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 421
+				province_id = 4299
+				province_id = 4305
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 421
+			owns_or_non_sovereign_subject_of = 4299
+			owns_or_non_sovereign_subject_of = 4305
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_caucasian_conscripts
+				duration = 3650
+			}
+		}
+	}
+}
+
+KAZ_TRN_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = KAZ
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = TRN
+		}
+	}
+	has_country_shield = yes
+	
+	KAZ_rus_wars_1 = { #attack mos
+		icon = mission_non-western_cavalry_raid
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				offensive_war_with = RUS
+				offensive_war_with = MOS
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+				}
+			}
+		}
+		effect = {
+			306 = {
+				if = {
+					limit = {
+						owner = {
+							war_with = ROOT
+						}
+					}
+					add_province_modifier = {
+						name = kaz_novgorod_unprepared
+						duration = 1825
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = RUS
+					offensive_war_with = RUS
+				}
+				RUS = {
+					country_event = { id = ME_Kazan_Events.1 }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+					offensive_war_with = MOS
+				}
+				MOS = {
+					country_event = { id = ME_Kazan_Events.1 }
+				}
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 10 }
+			}
+		}
+	}
+	
+	KAZ_rus_wars_4 = { #occupy n_novgorod
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_1
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 306
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			controls = 306
+		}
+		effect = {
+			306 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = kaz_renewed_morale
+				duration = 3650
+			}
+			add_yearly_manpower = 2.5
+		}
+	}
+	
+	KAZ_rus_wars_5 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_4
+		}
+		position = 3
+		trigger = {
+			OR = {
+				war_score_against = {
+					who = RUS
+					value = 40
+				}
+				war_score_against = {
+					who = MOS
+					value = 40
+				}
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							exists = RUS
+							war_score_against = {
+								who = RUS
+								value = 40
+							}
+						}
+						AND = {
+							exists = MOS
+							war_score_against = {
+								who = MOS
+								value = 40
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = RUS
+						war_score_against = {
+							who = RUS
+							value = 40
+						}
+					}
+					RUS = {
+						set_country_flag = ME_Kazan_Events_3_target
+					}
+				}
+				if = {
+					limit = {
+						exists = MOS
+						war_score_against = {
+							who = MOS
+							value = 40
+						}
+					}
+					MOS = {
+						set_country_flag = ME_Kazan_Events_3_target
+					}
+				}
+				country_event = { id = ME_Kazan_Events.3 }
+			}
+			else = {
+				add_prestige = 10
+				add_legitimacy_equivalent = { value = 10 }
+			}
+		}
+	}
+	
+	KAZ_rus_wars_8 = { #second war on mos
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_5
+		}
+		position = 6
+		trigger = {
+			OR = {
+				offensive_war_with = RUS
+				offensive_war_with = MOS
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_familiar_terain
+				duration = 3650
+			}
+		}
+	}
+	
+	KAZ_rus_wars_10 = { #occupy moscow
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_8
+		}
+		position = 7
+		provinces_to_highlight = {
+			province_id = 295
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					295 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+				295 = {
+					controlled_by = ROOT
+				}
+			}
+			else = {
+				OR = {
+					war_score_against = {
+						who = RUS
+						value = 50
+					}
+					war_score_against = {
+						who = MOS
+						value = 50
+					}
+					AND = {
+						NOT = { exists = RUS }
+						NOT = { exists = MOS }
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_occupied_mos
+				duration = 365
+			}
+		}
+	}
+	
+	KAZ_rus_wars_16 = { #new yoke
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_10
+			KAZ_rus_wars_17
+		}
+		position = 9
+		trigger = {
+			OR = {
+				NOT = { exists = RUS }
+				RUS = {
+					is_subject_of = ROOT
+					is_subject_of_type = tributary_state
+				}
+			}
+			OR = {
+				NOT = { exists = MOS }
+				MOS = {
+					is_subject_of = ROOT
+					is_subject_of_type = tributary_state
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_tatar_yoke
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = kaz_great_terror
+				duration = 3650
+			}
+			add_prestige = 50
+			295 = {
+				if = {
+					limit = {
+						country_or_subject_holds = ROOT
+					}
+					add_base_tax = -1
+					add_base_manpower = -1
+					change_culture = ROOT
+				}
+			}
+			306 = {
+				if = {
+					limit = {
+						country_or_subject_holds = ROOT
+					}
+					add_base_tax = -1
+					add_base_manpower = -1
+					change_culture = ROOT
+				}
+			}
+			310 = {
+				if = {
+					limit = {
+						country_or_subject_holds = ROOT
+					}
+					add_base_tax = -1
+					add_base_manpower = -1
+					change_culture = ROOT
+				}
+			}
+			custom_tooltip = can_form_tatarstan_tooltip
+			hidden_effect = {
+				set_country_flag = can_form_tatarstan
+			}
+		}
+	}
+}
+
+KAZ_TRN_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = KAZ
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = TRN
+		}
+	}
+	has_country_shield = yes
+	
+	KAZ_trade = {
+		icon = mission_non-western_cavalry_raid
+		position = 1
+		provinces_to_highlight = {
+			province_has_center_of_trade_of_level = 1
+			has_discovered = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 7
+				province_has_center_of_trade_of_level = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_trade
+				duration = 9125
+			}
+			add_mercantilism = 10
+		}
+	}
+	
+	KAZ_rus_wars_3 = { #raid
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_1
+		}
+		position = 2
+		trigger = {
+			OR = {
+				war_score_against = {
+					who = RUS
+					value = 10
+				}
+				war_score_against = {
+					who = MOS
+					value = 10
+				}
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_owned_province = {
+						any_neighbor_province = {
+							OR = {
+								owned_by = RUS
+								owned_by = MOS
+							}
+							owner = {
+								war_with = ROOT
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							OR = {
+								owned_by = RUS
+								owned_by = MOS
+							}
+							owner = {
+								war_with = ROOT
+							}
+						}
+					}
+					every_neighbor_province = {
+						limit = {
+							OR = {
+								owned_by = RUS
+								owned_by = MOS
+							}
+							owner = {
+								war_with = ROOT
+							}
+						}
+						add_devastation = 30
+					}
+				}
+			}
+			add_prestige = 15
+			add_treasury = 100
+		}
+	}
+	
+	KAZ_feudalism_2 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_3
+		}
+		position = 3
+		trigger = {
+			any_owned_province = {
+				feudalism = 100
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = feudalism
+					value = 25
+				}
+			}
+			custom_tooltip = feudalism_tooltip
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						NOT = { is_capital = yes }
+					}
+					add_institution_embracement = {
+						which = feudalism
+						value = 10
+					}
+				}
+			}
+		}
+	}
+	
+	KAZ_horde_wars_7 = { #siberian horde
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_5
+			KAZ_rus_wars_5
+		}
+		position = 4
+		trigger = {
+			has_institution = feudalism
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = SHY
+				}
+				SHY = {
+					every_owned_province = {
+						limit = {
+							culture = siberian
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 10 }
+			}
+		}
+	}
+	
+	KAZ_horde_wars_8 = { #take siberia
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_7
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2441
+				province_id = 1076
+				province_id = 1075
+				province_id = 1071
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			2441 = {
+				owned_by = ROOT
+			}
+			1076 = {
+				owned_by = ROOT
+			}
+			1075 = {
+				owned_by = ROOT
+			}
+			1071 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = SHY
+					is_neighbor_of = SHY
+				}
+				every_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = SHY
+						}
+					}
+					every_neighbor_province = {
+						limit = {
+							owned_by = SHY
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_claim = ROOT
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+		}
+	}
+	
+	KAZ_tributes_1 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_8
+		}
+		position = 6
+		trigger = {
+			tributary_state = 5
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_tributary_network_1
+				duration = -1
+			}
+		}
+	}
+	
+	KAZ_rus_wars_12 = { #invade novgorod
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_8
+		}
+		position = 7
+		trigger = {
+			OR = {
+				AND = {
+					offensive_war_with = NOV
+					war_score_against = {
+						who = NOV
+						value = 10
+					}
+				}
+				NOT = { exists = NOV }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = NOV
+					is_neighbor_of = NOV
+				}
+				every_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = NOV
+						}
+					}
+					every_neighbor_province = {
+						limit = {
+							owned_by = NOV
+						}
+						if = {
+							limit = {
+								NOT = { is_core = ROOT }
+								NOT = { is_permanent_claim = ROOT }
+							}
+							add_claim = ROOT
+						}
+						add_devastation = 15
+					}
+				}
+			}
+			add_years_of_income = 0.5
+		}
+	}
+	
+	KAZ_rus_wars_17 = { #kill novgorod
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_12
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 310
+				province_id = 33
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 310
+			owns_core_province = 33
+			NOT = { exists = NOV }
+		}
+		effect = {
+			add_adm_power = 75
+			add_dip_power = 75
+			add_mil_power = 75
+		}
+	}
+	
+	KAZ_plc_13 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_17
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = bothnia_area
+				area = finland_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bothnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			finland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bothnia_area = {
+				add_province_modifier = {
+					name = kaz_finland
+					duration = -1
+				}
+			}
+			finland_area = {
+				add_province_modifier = {
+					name = kaz_finland
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+KAZ_TRN_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = KAZ
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = TRN
+		}
+	}
+	has_country_shield = yes
+	
+	KAZ_horde_wars_4 = { #start nog wars
+		icon = mission_non-western_cavalry_raid
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				has_spy_network_in = {
+					who = NOG
+					value = 25
+				}
+				NOT = { exists = NOG }
+			}
+		}
+		effect = {
+			474 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1965 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2420 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1966 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = NOG
+				}
+				add_spy_network_in = {
+					who = NOG
+					value = -25
+				}
+			}
+		}
+	}
+	
+	KAZ_horde_wars_5 = { #invade nogai horde
+		icon = mission_non-western_cavalry_raid
+		required_missions = { 
+			KAZ_rus_wars_3
+			KAZ_horde_wars_4
+		}
+		position = 3
+		provinces_to_highlight = {
+			is_core = NOG
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = owns_enough_nog_tooltip
+				num_of_owned_provinces_with = {
+					value = 8
+					is_core = NOG
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = NOG
+				}
+				NOG = {
+					every_owned_province = {
+						limit = {
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						is_core = NOG
+					}
+					add_local_autonomy = -10
+					add_nationalism = -5
+				}
+			}
+		}
+	}
+	
+	KAZ_horde_wars_6 = { #kill nogai horde
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_5
+		}
+		position = 5
+		trigger = {
+			NOT = { exists = NOG }
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_kill_nog
+				duration = 3650
+			}
+		}
+	}
+	
+	KAZ_horde_wars_10 = { #kill uzbek
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_6
+			KAZ_horde_wars_8
+		}
+		position = 6
+		trigger = {
+			NOT = { exists = SHY }
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_kill_shy
+				duration = 3650
+			}
+		}
+	}
+}
+
+# Kazan Missions
+KAZ_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = KAZ
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	KAZ_plc_2 = { #conquest
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_1
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = sloboda_ukraine_area
+				area = zaporizhia_area
+				area = yedisan_area
+				area = east_dniepr_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sloboda_ukraine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			zaporizhia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yedisan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_dniepr_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			sloboda_ukraine_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			zaporizhia_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			yedisan_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			east_dniepr_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	KAZ_plc_3 = { #conquest
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_2
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = west_dniepr_area
+				area = podolia_volhynia_area
+				area = moldavia_area
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { owned_by = TUR }
+		}
+		trigger = {
+			west_dniepr_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					owned_by = TUR
+				}
+			}
+			podolia_volhynia_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					owned_by = TUR
+				}
+			}
+			moldavia_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					owned_by = TUR
+				}
+			}
+		}
+		effect = {
+			west_dniepr_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			podolia_volhynia_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			moldavia_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	KAZ_plc_7 = { #trade routes into europe
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_3
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 260
+				province_id = 262
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			260 = {
+				owned_by = ROOT
+			}
+			262 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_poland_trade
+				duration = 3650
+			}
+		}
+	}
+	
+	KAZ_plc_10 = { #poland proper
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_7
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = mazovia_area
+				area = malopolska_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			mazovia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			malopolska_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_hussar
+				duration = 9125
+			}
+		}
+	}
+	
+	KAZ_plc_11 = { #kill poland
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_10
+		}
+		position = 13
+		trigger = {
+			NOT = { exists = POL }
+			NOT = { exists = PLC }
+		}
+		effect = {
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							is_core = POL
+							is_core = PLC
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							is_core = POL
+							is_core = PLC
+						}
+					}
+					add_nationalism = -5
+				}
+			}
+			else = {
+				add_prestige = 15
+			}
+		}
+	}
+}
+
+KAZ_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = KAZ
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	KAZ_plc_4 = { #break plc
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_1
+		}
+		position = 10
+		trigger = {
+			OR = {
+				war_score_against = {
+					who = LIT
+					value = 95
+				}
+				war_score_against = {
+					who = POL
+					value = 95
+				}
+				war_score_against = {
+					who = PLC
+					value = 95
+				}
+				AND = {
+					NOT = { exists = LIT }
+					NOT = { exists = POL }
+					NOT = { exists = PLC }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = LIT
+				}
+				if = {
+					limit = {
+						LIT = {
+							is_subject = yes
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+					LIT = {
+						overlord = {
+							PREV = {
+								grant_independence = yes
+							}
+						}
+					}
+				}
+				LIT = {
+					white_peace = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = POL
+				}
+				POL = {
+					white_peace = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = PLC
+				}
+				PLC = {
+					white_peace = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = TUR
+				}
+				reverse_add_opinion = {
+					who = TUR
+					modifier = kaz_big_help
+				}
+			}
+			if = {
+				limit = {
+					NOT = { exists = LIT }
+					NOT = { exists = PLC }
+					NOT = { exists = POL }
+				}
+				add_prestige = 20
+			}
+		}
+	}
+	
+	KAZ_plc_6 = { #conquest
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_3
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = minsk_area
+				area = white_ruthenia_area
+				area = smolensk_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			minsk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			white_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			smolensk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			minsk_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			white_ruthenia_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			smolensk_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	KAZ_plc_8 = { #conquest
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_6
+		}
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = samogitia_area
+				area = pripyat_area
+				area = lithuania_area
+				area = pskov_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			samogitia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			pripyat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lithuania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			pskov_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			samogitia_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			pripyat_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			lithuania_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+			pskov_area = {
+				add_province_modifier = {
+					name = kaz_exploit_goods
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	KAZ_plc_9 = { #kill lithuania
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_8
+		}
+		position = 13
+		trigger = {
+			NOT = { exists = LIT }
+		}
+		effect = {
+			if = {
+				limit = {
+					any_owned_province = {
+						is_core = LIT
+					}
+				}
+				every_owned_province = {
+					limit = {
+						is_core = LIT
+					}
+					add_nationalism = -5
+				}
+			}
+			else = {
+				add_prestige = 15
+			}
+		}
+	}
+	
+	KAZ_plc_12 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_9
+		}
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = curonia_area
+				area = estonia_ingria_area
+				area = livonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			curonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			estonia_ingria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			livonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_baltic_trade
+				duration = 5475
+			}
+		}
+	}
+}
+
+KAZ_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = KAZ
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	KAZ_georgia_2 = { #subjugate 
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_georgia_1
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2203
+				province_id = 423
+				province_id = 4301
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 2203
+			owns_or_non_sovereign_subject_of = 423
+			owns_or_non_sovereign_subject_of = 4301
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_georgian_conscripts
+				duration = 3650
+			}
+		}
+	}
+	
+	KAZ_georgia_3 = { #subjugate east georgia
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_georgia_2
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 462
+				province_id = 422
+				province_id = 1856
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { #subjugate west georgia
+			owns_or_non_sovereign_subject_of = 462
+			owns_or_non_sovereign_subject_of = 422
+			owns_or_non_sovereign_subject_of = 1856
+		}
+		effect = {
+			add_mil_power = 100
+		}
+	}
+	
+	KAZ_plc_14 = { #carpathia
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_3
+		}
+		position = 12
+		provinces_to_highlight = {
+			region = carpathia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 6
+				region = carpathia_region
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_adm_power = 50
+		}
+	}
+	
+	KAZ_wien = {#siege vienna
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_14
+		}
+		position = 13
+		provinces_to_highlight = {
+			province_id = 134
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			134 = {
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_razing
+				duration = 365
+			}
+		}
+	}
+	
+	KAZ_prussia = {#raze
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_plc_8
+		}
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = west_prussia_area
+			}
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			east_prussia_area = {
+				type = all
+				controlled_by = ROOT
+			}
+			west_prussia_area = {
+				type = all
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_razing_2
+				duration = 365
+			}
+		}
+	}
+}
+
+KAZ_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = KAZ
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	KAZ_tributes_2 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_16
+		}
+		position = 10
+		trigger = {
+			tributary_state = 10
+			vassal = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_tributary_network_2
+				duration = -1
+			}
+		}
+	}
+	
+	KAZ_asia_4 = { #eastern turks
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_asia_2
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 715
+				province_id = 739
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 715
+			owns_core_province = 739
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_eastern_turks
+				duration = 3650
+			}
+			gansu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			west_gansu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+}
+
+KAZ_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = KAZ
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	KAZ_asia_1 = { #transoxiana
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_10
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = transcaspia_area
+				area = khiva_area
+				area = merv_area
+				area = transoxiana_area
+				area = kyzylkum_area
+				area = termez_area
+				area = arys_area
+				area = ferghana_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			transcaspia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			khiva_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			merv_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			transoxiana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kyzylkum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			termez_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			arys_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ferghana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_central_asian_trade
+				duration = 9125
+			}
+		}
+	}
+	
+	KAZ_asia_2 = { #mongolia
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_asia_1
+		}
+		position = 10
+		provinces_to_highlight = {
+			region = mongolia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 20
+				region = mongolia_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_connection_to_mongol
+				duration = 9125
+			}
+			add_country_modifier = {
+				name = kaz_mongol_horses
+				duration = 18250
+			}
+		}
+	}
+	
+	KAZ_china_1 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_asia_2
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = gansu_area
+				area = west_gansu_area
+				area = shanxi_area
+				area = shaanxi_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 11
+		trigger = {
+			gansu_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			west_gansu_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			shanxi_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			shaanxi_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			north_china_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			add_adm_power = 150
+			add_dip_power = 150
+			add_mil_power = 150
+		}
+	}
+	
+	KAZ_china_2 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_china_1
+		}
+		provinces_to_highlight = {
+			area = hebei_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 13
+		trigger = {
+			hebei_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			xinan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			south_china_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			add_adm_power = 200
+			add_dip_power = 200
+			add_mil_power = 200
+		}
+	}
+	
+	KAZ_china_3 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_china_2
+		}
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+				province_id = 295
+				province_id = 1082
+				province_id = 464
+				province_id = 466
+				province_id = 2444
+				province_id = 476
+				province_id = 33
+			}
+			NOT = { area = taiwan_area }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			north_china_region = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			south_china_region = {
+				type = all
+				OR = {
+					AND = {
+						owned_by = ROOT
+						is_core = ROOT
+					}
+					area = taiwan_area
+				}
+			}
+			xinan_region = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			owns_core_province = 295
+			owns_core_province = 1082
+			owns_core_province = 464
+			owns_core_province = 466
+			owns_core_province = 2444
+			owns_core_province = 476
+			owns_core_province = 33
+		}
+		effect = {
+			679 = {#chengdu
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			680 = {#chonqing
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			2157 = {#waichoq
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			667 = {#canton
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			1829 = {#quanzhou
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			669 = {#fuzhou
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			682 = {#wuchang
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			688 = {#kaifeng
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_production = -2
+			}
+			684 = {#hanzhou
+				add_base_tax = -3
+				add_base_production = -3
+				add_base_production = -3
+			}
+			1821 = {#nanjing
+				add_base_tax = -3
+				add_base_production = -3
+				add_base_production = -3
+			}
+			1816 = {#beijing
+				add_base_tax = -3
+				add_base_production = -3
+				add_base_production = -3
+			}
+			295 = {#moscow
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			1082 = {#kazan
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			464 = {#astrakhan
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			466 = {#sarai
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			2444 = {#bashgrid
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			476 = {#kypshak
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			33 = {#neva
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_production = 3
+			}
+			add_country_modifier = {
+				name = trn_dragon
+				duration = -1
+			}
+		}
+	}
+}
+
+# Tatarstan Missions
+TRN_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRN
+	}
+	has_country_shield = yes
+	
+	TRN_armed_neutraliy = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_16
+		}
+		position = 10
+		trigger = {
+			army_size = 100
+			manpower = 50
+			num_of_owned_provinces_with = {
+				value = 20
+				fort_level = 2
+			}
+			OR = {
+				barracks = 40
+				training_fields = 40
+			}
+		}
+		effect = {
+			custom_tooltip = trn_neutral_tooltip
+			set_country_flag = trn_neutral
+		}
+	}
+	
+	TRN_exercise_might = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_armed_neutraliy
+		}
+		position = 13
+		trigger = {
+			any_country = {
+				defensive_war_with = ROOT
+				total_development = 500
+				NOT = {
+					war_score_against = {
+						who = ROOT
+						value = -25
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_expedition
+				duration = 7300
+			}
+		}
+	}
+	
+	TRN_mil_reform = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_science
+		}
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				province_id = 33
+				province_id = 454
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				AND = {
+					NOT = { has_building = barracks }
+					NOT = { has_building = training_fields }
+				}
+				NOT = { fort_level = 4 }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 30 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 3 } }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				33 = {
+					owned_by = ROOT
+					is_core = ROOT
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+					}
+					fort_level = 4
+					if = {
+						limit = {
+							has_dlc = "Common Sense"
+						}
+						development = 30
+					}
+					else = {
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_3_BUILDINGS
+							province_has_at_least_num_of_buildings = { amount = 3 }
+						}
+					}
+				}
+				454 = {
+					owned_by = ROOT
+					is_core = ROOT
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+					}
+					fort_level = 4
+					if = {
+						limit = {
+							has_dlc = "Common Sense"
+						}
+						development = 30
+					}
+					else = {
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_3_BUILDINGS
+							province_has_at_least_num_of_buildings = { amount = 3 }
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.6
+			}
+			calc_true_if = {
+				full_idea_group = aristocracy_ideas
+				full_idea_group = plutocracy_ideas
+				full_idea_group = offensive_ideas
+				full_idea_group = defensive_ideas
+				full_idea_group = quantity_ideas
+				full_idea_group = quality_ideas
+				full_idea_group = naval_ideas
+				amount = 2
+			}
+			army_reformer = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_aow
+				duration = -1
+			}
+		}
+	}
+}
+
+TRN_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRN
+	}
+	has_country_shield = yes
+	
+	TRN_prospect = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_consolidate
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 466
+				province_id = 1082
+				province_id = 4265
+				province_id = 295
+				province_id = 2420
+				province_id = 464
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_production = 10 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					has_no_manufactory_trigger = yes
+				}
+			}
+		}
+		trigger = {
+			466 = {#sarai
+				owned_by = ROOT
+				is_core = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+			1082 = {#kazan
+				owned_by = ROOT
+				is_core = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+			4265 = {#archally
+				owned_by = ROOT
+				is_core = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+			295 = {#moscow
+				owned_by = ROOT
+				is_core = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+			464 = {#astrakhan
+				owned_by = ROOT
+				is_core = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			moscow_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_heart
+					duration = -1
+				}
+			}
+			kazan_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_heart
+					duration = -1
+				}
+			}
+			astrakhan_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_heart
+					duration = -1
+				}
+			}
+			466 = {
+				add_province_modifier = {
+					name = trn_sarai
+					duration = -1
+				}
+				add_base_production = 4
+			}
+			1082 = {
+				add_province_modifier = {
+					name = trn_kazan
+					duration = -1
+				}
+				add_base_production = 4
+			}
+			295 = {
+				add_province_modifier = {
+					name = trn_moscow
+					duration = -1
+				}
+				add_base_production = 4
+				change_trade_goods = glass
+			}
+		}
+	}
+	
+	TRN_monopoly = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_econ
+		}
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = finland_area
+				area = bothnia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			284 = {#crimea
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			280 = {#kiev
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			310 = {#novgorod
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1926 = {#baltic
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1652 = {#white sea
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1082 = { #kazan
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			262 = {#krakow
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			finland_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			bothnia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			change_technology_group = eastern
+			change_unit_type = eastern
+			add_mercantilism = 10
+		}
+	}
+	
+	TRN_science = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_irrigate
+		}
+		position = 14
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { has_building = university }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 50 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 5 } }
+				}
+			}
+		}
+		trigger = {
+			natural_scientist = 3
+			army_reformer = 3
+			statesman = 3
+			capital_scope = {
+				has_building = university
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 50
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 5 }
+				}
+			}
+		}
+		effect = {
+			capital_scope = {				
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_manpower = 3
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 20
+			}
+			add_country_modifier = {
+				name = trn_uni
+				duration = -1
+			}
+		}
+	}
+}
+
+TRN_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRN
+	}
+	has_country_shield = yes
+	
+	TRN_consolidate = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_16
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = moscow_area
+				area = suzdal_area
+				area = novgorod_area
+			}
+			NOT = { culture = ROOT }
+		}
+		trigger = {
+			moscow_area = {
+				type = all
+				culture = ROOT
+			}
+			suzdal_area = {
+				type = all
+				culture = ROOT
+			}
+			novgorod_area = {
+				type = all
+				culture = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_indoctrinated
+				duration = -1
+			}
+		}
+	}
+	
+	TRN_reform = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_consolidate
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 33
+				province_id = 295
+				province_id = 310
+				province_id = 464
+				province_id = 1082
+				province_id = 284
+			}
+		}
+		position = 11
+		trigger = {
+			NOT = { average_autonomy = 10 }
+			owns_core_province = 33
+			owns_core_province = 295
+			owns_core_province = 310
+			owns_core_province = 464
+			owns_core_province = 1082
+			owns_core_province = 284
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				33 = {
+					development = 20
+				}
+				295 = {
+					development = 20
+				}
+				310 = {
+					development = 20
+				}
+				464 = {
+					development = 20
+				}
+				1082 = {
+					development = 20
+				}
+				284 = {
+					development = 20
+				}
+			}
+			else = {
+				33 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+				295 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+				310 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+				464 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+				1082 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+				284 = {
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_2_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 2 }
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Kazan_Events.6 }
+		}
+	}
+	
+	TRN_econ = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_reform
+		}
+		position = 12
+		trigger = {
+			OR = {
+				workshop = 10
+				counting_house = 10
+			}
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 5
+			}
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				num_of_owned_provinces_with = {
+					value = 5
+					development = 30
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 5
+					province_has_at_least_num_of_buildings = { amount = 3 }
+				}
+			}
+		}
+		effect = {
+			if = {#Kazan
+				limit = {
+					owns = 1082
+				}
+				1082 = {
+					change_trade_goods = iron
+				}
+			}
+			if = {#Udmurtia
+				limit = {
+					owns = 1972
+				}
+				1972 = {
+					change_trade_goods = iron
+				}
+			}
+			if = {#Ar-Chally
+				limit = {
+					owns = 4265
+				}
+				4265 = {
+					change_trade_goods = iron
+				}
+			}
+			if = {#Astrakhan
+				limit = {
+					owns = 464
+				}
+				464 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#Tetyushi
+				limit = {
+					owns = 4264
+				}
+				4264 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#kanadey
+				limit = {
+					owns = 2419
+				}
+				2419 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#penza
+				limit = {
+					owns = 303
+				}
+				303 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#galich
+				limit = {
+					owns = 1957
+				}
+				1957 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#sarai
+				limit = {
+					owns = 466
+				}
+				466 = {
+					change_trade_goods = cloth
+				}
+			}
+			if = {#bashkortan
+				limit = {
+					owns = 475
+				}
+				475 = {
+					change_trade_goods = gold
+				}
+			}
+			if = {#astrakhan
+				limit = {
+					owns = 464
+				}
+				464 = {
+					center_of_trade = 1
+				}
+			}
+			if = {#nogai
+				limit = {
+					owns = 465
+				}
+				465 = {
+					center_of_trade = 1
+				}
+			}
+			if = {#kanadey
+				limit = {
+					owns = 2419
+				}
+				2419 = {
+					center_of_trade = 1
+				}
+			}
+			add_country_modifier = {
+				name = trn_colonial_ambition
+				duration = -1
+			}
+		}
+	}
+	
+	TRN_irrigate = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_econ
+		}
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				province_id = 464
+				province_id = 303
+				province_id = 286
+				province_id = 1082
+				province_id = 2420
+				province_id = 476
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 35 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 3 } }
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				464 = {
+					owned_by = ROOT
+					development = 35
+				}
+				303 = {
+					owned_by = ROOT
+					development = 35
+				}
+				286 = {
+					owned_by = ROOT
+					development = 35
+				}
+				1082 = {
+					owned_by = ROOT
+					development = 35
+				}
+				2420 = {
+					owned_by = ROOT
+					development = 35
+				}
+				476 = {
+					owned_by = ROOT
+					development = 35
+				}
+			}
+			else = {
+				464 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+				303 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+				286 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+				1082 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+				2420 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+				476 = {
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAS_AT_LEAST_3_BUILDINGS
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+			}
+			natural_scientist = 3
+		}
+		effect = {
+			crimea_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_irrigation
+					duration = -1
+				}
+			}
+			russia_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_irrigation
+					duration = -1
+				}
+			}
+			ural_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_irrigation
+					duration = -1
+				}
+			}
+			central_asia_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_irrigation
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	TRN_nationalism_mission = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_irrigate
+		}
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				region = crimea_region
+				region = ruthenia_region
+				region = russia_region
+			}
+			NOT = { culture = ROOT }
+		}
+		trigger = {
+			crimea_region = {
+				type = all
+				culture = ROOT
+			}
+			ruthenia_region = {
+				type = all
+				culture = ROOT
+			}
+			russia_region = {
+				type = all
+				culture = ROOT
+			}
+		}
+		effect = {
+			crimea_region = {
+				add_province_modifier = {
+					name = trn_nationalism
+					duration = -1
+				}
+			}
+			russia_region = {
+				add_province_modifier = {
+					name = trn_nationalism
+					duration = -1
+				}
+			}
+			ruthenia_region = {
+				add_province_modifier = {
+					name = trn_nationalism
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+TRN_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRN
+	}
+	has_country_shield = yes
+	
+	TRN_siberia = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_consolidate
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				region = east_siberia_region
+				region = west_siberia_region
+				province_id = 1955
+				province_id = 284
+				province_id = 33
+				province_id = 1044
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = east_siberia_region_tooltip
+				num_of_owned_provinces_with = {
+					value = 10
+					is_core = ROOT
+					region = east_siberia_region
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = west_siberia_region_tooltip
+				num_of_owned_provinces_with = {
+					value = 10
+					is_core = ROOT
+					region = west_siberia_region
+				}
+			}
+			owns_core_province = 1955
+			owns_core_province = 284
+			owns_core_province = 33
+			owns_core_province = 1044
+		}
+		effect = {
+			west_siberia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_siberia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tannu_uriankhai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1955 = {
+				add_province_modifier = {
+					name = trn_dockyards
+					duration = -1
+				}
+			}
+			284 = {
+				add_province_modifier = {
+					name = trn_dockyards
+					duration = -1
+				}
+			}
+			33 = {
+				add_province_modifier = {
+					name = trn_dockyards
+					duration = -1
+				}
+			}
+			1044 = {
+				add_province_modifier = {
+					name = trn_dockyards
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	TRN_genoa = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_reform
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 285
+				province_id = 286
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 12
+		trigger = {
+			owns_core_province = 285
+			owns_core_province = 286
+		}
+		effect = {
+			crimea_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = trn_liberation
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+TRN_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRN
+	}
+	has_country_shield = yes
+	
+	TRN_forefather = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_horde_wars_10
+		}
+		provinces_to_highlight = {
+			region = mongolia_region
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			mongolia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_mongols
+				duration = -1
+			}
+			add_adm_power = 150
+			add_dip_power = 150
+			add_mil_power = 150
+		}
+	}
+	
+	TRN_balitc = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			KAZ_rus_wars_16
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = estonia_ingria_area
+				area = livonia_area
+				area = curonia_area
+				area = samogitia_area
+				area = lithuania_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			estonia_ingria_area = {
+				type = all
+				owned_by = ROOT
+			}
+			livonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			curonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			samogitia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			lithuania_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = trn_baltic
+				duration = 7300
+			}
+		}
+	}
+	
+	TRN_balitc_2 = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			TRN_balitc
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = estonia_ingria_area
+				area = livonia_area
+				area = curonia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 15
+		trigger = {
+			estonia_ingria_area = {
+				type = all
+				owned_by = ROOT
+			}
+			livonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			curonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				num_of_owned_provinces_with = {
+					value = 3
+					trade_goods = naval_supplies
+					base_production = 10
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 3
+					trade_goods = naval_supplies
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			1935 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_province_modifier = {
+						name = trn_naval_base
+						duration = -1
+					}
+				}
+			}
+			36 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_province_modifier = {
+						name = trn_naval_base
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}

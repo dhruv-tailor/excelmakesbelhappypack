@@ -1,0 +1,966 @@
+ODA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ODA_wild_ginger = {
+		icon = me_mission_japan_bridge
+		required_missions = {
+			ODA_rise
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 4360
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 4360
+				4360 = {
+					owner = {
+						OR = {
+							AND = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
+							}
+							AND = {
+								is_rival = ROOT
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -100
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					4360 = {
+						owner = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+				set_country_flag = ginger_allied
+				add_country_modifier = {
+					name = wild_ginger_allied
+					duration = 7300
+				}
+				hidden_effect = {
+					4360 = {
+						owner = {
+							country_event = { id = ME_Oda_Events.5 }
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					4360 = {
+						owner = {
+							is_rival = ROOT
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -100
+								}
+							}
+						}
+					}
+				}
+				add_country_modifier = {
+					name = wild_ginger_rival
+					duration = 7300
+				}
+				4360 = {
+					owner = {
+						reverse_add_casus_belli = {
+							type = cb_humiliate
+							months = 120
+							target = ROOT
+						}
+						hidden_effect = {
+							country_event = { id = ME_Oda_Events.5 }
+						}
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = wild_ginger_rival
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	ODA_unite_chubu = {
+		icon = me_mission_japan_samurai_warrior_closeup
+		required_missions = {
+			ODA_wild_ginger
+			ODA_suruga
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = chubu_area
+				area = eastern_chubu_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = ginger_allied
+					event_target:oda_allied_rival = {
+						exists = yes
+					}
+				}
+				chubu_area = {
+					type = all
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						country_or_non_sovereign_subject_holds = event_target:oda_allied_rival
+					}
+				}
+				eastern_chubu_area = {
+					type = all
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						country_or_non_sovereign_subject_holds = event_target:oda_allied_rival
+					}
+				}
+			}
+			else = {
+				chubu_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				eastern_chubu_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			kanto_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ODA_take_musashi = {
+		icon = me_mission_venice_city_and_port
+		required_missions = {
+			ODA_unite_chubu
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1028
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+			}
+		}
+		trigger = {
+			1028 = {
+				owned_by = ROOT
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			add_mercantilism = 2
+			1028 = {
+				change_province_name = "Musashi"
+				rename_capital = "Edo"
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+}
+
+ODA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ODA_mighty_fleet = {
+		icon = me_mission_japan_turtle_ship
+		required_missions = {
+			ODA_rise
+		}
+		position = 2
+		trigger = {
+			num_of_admirals = 1
+			navy_size_percentage = 1.00
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					any_owned_province = {
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					create_flagship = {
+						name = "Sauzando Sani-go"
+						type = galley
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = oda_thousand_sunny
+					duration = 9125
+				}
+			}
+		}
+	}
+
+	ODA_inuyama_castle = {
+		icon = me_mission_japan_castle
+		required_missions = {
+			ODA_storming_mino
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1030
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			owns = 1030
+			1030 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_tenshu
+				duration = 9125
+			}
+			1030 = {
+				add_base_manpower = 1
+			}
+		}
+	}
+
+	ODA_suruga = {
+		icon = me_mission_japan_samurai_warrior3
+		required_missions = {
+			ODA_western_chubu
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 1839
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_estate = estate_nobles }
+					nationalism = 1
+				}
+			}
+		}
+		trigger = {
+			1839 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				1839 = {
+					has_estate = estate_nobles
+				}
+				AND = {
+					legitimacy_equivalent = 100
+					1839 = {
+						NOT = { nationalism = 1 }
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_kuge
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+		}
+	}
+}
+
+ODA_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ODA_rise = {
+		icon = me_mission_ming_imperial_forces
+		required_missions = { }
+		position = 1
+		trigger = {
+			stability = 0
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_lion
+				duration = 9125
+			}
+			chubu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ODA_storming_mino = {
+		icon = me_mission_mongolia_siege
+		required_missions = {
+			ODA_rise
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1835
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			owner = {
+				OR = {
+					NOT = { war_with = ROOT }
+					NOT = {
+						has_spy_network_from = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 1835
+				1835 = {
+					owner = {
+						war_with = ROOT
+						has_spy_network_from = {
+							who = ROOT
+							value = 30
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns_or_non_sovereign_subject_of = 1835
+				}
+				add_mil_power = 25
+				add_yearly_manpower = 1
+			}
+			else = {
+				add_country_modifier = {
+					name = oda_phoenix_cannon
+					duration = 3650
+				}
+				1835 = {
+					owner = {
+						add_spy_network_from = {
+							who = ROOT
+							value = -30
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ODA_western_chubu = {
+		icon = me_mission_japan_samurai_warrior1
+		required_missions = {
+			ODA_storming_mino
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = chubu_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			NOT = { war_exhaustion = 1 }
+			chubu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_country_modifier = {
+				name = oda_demon_flash
+				duration = 7300
+			}
+			chubu_area = {
+				add_local_autonomy = -20
+			}
+			eastern_chubu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ODA_march_kyoto = {
+		icon = me_mission_japan_samurai_warrior2
+		required_missions = {
+			ODA_western_chubu
+			ODA_foothold_kinai
+		}
+		position = 5
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ODA_has_more_development_than_daymios
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ROOT }
+						OR = {
+							army_size = ROOT
+							total_development = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_lion_march
+				duration = 9125
+			}
+			1020 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+		}
+	}
+
+	ODA_mightiest_daimyo = {
+		icon = me_mission_japan_united
+		required_missions = {
+			ODA_march_kyoto
+			ODA_take_musashi
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = kanto_area
+				area = chubu_area
+				area = eastern_chubu_area
+				area = kinai_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_at_war = no
+			stability = 2
+			legitimacy_equivalent = 100
+			kanto_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			chubu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			eastern_chubu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kinai_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			set_capital = 1020
+			1020 = {
+				add_base_production = 2
+			}
+			add_country_modifier = {
+				name = oda_blaze_dragon
+				duration = 7300
+			}
+			japan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+ODA_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ODA_false_heirs = {
+		icon = me_mission_get_pu
+		required_missions = {
+			ODA_rise
+		}
+		provinces_to_highlight = {
+			province_id = 4359
+			NOT = { owned_by = ROOT }
+			owner = {
+				OR = {
+					NOT = { marriage_with = ROOT }
+					NOT = { alliance_with = ROOT }
+				}
+			}
+		}
+		position = 2
+		trigger = {
+			OR = {
+				AND = {
+					owns = 4359
+					legitimacy_equivalent = 75
+				}
+				AND = {
+					legitimacy_equivalent = 90
+					4359 = {
+						owner = {
+							marriage_with = ROOT
+							alliance_with = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_emperor_bond
+				duration = 7300
+			}
+		}
+	}
+
+	ODA_foothold_kinai = {
+		icon = mission_unite_home_region
+		required_missions = {
+			ODA_false_heirs
+			ODA_appease_shogun
+		}
+		position = 4
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+    			area = kinai_area
+			}
+		}
+		effect = {
+			add_years_of_income = 0.8
+			add_yearly_manpower = 1.0
+		}
+	}
+
+	ODA_settsu = {
+		icon = mission_dominate_home_trade_node
+		required_missions = {
+			ODA_march_kyoto
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1021
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 12 }
+				devastation = 1
+			}
+		}
+		trigger = {
+			treasury = 200
+			1021 = {
+				owned_by = ROOT
+				base_production = 12
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			add_treasury = -200
+			add_mercantilism = 3
+			1021 = {
+				if = {
+					limit = {
+						NOT = { has_building = trade_depot }
+						NOT = { has_building = stock_exchange }
+					}
+					if = {
+						limit = {
+							has_building = marketplace
+						}
+						remove_building = marketplace
+					}
+					add_building_construction = {
+						building = trade_depot
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = trade_depot
+					}
+					remove_building = trade_depot
+					add_building_construction = {
+						building = stock_exchange
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_production = 2
+				}
+			}
+		}
+	}
+}
+
+ODA_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ODA_developing_owari = {
+		icon = me_mission_japan_temple
+		required_missions = {
+			ODA_rise
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1030
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 1
+			}
+		}
+		trigger = {
+			OR = {
+				treasury = 100
+				treasurer = 2
+			}
+			1030 = {
+				owned_by = ROOT
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_life_gate
+				duration = 9125
+			}
+			if = {
+				NOT = { treasurer = 2 }
+				add_treasury = -100
+			}
+			1030 = {
+				random_list = {
+					33 = { add_base_manpower = 1 }
+					33 = { add_base_production = 1 }
+					33 = { add_base_tax = 1 }
+				}
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building_construction = {
+						building = cathedral
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building_construction = {
+						building = temple
+						speed = 1
+						cost = 0
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+						is_state = yes
+					}
+					add_prosperity = 25
+				}
+				else = {
+					ROOT = {
+						add_adm_power = 25
+					}
+				}
+			}
+		}
+	}
+
+	ODA_appease_shogun = {
+		icon = me_mission_japan_court
+		required_missions = {
+			ODA_false_heirs
+		}
+		position = 3
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 2
+				area = kinai_area
+			}
+			OR = {
+				has_reform = shogunate
+				any_country = {
+					has_reform = shogunate
+					NOT = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = aggressive_expansion
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = oda_thousands_worlds
+				duration = 7300
+			}
+			if = {
+				limit = {
+					any_country = {
+						has_reform = shogunate
+						NOT = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = aggressive_expansion
+							}
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						has_reform = shogunate
+					}
+					country_event = { id = ME_Oda_Events.4 days = 31 }
+				}
+			}
+			kinai_area = {
+				limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+		}
+	}
+
+	ODA_reign_estate = {
+		icon = me_mission_japan_teathre
+		required_missions = {
+			ODA_appease_shogun
+		}
+		position = 5
+		trigger = {
+			OR = {
+				AND = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 65
+					}
+					estate_influence = {
+						estate = estate_church
+						loyalty = 75
+					}
+				}
+				AND = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 65
+					}
+					estate_influence = {
+						estate = estate_nobles
+						loyalty = 75
+					}
+				}
+				AND = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 65
+					}
+					estate_influence = {
+						estate = estate_burghers
+						loyalty = 75
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			every_owned_province = {
+				limit = {
+					OR = {
+						AND = {
+							has_estate = estate_church
+							ROOT = {
+								estate_loyalty = {
+									estate = estate_church
+									loyalty = 65
+								}
+								estate_influence = {
+									estate = estate_church
+									loyalty = 75
+								}
+							}
+						}
+						AND = {
+							has_estate = estate_nobles
+							ROOT = {
+								estate_loyalty = {
+									estate = estate_nobles
+									loyalty = 65
+								}
+								estate_influence = {
+									estate = estate_nobles
+									loyalty = 75
+								}
+							}
+						}
+						AND = {
+							has_estate = estate_burghers
+							ROOT = {
+								estate_loyalty = {
+									estate = estate_burghers
+									loyalty = 65
+								}
+								estate_influence = {
+									estate = estate_burghers
+									loyalty = 75
+								}
+							}
+						}
+					}
+				}
+				add_province_modifier = {
+					name = oda_crossroad
+					duration = 7300
+				}
+			}
+		}
+	}
+}

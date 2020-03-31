@@ -1,0 +1,596 @@
+UES_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = UES
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	uesugi_the_kanreis_navy = {
+		icon = mission_galleys_in_port
+		required_missions = { }
+		position = 1
+		trigger = {
+			stability = 1
+			num_of_admirals = 1
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = uesugi_the_kanreis_navy_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	uesugi_secure_the_northern_border = {
+		icon = mission_steppe_warriors
+		required_missions = { uesugi_the_kanreis_navy }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = thohoku_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					is_expanded_mod_active = { mod = trade_goods }
+					province_id = 4131
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { fort_level = 2 }
+					}
+				}
+			}
+		}
+		trigger = {
+			thohoku_area = {
+				type = all
+				owned_by = ROOT
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				owns = 4131
+				4131 = {
+					fort_level = 2
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_legitimacy_equivalent = { value = 10 }
+			4131 = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+						owned_by = ROOT
+						fort_level = 2
+					}
+					add_province_modifier = {
+						name = uesugi_secure_the_northern_border_province_modifier
+						duration = -1
+					}
+				}
+			}
+			hokkaido_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	uesugi_conquer_ainu = {
+		icon = mission_invade_island
+		required_missions = { uesugi_secure_the_northern_border }
+		position = 3
+		provinces_to_highlight = {
+			area = hokkaido_area
+			NOT = { province_id = 1032 }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			hokkaido_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					province_id = 1032
+				}
+			}
+		}
+		effect = {
+			create_explorer = 75
+			if = {
+				limit = {
+					exploration_ideas = 1
+				}
+				add_country_modifier = {
+					name = uesugi_conquer_ainu_modifier
+					duration = 7300
+				}
+			}
+			else = {
+				custom_tooltip = UES_EFFECT_IF_HAS_FIRST_EXPLORATION_IDEA
+				tooltip = {
+					add_country_modifier = {
+						name = uesugi_conquer_ainu_modifier
+						duration = 7300
+					}
+				}
+			}
+			1032 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								owned_by = ROOT
+								is_city = no
+							}
+						}
+					}
+					add_siberian_construction = 1000
+				}
+			}
+		}
+	}
+}
+
+UES_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = UES
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	uesugi_campagn_to_eastern_chubu = {
+		icon = mission_restore_rule_over_mysore
+		required_missions = { uesugi_embrace_the_sengoku_jidai }
+		position = 2
+		provinces_to_highlight = {
+			area = eastern_chubu_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			eastern_chubu_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			if = {
+				limit = {
+					NOT = { MIL = 6 }
+				}
+				change_mil = 1
+			}
+			else = {
+				add_mil_power = 50
+			}
+		}
+	}
+	
+	uesugi_discover_the_new_world = {
+		icon = mission_colonial
+		required_missions = { uesugi_conquer_ainu uesugi_develop_musashi }
+		position = 4
+		trigger = {
+			OR = {
+				shipyard = 5
+				grand_shipyard = 5
+				exploration_ideas = 4
+			}
+			OR = {
+				north_america = {
+					has_discovered = ROOT
+				}
+				south_america = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 5
+			add_country_modifier = {
+				name = uesugi_discover_the_new_world_modifier
+				duration = -1
+				desc = UES_UNTIL_WE_FORM_JAPAN
+			}
+			1240 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								owned_by = ROOT
+								is_city = no
+							}
+						}
+					}
+					add_siberian_construction = 750
+				}
+			}
+		}
+	}
+}
+
+UES_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = UES
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	uesugi_embrace_the_sengoku_jidai = {
+		icon = mission_japanese_samurai
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_at_war = yes
+			num_of_generals = 1
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = uesugi_embrace_the_sengoku_jidai_modifier
+				duration = 7300
+			}
+			eastern_kanto_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			eastern_chubu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hokuriku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			thohoku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	uesugi_paper_of_echizen = {
+		icon = mission_court_education
+		required_missions = { uesugi_embrace_the_sengoku_jidai }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1023
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 15 }
+			}
+		}
+		trigger = {
+			owns = 1023
+			1023 = {
+				base_production = 15
+			}
+		}
+		effect = {
+			1023 = {
+				add_province_modifier = {
+					name = uesugi_paper_of_echizen_province_modifier
+					duration = -1
+					desc = UES_UNTIL_WE_FORM_JAPAN
+				}
+			}
+		}
+	}
+	
+	uesugi_develop_musashi = {
+		icon = mission_asian_city
+		required_missions = { uesugi_campagn_to_eastern_chubu uesugi_paper_of_echizen uesugi_the_kanto_prefecture }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1028
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			owns = 1028
+			1028 = {
+				development = 30
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = uesugi_develop_musashi_modifier
+				duration = 5475
+			}
+			1028 = {
+				build_possible_manufactory_in_province = yes
+				add_province_modifier = {
+					name = uesugi_develop_musashi_province_modifier
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	uesugi_kenshin = {
+		icon = mission_defy_the_dragon
+		required_missions = { uesugi_discover_the_new_world uesugi_trade_network }
+		position = 5
+		trigger = {
+			legitimacy_equivalent = 100
+			grown_by_development = 150
+		}
+		effect = {
+			country_event = { id = ME_Uesugi_Events.2 }
+		}
+	}
+}
+
+UES_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = UES
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	uesugi_the_kanto_prefecture = {
+		icon = mission_asian_cannon
+		required_missions = { uesugi_embrace_the_sengoku_jidai }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = eastern_kanto_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 4190
+					NOT = { development = 20 }
+				}
+			}
+		}
+		trigger = {
+			eastern_kanto_area = {
+				type = all
+				owned_by = ROOT
+			}
+			4190 = {
+				development = 20
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { ADM = 6 }
+				}
+				change_adm = 1
+			}
+			else = {
+				add_adm_power = 50
+			}
+			4190 = {
+				add_province_modifier = {
+					name = uesugi_the_kanto_prefecture_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	uesugi_trade_network = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { uesugi_develop_musashi uesugi_elaborate_court }
+		position = 4
+		trigger = {
+			OR = {
+				DIP = 5
+				num_of_merchants = 3
+			}
+			japan_region = {
+				owned_by = ROOT
+				province_has_center_of_trade_of_level = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = uesugi_trade_network_modifier
+				duration = -1
+				desc = UES_UNTIL_WE_FORM_JAPAN
+			}
+		}
+	}
+}
+
+UES_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = UES
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	uesugi_shogun_relations = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+			NOT = {
+				owner = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+			}
+		}
+		trigger = {
+			advisor = spymaster
+			OR = {
+				owns = 1020
+				1020 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = uesugi_shogun_relations_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	uesugi_infiltrate_courts = {
+		icon = mission_eliminate_pretenders
+		required_missions = { uesugi_shogun_relations }
+		position = 2
+		trigger = {
+			OR = {
+				spy_ideas = 1
+				any_rival_country = {
+					has_spy_network_from = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_rival_country = {
+						has_spy_network_from = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+				random_rival_country = {
+					limit = {
+						has_spy_network_from = {
+							who = ROOT
+							value = 100
+						}
+					}
+					add_country_modifier = {
+						name = uesugi_infiltrate_courts_modifier_1
+						duration = 5475
+					}
+					hidden_effect = {
+						country_event = { id = ME_Uesugi_Events.3 }
+					}
+				}
+			}
+			else = {
+				add_ruler_modifier = {
+					name = uesugi_infiltrate_courts_modifier_2
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	uesugi_elaborate_court = {
+		icon = mission_scholar_officials
+		required_missions = { uesugi_infiltrate_courts }
+		position = 3
+		trigger = {
+			share_of_starting_income = 3
+			employed_advisor = {
+				category = ADM
+			}
+			employed_advisor = {
+				category = DIP
+			}
+			employed_advisor = {
+				category = MIL
+			}
+		}
+		effect = {
+			add_prestige = 20
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 250
+			}
+			else = {
+				add_dip_power = 100
+			}
+		}
+	}
+}

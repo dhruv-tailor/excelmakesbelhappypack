@@ -1,0 +1,496 @@
+estate_nomadic_tribes = {
+	icon = 5
+	
+	color = { 50 150 50 }
+	
+	# Is estate kept in control of province on conquest?
+	keep_on_conquest = no	
+
+	# If true, country will get estate
+	trigger = {
+		has_dlc = "The Cossacks"
+		NOT = { has_government_attribute = is_merchant_republic }
+		NOT = { government = native }
+		NOT = { has_reform = siberian_tribe }
+		NOT = { has_reform = veche_republic }
+		NOT = { has_reform = cossacks_reform }
+		is_nomad = yes
+		is_colonial_nation = no
+		NOT = { has_reform = celestial_empire }
+	}
+	
+	# If true, province can be granted to estate
+	province_trigger = {
+		always = yes
+	}	
+	
+	# Giving territory affects power this much compared to base
+	territory_power_modifier = 0.4
+
+	# Is used to weigh importance compared to other estates
+	start_territory_weight = 100
+	
+	# Min autonomy in estate provinces
+		min_autonomy = 50
+	
+	# Estate cancels out the following multiplicative local autonomy effects:
+	autonomy_does_not_affect = local_manpower_modifier
+	autonomy_does_not_affect = land_forcelimit_modifier
+
+	# These scale with loyalty & power
+	country_modifier_happy = {
+		cavalry_cost = -0.2
+		manpower_recovery_speed = 0.2
+	}
+	country_modifier_neutral = {
+		manpower_recovery_speed = 0.2
+	}	
+	country_modifier_angry = {
+		horde_unity = -4
+		manpower_recovery_speed = -0.4
+		raze_power_gain = -1
+	}
+	
+	# These do not scale, but only applied in provinces owned by the estate
+	province_modifier_happy = {
+		local_manpower_modifier = 0.33
+		local_unrest = -2
+	}
+	province_modifier_neutral = {
+		local_manpower_modifier = 0.33
+	}	
+	province_modifier_angry = {
+		local_unrest = 5
+	}		
+	
+	# Influence modifiers
+	base_influence = 25
+	
+	# For province assignment
+	ai_grant_province = {
+		factor = 1	
+		modifier = {
+			factor = 0.5
+			development = 20
+		}
+		modifier = {
+			factor = 2
+			NOT = { development = 10 }
+		}
+		modifier = {
+			factor = 4
+			local_autonomy = 50
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { local_autonomy = 50 }
+		}
+	}	
+	
+	#Special Interactions
+	interaction = {
+		name = "SUPPORT_TRIBES"
+		icon = 7
+		
+		years_between_use = 10
+		
+		trigger = {
+			years_of_income = 0.25
+		}
+		
+		effect = {
+			add_years_of_income = -0.25
+			add_estate_loyalty = {
+				estate = estate_nomadic_tribes
+				loyalty = 15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 0.5 }				
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_nomadic_tribes
+					loyalty = 30
+				}				
+			}			
+		}
+	}
+	interaction = {
+		name = "CONTRIBUTE_WARRIORS"
+		icon = 12
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_nomadic_tribes
+				loyalty = 50
+			}
+			estate_influence = {
+				estate = estate_nomadic_tribes
+				influence = 40
+			}
+			NOT = { manpower_percentage = 0.99 }
+		}
+		
+		effect = {
+			add_yearly_manpower = 2.5
+			add_estate_loyalty = {
+				estate = estate_nomadic_tribes
+				loyalty = -15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25			
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nomadic_tribes
+						loyalty = 50
+					}			
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}			
+		}
+	}
+	interaction = {
+		name = "RAISE_HOST"
+		icon = 13
+		
+		years_between_use = 10
+		
+		trigger = {
+			any_owned_province = {
+				has_estate = estate_nomadic_tribes
+				controlled_by = ROOT
+			}
+			estate_loyalty = {
+				estate = estate_nomadic_tribes
+				loyalty = 50
+			}
+			estate_influence = {
+				estate = estate_nomadic_tribes
+				influence = 40
+			}
+		}
+		
+		effect = {
+			random_owned_province = {
+				limit = {
+						has_estate = estate_nomadic_tribes
+						controlled_by = ROOT
+				}
+				add_unit_construction = {
+					type = cavalry
+					amount = 5
+					speed = 0.25
+					cost = 0
+				}
+			}
+			create_general = { tradition = 20 }
+			add_estate_influence_modifier = {
+				estate = estate_nomadic_tribes
+				desc = EST_VAL_RAISED_HOST
+				influence = 15
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				army_size_percentage = 0.5
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_nomadic_tribes
+					influence = 50
+				}			
+			}	
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+		}
+	}
+	interaction = {
+		name = "RECRUIT_MINISTER"
+		icon = 10
+		
+		years_between_use = 30
+		
+		trigger = {
+			estate_influence = {
+				estate = estate_nomadic_tribes
+				influence = 40
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						has_estate = estate_nomadic_tribes
+					}
+					save_event_target_as = estate_nomadic_province
+				}
+			}
+			if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_nomadic_province
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_nomadic_province
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_nomadic_province
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 3
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_nomadic_province
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+					cost_multiplier = 0.5
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_nomadic_province
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+					cost_multiplier = 0.75
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_nomadic_province
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+					culture = event_target:estate_nomadic_province
+					religion = event_target:estate_nomadic_province
+					location = event_target:estate_nomadic_province
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_nomadic_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = recruitmaster
+					skill = 2
+				}
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_nomadic_tribes
+				desc = EST_VAL_NOMAD_MINISTER
+				influence = 15
+				duration = 10950
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0			
+		}		
+	}
+}

@@ -1,0 +1,188 @@
+CAT_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAT
+	}
+	has_country_shield = yes
+	
+	Catalonia_Independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			127 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2986 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Catalonia_Conquer_Sardinia = {
+		icon = mission_galleys_in_port
+		required_missions = { Catalonia_Independence }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 127
+				province_id = 2986
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			127 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2986 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			aragon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Catalonia_Conquer_Aragon = {
+		icon = mission_cannons_firing
+		required_missions = { Catalonia_Conquer_Sardinia }
+		provinces_to_highlight = {
+			area = aragon_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aragon_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Catalonia_Conquer_Sicily = {
+		icon = mission_assemble_an_army
+		required_missions = { Catalonia_Conquer_Aragon }
+		provinces_to_highlight = {
+			area = sicily_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = hegemonic_ambition
+				duration = 36500
+			}
+		}
+	}
+	
+	Catalonian_Claim_To_Naples = {
+		icon = mission_have_two_subjects
+		required_missions = { Catalonia_Conquer_Sicily }
+		provinces_to_highlight = {
+			NOT = { exists = NAP }
+			is_core = NAP
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = NAP
+				}
+				has_spy_network_in = {
+					who = NAP
+					value = 50
+				}
+			}
+			else = {
+				all_province = {
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						NOT = { is_core = NAP }
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = NAP
+				}
+				add_casus_belli = {
+					target = NAP
+					type = cb_restore_personal_union
+					months = 600
+				}
+				2753 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_claim = ROOT
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+				add_legitimacy_equivalent = { value = 10 }
+			}
+		}
+	}
+	
+	Catalonia_Conquer_Languedoc = {
+		icon = mission_conquer_50_development
+		required_missions = { Catalonian_Claim_To_Naples }
+		provinces_to_highlight = {
+			area = languedoc_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			languedoc_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = thriving_arms_industry
+				duration = 36500
+			}
+		}
+	}
+}

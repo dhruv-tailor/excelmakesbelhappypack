@@ -1,0 +1,1005 @@
+#########
+#Made by Zain for Missions Extended Mod
+#########
+
+ireland_missions_column_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = IRE
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Rule Britannia" }
+		}
+	}
+	has_country_shield = yes
+
+	ireland_mission_2 = {
+		icon = mission_alliances
+		required_missions = {  }
+		position = 2
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					NOT = { overlord_of = ROOT }
+					NOT = { is_subject_of = ROOT }
+					capital_scope = {
+						region = france_region
+					}
+				}
+			}
+			region = france_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				reverse_has_opinion = {
+					who = FRA
+					value = 150
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						capital_scope = {
+							region = france_region
+						}
+					}
+				}
+				any_country = {
+					hidden_trigger = {
+						NOT = { tag = ROOT }
+					}
+					NOT = { overlord_of = ROOT }
+					NOT = { is_subject_of = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+					capital_scope = {
+						region = france_region
+					}
+				}
+			}
+			else = {
+				france_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				create_alliance = FRA
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+						capital_scope = {
+							region = france_region
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+						capital_scope = {
+							region = france_region
+						}
+					}
+					create_alliance = ROOT
+				}
+			}
+			else = {
+				add_prestige = 20
+			}
+		}
+	}
+
+	ireland_mission_7 = {
+		icon = mission_assemble_an_army
+		required_missions = { ireland_mission_2 }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				reverse_has_opinion = {
+					who = FRA
+					value = 200
+				}
+			}
+			else_if = {
+				limit = {
+					any_ally = {
+						capital_scope = {
+							region = france_region
+						}
+					}
+				}
+				any_ally = {
+					capital_scope = {
+						region = france_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				any_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+		}
+		effect = {
+			capital_scope = {
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				cavalry = ROOT
+			}
+		}
+	}
+
+	ireland_mission_13 = {
+		icon = mission_assemble_an_army
+		required_missions = {
+			ireland_mission_7
+			ireland_mission_12
+		}
+		position = 5
+		provinces_to_highlight = {
+			NOT = { exists = GBR }
+			NOT = { exists = ENG }
+			province_id = 236
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				reverse_has_opinion = {
+					who = FRA
+					value = 200
+				}
+			}
+			else_if = {
+				limit = {
+					any_ally = {
+						capital_scope = {
+							region = france_region
+						}
+					}
+				}
+				any_ally = {
+					capital_scope = {
+						region = france_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				any_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = GBR
+				}
+				war_with = GBR
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				war_with = ENG
+			}
+			else_if = {
+				limit = {
+					236 = {
+						NOT = { owned_by = ROOT }
+						owner = {
+							NOT = { is_subject_of = ROOT }
+							NOT = { overlord_of = ROOT }
+						}
+					}
+				}
+				236 = {
+					owner = {
+						war_with = ROOT
+					}
+				}
+			}
+			else = {
+				owns_core_province = 236
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "french_elan_ire"
+				duration = 3650
+			}
+		}
+	}
+
+	irish_america_ME = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			colonial_region = colonial_eastern_america
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = irish_america.tooltip
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 5
+					colonial_region = colonial_eastern_america
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "irish_new_world"
+				duration = 7300
+			}
+		}
+	}
+
+	ire_import_potatoes_ME = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { irish_america_ME }
+		provinces_to_highlight = {
+			OR = {
+				continent = new_world
+				continent = north_america
+			}
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 8
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = irish_potatoes.tooltip
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 15
+					OR = {
+						continent = new_world
+						continent = north_america
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "irish_potatoes"
+				duration = 7300
+			}
+			capital_scope = {
+				add_base_production = 2
+				add_base_manpower = 1
+			}
+		}
+	}
+}
+
+ireland_missions_column_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = IRE
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Rule Britannia" }
+		}
+	}
+	has_country_shield = yes
+
+	ireland_mission_3 = {
+		icon = mission_early_game_buildings
+		required_missions = { ireland_mission_1 }
+		position = 2
+		trigger = {
+			OR = {
+				temple = 7
+				cathedral = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "admin_growth_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_8 = {
+		icon = mission_early_game_buildings
+		required_missions = { ireland_mission_3 }
+		position = 3
+		trigger = {
+			monthly_income = 15
+		}
+		effect = {
+			add_country_modifier = {
+				name = "economy_growth_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_14 = {
+		icon = mission_conquer_50_development
+		required_missions = { ireland_mission_12 }
+		position = 5
+		provinces_to_highlight = {
+			area = wales_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			wales_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			west_midlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+ireland_missions_column_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = IRE
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Rule Britannia" }
+		}
+	}
+	has_country_shield = yes
+
+	ireland_mission_1 = {
+		icon = mission_alliances
+		required_missions = {  }
+		position = 1
+		trigger = {
+			NOT = { average_home_autonomy = 40 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = "reigning_in_clans"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_4 = {
+		icon = mission_early_game_buildings
+		required_missions = { ireland_mission_1 }
+		position = 2
+		trigger = {
+			OR = {
+				workshop = 7
+				counting_house = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "production_growth_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_9 = {
+		icon = mission_early_game_buildings
+		required_missions = { ireland_mission_4 }
+		position = 3
+		trigger = {
+			OR = {
+				marketplace = 7
+				trade_depot = 7
+				stock_exchange = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "trade_growth_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_12 = {
+		icon = mission_unite_home_region
+		required_missions = {
+			ireland_mission_8
+			ireland_mission_9
+			ireland_mission_10
+		}
+		position = 4
+		trigger = {
+			NOT = { average_home_autonomy = 25 }
+		}
+		effect = {
+			add_stability = 1
+			wales_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wessex_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ireland_mission_17 = {
+		icon = mission_cannons_firing
+		required_missions = {
+			ireland_mission_14
+			ireland_mission_15
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = wales_area
+				area = wessex_area
+				area = home_counties_area
+				area = east_anglia_area
+				area = yorkshire_area
+				area = east_midlands_area
+				area = west_midlands_area
+				province_id = 246
+				province_id = 247
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			wales_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			wessex_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			home_counties_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_anglia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yorkshire_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_midlands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_midlands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			247 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			246 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			lowlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			highlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			4362 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4361 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = "conquer_england_ire"
+				duration = -1
+			}
+		}
+	}
+
+	ire_rule_britannia = {
+		icon = mission_empire
+		required_missions = { ireland_mission_17 }
+		provinces_to_highlight = {
+			region = british_isles_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			british_isles_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_country_modifier = {
+				name = "rule_britannia"
+				duration = 14600
+			}
+		}
+	}
+}
+
+ireland_missions_column_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = IRE
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Rule Britannia" }
+		}
+	}
+	has_country_shield = yes
+
+	ireland_mission_5 = {
+		icon = mission_early_game_buildings
+		required_missions = { ireland_mission_1 }
+		position = 2
+		trigger = {
+			OR = {
+				barracks = 7
+				training_fields = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "military_growth_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_10 = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { ireland_mission_5 }
+		position = 3
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "army_tradition_ire"
+				duration = 9125
+			}
+		}
+	}
+
+	ireland_mission_15 = {
+		icon = mission_conquer_50_development
+		required_missions = { ireland_mission_12 }
+		position = 5
+		provinces_to_highlight = {
+			area = wessex_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			wessex_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			home_counties_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+ireland_missions_column_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = IRE
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Rule Britannia" }
+		}
+	}
+	has_country_shield = yes
+
+	ireland_mission_6 = {
+		icon = mission_alliances
+		required_missions = {  }
+		position = 2
+		provinces_to_highlight = {
+			NOT = { exists = SCO }
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					NOT = { overlord_of = ROOT }
+					NOT = { is_subject_of = ROOT }
+					capital_scope = {
+						OR = {
+							area = lowlands_area
+							area = highlands_area
+							area = kingdom_of_the_isles_area
+							area = scottish_marches_area
+						}
+					}
+				}
+			}
+			OR = {
+				area = lowlands_area
+				area = highlands_area
+				area = kingdom_of_the_isles_area
+				area = scottish_marches_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = SCO
+				}
+				reverse_has_opinion = {
+					who = SCO
+					value = 150
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						capital_scope = {
+							OR = {
+								area = lowlands_area
+								area = highlands_area
+								area = kingdom_of_the_isles_area
+								area = scottish_marches_area
+							}
+						}
+					}
+				}
+				any_country = {
+					hidden_trigger = {
+						NOT = { tag = ROOT }
+					}
+					NOT = { overlord_of = ROOT }
+					NOT = { is_subject_of = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+					capital_scope = {
+						OR = {
+							area = lowlands_area
+							area = highlands_area
+							area = kingdom_of_the_isles_area
+							area = scottish_marches_area
+						}
+					}
+				}
+			}
+			else = {
+				lowlands_area = {
+					type = all
+					owned_by = ROOT
+				}
+				highlands_area = {
+					type = all
+					owned_by = ROOT
+				}
+				kingdom_of_the_isles_area = {
+					type = all
+					owned_by = ROOT
+				}
+				scottish_marches_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = SCO
+				}
+				create_alliance = SCO
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+						capital_scope = {
+							OR = {
+								area = lowlands_area
+								area = highlands_area
+								area = kingdom_of_the_isles_area
+								area = scottish_marches_area
+							}
+						}
+					}
+				}
+				random_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						NOT = { overlord_of = ROOT }
+						NOT = { is_subject_of = ROOT }
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+						capital_scope = {
+							OR = {
+								area = lowlands_area
+								area = highlands_area
+								area = kingdom_of_the_isles_area
+								area = scottish_marches_area
+							}
+						}
+					}
+					create_alliance = ROOT
+				}
+			}
+			else = {
+				add_prestige = 20
+			}
+		}
+	}
+
+	ireland_mission_11 = {
+		icon = mission_assemble_an_army
+		required_missions = { ireland_mission_6 }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					exists = SCO
+				}
+				reverse_has_opinion = {
+					who = SCO
+					value = 200
+				}
+			}
+			else_if = {
+				limit = {
+					any_ally = {
+						capital_scope = {
+							OR = {
+								area = lowlands_area
+								area = highlands_area
+								area = kingdom_of_the_isles_area
+								area = scottish_marches_area
+							}
+						}
+					}
+				}
+				any_ally = {
+					capital_scope = {
+						OR = {
+							area = lowlands_area
+							area = highlands_area
+							area = kingdom_of_the_isles_area
+							area = scottish_marches_area
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				any_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+		}
+		effect = {
+			capital_scope = {
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				cavalry = ROOT
+			}
+		}
+	}
+
+	ireland_mission_16 = {
+		icon = mission_assemble_an_army
+		required_missions = {
+			ireland_mission_11
+			ireland_mission_12
+		}
+		position = 5
+		trigger = {
+			if = {
+				limit = {
+					exists = SCO
+				}
+				reverse_has_opinion = {
+					who = SCO
+					value = 200
+				}
+			}
+			else_if = {
+				limit = {
+					any_ally = {
+						capital_scope = {
+							OR = {
+								area = lowlands_area
+								area = highlands_area
+								area = kingdom_of_the_isles_area
+								area = scottish_marches_area
+							}
+						}
+					}
+				}
+				any_ally = {
+					capital_scope = {
+						OR = {
+							area = lowlands_area
+							area = highlands_area
+							area = kingdom_of_the_isles_area
+							area = scottish_marches_area
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				any_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = GBR
+				}
+				war_with = GBR
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				war_with = ENG
+			}
+			else_if = {
+				limit = {
+					236 = {
+						NOT = { owned_by = ROOT }
+						owner = {
+							NOT = { is_subject_of = ROOT }
+							NOT = { overlord_of = ROOT }
+						}
+					}
+				}
+				236 = {
+					owner = {
+						war_with = ROOT
+					}
+				}
+			}
+			else = {
+				owns_core_province = 236
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "scottish_charge_ire"
+				duration = 3650
+			}
+		}
+	}
+}

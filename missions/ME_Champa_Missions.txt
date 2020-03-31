@@ -1,0 +1,576 @@
+CHA_missions_1 = {
+    slot = 1
+    generic = no
+    ai = yes
+    potential = {
+        tag = CHA
+    }
+    has_country_shield = yes
+
+	Change_Religion = {
+		icon = mission_buddhist_monk_praying
+		required_missions = { }
+		position = 1
+		trigger = { 
+			religion = buddhism
+		}
+		effect = { 
+			add_country_modifier = {
+				name = CHA_national_conversions
+				duration = 3650
+			}
+		}	
+	}
+	
+	Convert_Provinces = {
+		icon = mission_hands_praying
+		required_missions = { Change_Religion }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = buddhism }
+		}
+		trigger = { 
+			all_owned_province = { 
+				religion = buddhism
+			}
+		}
+		effect = { 
+			607 = {
+				add_base_tax = 2
+				add_base_manpower = 2
+				add_base_production = 3
+				add_unrest = -5
+			}	
+		}
+	}
+}
+
+CHA_missions_2 = {
+    slot = 2
+    generic = no
+    ai = yes
+    potential = {
+        tag = CHA
+    }
+    has_country_shield = yes
+	
+	Indrapura_Conquest = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 1022
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				AND = {
+					province_id = 2373
+					NOT = { is_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			}
+		}
+		trigger = { 
+			owns_core_province = 1022
+			2373 = {
+				OR = {
+					is_claim = ROOT
+					is_core = ROOT
+				}
+			}
+		}		
+		effect = {
+			if = {
+				limit =  {
+					NOT = { religion = hinduism }
+				}
+				change_religion = hinduism
+			}
+			1022 = {
+				add_base_manpower = 1
+				add_base_production = 1
+				add_base_tax = 1
+			}
+			if = {
+				limit = { 
+					DAI = { 
+						owns = 2373
+						is_rival = ROOT
+					} 
+				}
+				DAI = {
+					country_event = { id = ME_Champa_Events.1 }
+				}
+			}
+		}	
+	}
+	
+	Remaining_Tonkin = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Indrapura_Conquest }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 610
+				province_id = 1016
+			}
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = { 
+			owns_core_province = 610
+			owns_core_province = 1016
+			owns_core_province = 2373
+		}		
+		effect = {
+			red_river_delta_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			2371 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}	
+	}
+	
+	Vietnam_Proper = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Remaining_Tonkin }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2371
+				province_id = 613
+				province_id = 616
+				province_id = 2372
+			}
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = { 
+			owns_core_province = 613
+			owns_core_province = 616
+			owns_core_province = 2371
+			owns_core_province = 2372
+		}		
+		effect = {
+			south_laos_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_laos_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}	
+	}
+
+	Luang_Prabang = {
+		icon = mission_indian_soldier_elephant
+		required_missions = { Developing_the_Lands }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 608
+				province_id = 611
+				province_id = 614
+				province_id = 615
+				province_id = 1844
+				province_id = 2381
+				province_id = 2382
+				province_id = 2383
+				province_id = 2384
+				province_id = 2385
+				province_id = 2386
+			}	
+            OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = { 
+			owns_core_province = 608
+			owns_core_province = 611
+			owns_core_province = 614
+			owns_core_province = 615
+			owns_core_province = 1844
+			owns_core_province = 2381
+			owns_core_province = 2382
+			owns_core_province = 2383
+			owns_core_province = 2384
+			owns_core_province = 2385
+			owns_core_province = 2386
+		}		
+		effect = {
+			add_accepted_culture = lao
+			add_country_modifier = {
+				name = CHA_integrated_lao
+				duration = -1
+			}
+		}
+	}
+	
+	Battambang_AYU = {
+		icon = mission_have_manufactories
+		required_missions = { Luang_Prabang }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 2379
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = { 
+			owns_core_province = 2379
+		}		
+		effect = {
+			2379 = {
+				add_unrest = -5
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								religion = hinduism
+								religion = buddhism
+							}
+						}
+						has_owner_religion = no
+					}
+					change_religion = ROOT
+				}
+			}
+		}
+	}
+	
+	The_Siege_of_Ayutthaya = {
+		icon = mission_conquer_50_development
+		required_missions = { Battambang_AYU }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 600
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			600 = {
+				owner = {
+					war_with = ROOT
+				}
+				controlled_by = ROOT
+			}	
+		}		
+		effect = {
+			600 = {
+				owner = {
+					country_event = { id = ME_Champa_Events.2 }
+				}
+			}
+		}
+	}
+}
+
+CHA_missions_3 = {
+    slot = 3
+    generic = no
+    ai = yes
+    potential = {
+        tag = CHA
+    }
+	has_country_shield = yes
+	
+	Champa_Rice = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 1
+		trigger = { 
+			production_leader = {
+				trade_goods = grain
+			}
+		}		
+		effect = {
+			every_owned_province = {
+				add_province_modifier = {
+					name = CHA_trade
+					duration = -1
+				}
+			}	
+		}	
+	}
+	
+	The_Utsul = {
+		icon = mission_galleys_in_port
+		required_missions = { Champa_Rice }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 666
+				province_id = 2160
+			}
+			NOT = { is_core = ROOT }
+			NOT = { is_claim = ROOT }
+		}
+		trigger = {
+			666 = {
+				OR = {
+					is_claim = ROOT
+					is_core = ROOT
+				}
+			}
+			2160 = {
+				OR = {
+					is_claim = ROOT
+					is_core = ROOT
+				}
+			}
+			NOT = { war_with = MNG }
+		}		
+		effect = {
+			666 = {
+				change_culture = cham
+				add_unrest = 10
+			}
+			2160 = {
+				change_culture = cham
+				add_unrest = 10
+			}
+		}
+	}
+	
+	Developing_the_Lands = {
+		icon = mission_early_game_buildings
+		required_missions = { The_Utsul }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { development = 20 }
+		}
+		trigger = {
+			all_owned_province = {
+				development = 20
+			}
+		}		
+		effect = {
+			add_country_modifier = {
+				name = CHA_development
+				duration = -1
+			}
+		}
+	}
+}
+
+CHA_missions_4 = {
+    slot = 4
+    generic = no
+    ai = yes
+    potential = {
+        tag = CHA
+    }
+    has_country_shield = yes
+	
+	Tay_Nguyen_Convert = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 2375
+			OR = {
+				NOT = { owned_by = ROOT }
+				has_owner_religion = no
+			}
+		}
+		trigger = { 
+			OR = {
+				religion = buddhism
+				religion = hinduism
+			}
+			owns = 2375
+			2375 = {
+				has_owner_religion = yes
+			}
+		}		
+		effect = { 
+			add_country_modifier = {
+				name = CHA_tay_nguyen
+				duration = 3650
+			}	
+		}
+	}
+	
+	Angkor_Palace = {
+		icon = mission_japanese_fort
+		required_missions = { Tay_Nguyen_Convert }
+		position = 1
+		provinces_to_highlight = {
+            province_id = 609
+            OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+        }
+		trigger = { 
+			owns_core_province = 609
+		}		
+		effect = { 
+			609 = {
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building = fort_15th
+				}
+				if = {
+					limit = {
+						NOT = { has_building = temple }
+						NOT = { has_building = cathedral }
+					}
+					add_building = temple
+				}
+			}
+			2375 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			2377 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	The_Mekong_Delta = {
+		icon = mission_unite_home_region
+		required_missions = { Angkor_Palace }
+		position = 1
+		provinces_to_highlight = {
+            OR = {
+				province_id = 605
+				province_id = 2376
+				province_id = 2377
+			}	
+            OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+        }
+		trigger = { 
+			owns_core_province = 2377
+			owns_core_province = 605
+			owns_core_province = 2376
+		}		
+		effect = { 
+			2377 = {
+				change_culture = cham
+				add_unrest = -5
+				add_base_tax = 1
+			}
+			2376 = {
+				change_culture = cham
+				add_unrest = -5
+				add_base_manpower = 1
+			}
+			605 = {
+				change_culture = cham
+				add_unrest = -5
+				add_base_production = 1
+			}
+		}
+	}
+	
+	The_Fall_of_Khmer = {
+		icon = mission_chinese_general_riding
+		required_missions = { The_Mekong_Delta }
+		position = 1
+		provinces_to_highlight = {
+            OR = {
+				province_id = 1823
+				province_id = 2380
+				province_id = 2378
+				province_id = 604
+			}	
+            OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+        }
+		trigger = { 
+			owns_core_province = 2380
+			owns_core_province = 1823
+			owns_core_province = 604
+			owns_core_province = 2378
+		}		
+		effect = { 
+			2379 = {
+				add_unrest = 10
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			604 = {
+				add_base_production = 1
+				add_base_tax = 1
+				add_base_manpower = 1
+			}
+			2380 = {
+				add_base_production = 1
+				add_base_tax = 1
+				add_base_manpower = 1
+			}
+			1823 = {
+				add_base_production = 1
+				add_base_tax = 1
+				add_base_manpower = 1
+			}
+			2378 = {
+				add_base_production = 1
+				add_base_tax = 1
+				add_base_manpower = 1
+			}
+		}
+	}	
+}

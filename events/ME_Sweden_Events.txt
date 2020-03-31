@@ -1,0 +1,219 @@
+namespace = ME_Sweden_Events
+
+country_event = {
+	id = ME_Sweden_Events.1
+	title = ME_Sweden_Events.EVTNAME1
+	desc = ME_Sweden_Events.EVTDESC1
+	picture = CITY_VIEW_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sweden_Events1.EVTOPT1
+
+		ai_chance = { factor = 0.8 }
+		
+		add_stability_or_adm_power = yes
+		1982 = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+			change_province_name = "Karlskrona"
+		}
+	}
+	
+	option = {
+		name = ME_Sweden_Events1.EVTOPT2
+
+		ai_chance = { factor = 0.2 }
+		
+		add_stability_or_adm_power = yes
+		1982 = {
+			add_base_tax = 2
+			add_base_production = 2
+			add_base_manpower = 2
+			if = {
+				limit = {
+					NOT = { is_capital_of = ROOT }
+				}
+				ROOT = { set_capital = PREV }
+			}
+			if = {
+				limit = {
+					NOT = { province_has_center_of_trade_of_level = 1 }
+				}
+				center_of_trade = 1
+			}
+			else_if = {
+				limit = {
+					NOT = { province_has_center_of_trade_of_level = 3 }
+				}
+				add_center_of_trade_level = 1
+			}
+			if = {
+				limit = {
+					has_owner_culture = no
+				}
+				change_culture = ROOT
+			}
+			if = {
+				limit = {
+					has_owner_religion = no
+				}
+				change_religion = ROOT
+			}
+			change_province_name = "Karlskrona"
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -30
+		}
+		random_owned_province = {
+			limit = {
+				is_capital = no
+				NOT = { province_id = 1982 }
+			}
+			noble_rebels = 1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Sweden_Events.2
+	title = ME_Sweden_Events.EVTNAME2
+	desc = ME_Sweden_Events.EVTDESC2
+	picture = ANGRY_MOB_eventPicture
+
+	trigger = {
+		tag = SWE
+		exists = DAN
+		historical_rival_with = DAN
+		NOT = { ruler_has_personality = benevolent_personality }
+		skaneland_area = {
+			type = all
+			owned_by = ROOT
+			culture = danish
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+		
+		modifier = {
+			factor = 0.5
+			war_with = DAN
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_global_flag = sweden_snapphanarna_separatists_happened
+		}
+	}
+
+	option = {
+		name = ME_Sweden_Events2.EVTOPT1
+
+		ai_chance = { factor = 100 }
+		
+		skaneland_area = {
+			add_province_modifier = {
+				name = sweden_snapphanarna_separatists
+				duration = -1
+			}
+		}
+		random_province = {
+			limit = {
+				area = skaneland_area
+			}
+			nationalist_rebels = 2
+		}
+	}
+}
+
+country_event = {
+	id = ME_Sweden_Events.3
+	title = ME_Sweden_Events.EVTNAME3
+	desc = ME_Sweden_Events.EVTDESC3
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	trigger = {
+		tag = SWE
+		has_global_flag = wih_christina_swe_flag
+		government = monarchy
+		is_lesser_in_union = no
+		has_ruler = "Christina Vasa"
+		is_female = yes
+		has_heir = no
+	}
+	
+	option = {
+		name = ME_Sweden_Events3.EVTOPT1
+
+		ai_chance = { factor = 0.5 }
+		
+		define_heir = {
+			name = "Karl X. Gustav"
+			dynasty = "von Wittelsbach"
+			age = 5
+			adm = 4
+			max_random_adm = 4
+			dip = 3
+			max_random_dip = 3
+			mil = 5
+			max_random_mil = 5
+			male = yes
+		}
+	}
+	
+	option = {
+		name = ME_Sweden_Events3.EVTOPT2
+
+		ai_chance = { factor = 0.5 }
+		
+		add_ruler_modifier = {
+			name = sweden_rejected_the_wittelsbachs
+			duration = -1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Sweden_Events.4
+	title = ME_Sweden_Events.EVTNAME4
+	desc = ME_Sweden_Events.EVTDESC4
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	hidden = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_country_modifier = sweden_echoes_of_freedom_modifier
+		OR = {
+			AND = {
+				is_subject = no
+				is_at_war = no
+			}
+			AND = {
+				is_subject = yes
+				NOT = { liberty_desire = 50 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = sweden_echoes_of_freedom_modifier
+		}
+	}
+
+	option = {
+		name = ME_Sweden_Events4.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}

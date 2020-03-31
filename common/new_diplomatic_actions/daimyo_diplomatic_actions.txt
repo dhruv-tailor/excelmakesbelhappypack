@@ -1,0 +1,726 @@
+onin_war_bribe_action = {
+	category = influence
+	
+	require_acceptance = no
+	
+	is_visible = {
+		OR = {
+			tag = HSK
+			tag = YMN
+		}
+		has_global_flag = JAP_crisis
+		FROM = {
+			has_reform = daimyo
+			NOT = { tag = ASK }
+			NOT = { tag = HSK }
+			NOT = { tag = YMN }
+			ai = yes
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			OR = {
+				tag = HSK
+				tag = YMN
+			}
+			has_global_flag = JAP_crisis
+			FROM = {
+				has_reform = daimyo
+				NOT = { tag = ASK }
+				NOT = { tag = HSK }
+				NOT = { tag = YMN }
+				ai = yes
+			}
+		}
+		treasury = 25
+		custom_trigger_tooltip = {
+			tooltip = ONIN_WAR_DIP_ACTION_ONLY_EVERY_2_YEARS
+			FROM = {
+				OR = {
+					NOT = { has_country_flag = onin_war_bribe_action_used_by_@ROOT }
+					had_country_flag = { flag = onin_war_bribe_action_used_by_@ROOT days = 730 }
+				}
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				OR = {
+					tag = HSK
+					tag = YMN
+				}
+				has_global_flag = JAP_crisis
+				FROM = {
+					has_reform = daimyo
+					NOT = { tag = ASK }
+					NOT = { tag = HSK }
+					NOT = { tag = YMN }
+					ai = yes
+				}
+				treasury = 25
+				FROM = {
+					OR = {
+						NOT = { has_country_flag = onin_war_bribe_action_used_by_@ROOT }
+						had_country_flag = { flag = onin_war_bribe_action_used_by_@ROOT days = 730 }
+					}
+				}
+			}
+			add_treasury = -25
+			FROM = {
+				add_treasury = 25
+				if = {
+					limit = {
+						ROOT = { tag = HSK }
+					}
+					change_variable = { which = Daimyo_Support_for_HSK value = 10 }
+				}
+				else = {
+					change_variable = { which = Daimyo_Support_for_YMN value = 10 }
+				}
+				clr_country_flag = onin_war_bribe_action_used_by_@ROOT
+				set_country_flag = onin_war_bribe_action_used_by_@ROOT
+			}
+		}
+	}
+	
+	ai_will_do = {
+		treasury = 100
+		NOT = { is_rival = FROM }
+		OR = {
+			FROM = {
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_HSK_temp
+						}
+					}
+				}
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_YMN_temp
+						}
+					}
+				}
+			}
+			AND = {
+				tag = HSK
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				tag = YMN
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+onin_war_send_men_action = {
+	category = influence
+	
+	require_acceptance = no
+	
+	is_visible = {
+		OR = {
+			tag = HSK
+			tag = YMN
+		}
+		has_global_flag = JAP_crisis
+		FROM = {
+			has_reform = daimyo
+			NOT = { tag = ASK }
+			NOT = { tag = HSK }
+			NOT = { tag = YMN }
+			ai = yes
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			OR = {
+				tag = HSK
+				tag = YMN
+			}
+			has_global_flag = JAP_crisis
+			FROM = {
+				has_reform = daimyo
+				NOT = { tag = ASK }
+				NOT = { tag = HSK }
+				NOT = { tag = YMN }
+				ai = yes
+			}
+		}
+		manpower = 1
+		custom_trigger_tooltip = {
+			tooltip = ONIN_WAR_DIP_ACTION_ONLY_EVERY_2_YEARS
+			FROM = {
+				OR = {
+					NOT = { has_country_flag = onin_war_send_men_action_used_by_@ROOT }
+					had_country_flag = { flag = onin_war_send_men_action_used_by_@ROOT days = 730 }
+				}
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				OR = {
+					tag = HSK
+					tag = YMN
+				}
+				has_global_flag = JAP_crisis
+				FROM = {
+					has_reform = daimyo
+					NOT = { tag = ASK }
+					NOT = { tag = HSK }
+					NOT = { tag = YMN }
+					ai = yes
+				}
+				manpower = 1
+				FROM = {
+					OR = {
+						NOT = { has_country_flag = onin_war_send_men_action_used_by_@ROOT }
+						had_country_flag = { flag = onin_war_send_men_action_used_by_@ROOT days = 730 }
+					}
+				}
+			}
+			add_manpower = -1
+			FROM = {
+				add_manpower = 1
+				if = {
+					limit = {
+						ROOT = { tag = HSK }
+					}
+					change_variable = { which = Daimyo_Support_for_HSK value = 10 }
+				}
+				else = {
+					change_variable = { which = Daimyo_Support_for_YMN value = 10 }
+				}
+				clr_country_flag = onin_war_send_men_action_used_by_@ROOT
+				set_country_flag = onin_war_send_men_action_used_by_@ROOT
+			}
+		}
+	}
+	
+	ai_will_do = {
+		is_at_war = no
+		manpower = 3
+		NOT = { is_rival = FROM }
+		OR = {
+			FROM = {
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_HSK_temp
+						}
+					}
+				}
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_YMN_temp
+						}
+					}
+				}
+			}
+			AND = {
+				tag = HSK
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				tag = YMN
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+onin_war_send_generals_action = {
+	category = influence
+	
+	require_acceptance = no
+	
+	is_visible = {
+		OR = {
+			tag = HSK
+			tag = YMN
+		}
+		has_global_flag = JAP_crisis
+		FROM = {
+			has_reform = daimyo
+			NOT = { tag = ASK }
+			NOT = { tag = HSK }
+			NOT = { tag = YMN }
+			ai = yes
+		}
+	}
+	
+	is_allowed = {
+		hidden_trigger = {
+			OR = {
+				tag = HSK
+				tag = YMN
+			}
+			has_global_flag = JAP_crisis
+			FROM = {
+				has_reform = daimyo
+				NOT = { tag = ASK }
+				NOT = { tag = HSK }
+				NOT = { tag = YMN }
+				ai = yes
+			}
+		}
+		army_tradition = 10
+		custom_trigger_tooltip = {
+			tooltip = ONIN_WAR_DIP_ACTION_ONLY_EVERY_5_YEARS
+			FROM = {
+				OR = {
+					NOT = { has_country_flag = onin_war_send_generals_action_used_by_@ROOT }
+					had_country_flag = { flag = onin_war_send_generals_action_used_by_@ROOT days = 1825 }
+				}
+			}
+		}
+	}
+	
+	on_accept = {
+		if = {
+			limit = {
+				OR = {
+					tag = HSK
+					tag = YMN
+				}
+				has_global_flag = JAP_crisis
+				FROM = {
+					has_reform = daimyo
+					NOT = { tag = ASK }
+					NOT = { tag = HSK }
+					NOT = { tag = YMN }
+					ai = yes
+				}
+				army_tradition = 10
+				FROM = {
+					OR = {
+						NOT = { has_country_flag = onin_war_send_generals_action_used_by_@ROOT }
+						had_country_flag = { flag = onin_war_send_generals_action_used_by_@ROOT days = 1825 }
+					}
+				}
+			}
+			add_army_tradition = -10
+			FROM = {
+				add_army_tradition = 10
+				if = {
+					limit = {
+						ROOT = { tag = HSK }
+					}
+					change_variable = { which = Daimyo_Support_for_HSK value = 15 }
+				}
+				else = {
+					change_variable = { which = Daimyo_Support_for_YMN value = 15 }
+				}
+				clr_country_flag = onin_war_send_generals_action_used_by_@ROOT
+				set_country_flag = onin_war_send_generals_action_used_by_@ROOT
+			}
+		}
+	}
+	
+	ai_will_do = {
+		army_tradition = 20
+		NOT = { is_rival = FROM }
+		OR = {
+			FROM = {
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_HSK_temp
+						}
+					}
+				}
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_YMN_temp
+						}
+					}
+				}
+			}
+			AND = {
+				tag = HSK
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				tag = YMN
+				NOT = {
+					any_country = {
+						has_reform = daimyo
+						NOT = { tag = ASK }
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+						ai = yes
+						NOT = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_YMN_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_YMN
+								}
+								export_to_variable = {
+									variable_name = Daimyo_Support_for_HSK_temp
+									value = 0
+								}
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									which = Daimyo_Support_for_HSK
+								}
+								
+								change_variable = {
+									which = Daimyo_Support_for_HSK_temp
+									value = 25
+								}
+
+								check_variable = {
+									which = Daimyo_Support_for_YMN_temp
+									which = Daimyo_Support_for_HSK_temp
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

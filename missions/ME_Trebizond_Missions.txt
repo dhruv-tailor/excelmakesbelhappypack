@@ -1,0 +1,1174 @@
+TRE_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRE
+	}
+	has_country_shield = yes
+	
+	TRE_georgian_diplomacy = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			NOT = { exists = GEO }
+			NOT = { exists = IME }
+			NOT = { exists = SME }
+			OR = {
+				province_id = 422
+				province_id = 423
+			}
+		}
+		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = GEO
+					value = 100
+				}
+				reverse_has_opinion = {
+					who = IME
+					value = 100
+				}
+				reverse_has_opinion = {
+					who = SME
+					value = 100
+				}
+				AND = {
+					owns = 422
+					NOT = { exists = GEO }
+					NOT = { exists = IME }
+					NOT = { exists = SME }
+					owns = 423
+					owns = 2204
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_country_modifier = {
+				name = TRE_georgian_diplomacy_modifier
+				duration = 9125
+			}
+		}
+	}
+	TRE_look_to_the_west = {
+		icon = mission_early_game_buildings
+		required_missions = { TRE_georgian_diplomacy }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					any_country = {
+						capital_scope = {
+							region = italy_region
+						}
+						has_institution = renaissance
+					}
+				}
+				any_country = {
+					capital_scope = {
+						region = italy_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+					has_institution = renaissance
+				}
+			}
+			else = {
+				any_country = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+					has_institution = renaissance
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_italian_connections
+				duration = 9125
+			}
+			330 = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 50
+				}
+				add_province_modifier = {
+					name = TRE_italian_connections2
+					duration = 7300
+				}
+			}
+		}
+	}
+	TRE_italian_banking_innovations = {
+		icon = mission_african_gold
+		required_missions = { TRE_look_to_the_west }
+		position = 3
+		provinces_to_highlight = {
+		}
+		trigger = {
+			NOT = {
+				inflation = 0.01
+			}
+			treasury = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_italian_banking
+				duration = 9125
+			}
+		}
+	}
+	TRE_black_sea_fleet = {
+		icon = mission_galleys_in_port
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_naval_zeal
+				duration = 9125
+			}
+			2195 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			imereti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	TRE_bring_theodoro_back_to_fold = {
+		icon = mission_have_two_subjects
+		required_missions = { TRE_black_sea_fleet }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				AND = {
+					owns_core_province = 2410
+					NOT = { exists = FEO }
+				}
+				AND = {
+					marriage_with = FEO
+					alliance_with = FEO
+					FEO = {
+						is_at_war = no
+					}
+					is_at_war = no
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns_core_province = 2410
+					NOT = { exists = FEO }
+				}
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
+			}
+			else = {
+				country_event = { id = ME_Trebizond_Events.1 } #"An Offer to Theodoro" .2 is reserved for response event
+			}
+		}
+	}
+	TRE_black_sea_ports = {
+		icon = mission_raid_on_venice
+		required_missions = { TRE_bring_theodoro_back_to_fold }
+		position = 6
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			has_port = yes
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_port = yes
+				value = 3
+			}
+			330 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						330 = {
+							province_has_center_of_trade_of_level = 3
+						}
+					}
+				}
+				330 = {
+					add_center_of_trade_level = 1
+				}
+			}
+			else = {
+				add_treasury = 250
+			}
+		}
+	}
+	TRE_proposition_for_genoa = {
+		icon = mission_spanish_armada
+		required_missions = { TRE_black_sea_ports }
+		position = 7
+		provinces_to_highlight = {
+		}
+		trigger = {
+			num_of_light_ship = 10
+			treasury = 250
+			OR = {
+				AND = {
+					owns_core_province = 2447
+					owns_core_province = 285
+					owns_core_province = 286
+				}
+				AND = {
+					has_opinion = {
+						who = GEN
+						value = 100
+					}
+					reverse_has_opinion = {
+						who = GEN
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns_core_province = 2447
+					owns_core_province = 285
+					owns_core_province = 286
+				}
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
+			}
+			else = {
+				country_event = { id = ME_Trebizond_Events.3 } #"Proposition to Genoa" .4 is reserved for response event
+			}
+		}
+	}
+}
+TRE_Missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRE
+	}
+	has_country_shield = yes
+	TRE_seek_russian_support = {
+		icon = mission_weather_the_troubles
+		required_missions = { TRE_georgian_diplomacy }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					any_country = {
+						capital_scope = {
+							region = russia_region
+						}
+					}
+				}
+				any_country = {
+					NOT = {
+						any_country = {
+							capital_scope = {
+								region = russia_region
+							}
+							army_size = PREV
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			else = {
+				OR = {
+					temple = 10
+					cathedral = 10
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_russian_support
+				duration = 9125
+			}
+			add_patriarch_authority = 0.2
+		}
+	}
+	TRE_religious_reforms = {
+		icon = mission_european_church
+		required_missions = { }
+		position = 3
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Third Rome"
+				}
+				OR = {
+					current_icon = icon_michael 
+					current_icon = icon_eleusa 
+					current_icon = icon_pancreator 
+					current_icon = icon_nicholas 
+				}
+			}
+			else = {
+				patriarch_authority = 0.1
+				capital_scope = {
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_religious_reforms
+				duration = 7300
+			}
+		}
+	}
+	TRE_metropolitan_of_trebizond = {
+		icon = mission_autocephalous_archbishopric
+		required_missions = { TRE_religious_reforms }
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = { 
+			if = {
+				limit = {
+					has_dlc = "Third Rome"
+				}
+				330 = {
+					has_state_patriach = yes
+					owned_by = ROOT
+				}
+			}
+			else = {
+				330 = {
+					NOT = { devastation = 0.01 }
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_patriarch_authority = 0.1
+			add_country_modifier = {
+				name = TRE_metropolitan
+				duration = 7300
+			}
+		}
+	}
+	TRE_ecumenical_patriarch = {
+		icon = mission_russian_patriarchatee #I am sorry & congrats to pdx on the spelling
+		required_missions = { TRE_metropolitan_of_trebizond }
+		position = 9
+		provinces_to_highlight = {
+		}
+		trigger = { 
+			if = {
+				limit = {
+					has_dlc = "Third Rome"
+				}
+				thrace_area = {
+					type = all
+					has_state_patriach = yes
+					owned_by = ROOT
+				}
+			}
+			else = {
+				thrace_area = {
+					type = all
+					NOT = { devastation = 0.01 }
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_patriarch_authority = 0.2
+			add_country_modifier = {
+				name = TRE_unity_in_faith
+				duration = 9125
+			}
+		}
+	}
+}
+TRE_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRE
+	}
+	has_country_shield = yes
+	TRE_phoenix_in_the_east = {
+		icon = mission_pf_cross
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			stability = 2
+			if = {
+				limit = {
+					ai = no
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			legitimacy_equivalent = 100
+		}
+		effect = {
+			330 = {
+				add_province_modifier = {
+					name = TRE_phoenix_of_the_east
+					duration = 9125
+				}
+			}
+			add_country_modifier = {
+				name = TRE_immigrants_from_the_west
+				duration = 7300
+			}
+			add_adm_power = 100
+		}
+	}
+	TRE_production_in_the_pontic_mountains = {
+		icon = mission_african_gold
+		required_missions = { TRE_phoenix_in_the_east }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 330
+			NOT = { owned_by = ROOT }
+			NOT = { development = 15 }
+		}
+		trigger = {
+			330 = {
+				development = 15
+			}
+			natural_scientist = 1
+		}
+		effect = {
+			country_event = { id = ME_Trebizond_Events.5 } #for Industry in the Pontic event
+		}
+	}
+	TRE_ponts_in_hiding = {
+		icon = mission_unite_home_region
+		required_missions = { TRE_religious_reforms TRE_production_in_the_pontic_mountains TRE_reunite_pontic_coast }
+		position = 4
+		provinces_to_highlight = {
+			area = kastamonu_area
+			NOT = { owned_by = ROOT }
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			kastamonu_area = {
+				type = all
+				owned_by = ROOT
+				religion = ROOT
+			}
+		}
+		effect = {
+			kastamonu_area = {
+				add_nationalism = -10
+				change_culture = pontic_greek 
+			}
+		}
+	}
+	TRE_cappadocian_greeks = {
+		icon = me_mission_muslim_family #hopefully doenst look too muslim
+		required_missions = { TRE_ponts_in_hiding TRE_claim_the_interior }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = karaman_area
+				area = rum_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			karaman_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+			rum_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+		}
+		effect = {
+			karaman_area = {
+				add_province_modifier = {
+					name = TRE_pontic_influence
+					duration = -1
+				}
+			}
+			rum_area = {
+				add_province_modifier = {
+					name = TRE_pontic_influence
+					duration = -1
+				}
+			}
+		}
+	}
+	TRE_aegean_coast = {
+		icon = mission_galleys_in_port
+		required_missions = { TRE_control_cilicia }
+		position = 7
+		provinces_to_highlight = {
+			area = aydin_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			aydin_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_asia_minor_coast
+				duration = 7300
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TRE_our_aegean_sea = {
+		icon = mission_look_west
+		required_missions = { TRE_aegean_coast TRE_return_prosperity_to_greece }
+		position = 9
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						145 = {
+							province_has_center_of_trade_of_level = 3
+						}
+					}
+				}
+				146 = {
+					add_center_of_trade_level = 1
+				}
+			}
+			else = {
+				add_treasury = 250
+			}
+			add_country_modifier = {
+				name = TRE_trade_power
+				duration = 18250
+			}
+			321 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	TRE_komnenoi_restoration = {
+		icon = mission_pf_cross
+		required_missions = { TRE_ecumenical_patriarch TRE_our_aegean_sea  }
+		position = 10
+		provinces_to_highlight = {
+		}
+		trigger = {
+			legitimacy_equivalent = 100
+			NOT = { average_autonomy_above_min = 34 }
+		}
+		effect = {
+			set_government_rank = 3
+			add_country_modifier = {
+				name = TRE_golden_century
+				duration = 36500
+			}
+		}
+	}
+}
+TRE_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRE
+	}
+	has_country_shield = yes
+	TRE_pontic_army = {
+		icon = mission_pf_soldier
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size_percentage = 1
+			land_maintenance = 1
+		}
+		effect = {
+			kastamonu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			erzurum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			add_mil_power = 100
+			add_country_modifier = {
+				name = TRE_great_pontic_army
+				duration = 9125
+			}
+		}
+	}
+	TRE_war_with_turks = {
+		icon = mission_non-western_soldiers
+		required_missions = { TRE_pontic_army  }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				war_with = TUR
+				NOT = { exists = TUR }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_to_the_last_man
+				duration = 3650
+			}
+			create_general = {
+				tradition = 60
+			}
+		}
+	}
+	TRE_reunite_pontic_coast = {
+		icon = mission_cannons_firing
+		required_missions = { TRE_war_with_turks }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2304
+				province_id = 328
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2304
+			owns = 328
+		}
+		effect = {
+			rum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			2304 = {
+				add_province_modifier = {
+					name = TRE_pontic_reconquest
+					duration = -1
+				}
+			}
+			328 = {
+				add_province_modifier = {
+					name = TRE_pontic_reconquest
+					duration = -1
+				}
+			}
+		}
+	}
+	TRE_across_the_mountains = {
+		icon = me_mission_ottomans_sultan_of_rum
+		required_missions = { TRE_reunite_pontic_coast }
+		position = 4
+		provinces_to_highlight = {
+			area = rum_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			rum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_in_between_the_mountains
+				duration = 7300
+			}
+			karaman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			hudavendigar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			ankara_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TRE_claim_the_interior = {
+		icon = mission_pf_map_table
+		required_missions = { TRE_across_the_mountains }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = karaman_area
+				area = ankara_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			karaman_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ankara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			cukurova_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			germiyan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TRE_control_cilicia = {
+		icon = mission_assemble_an_army
+		required_missions = { TRE_claim_the_interior }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2302
+				province_id = 327
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2302 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			327 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			aydin_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TRE_bulgarian_expansion = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { TRE_rise_from_the_ashes }
+		position = 7
+		provinces_to_highlight = {
+			area = bulgaria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bulgaria_area = {
+				add_nationalism = -5
+			}
+			add_country_modifier = {
+				name = TRE_bulgaria_defeated
+				duration = 7300
+			}
+		}
+	}
+	TRE_return_prosperity_to_greece = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { TRE_bulgarian_expansion TRE_reclaim_greece }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_prosperous = no
+			}
+			else = {
+				devastation = 0.01
+			}
+		}
+		trigger = {
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
+		}
+		effect = {
+			morea_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			northern_greece_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			macedonia_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						148 = {
+							province_has_center_of_trade_of_level = 3
+						}
+					}
+				}
+				148 = {
+					add_center_of_trade_level = 1
+				}
+			}
+			else = {
+				add_treasury = 250
+			}
+		}
+	}
+}
+TRE_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRE
+	}
+	has_country_shield = yes
+	TRE_advance_our_Frontier = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { TRE_pontic_army  }
+		position = 2
+		provinces_to_highlight = {
+			area = erzurum_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			erzurum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			armenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			erzurum_area = {
+				add_province_modifier = {
+					name = TRE_pontic_influence_2
+					duration = -1
+				}
+			}
+			add_country_modifier = {
+				name = TRE_advancing_the_frontier
+				duration = 5475
+			}
+		}
+	}
+	TRE_into_armenia = {
+		icon = mission_portuguese_oman
+		required_missions = { TRE_advance_our_Frontier }
+		position = 3
+		provinces_to_highlight = {
+			area = armenia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			armenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_tolerance
+				duration = 18250
+			}
+		}
+	}
+	TRE_open_the_straits = {
+		icon = mission_ottoman_diplomacy
+		required_missions = { TRE_across_the_mountains }
+		position = 5
+		provinces_to_highlight = {
+			area = hudavendigar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			151 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
+		}
+		effect = {
+			thrace_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			hudavendigar_area = {
+				add_province_modifier = {
+					name = TRE_quest_to_cross_the_strait
+					duration = 7300
+				}
+			}
+		}
+	}
+	TRE_rise_from_the_ashes = {
+		icon = mission_pf_soldier
+		required_missions = { TRE_open_the_straits }
+		position = 6
+		provinces_to_highlight = {
+			area = thrace_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			thrace_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bulgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = TRE_the_phoenix_rises
+				duration = 7300
+			}
+		}
+	}
+	TRE_reclaim_greece = {
+		icon = mission_empire
+		required_missions = { TRE_rise_from_the_ashes }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TRE_the_komnenoi_restoration
+				duration = 7300
+			}
+		}
+	}
+}

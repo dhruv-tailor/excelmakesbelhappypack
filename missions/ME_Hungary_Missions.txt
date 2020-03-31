@@ -1,0 +1,1169 @@
+HUN_missions_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	hungary_hungarian_guard = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+			else = {
+				is_papal_controller = yes
+			}
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wallachia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	hungary_bosnian_feud = {
+		icon = me_mission_hungary_bosnia_war
+		required_missions = { hungary_hungarian_guard }
+		position = 2
+		provinces_to_highlight = {
+			area = bosnia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bosnia_area = {
+				add_province_modifier = {
+					name = hungary_bosnian_feud_province_modifier
+					duration = 1825
+				}
+			}
+			1831 = {
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+						NOT = { has_construction = missionary }
+						NOT = { has_construction = culture }
+						NOT = { has_construction = core }
+						NOT = { has_construction = building }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 1
+						cost = 0
+					}
+				}
+			}
+			137 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	hungary_presence_in_ragusa = {
+		icon = mission_hanseatic_city
+		required_missions = { hungary_bosnian_feud }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 137
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 137
+			137 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			137 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			add_country_modifier = {
+				name = hungary_presence_in_ragusa_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	hungary_the_austrian_capital = {
+		icon = me_mission_hungary_knights
+		required_missions = { hungary_european_neighbors }
+		position = 5
+		provinces_to_highlight = {
+			area = austria_proper_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			austria_proper_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 20
+			134 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			austria_proper_area = {
+				add_local_autonomy = -25
+			}
+		}
+	}
+	
+	hungary_a_question_of_faith = {
+		icon = mission_hands_praying
+		required_missions = { }
+		position = 7
+		trigger = {
+			religion = catholic
+			NOT = { religious_unity = 0.7 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_a_question_of_faith_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	hungary_reinforce_catholicism = {
+		icon = me_mission_one_country_one_faith
+		required_missions = { hungary_a_question_of_faith }
+		position = 8
+		trigger = {
+			NOT = { mission_completed = hungary_a_new_dawn }
+			religion = catholic
+			OR = {
+				is_papal_controller = yes
+				is_defender_of_faith = yes
+				AND = {
+					exists = PAP
+					reverse_has_opinion = {
+						who = PAP
+						value = 50
+					}
+				}
+				AND = {
+					NOT = { exists = PAP }
+					is_papal_controller = no
+					any_country = {
+						is_papal_controller = yes
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			add_papal_influence = 10
+			add_country_modifier = {
+				name = hungary_reinforce_catholicism_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	hungary_the_holy_see = {
+		icon = me_mission_protect_throne
+		required_missions = { hungary_reinforce_catholicism }
+		position = 9
+		trigger = {
+			religion = catholic
+			NOT = { has_country_modifier = hungary_a_question_of_faith_modifier }
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_the_holy_see_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	hungary_peace_through_unity = {
+		icon = mission_empire
+		required_missions = { hungary_the_holy_see }
+		position = 10
+		trigger = {
+			religion = catholic
+			religious_unity = 1
+		}
+		effect = {
+			add_years_of_income = 2
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_prestige = 15
+			add_stability = 1
+		}
+	}
+}
+
+HUN_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	hungary_despot_of_serbia = {
+		icon = me_mission_hungary_serbian_cavalry
+		required_missions = { hungary_hungarian_guard }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = serbia_area
+				area = rascia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			serbia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			4239 = {
+				if = {
+					limit = {
+						NOT = { religion = ROOT }
+					}
+					change_religion = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = hungary_despot_of_serbia_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	hungary_riches_of_kosovo = {
+		icon = me_mission_hungary_gold_mine_west
+		required_missions = { hungary_despot_of_serbia }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1766
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			owns_core_province = 1766
+			1766 = {
+				base_production = 10
+			}
+		}
+		effect = {
+			1766 = {
+				add_province_modifier = {
+					name = hungary_riches_of_kosovo_province_modifier
+					duration = 10950
+				}
+			}
+			if = {
+				limit = {
+					rascia_area = {
+						type = all
+						owned_by = ROOT
+						is_state = yes
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					rascia_area = {
+						add_prosperity = 50
+					}
+				}
+				else = {
+					rascia_area = {
+						add_base_tax = 1
+						add_base_production = 1
+						add_base_manpower = 1
+					}
+				}
+			}
+		}
+	}
+	
+	hungary_european_neighbors = {
+		icon = me_mission_gather_allies
+		required_missions = { }
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					exists = BOH
+				}
+				OR = {
+					NOT = {
+						reverse_has_opinion = {
+							who = BOH
+							value = -50
+						}
+					}
+					overlord_of = BOH
+				}
+			}
+			else = {
+				266 = {
+					owner = {
+						OR = {
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = HAB
+				}
+				OR = {
+					NOT = {
+						reverse_has_opinion = {
+							who = HAB
+							value = -50
+						}
+					}
+					overlord_of = HAB
+				}
+			}
+			else = {
+				134 = {
+					owner = {
+						OR = {
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			inner_austria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			austria_proper_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bohemia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	hungary_pushing_the_von_habsburg = {
+		icon = me_mission_habsburg_coat
+		required_missions = { hungary_european_neighbors }
+		position = 5
+		provinces_to_highlight = {
+			area = inner_austria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			inner_austria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = hungary_pushing_the_von_habsburg_modifier
+				duration = -1
+			}
+			tirol_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	hungary_last_habsburg_bastion = {
+		icon = me_mission_medieval_fort
+		required_missions = { hungary_the_austrian_capital hungary_pushing_the_von_habsburg }
+		position = 6
+		provinces_to_highlight = {
+			area = tirol_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tirol_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 1.5
+			tirol_area = {
+				add_province_modifier = {
+					name = hungary_last_habsburg_bastion_province_modifier
+					duration = 1825
+				}
+			}
+		}
+	}
+	
+	hungary_the_burgher_gold = {
+		icon = me_mission_hungary_kosovo_gold
+		required_missions = { hungary_last_habsburg_bastion }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 73
+				province_id = 154
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { has_estate = estate_burghers }
+				unrest = 1
+			}
+		}
+		trigger = {
+			owns_core_province = 73
+			owns_core_province = 154
+			73 = {
+				has_estate = estate_burghers
+				NOT = { unrest = 1 }
+			}
+			154 = {
+				has_estate = estate_burghers
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			73 = {
+				custom_tooltip = HUN_PROVINCE_GAINS_MODIFIER_UNTIL_NOT_HAS_ESTATE_BURGHERS
+				hidden_effect = {
+					add_province_triggered_modifier = hungary_the_burgher_gold_province_triggered_modifier
+				}
+			}
+			154 = {
+				custom_tooltip = HUN_PROVINCE_GAINS_MODIFIER_UNTIL_NOT_HAS_ESTATE_BURGHERS
+				hidden_effect = {
+					add_province_triggered_modifier = hungary_the_burgher_gold_province_triggered_modifier
+				}
+			}
+		}
+	}
+	
+	hungary_a_new_dawn = {
+		icon = me_mission_hungary_road
+		required_missions = { hungary_a_question_of_faith }
+		position = 8
+		trigger = {
+			NOT = { mission_completed = hungary_reinforce_catholicism }
+			is_papal_controller = no
+			is_defender_of_faith = no
+			OR = {
+				dominant_religion = orthodox
+				AND = {
+					exists = PAP
+					NOT = {
+						reverse_has_opinion = {
+							who = PAP
+							value = -50
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = PAP }
+					any_country = {
+						is_papal_controller = yes
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = -50
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = -50
+			change_religion = orthodox
+			hidden_effect = {
+				capital_scope = {
+					change_religion = orthodox
+				}
+			}
+			add_country_modifier = {
+				name = hungary_a_new_dawn_modifier_1
+				duration = 5475
+			}
+			add_country_modifier = {
+				name = hungary_a_new_dawn_modifier_2
+				duration = 3650
+			}
+			every_known_country = {
+				limit = {
+					religion = catholic
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = hungary_new_dawn_opinion
+				}
+			}
+		}
+	}
+	
+	hungary_solidarity_through_faith = {
+		icon = me_mission_imperial
+		required_missions = { hungary_a_new_dawn }
+		position = 9
+		trigger = {
+			religion = orthodox
+			OR = {
+				any_ally = {
+					religion = orthodox
+				}
+				any_subject_country = {
+					religion = orthodox
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = hungary_solidarity_through_faith_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	hungary_brothers_in_arms = {
+		icon = me_mission_conquer
+		required_missions = { hungary_solidarity_through_faith }
+		position = 10
+		trigger = {
+			religion = orthodox
+			religious_unity = 1
+		}
+		effect = {
+			add_stability = 1
+			add_prestige = 15
+			add_country_modifier = {
+				name = hungary_brothers_in_arms_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+HUN_missions_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	hungary_balkan_renaissance = {
+		icon = me_mission_renaissance
+		required_missions = { hungary_capital_expansion }
+		position = 2
+		trigger = {
+			has_institution = renaissance
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 5
+			}
+			else = {
+				adm_power = 50
+				dip_power = 50
+				mil_power = 50
+				all_known_country = {
+					ROOT = {
+						custom_trigger_tooltip = {
+							tooltip = INC_HAS_BETTER_ADM_TECH
+							adm_tech = PREV
+						}
+						custom_trigger_tooltip = {
+							tooltip = INC_HAS_BETTER_DIP_TECH
+							dip_tech = PREV
+						}
+						custom_trigger_tooltip = {
+							tooltip = INC_HAS_BETTER_MIL_TECH
+							mil_tech = PREV
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_balkan_renaissance_modifier
+				duration = 9125
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 5
+			}
+			else = {
+				add_adm_power = 25
+				add_dip_power = 25
+				add_mil_power = 25
+			}
+		}
+	}
+	
+	hungary_fortline_of_serbia = {
+		icon = me_mission_modern_army
+		required_missions = { hungary_despot_of_serbia }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 1766
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { fort_level = 2 }
+					}
+				}
+				AND = {
+					province_id = 3000
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {
+			owns_core_province = 1766
+			owns_core_province = 3000
+			1766 = {
+				fort_level = 2
+			}
+		}
+		effect = {
+			1766 = {
+				add_province_modifier = {
+					name = hungary_fortline_of_serbia_province_modifier
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	hungary_bohemia_state = {
+		icon = mission_conquer_50_development
+		required_missions = { hungary_european_neighbors }
+		position = 5
+		provinces_to_highlight = {
+			area = bohemia_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
+		}
+		trigger = {
+			bohemia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 0.25
+			define_advisor = {
+				type = inquisitor
+				skill = 3
+				name = "Tamas Bakocz"
+				culture = bohemian
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+			add_country_modifier = {
+				name = hungary_bohemia_state_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	hungary_become_an_empire = {
+		icon = mission_empire
+		required_missions = { hungary_bohemia_state hungary_last_habsburg_bastion }
+		position = 7
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 3
+			}
+			else = {
+				total_development = 1000
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_become_an_empire_modifier
+				duration = -1
+			}
+			add_country_modifier = {
+				name = hungary_become_an_empire_modifier_timed
+				duration = 7300
+			}
+		}
+	}
+}
+
+HUN_missions_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	hungary_capital_expansion = {
+		icon = me_mission_hungary_expand
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = transdanubia_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							transdanubia_area = {
+								type = all
+								NOT = { development = 20 }
+							}
+							NOT = { development = 20 }
+						}
+						AND = {
+							transdanubia_area = {
+								type = all
+								NOT = { renaissance = 25 }
+							}
+							NOT = { renaissance = 25 }
+						}
+					}
+				}
+				AND = {
+					is_capital_of = ROOT
+					NOT = { development = 25 }
+				}
+			}
+		}
+		trigger = {
+			capital_scope = {
+				development = 25
+			}
+			transdanubia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			transdanubia_area = {
+				development = 20
+			}
+			transdanubia_area = {
+				renaissance = 25
+			}
+		}
+		effect = {
+			153 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_production = 1
+				}
+			}
+			if = {
+				limit = {
+					transdanubia_area = {
+						type = all
+						owned_by = ROOT
+						is_state = yes
+					}
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					transdanubia_area = {
+						add_prosperity = 100
+					}
+				}
+				else = {
+					transdanubia_area = {
+						add_base_tax = 2
+						add_base_production = 2
+						add_base_manpower = 2
+					}
+				}
+			}
+		}
+	}
+	
+	hungary_hungarian_trade_center = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { hungary_capital_expansion }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 153
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 153
+			153 = {
+				base_production = 10
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 0.33
+			153 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+	
+	hungary_modernized_administration = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { hungary_balkan_renaissance hungary_hungarian_trade_center hungary_renaissance_administration }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 1
+		}
+		trigger = {
+			total_development = 400
+			NOT = { average_autonomy = 25 }
+			NOT = { corruption = 0.01 }
+			all_owned_province = {
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_modernized_administration_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	hungary_ottoman_threat = {
+		icon = me_mission_hungary_crush_the_ottomans
+		required_missions = { }
+		position = 4
+		trigger = {
+			is_at_war = no
+			calc_true_if = {
+				all_ally = {
+					NOT = { religion_group = muslim }
+				}
+				amount = 2
+			}
+			army_size = 30
+		}
+		effect = {
+			bulgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = hungary_ottoman_threat_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	hungary_liberate_bulgaria = {
+		icon = me_mission_hungary_liberate_bulgaria
+		required_missions = { hungary_ottoman_threat }
+		position = 5
+		provinces_to_highlight = {
+			area = bulgaria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bulgaria_area = {
+				add_province_modifier = {
+					name = hungary_liberate_bulgaria_province_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+HUN_missions_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	hungary_renaissance_administration = {
+		icon = mission_have_two_subjects
+		required_missions = { hungary_capital_expansion }
+		position = 2
+		trigger = {
+			employed_advisor = {
+				category = ADM
+			}
+			employed_advisor = {
+				category = DIP
+			}
+			employed_advisor = {
+				category = MIL
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = hungary_renaissance_administration_modifier
+				duration = 7300
+			}
+			153 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+						NOT = { trade_goods = paper }
+					}
+					change_trade_goods = paper
+				}
+			}
+		}
+	}
+	
+	hungary_securing_constantinople = {
+		icon = "mission_city_of_the_world's_desire"
+		required_missions = { hungary_ottoman_threat }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 151
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 151
+			treasury = 2000
+		}
+		effect = {
+			add_treasury = -2000
+			151 = {
+				if = {
+					limit = {
+						ROOT = {
+							religion = catholic
+						}
+					}
+					change_province_name = "New Rome"
+				}
+				change_culture = ROOT
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_manpower = 3
+				add_province_modifier = {
+					name = hungary_securing_constantinople_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	hungary_victorious_crusade = {
+		icon = me_mission_hungary_ottoman_horseman
+		required_missions = { hungary_liberate_bulgaria hungary_securing_constantinople }
+		position = 5
+		provinces_to_highlight = {
+			exists = TUR
+			region = balkan_region
+			country_or_non_sovereign_subject_holds = TUR
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = TUR }
+				AND = {
+					TUR = {
+						NOT = { total_development = ROOT }
+					}
+					balkan_region = {
+						type = all
+						NOT = { country_or_non_sovereign_subject_holds = TUR }
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_country_modifier = {
+				name = hungary_victorious_crusade_modifier_1
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = hungary_victorious_crusade_modifier_2
+				duration = 5475
+			}
+		}
+	}
+}

@@ -1,0 +1,146 @@
+LUX_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = LUX
+	}
+	has_country_shield = yes
+
+	Luxembourg_Independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		trigger = {
+			is_subject = no
+		}
+		effect = {
+			country_event = { id = ME_Luxemburg_Events.1 }
+		}
+	}
+	
+	Luxembourg_Secure_Alliance = {
+		icon = mission_empire
+		required_missions = { Luxembourg_Independence }
+		trigger = {
+			dynasty = "von Luxemburg"
+			reverse_has_opinion = {
+				who = POL
+				value = 125
+			}
+			alliance_with = POL
+			reverse_has_opinion = {
+				who = HUN
+				value = 125
+			}
+			alliance_with = HUN
+			exists = BOH
+		}
+		effect = {
+			add_casus_belli = {
+				target = BOH
+				type = cb_restore_personal_union
+				months = 600
+			}
+		}
+	}
+	
+	Luxembourg_Declare_On_Bohemia = {
+		icon = mission_empire
+		required_missions = { Luxembourg_Secure_Alliance }
+		trigger = {
+			is_in_war = {
+    			attacker_leader = ROOT
+				casus_belli = cb_restore_personal_union
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = Luxembourg_Mercenary_Contracts
+				duration = 1825
+			}
+		}
+	}
+	
+	Luxembourg_Forced_Union = {
+		icon = mission_have_two_subjects
+		required_missions = { Luxembourg_Declare_On_Bohemia }
+		trigger = {
+			senior_union_with = BOH
+		}
+		effect = {
+			BOH = {
+				add_liberty_desire = -25
+			}
+		}
+	}
+	
+	Luxembourg_Expand = {
+		icon = mission_cannons_firing
+		required_missions = { Luxembourg_Forced_Union }
+		trigger = {
+			num_of_provinces_in_states = 12
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 20 }
+			if = {
+				limit = {
+					exists = BOH
+				}
+				BOH = {
+					country_event = { id = ME_Luxemburg_Events.3 }
+				}
+			}
+		}
+	}
+	
+	Luxembourg_Integrate_Bohemia = {
+		icon = mission_empire
+		required_missions = { Luxembourg_Expand }
+		provinces_to_highlight = {
+			NOT = { exists = BOH }
+			province_id = 266
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = BOH }
+			owns = 266
+			exists = BRA
+		}
+		effect = {
+			add_casus_belli = {
+				target = BRA
+				type = cb_restore_personal_union
+				months = 600
+			}
+		}
+	}
+	
+	Luxembourg_Force_Union_Bra = {
+		icon = mission_have_two_subjects
+		required_missions = { Luxembourg_Integrate_Bohemia }
+		trigger = {
+			senior_union_with = BRA
+		}
+		effect = {
+			add_prestige = 50
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+	
+	Luxembourg_Emperor = {
+		icon = mission_empire
+		required_missions = { Luxembourg_Force_Union_Bra }
+		trigger = {
+			is_emperor = yes
+		}
+		effect = {
+			94 = {
+				add_base_tax = 4
+				add_base_production = 4
+				add_base_manpower = 3
+			}
+		}
+	}
+}

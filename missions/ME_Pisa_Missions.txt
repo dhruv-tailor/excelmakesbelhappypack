@@ -1,0 +1,143 @@
+PIS_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = PIS
+	}
+	has_country_shield = yes
+	
+	Pisa_Defense = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 5
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 0.9
+		}
+		effect = {
+			117 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2980 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Pisa_Fort = {
+		icon = mission_conquer_50_development
+		required_missions = { Pisa_Defense }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 115
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
+		trigger = {
+			115 = {
+				owned_by = ROOT
+				fort_level = 2
+			}
+		}
+		effect = {
+			115 = {
+				add_province_modifier = {
+					name = me_pisan_fort
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	Pisa_Tuscan_coastline = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { Pisa_Fort }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 117
+				province_id = 2980
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			117 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2980 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			116 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2978 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Pisa_Tuscany = {
+		icon = mission_unite_home_region
+		required_missions = { Pisa_Tuscan_coastline }
+		position = 8
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+		}
+	}
+	
+	Pisa_Stability = {
+		icon = mission_asian_trader
+		required_missions = { Pisa_Tuscany }
+		position = 9
+		trigger = {
+			stability = 3
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}

@@ -1,0 +1,1261 @@
+QIR_AKK_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = AKK
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_settling_in_diyarbakir = {
+		icon = mission_early_game_buildings
+		required_missions = { AKK_tribal_settling }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 418
+				province_id = 2305
+				province_id = 2306
+				province_id = 2308
+				province_id = 4292
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { culture = turkish }
+				AND = {
+					province_id = 418
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			418 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			2305 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2306 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2308 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4292 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_influx_of_white_sheep
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_turcoman_iqta = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { QIR_settling_in_diyarbakir QIR_azerbaijani_settlers }
+		position = 9
+		trigger = {
+			num_of_subjects = 1
+			legitimacy_equivalent = 100
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					has_country_modifier = efficient_tax_farming_modifier 
+					has_country_modifier = land_acquisition_modifier 
+					has_country_modifier = lenient_taxation_modifier 
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				change_government_reform_progress = 25
+			}
+			add_country_modifier = {
+				name = QIR_turkoman_taxation
+				duration = -1
+			}
+		}
+	}
+	
+	QIR_standing_army = {
+		icon = mission_assemble_an_army
+		required_missions = { QIR_turcoman_iqta }
+		position = 10
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size_percentage = 0.9
+			army_size = 40
+			if = { 
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.25
+			}
+			else = {
+				army_tradition = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_modern_army
+				duration = 7300
+			}
+		}
+	}
+}
+
+QIR_AKK_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = AKK
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_azerbaijani_settlers = {
+		icon = mission_colonial
+		required_missions = { AKK_tribal_settling }
+		position = 8
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = azerbaijani
+			NOT = { development = 20 }
+		}
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					culture = azerbaijani
+					development = 20
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_influx_of_black_sheep
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_economics = {
+		icon = mission_war_chest
+		required_missions = { QIR_turcoman_iqta QIR_arabian_coast }
+		position = 10
+		trigger = {
+			monthly_income = 25
+			trade_efficiency = 0.4
+			home_trade_node = {
+				trade_share = {
+					share = 90
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_prospering
+				duration = 9125
+			}
+			capital_scope = { 
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+}
+
+QIR_AKK_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = AKK
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_rein_in_persia = {
+		icon = mission_persian_soldiers
+		required_missions = { AKK_Persian_submission }
+		position = 8
+		provinces_to_highlight = {
+			region = persia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			persia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_persia_conquered
+				duration = 7300
+			}
+			bahrain_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khorasan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	QIR_arabian_coast = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { QIR_rein_in_persia }
+		position = 9
+		provinces_to_highlight = {
+			area = bahrain_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bahrain_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_extending_trade_reach
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_gulf_of_persia = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { QIR_arabian_coast }
+		position = 10
+		trigger = {
+			1334 = {
+				trade_share = {
+					share = 75
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_trading_guilds
+				duration = 5475
+			}
+		}
+	}
+}
+
+QIR_AKK_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = AKK
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_caucasian_integration = {
+		icon = mission_alliances
+		required_missions = { AKK_masters_of_the_mountains }
+		position = 7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QIR_tooltips.1
+				calc_true_if = {
+					accepted_culture = georgian
+					accepted_culture = armenian
+					accepted_culture = avar
+					accepted_culture = circassian
+					accepted_culture = dagestani
+					amount = 2
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = QIR_cultural_integration
+				duration = 5475
+			}
+		}
+	}
+	
+	QIR_conquer_khorasan = {
+		icon = mission_chinese_general_riding
+		required_missions = { QIR_rein_in_persia }
+		position = 9
+		provinces_to_highlight = {	
+			region = khorasan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			khorasan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_ruler_modifier = {
+				name = QIR_conqueror
+				duration = -1
+			}
+		}
+	}
+	
+	QIR_syria = {
+		icon = mission_egyptian_mamluk_soldier
+		required_missions = { QIR_cilicia }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = syria_area
+				area = syrian_desert_area
+				area = aleppo_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			syria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			syrian_desert_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = al_suryah_arabic 
+			add_prestige = 25
+			2313 = {
+				galley = ROOT
+				galley = ROOT
+				light_ship = ROOT
+			}
+		}
+	}
+}
+
+QIR_AKK_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = AKK
+		tag = TRK
+	}
+	has_country_shield = yes
+
+	QIR_insult_ottomans = {
+		icon = diplo_missions_icon
+		required_missions = { AKK_masters_of_the_mountains }
+		position = 8
+		trigger = {
+			OR = {
+				NOT = { exists = TUR }
+				TUR = {
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 15
+			karaman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			dulkadir_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			327 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2302 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	QIR_cilicia = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { QIR_insult_ottomans }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = karaman_area
+				area = dulkadir_area
+				province_id = 327
+				province_id = 2302
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			karaman_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			dulkadir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			327 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2302 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = qir_founding_a_navy
+				duration = 9125
+			}
+			ankara_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kastamonu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syrian_desert_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	QIR_second_rum = {
+		icon = mission_empire
+		required_missions = { QIR_cilicia }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = ankara_area
+				area = rum_area
+				area = kastamonu_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			ankara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kastamonu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_successor_of_rum
+				duration = -1
+			}
+			germiyan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aydin_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hudavendigar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	QIR_turcoman_constantinople = {
+		icon = mission_pf_soldier
+		required_missions = { QIR_second_rum }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = hudavendigar_area
+				area = germiyan_area
+				area = aydin_area
+				province_id = 151
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			germiyan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aydin_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			151 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			add_country_modifier = {
+				name = QIR_custodian_of_constantinople
+				duration = 5475
+			}
+		}
+	}
+}
+
+QIR_QAR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = QAR
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_settling_in_diyarbakir = {
+		icon = mission_early_game_buildings
+		required_missions = { QAR_tribal_settling }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 418
+				province_id = 2305
+				province_id = 2306
+				province_id = 2308
+				province_id = 4292
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { culture = turkish }
+				AND = {
+					province_id = 418
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			418 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			2305 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2306 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2308 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4292 = { 
+				culture = turkish
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_influx_of_white_sheep
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_turcoman_iqta = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { QIR_settling_in_diyarbakir QIR_azerbaijani_settlers }
+		position = 7
+		trigger = {
+			num_of_subjects = 1
+			legitimacy_equivalent = 100
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					has_country_modifier = efficient_tax_farming_modifier 
+					has_country_modifier = land_acquisition_modifier 
+					has_country_modifier = lenient_taxation_modifier 
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				change_government_reform_progress = 25
+			}
+			add_country_modifier = {
+				name = QIR_turkoman_taxation
+				duration = -1
+			}
+		}
+	}
+	
+	QIR_standing_army = {
+		icon = mission_assemble_an_army
+		required_missions = { QIR_turcoman_iqta }
+		position = 8
+		trigger = {
+			army_size_percentage = 0.9
+			army_size = 40
+			if = { 
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.25
+			}
+			else = {
+				army_tradition = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_modern_army
+				duration = 7300
+			}
+		}
+	}
+}
+
+QIR_QAR_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = QAR
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_azerbaijani_settlers = {
+		icon = mission_colonial
+		required_missions = { QAR_tribal_settling }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = azerbaijani
+			NOT = { development = 20 }
+		}
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					culture = azerbaijani
+					development = 20
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_influx_of_black_sheep
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_economics = {
+		icon = mission_war_chest
+		required_missions = { QIR_turcoman_iqta QIR_arabian_coast }
+		position = 8
+		trigger = {
+			monthly_income = 25
+			trade_efficiency = 0.4
+			home_trade_node = {
+				trade_share = {
+					share = 90
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_prospering
+				duration = 9125
+			}
+			capital_scope = { 
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+}
+
+QIR_QAR_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = QAR
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_rein_in_persia = {
+		icon = mission_persian_soldiers
+		required_missions = { QAR_Persian_submission }
+		position = 6
+		provinces_to_highlight = {
+			region = persia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			persia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_persia_conquered
+				duration = 7300
+			}
+			bahrain_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khorasan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	QIR_arabian_coast = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { QIR_rein_in_persia }
+		position = 7
+		provinces_to_highlight = {
+			area = bahrain_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bahrain_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_extending_trade_reach
+				duration = 9125
+			}
+		}
+	}
+	
+	QIR_gulf_of_persia = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { QIR_arabian_coast }
+		position = 8
+		trigger = {
+			1334 = {
+				trade_share = {
+					share = 75
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_trading_guilds
+				duration = 5475
+			}
+		}
+	}
+}
+
+QIR_QAR_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = QAR
+		tag = TRK
+	}
+	has_country_shield = yes
+	
+	QIR_caucasian_integration = {
+		icon = mission_alliances
+		required_missions = { QAR_masters_of_the_mountains }
+		position = 5
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QIR_tooltips.1
+				calc_true_if = {
+					accepted_culture = georgian
+					accepted_culture = armenian
+					accepted_culture = avar
+					accepted_culture = circassian
+					accepted_culture = dagestani
+					amount = 2
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = QIR_cultural_integration
+				duration = 5475
+			}
+		}
+	}
+	
+	QIR_conquer_khorasan = {
+		icon = mission_chinese_general_riding
+		required_missions = { QIR_rein_in_persia }
+		position = 7
+		provinces_to_highlight = {	
+			region = khorasan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			khorasan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_ruler_modifier = {
+				name = QIR_conqueror
+				duration = -1
+			}
+		}
+	}
+	
+	QIR_syria = {
+		icon = mission_egyptian_mamluk_soldier
+		required_missions = { QIR_cilicia }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = syria_area
+				area = syrian_desert_area
+				area = aleppo_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			syria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			syrian_desert_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = al_suryah_arabic 
+			add_prestige = 25
+			2313 = {
+				galley = ROOT
+				galley = ROOT
+				light_ship = ROOT
+			}
+		}
+	}
+}
+
+QIR_QAR_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {	
+		was_tag = QAR
+		tag = TRK
+	}
+	has_country_shield = yes
+
+	QIR_insult_ottomans = {
+		icon = diplo_missions_icon
+		required_missions = { QAR_masters_of_the_mountains }
+		position = 6
+		trigger = {
+			OR = {
+				NOT = { exists = TUR }
+				TUR = {
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 15
+			karaman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			dulkadir_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			327 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2302 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	QIR_cilicia = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { QIR_insult_ottomans }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = karaman_area
+				area = dulkadir_area
+				province_id = 327
+				province_id = 2302
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			karaman_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			dulkadir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			327 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2302 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = qir_founding_a_navy
+				duration = 9125
+			}
+			ankara_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kastamonu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syrian_desert_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	QIR_second_rum = {
+		icon = mission_empire
+		required_missions = { QIR_cilicia }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = ankara_area
+				area = rum_area
+				area = kastamonu_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			ankara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rum_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kastamonu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QIR_successor_of_rum
+				duration = -1
+			}
+			germiyan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aydin_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hudavendigar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	QIR_turcoman_constantinople = {
+		icon = mission_pf_soldier
+		required_missions = { QIR_second_rum }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = hudavendigar_area
+				area = germiyan_area
+				area = aydin_area
+				province_id = 151
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			germiyan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aydin_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			151 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			add_country_modifier = {
+				name = QIR_custodian_of_constantinople
+				duration = 5475
+			}
+		}
+	}
+}

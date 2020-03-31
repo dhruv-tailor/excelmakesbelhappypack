@@ -1,0 +1,670 @@
+ASK_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ASK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ASK_the_kyoto_contribution = {
+		icon = mission_high_income
+		position = 1
+		required_missions = { }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ASK_DAIMYO_CONTRIBUTION_EVENT_HAS_HAPPENED
+				has_country_flag = JAP_daimyo_contribution_flag
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				if = {
+					limit = {
+						ruler_has_personality = obsessive_perfectionist_personality
+					}
+					remove_ruler_personality = obsessive_perfectionist_personality
+				}
+				add_ruler_personality = architectural_visionary_personality
+			}
+			else = {
+				capital_scope = {
+					add_province_modifier = {
+						name = ASK_daimyo_tributes
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+
+	ASK_development_plan = {
+		icon = mission_asian_city
+		position = 3
+		required_missions = { ASK_the_kyoto_contribution ASK_enforce_diplomatic_attendance }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			capital_scope = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_next_institution_embracement = 20
+			}
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_dlc = "Mandate of Heaven" }
+						capital_scope = {
+							is_prosperous = yes
+						}
+					}
+				}
+				add_years_of_income = 0.33
+			}
+			else = {
+				capital_scope = {
+					add_prosperity = 50
+				}
+			}
+		}
+	}
+
+	ASK_temple = {
+		icon = mission_rb_trinity_college_dublin
+		position = 4
+		required_missions = { ASK_development_plan }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { development = 35 }
+		}
+		trigger = {
+			capital_scope = {
+				development = 35
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = ASK_golden_pavilion
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+ASK_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ASK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ASK_trade_in_japan = {
+		icon = mission_junk_boat
+		position = 2
+		required_missions = { ASK_the_kyoto_contribution ASK_restore_shogun_authority }
+		trigger = {
+			num_of_light_ship = 5
+			num_of_subjects = 3
+			calc_true_if = {
+				all_subject_country = {
+					has_divert_trade = yes
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ASK_nippon_trade_monopoly
+				duration = 7300
+			}
+			1020 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 25
+					key = ASK_nippon_trade_monopoly_trade
+				}
+			}
+		}
+	}
+
+	ASK_castle_of_capital = {
+		icon = mission_japanese_fort
+		position = 4
+		required_missions = { ASK_development_plan }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = fort_15th }
+			NOT = { has_building = fort_16th }
+			NOT = { has_building = fort_17th }
+			NOT = { has_building = fort_18th }
+		}
+		trigger = {
+			capital_scope = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			capital_scope = {
+				if = {
+					limit = {
+						has_building = fort_15th
+					}
+					remove_building = fort_15th
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = {
+						has_building = fort_16th
+					}
+					remove_building = fort_16th
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = {
+						has_building = fort_17th
+					}
+					remove_building = fort_17th
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = {
+						has_building = fort_18th
+					}
+					ROOT = {
+						add_mil_power = 200
+					}
+				}
+				#add_province_modifier = {
+				#	name = ASK_capital_fortifications
+				#	duration = 7300
+				#}
+				#NEGATIVE BONUS ANGERY
+			}
+		}
+	}
+}
+
+ASK_missions_3 = {
+	generic = no
+	slot = 3
+	ai = yes
+	potential = {
+		tag = ASK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ASK_restore_shogun_authority = {
+		icon = mission_kowtow
+		position = 1
+		required_missions = { }
+		trigger = {
+			OR = {
+				diplomat = 1
+				statesman = 1
+			}
+			all_subject_country = {
+				NOT = { liberty_desire = 30 }
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 5 }
+			add_country_modifier = {
+				name = ASK_Reinstated
+				duration = 7300
+			}
+		}
+	}
+
+	ASK_enforce_diplomatic_attendance  = {
+		icon = mission_scholar_officials
+		position = 2
+		required_missions = { ASK_restore_shogun_authority }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+					is_expanded_mod_active = { mod = governments }
+				}
+				OR = {
+					has_reform = diplomatic_positions_reform
+					diplomat = 2
+				}
+			}
+			else = {
+				diplomat = 2
+			}
+			all_subject_country = {
+				has_opinion = {
+					who = ROOT
+					value = 125
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { DIP = 6 }
+				}
+				change_dip = 1
+			}
+			add_prestige = 10
+			add_country_modifier = {
+				name = ASK_enforced_attendance
+				duration = 9125
+			}
+		}
+	}
+
+	ASK_diplomatic_integration  = {
+		icon = mission_rb_monopolize_the_channel
+		position = 3
+		required_missions = { ASK_enforce_diplomatic_attendance }
+		trigger = {
+			has_country_modifier = annexers_legacy
+			num_of_owned_provinces_with = {
+				value = 5
+				region = japan_region
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			remove_country_modifier = annexers_legacy
+		}
+	}
+	
+	ASK_integrate_the_lords  = {
+		icon = mission_court_education
+		position = 5
+		required_missions = { ASK_diplomatic_integration ASK_assign_tosenbugyo ASK_castle_of_capital }
+		trigger = {
+			OR = {
+				grown_by_development = 200
+				legitimacy_equivalent = 100
+				grown_by_states = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ASK_kokutai
+				duration = 5475
+			}
+		}
+	}
+}
+
+ASK_missions_4 = {
+	generic = no
+	slot = 4
+	ai = yes
+	potential = {
+		tag = ASK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ASK_rein_the_daimyo_lords  = {
+		icon = mission_noble_council
+		position = 2
+		required_missions = { ASK_hunt_for_ronin ASK_restore_shogun_authority }
+		trigger = {
+			OR = {
+				full_idea_group = influence_ideas
+				full_idea_group = diplomatic_ideas
+				DIP = 5
+			}
+		}
+		effect = {
+			add_prestige = 15
+			add_ruler_modifier = {
+				name = ASK_benevolent_rule
+				duration = -1
+			}
+		}
+	}
+
+	ASK_assign_tosenbugyo = {
+		icon = mission_asian_trader
+		position = 4
+		required_missions = { ASK_recruit_brilliant_minds }
+		trigger = {
+			legitimacy_equivalent = 80
+			prestige = 25
+			stability = 2
+			calc_true_if = {
+				all_subject_country = {
+					is_subject_of_type = daimyo_vassal
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			country_event = { id = ME_Ashikaga_Events.5 }
+			add_country_modifier = {
+				name = ASK_tosenbugyo_mod
+				duration = 10950
+			}
+		}
+	}
+}
+
+ASK_missions_5 = {
+	generic = no
+	slot = 5
+	ai = yes
+	potential = {
+		tag = ASK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ASK_hunt_for_ronin = {
+		icon = mission_japanese_samurai
+		position = 1
+		required_missions = { }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				custom_trigger_tooltip = {
+					tooltip = ASK_HAS_ENACTED_EXPEL_RONIN_ABILITY
+					any_subject_country = {
+						has_country_modifier = subject_expel_ronin
+					}
+				}
+			}
+			else = {
+				commandant = 1
+			}
+			#50 mil power angery
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.05
+			}
+			else = {
+				add_army_tradition = 15
+			}
+			custom_tooltip = ASK_DAIMYO_OPINION_INCREASED
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						has_reform = daimyo
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = ASK_hunted_down_the_ronin
+					}
+				}
+			}
+		}
+	}
+
+	ASK_recruit_brilliant_minds = {
+		icon = mission_protect_albania
+		position = 3
+		required_missions = { ASK_hunt_for_ronin ASK_enforce_diplomatic_attendance }
+		trigger = {
+			has_mil_advisor = yes
+			OR = {
+				has_leader_with = { fire = 4 }
+				has_leader_with = { shock = 4 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ASK_military_minds
+				duration = 7300
+			}
+		}
+	}
+
+	ASK_punish_warmongers = {
+		icon = mission_non-western_cavalry_raid
+		position = 4
+		required_missions = { ASK_recruit_brilliant_minds }
+		trigger = {
+			any_subject_country = {
+				is_subject_of_type = daimyo_vassal
+				# custom_trigger_tooltip = {
+					# tooltip = ASK_DAIMYO_WE_HAVE_AT_LEAST_15_AE_OF
+					# reverse_has_opinion_modifier = {
+						# who = ROOT
+						# modifier = aggressive_expansion
+					# }
+					# NOT = {
+						# reverse_has_opinion_modifier = {
+							# who = ROOT
+							# modifier = aggressive_expansion
+							# value = -15
+						# }
+					# }
+				# }
+				grown_by_development = 30
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_subject_country = {
+						is_subject_of_type = daimyo_vassal
+						ai = yes
+					}
+				}
+				custom_tooltip = ASK_DAIMYO_WILL_BE_PUNISHED
+				hidden_effect = {
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = daimyo_vassal
+							ai = yes
+						}
+						every_country = {
+							limit = {
+								is_subject_of_type = daimyo_vassal
+								NOT = { tag = PREV }
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+							add_opinion = {
+								who = PREV
+								modifier = aggressive_expansion
+							}
+						}
+					}
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = daimyo_vassal
+							NOT = { tag = PREV }
+						}
+						country_event = { id = ME_Ashikaga_Events.6 }
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+			if = {
+				limit = {
+					any_subject_country = {
+						is_subject_of_type = daimyo_vassal
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+				custom_tooltip = ASK_TOOLTIP_TO_GIVE_TRUST
+				hidden_effect = {
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = daimyo_vassal
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+						add_trust = {
+							who = ROOT
+							value = 25
+							mutual = yes
+						}
+					}
+				}
+			}
+		}
+	}
+}

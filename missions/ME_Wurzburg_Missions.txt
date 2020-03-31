@@ -1,0 +1,166 @@
+WBG_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = WBG
+	}
+	has_country_shield = yes
+	
+	wbg_papal = {
+		icon = mission_religious
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+			else = {
+				is_papal_controller = yes
+			}
+		}
+		effect = {
+			add_papal_influence = 15
+			add_dip_power = 50
+		}
+	}
+	
+	wbg_bishoprics = {
+		icon = mission_alliances
+		required_missions = { wbg_papal }
+		position = 3
+		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = KOL
+					value = 100
+				}
+				reverse_has_opinion = {
+					who = TRI
+					value = 100
+				}
+				AND = {
+					government = theocracy
+					all_country = {
+						OR = {
+							NOT = { is_part_of_hre = yes }
+							NOT = { government = theocracy }
+							hidden_trigger = { tag = ROOT }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = wbg_diplomacy
+				duration = 10950
+			}
+		}
+	}
+	
+	wbg_witch_trials = {
+		icon = mission_religious
+		required_missions = { wbg_bishoprics }
+		position = 5
+		trigger = {
+			adm_power = 100
+			religion = catholic
+			papal_influence = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = wbg_burn_witches
+				duration = 9125
+			}
+			add_prestige = 10
+		}
+	}
+}
+
+WBG_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = WBG
+	}
+	has_country_shield = yes
+	
+	wbg_munster = {
+		icon = mission_european_church
+		position = 1
+		provinces_to_highlight = {
+			province_id = 79
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			79 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			79 = {
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 2
+				}
+			}
+		}
+	}
+	
+	wbg_primas_germaniae = {
+		icon = mission_religious
+		required_missions = { wbg_munster }
+		position = 3
+		trigger = {
+			has_country_modifier = primas_germaniae
+		}
+		effect = {
+			add_prestige = 25
+			add_devotion = 25
+			add_stability = 1
+		}
+	}
+	
+	wbg_legatus_natus = {
+		icon = mission_hands_praying
+		required_missions = { wbg_primas_germaniae }
+		position = 5
+		trigger = {
+			has_country_modifier = legatus_natus
+		}
+		effect = {
+			add_papal_influence = 50
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}

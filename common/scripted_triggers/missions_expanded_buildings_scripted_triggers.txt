@@ -1,0 +1,667 @@
+# Buildings scripted triggers
+## province scope
+province_has_building_of_group = {
+	#	"group" that can be checked:
+	#		building groups (trade, government, navy, production, army, taxation, defense, all) -- all does NOT include manufactories
+	#
+	#	use "all" to check if the province has any of the group's/sub group's buildings
+	#	use "equal_or_more_advanced_than" to check if the province has that or a building replacing that building
+	#
+	#	examples of usage:
+	#		province_has_building_of_group = { group = trade all = yes }
+	#		province_has_building_of_group = { group = trade equal_or_more_advanced_than = trade_depot }
+	#		province_has_building_of_group = { group = government all = yes }
+	#		province_has_building_of_group = { group = government equal_or_more_advanced_than = townhall }
+	#		province_has_building_of_group = { group = all all = yes }
+	#	when using "group = all", you have to use "all = yes", "equal_or_more_advanced_than" is not accepted here
+	#
+	#	it's highly advised to use this trigger inside of a custom_trigger_tooltip section
+	#	already localised tooltips are:
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_marketplace
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_trade_depot
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_stock_exchange
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_EOMAT_courthouse
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_EOMAT_town_hall
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_drydock
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_grand_shipyard
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_workshop
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_counting_house
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_barracks
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_training_fields
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_regimental_camp
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_conscription_center
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_temple
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_15th
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_16th
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_17th
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_18th
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_marketplace
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_trade_depot
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_stock_exchange
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_EOMAT_courthouse
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_EOMAT_town_hall
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_drydock
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_grand_shipyard
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_workshop
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_counting_house
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_barracks
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_training_fields
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_regimental_camp
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_conscription_center
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_temple
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_15th
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_16th
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_17th
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_EOMAT_fort_18th
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+
+	if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_trade_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_marketplace = 1 }
+					}
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_trade_depot = 1 }
+					}
+				}
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			else = {
+				has_building = stock_exchange
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_government_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+					has_building = university
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_courthouse = 1 }
+					}
+				}
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_town_hall = 1 }
+					}
+				}
+				has_building = town_hall
+			}
+			else = {
+				has_building = university
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_navy_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = dock
+					has_building = drydock
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_dock = 1 }
+					}
+				}
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_drydock = 1 }
+					}
+				}
+				has_building = drydock
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_shipyard = 1 }
+					}
+				}
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+			else = {
+				has_building = grand_shipyard
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_production_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_workshop = 1 }
+					}
+				}
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+			else = {
+				has_building = counting_house
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_army_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_barracks = 1 }
+					}
+				}
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_training_fields = 1 }
+					}
+				}
+				has_building = training_fields
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_regimental_camp = 1 }
+					}
+				}
+				OR = {
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
+			}
+			else = {
+				has_building = conscription_center
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_taxation_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_temple = 1 }
+					}
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			else = {
+				has_building = cathedral
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_defense_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_fort_15th = 1 }
+					}
+				}
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_fort_16th = 1 }
+					}
+				}
+				OR = {
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			else_if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = equal_or_more_advanced_than_$equal_or_more_advanced_than$
+							value = 1
+						}
+						check_variable = { equal_or_more_advanced_than_fort_17th = 1 }
+					}
+				}
+				OR = {
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			else = {
+				has_building = fort_18th
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_all_buildings = 1 }
+			}
+		}
+		[[equal_or_more_advanced_than]
+			# no checks here
+		]
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+					has_building = courthouse
+					has_building = town_hall
+					has_building = university
+					has_building = dock
+					has_building = drydock
+					has_building = shipyard
+					has_building = grand_shipyard
+					has_building = workshop
+					has_building = counting_house
+					has_building = barracks
+					has_building = training_fields
+					has_building = regimental_camp
+					has_building = conscription_center
+					has_building = temple
+					has_building = cathedral
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			else = {
+				always = yes
+			}
+		]
+	}
+	else = {
+		always = yes
+	}
+}
+
+province_has_at_least_num_of_buildings = {
+	# takes "amount" as argument, e.g. province_has_at_least_num_of_buildings = { amount = 3 }
+	# you can use this trigger with custom_trigger_tooltip if necessary, HAS_AT_LEAST_<0-10>_BUILDINGS are localized
+	calc_true_if = {
+		has_building = marketplace
+		has_building = trade_depot
+		has_building = stock_exchange
+		has_building = courthouse
+		has_building = town_hall
+		has_building = university
+		has_building = dock
+		has_building = drydock
+		has_building = shipyard
+		has_building = grand_shipyard
+		has_building = workshop
+		has_building = counting_house
+		has_building = barracks
+		has_building = training_fields
+		has_building = regimental_camp
+		has_building = conscription_center
+		has_building = temple
+		has_building = cathedral
+		has_building = fort_15th
+		has_building = fort_16th
+		has_building = fort_17th
+		has_building = fort_18th
+		amount = $amount$
+	}
+}
+
+## country scope
+# they check for <amount> of a specific building, not <amount> of buildings of the group
+num_of_owned_trade_building_trigger = {
+	OR = {
+		marketplace = $amount$
+		trade_depot = $amount$
+		stock_exchange = $amount$
+	}
+}
+
+num_of_owned_government_building_trigger = {
+	OR = {
+		courthouse = $amount$
+		town_hall = $amount$
+		university = $amount$
+	}
+}
+
+num_of_owned_navy_building_trigger = {
+	OR = {
+		dock = $amount$
+		drydock = $amount$
+		shipyard = $amount$
+		grand_shipyard = $amount$
+	}
+}
+
+num_of_owned_production_building_trigger = {
+	OR = {
+		workshop = $amount$
+		counting_house = $amount$
+	}
+}
+
+num_of_owned_army_building_trigger = {
+	OR = {
+		barracks = $amount$
+		training_fields = $amount$
+		regimental_camp = $amount$
+		conscription_center = $amount$
+	}
+}
+
+num_of_owned_taxation_building_trigger = {
+	OR = {
+		temple = $amount$
+		cathedral = $amount$
+	}
+}
+
+num_of_owned_defence_building_trigger = {
+	OR = {
+		fort_15th = $amount$
+		fort_16th = $amount$
+		fort_17th = $amount$
+		fort_18th = $amount$
+	}
+}
+
+num_of_owned_manufactory_trigger = {
+	OR = {
+		wharf = $amount$
+		weapons = $amount$
+		textile = $amount$
+		tradecompany = $amount$
+		farm_estate = $amount$
+		mills = $amount$
+		plantations = $amount$
+		furnace = $amount$
+	}
+}
+
+num_of_owned_manufactory_combined_trigger = {
+	calc_true_if = {
+		all_owned_province = {
+			OR = {
+				has_building = wharf
+				has_building = weapons
+				has_building = textile
+				has_building = tradecompany
+				has_building = farm_estate
+				has_building = mills
+				has_building = plantations
+				has_building = furnace
+			}
+		}
+		amount = $amount$
+	}
+}

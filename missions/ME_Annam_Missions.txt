@@ -1,0 +1,349 @@
+annam_missions_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ANN
+	}
+	has_country_shield = yes
+	
+	ANN_become_free = {
+		icon = mission_build_up_to_force_limit
+		position = 1
+		required_missions = { }
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = ANN_free_now
+				duration = 7300
+			}	
+		}
+	}
+	
+	ANN_the_remainder_of_tonkin = {
+		icon = mission_great_wall
+		position = 2
+		required_missions = { ANN_become_free }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 610
+				province_id = 1016
+			}
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = {
+			owns_core_province = 610
+			owns_core_province = 1016
+		}
+		effect = {
+			add_country_modifier = {
+				name = ANN_conquered_tonkin
+				duration = 7300
+			}	
+		}
+	}
+	
+	ANN_seize_the_capital = {
+		icon = mission_monarch_in_throne_room
+		position = 3
+		required_missions = { ANN_the_remainder_of_tonkin}
+		provinces_to_highlight = {
+			province_id = 613
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = {
+			owns_core_province = 613
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 50
+			add_mil_power = 150
+		}
+	}
+	
+	ANN_vietnam_leftovers = {
+		icon = mission_japanese_fort
+		position = 4
+		required_missions = { ANN_seize_the_capital }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 2371
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				AND = {
+					area = red_river_delta_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+            }
+		}
+		
+		trigger = {
+			NOT = { exists = DAI }
+			red_river_delta_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			owns_core_province = 2371
+		}
+		effect = {
+			add_country_modifier = {
+				name = ANN_ended_our_overlords
+				duration = 14600
+			}
+		}
+	}
+}
+
+annam_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ANN
+	}
+	has_country_shield = yes
+	
+	ANN_vassalize_vietnam = {
+		icon = mission_have_two_subjects
+		position = 4
+		required_missions = { ANN_seize_the_capital }
+		trigger = {
+			OR = {
+				NOT = { exists = DAI }
+				overlord_of = DAI
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_army_tradition = 15
+		}
+	}
+	
+	ANN_integrate_daiviet = {
+		icon = mission_alliances
+		position = 5
+		required_missions = { ANN_vassalize_vietnam }
+		trigger = {
+			diplomatic_reputation = 3
+			stability = 1
+			OR = {
+				overlord_of = DAI
+				has_opinion = {
+					who = DAI
+					value = 190
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = loyal_subjects
+				duration = 3650
+			}
+		}
+	}
+}	
+
+annam_missions_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ANN
+	}
+	has_country_shield = yes
+	
+	ANN_build_trade_buildings = {
+		icon = mission_early_game_buildings
+		position = 1
+		required_missions = { }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = ANN_trade_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	ANN_build_production_buildings = {
+		icon = mission_early_game_buildings
+		position = 2
+		required_missions = { ANN_build_trade_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = ANN_production_buildings
+				duration = 7300
+			}
+		}
+	}
+}
+
+annam_missions_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ANN
+	}
+	has_country_shield = yes
+	
+	ANN_build_naval_buildings = {
+		icon = mission_early_game_buildings
+		position = 1
+		required_missions = { }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = dock
+						has_building = drydock
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_yearly_sailors = 3
+			add_country_modifier = {
+				name = ANN_naval_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	ANN_build_government_buildings = {
+		icon = mission_early_game_buildings
+		position = 2
+		required_missions = { ANN_build_naval_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+						has_building = university
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_country_modifier = {
+				name = ANN_government_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	ANN_build_army_buildings = {
+		icon = mission_early_game_buildings
+		position = 3
+		required_missions = { ANN_build_government_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = ANN_army_buildings
+				duration = 7300
+			}
+		}
+	}
+}
+
+annam_missions_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ANN
+	}
+	has_country_shield = yes
+
+	ANN_rekindle_fires = {
+		icon = me_mission_annam_rekindle_fires
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 100
+				province_id = 610
+				province_id = 613
+				province_id = 616
+				province_id = 2371
+				province_id = 2372
+				province_id = 2373
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			stability = 2
+			legitimacy_equivalent = 100
+			owns_core_province = 610
+			owns_core_province = 1016
+			owns_core_province = 613
+			owns_core_province = 616
+			owns_core_province = 2371
+			owns_core_province = 2372
+			owns_core_province = 2373
+		}
+		effect = {
+			country_event = { id = ME_Annam_Events.1 }
+		}
+	}
+}

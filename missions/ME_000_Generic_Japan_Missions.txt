@@ -1,0 +1,738 @@
+generic_japan_me_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_bushido_code = { # Bushido Code
+		icon = mission_japanese_samurai
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_tradition = 35
+		}
+		effect = {
+			add_country_modifier = {
+				name = "strengthened_bushido"
+				duration = 9125
+			}
+		}
+	}
+
+	JAP_ashigaru_drafting = { # Improve Ashigaru Drafting
+		icon = mission_assemble_an_army
+		required_missions = { JAP_bushido_code JAP_expand_samurai_ranks }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				base_manpower = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_ashigarus
+				duration = 5475
+			}
+		}
+	}
+
+	JAP_mobilize_the_clan = { # Mobilize the Clan
+		icon = mission_japanese_samurai
+		required_missions = { }
+		position = 3
+		trigger = {
+			is_at_war = yes
+		}
+		effect = {
+			custom_tooltip = JAP_tooltip.1
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	JAP_stronger_than_many = { # Stronger than many Daimyos
+		icon = mission_assemble_an_army
+		required_missions = { JAP_mobilize_the_clan }
+		position = 4
+		trigger = {
+			all_country = {
+				OR = {
+					capital_scope = {
+						NOT = { region = japan_region }
+					}
+					tag = ASK
+					tag = RYU
+					tag = AIN
+					NOT = { army_size = ROOT }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_rise_of_a_new_clan
+				duration = 7300
+			}
+		}
+	}
+
+	JAP_a_new_shogunate = { # A New Shogunate
+		icon = mission_have_two_subjects
+		required_missions = { JAP_stronger_than_many JAP_expand_the_clan }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				has_reform = shogunate
+				1020 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					num_of_subjects = 1
+				}
+				every_subject_country = {
+					add_liberty_desire = -20
+				}
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 10 }
+			}
+		}
+	}
+}
+
+generic_japan_me_1_MoH = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		has_dlc = "Mandate of Heaven"
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	JAP_make_an_example = { # Make an Example
+		icon = econ_missions_icon
+		required_missions = { JAP_defeat_the_ikko_ikki }
+		position = 7
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 1
+		}
+		trigger = {
+			is_incident_happened = incident_ikko_shu
+			all_owned_province = {
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_years_of_income = 0.6
+			add_country_modifier = {
+				name = JAP_seized_ikko_wealth
+				duration = 7300
+			}
+		}
+	}
+}
+
+generic_japan_me_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_development_of_the_castle_town = { # Development of Castle Towns
+		icon = mission_asian_city
+		required_missions = { JAP_expand_samurai_ranks }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 2
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				OR = {
+					has_building = marketplace
+					has_building = stock_exchange
+					has_building = trade_depot
+				}
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				#May trigger the Urbanization incident at any time (to be implemented)
+				set_country_flag = ME_Urbanization
+				custom_tooltip = JAP_tooltip.2
+			}
+		}
+	}
+
+	JAP_expand_the_clan = { # Expand the Clan
+		icon = mission_japanese_fort
+		required_missions = { JAP_mobilize_the_clan }
+		position = 4
+		trigger = {
+			grown_by_states = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_sengoku_contender
+				duration = 7300
+			}
+		}
+	}
+}
+generic_japan_me_2_MoH = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		has_dlc = "Mandate of Heaven"
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	JAP_defeat_the_ikko_ikki = { # Defeat the Ikko Ikki
+		icon = quan_missions_icon
+		required_missions = { JAP_ikko_ikki }
+		position = 6
+		trigger = {
+			num_of_cities = 3
+			custom_trigger_tooltip = {
+				tooltip = ME_HAS_BEEN_RESTRICTIVE_TO_IKKO
+				has_country_flag = JAP_allow_ikki_missions_3
+			}
+		}
+		effect = {
+			random_owned_province = {
+				add_province_modifier = {
+					name = JAP_stronghold_against_ikko
+					duration = -1
+				}
+			}
+			random_owned_province = {
+				add_province_modifier = {
+					name = JAP_stronghold_against_ikko
+					duration = -1
+				}
+			}
+		}
+	}
+
+	JAP_traditional_samurai_armies = { # Traditional Samurai Armies
+		icon = mission_japanese_samurai
+		required_missions = { JAP_defeat_the_ikko_ikki }
+		position = 7
+		trigger = {
+			army_tradition = 70
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_no_more_budhists_in_our_ranks
+				duration = 10950
+			}
+		}
+	}
+}
+
+generic_japan_me_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_expand_samurai_ranks = { # Expand Samurai Ranks
+		icon = mission_japanese_samurai
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 0.8
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_faithful_samurai
+				duration = 7300
+			}
+		}
+	}
+
+	JAP_tanageshima = { # Tanageshima
+		icon = mission_cannons_firing
+		required_missions = { JAP_the_wealth JAP_ashigaru_drafting }
+		position = 3
+		trigger = {
+			num_of_infantry = 20
+			num_of_artillery = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_future_of_warfare
+				duration = 9125
+			}
+			random_owned_province = {
+				add_province_modifier = {
+					name = JAP_skilled_weapon_manufacturer
+					duration = 10950
+				}
+			}
+		}
+	}
+
+	JAP_the_japanese_peasantry = { # The Japanese Peasantry
+		icon = mission_high_income
+		required_missions = { JAP_bunkoko }
+		position = 4
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = JAP_balance_the_four_divisions_tt
+				OR = {
+					AND = {
+						OR = {
+							NOT = { has_estate = estate_burghers }
+							estate_loyalty = {
+								estate = estate_burghers
+								loyalty = 70
+							}
+						}
+						OR = {
+							NOT = { has_estate = estate_church }
+							estate_loyalty = {
+								estate = estate_church
+								loyalty = 70
+							}
+						}
+					}
+					AND = {
+						OR = {
+							NOT = { has_estate = estate_burghers }
+							estate_loyalty = {
+								estate = estate_burghers
+								loyalty = 70
+							}
+						}
+						OR = {
+							NOT = { has_estate = estate_nobles }
+							estate_loyalty = {
+								estate = estate_nobles
+								loyalty = 70
+							}
+						}
+					}
+					AND = {
+						OR = {
+							NOT = { has_estate = estate_church }
+							estate_loyalty = {
+								estate = estate_church
+								loyalty = 70
+							}
+						}
+						OR = {
+							NOT = { has_estate = estate_nobles }
+							estate_loyalty = {
+								estate = estate_nobles
+								loyalty = 70
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { stability = 3 }
+				}
+				add_stability = 1
+			}
+			else = {
+				add_adm_power = 100
+			}
+		}
+	}
+}
+
+generic_japan_me_3_MoH = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		has_dlc = "Mandate of Heaven"
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_ikko_ikki = { # The Ikko Ikki
+		icon = mission_rice_field
+		required_missions = { }
+		position = 5
+		trigger = {
+			is_incident_active = incident_ikko_shu
+		}
+		effect = {
+			add_mil_power = 50
+			custom_tooltip = ME_REWARD_WILL_DEPEND_ON_YOUR_CHOICE
+		}
+	}
+}
+
+generic_japan_me_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_Nanikata_system = { #Nanikata System
+		icon = mission_rice_field
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { num_of_times_improved = 3 }
+		}
+		trigger = {
+			treasury = 150
+			num_of_owned_provinces_with = {
+				value = 3
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_developing_own_nanikata_system
+				duration = 9125
+			}
+		}
+	}
+
+	JAP_the_wealth = { # The Wealth of the Isle
+		icon = mission_market_place_with_asian_traders
+		required_missions = { JAP_nanban_trade  JAP_Nanikata_system }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				development = 15
+			}
+		}
+		effect = {
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						development = 15
+						NOT = { has_province_modifier = JAP_wealth_of_the_isle }
+					}
+					add_province_modifier = {
+						name = JAP_wealth_of_the_isle
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						development = 15
+						NOT = { has_province_modifier = JAP_wealth_of_the_isle }
+					}
+					add_province_modifier = {
+						name = JAP_wealth_of_the_isle
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						development = 15
+						NOT = { has_province_modifier = JAP_wealth_of_the_isle }
+					}
+					add_province_modifier = {
+						name = JAP_wealth_of_the_isle
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = JAP_tooltip.4
+		}
+	}
+
+	JAP_bunkoko = { # Bunkoko-ho
+		icon = admin_missions_icon
+		required_missions = { }
+		position = 3
+		trigger = {
+			OR = {
+				is_subject = no
+				liberty_desire = 50
+			}
+		}
+		effect = {
+			country_event = { id = ME_Daimyo_Events.15 } #to be done later
+		}
+	}
+
+	JAP_tend_the_rice_fields = { # Tend the Rice Fields
+		icon = mission_rice_field
+		required_missions = { JAP_bunkoko }
+		position = 4
+		trigger = {
+			stability = 2
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				any_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 2
+			add_years_of_income = 1
+		}
+	}
+}
+
+generic_japan_me_4_MoH = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		has_dlc = "Mandate of Heaven"
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	JAP_alliance_with_ikko_ikki = { # Alliance with Ikko Ikki
+		icon = mission_alliances
+		required_missions = { JAP_ikko_ikki }
+		position = 6
+		trigger = {
+			num_of_cities = 3
+			custom_trigger_tooltip = {
+				tooltip = ME_HAS_BEEN_PEACEFUL_TO_IKKO
+				OR = {
+					has_country_flag = JAP_allow_ikki_missions_1
+					has_country_flag = JAP_allow_ikki_missions_2
+				}
+			}
+		}
+		effect = {
+			random_owned_province = {
+				add_country_modifier = {
+					name = JAP_ikko_province
+					duration = -1
+				}
+				add_country_modifier = {
+					name = JAP_budhhist_influence
+					duration = -1
+				}
+			}
+			random_owned_province = {
+				add_country_modifier = {
+					name = JAP_budhhist_influence
+					duration = -1
+				}
+			}
+			random_owned_province = {
+				add_country_modifier = {
+					name = JAP_budhhist_influence
+					duration = -1
+				}
+			}
+		}
+	}
+
+	JAP_integrate = { # Integrate the War Monks
+		icon = qual_missions_icon
+		required_missions = { JAP_alliance_with_ikko_ikki}
+		position = 7
+		trigger = {
+			any_owned_province = {
+				has_province_modifier = JAP_ikko_province
+				num_of_times_improved = 4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_warrior_monks
+				duration = 7300
+			}
+		}
+	}
+}
+
+generic_japan_me_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	JAP_nanban_trade = { # The Nanban Trade
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = JAP_tooltip.3
+				has_country_flag = end_of_nanban_chain
+			}
+			any_known_country = {
+				capital_scope = {
+					continent = europe
+				}
+				has_opinion = {
+					who = ROOT
+					value = 75
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_nanban_trade
+				duration = 9125
+			}
+		}
+	}
+
+	JAP_european_support = { # European Support
+		icon = mission_alliances
+		required_missions = { JAP_nanban_trade }
+		position = 2
+		trigger = {
+			calc_true_if = {
+				all_country = {
+					capital_scope = {
+						continent = europe
+					}
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			add_yearly_manpower = 0.8
+		}
+	}
+
+	JAP_loyal_clan = { # Loyal Clan Provinces
+		icon = mission_asian_cannon
+		required_missions = { JAP_bunkoko }
+		position = 4
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				NOT = { local_autonomy_above_min = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_organized_clan
+				duration = 9125
+			}
+		}
+	}
+}
+
+generic_japan_me_5_MoH = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		has_dlc = "Mandate of Heaven"
+		country_gets_japanese_generic_missions = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	JAP_buddhist_traditions = { # Budhist Traditions
+		icon = mission_buddhist_monk_praying
+		required_missions = { JAP_alliance_with_ikko_ikki }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				has_province_modifier = JAP_budhhist_influence
+				development = 13
+			}
+		}
+		effect = {
+			country_event = { id = ME_Daimyo_Events.7 } #to be done later
+		}
+	}
+}

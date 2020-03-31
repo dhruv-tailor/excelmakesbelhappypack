@@ -1,0 +1,361 @@
+namespace = ME_Ashikaga_Events
+
+country_event = { #Daimyo Contribution
+	id = ME_Ashikaga_Events.1
+	title = ME_Ashikaga_Events.1.t
+	desc = ME_Ashikaga_Events.1.d
+	picture = DAIMYO_CONTRIBUTION_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = ASK
+		has_reform = shogunate
+		is_at_war = no
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = JAP_daimyo_contribution_flag
+		}
+	}
+
+	option = { #Contribution in coin
+		name = ME_Ashikaga_Events.1.a
+
+		custom_tooltip = ASK_DAIMYOS_PAY_5_DUCATS
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					is_subject_of_type = daimyo_vassal
+				}
+				add_treasury = -5
+				ROOT = {
+					add_treasury = 5
+				}
+			}
+		}
+	}
+
+	option = { #People
+		name = ME_Ashikaga_Events.1.b
+
+		capital_scope = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+			add_province_modifier = {
+				name = ASK_influx_of_serfs
+				duration = 1825
+			}
+		}
+		custom_tooltip = ASK_DAIMYOS_LOSE_RANDOM_CAPITAL_DEV
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					is_subject_of_type = daimyo_vassal
+				}
+				capital_scope = {
+					random_list = {
+						33 = { add_base_manpower = -1 }
+						33 = { add_base_production = -1 }
+						33 = { add_base_tax = -1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Daijo Tenno
+	id = ME_Ashikaga_Events.2
+	title = ME_Ashikaga_Events.2.t
+	desc = ME_Ashikaga_Events.2.d
+	picture = DAIJO_TENNO_eventPicture
+	
+	fire_only_once = yes
+
+	trigger = {
+		tag = ASK
+		has_heir = no
+		NOT = { has_ruler_flag = ASK_no_more_event }
+		# ruler_age = 50
+		# NOT = { ADM = 4 }
+		# NOT = { DIP = 4 }
+		# NOT = { MIL = 4 }
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = { #Throne thief
+		name = ME_Ashikaga_Events.2.a
+		define_ruler = {
+			dynasty = ROOT
+			culture = ROOT
+			religion = ROOT
+			male = yes
+			adm = 2
+			dip = 2
+			mil = 2
+			claim = 50
+			age = 15
+		}
+		add_country_modifier = {
+			name = ASK_disputed_shogun
+			duration = 7300
+		}
+	}
+
+	option = { #ThRoNe Is MiNe
+		name = ME_Ashikaga_Events.2.b
+
+		add_legitimacy = 10
+		add_prestige = 5
+		set_ruler_flag = ASK_no_more_event
+	}
+}
+
+country_event = { #Okinawa offer
+	id = ME_Ashikaga_Events.3
+	title = ME_Ashikaga_Events.3.t
+	desc = ME_Ashikaga_Events.3.d
+	picture = PRAYING_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = ASK
+		treasury = 150
+		has_reform = shogunate
+		exists = RYU
+		RYU = {
+			capital = 1015
+			NOT = { num_of_cities = 2 }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = { #sure
+		name = ME_Ashikaga_Events.3.a
+
+		custom_tooltip = ASK_OFFER_TO_RYUKYU
+		hidden_effect = {
+			RYU = {
+				country_event = { id = ME_Ashikaga_Events.4 }
+			}
+		}
+	}
+
+	option = { #nah
+		name = ME_Ashikaga_Events.3.b
+
+		add_prestige = -5
+	}
+}
+
+country_event = { #Okinawa offer - Ryukyu side
+	id = ME_Ashikaga_Events.4
+	title = ME_Ashikaga_Events.4.t
+	desc = ME_Ashikaga_Events.4.d
+	picture = PRAYING_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #sure
+		name = ME_Ashikaga_Events.4.a
+		
+		add_treasury = 150
+		add_government_reform = daimyo
+		FROM = {
+			add_treasury = -150
+			create_subject = {
+				subject_type = daimyo_vassal
+				subject = ROOT
+			}
+		}
+		change_religion = shinto
+		capital_scope = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+			change_religion = shinto
+		}
+	}
+	
+	option = { #nah
+		name = ME_Ashikaga_Events.4.b
+		
+		add_prestige = 10
+		add_legitimacy = 10
+	}
+}
+
+country_event = { #Tosenbugyo
+	id = ME_Ashikaga_Events.5
+	title = ME_Ashikaga_Events.5.t
+	desc = ME_Ashikaga_Events.5.d
+	picture = TOSENBUGYO_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_subject_country = {
+				limit = {
+					NOT = { tag = event_target:ashikaga_target_1 }
+					NOT = { tag = event_target:ashikaga_target_2 }
+					NOT = { tag = event_target:ashikaga_target_3 }
+					NOT = {
+						any_country = {
+							is_subject_of = ROOT
+							total_development = PREV
+							NOT = { tag = event_target:ashikaga_target_1 }
+							NOT = { tag = event_target:ashikaga_target_2 }
+							NOT = { tag = event_target:ashikaga_target_3 }
+						}
+					}
+				}
+				save_event_target_as = ashikaga_target_1
+			}
+			random_subject_country = {
+				limit = {
+					NOT = { tag = event_target:ashikaga_target_1 }
+					NOT = { tag = event_target:ashikaga_target_2 }
+					NOT = { tag = event_target:ashikaga_target_3 }
+					NOT = {
+						any_country = {
+							is_subject_of = ROOT
+							total_development = PREV
+							NOT = { tag = event_target:ashikaga_target_1 }
+							NOT = { tag = event_target:ashikaga_target_2 }
+							NOT = { tag = event_target:ashikaga_target_3 }
+						}
+					}
+				}
+				save_event_target_as = ashikaga_target_2
+			}
+			random_subject_country = {
+				limit = {
+					NOT = { tag = event_target:ashikaga_target_1 }
+					NOT = { tag = event_target:ashikaga_target_2 }
+					NOT = { tag = event_target:ashikaga_target_3 }
+					NOT = {
+						any_country = {
+							is_subject_of = ROOT
+							total_development = PREV
+							NOT = { tag = event_target:ashikaga_target_1 }
+							NOT = { tag = event_target:ashikaga_target_2 }
+							NOT = { tag = event_target:ashikaga_target_3 }
+						}
+					}
+				}
+				save_event_target_as = ashikaga_target_3
+			}
+		}
+    }
+	
+	option = { #target 1
+		name = ME_Ashikaga_Events.5.a
+		
+		event_target:ashikaga_target_1 = {
+			add_ruler_modifier = {
+				name = ASK_tosenbugyo
+				duration = -1
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = ASK_tosenbugyo
+			}
+			add_liberty_desire = -25
+		}
+	}
+	
+	option = { #target 2
+		name = ME_Ashikaga_Events.5.b
+		
+		trigger = {
+			event_target:ashikaga_target_2 = {
+				exists = yes
+			}
+		}
+		
+		event_target:ashikaga_target_2 = {
+			add_ruler_modifier = {
+				name = ASK_tosenbugyo
+				duration = -1
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = ASK_tosenbugyo
+			}
+			add_liberty_desire = -25
+		}
+	}
+	
+	option = { #target 3
+		name = ME_Ashikaga_Events.5.c
+		
+		trigger = {
+			event_target:ashikaga_target_3 = {
+				exists = yes
+			}
+		}
+		
+		event_target:ashikaga_target_3 = {
+			add_ruler_modifier = {
+				name = ASK_tosenbugyo
+				duration = -1
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = ASK_tosenbugyo
+			}
+			add_liberty_desire = -25
+		}
+	}
+}
+
+country_event = { #Shogun Enforced Peace
+	id = ME_Ashikaga_Events.6
+	title = ME_Ashikaga_Events.6.t
+	desc = ME_Ashikaga_Events.6.d
+	picture = PRAYING_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #we shall sign the agreement
+		name = ME_Ashikaga_Events.6.a
+		
+		add_stability = 1
+		add_legitimacy = -10
+		add_army_tradition = -10
+		add_country_modifier = {
+			name = ASK_signed_the_kyoto_agreement
+			duration = 9125
+		}
+	}
+	
+	option = { #nah
+		name = ME_Ashikaga_Events.6.b
+		
+		add_stability = -3
+		FROM = {
+			every_subject_country = {
+				add_opinion = {
+					who = ROOT
+					modifier = ASK_Refused
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,659 @@
+namespace = ME_Persia_Events
+
+country_event = {
+	id = ME_Persia_Events.1
+	title = ME_Persia_Events.EVTNAME1
+	desc = ME_Persia_Events.EVTDESC1
+	picture = CITY_DEVELOPMENT_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events1.EVTOPT1
+		
+		trigger = {
+			owns = 416
+			416 = {
+				development = 30
+			}
+		}
+		
+		ai_chance = { factor = 0.33 }
+		
+		set_capital = 416
+		416 = {
+			add_base_tax = 3
+			add_base_production = 2
+			add_base_manpower = 2
+			add_province_modifier = {
+				name = persia_tabriz_capital_modifier
+				duration = -1
+				desc = UNTIL_NOT_PERSIAN_CAPITAL_ANYMORE
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events1.EVTOPT2
+		
+		trigger = {
+			owns = 410
+			410 = {
+				development = 30
+			}
+		}
+		
+		ai_chance = { factor = 0.33 }
+		
+		set_capital = 410
+		410 = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+			add_province_modifier = {
+				name = persia_baghdad_capital_modifier
+				duration = -1
+				desc = UNTIL_NOT_PERSIAN_CAPITAL_ANYMORE
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events1.EVTOPT3
+		
+		trigger = {
+			owns = 428
+			428 = {
+				development = 30
+			}
+		}
+		
+		ai_chance = { factor = 0.33 }
+		
+		set_capital = 428
+		428 = {
+			add_base_tax = 1
+			add_base_production = 2
+			add_province_modifier = {
+				name = persia_teheran_capital_modifier
+				duration = -1
+				desc = UNTIL_NOT_PERSIAN_CAPITAL_ANYMORE
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.2
+	title = ME_Persia_Events.EVTNAME2
+	desc = ME_Persia_Events.EVTDESC2
+	picture = CITY_VIEW_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		any_owned_province = {
+			is_capital = no
+			OR = {
+				has_province_modifier = persia_tabriz_capital_modifier
+				has_province_modifier = persia_baghdad_capital_modifier
+				has_province_modifier = persia_teheran_capital_modifier
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					is_capital = no
+					OR = {
+						has_province_modifier = persia_tabriz_capital_modifier
+						has_province_modifier = persia_baghdad_capital_modifier
+						has_province_modifier = persia_teheran_capital_modifier
+					}
+				}
+				remove_province_modifier = persia_tabriz_capital_modifier
+				remove_province_modifier = persia_baghdad_capital_modifier
+				remove_province_modifier = persia_teheran_capital_modifier
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.3
+	title = ME_Persia_Events.EVTNAME3
+	desc = ME_Persia_Events.EVTDESC3
+	picture = CITY_VIEW_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		mission_completed = persia_clergy_governors
+		any_owned_province = {
+			OR = {
+				AND = {
+					has_estate = estate_church
+					NOT = { has_province_modifier = persia_clergy_governors_province_modifier }
+				}
+				AND = {
+					NOT = { has_estate = estate_church }
+					has_province_modifier = persia_clergy_governors_province_modifier
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					has_estate = estate_church
+					NOT = { has_province_modifier = persia_clergy_governors_province_modifier }
+				}
+				add_province_modifier = {
+					name = persia_clergy_governors_province_modifier
+					duration = -1
+				}
+			}
+			every_owned_province = {
+				limit = {
+					NOT = { has_estate = estate_church }
+					has_province_modifier = persia_clergy_governors_province_modifier
+				}
+				remove_province_modifier = persia_clergy_governors_province_modifier
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events3.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.4
+	title = ME_Persia_Events.EVTNAME4
+	desc = ME_Persia_Events.EVTDESC4
+	picture = LIBERUM_VETO_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events4.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				NOT = { num_of_free_diplomatic_relations = 1 }
+			}
+		}
+		
+		kartli_kakheti_area = {
+			limit = {
+				NOT = { is_core = GEO }
+				owned_by = ROOT
+			}
+			add_core = GEO
+		}
+		samtskhe_area = {
+			limit = {
+				NOT = { is_core = GEO }
+				owned_by = ROOT
+			}
+			add_core = GEO
+		}
+		imereti_area = {
+			limit = {
+				NOT = { is_core = GEO }
+				owned_by = ROOT
+			}
+			add_core = GEO
+		}
+		release = GEO
+		GEO = {
+			change_government = monarchy
+			add_government_reform = feudalism_reform
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+				can_be_overlord = persian_satrapy
+			}
+			create_subject = {
+				subject = GEO
+				subject_type = persian_satrapy
+			}
+		}
+		else = {
+			create_march = GEO
+		}
+		custom_tooltip = PER_AS_LONG_GEO_IS_MARCH_THEY_GET_BONUSES
+		set_country_flag = persia_shahanshah_of_persia_march
+	}
+	
+	option = {
+		name = ME_Persia_Events4.EVTOPT2
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_prestige = 15
+		if = {
+			limit = {
+				any_owned_province = {
+					culture = georgian
+				}
+			}
+			every_owned_province = {
+				limit = {
+					culture = georgian
+				}
+				change_culture = ROOT
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.5
+	title = ME_Persia_Events.EVTNAME5
+	desc = ME_Persia_Events.EVTDESC5
+	picture = REVOLUTION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events5.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_years_of_income = 1.5
+		shahrizor_area = {
+			change_culture = ROOT
+		}
+		al_jazira_area = {
+			change_culture = ROOT
+		}
+		iraq_arabi_area = {
+			change_culture = ROOT
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events5.EVTOPT2
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_stability = 1
+		add_dip_power = 100
+		add_country_modifier = {
+			name = persia_fate_of_the_two_sheep_modifier
+			duration = -1
+		}
+		add_accepted_culture = al_iraqiya_arabic
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.6
+	title = ME_Persia_Events.EVTNAME6
+	desc = ME_Persia_Events.EVTDESC6
+	picture = {
+		trigger = {
+			has_dlc = "Rights of Man"
+		}
+		picture = SWORD_OF_OSMAN_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Rights of Man" }
+		}
+		picture = COUNTRY_COLLAPSE_eventPicture
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events6.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_piety = 0.25
+		add_country_modifier = {
+			name = persia_end_of_osman_modifier_1
+			duration = -1
+		}
+		add_accepted_culture = turkish
+		add_country_modifier = {
+			name = persia_end_of_osman_modifier_2
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events6.EVTOPT2
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_piety = -0.25
+		add_years_of_income = 0.5
+		add_country_modifier = {
+			name = persia_end_of_osman_modifier_3
+			duration = 1825
+		}
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.7
+	title = ME_Persia_Events.EVTNAME7
+	desc = ME_Persia_Events.EVTDESC7
+	picture = REFORM_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events7.EVTOPT1
+		
+		ai_chance = { factor = 0.5 }
+		
+		custom_tooltip = PER_UNLOCK_MISSION_MASTERS_OF_THE_HORSE
+		hidden_effect = {
+			set_country_flag = per_unlock_mission_masters_of_the_horse
+			swap_non_generic_missions = yes
+		}
+		add_country_modifier = {
+			name = persia_persian_military_reforms_modifier_1
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events7.EVTOPT2
+		
+		ai_chance = { factor = 0.5 }
+		
+		custom_tooltip = PER_UNLOCK_MISSION_MODERNIZE_THE_QIZILBASH
+		hidden_effect = {
+			set_country_flag = per_unlock_mission_modernize_the_qizilbash
+			swap_non_generic_missions = yes
+		}
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			add_country_modifier = {
+				name = persia_persian_military_reforms_modifier_2
+				duration = -1
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = persia_persian_military_reforms_modifier_3
+				duration = -1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.8
+	title = ME_Persia_Events.EVTNAME8
+	desc = ME_Persia_Events.EVTDESC8
+	picture = HORDE_ON_HORSEBACK_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events8.EVTOPT1
+		
+		ai_chance = { factor = 0 }
+		
+		change_government = tribal
+		add_government_reform = tribal_federation
+		if = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			add_country_modifier = {
+				name = persia_a_modern_horse_modifier_1
+				duration = -1
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = persia_a_modern_horse_modifier_3
+				duration = -1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events8.EVTOPT2
+		
+		ai_chance = { factor = 100 }
+		
+		add_country_modifier = {
+			name = persia_a_modern_horse_modifier_2
+			duration = -1
+		}
+	}
+}
+
+province_event = {
+	id = ME_Persia_Events.9
+	title = ME_Persia_Events.EVTNAME9
+	desc = ME_Persia_Events.EVTDESC9
+	picture = CITY_VIEW_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		OR = {
+			province_id = 4341
+			province_id = 410
+			province_id = 454
+		}
+		OR = {
+			NOT = { has_province_modifier = persia_a_road_made_of_silk_province_modifier }
+			NOT = { trade_goods = silk }
+		}
+		owner = {
+			mission_completed = persia_a_road_made_of_silk
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			change_trade_goods = silk
+			add_province_modifier = {
+				name = persia_a_road_made_of_silk_province_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events9.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.10
+	title = ME_Persia_Events.EVTNAME10
+	desc = ME_Persia_Events.EVTDESC10
+	picture = HARBOUR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Persia_Events10.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.5
+			
+			modifier = {
+				factor = 0
+				NOT = { num_of_free_diplomatic_relations = 1 }
+			}
+		}
+		
+		pirate_coast_area = {
+			limit = {
+				NOT = { is_core = ORM }
+				owned_by = ROOT
+			}
+			add_core = ORM
+		}
+		mogostan_area = {
+			limit = {
+				NOT = { is_core = ORM }
+				owned_by = ROOT
+			}
+			add_core = ORM
+		}
+		mascat_area = {
+			limit = {
+				NOT = { is_core = ORM }
+				owned_by = ROOT
+			}
+			add_core = ORM
+		}
+		oman_area = {
+			limit = {
+				NOT = { is_core = ORM }
+				owned_by = ROOT
+			}
+			add_core = ORM
+		}
+		release = ORM
+		ORM = {
+			change_government = monarchy
+			add_government_reform = feudalism_reform
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+				can_be_overlord = persian_satrapy
+			}
+			create_subject = {
+				subject = ORM
+				subject_type = persian_satrapy
+			}
+		}
+		else = {
+			vassalize = ORM
+		}
+		custom_tooltip = PER_AS_LONG_GEO_IS_VASSAL_THEY_GET_BONUSES
+		set_country_flag = persia_kingdom_of_hormuz_vassal
+		hidden_effect = {
+			4346 = {
+				add_trade_modifier = {
+					who = ROOT
+					key = persia_kingdom_of_hormuz_trade_modifier
+					power = 30
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events10.EVTOPT2
+		
+		ai_chance = { factor = 0.5 }
+		
+		pirate_coast_area = {
+			add_province_modifier = {
+				name = persia_kingdom_of_hormuz_province_modifier
+				duration = 7300
+			}
+		}
+		mogostan_area = {
+			add_province_modifier = {
+				name = persia_kingdom_of_hormuz_province_modifier
+				duration = 7300
+			}
+		}
+		mascat_area = {
+			add_province_modifier = {
+				name = persia_kingdom_of_hormuz_province_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Persia_Events.11
+	title = ME_Persia_Events.EVTNAME11
+	desc = ME_Persia_Events.EVTDESC11
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = persia_kingdom_of_hormuz_vassal
+		4346 = {
+			has_trade_modifier = {
+				who = ROOT
+				key = persia_kingdom_of_hormuz_trade_modifier
+			}
+		}
+		ORM = {
+			OR = {
+				NOT = { is_subject_of = ROOT }
+				AND = {
+					NOT = { is_subject_of_type = vassal }
+					NOT = { is_subject_of_type = persian_satrapy }
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			4346 = {
+				remove_trade_modifier = {
+					who = ROOT
+					key = persia_kingdom_of_hormuz_trade_modifier
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Persia_Events11.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}

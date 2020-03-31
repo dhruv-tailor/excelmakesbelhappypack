@@ -1,0 +1,866 @@
+namespace = ME_Daimyo_Events
+
+country_event = { #Ashikaga Succession Crisis - For Ashikaga 
+	id = ME_Daimyo_Events.1
+	title = ME_Daimyo_Events.1.t
+	desc = ME_Daimyo_Events.1.d
+	picture = DIPLOMACY_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = ASK
+		has_reform = shogunate
+		is_year = 1445
+		NOT = { is_year = 1500 }
+		exists = HSK
+		exists = YMN
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = { #Sad
+		name = ME_Daimyo_Events.1.a
+		
+		set_global_flag = JAP_crisis
+		add_legitimacy = -10
+		custom_tooltip = ME_Daimyo_Tooltips.1
+		hidden_effect = {
+			every_subject_country = {
+				limit = {
+					ai = yes
+					is_subject_of_type = daimyo_vassal
+					NOT = { tag = HSK }
+					NOT = { tag = YMN }
+				}
+				country_event = { id = ME_Daimyo_Events.2 }
+				set_variable = {
+					which = Daimyo_Support_for_HSK
+					value = 100
+				}
+				set_variable = {
+					which = Daimyo_Support_for_YMN
+					value = 100
+				}
+				if = {
+					limit = {
+						OR = {
+						 	is_rival = HSK
+							is_enemy = HSK
+						}
+					}
+					subtract_variable = {
+						which = Daimyo_Support_for_HSK
+						value = 100
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+						 	is_rival = YMN
+							is_enemy = YMN
+						}
+					}
+					subtract_variable = {
+						which = Daimyo_Support_for_YMN
+						value = 100
+					}
+				}
+				if = {
+					limit = {
+						marriage_with = HSK
+					}
+					change_variable = {
+						which = Daimyo_Support_for_HSK
+						value = 10
+					}
+				}
+				if = {
+					limit = {
+						marriage_with = YMN
+					}
+					change_variable = {
+						which = Daimyo_Support_for_YMN
+						value = 10
+					}
+				}
+				if = {
+					limit = {
+						alliance_with = HSK
+					}
+					change_variable = {
+						which = Daimyo_Support_for_HSK
+						value = 25
+					}
+				}
+				if = {
+					limit = {
+						alliance_with = YMN
+					}
+					change_variable = {
+						which = Daimyo_Support_for_YMN
+						value = 25
+					}
+				}
+				random_list = {
+					25 = {
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_HSK
+							value = 10
+						}
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_HSK
+							value = 20
+						}
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_HSK
+							value = 30
+						}
+					}
+				}
+				random_list = {
+					25 = {
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_YMN
+							value = 10
+						}
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_YMN
+							value = 20
+						}
+					}
+					25 = {
+						change_variable = {
+							which = Daimyo_Support_for_YMN
+							value = 30
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Ashikaga Succession Crisis - For Daimyos
+	id = ME_Daimyo_Events.2
+	title = ME_Daimyo_Events.1.t
+	desc = ME_Daimyo_Events.1.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #Sad
+		name = ME_Daimyo_Events.2.a
+		
+		FROM = {
+			tooltip = {
+				add_legitimacy = -10
+			}
+		}
+		custom_tooltip = ME_Daimyo_Tooltips.1
+	}
+}
+
+country_event = { #Kyoto Kanrei
+	id = ME_Daimyo_Events.3
+	title = ME_Daimyo_Events.3.t
+	desc = ME_Daimyo_Events.3.d
+	picture = DIPLOMACY_eventPicture
+	
+	trigger = {
+		has_reform = daimyo
+		OR = {
+			NOT = { has_country_flag = JAP_kyoto_kan }
+			NOT = { has_country_modifier = JAP_kyoto_kanrei }
+		}
+		capital_scope = {
+			OR = {
+				area = sanindo_area
+				area = shikoku_area
+				area = saigoku_area
+				area = kinai_area
+				area = chubu_area
+				area = hokuriku_area
+			}
+		}
+		NOT = {
+			any_country = {
+				has_reform = daimyo
+				capital_scope = {
+					OR = {
+						area = sanindo_area
+						area = shikoku_area
+						area = saigoku_area
+						area = kinai_area
+						area = chubu_area
+						area = hokuriku_area
+					}
+				}
+				army_size = ROOT
+				has_opinion = {
+					who = ASK
+					value = 0
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = { #Position Gained
+		name = ME_Daimyo_Events.3.a
+		
+		set_country_flag = JAP_kyoto_kan
+		add_country_modifier = {
+			name = JAP_kyoto_kanrei
+			duration = -1
+		}
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				OR = {
+					has_country_flag = JAP_kyoto_kan
+					has_country_modifier = JAP_kyoto_kanrei
+				}
+			}
+			country_event = { id = ME_Daimyo_Events.4 }
+		}
+	}
+}
+
+country_event = { #Loss of Kyoto Kanrei position
+	id = ME_Daimyo_Events.4
+	title = ME_Daimyo_Events.4.t
+	desc = ME_Daimyo_Events.4.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #Sad
+		name = ME_Daimyo_Events.4.a
+		
+		clr_country_flag = JAP_kyoto_kan
+		remove_country_modifier = JAP_kyoto_kanrei
+	}
+}
+
+country_event = { #Kanto Kanrei
+	id = ME_Daimyo_Events.5
+	title = ME_Daimyo_Events.5.t
+	desc = ME_Daimyo_Events.5.d
+	picture = DIPLOMACY_eventPicture
+	
+	trigger = {
+		has_reform = daimyo
+		OR = {
+			NOT = { has_country_flag = JAP_kanto_kan }
+			NOT = { has_country_modifier = JAP_kanto_kanrei }
+		}
+		capital_scope = {
+			OR = {
+				area = eastern_chubu_area
+				area = kanto_area
+				area = eastern_kanto_area
+				area = thohoku_area
+			}
+		}
+		NOT = {
+			any_country = {
+				has_reform = daimyo
+				capital_scope = {
+					OR = {
+						area = eastern_chubu_area
+						area = kanto_area
+						area = eastern_kanto_area
+						area = thohoku_area
+					}
+				}
+				army_size = ROOT
+				has_opinion = {
+					who = ASK
+					value = 0
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = { #Position Gained
+		name = ME_Daimyo_Events.5.a
+		
+		set_country_flag = JAP_kanto_kan
+		add_country_modifier = {
+			name = JAP_kanto_kanrei
+			duration = -1
+		}
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				OR = {
+					has_country_flag = JAP_kanto_kan
+					has_country_modifier = JAP_kanto_kanrei
+				}
+			}
+			country_event = { id = ME_Daimyo_Events.6 }
+		}
+	}
+}
+
+country_event = { #Loss of Kanto Kanrei position
+	id = ME_Daimyo_Events.6
+	title = ME_Daimyo_Events.6.t
+	desc = ME_Daimyo_Events.6.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #Sad
+		name = ME_Daimyo_Events.6.a
+		
+		clr_country_flag = JAP_kanto_kan
+		remove_country_modifier = JAP_kanto_kanrei
+	}
+}
+
+country_event = { #Buddhism in Japan
+	id = ME_Daimyo_Events.7
+	title = ME_Daimyo_Events.7.t
+	desc = ME_Daimyo_Events.7.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Daimyo_Events.7.a
+		
+		ai_chance = { factor = 15 }
+		
+		change_religion = vajrayana
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.7.b
+		
+		ai_chance = { factor = 85 }
+		
+		add_stability_or_adm_power = yes
+	}
+}
+
+country_event = { #Onset of the War
+	id = ME_Daimyo_Events.8
+	title = ME_Daimyo_Events.8.t
+	desc = ME_Daimyo_Events.8.d
+	picture = DIPLOMACY_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			tag = HSK
+			tag = YMN
+		}
+		had_global_flag = {
+			flag = JAP_crisis
+			days = 3650
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.8.a
+		
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = {
+				tag = HSK
+			}
+			if = {
+				limit = {
+					exists = YMN
+				}
+				add_casus_belli = {
+					target = YMN
+					type = cb_onin_war
+					months = 60
+				}
+				if = {
+					limit = {
+						ai = yes
+					}
+					declare_war_with_cb = {
+						who = YMN
+						casus_belli = cb_onin_war 
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				exists = HSK
+			}
+			add_casus_belli = {
+				target = HSK
+				type = cb_onin_war
+				months = 60
+			}
+			if = {
+				limit = {
+					ai = yes
+				}
+				declare_war_with_cb = {
+					who = HSK
+					casus_belli = cb_onin_war 
+				}
+			}
+		}
+		clr_global_flag = JAP_crisis #disable ability to influence
+		set_global_flag = JAP_crisis_over
+	}
+}
+
+country_event = { #Pick of your faction
+	id = ME_Daimyo_Events.9
+	title = ME_Daimyo_Events.9.t
+	desc = ME_Daimyo_Events.9.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes #triggered by decision
+	
+	option = { #Neutral
+		name = ME_Daimyo_Events.9.a
+		
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				OR = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_HSK_temp
+						}
+					}
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_YMN_temp
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = JAP_supporting_yamana
+			}
+			YMN = {
+				country_event = { id = ME_Daimyo_Events.10  }#FROM NO LONGER SUPPORTS US
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = JAP_supporting_hosokawa 
+			}
+			HSK = {
+				country_event = { id = ME_Daimyo_Events.10 } #FROM NO LONGER SUPPORTS US
+			}
+		}
+		clr_country_flag = JAP_supporting_yamana
+		clr_country_flag = JAP_supporting_hosokawa
+	}
+	
+	option = { #Hosokawa
+		name = ME_Daimyo_Events.9.b
+		
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_YMN_temp
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = JAP_supporting_yamana
+			}
+			YMN = {
+				country_event = { id = ME_Daimyo_Events.10  }#FROM NO LONGER SUPPORTS US
+			}
+		}
+		HSK = {
+			country_event = { id = ME_Daimyo_Events.11  }#FROM NOW SUPPORTS US
+		}
+		set_country_flag = JAP_supporting_hosokawa
+		clr_country_flag = JAP_supporting_yamana
+		custom_tooltip = JAP_BY_PROMISING
+	}
+	
+	option = { #Yamana
+		name = ME_Daimyo_Events.9.c
+		
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_YMN_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_YMN
+						}
+						export_to_variable = {
+							variable_name = Daimyo_Support_for_HSK_temp
+							value = 0
+						}
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							which = Daimyo_Support_for_HSK
+						}
+						
+						change_variable = {
+							which = Daimyo_Support_for_HSK_temp
+							value = 25
+						}
+
+						check_variable = {
+							which = Daimyo_Support_for_YMN_temp
+							which = Daimyo_Support_for_HSK_temp
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = JAP_supporting_hosokawa 
+			}
+			HSK = {
+				country_event = { id = ME_Daimyo_Events.10 }#FROM NO LONGER SUPPORTS US
+			}
+		}
+		YMN = {
+			country_event = { id = ME_Daimyo_Events.11 }#FROM NOW SUPPORTS US
+		}
+		set_country_flag = JAP_supporting_yamana
+		clr_country_flag = JAP_supporting_hosokawa
+		custom_tooltip = JAP_BY_PROMISING
+	}
+	
+	after = {
+		clr_country_flag = choosing_side_in_onin_war_support
+	}
+}
+
+country_event = { #FROM NO LONGER SUPPORTS US
+	id = ME_Daimyo_Events.10
+	title = ME_Daimyo_Events.10.t
+	desc = ME_Daimyo_Events.10.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Daimyo_Events.10.a
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = { #FROM SUPPORTS US
+	id = ME_Daimyo_Events.11
+	title = ME_Daimyo_Events.11.t
+	desc = ME_Daimyo_Events.11.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Daimyo_Events.11.a
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = { #Onset of the War
+	id = ME_Daimyo_Events.12
+	title = ME_Daimyo_Events.12.t
+	desc = ME_Daimyo_Events.12.d
+	picture = DIPLOMACY_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_in_war = {
+			attacker_leader = ROOT
+			casus_belli = cb_onin_war
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.12.a
+		
+		ai_chance = { factor = 100 }
+		
+		hidden_effect = {
+			random_country = {
+				limit = {
+					has_reform = shogunate
+				}
+				every_subject_country = {
+					limit = {
+						NOT = { tag = HSK }
+						NOT = { tag = YMN }
+					}
+					country_event = { id = ME_Daimyo_Events.13 }
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Onset of the War
+	id = ME_Daimyo_Events.13
+	title = ME_Daimyo_Events.12.t
+	desc = ME_Daimyo_Events.12.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Daimyo_Events.13.a
+		
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = {
+				has_country_flag = JAP_supporting_hosokawa
+			}
+			custom_tooltip = JAP_PAY_UP
+			hidden_effect = {
+				add_treasury = -25
+				add_manpower = -1
+				HSK = {
+					add_treasury = 25
+					add_manpower = 1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = JAP_supporting_yamana
+			}
+			custom_tooltip = JAP_PAY_UP
+			hidden_effect = {
+				add_treasury = -25
+				add_manpower = -1
+				YMN = {
+					add_treasury = 25
+					add_manpower = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Onset of the War
+	id = ME_Daimyo_Events.14
+	title = ME_Daimyo_Events.12.t
+	desc = ME_Daimyo_Events.12.d
+	picture = DIPLOMACY_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_in_war = {
+			defender_leader = ROOT
+			casus_belli = cb_onin_war
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.12.a
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = { #Bunkoko-ho aka laws of the daimyos
+	id = ME_Daimyo_Events.15
+	title = ME_Daimyo_Events.15.t
+	desc = ME_Daimyo_Events.15.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Daimyo_Events.15.a #Reform the Taxation
+		
+		ai_chance = { factor = 50 }
+		
+		add_country_modifier = {
+			name = JAP_tax
+			duration = 9125
+		}
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.15.b #elaborative drafting policy
+		
+		ai_chance = { factor = 50 }
+		
+		add_country_modifier = {
+			name = JAP_drafting
+			duration = 9125
+		}
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.15.c #Try to appease the Shogun
+		
+		ai_chance = { factor = 0 }
+		
+		add_country_modifier = {
+			name = JAP_appeasement
+			duration = 9125
+		}
+	}
+}
+
+country_event = { #hidden event for non daimyo to remove the kanrei
+	id = ME_Daimyo_Events.16
+	title = ME_Daimyo_Events.16.t
+	desc = ME_Daimyo_Events.16.d
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		NOT = { has_reform = daimyo }
+		OR = { 
+			has_country_modifier = JAP_kanto_kanrei
+			has_country_modifier = JAP_kyoto_kanrei
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = JAP_kanto_kanrei
+			remove_country_modifier = JAP_kyoto_kanrei
+		}
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.15.a 
+		
+		ai_chance = { factor = 100 }
+	}
+}

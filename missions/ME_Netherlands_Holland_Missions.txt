@@ -1,0 +1,2003 @@
+NED_HOL_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = NED
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = HOL
+		}
+	}
+	has_country_shield = yes
+	
+	netherlands_holland_dutch_command_structure = {
+		icon = me_mission_merchant_navy
+		required_missions = { netherlands_holland_proud_naval_tradition }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 97
+				province_id = 4383
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			num_of_heavy_ship = 20
+			advisor = naval_reformer
+			ADM = 4
+			owns_core_province = 97
+			owns_core_province = 4383
+		}
+		effect = {
+			set_country_flag = enable_hol_ned_admirality_decisions
+			custom_tooltip = ENABLE_HOL_NED_ADMIRALITY_DECISIONS
+		}
+	}
+	
+	netherlands_holland_the_dutch_admiralities = {
+		icon = me_mission_venice_navy
+		required_missions = { netherlands_holland_dutch_command_structure }
+		position = 3
+		trigger = {
+			OR = {
+				has_leader_with = {
+					admiral = yes
+					shock = 5
+				}
+				has_leader_with = {
+					admiral = yes
+					fire = 5
+				}
+				has_leader_with = {
+					admiral = yes
+					manuever = 5
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NED_HOL_FOUND_THE_AMSTERDAM_ADMIRALITY_COMPLETED
+				has_country_flag = ned_hol_found_the_amsterdam_admirality_completed
+			}
+			custom_trigger_tooltip = {
+				tooltip = NED_HOL_FOUND_THE_DEN_HAAG_ADMIRALITY_COMPLETED
+				has_country_flag = ned_hol_found_the_den_haag_admirality_completed
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_the_dutch_admiralities_modifier_1
+				duration = -1
+			}
+			add_country_modifier = {
+				name = netherlands_holland_the_dutch_admiralities_modifier_2
+				duration = -1
+			}
+		}
+	}
+	
+	netherlands_holland_dutch_naval_pride = {
+		icon = mission_launch_a_flagship
+		required_missions = { netherlands_holland_the_dutch_admiralities }
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				has_flagship = yes
+			}
+			else = {
+				heavy_ship_fraction = 0.3
+			}
+			navy_size = 150
+		}
+		effect = {
+			add_prestige = 15
+			add_navy_tradition = 10
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				add_country_modifier = {
+					name = netherlands_holland_dutch_naval_pride_modifier
+					duration = -1
+					desc = NED_HOL_UNTIL_FLAGSHIP_IS_SUNK_OR_CAPTURED
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = netherlands_holland_dutch_naval_pride_modifier
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_establish_merchant_banks = {
+		icon = mission_rb_the_bank_of_scotland
+		required_missions = { netherlands_holland_amsterdam_port }
+		position = 7
+		trigger = {
+			OR = {
+				marketplace = 5
+				trade_depot = 5
+				stock_exchange = 5
+			}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 60
+			}
+			estate_influence = {
+				estate = estate_burghers
+				influence = 75
+			}
+			num_of_owned_provinces_with = {
+				value = 2
+				development = 30
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = netherlands_holland_establish_merchant_banks_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	netherlands_holland_dutch_mercantile_policies = {
+		icon = mission_rb_monopolize_the_channel
+		required_missions = { netherlands_holland_establish_merchant_banks }
+		position = 8
+		trigger = {
+			mercantilism = 25
+			1269 = {
+				trade_share = {
+					country = ROOT
+					share = 40
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = netherlands_holland_dutch_mercantile_policies_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	netherlands_holland_attract_english_investors = {
+		icon = mission_invade_england
+		required_missions = { netherlands_holland_dutch_mercantile_policies }
+		position = 9
+		trigger = {
+			NOT = { corruption = 2 }
+			trade_ideas = 5
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 65
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = GBR
+				}
+				GBR = {
+					add_inflation = 10
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				ENG = {
+					add_inflation = 10
+				}
+			}
+			else = {
+				add_inflation = 5
+			}
+			add_corruption = 2
+			add_country_modifier = {
+				name = netherlands_holland_attract_english_investors_modifier
+				duration = 7300
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_NETHERLANDS_HOLLAND_ATTRACT_ENGLISH_INVESTORS_MODIFIER
+				influence = 10
+				duration = 7300
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				capital_scope = {
+					add_prosperity = 100
+				}
+			}
+			else = {
+				capital_scope = {
+					add_base_tax = 2
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_found_the_voc = {
+		icon = mission_indian_trade_company
+		required_missions = { }
+		position = 10
+		trigger = {
+			num_of_light_ship = 100
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				OR = {
+					region = south_africa_region
+					region = guinea_region
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			set_country_flag = enable_ned_hol_voc_estate
+			custom_tooltip = ENABLE_NED_HOL_VOC_ESTATE
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						has_estate = no
+					}
+					set_estate = estate_east_india_company
+					remove_estate = estate_east_india_company
+				}
+			}
+		}
+	}
+	
+	ned_taiwan_ME = {
+		icon = mission_rice_field
+		required_missions = { ned_spice_australia_ME }
+		position = 12
+		provinces_to_highlight = {
+			area = taiwan_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ned_taiwan.tooltip
+				taiwan_area = {
+					type = all
+					owned_by = ROOT
+					is_city = yes
+				}
+			}
+		}
+		effect = {
+			taiwan_area = {
+				add_province_modifier = {
+					name = "ned_zeelandia_mod"
+					duration = -1
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+		}
+	}
+}
+
+NED_HOL_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = NED
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = HOL
+		}
+	}
+	has_country_shield = yes
+	
+	netherlands_holland_proud_naval_tradition = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 1
+		trigger = {
+			navy_size_percentage = 1
+			num_of_light_ship = 10
+			num_of_admirals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_proud_naval_tradition_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	netherlands_holland_the_sea_beggars = {
+		icon = me_mission_netherlands_navy
+		required_missions = { netherlands_holland_proud_naval_tradition }
+		position = 2
+		trigger = {
+			is_year = 1470
+			advisor = naval_reformer
+			OR = {
+				shipyard = 5
+				grand_shipyard = 5
+			}
+			num_of_heavy_ship = 10
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_the_sea_beggars_modifier
+				duration = -1
+			}
+			define_admiral = {
+				name = "Michiel van Ruyter"
+				female = no
+				fire = 4
+				shock = 4
+				manuever = 5
+				siege = 1
+			}
+		}
+	}
+	
+	netherlands_holland_rival_the_spanish = {
+		icon = mission_aragonese_navy
+		required_missions = { netherlands_holland_the_sea_beggars }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					exists = SPA
+				}
+				navy_size = SPA
+			}
+			else_if = {
+				limit = {
+					exists = CAS
+				}
+				navy_size = CAS
+			}
+			else_if = {
+				limit = {
+					iberia_region = {
+						NOT = { owned_by = ROOT }
+					}
+				}
+				iberia_region = {
+					owner = {
+						hidden_trigger = {
+							NOT = { tag = ROOT }
+						}
+						NOT = { navy_size = ROOT }
+					}
+				}
+			}
+			else = {
+				navy_size = 50
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_navy_tradition = 10
+			add_country_modifier = {
+				name = netherlands_holland_rival_the_spanish_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_humiliating_the_armada = {
+		icon = mission_disrupt_portuguese_trade
+		required_missions = { netherlands_holland_rival_the_spanish }
+		position = 4
+		provinces_to_highlight = {
+			region = iberia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = SPA }
+			NOT = { exists = CAS }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = SPA
+				}
+				war_with = SPA
+				war_score_against = {
+					who = SPA
+					value = 30
+				}
+				if = {
+					limit = {
+						has_dlc = "Golden Century"
+					}
+					OR = {
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_HAS_CAPTURED_SPA_FLAGSHIP
+							has_country_flag = captured_flagship_of_SPA
+						}
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_HAS_SUNK_SPA_FLAGSHIP
+							has_country_flag = sunk_flagship_of_SPA
+						}
+						AND = {
+							SPA = {
+								has_flagship = no
+							}
+							OR = {
+								custom_trigger_tooltip = {
+									tooltip = NED_HOL_BLOCKADES_AT_LEAST_10_SPA_PORTS
+									SPA = {
+										calc_true_if = {
+											all_owned_province = {
+												has_port = yes
+												is_blockaded = yes
+												sea_zone = {
+													OR = {
+														light_ships_in_province = ROOT
+														heavy_ships_in_province = ROOT
+														galleys_in_province = ROOT
+													}
+												}
+											}
+											amount = 10
+										}
+									}
+								}
+								AND = {
+									num_of_heavy_ship = SPA
+									num_of_heavy_ship = 20
+								}
+							}
+						}
+					}
+				}
+				else = {
+					OR = {
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_BLOCKADES_AT_LEAST_10_SPA_PORTS
+							SPA = {
+								calc_true_if = {
+									all_owned_province = {
+										has_port = yes
+										is_blockaded = yes
+										sea_zone = {
+											OR = {
+												light_ships_in_province = ROOT
+												heavy_ships_in_province = ROOT
+												galleys_in_province = ROOT
+											}
+										}
+									}
+									amount = 10
+								}
+							}
+						}
+						AND = {
+							num_of_heavy_ship = SPA
+							num_of_heavy_ship = 20
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = CAS
+				}
+				war_with = CAS
+				war_score_against = {
+					who = CAS
+					value = 30
+				}
+				if = {
+					limit = {
+						has_dlc = "Golden Century"
+					}
+					OR = {
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_HAS_CAPTURED_SPA_FLAGSHIP
+							has_country_flag = captured_flagship_of_CAS
+						}
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_HAS_SUNK_SPA_FLAGSHIP
+							has_country_flag = sunk_flagship_of_CAS
+						}
+						AND = {
+							CAS = {
+								has_flagship = no
+							}
+							OR = {
+								custom_trigger_tooltip = {
+									tooltip = NED_HOL_BLOCKADES_AT_LEAST_10_CAS_PORTS
+									CAS = {
+										calc_true_if = {
+											all_owned_province = {
+												has_port = yes
+												is_blockaded = yes
+												sea_zone = {
+													OR = {
+														light_ships_in_province = ROOT
+														heavy_ships_in_province = ROOT
+														galleys_in_province = ROOT
+													}
+												}
+											}
+											amount = 10
+										}
+									}
+								}
+								AND = {
+									num_of_heavy_ship = CAS
+									num_of_heavy_ship = 20
+								}
+							}
+						}
+					}
+				}
+				else = {
+					OR = {
+						custom_trigger_tooltip = {
+							tooltip = NED_HOL_BLOCKADES_AT_LEAST_10_CAS_PORTS
+							CAS = {
+								calc_true_if = {
+									all_owned_province = {
+										has_port = yes
+										is_blockaded = yes
+										sea_zone = {
+											OR = {
+												light_ships_in_province = ROOT
+												heavy_ships_in_province = ROOT
+												galleys_in_province = ROOT
+											}
+										}
+									}
+									amount = 10
+								}
+							}
+						}
+						AND = {
+							num_of_heavy_ship = CAS
+							num_of_heavy_ship = 20
+						}
+					}
+				}
+			}
+			else = {
+				num_of_heavy_ship = 20
+				iberia_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 10
+			if = {
+				limit = {
+					OR = {
+						exists = SPA
+						exists = CAS
+					}
+				}
+				add_country_modifier = {
+					name = netherlands_holland_humiliating_the_armada_modifier
+					duration = -1
+					desc = NED_HOL_UNTIL_END_OF_WAR
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_dutch_thalassocracy = {
+		icon = mission_south_indian_trade
+		required_missions = { netherlands_holland_dutch_naval_pride netherlands_holland_humiliating_the_armada }
+		position = 4
+		trigger = {
+			num_of_light_ship = 100
+			num_of_heavy_ship = 100
+			all_country = {
+				OR = {
+					capital_scope = {
+						NOT = { continent = europe }
+					}
+					NOT = { navy_size = ROOT }
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Netherlands_Holland_Events.4 }
+		}
+	}
+	
+	netherlands_holland_amsterdam_port = {
+		icon = me_mission_netherlands_navy
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 97
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_state = no
+				NOT = { development = 22 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 3 } }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				trade_ideas = 4
+				NED_ideas = 2
+			}
+			97 = {
+				owned_by = ROOT
+				is_state = yes
+				development = 22
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 3 }
+				}
+			}
+		}
+		effect = {
+			97 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { capital = 97 }
+				}
+				set_capital = 97
+			}
+			add_country_modifier = {
+				name = netherlands_holland_amsterdam_port_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_the_antwerpen_diamond_district = {
+		icon = me_mission_netherlands_polders
+		required_missions = { netherlands_holland_amsterdam_port }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1744
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { development = 25 }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+			}
+		}
+		trigger = {
+			owns_core_province = 1744
+			1744 = {
+				development = 25
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			1744 = {
+				change_trade_goods = gems
+				add_permanent_province_modifier = {
+					name = netherlands_holland_the_antwerpen_diamond_district_province_modifier
+					duration = -1
+				}
+			}
+			define_advisor = {
+				type = natural_scientist
+				skill = 3
+				name = "Lodewyk van Berken"
+				culture = flemish
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+		}
+	}
+	
+	netherlands_holland_zuiderzee_works = {
+		icon = me_mission_netherlands_reclaiming_land
+		required_missions = { netherlands_holland_the_antwerpen_diamond_district netherlands_holland_amsterdam_canal_system }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1744
+				province_id = 1865
+				province_id = 90
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			adm_tech = 6
+			treasury = 1000
+			ADM = 5
+			full_idea_group = economic_ideas
+			owns_core_province = 1744
+			owns_core_province = 1865
+			owns_core_province = 90
+		}
+		effect = {
+			add_treasury = -1000
+			1744 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = netherlands_holland_zuiderzee_works_province_modifiers
+					duration = 5475
+				}
+			}
+			1865 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = netherlands_holland_zuiderzee_works_province_modifiers
+					duration = 5475
+				}
+			}
+			90 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = netherlands_holland_zuiderzee_works_province_modifiers
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_golden_age = {
+		icon = mission_golden_century
+		required_missions = { netherlands_holland_zuiderzee_works }
+		position = 8
+		trigger = {
+			ADM = 5
+			monthly_income = 100
+			1269 = {
+				trade_share = {
+					country = ROOT
+					share = 40
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_golden_age_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	netherlands_holland_leiden_university = {
+		icon = mission_early_modern_university
+		required_missions = { netherlands_holland_dawn_of_reformation }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = holland_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						is_state = no
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							is_prosperous = no
+						}
+					}
+				}
+				AND = {
+					province_id = 4383
+					OR = {
+						NOT = { development = 30 }
+						NOT = { has_building = university }
+					}
+				}
+			}
+		}
+		trigger = {
+			holland_area = {
+				type = all
+				owned_by = ROOT
+				is_state = yes
+			}
+			4383 = {
+				development = 30
+				has_building = university
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				holland_area = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_leiden_university_modifier_1
+				duration = 9125
+			}
+			add_country_modifier = {
+				name = netherlands_holland_leiden_university_modifier_2
+				duration = 7300
+			}
+			define_advisor = {
+				name = "Mirna van Rijn"
+				type = diplomat
+				skill = 2
+				female = yes
+				cost_multiplier = 0.5
+			}
+		}
+	}
+	
+	ned_spice_australia_ME = {
+		icon = mission_settlers_north_america
+		required_missions = { }
+		position = 11
+		completed_by = 1660.1.1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ned_spice_australia.tooltip
+				colonial_australia = {
+					has_discovered = ROOT
+				}
+				trade_company_indonesia = {
+					has_discovered = ROOT
+				}
+				trade_company_moluccas = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			create_admiral = {
+				tradition = 80
+			}
+			malaya_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malacca_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			taiwan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ned_malacca_ME = {
+		icon = mission_unite_home_region
+		required_missions = { ned_spice_australia_ME }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = malaya_area
+				area = malacca_area
+			}
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			malaya_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malacca_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			596 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 35
+					key = malacca_conquest
+				}
+			}
+		}
+	}
+}
+
+NED_HOL_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = NED
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = HOL
+		}
+	}
+	has_country_shield = yes
+	
+	netherlands_holland_for_a_few_ducats_more = {
+		icon = mission_african_gold
+		required_missions = { netherlands_holland_proud_naval_tradition }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 45
+			NOT = { owned_by = ROOT }
+			owner = {
+				has_opinion = {
+					who = ROOT
+					value = -5
+				}
+			}
+		}
+		trigger = {
+			is_at_war = no
+			light_ship_fraction = 0.5
+			45 = {
+				has_merchant = ROOT
+			}
+			45 = {
+				OR = {
+					owned_by = ROOT
+					owner = {
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = -5
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			45 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			43 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			25 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			38 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			310 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					45 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+				45 = {
+					owner = {
+						country_event = { id = ME_Netherlands_Holland_Events.3 }
+					}
+				}
+			}
+			else = {
+				45 = {
+					add_trade_modifier = {
+						who = ROOT
+						power = 25
+						duration = -1
+						key = ned_hol_treaty_of_copenhagen_trade_modifier_positive
+					}
+				}
+				1926 = {
+					add_trade_modifier = {
+						who = ROOT
+						power = 25
+						duration = -1
+						key = ned_hol_treaty_of_copenhagen_trade_modifier_positive
+					}
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_expansion_into_flanders = {
+		icon = mission_cannons_firing
+		required_missions = { netherlands_holland_unite_the_low_countries }
+		position = 3
+		provinces_to_highlight = {
+			area = flanders_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			flanders_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			1865 = {
+				if = {
+					limit = {
+						NOT = { has_building = drydock }
+					}
+					if = {
+						limit = {
+							has_building = dock
+						}
+						remove_building = dock
+					}
+					add_building = drydock
+				}
+				else = {
+					add_base_production = 1
+				}
+				add_province_modifier = {
+					name = netherlands_holland_expansion_into_flanders_province_modifier
+					duration = 7300
+				}
+			}
+			90 = {
+				if = {
+					limit = {
+						NOT = { has_building = drydock }
+					}
+					if = {
+						limit = {
+							has_building = dock
+						}
+						remove_building = dock
+					}
+					add_building = drydock
+				}
+				else = {
+					add_base_production = 1
+				}
+				add_province_modifier = {
+					name = netherlands_holland_expansion_into_flanders_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_brave_step_forward = {
+		icon = me_mission_army
+		required_missions = { netherlands_holland_expansion_into_flanders }
+		position = 4
+		provinces_to_highlight = {
+			area = picardy_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 30
+				unrest = 1
+			}
+		}
+		trigger = {
+			picardy_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 30 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			89 = {
+				add_province_modifier = {
+					name = netherlands_holland_brave_step_forward_province_modifier
+					duration = 5475
+				}
+			}
+			picardy_area = {
+				limit = {
+					NOT = { culture = ROOT }
+				}
+				change_culture = ROOT
+			}
+		}
+	}
+	
+	netherlands_holland_amsterdam_canal_system = {
+		icon = me_mission_netherlands_amsterdams_canal_system
+		required_missions = { netherlands_holland_amsterdam_port }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 97
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 36 }
+			}
+		}
+		trigger = {
+			is_year = 1474
+			trade_ideas = 1
+			capital = 97
+			97 = {
+				development = 36
+			}
+		}
+		effect = {
+			97 = {
+				add_province_modifier = {
+					name = netherlands_holland_amsterdam_canal_system_province_modifier
+					duration = 5475
+				}
+			}
+			add_country_modifier = {
+				name = netherlands_holland_amsterdam_canal_system_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	netherlands_holland_dawn_of_reformation = {
+		icon = mission_luther_theses
+		required_missions = { }
+		position = 9
+		trigger = {
+			OR = {
+				is_religion_enabled = protestant
+				is_religion_enabled = reformed
+			}
+			any_owned_province = {
+				OR = {
+					religion = protestant
+					religion = reformed
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Netherlands_Holland_Events.5 }
+		}
+	}
+	
+	netherlands_holland_past_the_beeldenstorm = {
+		icon = mission_hands_praying
+		required_missions = { netherlands_holland_dawn_of_reformation }
+		position = 10
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = anglican
+			}
+			dominant_religion = catholic
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_past_the_beeldenstorm_modifier
+				duration = 7300
+			}
+			if = {
+				limit = {
+					OR = {
+						tag = NED
+						tag = HOL
+					}
+					is_year = 1495
+					NOT = { is_year = 1536 }
+				}
+				country_event = { id = flavor_hol.5120 tooltip = NED_HOL_EVENT_CAN_HAPPEN }
+			}
+		}
+	}
+	
+	ned_india_ceylon_ME = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { netherlands_holland_found_the_voc ned_south_africa_colony_ME }
+		position = 11
+		completed_by = 1660.1.1
+		provinces_to_highlight = {
+			area = lanka_area
+			has_discovered = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lanka_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ned_ceylon_mod"
+				duration = 5475
+			}
+		}
+	}
+	
+	ned_indonesia_cot_ME = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { ned_spice_australia_ME }
+		position = 12
+		trigger = { 
+			1361 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "por_johor_dominance"
+				duration = 7300
+			}
+		}
+	}
+}
+
+NED_HOL_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = NED
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = HOL
+		}
+	}
+	has_country_shield = yes
+	
+	netherlands_holland_unite_the_low_countries = {
+		icon = me_mission_conquer
+		required_missions = { }
+		position = 2
+		trigger = {
+			grown_by_development = 15
+			army_size = 10
+			monthly_income = 10
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_unite_the_low_countries_modifier
+				duration = 9125
+			}
+			low_countries_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	netherlands_holland_taking_frisia = {
+		icon = mission_conquer_50_development
+		required_missions = { netherlands_holland_unite_the_low_countries }
+		position = 3
+		provinces_to_highlight = {
+			area = frisia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			frisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			frisia_area = {
+				add_permanent_province_modifier = {
+					name = netherlands_holland_taking_frisia_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_fate_of_burgundy = {
+		icon = me_mission_burgundy_flag
+		required_missions = { netherlands_holland_expansion_into_flanders netherlands_holland_taking_frisia netherlands_holland_netherlands_campaign }
+		position = 4
+		trigger = {
+			NOT = { exists = BUR }
+			if = {
+				limit = {
+					NOT = { government = republic }
+				}
+				legitimacy_equivalent = 100
+			}
+			else = {
+				legitimacy_equivalent = 80
+			}
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				OR = {
+					is_elector = yes
+					is_emperor = yes
+					emperor = {
+						marriage_with = ROOT
+					}
+				}
+			}
+			else = {
+				num_of_allies = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_fate_of_burgundy_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	netherlands_holland_dutch_triumph = {
+		icon = mission_unite_home_region
+		required_missions = { netherlands_holland_brave_step_forward netherlands_holland_fate_of_burgundy netherlands_holland_brothers_in_culture }
+		position = 5
+		trigger = {
+			is_subject = no
+			tag = NED
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_dutch_triumph_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	netherlands_holland_maurice_of_orange = {
+		icon = me_mission_good_leader
+		required_missions = { }
+		position = 6
+		trigger = {
+			MIL = 6
+			mil_tech = 15
+			army_tradition = 55
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.1
+			}
+			else = {
+				add_army_tradition = 10
+			}
+			add_country_modifier = {
+				name = netherlands_holland_maurice_of_orange_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_dutch_states_army = {
+		icon = me_mission_modern_army
+		required_missions = { netherlands_holland_maurice_of_orange }
+		position = 7
+		trigger = {
+			mil_tech = 15
+			advisor = army_reformer
+			num_of_mercenaries = 25
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_dutch_states_army_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_reforms_of_william_iii = {
+		icon = mission_new_army
+		required_missions = { netherlands_holland_dutch_states_army }
+		position = 8
+		trigger = {
+			army_tradition = 80
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.6
+			}
+			else = {
+				has_commanding_three_star = yes
+				full_idea_group = quality_ideas
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_reforms_of_william_iii_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_a_modern_european_power = {
+		icon = mission_assemble_an_army
+		required_missions = { netherlands_holland_reforms_of_william_iii netherlands_holland_reign_in_the_isles }
+		position = 9
+		trigger = {
+			army_size = 125
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				OR = {
+					is_great_power = yes
+					total_development = 750
+				}
+				calc_true_if = {
+					all_ally = {
+						is_great_power = yes
+					}
+					amount = 2
+				}
+			}
+			else = {
+				total_development = 750
+				calc_true_if = {
+					all_ally = {
+						total_development = 750
+					}
+					amount = 2
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_a_modern_european_power_modifier
+				duration = -1
+				desc = NED_HOL_UNTIL_END_OF_CURRENT_AGE
+			}
+			if = {
+				limit = {
+					current_age = age_of_discovery
+				}
+				set_country_flag = ned_hol_a_modern_european_power_age_of_discovery
+			}
+			else_if = {
+				limit = {
+					current_age = age_of_reformation
+				}
+				set_country_flag = ned_hol_a_modern_european_power_age_of_reformation
+			}
+			else_if = {
+				limit = {
+					current_age = age_of_absolutism
+				}
+				set_country_flag = ned_hol_a_modern_european_power_age_of_absolutism
+			}
+			else_if = {
+				limit = {
+					current_age = age_of_revolutions
+				}
+				set_country_flag = ned_hol_a_modern_european_power_age_of_revolutions
+			}
+		}
+	}
+	
+	ned_south_africa_colony_ME = {
+		icon = mission_african_soldier
+		required_missions = { }
+		position = 10
+		completed_by = 1660.1.1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 833
+				province_id = 1177
+				province_id = 1179
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ned_south_africa_colony.tooltip
+				OR = {
+					833 = {
+						owned_by = ROOT
+						is_city = yes
+					}
+					1177 = {
+						owned_by = ROOT
+						is_city = yes
+					}
+					1179 = {
+						owned_by = ROOT
+						is_city = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_treasury = 300
+			lanka_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ned_american_discovery_ME = {
+		icon = mission_settlers_north_america
+		required_missions = { ned_caribbean_discovery_ME }
+		position = 11
+		completed_by = 1640.1.1
+		provinces_to_highlight = {
+			colonial_region = colonial_eastern_america
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = miss_discover_eastern_america
+				colonial_eastern_america = {
+					has_discovered = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = miss_colonize_eastern_america
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 1
+					colonial_region = colonial_eastern_america
+					is_city = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "por_brazil_colonial"
+				duration = 5475
+			}
+		}
+	}
+}
+
+NED_HOL_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = NED
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			tag = HOL
+		}
+	}
+	has_country_shield = yes
+	
+	netherlands_holland_gathering_supporters = {
+		icon = me_mission_gather_allies
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 0.5
+			calc_true_if = {
+				all_country = {
+					NOT = { overlord_of = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = netherlands_holland_gathering_supporters_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_independence_achieved = {
+		icon = me_mission_globe_map
+		required_missions = { netherlands_holland_gathering_supporters }
+		position = 2
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_legitimacy_equivalent = { value = 30 }
+			add_country_modifier = {
+				name = netherlands_holland_independence_achieved_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	netherlands_holland_netherlands_campaign = {
+		icon = mission_spanish_netherlands
+		required_missions = { netherlands_holland_unite_the_low_countries }
+		position = 3
+		provinces_to_highlight = {
+			area = netherlands_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			netherlands_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = netherlands_holland_netherlands_campaign_modifier
+				duration = 3650
+			}
+			netherlands_area = {
+				add_province_modifier = {
+					name = netherlands_holland_netherlands_campaign_province_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_brothers_in_culture = {
+		icon = mission_arts_and_letters
+		required_missions = { netherlands_holland_netherlands_campaign }
+		position = 4
+		provinces_to_highlight = {
+			area = wallonia_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 30
+				unrest = 1
+			}
+		}
+		trigger = {
+			wallonia_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 30 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			1866 = {
+				add_province_modifier = {
+					name = netherlands_holland_brothers_in_culture_province_modifier
+					duration = -1
+				}
+			}
+			wallonia_area = {
+				limit = {
+					NOT = { culture = ROOT }
+				}
+				change_culture = ROOT
+			}
+		}
+	}
+	
+	netherlands_holland_glorious_revolution = {
+		icon = me_mission_protect_throne
+		required_missions = { netherlands_holland_maurice_of_orange }
+		position = 7
+		trigger = {
+			is_year = 1550
+			is_subject = no
+			army_size = 50
+			DIP = 5
+			if = {
+				limit = {
+					exists = GBR
+				}
+				GBR = {
+					is_subject = no
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				ENG = {
+					is_subject = no
+				}
+			}
+			else = {
+				OR = {
+					exists = GBR
+					exists = ENG
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = GBR
+				}
+				GBR = {
+					country_event = { id = ME_Netherlands_Holland_Events.1 }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				ENG = {
+					country_event = { id = ME_Netherlands_Holland_Events.1 }
+				}
+			}
+			else = {
+				tooltip = {
+					ENG = {
+						country_event = { id = ME_Netherlands_Holland_Events.1 }
+					}
+				}
+			}
+		}
+	}
+	
+	netherlands_holland_reign_in_the_isles = {
+		icon = mission_rb_invade_england
+		required_missions = { netherlands_holland_glorious_revolution }
+		position = 8
+		trigger = {
+			legitimacy_equivalent = 100
+			if = {
+				limit = {
+					exists = GBR
+				}
+				senior_union_with = GBR
+				GBR = {
+					NOT = { liberty_desire = 25 }
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			else = {
+				senior_union_with = ENG
+				ENG = {
+					NOT = { liberty_desire = 25 }
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = netherlands_holland_reign_in_the_isles_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	ned_caribbean_discovery_ME = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 10
+		completed_by = 1550.1.1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = miss_discover_caribbean
+				colonial_the_carribean = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_prestige = 15
+			add_country_modifier = {
+				name = "the_unknown_frontier"
+				duration = 5475
+			}
+		}
+	}
+	
+	netherlands_holland_found_the_wic = {
+		icon = mission_indian_trade_company
+		required_missions = { ned_caribbean_discovery_ME }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				colonial_region = colonial_eastern_america
+				colonial_region = colonial_the_carribean
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_light_ship = 50
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				OR = {
+					colonial_region = colonial_eastern_america
+					colonial_region = colonial_the_carribean
+				}
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = netherlands_holland_found_the_wic_modifier
+				duration = -1
+			}
+			south_america = {
+				limit = {
+					NOT = { has_discovered = ROOT }
+				}
+				discover_country = ROOT
+			}
+		}
+	}
+	
+	ned_brazil_colony_ME = {
+		icon = mission_iberian_conquistador
+		required_missions = { netherlands_holland_found_the_wic }
+		position = 12
+		provinces_to_highlight = {
+			colonial_region = colonial_brazil
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = miss_discover_brazil
+				colonial_brazil = {
+					has_discovered = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = miss_colonize_brazil
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 1
+					colonial_region = colonial_brazil
+					is_city = yes
+				}
+			}
+		}
+		effect = {
+			colonial_brazil = {
+				limit = { 
+					OR = {
+						country_or_non_sovereign_subject_holds = CAS
+						country_or_non_sovereign_subject_holds = POR
+						country_or_non_sovereign_subject_holds = SPA
+					}
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "ned_brazil_mod"
+				duration = 5475
+			}
+		}
+	}
+}

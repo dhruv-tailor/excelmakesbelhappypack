@@ -1,0 +1,1535 @@
+golden_horde_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = GLH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	golden_horde_chagatai_down = {
+		icon = me_mission_mongolia_changatai_flag
+		required_missions = { }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 715
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 715
+			OR = {
+				NOT = { exists = CHG }
+				CHG = {
+					NOT = { num_of_cities = 10 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_chagatai_down_modifier
+				duration = -1
+			}
+			north_zungaria = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			altai_sayan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_the_four_oirat = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { golden_horde_chagatai_down }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = north_zungaria
+				area = altai_sayan_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			north_zungaria = {
+				type = all
+				owned_by = ROOT
+			}
+			altai_sayan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_the_four_oirat_modifier
+				duration = -1
+			}
+			2116 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+		}
+	}
+	
+	golden_horde_reclaim_the_mongolian_capital = {
+		icon = me_mission_mongolia_horsemen_charging
+		required_missions = { golden_horde_the_four_oirat }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2116
+				province_id = 717
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2116
+			owns = 717
+		}
+		effect = {
+			2116 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				if = {
+					limit = {
+						has_dlc = "The Cossacks"
+					}
+					custom_tooltip = GLH_CANNOT_RAZE_THIS_PROVINCE_ANYMORE
+					hidden_effect = {
+						add_province_modifier = {
+							name = province_razed
+							duration = -1
+						}
+					}
+				}
+			}
+			717 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						has_dlc = "The Cossacks"
+					}
+					custom_tooltip = GLH_CANNOT_RAZE_THIS_PROVINCE_ANYMORE
+					hidden_effect = {
+						add_province_modifier = {
+							name = province_razed
+							duration = -1
+						}
+					}
+				}
+			}
+			mongolia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_massacre_the_manchu = {
+		icon = me_mission_mongolia_manchu_warrior
+		required_missions = { golden_horde_reclaim_the_mongolian_capital }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1033
+				area = heilongjiang_area
+				area = central_heilongjiang_area
+				area = east_heilongjiang_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 1033
+			heilongjiang_area = {
+				type = all
+				owned_by = ROOT
+			}
+			central_heilongjiang_area = {
+				type = all
+				owned_by = ROOT
+			}
+			east_heilongjiang_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 5
+			if = {
+				limit = {
+					manchuria_region = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				country_event = { id = ME_Yuan_Events.1 }
+			}
+		}
+	}
+	
+	golden_horde_reach_the_seas = {
+		icon = mission_to_the_south_china_sea
+		required_missions = { golden_horde_massacre_the_manchu }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1033
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 1033
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_reach_the_seas_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	golden_horde_abolish_the_four_bey = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 7
+		trigger = {
+			OR = {
+				adm_power = 200
+				mil_power = 200
+			}
+			NOT = { average_autonomy = 40 }
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nomadic_tribes
+						influence = 25
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					mil_power = 200
+				}
+				add_mil_power = -200
+			}
+			else = {
+				add_adm_power = -200
+			}
+			add_country_modifier = {
+				name = golden_horde_abolish_the_four_bey_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	golden_horde_establish_yassa_law = {
+		icon = mission_empire
+		required_missions = { golden_horde_abolish_the_four_bey }
+		position = 8
+		trigger = {
+			absolutism = 85
+		}
+		effect = {
+			add_absolutism = -20
+			add_country_modifier = {
+				name = golden_horde_establish_yassa_law_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+golden_horde_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = GLH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	golden_horde_terrorize_the_timurids = {
+		icon = me_mission_timurids_flag
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 4344
+			OR = {
+				AND = {
+					has_dlc = "The Cossacks"
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_province_modifier = province_razed }
+					}
+				}
+				NOT = { has_dlc = "The Cossacks" }
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				is_state = no
+			}
+			ROOT = {
+				NOT = {
+					OR = {
+						war_with = QOM
+						war_with = KHO
+						war_with = FRS
+						war_with = YZD
+						war_with = AFG
+						war_with = TRS
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				OR = {
+					war_with = QOM
+					war_with = KHO
+					war_with = FRS
+					war_with = YZD
+					war_with = AFG
+					war_with = TRS
+					AND = {
+						owns = 4344
+						4344 = {
+							has_province_modifier = province_razed
+						}
+					}
+					AND = {
+						owns_core_province = 4344
+						4344 = {
+							is_state = yes
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					war_with = QOM
+					war_with = KHO
+					war_with = FRS
+					war_with = YZD
+					war_with = AFG
+					war_with = TRS
+					AND = {
+						owns_core_province = 4344
+						4344 = {
+							is_state = yes
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						tag = QOM
+						tag = KHO
+						tag = FRS
+						tag = YZD
+						tag = AFG
+						tag = TRS
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = golden_horde_timurid_princes_opinion
+				}
+			}
+			transcaspia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transoxiana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khiva_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			merv_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_seize_samarkand = {
+		icon = me_mission_golden_horde_horsemen
+		required_missions = { golden_horde_terrorize_the_timurids }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 454
+			OR = {
+				AND = {
+					has_dlc = "The Cossacks"
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_province_modifier = province_razed }
+					}
+				}
+				NOT = { has_dlc = "The Cossacks" }
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				is_state = no
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				OR = {
+					AND = {
+						owns = 454
+						454 = {
+							has_province_modifier = province_razed
+						}
+					}
+					AND = {
+						owns_core_province = 454
+						454 = {
+							is_state = yes
+						}
+					}
+				}
+			}
+			else = {
+				owns_core_province = 454
+				454 = {
+					is_state = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_seize_samarkand_modifier
+				duration = 18250
+			}
+			herat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mashhad_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			balkh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			termez_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_the_fall_of_herat = {
+		icon = mission_cannons_firing
+		required_missions = { golden_horde_seize_samarkand }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 446
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 446
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_the_fall_of_herat_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	golden_horde_defeat_the_imperial_army = {
+		icon = me_mission_france_crush_the_empire
+		required_missions = { golden_horde_punish_poland }
+		position = 4
+		provinces_to_highlight = {
+			area = austria_proper_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { hre_size = 1 }
+			is_emperor = no
+			NOT = { exists = HAB }
+		}
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				OR = {
+					is_emperor = yes
+					emperor = {
+						war_with = ROOT
+						NOT = {
+							war_score_against = {
+								who = ROOT
+								value = -50
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				war_with = HAB
+				war_score_against = {
+					who = HAB
+					value = 50
+				}
+			}
+			else = {
+				austria_proper_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			austria_proper_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			inner_austria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_invade_china = {
+		icon = mission_rule_indochina
+		required_missions = { golden_horde_massacre_the_manchu }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1816
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 1816
+		}
+		effect = {
+			add_manpower = 10
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = golden_horde_invade_china_modifier
+				duration = 9125
+			}
+			1816 = {
+				add_devastation = 100
+			}
+		}
+	}
+	
+	golden_horde_restore_bagdad = {
+		icon = me_mission_ottomans_custodians_of_the_holy_city
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 410
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+			}
+		}
+		trigger = {
+			owns = 410
+			410 = {
+				development = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_restore_bagdad_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	golden_horde_an_issue_of_religion = {
+		icon = me_mission_golden_horde_islam
+		required_missions = { golden_horde_restore_bagdad }
+		position = 8
+		trigger = {
+			OR = {
+				NOT = { religious_unity = 0.5 }
+				religious_unity = 0.95
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { religious_unity = 0.5 }
+				}
+				add_country_modifier = {
+					name = golden_horde_an_issue_of_religion_modifier_1
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = golden_horde_an_issue_of_religion_modifier_2
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+golden_horde_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = GLH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	golden_horde_defeat_lithuania = {
+		icon = me_mission_lithuania_flag
+		required_missions = { }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = pripyat_area
+				area = minsk_area
+				area = lithuania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			pripyat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			minsk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lithuania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_defeat_lithuania_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	golden_horde_punish_poland = {
+		icon = me_mission_poland_drive_out_teutons
+		required_missions = { golden_horde_defeat_lithuania }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = red_ruthenia_area
+				area = mazovia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			red_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mazovia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_punish_poland_modifier
+				duration = 3650
+			}
+			west_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_banish_the_black_army = {
+		icon = mission_assemble_an_army
+		required_missions = { golden_horde_punish_poland }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 153
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			controls = 153
+		}
+		effect = {
+			transdanubia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			slovakia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_european_military = {
+		icon = mission_cannons_firing
+		required_missions = { golden_horde_defeat_the_imperial_army golden_horde_banish_the_black_army golden_horde_terrorize_the_prussians }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 134
+				province_id = 50
+				province_id = 153
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			num_of_artillery = 50
+			owns_core_province = 134
+			owns_core_province = 50
+			owns_core_province = 153
+		}
+		effect = {
+			country_event = { id = ME_Golden_Horde_Events.1 }
+		}
+	}
+	
+	golden_horde_livestock_stocking = {
+		icon = mission_marwari_horses
+		required_missions = { }
+		position = 7
+		trigger = {
+			livestock = 20
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = golden_horde_livestock_stocking_modifier
+				duration = 9125
+			}
+		}
+	}
+}
+
+golden_horde_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = GLH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	golden_horde_invade_the_baltic = {
+		icon = mission_invade_island
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 19
+				province_id = 27
+				province_id = 28
+				province_id = 30
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 19
+			owns_or_non_sovereign_subject_of = 27
+			owns_or_non_sovereign_subject_of = 28
+			owns_or_non_sovereign_subject_of = 30
+		}
+		effect = {
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = golden_horde_invade_the_baltic_modifier
+				duration = 7300
+			}
+			27 = {
+				if = {
+					limit = {
+						ROOT = {
+							mil_tech = 24
+						}
+						NOT = { has_building = fort_18th }
+					}
+					if = {
+						limit = {
+							has_building = fort_17th
+						}
+						remove_building = fort_17th
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 19
+						}
+						NOT = { has_building = fort_17th }
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 14
+						}
+						NOT = { has_building = fort_16th }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building = fort_15th
+				}
+			}
+			laponia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			norrland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_stockholm_secured = {
+		icon = mission_assemble_an_army
+		required_missions = { golden_horde_invade_the_baltic }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = ostra_svealand_area
+				area = laponia_area
+				area = norrland_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			ostra_svealand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			laponia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			norrland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			1 = {
+				if = {
+					limit = {
+						ROOT = {
+							mil_tech = 24
+						}
+						NOT = { has_building = fort_18th }
+					}
+					if = {
+						limit = {
+							has_building = fort_17th
+						}
+						remove_building = fort_17th
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 19
+						}
+						NOT = { has_building = fort_17th }
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 14
+						}
+						NOT = { has_building = fort_16th }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building = fort_15th
+				}
+			}
+			denmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			skaneland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_norway = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			svealand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_the_doorway_to_scandinavia = {
+		icon = me_mission_golden_horde_scandinavian_knight
+		required_missions = { golden_horde_stockholm_secured }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = denmark_area
+				area = skaneland_area
+				area = northern_norway
+				area = svealand_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			denmark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			skaneland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_norway = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			svealand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mercantilism = 10
+			14 = {
+				if = {
+					limit = {
+						ROOT = {
+							mil_tech = 24
+						}
+						NOT = { has_building = fort_18th }
+					}
+					if = {
+						limit = {
+							has_building = fort_17th
+						}
+						remove_building = fort_17th
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 19
+						}
+						NOT = { has_building = fort_17th }
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = {
+						ROOT = {
+							mil_tech = 14
+						}
+						NOT = { has_building = fort_16th }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building = fort_15th
+				}
+				add_province_modifier = {
+					name = golden_horde_the_doorway_to_scandinavia_province_modifier
+					duration = -1
+				}
+			}
+			scandinavia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_terrorize_the_prussians = {
+		icon = me_mission_prussia_coat
+		required_missions = { golden_horde_punish_poland }
+		position = 4
+		provinces_to_highlight = {
+			area = east_prussia_area
+			NOT = { owned_by = ROOT }
+			NOT = { exists = PRU }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = PRU
+				}
+				war_with = PRU
+				PRU = {
+					war_exhaustion = 5
+				}
+			}
+			else = {
+				east_prussia_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			mittelmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			neumark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_an_anatolian_assertion = {
+		icon = me_mission_ottomans_safe_guard_anatolia
+		required_missions = { golden_horde_naval_dominance }
+		position = 5
+		provinces_to_highlight = {
+			area = hudavendigar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_an_anatolian_assertion_modifier
+				duration = 9125
+			}
+			anatolia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_fur_trade = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
+		position = 7
+		trigger = {
+			trading_bonus = {
+				trade_goods = fur
+				value = yes
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = golden_horde_fur_trade_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	golden_horde_to_feed_an_army = {
+		icon = me_mission_inca_corn
+		required_missions = { golden_horde_livestock_stocking golden_horde_fur_trade golden_horde_salt_production }
+		position = 8
+		trigger = {
+			grain = 40
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_to_feed_an_army_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+golden_horde_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = GLH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	golden_horde_ottoman_rivalry = {
+		icon = me_mission_hungary_crush_the_ottomans
+		required_missions = { }
+		position = 2
+		provinces_to_highlight = {
+			region = anatolia_region
+			NOT = { owned_by = ROOT }
+			NOT = { exists = TUR }
+			anatolia_region = {
+				type = all
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				is_rival = TUR
+				AND = {
+					NOT = { exists = TUR }
+					anatolia_region = {
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_manpower = 20
+		}
+	}
+	
+	golden_horde_turkish_tatar_war = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { golden_horde_ottoman_rivalry }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = erzurum_area
+				area = north_kurdistan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			erzurum_area = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			north_kurdistan_area = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				erzurum_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				north_kurdistan_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			dulkadir_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_naval_dominance = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { golden_horde_turkish_tatar_war }
+		position = 4
+		provinces_to_highlight = {
+			exists = TUR
+			region = anatolia_region
+			owned_by = TUR
+			has_port = yes
+			OR = {
+				is_blockaded = no
+				sea_zone = {
+					NOT = {
+						OR = {
+							light_ships_in_province = ROOT
+							heavy_ships_in_province = ROOT
+							galleys_in_province = ROOT
+						}
+					}
+				}
+			}
+			TUR = {
+				NOT = { is_subject_of = ROOT }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				OR = {
+					overlord_of = TUR
+					AND = {
+						war_with = TUR
+						TUR = {
+							custom_trigger_tooltip = {
+								tooltip = GLH_BLOCKADES_ALL_TUR_PORTS_IN_ANATOLIA
+								all_owned_province = {
+									OR = {
+										has_port = no
+										NOT = { region = anatolia_region }
+										AND = {
+											is_blockaded = yes
+											sea_zone = {
+												OR = {
+													light_ships_in_province = ROOT
+													heavy_ships_in_province = ROOT
+													galleys_in_province = ROOT
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				navy_size = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_naval_dominance_modifier
+				duration = 36500
+			}
+			kastamonu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ankara_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			karaman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			cukurova_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	golden_horde_savior_of_the_mamluks = {
+		icon = me_mission_golden_horde_defeat_mamluks
+		required_missions = { golden_horde_naval_dominance }
+		position = 5
+		provinces_to_highlight = {
+			region = egypt_region
+			NOT = { owned_by = ROOT }
+			NOT = { exists = MAM }
+			egypt_region = {
+				type = all
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					exists = MAM
+					OR = {
+						alliance_with = MAM
+						overlord_of = MAM
+						has_guaranteed = MAM
+					}
+				}
+				AND = {
+					NOT = { exists = MAM }
+					egypt_region = {
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = golden_horde_savior_of_the_mamluks_modifier
+				duration = -1
+			}
+			add_accepted_culture = al_misr_arabic
+		}
+	}
+	
+	golden_horde_salt_production = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 1077
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			owns = 1077
+			1077 = {
+				base_production = 10
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			custom_tooltip = GLH_SALT_CRISIS_EVENT_CANNOT_HAPPEN
+			add_country_modifier = {
+				name = golden_horde_salt_production_modifier
+				duration = 9125
+			}
+		}
+	}
+}

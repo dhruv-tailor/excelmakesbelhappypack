@@ -1,0 +1,317 @@
+estate_junkers =
+{
+	icon = 12
+	
+	color = { 144 0 32 }
+	
+	# Is estate kept in control of province on conquest?
+	keep_on_conquest = no
+	
+	# If true, country will get estate
+	trigger = {
+		OR = {
+			has_government_attribute = enables_junker_estate
+		}
+	}
+	
+	# If true, province can be granted to estate
+	province_trigger = {
+		always = yes
+	}	
+
+	# Is used to weigh importance compared to other estates
+	start_territory_weight = 0
+	
+	# Min autonomy in estate provinces
+	min_autonomy = 25
+	
+	# Estate cancels out the following multiplicative local autonomy effects:
+	 autonomy_does_not_affect = local_manpower_modifier
+	 autonomy_does_not_affect = local_tax_modifier
+
+	country_modifier_happy = {
+		army_tradition_decay = -0.005
+		manpower_recovery_speed = 0.20
+	}
+	country_modifier_neutral = {
+		army_tradition_decay = -0.005
+	}	
+	country_modifier_angry = {
+		army_tradition_decay = 0.005
+	}
+	
+	# These do not scale, but only applied in provinces owned by the estate
+	province_modifier_happy = {
+		local_defensiveness = 0.15
+		regiment_recruit_speed = -0.25
+	}
+	province_modifier_neutral = {
+		local_defensiveness = 0.15
+		trade_goods_size_modifier = -0.20
+	}	
+	province_modifier_angry = {
+		local_unrest = 5
+	}		
+	
+	# Influence modifiers
+	base_influence = 20
+	
+	# Influence modifiers from Events:
+	
+	# Loyalty modifiers
+	
+	#Alternative naming of estates
+
+	# Does the AI want to give any extra territory beyond the minimum?
+
+	# For province assignment
+	ai_grant_province = {
+		factor = 1	
+		modifier = {
+			factor = 0.5
+			development = 20
+		}
+		modifier = {
+			factor = 2
+			NOT = { development = 10 }
+		}				
+		modifier = {
+			factor = 0.1
+			has_estate = estate_cossacks
+			has_terrain = steppe
+		}
+		modifier = {
+			factor = 0.75
+			has_owner_culture = yes
+		}
+		modifier = {
+			factor = 0.75
+			province_trade_power = 5
+		}			
+		modifier = {
+			factor = 0.75
+			province_trade_power = 10
+		}
+		modifier = {
+			factor = 4
+			local_autonomy = 25
+		}
+		modifier = {
+			factor = 0.25
+			NOT = { local_autonomy = 25 }
+		}
+	}
+	
+	# Special interactions
+	interaction = {
+		name = "RECRUIT_JUNKERS"
+		icon = 21
+		
+		years_between_use = 20
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_junkers
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			custom_tooltip = Provinces_Junkers.tooltip
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 40
+					}
+				}
+				add_army_tradition = 15
+			}
+			else_if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 20
+					}
+				}
+				add_army_tradition = 10
+			}
+			else = {
+				add_army_tradition = 5
+			}
+			add_estate_loyalty = {
+				estate = estate_junkers
+				loyalty = -10
+			}
+		}
+	}
+	interaction = {
+		name = "PLACATE_JUNKERS"
+		icon = 1
+		
+		years_between_use = 10
+		
+		trigger = {
+			any_owned_province = {
+				has_estate = estate_junkers
+			}
+		}
+		
+		effect = {
+			custom_tooltip = Provinces_Junkers.tooltip
+			custom_tooltip = Placate_Junkers.tooltip
+			hidden_effect = {
+				every_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_local_autonomy = 25
+				}
+			}
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 40
+					}
+				}
+				add_estate_loyalty = {
+					estate = estate_junkers
+					loyalty = 15
+				}
+			}
+			else_if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 20
+					}
+				}
+				add_estate_loyalty = {
+					estate = estate_junkers
+					loyalty = 10
+				}
+			}
+			else = {
+				add_estate_loyalty = {
+					estate = estate_junkers
+					loyalty = 5
+				}
+			}
+		}
+		
+	}
+	interaction = {
+		name = "PROMOTE_JUNKERS"
+		icon = 17
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_junkers
+				influence = 30
+			}
+			any_owned_province = {
+				has_estate = estate_junkers
+			}
+		}
+		
+		effect = {
+			custom_tooltip = Provinces_Junkers.tooltip
+			if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 40
+					}
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+			}
+			else_if = {
+				limit = {
+					estate_territory = {
+						estate = estate_junkers 
+						territory = 20
+					}
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = { has_estate = estate_junkers }
+					add_base_manpower = 1
+				}
+			}
+			add_estate_loyalty = {
+					estate = estate_junkers
+					loyalty = -5
+				}
+			add_estate_influence_modifier = {
+				estate = estate_junkers
+				desc = EST_VAL_PROMOTE_JUNKERS
+				influence = 10
+				duration = 3650
+			}
+		}
+	}
+	interaction = {
+		name = "JUNKER_ADVISOR"
+		icon = 10
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_junkers
+				influence = 30
+			}
+			estate_loyalty = {
+				estate = estate_junkers
+				influence = 30
+			}
+		}
+		
+		effect = {
+			define_advisor = {
+					type = commandant
+					skill = 1
+					cost_multiplier = 0.75
+				}
+			add_estate_influence_modifier = {
+				estate = estate_junkers
+				desc = EST_VAL_JUNKER_ADVISOR
+				influence = 10
+				duration = 3650
+			}
+		}
+	}
+}

@@ -1,0 +1,746 @@
+QAR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {	
+		OR = {
+			tag = QAR
+			AND = {
+				was_tag = QAR
+				tag = TRK
+			}
+		}
+	}
+	has_country_shield = yes
+
+	QAR_Horselords = {
+		icon = mission_chinese_general_riding
+		required_missions = {  }
+		position = 1
+		trigger = {
+			legitimacy_equivalent = 100
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				tribal_allegiance = 30
+			}
+			else = {
+				prestige = 20
+			}
+		}
+		effect = {
+			add_manpower = 5
+			add_country_modifier = {
+				name = "QAR_horse_lords" #-20% Cavalry Cost
+				duration = 3650
+			}
+		}
+	}
+	
+	QAR_True_turkomans = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { QAR_Horselords }
+		position = 2
+		trigger = {
+			num_of_cavalry = 7
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				has_country_modifier = train_horsemanship_modifier
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_turkomans" #+1 legitimacy, +1 Tribal Allegiance, +0.5 Horde unity
+				duration = -1
+			}
+		}
+	}
+
+	QAR_shia_sheep = {
+		icon = me_mission_great_mosque
+		required_missions = { QAR_True_turkomans QAR_crush_jihangir }
+		position = 3
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					religion = shiite
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QAR_shia_sheep_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	QAR_the_horsemen = {
+		icon = mission_cossack_cavalry
+		required_missions = { QAR_shia_sheep }
+		position = 4
+		trigger = {
+			num_of_cavalry = 20
+			cavalry_fraction = 0.5
+		}
+		effect = {
+			add_country_modifier = {
+				name = QAR_horsemen
+				duration = 7300
+			}
+		}
+	}
+	
+	
+	QAR_tribal_settling = {
+		icon = mission_central_asian_city
+		required_missions = { QAR_the_horsemen }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = tabriz_area
+					OR = {
+						NOT = { culture = azerbaijani }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					province_id = 418
+					OR = {
+						NOT = { culture = turkish }
+						NOT = { owned_by = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {
+			tabriz_area = {
+				type = all
+				owned_by = ROOT
+				culture = azerbaijani
+			}
+			418 = {
+				owned_by = ROOT
+				culture = turkish
+			}
+			calc_true_if = {
+				all_owned_province = {
+					culture = azerbaijani
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			418 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			custom_tooltip = QAR_tooltip.3
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						culture = azerbaijani
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = {
+						culture = azerbaijani
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = {
+						culture = azerbaijani
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+}
+
+QAR_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {	
+		OR = {
+			tag = QAR
+			AND = {
+				was_tag = QAR
+				tag = TRK
+			}
+		}
+	}
+	has_country_shield = yes
+
+	QAR_crush_jihangir = {
+		icon = mission_crusade_for_varna
+		required_missions = { QAR_end_of_timurs_empire }
+		position = 2
+		provinces_to_highlight = {
+			is_core = AKK
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			# custom_trigger_tooltip = {
+				# tooltip = QAR_tooltip.4
+				407 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				4292 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				2308 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				418 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				2305 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				2306 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				331 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				NOT = { exists = AKK }
+			# }
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_turkoman_tribes_reunited"
+				duration = 9125
+			}
+			add_accepted_culture = turkish
+			4295 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	QAR_integrate_the_cities = {
+		icon = mission_bedouins
+		required_missions = { }
+		position = 3
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QAR_tooltip.1
+				accepted_culture = al_iraqiya_arabic
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_unity"
+				duration = 5475
+			}
+		}
+	}
+	
+	QAR_custodian_of_baghdad = {
+		icon = innovative_missions_icon
+		required_missions = { QAR_integrate_the_cities QAR_end_mushasha QAR_shia_sheep }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 410
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				num_free_building_slots = 1
+			}
+		}
+		trigger = {
+			410 = {
+				owned_by = ROOT
+				development = 20
+				NOT = { num_free_building_slots = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_custodian_of_baghdad_modifier"
+				duration = 9125
+			}
+		}
+	}
+	
+	QAR_safeguard_holy_sites = {
+		icon = me_mission_muslim_priest
+		required_missions = { QAR_custodian_of_baghdad }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 409
+				province_id = 2311
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				NOT = { religion = shiite }
+			}
+		}
+		trigger = {
+			409 = {
+				owned_by = ROOT
+				development = 15
+				religion = shiite
+			}
+			2311 = {
+				owned_by = ROOT
+				development = 15
+				religion = shiite
+			}
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+			add_country_modifier = {
+				name = QAR_sword_of_islam
+				duration = 9125
+			}
+		}
+	}
+}
+
+QAR_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {	
+		OR = {
+			tag = QAR
+			AND = {
+				was_tag = QAR
+				tag = TRK
+			}
+		}
+	}
+	has_country_shield = yes
+
+	QAR_end_of_timurs_empire = {
+		icon = mission_central_asian_city
+		required_missions = { }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QAR_tooltip.2
+				has_global_flag = death_of_shah_rukh
+			}
+			army_size_percentage = 0.80
+			manpower = 10
+		}
+		effect = {
+			custom_tooltip = QAR_tooltip.6
+			hidden_effect = {
+				AKK = {
+					every_core_province = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				MSY = {
+					every_core_province = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			add_country_modifier = {
+				name = QAR_to_fill_the_power_vacuum
+				duration = 5475
+			}
+		}
+	}
+
+	QAR_end_mushasha = {
+		icon = mission_non-western_soldiers
+		required_missions = { QAR_end_of_timurs_empire }
+		position = 3
+		provinces_to_highlight = {
+			is_core = MSY
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QAR_tooltip.5
+				NOT = {
+					any_province = {
+						is_core = MSY
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
+		}
+		effect = {
+			408 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = QAR_estuary_secured
+				}
+			}
+			azerbaijan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			luristan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	QAR_qazvin = {
+		icon = mission_ottoman_harem
+		required_missions = { QAR_end_mushasha }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = luristan_area
+				area = azerbaijan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			luristan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			azerbaijan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QAR_incursion_into_persia
+				duration = 9125
+			}
+			iraq_e_ajam_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			farsistan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			persian_gulf_coast = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			isfahan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	QAR_Persian_submission = {
+		icon = mission_persian_soldiers
+		required_missions = { QAR_qazvin }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = iraq_e_ajam_area
+				area = farsistan_area
+				area = isfahan_area
+				area = persian_gulf_coast
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			iraq_e_ajam_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kerman_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			isfahan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_king_of_kings"
+				duration = 7300
+			}
+			persia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+QAR_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {	
+		OR = {
+			tag = QAR
+			AND = {
+				was_tag = QAR
+				tag = TRK
+			}
+		}
+	}
+	has_country_shield = yes
+
+	QAR_integrate_kharabakh = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { QAR_reign_in_armenia QAR_end_of_timurs_empire }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2202
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2202
+			NOT = { exists = MLK }
+		}
+		effect = {
+			custom_tooltip = QAR_tooltip.8
+			hidden_effect = {
+				shirvan_area  = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT	}
+						owned_by = SRV
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = QAR_governor_of_azerbaijan
+				duration = 7300
+			}
+		}
+	}
+	
+	QAR_defeat_shirvanshah = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { QAR_integrate_kharabakh }
+		position = 3
+		provinces_to_highlight = {
+			area = shirvan_area
+			is_core = SRV
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = QAR_tooltip.7
+				NOT = {
+					shirvan_area = {
+						is_core = SRV
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = QAR_connection_to_caspian_sea
+				duration = 9125
+			}
+			shirvan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			dagestan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+QAR_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {	
+		OR = {
+			tag = QAR
+			AND = {
+				was_tag = QAR
+				tag = TRK
+			}
+		}
+	}
+	has_country_shield = yes
+
+	QAR_reign_in_armenia = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			area = armenia_area
+			owned_by = ROOT
+			unrest = 0.01
+		}
+		trigger = {
+			armenia_area = {
+				type = all
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { unrest = 0.01 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_armenian_quelled"
+				duration = 9125
+			}
+		}
+	}
+	
+	QAR_integrate_bitlis = {
+		icon = mission_alliances
+		required_missions = { QAR_reign_in_armenia }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2307
+				province_id = 4296
+				province_id = 4302
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2307
+			owns = 4296
+			owns = 4302
+			NOT = { exists = BTL }
+		}
+		effect = {
+			add_stability = 1
+			kartli_kakheti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	QAR_revenge_on_vakhtang = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { QAR_integrate_bitlis }
+		position = 3
+		provinces_to_highlight = {
+			area = kartli_kakheti_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kartli_kakheti_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_legitimacy_equivalent = { value = 10 }
+			imereti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			samtskhe_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	QAR_masters_of_the_mountains = {
+		icon = mission_empire
+		required_missions = { QAR_revenge_on_vakhtang QAR_defeat_shirvanshah }
+		position = 4
+		provinces_to_highlight = {
+			region = caucasia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			caucasia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "QAR_masters_of_the_mountains_modifier"
+				duration = -1
+			}
+		}
+	}
+}

@@ -1,0 +1,715 @@
+QOM_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = QOM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ajam_qom_renewed = {
+		icon = mission_conquer_50_development
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 2213
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			stability = 1
+			owns = 2213
+			capital = 2213
+			2213 = {
+				development = 12
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_qom_renewed_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	ajam_local_townships = {
+		icon = mission_develop_alhambra
+		required_missions = { ajam_qom_renewed }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2212
+				province_id = 4300
+				province_id = 2216
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 10 }
+			}
+		}
+		trigger = {
+			owns = 2212
+			2212 = {
+				development = 10
+			}
+			owns = 4300
+			4300 = {
+				development = 10
+			}
+			owns = 2216
+			2216 = {
+				development = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_local_townships_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	ajam_enlightened_rule = {
+		icon = me_mission_muslim_priest
+		required_missions = { ajam_local_townships ajam_inward_perfection }
+		position = 7
+		trigger = {
+			religion_group = muslim
+			NOT = { piety = -0.99 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_enlightened_rule_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+QOM_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = QOM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ajam_prepare_defense = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 429
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+			ROOT = {
+				NOT = { num_of_allies = 2 }
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_allies = 2
+				AND = {
+					owns = 429
+					429 = {
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns = 429
+					429 = {
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+				}
+				429 = {
+					add_province_modifier = {
+						name = ajam_prepare_defense_province_modifier
+						duration = 7300
+					}
+				}
+				2213 = {
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						add_province_modifier = {
+							name = ajam_prepare_defense_province_modifier
+							duration = 7300
+						}
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ajam_prepare_defense_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	ajam_inward_perfection = {
+		icon = me_mission_muslim_family
+		required_missions = { ajam_qom_renewed ajam_prepare_defense }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { development = 6 }
+		}
+		trigger = {
+			if = {
+				limit = {
+					religion_group = muslim
+				}
+				NOT = { piety = -0.6 }
+			}
+			all_owned_province = {
+				development = 6
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_inward_perfection_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	ajam_defeat_khorasan = {
+		icon = mission_cannons_firing
+		required_missions = { ajam_open_revolt }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 427
+				province_id = 2214
+				province_id = 2236
+				province_id = 2235
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 427
+			owns = 2214
+			owns = 2236
+			owns = 2235
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_defeat_khorasan_modifier
+				duration = 18250
+			}
+			khorasan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			merv_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			birjand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transoxiana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ajam_northward_push = {
+		icon = mission_conquer_persia
+		required_missions = { ajam_defeat_khorasan }
+		position = 8
+		provinces_to_highlight = {
+			area = birjand_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			birjand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_mil_power = 150
+			herat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+QOM_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = QOM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ajam_open_revolt = {
+		icon = me_mission_france_cavalry_in_battle
+		required_missions = { ajam_meaning_of_ajam }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 454
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = TIM }
+		}
+		trigger = {
+			OR = {
+				war_with = TIM
+				AND = {
+					NOT = { exists = TIM }
+					owns_or_non_sovereign_subject_of = 454
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_open_revolt_modifier
+				duration = 3650
+			}
+			persia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mashhad_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ajam_march_on_transoxiana = {
+		icon = mission_assemble_an_army
+		required_missions = { ajam_defeat_khorasan ajam_open_revolt }
+		position = 8
+		provinces_to_highlight = {
+			area = transoxiana_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			transoxiana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_march_on_transoxiana_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	ajam_second_capital = {
+		icon = mission_into_persia_1
+		required_missions = { ajam_northward_push ajam_march_on_transoxiana ajam_southward_push }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 446
+				province_id = 451
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 446
+			owns_core_province = 451
+		}
+		effect = {
+			add_prestige = 10
+			add_legitimacy_equivalent = { value = 10 }
+			herat_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = ajam_second_capital_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+QOM_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = QOM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ajam_meaning_of_ajam = {
+		icon = mission_into_persia_2
+		required_missions = { }
+		position = 5
+		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = FRS
+					value = 130
+				}
+				reverse_has_opinion = {
+					who = KHO
+					value = 130
+				}
+				reverse_has_opinion = {
+					who = TRS
+					value = 130
+				}
+				war_with = TIM
+				AND = {
+					NOT = { exists = FRS }
+					NOT = { exists = KHO }
+					NOT = { exists = TRS }
+					NOT = { exists = TIM }
+				}
+			}
+		}
+		effect = {
+			isfahan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			birjand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			herat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kerman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ajam_mitigated_collapse = {
+		icon = mission_hands_praying
+		required_missions = { ajam_meaning_of_ajam ajam_the_new_empire }
+		position = 6
+		trigger = {
+			OR = {
+				religion = sunni
+				religion = shiite
+			}
+			religious_unity = 0.75
+		}
+		effect = {
+			add_stability = 1
+			if = {
+				limit = {
+					religion = sunni
+				}
+				add_country_modifier = {
+					name = ajam_mitigated_collapse_modifier_1
+					duration = 10950
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ajam_mitigated_collapse_modifier_2
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	ajam_defeat_fars = {
+		icon = mission_persian_soldiers
+		required_missions = { ajam_open_revolt }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = farsistan_area
+				area = persian_gulf_coast
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			farsistan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_defeat_fars_modifier
+				duration = 14600
+			}
+			4332 = {
+				galley = ROOT
+				galley = ROOT
+				galley = ROOT
+				galley = ROOT
+				galley = ROOT
+			}
+			mogostan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kerman_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ajam_southward_push = {
+		icon = me_mission_army
+		required_missions = { ajam_defeat_fars }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 431
+				province_id = 4327
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 431
+			owns = 4327
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_southward_push_modifier
+				duration = 10950
+			}
+			sistan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+QOM_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = QOM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ajam_the_new_empire = {
+		icon = mission_empire
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 413
+				province_id = 4342
+				province_id = 2217
+				province_id = 2211
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 413
+			owns_core_province = 4342
+			owns_core_province = 2217
+			owns_core_province = 2211
+		}
+		effect = {
+			add_country_modifier = {
+				name = ajam_the_new_empire_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	ajam_consolidate_trade = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { ajam_the_new_empire }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2213
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 2213
+			2213 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			4341 = {
+				trade_share = {
+					share = 40
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			2213 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+					add_center_of_trade_level = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				else = {
+					add_base_production = 2
+				}
+			}
+			429 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = ajam_consolidate_trade_province_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	
+	ajam_hard_gold = {
+		icon = mission_zambezi_gold
+		required_missions = { ajam_consolidate_trade }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 4171
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 10 }
+			}
+		}
+		trigger = {
+			owns = 4171
+			4171 = {
+				development = 10
+			}
+		}
+		effect = {
+			4171 = {
+				change_trade_goods = gold
+				add_province_modifier = {
+					name = ajam_hard_gold_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}

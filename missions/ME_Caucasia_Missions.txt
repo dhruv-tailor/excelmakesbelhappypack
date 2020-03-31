@@ -1,0 +1,944 @@
+caucasia_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAU
+	}
+	has_country_shield = yes
+	
+	caucasia_plight_of_the_azerbaijani = {
+		icon = mission_unite_the_princes
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			culture = azerbaijani
+			has_discovered = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			all_province = {
+				OR = {
+					NOT = { culture = azerbaijani }
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					culture = azerbaijani
+				}
+				add_province_modifier = {
+					name = caucasia_plight_of_the_azerbaijani_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	caucasia_defensive_innovation = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { caucasia_bastion_of_the_caucasus }
+		position = 3
+		provinces_to_highlight = {
+			NOT = { has_dlc = "Rule Britannia" }
+			is_capital_of = ROOT
+			NOT = { development = 20 }
+		}
+		trigger = {
+			advisor = fortification_expert
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 25
+			}
+			else = {
+				capital_scope = {
+					development = 20
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_defensive_innovation_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	caucasia_dominance_of_samarkand = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { caucasia_defensive_innovation caucasia_prince_of_samarkand }
+		position = 6
+		trigger = {
+			454 = {
+				trade_share = {
+					share = 50
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = caucasia_dominance_of_samarkand_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+caucasia_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAU
+	}
+	has_country_shield = yes
+	
+	caucasia_bastion_of_the_caucasus = {
+		icon = mission_conquer_50_development
+		required_missions = { caucasia_true_unity }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				region = caucasia_region
+				OR = {
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			2202 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					change_trade_goods = salt
+				}
+			}
+			423 = {
+				add_province_modifier = {
+					name = caucasia_bastion_of_the_caucasus_province_modifier
+					duration = 9125
+				}
+			}
+			2204 = {
+				add_province_modifier = {
+					name = caucasia_bastion_of_the_caucasus_province_modifier
+					duration = 9125
+				}
+			}
+			422 = {
+				add_province_modifier = {
+					name = caucasia_bastion_of_the_caucasus_province_modifier
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	caucasia_overtake_the_hordes = {
+		icon = me_mission_golden_horde_horsemen
+		required_missions = { caucasia_bastion_of_the_caucasus }
+		position = 3
+		provinces_to_highlight = {
+			area = astrakhan_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			astrakhan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 15
+			464 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			lower_yik_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROTO
+			}
+			nogai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROTO
+			}
+			transcaspia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROTO
+			}
+		}
+	}
+	
+	caucasia_strike_at_the_mongols = {
+		icon = me_mission_mongolia_building_burning
+		required_missions = { caucasia_overtake_the_hordes }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = lower_yik_area
+				area = nogai_area
+				area = transcaspia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lower_yik_area = {
+				type = all
+				owned_by = ROOT
+			}
+			nogai_area = {
+				type = all
+				owned_by = ROOT
+			}
+			transcaspia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_strike_at_the_mongols_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	caucasia_prince_of_samarkand = {
+		icon = mission_golden_century
+		required_missions = { caucasia_strike_at_the_mongols caucasia_conquest_of_qom }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 454
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 454
+		}
+		effect = {
+			country_event = { id = ME_Caucasia_Events.1 }
+		}
+	}
+	
+	caucasia_bend_the_silk_road = {
+		icon = mission_indian_soldier_elephant
+		required_missions = { caucasia_dominance_of_samarkand }
+		position = 7
+		trigger = {
+			454 = {
+				trade_share = {
+					share = 20
+					country = ROOT
+				}
+			}
+			4341 = {
+				trade_share = {
+					share = 20
+					country = ROOT
+				}
+			}
+			707 = {
+				trade_share = {
+					share = 20
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_bend_the_silk_road_modifier
+				duration = 10950
+			}
+			419 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					if = {
+						limit = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+						}
+						center_of_trade = 1
+					}
+					else_if = {
+						limit = {
+							NOT = { province_has_center_of_trade_of_level = 3 }
+						}
+						add_center_of_trade_level = 1
+					}
+				}
+			}
+			466 = {
+				if = {
+					limit = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					if = {
+						limit = {
+							province_has_center_of_trade_of_level = 1
+						}
+						add_center_of_trade_level = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+caucasia_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAU
+	}
+	has_country_shield = yes
+	
+	caucasia_true_unity = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			region = caucasia_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				unrest = 0.01
+			}
+		}
+		trigger = {
+			caucasia_region = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { unrest = 0.01 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_true_unity_modifier
+				duration = 10950
+			}
+			2447 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	caucasia_press_circassian_claims = {
+		icon = mission_cannons_firing
+		required_missions = { caucasia_true_unity caucasia_caucasia_federated }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 2447
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 2447
+		}
+		effect = {
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			azov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	caucasia_expel_the_westerners = {
+		icon = mission_expel_the_moriscos
+		required_missions = { caucasia_overtake_the_hordes caucasia_press_circassian_claims }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = crimea_area
+				area = azov_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			crimea_area = {
+				type = all
+				owned_by = ROOT
+			}
+			azov_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			286 = {
+				change_trade_goods = fish
+				add_province_modifier = {
+					name = caucasia_expel_the_westerners_province_modifier
+					duration = 10950
+				}
+			}
+			284 = {
+				add_province_modifier = {
+					name = caucasia_expel_the_westerners_province_modifier
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	caucasia_caucasian_dominion = {
+		icon = mission_fortify_rajputana
+		required_missions = { caucasia_conquest_of_qom }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				continent = europe
+				continent = asia
+			}
+			has_terrain = mountain
+			has_discovered = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			europe = {
+				type = all
+				OR = {
+					NOT = { has_terrain = mountain }
+					owned_by = ROOT
+				}
+			}
+			asia = {
+				type = all
+				OR = {
+					NOT = { has_terrain = mountain }
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_caucasian_dominion_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	caucasia_a_rear_threat = {
+		icon = mission_conquer_50_development
+		required_missions = { caucasia_prince_of_samarkand caucasia_isfahan_campaign }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 330
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			owns_core_province = 330
+			330 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			330 = {
+				add_province_modifier = {
+					name = caucasia_a_rear_threat_province_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	caucasia_none_shall_pass = {
+		icon = mission_cannons_firing
+		required_missions = { caucasia_a_rear_threat }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				region = caucasia_region
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_prestige = 15
+			2196 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = caucasia_none_shall_pass_province_modifier
+						duration = 10950
+					}
+				}
+			}
+			462 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = caucasia_none_shall_pass_province_modifier
+						duration = 10950
+					}
+				}
+			}
+			1856 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = caucasia_none_shall_pass_province_modifier
+						duration = 10950
+					}
+				}
+			}
+			2195 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = caucasia_none_shall_pass_province_modifier
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+	
+	caucasia_the_black_navy = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { caucasia_none_shall_pass }
+		position = 8
+		trigger = {
+			num_of_galley = 25
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_the_black_navy_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+caucasia_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAU
+	}
+	has_country_shield = yes
+	
+	caucasia_caucasia_federated = {
+		icon = mission_have_two_subjects
+		required_missions = { caucasia_true_unity }
+		position = 2
+		trigger = {
+			NOT = { average_home_autonomy = 10 }
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 80
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 80
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 80
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				if = {
+					limit = {
+						has_estate = estate_cossacks
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_cossacks
+							influence = 80
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_estate = estate_nomadic_tribes
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nomadic_tribes
+							influence = 80
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_caucasia_federated_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	caucasia_head_of_caucasia = {
+		icon = mission_empire
+		required_missions = { caucasia_caucasia_federated }
+		position = 3
+		trigger = {
+			prestige = 20
+			legitimacy_equivalent = 100
+			OR = {
+				ruler_culture = armenian
+				ruler_culture = azerbaijani
+				ruler_culture = dagestani
+				ruler_culture = circassian
+				ruler_culture = georgian
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					government = republic
+				}
+				add_country_modifier = {
+					name = caucasia_head_of_caucasia_modifier_1
+					duration = 10950
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = caucasia_head_of_caucasia_modifier_2
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	caucasia_conquest_of_qom = {
+		icon = mission_assemble_an_army
+		required_missions = { caucasia_head_of_caucasia }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 2213
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2213
+		}
+		effect = {
+			2213 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+					add_center_of_trade_level = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			isfahan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	caucasia_isfahan_campaign = {
+		icon = mission_into_persia_1
+		required_missions = { caucasia_conquest_of_qom }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 429
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 429
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_isfahan_campaign_modifier
+				duration = 7300
+			}
+			isfahan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	caucasia_mountain_toll = {
+		icon = mission_conquer_air
+		required_missions = { caucasia_persian_dominance }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 428
+				province_id = 2213
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 428
+			428 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			owns = 2213
+			2213 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			random_list = {
+				50 = {
+					428 = {
+						add_province_modifier = {
+							name = caucasia_mountain_toll_province_modifier
+							duration = -1
+						}
+					}
+				}
+				50 = {
+					capital_scope = {
+						add_province_modifier = {
+							name = caucasia_mountain_toll_province_modifier
+							duration = -1
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+caucasia_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAU
+	}
+	has_country_shield = yes
+	
+	caucasia_national_heresy = {
+		icon = mission_hands_praying
+		required_missions = { }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = CAU_AT_LEAST_3_TOLERANCE_HERETIC
+				has_global_modifier_value = {
+					which = tolerance_heretic
+					value = 3
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = CAU_AT_LEAST_3_TOLERANCE_HEATHEN
+				has_global_modifier_value = {
+					which = tolerance_heathen
+					value = 3
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = caucasia_national_heresy_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	caucasia_georgian_union = {
+		icon = me_mission_protect_throne
+		required_missions = { caucasia_caucasia_federated }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = kartli_kakheti_area
+				area = imereti_area
+				area = samtskhe_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				unrest = 0.01
+				local_autonomy = 0.01
+			}
+		}
+		trigger = {
+			stability = 1
+			government = monarchy
+			legitimacy = 100
+			kartli_kakheti_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 0.01 }
+				NOT = { local_autonomy = 0.01 }
+			}
+			imereti_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 0.01 }
+				NOT = { local_autonomy = 0.01 }
+			}
+			samtskhe_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 0.01 }
+				NOT = { local_autonomy = 0.01 }
+			}
+		}
+		effect = {
+			kartli_kakheti_area = {
+				add_province_modifier = {
+					name = caucasia_georgian_union_province_modifier
+					duration = -1
+				}
+			}
+			imereti_area = {
+				add_province_modifier = {
+					name = caucasia_georgian_union_province_modifier
+					duration = -1
+				}
+			}
+			samtskhe_area = {
+				add_province_modifier = {
+					name = caucasia_georgian_union_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	caucasia_persian_dominance = {
+		icon = mission_dominate_persian_gulf
+		required_missions = { caucasia_isfahan_campaign }
+		position = 6
+		trigger = {
+			4341 = {
+				trade_share = {
+					share = 50
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = caucasia_persian_dominance_modifier
+				duration = 10950
+			}
+		}
+	}
+}

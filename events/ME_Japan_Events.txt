@@ -1,0 +1,2276 @@
+namespace = ME_Japan_Events
+
+# A New Favored Class?
+country_event = {
+	id = ME_Japan_Events.1
+	title = ME_Japan_Events.EVTNAME1
+	desc = ME_Japan_Events.EVTDESC1
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = IMPERIAL_SEAL_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = ECONOMY_eventPicture
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events1.EVTOPT1
+		
+		add_corruption = 2
+		add_army_tradition = 10
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 10
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events1.EVTOPT2
+		
+		add_corruption = 2
+		add_mercantilism = 3
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events1.EVTOPT3
+		
+		add_corruption = 2
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_ruler_modifier = {
+			name = japan_religious_class_promoted
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events1.EVTOPT4
+		
+		add_corruption = -2
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -5
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -5
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -5
+		}
+	}
+}
+
+# hidden event to remove Martial Law
+country_event = {
+	id = ME_Japan_Events.2
+	title = ME_Japan_Events.EVTNAME2
+	desc = ME_Japan_Events.EVTDESC2
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		is_at_war = no
+		has_country_modifier = japan_martial_law_modifier
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = japan_martial_law_modifier
+			clr_country_flag = japan_martial_law_cooldown
+			set_country_flag = japan_martial_law_cooldown
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Period of Growth
+country_event = {
+	id = ME_Japan_Events.3
+	title = ME_Japan_Events.EVTNAME3
+	desc = ME_Japan_Events.EVTDESC3
+	picture = CITY_DEVELOPMENT_eventPicture
+	
+	trigger = {
+		tag = JAP
+		NOT = { has_country_flag = japan_chose_conquest_missions }
+		NOT = { has_country_flag = japan_chose_colonial_missions }
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 25
+	}
+	
+	option = {
+		name = ME_Japan_Events3.EVTOPT1
+		
+		ai_chance = { factor = 0.75 }
+		
+		custom_tooltip = JAP_UNLOCK_CONQUEST_MISSIONS
+		hidden_effect = {
+			set_country_flag = japan_chose_conquest_missions
+			clr_country_flag = japan_chose_colonial_missions
+			swap_non_generic_missions = yes
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events3.EVTOPT2
+		
+		ai_chance = { factor = 0.25 }
+		
+		custom_tooltip = JAP_UNLOCK_COLONIAL_MISSIONS
+		hidden_effect = {
+			set_country_flag = japan_chose_colonial_missions
+			clr_country_flag = japan_chose_conquest_missions
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+# Meiji Restoration disaster events
+## The Meiji Restoration (starting event)
+country_event = {
+	id = ME_Japan_Events.4
+	title = ME_Japan_Events.EVTNAME4
+	desc = ME_Japan_Events.EVTDESC4
+	picture = ANGRY_MOB_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = has_japan_meiji_restoration_disaster
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events4.EVTOPT1
+		
+		custom_tooltip = JAP_MEIJI_RESTORATION_START_TT
+	}
+}
+
+## The End of the Meiji Restoration (ending event)
+country_event = {
+	id = ME_Japan_Events.5
+	title = ME_Japan_Events.EVTNAME5
+	desc = ME_Japan_Events.EVTDESC5
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = had_japan_meiji_restoration_disaster
+			clr_country_flag = has_japan_meiji_restoration_disaster
+			clr_country_flag = japan_meiji_restoration_disaster_daimyo_lords_demand_autonomy
+			clr_country_flag = japan_meiji_restoration_disaster_open_rebellion
+			clr_country_flag = japan_meiji_restoration_disaster_shiroyama
+			clr_country_flag = japan_meiji_restoration_disaster_speech_of_victory
+			clr_country_flag = japan_meiji_restoration_disaster_ending_flag
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events5.EVTOPT1
+		
+		remove_country_modifier = japan_peasant_concessions
+		add_country_modifier = {
+			name = japan_victorious_emergence
+			duration = -1
+		}
+	}
+}
+
+## Daimyo Lords Demand Autonomy
+country_event = {
+	id = ME_Japan_Events.6
+	title = ME_Japan_Events.EVTNAME6
+	desc = ME_Japan_Events.EVTDESC6
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = CHINESE_GENERAL_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = HORDE_ON_HORSEBACK_eventPicture
+	}
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		has_country_flag = has_japan_meiji_restoration_disaster
+		has_estate = estate_nobles
+		NOT = { has_country_flag = japan_meiji_restoration_disaster_daimyo_lords_demand_autonomy }
+	}
+	
+	mean_time_to_happen = {
+		months = 16
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = japan_meiji_restoration_disaster_daimyo_lords_demand_autonomy
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events6.EVTOPT1
+		
+		custom_tooltip = JAP_MEIJI_RESTORATION_EVERY_OWNED_PROVINCE_PLUS_20_AUTONOMY
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = EST_VAL_JAP_MEIJI_RESTORATION_DAIMYO_LORDS_DEMAND_AUTONOMY
+			influence = 20
+			duration = 3650
+		}
+		hidden_effect = {
+			every_owned_province = {
+				add_local_autonomy = 20
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events6.EVTOPT2
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -30
+		}
+		random_owned_province = {
+			noble_rebels = 2
+		}
+		random_owned_province = {
+			noble_rebels = 2
+		}
+		random_owned_province = {
+			noble_rebels = 2
+		}
+		random_owned_province = {
+			noble_rebels = 2
+		}
+		random_owned_province = {
+			noble_rebels = 2
+		}
+	}
+}
+
+## Open Rebellion of [GetYear]
+country_event = {
+	id = ME_Japan_Events.7
+	title = ME_Japan_Events.EVTNAME7
+	desc = ME_Japan_Events.EVTDESC7
+	picture = BORDER_TENSION_eventPicture
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		OR = {
+			has_country_flag = japan_meiji_restoration_disaster_daimyo_lords_demand_autonomy
+			NOT = { has_estate = estate_nobles }
+		}
+		NOT = { has_country_flag = japan_meiji_restoration_disaster_open_rebellion }
+	}
+	
+	mean_time_to_happen = {
+		months = 40
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = japan_meiji_restoration_disaster_open_rebellion
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events7.EVTOPT1
+		
+		add_stability = -1
+		add_legitimacy_equivalent = { value = -20 }
+		add_country_modifier = {
+			name = japan_peasant_concessions
+			duration = -1
+			desc = JAP_UNTIL_END_OF_MEIJI_RESTORATION_DISASTER
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events7.EVTOPT2
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -30
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			anti_tax_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			anti_tax_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			anti_tax_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			anti_tax_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			anti_tax_rebels = 3
+		}
+	}
+}
+
+## Shiroyama
+country_event = {
+	id = ME_Japan_Events.8
+	title = ME_Japan_Events.EVTNAME8
+	desc = ME_Japan_Events.EVTDESC8
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = FIREARMS_INCIDENT_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = MILITARY_CAMP_eventPicture
+	}
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		has_country_flag = japan_meiji_restoration_disaster_open_rebellion
+		NOT = { has_country_flag = japan_meiji_restoration_disaster_shiroyama }
+	}
+	
+	mean_time_to_happen = {
+		months = 36
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = japan_meiji_restoration_disaster_shiroyama
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events8.EVTOPT1
+		
+		define_general = {
+			name = "Saigo Takamori"
+			fire = 6
+			shock = 5
+			manuever = 3
+			siege = 4
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			noble_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			noble_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			noble_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			noble_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				region = japan_region
+			}
+			noble_rebels = 3
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events8.EVTOPT2
+		
+		add_army_tradition = -15
+		if = {
+			limit = {
+				owns = 1012
+			}
+			1012 = {
+				noble_rebels = 1
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					region = japan_region
+				}
+				noble_rebels = 1
+			}
+		}
+	}
+}
+
+## Speech of Victory
+country_event = {
+	id = ME_Japan_Events.9
+	title = ME_Japan_Events.EVTNAME9
+	desc = ME_Japan_Events.EVTDESC9
+	picture = {
+		trigger = {
+			has_dlc = "American Dream"
+		}
+		picture = DECLERATION_INDEPENDENCE_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "American Dream" }
+		}
+		picture = REFORM_eventPicture
+	}
+	
+	major = yes
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		has_country_flag = japan_meiji_restoration_disaster_shiroyama
+		NOT = { has_country_flag = japan_meiji_restoration_disaster_speech_of_victory }
+		has_regency = no
+		NOT = { num_of_rebel_armies = 1 }
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+	}
+	
+	mean_time_to_happen = {
+		months = 30
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = japan_meiji_restoration_disaster_speech_of_victory
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events9.EVTOPT1
+		
+		custom_tooltip = JAP_MEIJI_RESTORATION_END_TT
+		add_country_modifier = {
+			name = japan_adherence_to_tradition
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events9.EVTOPT2
+		
+		custom_tooltip = JAP_MEIJI_RESTORATION_END_TT
+		define_ruler = {
+			name = "Meiji"
+			dynasty = ROOT
+			religion = ROOT
+			culture = ROOT
+			ADM = 1
+			DIP 1
+			MIL = 1
+			age = 20
+		}
+		change_unit_type = western
+		add_country_modifier = {
+			name = japan_westernization_of_japan
+			duration = 3650
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			set_country_flag = japan_meiji_restoration_disaster_ending_flag
+		}
+	}
+}
+
+## The Khan's Rebellion
+country_event = {
+	id = ME_Japan_Events.10
+	title = ME_Japan_Events.EVTNAME10
+	desc = ME_Japan_Events.EVTDESC10
+	picture = {
+		trigger = {
+			has_dlc = "The Cossacks"
+		}
+		picture = NOMAD_ESTATE_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "The Cossacks" }
+		}
+		picture = SIEGE_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		num_of_owned_provinces_with = {
+			value = 3
+			region = manchuria_region
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = ME_Japan_Events10.EVTOPT1
+		
+		trigger = {
+			NOT = { exists = MCH }
+		}
+		
+		ai_chance = { factor = 0.75 }
+		
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = MCH
+			cede_province = MCH
+		}
+		vassalize = MCH
+		hidden_effect = {
+			MCH = {
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+				add_liberty_desire = 100
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events10.EVTOPT2
+		
+		trigger = {
+			exists = MCH
+			NOT = { overlord_of = MCH }
+		}
+		
+		ai_chance = { factor = 0.1 }
+		
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = MCH
+			cede_province = MCH
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events10.EVTOPT3
+		
+		trigger = {
+			exists = MCH
+			overlord_of = MCH
+		}
+		
+		ai_chance = { factor = 0.75 }
+		
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = MCH
+			cede_province = MCH
+		}
+		if = {
+			limit = {
+				MCH = {
+					is_subject_of_type = march
+				}
+			}
+			vassalize = MCH
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events10.EVTOPT4
+		
+		ai_chance = { factor = 0.25 }
+		
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = manchuria_region
+			}
+			add_core = MCH
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+	}
+}
+
+## The Joseon Rebellion
+country_event = {
+	id = ME_Japan_Events.11
+	title = ME_Japan_Events.EVTNAME11
+	desc = ME_Japan_Events.EVTDESC11
+	picture = REVOLUTION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		has_disaster = japan_meiji_restoration_disaster
+		num_of_owned_provinces_with = {
+			value = 3
+			region = korea_region
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = ME_Japan_Events11.EVTOPT1
+		
+		trigger = {
+			NOT = { exists = KOR }
+		}
+		
+		ai_chance = { factor = 0.75 }
+		
+		korea_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = KOR
+			cede_province = KOR
+		}
+		vassalize = KOR
+		hidden_effect = {
+			KOR = {
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+				add_liberty_desire = 100
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events11.EVTOPT2
+		
+		trigger = {
+			exists = KOR
+			NOT = { overlord_of = KOR }
+		}
+		
+		ai_chance = { factor = 0.1 }
+		
+		korea_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = KOR
+			cede_province = KOR
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events11.EVTOPT3
+		
+		trigger = {
+			exists = KOR
+			overlord_of = KOR
+		}
+		
+		ai_chance = { factor = 0.75 }
+		
+		korea_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = KOR
+			cede_province = KOR
+		}
+		if = {
+			limit = {
+				KOR = {
+					is_subject_of_type = march
+				}
+			}
+			vassalize = KOR
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events11.EVTOPT4
+		
+		ai_chance = { factor = 0.25 }
+		
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+		random_owned_province = {
+			limit = {
+				region = korea_region
+			}
+			add_core = KOR
+			add_nationalism = 5
+			add_unrest = 5
+			nationalist_rebels = 1
+		}
+	}
+}
+
+# Successors of Krung Tai
+country_event = {
+	id = ME_Japan_Events.12
+	title = ME_Japan_Events.EVTNAME12
+	desc = ME_Japan_Events.EVTDESC12
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = GIFTS_TO_EMPEROR_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = COURT_eventPicture
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events12.EVTOPT1
+		
+		ai_chance = { factor = 0.3 }
+		
+		define_ruler = {
+			name = "Narai"
+			dynasty = "Ramathibodi"
+			ADM = -2
+			DIP = -2
+			MIL = -2
+			claim = 20
+		}
+		add_ruler_modifier = {
+			name = japan_illegitimate_emperor
+			duration = -1
+		}
+		indo_china_region = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_core = ROOT
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events12.EVTOPT2
+		
+		ai_chance = { factor = 0.7 }
+		
+		add_prestige = 10
+	}
+}
+
+# Declawing the Tiger
+country_event = {
+	id = ME_Japan_Events.13
+	title = ME_Japan_Events.EVTNAME13
+	desc = ME_Japan_Events.EVTDESC13
+	picture = GREAT_BUILDING_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events13.EVTOPT1
+		
+		add_years_of_income = 1
+		add_mil_power = 50
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_devastation = 20
+			add_nationalism = 5
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events13.EVTOPT2
+		
+		if = {
+			limit = {
+				NOT = { exists = MCH }
+			}
+			set_country_flag = manchu_released
+		}
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			remove_core = ROOT
+			add_core = MCH
+			cede_province = MCH
+		}
+		create_subject = {
+			subject = MCH
+			subject_type = march
+		}
+		custom_tooltip = JAP_MANCHU_MARCH_BONUSES_TT
+		hidden_effect = {
+			set_country_flag = jap_mch_march_gives_bonuses
+			if = {
+				limit = {
+					has_country_flag = manchu_released
+				}
+				clr_country_flag = manchu_released
+				MCH = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events13.EVTOPT3
+		
+		highlight = yes
+		
+		trigger = {
+			OR = {
+				DIP = 6
+				AND = {
+					has_dlc = "Rights of Man"
+					ruler_has_personality = lawgiver_personality
+				}
+			}
+		}
+		
+		manchuria_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			change_culture = togoku
+			add_province_modifier = {
+				name = japan_elevated_locals
+				duration = 5475
+			}
+		}
+	}
+}
+
+# Campaign into South China
+country_event = {
+	id = ME_Japan_Events.14
+	title = ME_Japan_Events.EVTNAME14
+	desc = ME_Japan_Events.EVTDESC14
+	picture = LAND_MILITARY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events14.EVTOPT1
+		
+		add_country_modifier = {
+			name = japan_naval_invasion
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events14.EVTOPT2
+		
+		add_country_modifier = {
+			name = japan_thunder_war
+			duration = 5475
+		}
+	}
+}
+
+# Fate of the Emperorship
+country_event = {
+	id = ME_Japan_Events.15
+	title = ME_Japan_Events.EVTNAME15
+	desc = ME_Japan_Events.EVTDESC15
+	picture = BATTLE_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					is_emperor_of_china = yes
+				}
+				save_event_target_as = empire_of_china
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events15.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.6
+			
+			modifier = {
+				factor = 0.5
+				NOT = { prestige = 0 }
+			}
+		}
+		
+		set_emperor_of_china = ROOT
+		add_country_modifier = {
+			name = japan_legitimate_emperor
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events15.EVTOPT2
+		
+		ai_chance = {
+			factor = 0.4
+		}
+		
+		dismantle_empire_of_china = yes
+		add_prestige = 50
+		add_adm_power = 50
+		add_dip_power = 50
+		add_mil_power = 50
+		hidden_effect = {
+			event_target:empire_of_china = {
+				if = {
+					limit = {
+						has_reform = celestial_empire
+					}
+					remove_government_reform = celestial_empire
+				}
+			}
+		}
+	}
+}
+
+# Of Spice and Herbs
+country_event = {
+	id = ME_Japan_Events.16
+	title = ME_Japan_Events.EVTNAME16
+	desc = ME_Japan_Events.EVTDESC16
+	picture = FEAST_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events16.EVTOPT1
+		
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			custom_tooltip = JAP_OF_SPICE_AND_HERBS_SPICE_TT_TGE
+		}
+		else = {
+			custom_tooltip = JAP_OF_SPICE_AND_HERBS_SPICE_TT
+		}
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						trade_goods = spices
+						AND = {
+							is_expanded_mod_active = { mod = trade_goods }
+							trade_goods = cinnamon
+						}
+					}
+				}
+				add_province_modifier = {
+					name = japan_increased_demand_of_spice
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events16.EVTOPT2
+		
+		trigger = {
+			any_province = {
+				country_or_non_sovereign_subject_holds = ROOT
+				trade_goods = tea
+			}
+		}
+		
+		custom_tooltip = JAP_OF_SPICE_AND_HERBS_TEA_TT
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					trade_goods = tea
+				}
+				add_province_modifier = {
+					name = japan_increased_demand_of_tea
+					duration = 9125
+				}
+			}
+		}
+	}
+}
+
+# The Colonial Menace
+country_event = {
+	id = ME_Japan_Events.17
+	title = ME_Japan_Events.EVTNAME17
+	desc = ME_Japan_Events.EVTDESC17
+	picture = {
+		trigger = {
+			has_dlc = "El Dorado"
+		}
+		picture = NATIVES_LOW_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "El Dorado" }
+		}
+		picture = COLONIZATION_eventPicture
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events17.EVTOPT1
+		
+		custom_tooltip = JAP_FUTURE_CN_BONUSES_EXPLOIT
+		set_country_flag = jap_future_cn_bonuses_exploit
+	}
+	
+	option = {
+		name = ME_Japan_Events17.EVTOPT2
+		
+		custom_tooltip = JAP_FUTURE_CN_BONUSES_ASSIMILATE
+		set_country_flag = jap_future_cn_bonuses_assimilate
+	}
+	
+	option = {
+		name = ME_Japan_Events17.EVTOPT3
+		
+		custom_tooltip = JAP_FUTURE_CN_BONUSES_TRADE
+		set_country_flag = jap_future_cn_bonuses_trade
+	}
+}
+
+# [Root.GetAdjective] Colonial Code
+country_event = {
+	id = ME_Japan_Events.18
+	title = ME_Japan_Events.EVTNAME18
+	desc = ME_Japan_Events.EVTDESC18
+	picture = {
+		trigger = {
+			has_dlc = "El Dorado"
+		}
+		picture = LOADING_SHIP_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "El Dorado" }
+		}
+		picture = HARBOUR_eventPicture
+	}
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events18.EVTOPT1
+		
+		add_years_of_income = -0.25
+		add_country_modifier = {
+			name = japan_basic_colonial_code
+			duration = 7300
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events18.EVTOPT2
+		
+		add_years_of_income = -1
+		add_country_modifier = {
+			name = japan_expanded_colonial_code
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events18.EVTOPT3
+		
+		add_years_of_income = 0.33
+	}
+}
+
+# ME_Japan_Events.19 deleted (hidden event for removing a modifier)
+
+# [Root.GetAdjective] Colonial Era
+country_event = {
+	id = ME_Japan_Events.20
+	title = ME_Japan_Events.EVTNAME20
+	desc = ME_Japan_Events.EVTDESC20
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Japan_Events20.EVTOPT1
+		
+		add_prestige = 20
+		add_navy_tradition = 10
+		define_explorer = {
+			name = "Mamiya Rinzo"
+			shock = 3
+			fire = 3
+			manuever = 6
+			siege = 0
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events20.EVTOPT2
+		
+		add_prestige = 20
+		add_army_tradition = 10
+		define_conquistador = {
+			name = "Tenjiku Tokubei"
+			shock = 3
+			fire = 4
+			manuever = 6
+			siege = 0
+		}
+	}
+}
+
+# Colonial Ventures of [Root.GetName]
+country_event = {
+	id = ME_Japan_Events.21
+	title = ME_Japan_Events.EVTNAME21
+	desc = ME_Japan_Events.EVTDESC21
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = WOKOU_INCIDENT_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = SHIP_SAILING_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		is_institution_enabled = new_world_i
+		stability = 1
+		has_idea = quest_for_the_new_world
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 100
+	}
+	
+	option = {
+		name = ME_Japan_Events21.EVTOPT1
+		
+		add_years_of_income = -1
+		create_conquistador = 100
+		add_country_modifier = {
+			name = japan_embracing_colonial_ideas
+			duration = 3650
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events21.EVTOPT2
+		
+		add_prestige = -5
+	}
+}
+
+# The Great Age of Pirates
+country_event = {
+	id = ME_Japan_Events.22
+	title = ME_Japan_Events.EVTNAME22
+	desc = ME_Japan_Events.EVTDESC22
+	picture = {
+		trigger = {
+			has_dlc = "Art of War"
+		}
+		picture = DUTCH_SHIPS_PLUNDERING_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Art of War" }
+		}
+		picture = FORT_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		has_dlc = "Golden Century"
+		tag = JAP
+		NOT = { has_reform = pirate_republic_reform }
+		has_country_flag = japan_chose_colonial_missions
+		num_of_heavy_ship = 25
+		navy_size_percentage = 0.8
+	}
+	
+	mean_time_to_happen = {
+		months = 25
+	}
+	
+	option = {
+		name = ME_Japan_Events22.EVTOPT1
+		
+		ai_chance = { factor = 0 }
+		
+		change_government = republic
+		add_government_reform = pirate_republic_reform
+		add_country_modifier = {
+			name = japan_nippon_pirate_code
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events22.EVTOPT2
+		
+		ai_chance = { factor = 100 }
+		
+		add_stability_or_adm_power = yes
+		add_navy_tradition = 20
+	}
+}
+
+# Heavenly Approval
+country_event = {
+	id = ME_Japan_Events.23
+	title = ME_Japan_Events.EVTNAME23
+	desc = ME_Japan_Events.EVTDESC23
+	picture = GIFTS_TO_EMPEROR_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		has_dlc = "Mandate of Heaven"
+		tag = JAP
+		is_emperor_of_china = yes
+		NOT = { imperial_mandate = 50 }
+		stability = 2
+	}
+	
+	mean_time_to_happen = {
+		months = 360
+	}
+	
+	option = {
+		name = ME_Japan_Events23.EVTOPT1
+		
+		add_years_of_income = -1.5
+		add_meritocracy = 10
+		add_country_modifier = {
+			name = japan_heavenly_favor
+			duration = -1
+			desc = JAP_UNTIL_LESS_THAN_2_STABILITY
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events23.EVTOPT2
+		
+		add_mandate = -10
+		add_meritocracy = -10
+	}
+}
+
+# hidden event to remove modifier
+country_event = {
+	id = ME_Japan_Events.24
+	title = ME_Japan_Events.EVTNAME24
+	desc = ME_Japan_Events.EVTDESC24
+	picture = DIPLOMACY_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_modifier = japan_heavenly_favor
+		NOT = { stability = 2 }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = japan_heavenly_favor
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events24.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Dynastic House of Cards
+country_event = {
+	id = ME_Japan_Events.25
+	title = ME_Japan_Events.EVTNAME25
+	desc = ME_Japan_Events.EVTDESC25
+	picture = SENGOKU_eventPicture
+	
+	major = yes
+	fire_only_once = yes
+	
+	trigger = {
+		has_dlc = "Mandate of Heaven"
+		tag = JAP
+		exists = MNG
+		war_with = MNG
+		MNG = {
+			is_emperor_of_china = yes
+			NOT = { imperial_mandate = 50 }
+			NOT = { stability = 1 }
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_Japan_Events25.EVTOPT1
+		
+		custom_tooltip = JAP_ENABLE_SHATTER_MING_PEACE_OPTION
+		set_country_flag = jap_enable_shatter_ming_peace_option
+	}
+}
+
+# End of the [Root.Monarch.Dynasty.GetName]
+country_event = {
+	id = ME_Japan_Events.26
+	title = ME_Japan_Events.EVTNAME26
+	desc = ME_Japan_Events.EVTDESC26
+	picture = COUNTRY_COLLAPSE_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_country_flag = ME_Japan_Events_26_fired }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = ME_Japan_Events_26_fired
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events26.EVTOPT1
+		
+		if = {
+			limit = {
+				is_emperor_of_china = yes
+			}
+			custom_tooltip = JAP_MNG_MIGHT_LOSE_EOC
+		}
+		FROM = {
+			add_country_modifier = {
+				name = japan_scramble_for_china
+				duration = 7300
+			}
+		}
+		release_subjects_and_cede_cores = { who = ROOT release_subjects = yes rebels = yes }
+		hidden_effect = {
+			if = {
+				limit = {
+					is_emperor_of_china = yes
+					OR = {
+						north_china_region = {
+							NOT = { owned_by = ROOT }
+							is_capital = yes
+						}
+						south_china_region = {
+							NOT = { owned_by = ROOT }
+							is_capital = yes
+						}
+					}
+				}
+				random_province = {
+					limit = {
+						is_capital = yes
+						OR = {
+							region = north_china_region
+							region = south_china_region
+						}
+						NOT = { owned_by = ROOT }
+					}
+					owner = {
+						set_emperor_of_china = THIS
+					}
+				}
+			}
+		}
+		clr_country_flag = ME_Japan_Events_26_fired
+	}
+}
+
+# The First Geisha
+country_event = {
+	id = ME_Japan_Events.27
+	title = ME_Japan_Events.EVTNAME27
+	desc = ME_Japan_Events.EVTDESC27
+	picture = CULTURE_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		is_year = 1500
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+	
+	option = {
+		name = ME_Japan_Events27.EVTOPT1
+		
+		define_advisor = {
+			name = "Kikuya"
+			type = artist
+			skill = 3
+			cost_multiplier = 0.25
+			female = yes
+		}
+	}
+}
+
+# Poetry and Songs of the Edo Period
+country_event = {
+	id = ME_Japan_Events.28
+	title = ME_Japan_Events.EVTNAME28
+	desc = ME_Japan_Events.EVTDESC28
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = NEO_CONFUCIANISM_INCIDENT_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = CULTURE_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		is_year = 1520
+		NOT = { is_year = 1750 }
+		owns_or_non_sovereign_subject_of = 1015
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+	
+	option = {
+		name = ME_Japan_Events28.EVTOPT1
+		
+		add_dip_power = 50
+		define_advisor = {
+			name = "Yoshiya Chiru"
+			type = artist
+			skill = 3
+			cost_multiplier = 0.5
+			female = yes
+		}
+	}
+}
+
+# Way of Chonindo
+country_event = {
+	id = ME_Japan_Events.29
+	title = ME_Japan_Events.EVTNAME29
+	desc = ME_Japan_Events.EVTDESC29
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = SHOGUNATE_AUTHORITY_INCIDENT_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = CULTURE_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		stability = 1
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+	
+	option = {
+		name = ME_Japan_Events29.EVTOPT1
+		
+		add_stability_or_adm_power = yes
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_innovativeness = 5
+		}
+		else = {
+			add_dip_power = 50
+		}
+	}
+}
+
+# Rangaku
+country_event = {
+	id = ME_Japan_Events.30
+	title = ME_Japan_Events.EVTNAME30
+	desc = ME_Japan_Events.EVTDESC30
+	picture = INVENTION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		has_regency = no
+		OR = {
+			adm_tech = 16
+			AND = {
+				has_dlc = "Rule Britannia"
+				innovativeness = 50
+			}
+		}
+		any_known_country = {
+			capital_scope = {
+				continent = europe
+			}
+			has_opinion = {
+				who = ROOT
+				value = 150
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+	
+	option = {
+		name = ME_Japan_Events30.EVTOPT1
+		
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_innovativeness = 5
+		}
+		else = {
+			add_adm_power = 100
+		}
+		add_ruler_modifier = {
+			name = japan_rangaku
+			duration = -1
+		}
+	}
+}
+
+# Great Fire of Meireki
+country_event = {
+	id = ME_Japan_Events.31
+	title = ME_Japan_Events.EVTNAME31
+	desc = ME_Japan_Events.EVTDESC31
+	picture = COUNTRY_COLLAPSE_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		is_year = 1657
+		NOT = { is_year = 1680 }
+		owns = 1028
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = ME_Japan_Events31.EVTOPT1
+		
+		1028 = {
+			add_devastation = 75
+			if = {
+				limit = {
+					base_tax = 3
+				}
+				add_base_tax = -2
+			}
+			else = {
+				set_base_tax = 1
+			}
+			if = {
+				limit = {
+					base_production = 3
+				}
+				add_base_production = -2
+			}
+			else = {
+				set_base_production = 1
+			}
+			if = {
+				limit = {
+					base_manpower = 3
+				}
+				add_base_manpower = -2
+			}
+			else = {
+				set_base_manpower = 1
+			}
+		}
+	}
+}
+
+# The Power of Symbols
+country_event = {
+	id = ME_Japan_Events.32
+	title = ME_Japan_Events.EVTNAME32
+	desc = ME_Japan_Events.EVTDESC32
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = URBANISATION_INCIDENT_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = GREAT_BUILDING_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		has_regency = no
+		is_at_war = no
+		owns = 1028
+	}
+	
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = ME_Japan_Events32.EVTOPT1
+		
+		set_capital = 1028
+		1028 = {
+			change_province_name = "Edo"
+			rename_capital = "Edo"
+			add_base_tax = 2
+			add_base_production = 2
+			add_base_manpower = 2
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events32.EVTOPT2
+		
+		add_legitimacy_equivalent = { value = 10 }
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 15
+		}
+	}
+}
+
+# Gokaido Stations
+country_event = {
+	id = ME_Japan_Events.33
+	title = ME_Japan_Events.EVTNAME33
+	desc = ME_Japan_Events.EVTDESC33
+	picture = TRADEGOODS_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		mission_completed = japan_the_five_routes
+		any_owned_province = {
+			OR = {
+				area = kinai_area
+				area = chubu_area
+				area = eastern_chubu_area
+			}
+			has_province_modifier = japan_the_five_routes_province_modifier
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = ME_Japan_Events33.EVTOPT1
+		
+		ai_chance = { factor = 0.75 }
+		
+		add_years_of_income = -0.5
+		every_owned_province = {
+			limit = {
+				OR = {
+					area = kinai_area
+					area = chubu_area
+					area = eastern_chubu_area
+				}
+				has_province_modifier = japan_the_five_routes_province_modifier
+			}
+			add_province_modifier = {
+				name = japan_shukuba
+				duration = 10950
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events33.EVTOPT2
+		
+		ai_chance = { factor = 0.25 }
+		
+		add_prestige = -5
+	}
+	
+	option = {
+		name = ME_Japan_Events33.EVTOPT3
+		
+		highlight = yes
+		required_personality = well_connected_personality
+		
+		trigger = {
+			has_dlc = "Rights of Man"
+			ruler_has_personality = well_connected_personality
+		}
+		
+		ai_chance = { factor = 100 }
+		
+		add_years_of_income = -0.25
+		every_owned_province = {
+			limit = {
+				OR = {
+					area = kinai_area
+					area = chubu_area
+					area = eastern_chubu_area
+				}
+				has_province_modifier = japan_the_five_routes_province_modifier
+			}
+			add_province_modifier = {
+				name = japan_shukuba
+				duration = 10950
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events33.EVTOPT3
+		
+		highlight = yes
+		required_personality = architectural_visionary_personality
+		
+		trigger = {
+			has_dlc = "Rights of Man"
+			ruler_has_personality = architectural_visionary_personality
+			NOT = { ruler_has_personality = well_connected_personality }
+		}
+		
+		ai_chance = { factor = 100 }
+		
+		add_years_of_income = -0.25
+		every_owned_province = {
+			limit = {
+				OR = {
+					area = kinai_area
+					area = chubu_area
+					area = eastern_chubu_area
+				}
+				has_province_modifier = japan_the_five_routes_province_modifier
+			}
+			add_province_modifier = {
+				name = japan_shukuba
+				duration = 10950
+			}
+		}
+	}
+}
+
+# Keian Uprising
+country_event = {
+	id = ME_Japan_Events.34
+	title = ME_Japan_Events.EVTNAME34
+	desc = ME_Japan_Events.EVTDESC34
+	picture = {
+		trigger = {
+			has_dlc = "Art of War"
+		}
+		picture = VILLAGE_BURNING_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Art of War" }
+		}
+		picture = ANGRY_MOB_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		government = monarchy
+		has_heir = yes
+		NOT = { heir_age = 15 }
+		has_regency = no
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 600
+	}
+	
+	option = {
+		name = ME_Japan_Events34.EVTOPT1
+		
+		ai_chance = { factor = 0.3 }
+		
+		add_stability = -1
+		define_ruler = {
+			name = "Yui"
+			dynasty = "Shosetsu"
+			age = 46
+			claim = 30
+			ADM = 0
+			DIP = 0
+			MIL = 2
+		}
+		add_ruler_modifier = {
+			name = japan_usurper_rule
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events34.EVTOPT2
+		
+		ai_chance = { factor = 0.7 }
+		
+		add_prestige = 5
+		add_legitimacy_equivalent = { value = 5 }
+		if = {
+			limit = {
+				japan_region = {
+					owned_by = ROOT
+				}
+			}
+			random_owned_province = {
+				limit = {
+					region = japan_region
+				}
+				noble_rebels = 3
+			}
+			random_owned_province = {
+				limit = {
+					region = japan_region
+				}
+				noble_rebels = 3
+			}
+		}
+		else = {
+			random_owned_province = {
+				noble_rebels = 3
+			}
+			random_owned_province = {
+				noble_rebels = 3
+			}
+		}
+	}
+}
+
+# The San Felipe Incident
+country_event = {
+	id = ME_Japan_Events.35
+	title = ME_Japan_Events.EVTNAME35
+	desc = ME_Japan_Events.EVTDESC35
+	picture = {
+		trigger = {
+			has_dlc = "Art of War"
+		}
+		picture = WITCHBURNING_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Art of War" }
+		}
+		picture = BORDER_TENSION_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		has_dlc = "Mandate of Heaven"
+		tag = JAP
+		religion = shinto
+		is_incident_active = incident_spread_of_christianity
+		is_at_war = no
+	}
+	
+	mean_time_to_happen = {
+		months = 25
+	}
+	
+	option = {
+		name = ME_Japan_Events35.EVTOPT1
+		
+		custom_tooltip = shinto_events.isolation.tt
+		hidden_effect = {
+			add_incident_variable_value = {
+				incident = incident_spread_of_christianity
+				value = -1
+			}
+		}
+		add_country_modifier = {
+			name = japan_no_mondi_operandus
+			duration = 7300
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events35.EVTOPT2
+		
+		custom_tooltip = shinto_events.open.tt
+		hidden_effect = {
+			add_incident_variable_value = {
+				incident = incident_spread_of_christianity
+				value = 1
+			}
+		}
+		add_stability = 1
+		random_owned_province = {
+			limit = {
+				region = japan_region
+				NOT = { religion = catholic }
+			}
+			change_religion = catholic
+		}
+	}
+}
+
+# The Separation Edict
+country_event = {
+	id = ME_Japan_Events.36
+	title = ME_Japan_Events.EVTNAME36
+	desc = ME_Japan_Events.EVTDESC36
+	picture = {
+		trigger = {
+			has_dlc = "Mandate of Heaven"
+		}
+		picture = MERITOCRACY_eventPicture
+	}
+	picture = {
+		trigger = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		picture = COURT_eventPicture
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = JAP
+		is_year = 1550
+		stability = 1
+		is_at_war = no
+		has_estate = estate_nobles
+	}
+	
+	mean_time_to_happen = {
+		months = 30
+	}
+	
+	option = {
+		name = ME_Japan_Events36.EVTOPT1
+		
+		add_stability = -1
+		add_country_modifier = {
+			name = japan_the_separation_edict
+			duration = 10950
+		}
+	}
+	
+	option = {
+		name = ME_Japan_Events36.EVTOPT2
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 20
+		}
+		add_country_modifier = {
+			name = japan_social_flow
+			duration = 10950
+		}
+	}
+}

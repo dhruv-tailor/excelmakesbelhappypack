@@ -1,0 +1,488 @@
+HSK_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = HSK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	HSK_the_kyoto_kanrei = {
+		icon = mission_empire
+		position = 1
+		required_missions = { }
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = Hosokawa_Tooltips.1
+					had_country_flag = {
+						flag = JAP_kyoto_kan
+						days = 1825
+					}
+				}
+				has_idea = hsk_kanrei 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_influential_position
+				duration = 3650
+			}
+		}
+	}
+	
+	HSK_fund_the_ryoan_ji = {
+		icon = mission_buddhist_monk_praying
+		position = 4
+		required_missions = { HSK_building_a_legacy HSK_the_kyoto_kanrei }
+		provinces_to_highlight = {
+			province_id = 1020
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+			ROOT = {
+				NOT = {
+					reverse_has_opinion_modifier = {
+						who = ASK
+						modifier = sent_gift 
+						value = 25
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				1020 = {
+					owned_by = ROOT
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+				}
+				reverse_has_opinion_modifier = {
+					who = ASK
+					modifier = sent_gift 
+					value = 25
+				}
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = HSK_patronage
+				duration = 7300
+			}
+		}
+	}
+}
+
+HSK_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = HSK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	HSK_the_succession_crisis = {
+		icon = mission_scholar_officials
+		position = 1
+		required_missions = { }
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = Hosokawa_Tooltips.2
+					OR = { 
+						has_global_flag = JAP_crisis
+						has_global_flag = JAP_crisis_ended
+					}
+				}
+				NOT = { exists = YMN }
+				NOT = { exists = HSK }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_time_of_hardship_is_coming
+				duration = 3650
+			}
+		}
+	}
+	
+	HSK_shoguns_support = {
+		icon = mission_japanese_fort
+		position = 2
+		required_missions = { HSK_the_kyoto_kanrei HSK_the_succession_crisis }
+		trigger = {
+			reverse_has_opinion = {
+				who = ASK
+				value = 150
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = JAP_crisis
+				}
+				custom_tooltip = Hosokawa_Tooltips.3
+			}
+			add_country_modifier = {
+				name = HSK_shogun_support
+				duration = 3650
+			}
+		}
+	}
+	
+	HSK_building_a_legacy = {
+		icon = mission_buddhist_monk_praying
+		position = 3
+		required_missions = { }
+		trigger = {
+			num_of_owned_provinces_with =  {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_heritage
+				duration = 10950
+			}
+		}
+	}
+	
+	HSK_expand_the_kyoto_palace = {
+		icon = mission_asian_city
+		position = 5
+		required_missions = { HSK_fund_the_ryoan_ji HSK_hosokawa_administration }
+		provinces_to_highlight = {
+			province_id = 1020
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = courthouse }
+					NOT = { has_building = town_hall }
+				}
+			}
+		}
+		trigger = {
+		
+			1020 = {
+				owned_by = ROOT
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_the_new_shogunate
+				duration = 10950
+			}
+		}
+	}
+}
+
+HSK_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = HSK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	HSK_rally_supporters = {
+		icon = mission_asian_trader
+		position = 2
+		required_missions = { HSK_the_succession_crisis }
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = JAP_crisis
+						has_global_flag = JAP_crisis_over
+						
+					}
+					exists = YMN
+					exists = HSK
+				}
+				custom_trigger_tooltip = {
+					tooltip = Hosokawa_Tooltips.4
+					calc_true_if = {
+						all_country = {
+							has_country_flag = JAP_supporting_hosokawa
+						}
+						amount = 5
+					}	
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_country = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+						
+					}
+					amount = 3
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_foreign_support
+				duration = 7300
+			}
+		}
+	}
+	
+	HSK_hosokawa_administration = {
+		icon = mission_kowtow
+		position = 4
+		required_missions = { HSK_punish_yamana }
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 1020
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_the_kyocho_tyranny
+				duration = 9125
+			}
+		}
+	}
+	
+	HSK_bring_order = {
+		icon = mission_build_up_to_force_limit
+		position = 5
+		required_missions = { HSK_hosokawa_administration }
+		trigger = {
+			num_of_subjects = 1
+			all_subject_country = {
+				NOT = { liberty_desire = 25 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_unification_of_japan
+				duration = 10950
+			}
+		}
+	}
+}
+
+HSK_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = HSK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	HSK_rally_the_samurais = {
+		icon = mission_japanese_samurai
+		position = 1
+		required_missions = { }
+		trigger = {
+			army_size = 6
+			manpower = 11
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_faithful_samurai
+				duration = 7300
+			}
+		}
+	}
+	
+	HSK_punish_yamana = {
+		icon = mission_asian_city
+		position = 3
+		required_missions = { HSK_rally_supporters HSK_rally_the_samurais }
+		provinces_to_highlight = {
+			province_id = 1019
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 1019
+		}
+		effect = {
+			add_prestige = 10
+			create_general = {
+				tradition = 50
+				add_siege = 3
+			}
+			custom_tooltip = Hosokawa_Tooltips.5
+		}
+	}
+	
+	HSK_unite_shikoku = {
+		icon = mission_rice_field
+		position = 5
+		required_missions = { HSK_unite_the_hosokawa_branches }
+		provinces_to_highlight = {
+			area = shikoku_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			shikoku_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_shikoku_united
+				duration = 9125
+			}
+		}
+	}
+}
+
+HSK_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = HSK
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	HSK_draft_the_ashigaru = {
+		icon = mission_build_up_to_force_limit
+		position = 2
+		required_missions = { HSK_rally_the_samurais }
+		trigger = {
+			num_of_owned_provinces_with = {
+				base_manpower = 5
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAP_ashigarus
+				duration = 5475
+			}
+		}
+	}
+	
+	HSK_unite_the_hosokawa_branches = {
+		icon = mission_asian_cannon
+		position = 4
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1825
+				province_id = 1820
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 3 }
+			}
+		}
+		trigger = {
+			1825 = {
+				owned_by = ROOT
+				num_of_times_improved = 3
+			}
+			1820 = {
+				owned_by = ROOT
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSK_centralization
+				duration = 9125
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+			add_stability_or_adm_power = yes
+			4360 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	HSK_reconquer_mikawa = {
+		icon = mission_japanese_samurai
+		position = 5
+		required_missions = { HSK_unite_the_hosokawa_branches }
+		provinces_to_highlight = {
+			province_id = 4360
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			4360 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			add_prestige = 25
+			4360 = {
+				add_nationalism = -15
+				add_local_autonomy = -50
+			}
+		}
+	}
+}
