@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+## Update v0.20
+- nerfed roads by 50%
+- removes Subjects Expanded
 ## Update v0.10
 - Threw in Subjects Expanded
 - Minor Arumba Changes
