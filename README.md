@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+## Update v0.22 'Sevy#0769'
+- Fixed estates view for bigger UI 
+- Fixed buildings macrobuilder view for bigger UI
 ## Update v0.21
 - UI fixes
 - fixed Arumba's Keyboard Shortcuts
