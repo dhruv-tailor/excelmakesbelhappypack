@@ -1,4 +1,10 @@
 # excelmakesbelhappypack
+## Update v0.21
+- UI fixes
+- fixed Arumba's Keyboard Shortcuts
+- added missing scripted effects
+- made ME missions more compatible with IV
+- buffed Display Legitimacy cick for republics from -10 republican tradition to -4 republican tradition
 ## Update v0.20
 - nerfed roads by 50%
 - removes Subjects Expanded
