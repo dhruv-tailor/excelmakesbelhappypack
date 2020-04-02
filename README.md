@@ -1,4 +1,9 @@
 # excelmakesbelhappypack
+## Update v0.25
+- Idea Variation MP setting
+- fixed integrate Moneyloaners not working
+- -1 stab on reform change removed
+- Arumba's changes
 ## Update v0.24
 - fixed the edict duplication bug. probably. I don't know dude, I'm tired I didn't test it. That's y'all's job
 ## Update v0.23

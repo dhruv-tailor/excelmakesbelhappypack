@@ -24,19 +24,17 @@ infrastructure_lvl_1 = {
 	
 	
 	
+	
 	modifier = {
 	
 	supply_limit_modifier = 0.125 #50% of original
 	province_trade_power_modifier = 0.125 #50% of original
 	local_friendly_movement_speed = 0.025 #50% of original
 	local_tax_modifier = 0.0625 #50% of original
-		
 	}
-	
 	
 	ai_will_do = {
 		factor = 100
-	
 	}
 }
 
@@ -52,12 +50,10 @@ infrastructure_lvl_2 = {
 	province_trade_power_modifier = 0.25 #50% of original
 	local_friendly_movement_speed = 0.05 #50% of original
 	local_tax_modifier = 0.125 #50% of original
-		
 	}
 	
 	ai_will_do = {
 		factor = 100
-	
 	}
 }
 
@@ -74,11 +70,8 @@ infrastructure_lvl_3 = {
 	local_tax_modifier = 0.1875 #50% of original
 		
 	}
-	
-	
 	ai_will_do = {
 		factor = 100
-		
 	}
 }
 
@@ -98,7 +91,6 @@ infrastructure_lvl_4 = {
 	
 	ai_will_do = {
 		factor = 100
-		
 	}
 }
 
@@ -126,13 +118,19 @@ courthouse = {
 				any_province_in_state = {
 					
 					has_construction = building
+					
 				}
 			}
 		}
 		NOT = {
-		has_province_flag = idea_variation_government_buildings
+		OR = {
+		has_province_modifier = government_lvl_1_mod
+		has_province_modifier = government_lvl_2_mod
+		has_province_modifier = government_lvl_3_mod
+		has_province_modifier = government_lvl_4_mod
 		
 		}
+	}
 	}
 	
 	modifier = {
@@ -149,13 +147,26 @@ courthouse = {
 			limit = {
 				NOT = { province_id = ROOT }
 			}
-			set_province_flag = idea_variation_government_buildings
+			add_province_modifier = {
+				name = government_lvl_1_mod
+				duration = -1
+			}
 		}	
 	}
 	
+	
 	on_destroyed = {
+		if = {
+			limit = {
+				NOT = {
+					any_province_in_state = {
+						has_building = government_lvl_1
+					}
+				}
+			}
 		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+				remove_province_modifier = government_lvl_1_mod
+			}
 		}
 	}
 	
@@ -193,9 +204,32 @@ town_hall = {
 		#allowed_num_of_buildings = 1
 	}
 	
-	on_destroyed = {
+	on_built = {
 		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+			limit = {
+				NOT = { province_id = ROOT }
+			}
+			add_province_modifier = {
+				name = government_lvl_2_mod
+				duration = -1
+			}
+			remove_province_modifier = government_lvl_1_mod
+		}
+	}
+
+	
+	on_destroyed = {
+		if = {
+			limit = {
+				NOT = {
+					any_province_in_state = {
+						has_building = government_lvl_2
+					}
+				}
+			}
+		every_province_in_state = {
+				remove_province_modifier = government_lvl_2_mod
+			}
 		}
 	}
 	
@@ -231,9 +265,32 @@ government_lvl_3 = {
 		
 	}
 	
-	on_destroyed = {
+	on_built = {
 		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+			limit = {
+				NOT = { province_id = ROOT }
+			}
+			add_province_modifier = {
+				name = government_lvl_3_mod
+				duration = -1
+			}
+			remove_province_modifier = government_lvl_2_mod
+		}
+	}
+
+	
+	on_destroyed = {
+		if = {
+			limit = {
+				NOT = {
+					any_province_in_state = {
+						has_building = government_lvl_3
+					}
+				}
+			}
+		every_province_in_state = {
+				remove_province_modifier = government_lvl_3_mod
+			}
 		}
 	}
 	
@@ -266,9 +323,32 @@ government_lvl_4 = {
 		
 	}
 	
-	on_destroyed = {
+	on_built = {
 		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+			limit = {
+				NOT = { province_id = ROOT }
+		}
+			add_province_modifier = {
+				name = government_lvl_4_mod
+				duration = -1
+			}
+			remove_province_modifier = government_lvl_3_mod
+	}
+	}
+
+	
+	on_destroyed = { 
+		if = {
+			limit = {
+				NOT = {
+					any_province_in_state = {
+						has_building = government_lvl_4
+					}
+				}
+			}
+			every_province_in_state = {
+				remove_province_modifier = government_lvl_4_mod
+			}
 		}
 	}
 	
@@ -356,12 +436,10 @@ terrain_land = {
 	
 		local_development_cost = -0.05      
 		allowed_num_of_buildings = 2	
-		
-	}
 	
+	}
 	ai_will_do = {
 		factor = 100
-		
 	}	
 }
 
@@ -384,12 +462,11 @@ terrain_woodland = {
 	
 		local_development_cost = -0.15  
 		allowed_num_of_buildings = 2	
-		
 	}
+	
 	
 	ai_will_do = {
 		factor = 100
-		
 	}	
 }
 
@@ -416,11 +493,8 @@ terrain_desert = {
 		allowed_num_of_buildings = 2	
 		
 	}
-	
-	
 	ai_will_do = {
 		factor = 100
-		
 	}	
 }
 
@@ -446,13 +520,10 @@ terrain_hills = {
 	
 		local_development_cost = -0.15
 		allowed_num_of_buildings = 2	
-		
 	}
-	
 	ai_will_do = {
 		factor = 100
-		
-	}	
+	}
 }
 
 
@@ -477,7 +548,7 @@ terrain_art = {
 		local_development_cost = -0.3
 		allowed_num_of_buildings = 2	
 		
-	}
+	
 	
 	ai_will_do = {
 		factor = 100
@@ -499,7 +570,10 @@ terrain_jungle = {
 	modifier = {
 		local_development_cost = -0.35
 		allowed_num_of_buildings = 2
+
 	}
+	
+	
 	
 	ai_will_do = {
 		factor = 100
@@ -521,10 +595,9 @@ terrain_swamp = {
 		local_development_cost = -0.2
 		allowed_num_of_buildings = 2
 	}
-	
+
 	ai_will_do = {
 		factor = 100
-		
 	}	
 }
 
@@ -543,7 +616,8 @@ terrain_coastal = {
 	modifier = {
 		local_development_cost = -0.15
 		allowed_num_of_buildings = 2
-	}
+}
+	
 	
 	ai_will_do = {
 		factor = 100
@@ -569,7 +643,9 @@ workshop = {
 	modifier = {
 		
 		local_production_efficiency = 0.25
-	}
+
+
+}
 	
 	ai_will_do = {
 	factor = 100
@@ -588,9 +664,10 @@ production_lvl_2 = {
 	modifier = {
 	
 		local_production_efficiency = 0.5
-		
-	}
+
+}
 	
+		
 	ai_will_do = {
 	factor = 100
 		
@@ -610,6 +687,7 @@ production_lvl_3 = {
 		
 	}
 	
+	
 	ai_will_do = {
 	factor = 100
 		
@@ -622,7 +700,6 @@ counting_house = {
 	time = 12
 	
 	allow_in_gold_provinces = no
-	
 	make_obsolete = production_lvl_3
 	
 	modifier = {
@@ -630,6 +707,7 @@ counting_house = {
 		local_production_efficiency = 1.0
 		
 	}
+	
 	
 	ai_will_do = {
 	factor = 100
@@ -658,6 +736,8 @@ counting_house = {
 		
 	}
 	
+	
+	
 	ai_will_do = {
 	factor = 100
 		
@@ -678,6 +758,8 @@ taxation_lvl_2 = {
 		
 	}
 	
+	
+	
 	ai_will_do = {
 	factor = 100
 		
@@ -697,6 +779,8 @@ cathedral = {
 		
 	}
 	
+	
+	
 	ai_will_do = {
 	factor = 100
 		
@@ -713,8 +797,9 @@ taxation_lvl_4 = {
 	modifier = {
 	
 	local_tax_modifier = 1.0
-		
-	}
+}
+	
+	
 	
 	ai_will_do = {
 	factor = 100
@@ -742,11 +827,17 @@ marketplace = {
 	
 	province_trade_power_value = 2.0
 	trade_value_modifier = 0.1
-		
+	
 	}
 	
+	
+		
 	ai_will_do = {
-	factor = 50
+	factor = 100.5
+		modifier = {
+				factor = 0
+				NOT = { province_trade_power = 10 }
+			}
 		
 	}
 }
@@ -765,8 +856,14 @@ trade_lvl_2 = {
 		
 	}
 
+
+	
 	ai_will_do = {
-	factor = 50
+	factor = 100.5
+		modifier = {
+				factor = 0
+				NOT = { province_trade_power = 10 }
+			}
 		
 	}
 }
@@ -782,10 +879,17 @@ trade_depot = {
 		province_trade_power_value = 6.0
 		trade_value_modifier = 0.3
 		
+
 	}
 	
+	
+	
 	ai_will_do = {
-	factor = 50
+	factor = 100.5
+		modifier = {
+				factor = 0
+				NOT = { province_trade_power = 10 }
+			}
 		
 	}
 }
@@ -805,8 +909,13 @@ stock_exchange = {
 		
 	}	
 	
+	
 	ai_will_do = {
-	factor = 50
+	factor = 100.5
+		modifier = {
+				factor = 0
+				NOT = { province_trade_power = 10 }
+			}
 		
 	}
 }
@@ -827,7 +936,9 @@ manpower_lvl_1 = {
 	
 	modifier = {
 		local_manpower_modifier = 0.5
-	}
+		
+}
+	
 	
 	ai_will_do = {
 	factor = 100
