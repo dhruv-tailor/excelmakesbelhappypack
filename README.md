@@ -1,4 +1,6 @@
 # excelmakesbelhappypack
+## Update v0.24
+- fixed the edict duplication bug. probably. I don't know dude, I'm tired I didn't test it. That's y'all's job
 ## Update v0.23
 - removes the scaling difficulty for IV hard mode
 ## Update v0.22 'Sevy#0769'
