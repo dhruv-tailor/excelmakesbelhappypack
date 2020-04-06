@@ -1,0 +1,160 @@
+namespace = increase_dev_event
+
+
+country_event = {
+	# startup event
+	id = increase_dev_event.1
+	hidden = yes
+	is_triggered_only = yes
+	option = {
+	}
+}
+
+country_event = {
+	# startup event
+	id = increase_dev_event.10
+	hidden = yes
+	is_triggered_only = yes
+	option = {
+		add_
+	}
+}
+
+province_event = {
+	# increse counter of howmany time it was deved.
+	id = increase_dev_event.2
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate  = {
+		hidden_effect = {
+			if = {
+				limit  = { 
+						NOT = { 
+							check_variable = { 
+								which  = increaseCevCount 
+								value = 0
+							}
+						}
+					}
+					set_variable = {
+						which = increaseCevCount
+						value = 0
+					}
+				}
+				change_variable = { which = increaseCevCount   value = 1 } #increase count by 1
+		}
+		if = {
+			limit = { NOT = {
+				has_province_modifier = increaseDev
+			} }
+			add_province_modifier = {
+				name = increaseDev duration = -1
+			}
+		}
+	}
+	option = {
+		
+	}
+}
+
+
+country_event = {
+	# update lowest dev cost provence
+	id = increase_dev_event.3
+	title = increase_dev_event.2.t
+	desc = increase_dev_event.2.d
+	#hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = { ai = yes}
+	}
+	immediate  = {
+		capital_scope = {
+			save_event_target_as = TempProv 
+			set_province_flag = CheapDevTargetFlag
+			saveDevcostToVar = {
+				name=LocalDeVCost
+			}
+		} #start with the capital
+		every_owned_province = { #scope to a random prov
+			limit = {
+				is_dev_cost_lower = {
+					first = THIS
+					second = event_target:TempProv
+
+				}
+			always = no
+			}
+			event_target:TempProv = {
+				clr_province_flag = CheapDevTargetFlag
+			}
+			set_province_flag = CheapDevTargetFlag
+			save_event_target_as = TempProv 		
+			#save a random prov
+			saveDevcostToVar = {
+				name=LocalDeVCost
+			}
+
+			owner =  {
+				hidden_effect = { 
+					set_variable = { which = LocalDeVCost value = 0 }
+					change_variable = {
+						which = LocalDeVCost
+						which = PREV
+					}
+				}
+			}
+		}
+		
+
+	}
+
+	option = {
+		name = increase_dev_event.2.a
+		custom_tooltip = increase_dev_event.2.a.tt
+		every_owned_province = {
+			limit = {
+				has_province_flag = CheapDevTargetFlag
+			}
+			hidden_effect = { 
+				clr_province_flag = CheapDevTargetFlag
+				province_event = { id = increase_dev_event.1 #update
+				days = 0
+				}
+			} 
+			add_base_production = 1
+			
+			owner =  {
+				hidden_effect = { 
+					set_variable = { which=LocalDeVCost  which=PREV  }
+					multiply_variable = { which = LocalDeVCost	value = -1 }					
+					add_power_effect = { command=add_dip_power
+						variable=LocalDeVCost				
+					}
+				}
+				custom_tooltip = "Lose §R[This.LocalDeVCost.GetValue]§! dip"
+			}
+			
+		}
+	}
+}
+
+province_event = {
+	id = increase_dev_event.4
+	# fired by every institution event
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = { has_province_flag = institution_origin_flag }		
+	}
+	option = {
+		set_province_flag = institution_origin_flag
+		export_to_variable = {
+			variable_name = institution_year
+			value = trigger_value:is_year
+		}
+		log = "isnt is a  [This.institution_year.GetValue]"
+	}
+
+}
