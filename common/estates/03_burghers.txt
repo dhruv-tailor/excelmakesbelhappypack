@@ -334,7 +334,52 @@ estate_burghers =
 		value = 5		
 	}
 
-	# Special interactions
+
+
+
+
+
+#############################################
+####### Interactions 
+#############################################
+
+#############################################
+####### Make Promises
+#############################################
+
+	interaction = {
+		name = "Burg_6"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 5
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+	
 	interaction = {
 		name = "ASK_FOR_CONTRIBUTION"
 		icon = 6
@@ -430,6 +475,50 @@ estate_burghers =
 			}
 		}
 	}
+	
+	interaction = {
+		name = "GRANT_MONOPOLY_CHARTER"
+		icon = 17
+		
+		years_between_use = 20
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_prestige = -5
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_GRANTED_MONOPOLIES
+				influence = 10
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 60
+				}				
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 30
+				}				
+			}			
+		}
+	}
+	
 	interaction = {
 		name = "DEMAND_SUPPORT_BURGHERS"
 		icon = 3
@@ -506,48 +595,97 @@ estate_burghers =
 			factor = 0
 		}
 	}
+
+#############################################
+####### Recruit from their Domain
+#############################################
+
 	interaction = {
-		name = "GRANT_MONOPOLY_CHARTER"
-		icon = 17
+		name = "Burg_12"
+		icon = 12
 		
-		years_between_use = 20
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
 		
 		trigger = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_3
+				any_owned_province = {
+					has_estate = estate_burghers
+				}
+			}
 		}
 		
 		effect = {
-			add_prestige = -5
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = EST_VAL_GRANTED_MONOPOLIES
-				influence = 10
-				duration = 7300
+			add_country_modifier = {
+				name = "idea_variation_estate_3"
+				duration = 3650
 			}
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = 15
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_9
+				influence = -10
+				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 60
-				}				
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 30
-				}				
-			}			
+			factor = 0
+					
 		}
 	}
+
+#############################################
+####### Ask for Reform Support
+#############################################
+
+	interaction = {
+		name = "Burg_15"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		}
+		
+		years_between_use = 15
+		
+		trigger = {
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			reduce_loyal_without_burg = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 1825
+			}
+			
+		}
+		
+		ai_will_do = {
+			factor = 0
+					
+		}
+	}
+	
 	interaction = {
 		name = "RECRUIT_MINISTER"
 		icon = 10
@@ -666,12 +804,92 @@ estate_burghers =
 				}
 				create_admiral = { tradition = 40 }
 			}
-			add_estate_loyalty = {
+			add_estate_influence_modifier = {
 				estate = estate_burghers
-				loyalty = -5
+				desc = EST_VAL_GRANTED_ADMIRALSHIP
+				influence = 20
+				duration = 3650
 			}
 		}
 		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	interaction = {
+		name = "RECRUIT_EXPLORER"
+		icon = 5
+		
+		years_between_use = 15
+		
+		potential = {
+			has_idea = quest_for_the_new_world
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = { 
+					navy_tradition = 100
+				}
+				create_explorer = 100
+			}
+			if = {
+				limit = { 
+					navy_tradition = 90
+					NOT = { navy_tradition = 100 }
+				}
+				create_explorer = 90
+			}
+			if = {
+				limit = { 
+					navy_tradition = 80
+					NOT = { navy_tradition = 90 }
+				}
+				create_explorer = 80
+			}
+			if = {
+				limit = { 
+					navy_tradition = 70
+					NOT = { navy_tradition = 80 }
+				}
+				create_explorer = 70
+			}
+			if = {
+				limit = { 
+					navy_tradition = 60
+					NOT = { navy_tradition = 70 }
+				}
+				create_explorer = 60
+			}
+			if = {
+				limit = { 
+					navy_tradition = 50
+					NOT = { navy_tradition = 60 }
+				}
+				create_explorer = 50
+			}
+			if = {
+				limit = { 
+					navy_tradition = 0
+					NOT = { navy_tradition = 50 }
+				}
+				create_explorer = 40
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_GRANTED_EXPLORER
+				influence = 15
+				duration = 5475
+			}
+		}
 		ai_will_do = {
 			factor = 0
 		}
@@ -2236,43 +2454,7 @@ interaction = {
 		}
 	}
 
-#############################################
-####### Make Promises
-#############################################
 
-	interaction = {
-		name = "Burg_6"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 5
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_5
-				influence = 10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-	
 #############################################
 ####### Pass Reform
 #############################################
@@ -2329,11 +2511,7 @@ interaction = {
 		}
 		
 		effect = {
-			random_list = {
-			33 = { add_adm_power = -50 }
-			34 = { add_dip_power = -50 }
-			33 = { add_mil_power = -50 }
-			}
+			add_dip_power = -50
 			add_estate_loyalty = {
 				estate = estate_burghers
 				loyalty = 10
@@ -2455,51 +2633,6 @@ interaction = {
 
 
 
-#############################################
-####### Recruit from their Domain
-#############################################
-
-	interaction = {
-		name = "Burg_12"
-		icon = 12
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_province_estate_3
-				any_owned_province = {
-					has_estate = estate_burghers
-				}
-			}
-		}
-		
-		effect = {
-			add_country_modifier = {
-				name = "idea_variation_estate_3"
-				duration = 3650
-			}
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_9
-				influence = -10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
 
 #############################################
 ####### Confiscation of Lands
@@ -2539,49 +2672,7 @@ interaction = {
 		}
 	}	
 
-#############################################
-####### Ask for Reform Support
-#############################################
 
-	interaction = {
-		name = "Burg_15"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			NOT = { has_country_modifier = idea_variation_estate_13 }
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_26
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_burg = yes
-			
-			add_country_modifier = {
-				name = "idea_variation_estate_13"
-				duration = 1825
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
 
 ##########################################################################
 ####### Idea Variation End
