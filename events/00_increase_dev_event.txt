@@ -4,19 +4,56 @@ namespace = increase_dev_event
 country_event = {
 	# startup event
 	id = increase_dev_event.1
-	hidden = yes
+	#hidden = yes
 	is_triggered_only = yes
+	immediate = {
+		clr_country_flag = JustDevedFLAG
+		# Look in common\scripted_effects\00_scripted_effects_for_AI.txt
+		#updateMyFlagEffect = yes
+	}
 	option = {
+
 	}
 }
 
 country_event = {
-	# startup event
+	# update cost of 
 	id = increase_dev_event.10
 	hidden = yes
 	is_triggered_only = yes
 	option = {
-		add_
+		set_variable = {
+			which = monarchCap
+			value = 993
+		}
+		if = {
+			limit = { 
+				NOT = {
+					has_institution = feudalism
+				} 
+			}
+			change_variable = {
+				which = monarchCap
+				value = 50
+			}
+		} 
+		if = {
+			limit = { 
+				NOT = {
+					has_institution = feudalism
+				}
+			} 
+			every_province = {
+				limit = {
+					is_institution_origin = renaissance
+				}
+				change_variable = {
+					which = PREV:monarchCap
+					which = THIS:YearsCounter
+				}
+			}
+		}
+		log = "Cap [This.monarchCap.GetValue]"
 	}
 }
 
@@ -69,45 +106,8 @@ country_event = {
 	trigger = {
 		NOT = { ai = yes}
 	}
-	immediate  = {
-		capital_scope = {
-			save_event_target_as = TempProv 
-			set_province_flag = CheapDevTargetFlag
-			saveDevcostToVar = {
-				name=LocalDeVCost
-			}
-		} #start with the capital
-		every_owned_province = { #scope to a random prov
-			limit = {
-				is_dev_cost_lower = {
-					first = THIS
-					second = event_target:TempProv
-
-				}
-			always = no
-			}
-			event_target:TempProv = {
-				clr_province_flag = CheapDevTargetFlag
-			}
-			set_province_flag = CheapDevTargetFlag
-			save_event_target_as = TempProv 		
-			#save a random prov
-			saveDevcostToVar = {
-				name=LocalDeVCost
-			}
-
-			owner =  {
-				hidden_effect = { 
-					set_variable = { which = LocalDeVCost value = 0 }
-					change_variable = {
-						which = LocalDeVCost
-						which = PREV
-					}
-				}
-			}
-		}
-		
-
+	immediate = {
+		#updateMyFlagEffect = yes
 	}
 
 	option = {
@@ -119,9 +119,11 @@ country_event = {
 			}
 			hidden_effect = { 
 				clr_province_flag = CheapDevTargetFlag
-				province_event = { id = increase_dev_event.1 #update
-				days = 0
-				}
+				owner = {
+				set_province_flag = JustDevedFLAG
+				country_event = { id = increase_dev_event.1 #update
+				days = 31 
+				} }
 			} 
 			add_base_production = 1
 			
@@ -133,7 +135,7 @@ country_event = {
 						variable=LocalDeVCost				
 					}
 				}
-				custom_tooltip = "Lose §R[This.LocalDeVCost.GetValue]§! dip"
+				custom_tooltip = "Lose ?R[This.LocalDeVCost.GetValue]?! dip"
 			}
 			
 		}
@@ -149,12 +151,7 @@ province_event = {
 		NOT = { has_province_flag = institution_origin_flag }		
 	}
 	option = {
-		set_province_flag = institution_origin_flag
-		export_to_variable = {
-			variable_name = institution_year
-			value = trigger_value:is_year
-		}
-		log = "isnt is a  [This.institution_year.GetValue]"
+
 	}
 
 }
