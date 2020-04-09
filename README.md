@@ -1,7 +1,4 @@
 # excelmakesbelhappypack
-## Update v0.26
-- Arumba Changes
--Artimis's UI updates
 ## Update v0.25
 - Idea Variation MP setting
 - fixed integrate Moneyloaners not working
