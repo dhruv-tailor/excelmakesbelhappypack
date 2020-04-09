@@ -4,15 +4,28 @@ namespace = increase_dev_event
 country_event = {
 	# startup event
 	id = increase_dev_event.1
-	#hidden = yes
+	title = increase_dev_event.1.t
+	desc = increase_dev_event.1.d
+	hidden = yes
 	is_triggered_only = yes
+	trigger = {
+		NOT = { 
+			OR = {
+				tag = REB
+				tag = NAT
+				tag = PIR
+			} # do not trigger for special tags
+		}
+	}
+
 	immediate = {
 		clr_country_flag = JustDevedFLAG
 		# Look in common\scripted_effects\00_scripted_effects_for_AI.txt
-		#updateMyFlagEffect = yes
-	}
-	option = {
+		HiddenUpdateDevFlagEffect = {
+			target=target
+	}	}
 
+	option = {	
 	}
 }
 
@@ -99,17 +112,15 @@ province_event = {
 country_event = {
 	# update lowest dev cost provence
 	id = increase_dev_event.3
-	title = increase_dev_event.2.t
-	desc = increase_dev_event.2.d
-	#hidden = yes
+	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		NOT = { ai = yes}
+		NOT = { ai = yes }
 	}
 	immediate = {
-		#updateMyFlagEffect = yes
+		HiddenUpdateDevFlagEffect = {
+		target=target }
 	}
-
 	option = {
 		name = increase_dev_event.2.a
 		custom_tooltip = increase_dev_event.2.a.tt
@@ -118,40 +129,90 @@ country_event = {
 				has_province_flag = CheapDevTargetFlag
 			}
 			hidden_effect = { 
-				clr_province_flag = CheapDevTargetFlag
-				owner = {
-				set_province_flag = JustDevedFLAG
-				country_event = { id = increase_dev_event.1 #update
-				days = 31 
+				owner = { 
+				set_country_flag = JustDevedFLAG
+				fire_event_next_month = {
+					id = increase_dev_event.1
 				} }
 			} 
-			add_base_production = 1
-			
+			add_base_tax  = 1
 			owner =  {
-				hidden_effect = { 
-					set_variable = { which=LocalDeVCost  which=PREV  }
-					multiply_variable = { which = LocalDeVCost	value = -1 }					
-					add_power_effect = { command=add_dip_power
+				hidden_effect = { 	
+					set_variable = { which = LocalDeVCost which = PREV }
+					multiply_variable = { which = LocalDeVCost value = -1 }
+					add_power_effect = { command=add_adm_power
 						variable=LocalDeVCost				
 					}
-				}
-				custom_tooltip = "Lose ?R[This.LocalDeVCost.GetValue]?! dip"
-			}
-			
-		}
-	}
-}
-
-province_event = {
+} 	} 	} 	}	}				
+		
+country_event = {
+	# update lowest dev cost provence
 	id = increase_dev_event.4
-	# fired by every institution event
 	hidden = yes
 	is_triggered_only = yes
 	trigger = {
-		NOT = { has_province_flag = institution_origin_flag }		
+		NOT = { ai = yes }
+	}
+	immediate = {
+		HiddenUpdateDevFlagEffect = {
+		target=target }
 	}
 	option = {
+		name = increase_dev_event.2.a
+		custom_tooltip = increase_dev_event.2.a.tt
+		every_owned_province = {
+			limit = {
+				has_province_flag = CheapDevTargetFlag
+			}
+			hidden_effect = { 
+				owner = { 
+				set_country_flag = JustDevedFLAG
+				fire_event_next_month = {
+					id = increase_dev_event.1
+				} }
+			} 
+			add_base_production = 1
+			owner =  {
+				hidden_effect = { 	
+					set_variable = { which = LocalDeVCost which = PREV }
+					multiply_variable = { which = LocalDeVCost value = -1 }
+					add_power_effect = { command=add_dip_power
+						variable=LocalDeVCost				
+					}
+} 	} 	} 	}	}		
 
+country_event = {
+	# update lowest dev cost provence
+	id = increase_dev_event.5
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		NOT = { ai = yes }
 	}
-
-}
+	immediate = {
+		HiddenUpdateDevFlagEffect = {
+		target=target }
+	}
+	option = {
+		name = increase_dev_event.2.a
+		custom_tooltip = increase_dev_event.2.a.tt
+		every_owned_province = {
+			limit = {
+				has_province_flag = CheapDevTargetFlag
+			}
+			hidden_effect = { 
+				owner = { 
+				set_country_flag = JustDevedFLAG
+				fire_event_next_month = {
+					id = increase_dev_event.1
+				} }
+			} 
+			add_base_manpower = 1
+			owner =  {
+				hidden_effect = { 	
+					set_variable = { which = LocalDeVCost which = PREV }
+					multiply_variable = { which = LocalDeVCost value = -1 }
+					add_power_effect = { command=add_mil_power
+						variable=LocalDeVCost				
+					}
+} 	} 	} 	}	}		

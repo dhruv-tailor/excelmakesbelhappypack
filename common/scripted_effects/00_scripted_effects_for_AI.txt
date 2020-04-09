@@ -131,82 +131,128 @@ ape_helper1 = {
 		subtract_variable = { which = $variable$ value = $value$ }
 	}	
 }
-#updateMyFlagEffect = yes
-
-updateMyFlagEffect = {
- 	hidden_effect = {
+export_dev_cost_of_province = {
+	set_variable = {
+		which = $name$`	value= 0 # set var to zero not sure if needed but tp be safe
+	}
+	export_to_variable = {
+		variable_name = development_cost value = modifier:development_cost
+		who = owner #country dev cost reduction
+	}
+	export_to_variable = {
+		variable_name = all_power_cost 	value = modifier:all_power_cost
+		who = owner #country corutipon and invantes
+	}
+	export_to_variable = {
+		variable_name = $name$ 	value = modifier:local_development_cost
+	} # local dev cost modifer 
+	change_variable = {
+		which = $name$ 	value= 1 
+	} # adding 100%
+	change_variable = {
+		which = $name$ 	which = development_cost
+	} 
+	change_variable = {
+		which = $name$ 	which = all_power_cost
+	}
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		export_to_variable = {
+			variable_name = total_dev	value = total_development
+			who = owner # the capital is a special pace with a extra deb cost mod
+		}
+		if = { 
+			limit = { check_variable = {
+				which = total_dev value = 2000
+			} }  # it caps at 2000 total dev
+			set_variable = { which = total_dev value = -0.5 }
+		} #it scales by -5% per 100 dev
+		else = {
+			divide_variable = { which = total_dev value = -2000 }
+		}
+		change_variable = { 
+			which = $name$	which = total_dev
+		}
+	}
+	if  = {
+		limit = { owner = { adm_tech = 27 } }
+		multiply_variable = { 
+			which = $name$	value = 35
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 23 } }
+		multiply_variable = { 
+			which = $name$	value = 40
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 17  } }
+		multiply_variable = { 
+			which = $name$	value = 45
+		}
+	}
+	else = {
+	multiply_variable = { 
+		which = $name$	value = 50
+	} }
+}
+HiddenUpdateDevFlagEffect = {
+	hidden_effect = {
 		capital_scope = {
-			save_event_target_as = DevTarget
-			set_province_flag = CheapDevTargetFlag
- 		}
+			save_event_target_as = $target$
+			clr_province_flag = CheapDevTargetFlag
+			set_variable = { which = LocalDeVCost value = 0 }
+			export_dev_cost_of_province = {
+				name = LocalDeVCost
+			}
+			
+			owner = { 
+			if = {
+				limit = {
+					ai = no 
+				}
+				#log = LogText.3
+				every_owned_province = {
+					limit = { NOT = { is_capital = yes }}
+					clr_province_flag = CheapDevTargetFlag
+					set_variable = { which = LocalDeVCost value = 0 }
+					export_dev_cost_of_province = {
+						name = LocalDeVCost
+					}
+						if = {
+							limit = {
+								OR = {	
+									event_target:$target$ = {
+									check_variable = {
+									which = LocalDeVCost
+									which = PREV
+									} }
+								} 
+							}
+							#event_target:$target$ = {
+								#log = LogText.2
+							#}
+							save_event_target_as = $target$
+						} else = {
+							#event_target:$target$ = {
+							#log = LogText.1
+							#}
+						}
+				}
+				event_target:$target$ = {
+					set_province_flag = CheapDevTargetFlag
+				}
+			} }
+		}
+} }
+
+fire_event_next_month = {
+	export_to_variable = {
+		variable_name = day value = trigger_value:real_day_of_year }
+	log = test.4
+	country_event = { id = $id$ 
+		days = 31 
+		} 
 	}
 }
-
-# showFlagMyEffect = {
-# 	hidden_effect = {
-# 		any_owned_province = {
-# 			limit = {
-# 				has_province_flag = CheapDevTargetFlag
-# 			}
-# 			save_event_target_as = DevTarget
-# 		}
-# 	}
-# 	custom_tooltip = "test [This.DevTarget.GetName] "
-# }
-
-
-# updateFlagEffect = {
-# 	hidden_effect = {
-# 		capital_scope = {
-# 			save_event_target_as = DevTarget
-# 			set_province_flag = CheapDevTargetFlag
-# 		}
-# 		every_owned_province = {
-# 			if = {
-# 				limit = {
-# 					event_target:DevTarget = {
-# 						variable_arithmetic_trigger = {
-# 							export_to_variable = {
-# 								variable_name = temp1
-# 								value = modifier:local_development_cost
-# 								who = PREV
-# 							}
-# 							export_to_variable = {
-# 								variable_name = temp2
-# 								value = modifier:local_development_cost
-# 							}
-# 							check_variable = {
-# 								which = temp2
-# 								which = temp1									
-# 							}
-# 						}
-# 					}
-# 				}
-# 				save_event_target_as = DevTarget
-# 			}
-# 			else = {
-# 				clr_province_flag = CheapDevTargetFlag
-# 			}
-# 		}
-# 		event_target:DevTarget = {
-# 			log = "name: [This.GetName]"
-# 			set_province_flag = CheapDevTargetFlag
-# 			owner =  {
-# 				set_variable = { which = LocalDeVCost value = 0 }
-# 				export_to_variable = {
-# 					variable_name = LocalDeVCost
-# 					value = modifier:local_development_cost
-# 					who = PREV
-# 				}
-# 				change_variable = {
-# 					which = LocalDeVCost
-# 					value = 1
-# 				}
-# 				multiply_variable = {
-# 					which = LocalDeVCost
-# 					value = 50
-# 				}
-# 			}
-# 		}
-# 	}
-# }
