@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+## Update v0.26
+- Arumba Changes
+- UI for Ideas
 ## Update v0.25
 - Idea Variation MP setting
 - fixed integrate Moneyloaners not working
