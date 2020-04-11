@@ -1,0 +1,260 @@
+
+saveDevcostToVar = {
+	export_to_variable = {
+		variable_name = $name$
+		value = modifier:local_development_cost
+	}
+	change_variable = { 
+		which = $name$
+		value = 1
+	}
+	multiply_variable = { 
+		which = $name$
+		value = 50
+	}
+}
+
+
+
+#thank you u/Justice_Fighter https://www.reddit.com/r/eu4/comments/dy7lyv/are_dynamic_modifiers_possible/
+refresh_binary_modifier = {
+	if = {
+		limit = {
+			check_variable = { which = $variable$ value = 0.1  }
+		}
+		add_$scope$_modifier = {
+			name = $name$
+			duration = -1
+		}
+		set_variable = { which = temp which = $variable$ }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=819.2 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=409.6 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=204.8 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=102.4 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=51.2 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=25.6 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=12.8 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=6.4 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=3.2 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=1.6 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=0.8 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=0.4 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=0.2 }
+		rbm_helper = { name=$name$ variable=temp scope=$scope$ value=0.1 }
+		set_variable = { which = temp value = 0 }
+	}
+	else = {
+		remove_$scope$_modifier = $name$
+	}
+}
+
+rbm_helper = {
+	if = {
+		limit = {
+			has_$scope$_modifier = $name$_$value$
+		}
+		remove_$scope$_modifier = $name$_$value$
+	}
+	if = {
+		limit = {
+			check_variable = { which = $variable$ value = $value$ }
+		}
+		subtract_variable = { which = $variable$ value = $value$ }
+		add_$scope$_modifier = {
+			name = $name$_$value$
+			duration = -1
+			hidden = yes
+		}
+	}
+}
+
+add_power_effect = {
+	hidden_effect = {
+		set_variable = { which = temp which = $variable$ }
+		if = {
+			limit = {
+				check_variable = { which = $variable$ value = 0.1 }
+			}
+			# postive 
+			ape_helper1 = { variable=temp addcommand=$command$ value=8192 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=4096 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=2048 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=1024 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=512 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=256 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=128 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=64 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=32 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=16 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=8 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=4 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=2 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=1 }
+
+		}
+		else = {
+			#negative 
+			ape_helper2 = { variable=temp addcommand=$command$ value=-8192 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-4096 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-2048 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-1024 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-512 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-256 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-128 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-64 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-32 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-16 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-8 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-4 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-2 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-1 }
+		}
+		set_variable = { which = temp value = 0 }
+	}
+}	
+
+ape_helper2 = {
+	if = {
+		limit = {
+			NOT = { check_variable = { which = $variable$ value = $value$ }}
+		}
+		$addcommand$ = $value$
+		change_variable = { which = $variable$ value = $value$ }
+	}	
+}
+ape_helper1 = {
+	if = {
+		limit = {
+			check_variable = { which = $variable$ value = $value$ }
+		}
+		$addcommand$ = $value$
+		subtract_variable = { which = $variable$ value = $value$ }
+	}	
+}
+export_dev_cost_of_province = {
+	set_variable = {
+		which = $name$`	value= 0 # set var to zero not sure if needed but tp be safe
+	}
+	export_to_variable = {
+		variable_name = development_cost value = modifier:development_cost
+		who = owner #country dev cost reduction
+	}
+	export_to_variable = {
+		variable_name = all_power_cost 	value = modifier:all_power_cost
+		who = owner #country corutipon and invantes
+	}
+	export_to_variable = {
+		variable_name = $name$ 	value = modifier:local_development_cost
+	} # local dev cost modifer 
+	change_variable = {
+		which = $name$ 	value= 1 
+	} # adding 100%
+	change_variable = {
+		which = $name$ 	which = development_cost
+	} 
+	change_variable = {
+		which = $name$ 	which = all_power_cost
+	}
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		export_to_variable = {
+			variable_name = total_dev	value = total_development
+			who = owner # the capital is a special pace with a extra deb cost mod
+		}
+		if = { 
+			limit = { check_variable = {
+				which = total_dev value = 2000
+			} }  # it caps at 2000 total dev
+			set_variable = { which = total_dev value = -0.5 }
+		} #it scales by -5% per 100 dev
+		else = {
+			divide_variable = { which = total_dev value = -2000 }
+		}
+		change_variable = { 
+			which = $name$	which = total_dev
+		}
+	}
+	if  = {
+		limit = { owner = { adm_tech = 27 } }
+		multiply_variable = { 
+			which = $name$	value = 35
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 23 } }
+		multiply_variable = { 
+			which = $name$	value = 40
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 17  } }
+		multiply_variable = { 
+			which = $name$	value = 45
+		}
+	}
+	else = {
+	multiply_variable = { 
+		which = $name$	value = 50
+	} }
+}
+HiddenUpdateDevFlagEffect = {
+	hidden_effect = {
+		capital_scope = {
+			save_event_target_as = $target$
+			clr_province_flag = CheapDevTargetFlag
+			set_variable = { which = LocalDeVCost value = 0 }
+			export_dev_cost_of_province = {
+				name = LocalDeVCost
+			}
+			
+			owner = { 
+			if = {
+				limit = {
+					#ai = no 
+				}
+				#log = LogText.3
+				every_owned_province = {
+					limit = { NOT = { is_capital = yes }}
+					clr_province_flag = CheapDevTargetFlag
+					set_variable = { which = LocalDeVCost value = 0 }
+					export_dev_cost_of_province = {
+						name = LocalDeVCost
+					}
+						if = {
+							limit = {
+								OR = {	
+									event_target:$target$ = {
+									check_variable = {
+									which = LocalDeVCost
+									which = PREV
+									} }
+								} 
+							}
+							#event_target:$target$ = {
+								#log = LogText.2
+							#}
+							save_event_target_as = $target$
+						} else = {
+							#event_target:$target$ = {
+							#log = LogText.1
+							#}
+						}
+				}
+				event_target:$target$ = {
+					set_province_flag = CheapDevTargetFlag
+				}
+			} }
+		}
+} }
+
+fire_event_next_month = {
+	export_to_variable = {
+		variable_name = day value = trigger_value:real_day_of_year 
+	}
+	log = test.4
+	country_event = { id = $id$ 
+		days = 31 
+		} 
+}
+
+
