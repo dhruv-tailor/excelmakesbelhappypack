@@ -42,7 +42,7 @@ static const float 	TERRAIN_TILE_FREQ 			= 128.0f;
 // SEVERE_WINTER_VALUE = ###,					defines.lua   (reload defines)
 
 
-static const float 	BORDER_TILE					= 0.26f;
+static const float 	BORDER_TILE					= 0.4f;
 // BORDER_WIDTH		= ###						defines.lua   (reload defines)
 
 
