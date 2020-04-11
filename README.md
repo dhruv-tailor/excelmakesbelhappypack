@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+## Update
+- plugged in Theatrum Orbis Terrarum graphich pack
+- you can get the mod without graphics in the no-graphich branch
 ## Update v0.26
 - Arumba Changes
 - UI for Ideas
@@ -12,7 +15,7 @@
 ## Update v0.23
 - removes the scaling difficulty for IV hard mode
 ## Update v0.22 'Sevy#0769'
-- Fixed estates view for bigger UI 
+- Fixed estates view for bigger UI
 - Fixed buildings macrobuilder view for bigger UI
 ## Update v0.21
 - UI fixes
