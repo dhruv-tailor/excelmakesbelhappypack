@@ -14,3 +14,11 @@ NDefines.NMilitary.LOOTED_MAX = 10 -- doubled from 5 ducats/mo max to 10 because
 -- #arumba - AI should want to use its army, like a player
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_MILITARY_RULERS = 0 --If set to 1, AI will only send Condottieri while having a miliaristic ruler.
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_NEIGHBORS = 0 --If set to 1, AI will only send Condottieri to neighbors, regardless of access.
+
+-- #arumba - Support rebels sucks, lets make it not sucks
+NDefines.NDiplomacy.SUPPORT_REBELS_COST = 30
+NDefines.NDiplomacy.SUPPORT_REBELS_MONEY_FACTOR = 0.5
+NDefines.NDiplomacy.SUPPORT_REBELS_EFFECT = 20
+NDefines.NDiplomacy.SUPPORT_REBELS_DURATION = 3 -- in years
+
+ 
