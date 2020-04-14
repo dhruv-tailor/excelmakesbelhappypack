@@ -20,12 +20,12 @@ Code
 
 
 static const float3 LIGHT_DIFFUSE				= float3( 1.0f, 1.0f, 1.0f );
-static const float  LIGHT_INTENSITY   			= 1.0f;
+static const float  LIGHT_INTENSITY   			= 1.2f;
 static const float  AMBIENT						= 0.2f;
-static const float3 MAP_LIGHT_DIFFUSE			= float3( 0.5f, 0.5f, 0.5f );
-static const float  MAP_LIGHT_INTENSITY   		= 1.1f;
-static const float  MAP_AMBIENT					= 0.85f; // illusionary flat map
-static const float	LIGHT_HDR_RANGE 			= 1.0f;
+static const float3 MAP_LIGHT_DIFFUSE			= float3( 1.0f, 1.0f, 1.0f );
+static const float  MAP_LIGHT_INTENSITY   		= 1.5f;
+static const float  MAP_AMBIENT					= 0.0f;
+static const float	LIGHT_HDR_RANGE 			= 0.8f;
 
 // LIGHT_DIRECTION_X = -1.0						defines.lua   (reload defines)
 // LIGHT_DIRECTION_Y = -1.0						defines.lua   (reload defines)
@@ -42,7 +42,7 @@ static const float 	TERRAIN_TILE_FREQ 			= 128.0f;
 // SEVERE_WINTER_VALUE = ###,					defines.lua   (reload defines)
 
 
-static const float 	BORDER_TILE					= 0.2f;
+static const float 	BORDER_TILE					= 0.26f;
 // BORDER_WIDTH		= ###						defines.lua   (reload defines)
 
 
@@ -61,8 +61,8 @@ static const float 	TREE_SEASON_FADE_TWEAK 		= 2.5f;
 // --------------------------------------------------------------
 
 
-static const float 	WATER_TILE					= 2.25f;
-static const float 	WATER_TIME_SCALE			= 5.0f;
+static const float 	WATER_TILE					= 1.0f;
+static const float 	WATER_TIME_SCALE			= 12.0f;
 
 
 // --------------------------------------------------------------
@@ -81,8 +81,8 @@ static const float 	WATER_TIME_SCALE			= 5.0f;
 
 static const float 	FOG_BEGIN					= 80.0f;
 static const float 	FOG_END 					= 150.0f;
-static const float 	FOG_MAX 					= 0.1f;
-static const float3 FOG_COLOR 					= float3( 0.2f, 0.2f, 0.3f );
+static const float 	FOG_MAX 					= 0.7f;
+static const float3 FOG_COLOR 					= float3( 0.5f, 0.5f, 0.6f );
 
 
 
