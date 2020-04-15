@@ -1,4 +1,5 @@
 name="excelmakesbelhappypack"
+replace_path="gfx/loadingscreens"
 tags={
 	"Historical"
 	"Missions And Decisions"
@@ -7,4 +8,4 @@ tags={
 	"New Nations"
 }
 supported_version="1.29.*.*"
-path="mod/excelmakesbelhappypack"
+path="/mod/excelmakesbelhappypack"
