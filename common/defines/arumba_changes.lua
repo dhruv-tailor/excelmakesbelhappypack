@@ -23,3 +23,6 @@ NDefines.NDiplomacy.SUPPORT_REBELS_DURATION = 3 -- in years
 
 -- #arumba
 NDefines.NDiplomacy.SPY_NETWORK_SIEGE_EFFECT = 0.5
+
+-- #arumba
+NDefines.NCountry.MERCHANT_REPUBLIC_SIZE_LIMIT = 9999
