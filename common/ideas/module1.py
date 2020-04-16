@@ -12,7 +12,7 @@ class Ideas:
 		self.trigger = trigger
 
 def test1():
-	ModFolder = pathlib.PureWindowsPath("E:/Melle/Documents/Paradox Interactive/Europa Universalis IV/mod/excelmakesbelhappypack")
+	ModFolder = pathlib.PureWindowsPath("../..")
 	files = ["00_basic_ideas.txt" , "00_flogi_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	out = []
