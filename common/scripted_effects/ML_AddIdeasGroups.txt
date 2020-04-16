@@ -4,99 +4,205 @@
 
 
 
-ML_on_country_released = {
+ML_on_country_vassal_released = {
 	log = test.4
 	FROM = {
 		# save the number of ideas in variables
 		GetAllIdeas = yes
-		if = { 	limit = { check_variable = {
-			which = admin
-			value = 1
-		}}
-			PREV = {
-
-				set_variable = {
-					which = admin
-					which = PREV
-				}
-				log = test.5
-				#add_idea_group = administrative_ideas
-				while = { #loop
-					limit = { check_variable = {
-						which = admin
-						value = 1
-						} }
-					random_list = { # this might not be a seeded scope and evry loop wil give the same option
-						30 = {
-							Addinnovativeness_ideas  = yes
-						}
-						30 = {
-							Addeconomic_ideas = yes
-						}
-					}
-				} 
-				if = {
-					limit = {
-						check_variable = {
-							which = admin
-							value = 1
-							}
-					}
-					log = ErrorText.4
-				}
-			}
+		PREV = {
+		set_variable = {
+			which = numOfFreeIdeas
+			which = PREV
+		} }
+		country_event = {
+			id = increase_dev_event.6
+			days = 0
 		}
 	}
-
 }
+ML_give_free_idea_effect = {
+	log = displaynumofideas.t
+	if = { 	limit = { check_variable = {
+		which = numOfFreeIdeas
+		value = 1
+	}}
+		log = test.5
+		#add_idea_group = administrative_ideas
+		if = { #loop
+			limit = { check_variable = {
+				which = numOfFreeIdeas
+				value = 1
+				} }
+			random_list = { # this might not be a seeded scope and evry loop wil give the same option
+				20 = {
+					ideaorder1  = yes
+				}
+				20 = {
+					ideaorder2 = yes
+				}
+				20 = {
+					ideaorder3 = yes
+				}
+				20 = {
+					ideaorder4 = yes
+				}
+				20 = {
+					ideaorder5 = yes
+				}
+			}
+		} 
+		if = {
+			limit = {
+				check_variable = {
+					which = numOfFreeIdeas
+					value = 1
+					}
+			}
+			log = ErrorText.4
+		}	
+	}
+}
+
+
 #basic ideas only yet
 GetAllIdeas = {
+	set_variable = {
+		which = numOfFreeIdeas
+		value = 0
+	}
 	GetIdeas = {
-		variable_name = admin
-		id1=administrative_ideas
-		id2=innovativeness_ideas
-		id3=religious_ideas
+		variable_name = numOfFreeIdeas
+		id1=innovativeness_ideas
+		id2=religious_ideas
+		id3=spy_ideas
+		id4=dynasty0
+		id5=influence_ideas
+		id6=offensive_ideas
+		id7=defensive_ideas
+		id8=trade_ideas
+		id9=economic_ideas
+		id0=exploration_ideas
+	}
+	GetIdeas = {
+		variable_name = numOfFreeIdeas
+		id1=maritime_ideas
+		id2=quality_ideas
+		id3=quantity_ideas
 		id4=expansion_ideas
-		id5=humanist_ideas
+		id5=administrative_ideas
+		id6=humanist_ideas
+		id7=katholisch0
+		id8=protestant0
+		id9=reformiert0
+		id0=orthodox0
 	}
 	GetIdeas = {
-		variable_name = diplo
-		id1=trade_ideas
-		id2=spy_ideas
-		id3=dynasty0
-		id3=influence_ideas
-		id4=exploration_ideas
-		id5=maritime_ideas
+		variable_name = numOfFreeIdeas
+		id1=islam0
+		id2=tengri0
+		id3=hindu0
+		id4=confuci0
+		id5=budda0
+		id6=norse0
+		id7=shinto0
+		id8=cathar0
+		id9=coptic0
+		id0=romuva0
 	}
 	GetIdeas = {
-		variable_name = milta
-		id1=defensive_ideas
-		id2=offensive_ideas
-		id3=quality_ideas
-		id4=quantity_ideas
+		variable_name = numOfFreeIdeas
+		id1=suomi0
+		id2=jew0
+		id3=slav0
+		id4=helle0
+		id5=mane0
+		id6=animist0
+		id7=feti0
+		id8=zoro0
+		id9=ancli0
+		id0=nahu0
+	}
+	GetIdeas = {
+		variable_name = numOfFreeIdeas
+		id1=mesoam0
+		id2=inti0
+		id3=tote0
+		id4=justiz0
+		id5=entwicklung0
+		id6=gesundheit0
+		id7=monarchie0
+		id8=republik0
+		id9=aristo0
+		id0=diktatur0
+	}
+	GetIdeas = {
+		variable_name = numOfFreeIdeas
+		id1=horde0
+		id2=gross0
+		id3=galle0
+		id4=handel0
+		id5=kolonialimperium0
+		id6=assimilation0
+		id7=gesellschaft0
+		id8=propaganda0
+		id9=flottenbasis0
+		id0=nationalismus0
+	}
+	GetIdeas = {
+		variable_name = numOfFreeIdeas
+		id1=konigreich0
+		id2=imperialismus0
+		id3=generalstab0
+		id4=stehendesheer0
+		id5=soldnerheer0
+		id6=wehrpflicht0
+		id7=waffenqualitat0
+		id8=festung0
+		id9=kriegsproduktion0
+		id0=staatsverwaltung0
+	}
+	GetIdeas = {
+		variable_name = numOfFreeIdeas
+		id1=zentra0
+		id2=dezentra0
+		id3=formation0
+		id4=militarismus0
+		id5=shock0
+		id6=fire0
 	}
 }
 GetIdeas= {
-	set_variable = {
-		which = $variable_name$
-		value = 0
+	if = {
+		limit = { NOT = {
+			check_variable = {
+				which = $variable_name$
+				value = 1
+			} }
+		}
+		set_variable = {
+			which = $variable_name$
+			value = 0
+		}
 	}
 	[[id1]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id1$
 	}
-	]	[[id2]
+	]	
+	[[id2]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id2$
 	}
-	]	[[id3]
+	]	
+	[[id3]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id3$
 	}
-	]	[[id4]
+	]	
+	[[id4]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id4$
@@ -107,20 +213,35 @@ GetIdeas= {
 		variable_name = $variable_name$
 		which = $id5$
 	}
-	]	[[id6]
+	]	
+	[[id6]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id6$
 	}
-	]	[[id7]
+	]	
+	[[id7]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id7$
 	}
-	]	[[id8]
+	]	
+	[[id8]
 	export_num_ideas = {
 		variable_name = $variable_name$
 		which = $id8$
+	}
+	]	
+	[[id9]
+	export_num_ideas = {
+		variable_name = $variable_name$
+		which = $id9$
+	}
+	]
+	[[id0]
+	export_num_ideas = {
+		variable_name = $variable_name$
+		which = $id0$
 	}
 	]
 }
