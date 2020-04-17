@@ -95,7 +95,7 @@ export_dev_cost_of_province = {
 		}
 		export_to_variable = {
 			variable_name = total_dev	value = total_development
-			who = owner # the capital is a special pace with a extra deb cost mod
+			who = owner # the capital is a special pace with a extra dev cost reduction
 		}
 		if = { 
 			limit = { check_variable = {
@@ -172,6 +172,44 @@ HiddenUpdateDevFlagEffect = {
 		} }
 	}
 } 
+HiddenUpdateDipDevFlagEffect = {
+	every_owned_province = {
+			limit = { always = yes }
+		set_variable = { which = DipFactor which = LocalDeVCost }
+		clr_province_flag = CheapDipTargetFlag
+		if = { 
+			limit = { trade_goods = gold }
+			multiply_variable = {
+				which = DipFactor
+				value = 0.5
+			}
+		}
+	}
+	every_owned_province = {
+		limit = { always = yes }
+		owner = { set_variable = {
+			which = DipFactor
+			which = PREV
+		}	}
+		if = { limit = { owner = {
+			any_owned_province = {
+				NOT = {
+				check_variable = {
+					which = DipFactor
+					which = PREV
+				}  }
+			} }
+			if = { limit = { owner = { NOT = { ai = yes } } }
+			log = LogText.6 }
+		}
+		else = {
+			set_province_flag = CheapDipTargetFlag
+			if = { limit = { owner = { NOT = { ai = yes } } }
+			log = LogText.5 }
+		}	
+	}
+
+}
 
 fire_event_next_month = {
 	export_to_variable = {
