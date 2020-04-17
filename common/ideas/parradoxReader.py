@@ -18,6 +18,7 @@ def _get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('file_name')
     parser.add_argument('--intermediate', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
+    parser.add_argument('--encode', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
     parser.add_argument('--no_json', '-n', action="store_true", default=False)
 
     return parser.parse_args()
@@ -59,40 +60,46 @@ def decode(file_path, save_intermediate, no_json):
         print('Dumping intermediate code into file: {}_{:.0f}.intermediate'.format(file_name, time.time()))
 
         sys.exit()
-
-    with open(file_name + '.json', 'w') as file:
-        json.dump(json_data, file, indent=4)
+    if not no_json:
+        with open(file_name + '.json', 'w') as file:
+            json.dump(json_data, file, indent=4)
 
     return json_data
 
-def encode(json):
-    if type(json) == str:
-        return json
-
+def encode(json, pretty_print = False, depth = 0):
+    if pretty_print:
+        end = "\r\n" + "".ljust(depth, '\t')
+    else:
+        end = " "
     stringout = ""
-    for key in json:
-        stringout += key + " = " 
-        if type(json[key]) == list:
-            save = stringout
-            stringout = ""
-            for item in json[key]:
-                stringout += save + item + " "
-            continue
-        if type(json[key]) == type('s'):
-            stringout += json[key]
-            continue
-        if type(json[key]) == bool:
-            if (json[key]):
-                stringout += "yes"
+    if type(json) == dict:
+        for key in json:
+            stringout += "" + str(key) + " = " 
+            if type(json[key]) == dict:
+                stringout += "{" + end + '\t' + encode(json[key], pretty_print, depth + 1)
+                stringout = stringout[:-1] + '}' + end 
+            elif  type(json[key]) == list:
+                length = len(str(key)) + 3
+                stringout = stringout[:-length]
+                for duplicat in json[key]:
+                    stringout += "" + str(key) + " = " 
+                    if type(duplicat) == dict:
+                        stringout += "{" + end + '\t' + encode(duplicat,pretty_print,depth) + "}" + end
+                    else:
+                        stringout += encode(duplicat,pretty_print,depth)
             else:
-                stringout += "no"
-            continue
-        if type(json[key]) == int:
-            stringout += str(json[key]) + " "
-            continue
-        stringout += "{ "
-        stringout += encode(json[key])
-        stringout +=  " }"
+                stringout += encode(json[key]) + end
+    elif  type(json) == str:
+        stringout += json + end
+    elif  type(json) == float:
+        stringout += str(json) + end
+    elif  type(json) == int:
+        stringout += str(json) + end
+    elif  type(json) == bool:
+        stringout += "yes" if json else "no"
+        stringout += end
+    else:
+        stringout += str(type(json))
     return stringout
 
 

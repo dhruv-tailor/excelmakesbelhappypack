@@ -12,7 +12,7 @@ class Ideas:
 		self.trigger = trigger
 
 def test1():
-	ModFolder = pathlib.PureWindowsPath("../..")
+	ModFolder = pathlib.PureWindowsPath("E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
 	files = ["00_basic_ideas.txt" , "00_flogi_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	out = []
@@ -82,5 +82,7 @@ def test1():
 			outfile.write("\tAdd{0} = yes\n".format(ideaG.name))
 		outfile.write("}\n")
 		outfile.close()
+	#return(PR.encode(data, True))
+	
 if __name__ == "__main__":
 	test1()
