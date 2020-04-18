@@ -159,3 +159,4 @@ NDefines.NAI.PEACE_TERMS_MIL_ACCESS_BASE_MULT = 0 -- AI desire for mil access th
 NDefines.NAI.PEACE_TERMS_FLEET_BASING_BASE_MULT = 0 -- AI desire for fleet basing rights through peace
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_BASE_MULT = 0.1 -- AI desire for war reparations through peace
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_MIN_INCOME_RATIO = 0.5 -- AI only wants war reparations if other country has at least this % of their income
+NDefines.NEconomy.MAX_BUILDING_SLOTS = 18
