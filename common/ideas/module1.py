@@ -13,14 +13,14 @@ class Ideas:
 		self.trigger = trigger
 
 def test1():
-	ModFolder = pathlib.PureWindowsPath(r"E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
-	files = [r"common\ideas\00_admin_ideas.txt" , r"common\ideas\00_dip_ideas.txt", r"common\ideas\00_mil_ideas.txt" ]
+	ModFolder = pathlib.PureWindowsPath("E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
+	files = ["00_basic_ideas.txt" , "00_flogi_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	loc = localisation.localisation()
 	out = []
 	print (pathlib.Path('.'))
 	for f in files:
-		f = ModFolder / pathlib.Path(f)
+		f = ModFolder / "common" /  "ideas" / f 
 		if pathlib.Path(f).suffix == ".txt":
 			data = PR.decode(pathlib.Path(f).as_posix(),False,False)
 			out.append(data)

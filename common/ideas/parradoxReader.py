@@ -18,6 +18,7 @@ def _get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('file_name')
     parser.add_argument('--intermediate', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
+    parser.add_argument('--encode', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
     parser.add_argument('--no_json', '-n', action="store_true", default=False)
 
     return parser.parse_args()
@@ -59,9 +60,9 @@ def decode(file_path, save_intermediate, no_json):
         print('Dumping intermediate code into file: {}_{:.0f}.intermediate'.format(file_name, time.time()))
 
         sys.exit()
-
-    with open(file_name + '.json', 'w') as file:
-        json.dump(json_data, file, indent=4)
+    if not no_json:
+        with open(file_name + '.json', 'w') as file:
+            json.dump(json_data, file, indent=4)
 
     return json_data
 
