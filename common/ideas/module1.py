@@ -12,13 +12,13 @@ class Ideas:
 		self.trigger = trigger
 
 def test1():
-	ModFolder = pathlib.PureWindowsPath("E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
-	files = ["00_basic_ideas.txt" , "00_flogi_ideas.txt" ]
+	ModFolder = pathlib.PureWindowsPath(r"E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
+	files = [r"common\ideas\00_admin_ideas.txt" , r"common\ideas\00_dip_ideas.txt", r"common\ideas\00_mil_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	out = []
 	print (pathlib.Path('.'))
 	for f in files:
-		f = ModFolder / "common" /  "ideas" / f 
+		f = ModFolder / pathlib.Path(f)
 		if pathlib.Path(f).suffix == ".txt":
 			data = PR.decode(pathlib.Path(f).as_posix(),False,False)
 			out.append(data)
@@ -74,6 +74,16 @@ def test1():
 		outfile.write("#Add{0}\n".format(ideaG.name))
 	outfile.close()
 	
+	template2 = """	if = {{ limit = {{has_idea_goup = {0} }} add_idea = {0} 
+	"""
+	for itter in range(1,1):
+		random.shuffle(list)
+		outfile = open("ML_ideaorderFirstEffect{0}.txt.tmp".format(itter),"w")
+		outfile.write("ideaorder{0} = {{\n".format(itter))
+		for ideaG in list:			
+			outfile.write("\tAdd{0} = yes\n".format(ideaG.name))
+		outfile.write("}\n")
+		outfile.close()
 	for itter in range(1,6):
 		random.shuffle(list)
 		outfile = open("ML_ideaordereffect{0}.txt.tmp".format(itter),"w")
