@@ -1,8 +1,6 @@
 import parradoxReader as PR
 import pathlib 
-import os
-import json
-import random
+import os, json, random
 import localisation
 
 class Ideas:
@@ -13,14 +11,14 @@ class Ideas:
 		self.trigger = trigger
 
 def test1():
-	ModFolder = pathlib.PureWindowsPath("E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
-	files = ["00_basic_ideas.txt" , "00_flogi_ideas.txt" ]
+	ModFolder = pathlib.PureWindowsPath(r"E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
+	files = [r"common\ideas\00_admin_ideas.txt" , r"common\ideas\00_dip_ideas.txt", r"common\ideas\00_mil_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	loc = localisation.localisation()
 	out = []
 	print (pathlib.Path('.'))
 	for f in files:
-		f = ModFolder / "common" /  "ideas" / f 
+		f = ModFolder / pathlib.Path(f)
 		if pathlib.Path(f).suffix == ".txt":
 			data = PR.decode(pathlib.Path(f).as_posix(),False,False)
 			out.append(data)
@@ -60,34 +58,50 @@ def test1():
 			outfile.write("}\n")
 	outfile.write("}")
 	outfile.close()
-	introText = "# this file is genrated by {0} \n".format(os.path.basename(__file__))
-	template ="""Add{0} = {{
-	if = {{ limit = {{ check_variable = {{ which = numOfFreeIdeas value = 1	}} }}
-	if = {{ limit = {{  {2}	  }}
-	add_idea_group = {0}	}} #{1}"""
+	introText = "#This file was genrated by {0}\n".format(os.path.basename(__file__))
+	template = """Add{0} = {{
+	if = {{ limit = {{ check_variable = {{ which = numOfFreeIdeas value = 1	}} }}\n	if = {{ limit = {{  {1}	  }}
+	add_idea_group = {0}	}}"""
 	template1 = """	if = {{ limit = {{ check_variable = {{ which = numOfFreeIdeas value = 1	}} }} add_idea = {0}
 		if = {{ limit = {{ has_idea = {0} }} subtract_variable = {{ which = numOfFreeIdeas value = 1 }}	}} }}"""
 	outfile = open("ML_AddIdeas.txt.tmp","w")
 	outfile.write(introText)
 	for ideaG in list:
-		outfile.write(template.format(ideaG.name, loc[ideaG.name], PR.encode(ideaG.trigger)) + '\n')
+		outfile.write(template.format(ideaG.name, PR.encode(ideaG.trigger)) + '\n')
 		for idea in ideaG.listgroups:
 			outfile.write(template1.format(idea) + '\n')
 		outfile.write("}\t }\n")
 	for ideaG in list:
-		outfile.write("#Add{0}".format(ideaG.name).ljust(25," "))
-		outfile.write("{0}\n".format(loc[ideaG.name]))
+		outfile.write("#Add{0}\n".format(ideaG.name))
 	outfile.close()
 	
 	for itter in range(1,6):
 		random.shuffle(list)
 		outfile = open("ML_ideaordereffect{0}.txt.tmp".format(itter),"w")
+		outfile.write(introText)
 		outfile.write("ideaorder{0} = {{\n".format(itter))
 		for ideaG in list:			
 			outfile.write("\tAdd{0} = yes\n".format(ideaG.name))
 		outfile.write("}\n")
 		outfile.close()
-	#return(PR.encode(data, True))
+
+	template2 = """ideaorderSmart{0} = {{\n """
+	template3a = "\t if = {{ limit = {{ has_idea_group = {0} }} "
+	template3b = "Add{0} = yes }}"
+	template3c = "#{0}\n "
+	for itter in range(1,2):
+		random.shuffle(list)
+		outfile = open("ML_ideaordereffectSmart{0}.txt.tmp".format(itter),"w")
+		outfile.write(introText)
+		outfile.write(template2.format(itter))
+		for ideaG in list:			
+			outfile.write(template3a.format(ideaG.name).ljust(60," "))
+			outfile.write(template3b.format(ideaG.name).ljust(45," "))
+			outfile.write(template3c.format(loc[ideaG.name]))
+		outfile.write("}\n")
+		outfile.close()
+	with open("ML_ideaordereffectSmart1.txt.tmp","r") as file:
+		return(file.read())
 	
 if __name__ == "__main__":
 	test1()
