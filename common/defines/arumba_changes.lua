@@ -2,13 +2,13 @@ NDefines.NEconomy.EDICTS_COST_INCREASE = 1		-- % increase on state maintenance. 
 NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3	-- months lasting at least. removed because its annoying to remember managing and being blocked from doing it when you remember.
 
 -- #arumba - changes to condottieri to block non-participation contracts
-NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.0 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.  
+NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.0 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_WARN = -0.4 -- At this level of (lack of) participation from the player, a warning alert will be displayed about impendent AI discontent.  -- (was -1.2)
 
 -- #arumba - trying to encourage shorter term/immediate impact contracts
 NDefines.NDiplomacy.CONDOTTIERI_MIN_DURATION = 12 -- Minimum duration for Condottieri agreements that must be paid for in advance and that cannot be cancelled.
 
-NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 20 -- doubled from 10. 
+NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 20 -- doubled from 10.
 NDefines.NMilitary.LOOTED_MAX = 10 -- doubled from 5 ducats/mo max to 10 because of +looting speed multipliers in the mod
 
 -- #arumba - AI should want to use its army, like a player
@@ -36,10 +36,18 @@ NDefines.NAI.PEACE_BASE_RELUCTANCE = 0 -- AI base stubbornness to refuse peace (
 NDefines.NAI.PEACE_BATTLE_RELUCTANCE = 60 -- Reluctance multiplied by fraction of support limit currently in an ongoing battle in this war (to encourage battle resolution before peacing).
 NDefines.NAI.PEACE_EXCESSIVE_DEMANDS_FACTOR = 0.005 -- AI unwillingness to peace based on demanding more stuff than you have warscore
 NDefines.NAI.PEACE_EXCESSIVE_DEMANDS_THRESHOLD = 20 -- If you have less warscore than this, excessive demands will be factored in more highly
-NDefines.NAI.PEACE_TIME_MONTHS = 30 -- Months of additional AI stubbornness in a war
+
+NDefines.NAI.PEACE_TIME_MONTHS = 36 -- Months of additional AI stubbornness in a war
+-- PEACE_TIME_MONTHS = 60, -- Months of additional AI stubbornness in a war
+
 NDefines.NAI.PEACE_TIME_MAX_MONTHS = 600 -- Max months applied to time factor in a war
-NDefines.NAI.PEACE_TIME_EARLY_FACTOR = 1.0 -- was 0.75 -- During months of stubbornness the effect of time passed is multiplied by this
+
+NDefines.NAI.PEACE_TIME_EARLY_FACTOR = 1.0 -- During months of stubbornness the effect of time passed is multiplied by this
+-- PEACE_TIME_EARLY_FACTOR = 0.75, -- During months of stubbornness the effect of time passed is multiplied by this
+
 NDefines.NAI.PEACE_TIME_LATE_FACTOR = 3.0 -- After months of stubbornness the effect of time passed is multiplied by this (only applied to positive war enthusiasm)
+-- PEACE_TIME_LATE_FACTOR = 1.0, -- After months of stubbornness the effect of time passed is multiplied by this (only applied to positive war enthusiasm)
+
 NDefines.NAI.PEACE_STALLED_WAR_TIME_FACTOR = 0.34 -- Applied to number of years war has been stalled to determine how much positive war enthusiasm is reduced
 NDefines.NAI.PEACE_STALLED_WAR_THRESHOLD = 3 -- If the warscore has changed by this amount or less in the last year, the war is stalled
 NDefines.NAI.PEACE_WAR_EXHAUSTION_FACTOR = 1.0 -- AI willingness to peace based on war exhaustion
