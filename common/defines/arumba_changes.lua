@@ -36,10 +36,18 @@ NDefines.NAI.PEACE_BASE_RELUCTANCE = 0 -- AI base stubbornness to refuse peace (
 NDefines.NAI.PEACE_BATTLE_RELUCTANCE = 60 -- Reluctance multiplied by fraction of support limit currently in an ongoing battle in this war (to encourage battle resolution before peacing).
 NDefines.NAI.PEACE_EXCESSIVE_DEMANDS_FACTOR = 0.005 -- AI unwillingness to peace based on demanding more stuff than you have warscore
 NDefines.NAI.PEACE_EXCESSIVE_DEMANDS_THRESHOLD = 20 -- If you have less warscore than this, excessive demands will be factored in more highly
-NDefines.NAI.PEACE_TIME_MONTHS = 30 -- Months of additional AI stubbornness in a war
+
+NDefines.NAI.PEACE_TIME_MONTHS = 36 -- Months of additional AI stubbornness in a war
+-- PEACE_TIME_MONTHS = 60, -- Months of additional AI stubbornness in a war
+
 NDefines.NAI.PEACE_TIME_MAX_MONTHS = 600 -- Max months applied to time factor in a war
-NDefines.NAI.PEACE_TIME_EARLY_FACTOR = 1.0 -- was 0.75 -- During months of stubbornness the effect of time passed is multiplied by this
+
+NDefines.NAI.PEACE_TIME_EARLY_FACTOR = 1.0 -- During months of stubbornness the effect of time passed is multiplied by this
+-- PEACE_TIME_EARLY_FACTOR = 0.75, -- During months of stubbornness the effect of time passed is multiplied by this
+
 NDefines.NAI.PEACE_TIME_LATE_FACTOR = 3.0 -- After months of stubbornness the effect of time passed is multiplied by this (only applied to positive war enthusiasm)
+-- PEACE_TIME_LATE_FACTOR = 1.0, -- After months of stubbornness the effect of time passed is multiplied by this (only applied to positive war enthusiasm)
+
 NDefines.NAI.PEACE_STALLED_WAR_TIME_FACTOR = 0.34 -- Applied to number of years war has been stalled to determine how much positive war enthusiasm is reduced
 NDefines.NAI.PEACE_STALLED_WAR_THRESHOLD = 3 -- If the warscore has changed by this amount or less in the last year, the war is stalled
 NDefines.NAI.PEACE_WAR_EXHAUSTION_FACTOR = 1.0 -- AI willingness to peace based on war exhaustion
