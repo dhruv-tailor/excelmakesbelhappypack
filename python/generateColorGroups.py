@@ -132,6 +132,6 @@ for i, v in enumerate(list(GROUPS)):
     output.write(cb_block.format(i, neighbors, tags))
     output.write("\n\n")
 for itter in range(1,len(list(GROUPS))):
-    output.write(""" cb_color_{0}_desc:0 "People have been complaining about Unresolved Margins, Color disputes, Precarious Perimeters and a Chronic Chromatic Conflict it needs to be resolved on the battlefield."
+    output.write(""" cb_color_{0}_desc:0 "People have been complaining about Unresolved Margins, Color disputes, Precarious Perimeters and a Chroninc Chromatic Conflict between out nations. It needs to be resolved on the battlefield."
  cb_color_{0}:0 "Misplaced Border\n""".format(itter))
 output.close()
