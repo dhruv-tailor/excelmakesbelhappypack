@@ -2,13 +2,13 @@ NDefines.NEconomy.EDICTS_COST_INCREASE = 1		-- % increase on state maintenance. 
 NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3	-- months lasting at least. removed because its annoying to remember managing and being blocked from doing it when you remember.
 
 -- #arumba - changes to condottieri to block non-participation contracts
-NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.0 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.
+NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.0 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.  
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_WARN = -0.4 -- At this level of (lack of) participation from the player, a warning alert will be displayed about impendent AI discontent.  -- (was -1.2)
 
 -- #arumba - trying to encourage shorter term/immediate impact contracts
 NDefines.NDiplomacy.CONDOTTIERI_MIN_DURATION = 12 -- Minimum duration for Condottieri agreements that must be paid for in advance and that cannot be cancelled.
 
-NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 20 -- doubled from 10.
+NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 20 -- doubled from 10. 
 NDefines.NMilitary.LOOTED_MAX = 10 -- doubled from 5 ducats/mo max to 10 because of +looting speed multipliers in the mod
 
 -- #arumba - AI should want to use its army, like a player
@@ -168,4 +168,19 @@ NDefines.NAI.PEACE_TERMS_MIL_ACCESS_BASE_MULT = 0 -- AI desire for mil access th
 NDefines.NAI.PEACE_TERMS_FLEET_BASING_BASE_MULT = 0 -- AI desire for fleet basing rights through peace
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_BASE_MULT = 0.1 -- AI desire for war reparations through peace
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_MIN_INCOME_RATIO = 0.5 -- AI only wants war reparations if other country has at least this % of their income
-NDefines.NEconomy.MAX_BUILDING_SLOTS = 18
+
+NDefines.NAI.ADVISOR_BUDGET_FRACTION = 0.2 -- nerfed to try to increase net income ratio
+-- ADVISOR_BUDGET_FRACTION = 0.3, -- AI will spend a maximum of this fraction of monthly income on advisor maintenance
+NDefines.NAI.CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 101 -- buildings don't get destroyed when sieged, not sure why AI cancels constructions at all
+-- CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 0, -- If chance of fort falling is at least this, AI will cancel constructions in the province
+NDefines.NAI.DESIRED_SURPLUS = 0.15 -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
+-- DESIRED_SURPLUS = 0.1, -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
+NDefines.NAI.BIGSHIP_FRACTION = 0.3	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
+-- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
+	
+	
+	
+
+NDefines.NEconomy.MAX_BUILDING_SLOTS = 18 
+
+
