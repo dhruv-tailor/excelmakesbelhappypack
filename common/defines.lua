@@ -1273,7 +1273,8 @@ NAI = {
 	POWERFUL_ALLY_PENALTY = 50,	-- Penalty on alliance for them already having a powerful ally if much stronger
 	RIVAL_ALLIANCE_PENALTY = 50, -- Penalty on alliance chance for being allied to rivals
 
-	DEVELOPMENT_CAP_BASE = 10,	-- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
+	DEVELOPMENT_CAP_BASE = 30,	-- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
+	-- DEVELOPMENT_CAP_BASE = 10
 	DEVELOPMENT_CAP_MULT = 2,
 
 	PEACE_BASE_RELUCTANCE = 0, -- AI base stubbornness to refuse peace (always applied)

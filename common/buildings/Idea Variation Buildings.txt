@@ -89,11 +89,12 @@ infrastructure_lvl_4 = {
 ################################################
 #government_lvl_1 = {
 courthouse = {
-	cost = 60
+	cost = 75
 	time = 12
 	
 	modifier = {
-		local_state_maintenance_modifier = -0.25
+		local_state_maintenance_modifier = -0.20
+		local_missionary_strength = 0.005
 		local_autonomy = -0.05
 		local_monthly_devastation = -0.05
 		allowed_num_of_buildings = 1
@@ -107,12 +108,12 @@ courthouse = {
 town_hall = {
 	#make_obsolete = government_lvl_1
 	make_obsolete = courthouse
-	cost = 120
+	cost = 150
 	time = 12
 	
 	modifier = {
-		local_state_maintenance_modifier = -0.5
-		local_missionary_strength = 0.01
+		local_state_maintenance_modifier = -0.40
+		local_missionary_strength = 0.010
 		local_autonomy = -0.1
 		local_monthly_devastation = -0.1
 		allowed_num_of_buildings = 1
@@ -125,12 +126,12 @@ town_hall = {
 government_lvl_3 = {
 	#make_obsolete = government_lvl_2
 	make_obsolete = town_hall
-	cost = 180
+	cost = 225
 	time = 12
 
 	modifier = {
-		local_state_maintenance_modifier = -0.75
-		local_missionary_strength = 0.02
+		local_state_maintenance_modifier = -0.60
+		local_missionary_strength = 0.015
 		local_autonomy = -0.1
 		local_monthly_devastation = -0.15
 		allowed_num_of_buildings = 1
@@ -142,12 +143,12 @@ government_lvl_3 = {
 
 government_lvl_4 = {
 	make_obsolete = government_lvl_3
-	cost = 240
+	cost = 300
 	time = 12
 
 	modifier = {
-		local_state_maintenance_modifier = -1.0
-		local_missionary_strength = 0.03
+		local_state_maintenance_modifier = -0.80
+		local_missionary_strength = 0.020
 		local_autonomy = -0.15
 		local_monthly_devastation = -0.2
 		allowed_num_of_buildings = 1
@@ -196,7 +197,7 @@ terrain_land = {
 	}
 	ai_will_do = {
 		factor = 100
-	}	
+	}
 }
 
 terrain_woodland = {
@@ -761,14 +762,8 @@ marketplace = {
 		trade_value_modifier = 0.1
 	}
 	ai_will_do = {
-		factor = 100
+		factor = 120
 		
-		#Arumba WIP#
-		
-		# modifier = {
-			# factor = 0
-			# NOT = { province_trade_power = 10 }
-		# }
 		modifier = {
 			factor = 2
 			OR = {
@@ -788,9 +783,6 @@ marketplace = {
 				} 
 			}
 		}
-		
-		#Arumba WIP#
-		
 	}
 }
 
@@ -804,12 +796,29 @@ trade_lvl_2 = {
 		province_trade_power_value = 4.0
 		trade_value_modifier = 0.2
 	}
+	
 	ai_will_do = {
-		factor = 100
-		# modifier = {
-			# factor = 0
-			# NOT = { province_trade_power = 10 }
-		# }
+		factor = 120
+		
+		modifier = {
+			factor = 2
+			OR = {
+				has_state_edict = edict_protect_trade
+				has_state_edict = edict_protect_trade_2
+				has_state_edict = edict_protect_trade_3
+				has_state_edict = edict_protect_trade_4
+			}
+		}
+		modifier = {
+			factor = 2
+			owner = {
+				home_trade_node = {
+					any_trade_node_member_province = {
+						province_id = ROOT
+					} 
+				} 
+			}
+		}
 	}
 }
 
@@ -823,12 +832,29 @@ trade_depot = {
 		province_trade_power_value = 6.0
 		trade_value_modifier = 0.3
 	}
+	
 	ai_will_do = {
-		factor = 100
-		# modifier = {
-			# factor = 0
-			# NOT = { province_trade_power = 10 }
-		# }
+		factor = 120
+		
+		modifier = {
+			factor = 2
+			OR = {
+				has_state_edict = edict_protect_trade
+				has_state_edict = edict_protect_trade_2
+				has_state_edict = edict_protect_trade_3
+				has_state_edict = edict_protect_trade_4
+			}
+		}
+		modifier = {
+			factor = 2
+			owner = {
+				home_trade_node = {
+					any_trade_node_member_province = {
+						province_id = ROOT
+					} 
+				} 
+			}
+		}
 	}
 }
 
@@ -842,13 +868,30 @@ stock_exchange = {
 	modifier = {
 		province_trade_power_value = 8.0
 		trade_value_modifier = 0.4	
-	}	
+	}
+	
 	ai_will_do = {
-		factor = 100
-		# modifier = {
-			# factor = 0
-			# NOT = { province_trade_power = 10 }
-		# }
+		factor = 120
+		
+		modifier = {
+			factor = 2
+			OR = {
+				has_state_edict = edict_protect_trade
+				has_state_edict = edict_protect_trade_2
+				has_state_edict = edict_protect_trade_3
+				has_state_edict = edict_protect_trade_4
+			}
+		}
+		modifier = {
+			factor = 2
+			owner = {
+				home_trade_node = {
+					any_trade_node_member_province = {
+						province_id = ROOT
+					} 
+				} 
+			}
+		}
 	}
 }
 
@@ -866,6 +909,7 @@ manpower_lvl_1 = {
 	modifier = {
 		local_manpower_modifier = 0.5	
 	}
+	
 	ai_will_do = {
 		factor = 100
 		modifier = {
@@ -904,6 +948,49 @@ manpower_lvl_1 = {
 			factor = 1.10
 			base_manpower = 10
 		}
+		
+		# increase interest for each 10% below 50% max manpower
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.5
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.4
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.1
+				}
+			}
+		}
+		#/ increase interest for each 10% below 50% max manpower
 	}
 }
 
@@ -916,6 +1003,7 @@ barracks = {
 	modifier = {
 		local_manpower_modifier = 1.0
 	}
+	
 	ai_will_do = {
 		factor = 100
 		modifier = {
@@ -954,6 +1042,49 @@ barracks = {
 			factor = 1.10
 			base_manpower = 10
 		}
+		
+		# increase interest for each 10% below 50% max manpower
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.5
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.4
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.1
+				}
+			}
+		}
+		#/ increase interest for each 10% below 50% max manpower
 	}
 }
 
@@ -967,6 +1098,7 @@ training_fields = {
 	modifier = {
 		local_manpower_modifier = 1.5
 	}
+	
 	ai_will_do = {
 		factor = 100
 		modifier = {
@@ -1005,6 +1137,49 @@ training_fields = {
 			factor = 1.10
 			base_manpower = 10
 		}
+		
+		# increase interest for each 10% below 50% max manpower
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.5
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.4
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.3
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.2
+				}
+			}
+		}
+		modifier = {
+			factor = 1.25
+			NOT = {
+				FROM = {
+					manpower_percentage = 0.1
+				}
+			}
+		}
+		#/ increase interest for each 10% below 50% max manpower
 	}
 }
 
@@ -1187,13 +1362,6 @@ navymanpower_lvl_2 = {
 			has_idea = galle1
 			has_idea = merchant_marine_2
 		}
-		NOT = {
-			OR = {
-				has_building = navyforcelimit_lvl_2
-				has_building = grand_shipyard
-				#has_building = navyforcelimit_lvl_3
-			}
-		}
 	}
 	modifier = {
 		naval_forcelimit = 4
@@ -1242,13 +1410,6 @@ drydock = {
 		OR = {
 			has_idea = handel5
 			has_idea = galle1
-		}
-		NOT = {
-			OR = {
-				has_building = navyforcelimit_lvl_2
-				has_building = grand_shipyard
-				#has_building = navyforcelimit_lvl_3
-			}
 		}
 	}
 	modifier = {
@@ -1337,13 +1498,6 @@ navyforcelimit_lvl_2 = {
 			has_idea = gross6
 			has_idea = grand_navy_2
 		}
-		NOT = { 
-			OR = {	
-				has_building = navymanpower_lvl_2
-				has_building = drydock
-				#has_building = navymanpower_lvl_3
-			}
-		}
 	}
 	modifier = {
 		naval_forcelimit = 3
@@ -1380,13 +1534,6 @@ grand_shipyard = {
 	trigger = {
 		has_port = yes
 		has_idea = gross6
-		NOT = { 
-			OR = {
-				has_building = navymanpower_lvl_2
-				has_building = drydock
-				#has_building = navymanpower_lvl_3
-			}
-		}
 	}
 	modifier = {
 		naval_forcelimit = 6

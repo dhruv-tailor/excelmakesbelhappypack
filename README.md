@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+- Merged the on_actions
+## Important Update
+- in order to reduce size of the mod you need to copy the mod file contents to your .mod file
 ## Update
 - plugged in Theatrum Orbis Terrarum graphich pack
 - you can get the mod without graphics in the no-graphich branch
