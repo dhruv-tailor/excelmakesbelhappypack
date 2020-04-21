@@ -20,7 +20,6 @@ NDefines.NEconomy.LAND_TECH_MAINTENANCE_IMPACT = 0.04
 NDefines.NEconomy.BASE_INTERESTS = 5.0
 NDefines.NEconomy.CARAVAN_FACTOR = 20.0
 NDefines.NEconomy.CARAVAN_POWER_MAX = 10
-NDefines.NMilitary.ARMY_DRILL_YEARLY_DECAY = 0.0
 NDefines.NMilitary.GALLEY_BONUS_INLAND_SEA = 0.0
 NDefines.NMilitary.GALLEY_DICE_MALLUS_HIGH_SEA = -1
 NDefines.NMilitary.NAVAL_BASE_ENGAGEMENT_WIDTH = 60 	-- Number of ships that can fire per round

@@ -1,0 +1,221 @@
+
+
+#thank you u/Justice_Fighter https://www.reddit.com/r/eu4/comments/dy7lyv/are_dynamic_modifiers_possible/
+
+add_power_effect = {
+	hidden_effect = {
+		set_variable = { which = temp which = $variable$ }
+		if = {
+			limit = {
+				check_variable = { which = $variable$ value = 0.1 }
+			}
+			# postive 
+			ape_helper1 = { variable=temp addcommand=$command$ value=8192 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=4096 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=2048 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=1024 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=512 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=256 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=128 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=64 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=32 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=16 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=8 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=4 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=2 }
+			ape_helper1 = { variable=temp addcommand=$command$ value=1 }
+
+		}
+		else = {
+			#negative 
+			ape_helper2 = { variable=temp addcommand=$command$ value=-8192 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-4096 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-2048 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-1024 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-512 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-256 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-128 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-64 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-32 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-16 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-8 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-4 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-2 }
+			ape_helper2 = { variable=temp addcommand=$command$ value=-1 }
+		}
+		set_variable = { which = temp value = 0 }
+	}
+}	
+
+ape_helper2 = {
+	if = {
+		limit = {
+			NOT = { check_variable = { which = $variable$ value = $value$ }}
+		}
+		$addcommand$ = $value$
+		subtract_variable = { which = $variable$ value = $value$ }
+	}	
+}
+ape_helper1 = {
+	if = {
+		limit = {
+			check_variable = { which = $variable$ value = $value$ }
+		}
+		$addcommand$ = $value$
+		subtract_variable = { which = $variable$ value = $value$ }
+	}	
+}
+export_dev_cost_of_province = {
+	set_variable = {
+		which = $name$`	value= 0 # set var to zero not sure if needed but tp be safe
+	}
+	export_to_variable = {
+		variable_name = development_cost value = modifier:development_cost
+		who = owner #country dev cost reduction
+	}
+	export_to_variable = {
+		variable_name = all_power_cost 	value = modifier:all_power_cost
+		who = owner #country corutipon and invantes
+	}
+	export_to_variable = {
+		variable_name = $name$ 	value = modifier:local_development_cost
+	} # local dev cost modifer 
+	change_variable = {
+		which = $name$ 	value= 1 
+	} # adding 100%
+	change_variable = {
+		which = $name$ 	which = development_cost
+	} 
+	change_variable = {
+		which = $name$ 	which = all_power_cost
+	}
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		export_to_variable = {
+			variable_name = total_dev	value = total_development
+			who = owner # the capital is a special pace with a extra dev cost reduction
+		}
+		if = { 
+			limit = { check_variable = {
+				which = total_dev value = 2000
+			} }  # it caps at 2000 total dev
+			set_variable = { which = total_dev value = -0.5 }
+		} #it scales by -5% per 100 dev
+		else = {
+			divide_variable = { which = total_dev value = -2000 }
+		}
+		change_variable = { 
+			which = $name$	which = total_dev
+		}
+	}
+	if  = {
+		limit = { owner = { adm_tech = 27 } }
+		multiply_variable = { 
+			which = $name$	value = 35
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 23 } }
+		multiply_variable = { 
+			which = $name$	value = 40
+	}	}
+	else_if  = {
+		limit = { owner = { adm_tech = 17  } }
+		multiply_variable = { 
+			which = $name$	value = 45
+		}
+	}
+	else = {
+	multiply_variable = { 
+		which = $name$	value = 50
+	} }
+}
+HiddenUpdateDevFlagEffect = {
+	hidden_effect = {
+		every_owned_province = {
+				limit = { always = yes }
+			clr_province_flag = CheapDevTargetFlag
+			set_variable = { which = LocalDeVCost value = 0 }
+			export_dev_cost_of_province = {
+				name = LocalDeVCost
+			}
+		}
+		every_owned_province = {
+			limit = { always = yes }
+			owner = { set_variable = {
+				which = LocalDeVCost
+				which = PREV
+			}	}
+			if = { limit = { owner = {
+				any_owned_province = {
+					NOT = {
+					check_variable = {
+						which = LocalDeVCost
+						which = PREV
+					} 	}
+				} 	} }
+				#if = { limit = { owner = { NOT = { ai = yes } } }
+				#log = LogText.6 }
+			}
+			else = {
+				set_province_flag = CheapDevTargetFlag
+				#if = { limit = { owner = { NOT = { ai = yes } } }
+				#log = LogText.5 }
+			}			
+		}
+		owner = { any_owned_province = { 
+			limit = { has_province_flag = CheapDevTargetFlag }
+			owner = {
+				set_variable = { which = LocalDeVCost which = PREV }
+			}
+		} }
+	}
+} 
+HiddenUpdateDipDevFlagEffect = {
+	every_owned_province = {
+			limit = { always = yes }
+		set_variable = { which = DipFactor which = LocalDeVCost }
+		clr_province_flag = CheapDipTargetFlag
+		if = { 
+			limit = { trade_goods = gold }
+			multiply_variable = {
+				which = DipFactor
+				value = 0.5
+			}
+		}
+	}
+	every_owned_province = {
+		limit = { always = yes }
+		owner = { set_variable = {
+			which = DipFactor
+			which = PREV
+		}	}
+		if = { limit = { owner = {
+			any_owned_province = {
+				NOT = {
+				check_variable = {
+					which = DipFactor
+					which = PREV
+				}  }
+			} } }
+			if = { limit = { owner = { NOT = { ai = yes } } }
+			log = LogText.6 }
+		}
+		else = {
+			set_province_flag = CheapDipTargetFlag
+			if = { limit = { owner = { NOT = { ai = yes } } }
+			log = LogText.5 }
+		}	
+	}
+
+}
+
+fire_event_next_month = {
+	country_event = { id = $id$ 
+		days = 31 
+		} 
+}
+
+
+
