@@ -1,5 +1,8 @@
 # excelmakesbelhappypack
-## Branch Dev click
+## Even more features
+- Vassels get ideas now when released from the ether
+- Chromatic conflicts are now poisble ofr all nations that broder each other
+## Feature Branch 
 - plugged in a dev click.
 - Merged the on_actions
 ## Important Update
