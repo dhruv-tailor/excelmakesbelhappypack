@@ -178,9 +178,8 @@ NDefines.NAI.DESIRED_SURPLUS = 0.15 -- AI will aim for having at least this frac
 NDefines.NAI.BIGSHIP_FRACTION = 0.3	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 -- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 	
-	
-	
-
 NDefines.NEconomy.MAX_BUILDING_SLOTS = 18 
+NDefines.NMilitary.SUPPLY_DEPOT_MIL_COST = 5	-- Mil power cost to build a supply depot in an area.
+-- SUPPLY_DEPOT_MIL_COST = 20	-- Mil power cost to build a supply depot in an area.
 
 
