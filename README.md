@@ -1,8 +1,10 @@
 # excelmakesbelhappypack
-- Startup events know includes this readme.md file up to 30 lines
-## Branch Dev click
-- plugged in a dev click.
-- Merged the on_actions
+## V0.2.2
+- This pack and future versions are now avaible at github.com/TheDivexz/excelmakesbelhappypack/releases
+- also other improvemnts to ai and develment ideas
+- Startup events know includes this readme.md file up to 30 lines. Github bot does that for us
+- New nations get ideas from there releaser, wheter by peace deal or by releasing them. via missons tree created nations do not Though. 
+- Merged the on_actions they now have a unq file
 ## Important Update
 - in order to reduce size of the mod you need to copy the mod file contents to your .mod file
 ## Update
