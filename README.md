@@ -2,7 +2,7 @@
 ## V0.2.2
 - This pack and future versions are now avaible at github.com/TheDivexz/excelmakesbelhappypack/releases
 - also other improvemnts to ai and develment ideas
-- Startup events know includes this readme.md file up to 30 lines. Github bot does that for us hopefully be nice to the bot
+- Startup events know includes this readme.md file up to 30 lines.  Github bot does that for us hopefully be nice to the bot
 - New nations get ideas from there releaser, wheter by peace deal or by releasing them. via missons tree created nations do not Though. 
 - Merged the on_actions they now have a unq file
 ## Important Update
