@@ -18,3 +18,7 @@ NDefines.NMilitary.SUPPLY_DEPOT_MIL_COST = 5	-- Mil power cost to build a supply
 NDefines.NMilitary.FORT_FLIPPING_TIME = 60		-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
 	-- FORT_FLIPPING_TIME = 30,					-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
 	
+NDefines.NMilitary.SUPPLYLIMIT_BASE_MULTIPLIER = 8.0	
+	-- SUPPLYLIMIT_BASE_MULTIPLIER = 6.0
+	
+	
