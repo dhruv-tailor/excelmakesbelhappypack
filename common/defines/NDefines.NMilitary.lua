@@ -15,3 +15,6 @@ NDefines.NMilitary.DEFAULT_WARGOAL_TICKINGWARSCORE_BONUS = 0.5	-- Amount of wars
 NDefines.NMilitary.WARGOAL_MAX_BONUS = 25
 NDefines.NMilitary.SUPPLY_DEPOT_MIL_COST = 5	-- Mil power cost to build a supply depot in an area.
 -- SUPPLY_DEPOT_MIL_COST = 20	-- Mil power cost to build a supply depot in an area.
+NDefines.NMilitary.FORT_FLIPPING_TIME = 60		-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
+	-- FORT_FLIPPING_TIME = 30,					-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
+	
