@@ -3,30 +3,35 @@ import pathlib
 import os
 import json
 import random
-import openpyxl 
-
-class Ideas:
-	def __init__(self,name, typ, listgroups, trigger):
-		self.name = name
-		self.typ = typ
-		self.listgroups = listgroups
-		self.trigger = trigger
+from openpyxl import Workbook 
+from IdeaGroup import *
 
 def test1():
 	ModFolder = pathlib.PureWindowsPath(r"E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
 	files = [r"common\ideas\00_admin_ideas.txt" , r"common\ideas\00_dip_ideas.txt", r"common\ideas\00_mil_ideas.txt" ]
 	#files = [f for f in os.listdir('.') if os.path.isfile(f)]
 	out = []
+	out1 = []
 	print (pathlib.Path('.'))
 	for f in files:
 		f = ModFolder / pathlib.Path(f)
 		if pathlib.Path(f).suffix == ".txt":
-			data = PR.decode(pathlib.Path(f).as_posix(),False,False)
+			data = IdeasGroupFactory.ParseFromFile(f)
 			out.append(data)
+			
 	list = []
 	data = out[0]
 	for f in out[1:]:
-		data.update(f)
+		data.update(f) #merge all the idea in dicts toghter	
+
+	workbook = Workbook()
+	sheet = workbook.active
+
+	sheet["A1"] = "hello"
+	sheet["B1"] = "world!"
+
+workbook.save(filename="hello_world.xlsx")
+
 	for name in data:
 		item =  data[name]
 		if type(item)  == type(list):
@@ -40,11 +45,8 @@ def test1():
 		else:
 			trigger = "always = yes"
 		#print(typ)
-		for key in item:
-			if key in ["category", "bonus" , "trigger", "ai_will_do", "important"]:
-				continue
-			listgroups.append(key)
-		list.append(Ideas(name, typ, listgroups.copy(), trigger))
+		listgroups.append(key)
+		list.append(IdeaGroup(name, typ, listgroups.copy(), trigger))
 		listgroups.clear()
 		effects.clear()
 	count = 0
