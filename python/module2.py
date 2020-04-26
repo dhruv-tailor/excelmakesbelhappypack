@@ -128,18 +128,6 @@ class PoliciesFactory:
 		out = PoliciesFactory.HandleDuplicats(out)
 		return PoliciesFactory.makePolicies(out)
 
-import psutil
-
-def has_handle(fpath):
-    for proc in psutil.process_iter():
-        try:
-            for item in proc.open_files():
-                if fpath == item.path:
-                    return True
-        except Exception:
-            pass
-
-    return False
 
 def test1():
 	ModFolder = pathlib.PureWindowsPath(r"E:\Melle\Documents\Paradox Interactive\Europa Universalis IV\mod\GitBranch")
