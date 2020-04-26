@@ -25,7 +25,7 @@ def _get_args():
 
 def decode(file_path, save_intermediate, no_json):
     try:
-        file = open(file_path, 'r',encoding="utf8")
+        file = open(file_path, 'r',encoding="latin-1")
     except FileNotFoundError:
         print('ERROR: Unable to find file: ' + str(file_path))
         return ""

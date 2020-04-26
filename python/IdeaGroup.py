@@ -2,14 +2,14 @@ import pathlib
 import parradoxReader as PR
 
 class IdeaGroup:
-	def __init__(self,name = "Empty idea/errpr" , typ="", ideas=[], trigger="", Ideas = {}, json = {}):
+	def __init__(self,name = "Empty idea/errpr" , type="", ideas=[], trigger="", Ideas = {}, json = {}):
 		self.name = name
 		self.typ = typ
 		self.trigger = trigger
 		self.ideas = ideas
 		self.json = json
 	def __repr__(self):
-		ret = "IdeaGroup="+self.name + ": Type=" + self.typ + " " + "Ideas:" + self.ideas.keys().__repr__()
+		ret = "IdeaGroup="+self.name + ": Type=" + self.type + " " + "Ideas:" + self.ideas.keys().__repr__()
 		return ret
 
 
@@ -40,7 +40,7 @@ class IdeasGroupFactory:
 		for name in group:
 			try:
 				trigger = specKeys[name].get('trigger', "")
-				ret[name] = IdeaGroup(name, typ=specKeys[name]["category"],
+				ret[name] = IdeaGroup(name, type=specKeys[name]["category"],
 						 trigger=trigger,
 						ideas= group[name],
 						json=json[name] )
