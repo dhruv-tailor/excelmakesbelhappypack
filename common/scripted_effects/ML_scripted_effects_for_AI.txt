@@ -81,7 +81,7 @@ export_dev_cost_of_province = {
 		variable_name = $name$ 	value = modifier:local_development_cost
 	} # local dev cost modifer 
 	change_variable = {
-		which = $name$ 	value= 1 
+		which = $name$ 	value = 1 
 	} # adding 100%
 	change_variable = {
 		which = $name$ 	which = development_cost
@@ -99,7 +99,7 @@ export_dev_cost_of_province = {
 		}
 		if = { 
 			limit = { check_variable = {
-				which = total_dev value = 2000
+				which = total_dev value = 1000
 			} }  # it caps at 2000 total dev
 			set_variable = { which = total_dev value = -0.5 }
 		} #it scales by -5% per 100 dev
@@ -134,7 +134,7 @@ export_dev_cost_of_province = {
 HiddenUpdateDevFlagEffect = {
 	hidden_effect = {
 		every_owned_province = {
-				limit = { always = yes }
+			limit = { always = yes }
 			clr_province_flag = CheapDevTargetFlag
 			set_variable = { which = LocalDeVCost value = 0 }
 			export_dev_cost_of_province = {
@@ -142,29 +142,31 @@ HiddenUpdateDevFlagEffect = {
 			}
 		}
 		every_owned_province = {
-			limit = { always = yes }
+			limit = { 
+				is_state = yes
+				is_state_core = owner
+			}
 			owner = { set_variable = {
 				which = LocalDeVCost
 				which = PREV
 			}	}
-			if = { limit = { owner = {
+			if = { limit = { owner = { NOT = {
 				any_owned_province = {
 					NOT = {
 					check_variable = {
 						which = LocalDeVCost
 						which = PREV
-					} 	}
-				} 	} }
-				#if = { limit = { owner = { NOT = { ai = yes } } }
-				#log = LogText.6 }
-			}
-			else = {
+					} 	
+				} 	
+				is_state = yes
+				is_state_core = owner
+				} } } }
 				set_province_flag = CheapDevTargetFlag
-				#if = { limit = { owner = { NOT = { ai = yes } } }
-				#log = LogText.5 }
-			}			
+			}
+
+			
 		}
-		owner = { any_owned_province = { 
+		owner = { random_owned_province = { 
 			limit = { has_province_flag = CheapDevTargetFlag }
 			owner = {
 				set_variable = { which = LocalDeVCost which = PREV }
@@ -174,7 +176,7 @@ HiddenUpdateDevFlagEffect = {
 } 
 HiddenUpdateDipDevFlagEffect = {
 	every_owned_province = {
-			limit = { always = yes }
+		limit = { always = yes }
 		set_variable = { which = DipFactor which = LocalDeVCost }
 		clr_province_flag = CheapDipTargetFlag
 		if = { 
@@ -186,7 +188,10 @@ HiddenUpdateDipDevFlagEffect = {
 		}
 	}
 	every_owned_province = {
-		limit = { always = yes }
+		limit = { 
+			is_state = yes
+			is_state_core = owner
+		}
 		owner = { set_variable = {
 			which = DipFactor
 			which = PREV
@@ -198,14 +203,13 @@ HiddenUpdateDipDevFlagEffect = {
 					which = DipFactor
 					which = PREV
 				}  }
+				is_state = yes
+				is_state_core = owner
 			} } }
-			if = { limit = { owner = { NOT = { ai = yes } } }
-			log = LogText.6 }
 		}
 		else = {
 			set_province_flag = CheapDipTargetFlag
-			if = { limit = { owner = { NOT = { ai = yes } } }
-			log = LogText.5 }
+
 		}	
 	}
 
