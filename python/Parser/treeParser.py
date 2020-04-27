@@ -1,4 +1,4 @@
-
+import Parser
 from pathlib import Path
 tree = {'a': ['b', 'c'],
 		'b': ['d', 'e'],
@@ -17,13 +17,13 @@ class treeParser(object):
 	:param filePath: The orginal file loction
 	"""
 	def __init__(self, filePath: Path, tree: dict):
-		self.filePath
+		self.filePath = filePath
 
 	sub = []
 	def walk(self):
-		""" walk the tree"""
-		genericStart()
-		for object in sub:
+		""" walk the tree with subscriders"""
+		self.genericStart()
+		for object in self.sub:
 			try:
 				object.start()
 			except:
@@ -31,8 +31,21 @@ class treeParser(object):
 
 
 	def genericStart(self):
-		for frame in df['master']:
-			print(frame)
+		frame = Parser.db['Master']
+		erro = True
+		for idx , val in frame.iterrows():
+			if val.Mode != "FileRegex":
+				continue
+			erro = False
+			try:
+				print(val.eval)
+				eval(val.eval)
+			except:
+				pass				
+			print(self)
+			print(val)
+		if erro:
+				print("Error did not find a single FileRegex in Master" )
 
 
 	def children(token, tree):
