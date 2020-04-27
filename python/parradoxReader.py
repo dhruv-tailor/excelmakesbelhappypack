@@ -4,7 +4,7 @@ import json
 import os
 import re
 import sys
-import time
+import time , pathlib
 ### https://raw.githubusercontent.com/joshnygaard/paradox-reader/master/paradoxReader.py
 
 def main():
@@ -18,7 +18,6 @@ def _get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('file_name')
     parser.add_argument('--intermediate', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
-    parser.add_argument('--encode', '-i', help="Save the intermediate code. Useful for debugging", action="store_true", default=False)
     parser.add_argument('--no_json', '-n', action="store_true", default=False)
 
     return parser.parse_args()
@@ -26,10 +25,13 @@ def _get_args():
 
 def decode(file_path, save_intermediate, no_json):
     try:
-        file = open(file_path, 'r',encoding="ANSI")
+        file = open(file_path, 'r',encoding="latin-1")
     except FileNotFoundError:
-        print('ERROR: Unable to find file: ' + file_path)
-        sys.exit()
+        print('ERROR: Unable to find file: ' + str(file_path))
+        return ""
+    except ValueError:
+        print('ERROR: Unable to read file: ' + file_path)
+        sys.exit(1)
 
     data = file.read()
     data = re.sub(r'#.*', '', data) # Remove comments
@@ -60,9 +62,9 @@ def decode(file_path, save_intermediate, no_json):
         print('Dumping intermediate code into file: {}_{:.0f}.intermediate'.format(file_name, time.time()))
 
         sys.exit()
-    if not no_json:
-        with open(file_name + '.json', 'w') as file:
-            json.dump(json_data, file, indent=4)
+
+    with open(file_name + '.json', 'w') as file:
+        json.dump(json_data, file, indent=4)
 
     return json_data
 

@@ -40,7 +40,7 @@ def test1():
 			trigger = "always = yes"
 		#print(typ)
 		for key in item:
-			if key in ["category", "bonus" , "trigger", "ai_will_do"]:
+			if key in ["category", "bonus" , "trigger", "ai_will_do", "important"]:
 				continue
 			listgroups.append(key)
 		list.append(Ideas(name, typ, listgroups.copy(), trigger))
