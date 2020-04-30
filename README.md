@@ -1,4 +1,7 @@
 # excelmakesbelhappypack
+## V0.2.5.2
+- Ai and players have a descion to dev a lowest cost province when at the monarch cap.
+- Arumba changes to the dev idea. 
 ## V0.2.2
 - This pack and future versions are now available at github.com/TheDivexz/excelmakesbelhappypack/releases
 - also other improvements to ai and development ideas
