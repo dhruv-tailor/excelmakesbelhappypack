@@ -2,14 +2,8 @@ import re, enum
 from typing import List
 from pathlib import Path
 from codecs import StreamReader
+from Parser.ParserLocalisation import Operator
 
-class Operator(enum.Enum):
-		LESS = 0 
-		NOTLESS = 1 
-		MORE = 2
-		NOTMORE = 3
-		EQUAL = 4 
-		NOTEQUAL = 5
 
 class Token(object):
 	"""description of class"""

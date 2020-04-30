@@ -1,11 +1,14 @@
 
-from Parser.token import Operator, Token 
-import traceback , sys
+from Parser.token import Operator, Token
+import traceback , sys, Parser
 from typing import List
 from pathlib import Path
+from Parser.IO import IO
+from Parser.ParserLocalisation import ParserLocalisation as Localisation
+
 
 class parser(object):
-	"""description of class"""
+	"""parser """
 	namedBlocks = {}
 	multiTokenExpressions = {}
 	modifiers  = {}
@@ -24,107 +27,106 @@ class parser(object):
 			nesting -= 1
 			toOutput = False
 		elif inverted :
-			token.inverted = True;
-			inverted = False; # Never persists past more than one level
+			token.inverted = True 
+			inverted = False  # Never persists past more than one level
 		if 	(type(token.value) == str  and token.value.lower() == "no"):
 				token.inverted = not token.inverted
 
 		if (nesting == -1):
-			out = "";
+			out = "" 
 		elif (nesting == 0):
 			if (isBlock(token)):
-				out = localize(findName(token));
+				out = localize(findName(token)) 
 			else:
-				out = "";
+				out = "" 
 		elif (nesting == 1 and not isBlock(token)):
-			out = "";
+			out = "" 
 		elif (isMultiTokenExpression(token)) :
-			outputMultiLineCommand(token, output, nesting);
-			return; # Handles its own children
+			outputMultiLineCommand(token, output, nesting) 
+			return  # Handles its own children
 		elif (isNamedBlock(token)):
-			out = localize(findName(token));
+			out = localize(findName(token)) 
 		else:
-			out = localize(token);
+			out = localize(token) 
 		
 		if (toOutput):
-			output(out, output, nesting);
+			output(out, output, nesting) 
 		
 		for child in token.children :
-			parseTree(child, output, nesting + 1, inverted);
+			parseTree(child, output, nesting + 1, inverted) 
 
 	@staticmethod
 	def outputMultiLineCommand( token : Token,  output: List[str],  nesting : int) :
-		associatedTypes = multiTokenExpressions.get(token.type, None);
-		length = len(associatedTypes);
+		associatedTypes = multiTokenExpressions.get(token.type, None) 
+		length = len(associatedTypes) 
 		values  = []
-		modifierName = null;
-		operator = token.operator;
+		modifierName = null 
+		operator = token.operator 
 		for i in range(0, length):
-			found = False;
-			target = associatedTypes[i];
+			found = False 
+			target = associatedTypes[i] 
 			for child in token.children:
 				if (child.type == target) :
-					values.append(localizeValue(child));
+					values.append(localizeValue(child)) 
 					if (child.operator != Operator.EQUAL):
-						operator = child.operator;
+						operator = child.operator 
 					if (isModifier(child)):
-						modifierName = child.value;
-					found = true;
+						modifierName = child.value 
+					found = true 
 				elif (Localisation.variations.containsKey(child.type)) :
-					variationName = Localisation.variations.get(child.type);
+					variationName = Localisation.variations.get(child.type) 
 					if (variationName.equals(target)):
-						values.append(Localisation.findLocalisation(child.type));
-						values.append(localizeValue(child));
-					found = true;
+						values.append(Localisation.findLocalisation(child.type)) 
+						values.append(localizeValue(child)) 
+					found = true 
 			if (not found and target == "duration"):
 				values.append("the rest of the campaign")
 
 		output(Localisation.formatString(token.type, operator, token.inverted, values.copy()),
 				output, nesting)
 		if (modifierName != None) :
-			effects = modifiers.get(modifierName);
+			effects = modifiers.get(modifierName) 
 			if (effects != None):
 				for effect in effects:
-					output(effect, output, nesting + 1);
+					output(effect, output, nesting + 1) 
 		
 		@staticmethod
 		def isModifier( child: Token) -> bool:
-		# TODO - Game-independent detection
-			return child.type.equals("name");
+			return child.type.equals("name") 
 
 	@staticmethod
 	def localizeValue(token :Token) -> str:
-		return Localisation.localizeValue(token);
+		return Localisation.localizeValue(token) 
 
 	@staticmethod
 	def  localize(token :Token) -> str:
-		return Localisation.localize(token);
+		return Localisation.localize(token) 
 
 	@staticmethod
 	def findName(token : Token)  -> Token :
-		nameTokens = namedBlocks.get(token.type);
+		nameTokens = namedBlocks.get(token.type) 
 		for string in nameTokens :
 			for  child in token.children:
 				if (string.equals(child.type)) :
-					child.disabled = true;
-					return child;
+					child.disabled = true 
+					return child 
 	
-		print("No name found for " + token);
-		return token;
-		#throw new IllegalStateException("No name found!");
+		print("No name found for " + token) 
+		return token 
+		#throw new IllegalStateException("No name found!") 
 
 	@staticmethod
 	def   isBlock(token : Token) -> bool:
-		return token.children.size() > 0;
+		return token.children.size() > 0 
 	
 	@staticmethod
 	def   isNamedBlock(token : Token) -> bool:
-		return isBlock(token) and namedBlocks.containsKey(token.type);
+		return isBlock(token) and namedBlocks.containsKey(token.type) 
 
 	
 	@staticmethod
 	def  isMultiTokenExpression(token : Token) -> bool:
-		return isBlock(token) and multiTokenExpressions.containsKey(token.type);
+		return isBlock(token) and multiTokenExpressions.containsKey(token.type) 
 	
 	NEGATIONS = {"not", "nor" }
 
@@ -137,10 +139,10 @@ class parser(object):
 	 #/
 	@staticmethod
 	def isInversion(type : str) -> bool:
-		return NEGATIONS in (type.toLowerCase());
+		return NEGATIONS in (type.toLowerCase()) 
 
-	HEADER = "\n== %s ==";
-	BOLD = "\n'''%s'''\n";
+	HEADER = "\n== %s ==" 
+	BOLD = "\n'''%s'''\n" 
 	
 	##
 	 # Formats a string based on how deeply nested it is, and adds it to the
@@ -157,23 +159,23 @@ class parser(object):
 	@staticmethod
 	def  output(s : str,  output: List[str], nesting: str) :
 		if (s.equals("")):
-			return; # Skip blank lines
+			return  # Skip blank lines
 		
-		nesting -= 1;
+		nesting -= 1 
 		
 		if (nesting <= -1) :
-			output.append(String.format(HEADER, s));
-			return;
+			output.append(String.format(HEADER, s)) 
+			return 
 		elif (nesting == 0) :
-			output.append(String.format(BOLD, s));
-			return;
+			output.append(String.format(BOLD, s)) 
+			return 
 		
-		builder = "";
+		builder = "" 
 		for i in range(0, nesting):
-			builder += ('#');
-		builder +=(" ");
-		builder +=(s);
-		output.append(builder.toString());
+			builder += ('#') 
+		builder +=(" ") 
+		builder +=(s) 
+		output.append(builder.toString()) 
 	
 	##
 	 # Reads all event modifiers and converts them to human-readable text, so
@@ -186,41 +188,41 @@ class parser(object):
 	def  parseModifiers(root:Token) :
 		for child in root.children:
 			effects = []
-			name = child.type;
+			name = child.type 
 			for child2 in child.children:
-				s = localize(child2);
+				s = localize(child2) 
 				if s[0] >= '0' and s[0] <= '9':
-					s = "+" + s;
-				effects.append(s);
-			modifiers.put(name, effects);
+					s = "+" + s 
+				effects.append(s) 
+			modifiers.put(name, effects) 
 
 
 	@staticmethod
 	def main(args : List[str]) :
 		settings = {}
-		IO.readLocalisation("settings.txt", settings);
-		path = settings.get("path");
-		game = settings.get("game").toLowerCase();
+		#print(Path('.').resolve())
+		IO.readLocalisation("Parser/settings.txt", settings) 
+		path = settings.get("path") 
+		game = settings.get("game").lower() 
 		
-		Localisation.initialize(path, game);
+		Localisation.initialize(path, game) 
 		
-		IO.readExceptions(String.format("statements/%s/namedSections.txt", game), namedBlocks);
-		IO.readExceptions(String.format("statements/%s/exceptions.txt", game), multiTokenExpressions);
+		IO.readExceptions(String.format("statements/%s/namedSections.txt", game), namedBlocks) 
+		IO.readExceptions(String.format("statements/%s/exceptions.txt", game), multiTokenExpressions) 
 		if (game.equals("eu4")):
 			parseModifiers(Token.tokenize(IO.readFile(path 
-				+ "/common/event_modifiers/00_event_modifiers.txt")));
+				+ "/common/event_modifiers/00_event_modifiers.txt"))) 
 		
 
 		def action (filePath) :
 			if (Files.isRegularFile(filePath)) :
-				print("Parsing " + filePath.getFileName());
+				print("Parsing " + filePath.getFileName()) 
 				try :
 					root = None
 					with open(filePath.toString(), 'r') as file:
-						root = Token.tokenize(file);
-					output = [];
-					parseTree(root, output, -1, false);
-					# TODO - Ensure output folder exists
+						root = Token.tokenize(file) 
+					output = [] 
+					parseTree(root, output, -1, false) 
 					Path("output").mkdir(parents=True, exist_ok=True)
 					with open("output/" + filePath.getFileName(), 'w') as file:
 						file.writelines(output)
@@ -228,9 +230,9 @@ class parser(object):
 					traceback.print_exc()
 		files = sorted(Path(path/ "events").glob("*.txt"))
 		map(action, files)
-		Files.walk(Paths.get(path + "/events"));
+		Files.walk(Paths.get(path + "/events")) 
 		with open("output/errors.txt",'w') as file:
 			file.writeLines(Localisation.errors)
 
-	# TODO - Properly handle calling other events
-	# TODO - Handle event headers (E.G., is_mtth_scaled_to_size)
+
+
