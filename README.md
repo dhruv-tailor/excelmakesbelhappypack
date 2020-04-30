@@ -1,9 +1,13 @@
 # excelmakesbelhappypack
+## v0.2.2
+- working dev click for ai
+- also some other improvemnt to ai !
+- Startup events know includes this readme.md file up to 30 lines. shoud be working! using .yml files! 
 ## Even more features
 - Vassels get ideas now when released from the ether
 - Chromatic conflicts are now possible for all nations that border each other
 ## Feature Branch 
-- plugged in a dev click.
+- plugged in a dev click. 
 - Merged the on_actions
 ## Important Update
 - in order to reduce size of the mod you need to copy the mod file contents to your .mod file

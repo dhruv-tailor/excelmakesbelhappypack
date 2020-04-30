@@ -29,3 +29,85 @@ counter_of_institutions = {
   
   } 
 }
+
+
+Monthly_Timer_Startup = {
+
+# Whether the triggered modifier is visible in the Province view window
+potential = {
+
+  }
+
+    # Whether the triggered modifier is active
+    trigger = {
+      always = yes
+  }
+  on_activation = {
+    # set counter YearsCounter to count years 
+    log = "Monthly_Timer_Startup"
+    #save the current month in month
+    export_to_variable = {
+      which = month
+      value = trigger_value:is_month
+    }
+    if = {
+      limit = {
+        # if the precmonth is december 
+        check_variable = {
+          which = PrevMonth
+          value = 12
+        }
+      }
+      # set the the prev month to -1 
+      set_variable = {
+        which = PrevMonth
+        value = -1
+      }
+    }
+    log = "Month [This.month.GetValue] [This.PrevMonth.GetValue]"
+    if = {
+      limit = {
+        # check if the current month is higher than the prev one
+        check_variable = {
+          which = month
+          which = PrevMonth
+        } 
+        NOT = {
+          check_variable = {
+            which = PrevMonth
+            which = month
+          } 
+        }
+      } 
+      log = "Its a new month removing the timer"
+      remove_province_triggered_modifier = Monthly_Timer_Startup
+      REB = { 
+        if = {
+          limit = {
+            is_month = 1
+            NOT = { is_month = 2 }
+            #limit to the month of febaury
+          }
+          country_event = {
+            id = Monthly_Timer.111
+            days = 27
+          }
+        }
+        else = {
+          country_event = {
+            id = Monthly_Timer.111
+            days = 29 #should fire on 30 of this month
+          }
+        }
+      }
+    }
+      set_variable = {
+        which = PrevMonth
+        which = month
+      }
+      log = "this [This.month.GetValue]"
+    }
+  on_deactivation = {
+  
+  } 
+}
