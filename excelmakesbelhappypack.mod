@@ -8,4 +8,4 @@ tags={
 	"New Nations"
 }
 supported_version="1.29.*.*"
-path="/mod/excelmakesbelhappypack"
+path="mod/excelmakesbelhappypack"
