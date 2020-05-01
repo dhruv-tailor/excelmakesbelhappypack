@@ -148,23 +148,60 @@ country_event = {
 		}
 	}
 }
+country_event = {
+	# calc 
+	id = increase_dev_event.10
+	title = "increase_dev_event"
+	desc = "increase_dev_event"
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		always = yes
+	}
+	immediate = {
+		country_event = {
+			id = increase_dev_event.100
+			days = 0
+		}
+	} 
+	option = {
+		
+		if = {
+			limit = {
+				NOT = {
+				check_variable = { 
+					which = monarchCap
+					value = 999 
+				} }
+			}
+			log = "institution calculated2 for [This.GetName]"
+			set_variable = {
+				which = monarchCap
+				value = 999 
+			}
+		}
+	}
+}
 
 country_event = {
 	# institutions
-	id = increase_dev_event.10
+	id = increase_dev_event.100
 	title = "increase_dev_event"
 	desc = "increase_dev_event"
 	hidden = yes
 	is_triggered_only = yes
 
 	trigger = {
-		always =yes
+		#trigger only in the month of jan
+		#is_month = 0
+		NOT = {is_month = 1 }
 	}
 
 	immediate = {
-		log = "+institution"
-		1326 = { add_province_triggered_modifier = counter_of_institutions }
-		every_country = {
+		if = {
+			limit = { ai = no }
+			log = "institution calculated"
+		}
 		REB = { 
 			PREV = { 
 				set_variable = { 
@@ -575,7 +612,7 @@ country_event = {
 		export_to_variable = {	which = pCost			value = modifier:all_power_cost }
 		change_variable = {		which = pCost			which = penalty }
 		multiply_variable = {	which = monarchCap		which = pCost } #tooltip only
-	} }
+	} 
 	
 	option = {
 		#name = "set_country_flag = HitPointCap"
