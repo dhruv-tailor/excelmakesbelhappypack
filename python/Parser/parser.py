@@ -207,8 +207,8 @@ class parser(object):
 		
 		Localisation.initialize(path, game) 
 		
-		IO.readExceptions(String.format("statements/%s/namedSections.txt", game), namedBlocks) 
-		IO.readExceptions(String.format("statements/%s/exceptions.txt", game), multiTokenExpressions) 
+		IO.readExceptions("statements/{}/namedSections.txt".format( game), namedBlocks) 
+		IO.readExceptions("statements/{}/exceptions.txt".format( game), multiTokenExpressions) 
 		if (game.equals("eu4")):
 			parseModifiers(Token.tokenize(IO.readFile(path 
 				+ "/common/event_modifiers/00_event_modifiers.txt"))) 

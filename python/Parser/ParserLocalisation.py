@@ -66,4 +66,6 @@ class ParserLocalisation(object):
 						IO.readLocalisation(filePath, ParserLocalisation.statements)
 					except:
 						traceback.print_exc()
+		except:
+			pass
 						
