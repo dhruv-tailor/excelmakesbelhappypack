@@ -160,9 +160,9 @@ NDefines.NAI.DESIRED_SURPLUS = 0.10 -- AI will aim for having at least this frac
 NDefines.NAI.BIGSHIP_FRACTION = 0.3	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 	-- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 
-NDefines.NAI.DEVELOPMENT_CAP_BASE = 30 -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
-	-- DEVELOPMENT_CAP_BASE = 10
-NDefines.NAI.DEVELOPMENT_CAP_MULT = 2
+ -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
+NDefines.NAI.DEVELOPMENT_CAP_BASE = 30 --set to 3 manually if using dev-click setting
+NDefines.NAI.DEVELOPMENT_CAP_MULT = 2  --set to 1 manually if using dev-click setting
 
 NDefines.NAI.MIN_CAV_PERCENTAGE = 0
 	-- MIN_CAV_PERCENTAGE = 5, --AI will always try to have at least this many % of their army as cav, regardless of time in the game.
