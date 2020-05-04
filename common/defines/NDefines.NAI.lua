@@ -5,6 +5,12 @@ NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_WARN = -0.5 -- At
 -- #arumba - AI should want to use its army, like a player
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_MILITARY_RULERS = 0.5 --If set to 1, AI will only send Condottieri while having a miliaristic ruler.
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_NEIGHBORS = 0.5 --If set to 1, AI will only send Condottieri to neighbors, regardless of access.
+NDefines.NAI.DIPLOMATIC_ACTION_GUARANTEE_POWERBALANCE_FACTOR = 25 --AI scoring for guarantee action is increased by this if a nation blocks a powerbalance threat.
+	--DIPLOMATIC_ACTION_GUARANTEE_POWERBALANCE_FACTOR = 80 
+NDefines.NAI.MIN_INCOME_FOR_SUBSIDIES =	50	--Minimum monthly income for AI to want to spend some on subsidies.
+	--MIN_INCOME_FOR_SUBSIDIES = 20
+NDefines.NAI.CALL_IN_ALLIES_POWER_RATIO = 2.5 --AI will only call in allies in an offensive war if their military power ratio to the enemy is less than this.
+	--CALL_IN_ALLIES_POWER_RATIO = 4.0
 
 -- #arumba -- tweaks to AI peace deals *WIP*
 NDefines.NAI.PEACE_BASE_RELUCTANCE = 0 -- AI base stubbornness to refuse peace (always applied)
@@ -144,28 +150,46 @@ NDefines.NAI.PEACE_TERMS_FLEET_BASING_BASE_MULT = 0 -- AI desire for fleet basin
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_BASE_MULT = 0.1 -- AI desire for war reparations through peace
 NDefines.NAI.PEACE_TERMS_WAR_REPARATIONS_MIN_INCOME_RATIO = 0.5 -- AI only wants war reparations if other country has at least this % of their income
 
-NDefines.NAI.ADVISOR_BUDGET_FRACTION = 0.10 -- nerfed to try to increase net income ratio
+NDefines.NAI.ADVISOR_BUDGET_FRACTION = 0.3 -- nerfed to try to increase net income ratio / reverting it by Spirit
 	-- ADVISOR_BUDGET_FRACTION = 0.3, -- AI will spend a maximum of this fraction of monthly income on advisor maintenance
-NDefines.NAI.ARMY_BUDGET_FRACTION = 0.6 -- AI will spend a maximum of this fraction of monthly income on army maintenance (based off wartime costs)
+NDefines.NAI.ARMY_BUDGET_FRACTION = 0.7 -- AI will spend a maximum of this fraction of monthly income on army maintenance (based off wartime costs)
 	-- ARMY_BUDGET_FRACTION = 0.7, -- AI will spend a maximum of this fraction of monthly income on army maintenance (based off wartime costs)
-NDefines.NAI.NAVY_BUDGET_FRACTION = 0.4 -- AI will spend a maximum of this fraction of monthly income on navy maintenance (based off wartime costs)
+NDefines.NAI.NAVY_BUDGET_FRACTION = 0.5 -- AI will spend a maximum of this fraction of monthly income on navy maintenance (based off wartime costs)
 	-- NAVY_BUDGET_FRACTION = 0.5, -- AI will spend a maximum of this fraction of monthly income on navy maintenance (based off wartime costs)
-NDefines.NAI.FORT_BUDGET_FRACTION = 0.5 -- AI will spend a maximum of this fraction of monthly income on forts
+NDefines.NAI.FORT_BUDGET_FRACTION = 0.45 -- AI will spend a maximum of this fraction of monthly income on forts
 	-- FORT_BUDGET_FRACTION = 0.4, -- AI will spend a maximum of this fraction of monthly income on forts
+NDefines.NAI.MISSIONARY_MAINTENANCE_SHARE = 0.3	--The most an AI will spend of its income on a missionary
+	--MISSIONARY_MAINTENANCE_SHARE = 0.2 
+--NDefines.NAI.REGIMENTS_PER_GENERAL = 15	--AI will want one general for every this number of regiments (will not exceed free leader pool).
+NDefines.NAI.MIN_SHIPS_FOR_ADMIRAL = 20	--The minimum navy size for the AI to bother with an admiral.
+	--MIN_SHIPS_FOR_ADMIRAL = 10
 
 NDefines.NAI.CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 101 -- buildings don't get destroyed when sieged, not sure why AI cancels constructions at all
 	-- CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 0, -- If chance of fort falling is at least this, AI will cancel constructions in the province
 NDefines.NAI.DESIRED_SURPLUS = 0.10 -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
 	-- DESIRED_SURPLUS = 0.1, -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
-NDefines.NAI.BIGSHIP_FRACTION = 0.3	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
+NDefines.NAI.BIGSHIP_FRACTION = 0.35 --The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 	-- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
+NDefines.NAI.TRANSPORT_FRACTION = 0.3 --Max fraction of naval forcelimit that should be transports.
+	--TRANSPORT_FRACTION = 0.5 
 
  -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
 NDefines.NAI.DEVELOPMENT_CAP_BASE = 30 --set to 3 manually if using dev-click setting
 NDefines.NAI.DEVELOPMENT_CAP_MULT = 2  --set to 1 manually if using dev-click setting
 
+NDefines.NAI.ARTILLERY_FRACTION = 0.30 --Ratio of artillery to infantry AI will build.
+	--ARTILLERY_FRACTION = 0.35
+NDefines.NAI.FORCE_COMPOSITION_CHANGE_TECH_LEVEL = 16 --Tech level at which AI will double its artillery fraction.
+	--FORCE_COMPOSITION_CHANGE_TECH_LEVEL = 11
 NDefines.NAI.MIN_CAV_PERCENTAGE = 0
 	-- MIN_CAV_PERCENTAGE = 5, --AI will always try to have at least this many % of their army as cav, regardless of time in the game.
 NDefines.NAI.MAX_CAV_PERCENTAGE = 100
 	-- MAX_CAV_PERCENTAGE = 50, -- For modding, actual ratio is dynamically computed but will be no higher than this.
+
+--Part of troops assignment logic, Have huge potential but needs a lot of testing. by Spirit
+--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	--Army <-> province distance impact on province evaluation
+--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 --Border <-> province distance impact on province evaluation
+--NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 --AI will try to defend provinces under threat worth more than this percentage of total development
+--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 --Homeland priorization when assigning armies to regions (only applied when actually threatened)
+
 
