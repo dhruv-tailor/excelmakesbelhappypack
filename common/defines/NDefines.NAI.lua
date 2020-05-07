@@ -186,10 +186,21 @@ NDefines.NAI.MIN_CAV_PERCENTAGE = 0
 NDefines.NAI.MAX_CAV_PERCENTAGE = 100
 	-- MAX_CAV_PERCENTAGE = 50, -- For modding, actual ratio is dynamically computed but will be no higher than this.
 
---Part of troops assignment logic, Have huge potential but needs a lot of testing. by Spirit
---NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	--Army <-> province distance impact on province evaluation
---NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 --Border <-> province distance impact on province evaluation
+--Part of troops assignment logic, AI will operate from his borders or allied borders during the war. by Spirit
+NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1.25	--Army <-> province distance impact on province evaluation
+	--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	--Army <-> province distance impact on province evaluation
+NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	10	--Border <-> province distance impact on province evaluation
+	--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 --Border <-> province distance impact on province evaluation
 --NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 --AI will try to defend provinces under threat worth more than this percentage of total development
---NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 --Homeland priorization when assigning armies to regions (only applied when actually threatened)
+NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 25
+	--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 --Homeland priorization when assigning armies to regions (only applied when actually threatened)
+NDefines.NAI.MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.2	--AI will only assign armies larger that this to a region
+	--MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1
+NDefines.NAI.ACCEPTABLE_BALANCE_DEFAULT = 1.5 --AI wants this advantage to enter battles typically. (There are some exceptions, e.g. offensives.)
+	--ACCEPTABLE_BALANCE_DEFAULT = 1.75
+NDefines.NAI.ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.85
+	--ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.75
+--NDefines.NAI.PURSUE_DISTANCE = 100
+
 
 
