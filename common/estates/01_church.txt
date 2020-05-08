@@ -363,9 +363,45 @@ estate_church =
 	loyalty_modifier = {
 		desc = EST_VAL_FULL_RELIGIOUS
 		trigger = {
-			full_idea_group = religious_ideas
+			OR = {
+				full_idea_group = religious_ideas 
+				full_idea_group = katholisch0
+				full_idea_group = protestant0
+				full_idea_group = reformiert0
+				full_idea_group = orthodox0
+				full_idea_group = islam0
+				full_idea_group = cathar0
+				full_idea_group = shinto0
+				full_idea_group = norse0
+				full_idea_group = budda0
+				full_idea_group = confuci0 
+				full_idea_group = hindu0
+				full_idea_group = tengri0
+				full_idea_group = coptic0
+				full_idea_group = helle0
+				full_idea_group = slav0
+				full_idea_group = jew0
+				full_idea_group = suomi0
+				full_idea_group = romuva0
+				full_idea_group = animist0
+				full_idea_group = feti0
+				full_idea_group = zoro0
+				full_idea_group = mane0
+				full_idea_group = ancli0
+				full_idea_group = mesoam0
+				full_idea_group = inti0
+				full_idea_group = tote0
+				full_idea_group = nahu0
+			}
 		}
 		loyalty = 10
+	}
+	loyalty_modifier = {
+		desc = EST_KOR_FACTIONAL_UPHEAVAL
+		trigger = {
+			has_country_modifier = kor_factional_upheaval
+		}
+		loyalty = -10
 	}
 	
 	custom_name = {
@@ -411,6 +447,13 @@ estate_church =
 			religion = nahuatl
 		}
 	}
+	custom_name = {
+		desc = estate_yangban_scholars
+		trigger = {
+			tag = KOR
+			religion = confucianism
+		}
+	}
 	
 	# For province assignment
 	ai_grant_province = {
@@ -450,7 +493,7 @@ estate_church =
 	# Does the AI want to give any extra territory beyond the minimum?
 	ai_territory_modifier = {
 		trigger = {
-			has_idea_group = religious_ideas
+			has_all_reli_idea_groups = yes
 			num_of_cities = 10
 		}	
 		value = 10		
@@ -472,6 +515,8 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -492,8 +537,22 @@ estate_church =
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
 		}
 	}
 	
@@ -507,6 +566,8 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		years_between_use = 10
@@ -516,71 +577,40 @@ estate_church =
 		}
 		
 		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_territory = {
-						estate = estate_church
-						territory = 15
-						}	
-					}
-				}
-				add_years_of_income = 0.25
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_church
-						territory = 15
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_church
-						territory = 20
-						}	
-					}
-				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_church
-						territory = 20
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_church
-						territory = 30
-						}	
-					}
-				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_church
-						territory = 30
-						}
-				}
-				add_years_of_income = 1
-			}
+				 if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																						 add_years_of_income = 1   }
 			add_estate_loyalty = {
 				estate = estate_church
 				loyalty = -10
 			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = estate_influ_10
-				influence = -5
-				duration = 7300
-			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_church
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 50
+					}
+				}
+			}
 		}
 	}
 
@@ -616,12 +646,38 @@ estate_church =
 		}
 	
 		ai_will_do = {
-			factor = 0			
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					has_opinion = {
+						who = PAP
+						value = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					reverse_has_opinion = {
+						who = PAP
+						value = 100
+					}
+				}
+			}
 		}	
 	}
 
 #############################################
-####### Interactions 
+####### MAKE_GENEROUS_DONATION 
 #############################################
 	
 	interaction = {
@@ -649,6 +705,7 @@ estate_church =
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
 				NOT = { years_of_income = 0.5 }				
@@ -657,7 +714,7 @@ estate_church =
 				factor = 0
 				estate_loyalty = {
 					estate = estate_church
-					loyalty = 40
+					loyalty = 60
 				}
 			}			
 		}		
@@ -672,6 +729,11 @@ estate_church =
 		icon = 17
 		
 		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+		}
 		
 		trigger = {
 			always = yes
@@ -702,23 +764,24 @@ estate_church =
 				estate = estate_church
 				loyalty = 15
 			}
-			reduce_loyal_without_chur = yes	
+			#reduce_loyal_without_chur = yes	
 		}
 	
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
 				estate_loyalty = {
 					estate = estate_church
-					loyalty = 30
+					loyalty = 60
 				}						
 			}
 			modifier = {
 				factor = 0
 				estate_influence = {
 					estate = estate_church
-					influence = 60
+					influence = 80
 				}						
 			}			
 		}
@@ -740,10 +803,7 @@ estate_church =
 		}
 		
 		trigger = {		
-			estate_loyalty = {
-				estate = estate_church
-				loyalty = 30
-			}				
+			always = yes			
 		}
 		
 		effect = {
@@ -758,7 +818,7 @@ estate_church =
 				}
 				add_adm_power = 50
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_church
@@ -773,7 +833,7 @@ estate_church =
 				}
 				add_adm_power = 100
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_church
@@ -788,7 +848,7 @@ estate_church =
 				}
 				add_adm_power = 150
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_church
@@ -804,7 +864,26 @@ estate_church =
 		}
 		
 		ai_will_do = {
-			factor = 0		
+			factor = 1		
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+				}
+			}
 		}
 	}
 	
@@ -816,10 +895,13 @@ estate_church =
 		name = "Chur_12"
 		icon = 12
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+
 		}
 		
 		trigger = {
@@ -843,14 +925,38 @@ estate_church =
 			add_estate_influence_modifier = {
 				estate = estate_church
 				desc = estate_influ_9
-				influence = -10
+				influence = 10
 				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
+			}
 		}
 	}
 
@@ -862,10 +968,12 @@ estate_church =
 		name = "Chur_14"
 		icon = 17
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -883,18 +991,38 @@ estate_church =
 				influence = 10
 				duration = 7300
 			}
-			reduce_loyal_without_chur = yes
+			#reduce_loyal_without_chur = yes
 			
 			add_country_modifier = {
 				name = "idea_variation_estate_13"
-				duration = 1825
+				duration = 3650
 			}
 			
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
 		}
 	}
 	
@@ -932,7 +1060,15 @@ estate_church =
 		}
 		
 		ai_will_do = {
-			factor = 0			
+			factor = 0 #AI always native coexistence
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
 		}
 	}
 
@@ -940,18 +1076,23 @@ estate_church =
 ####### Government Interaction 
 #############################################
 
-interaction = {
+	interaction = {
 		name = "Chur_1"
 		icon = 17
 		
 		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+		}
 		
 		trigger = {
 			has_idea = aristo4
 		}
 		
 		effect = {
-			
 			add_estate_loyalty = {
 				estate = estate_church
 				loyalty = 10
@@ -959,8 +1100,15 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 10
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
 		}
 	}
 
@@ -976,6 +1124,8 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -995,8 +1145,15 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
 		}
 	}
 
@@ -1012,6 +1169,8 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -1027,8 +1186,68 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Chur_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_ENDTIER			
+			}
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 15
+			}
+			#reduce_loyal_without_chur = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 40
+				}
+			}
 		}
 	}
 
@@ -1044,6 +1263,8 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -1066,8 +1287,26 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { adm_power = 100 }
+			}
 		}
 	}
 
@@ -1081,15 +1320,18 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		years_between_use = 10
 		
 		trigger = {
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_INTERACTION_2
-			 has_iv_gov_estate_2 = yes 
-			}
+			#custom_trigger_tooltip = {
+			#tooltip = IV_ESTATE_INTERACTION_2
+			# has_iv_gov_estate_2 = yes 
+			#}
+			always = yes
 		}
 		
 		effect = {
@@ -1101,14 +1343,46 @@ interaction = {
 				estate = estate_church
 				desc = estate_influ_8
 				influence = 10
-				duration = 7300
+				duration = 3650
 			}
 			reduce_loyal_without_chur = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_chur = no
+				NOT = {
+				   #if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
@@ -1122,9 +1396,11 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
-		years_between_use = 15
+		years_between_use = 30
 		
 		trigger = {
 			always = yes
@@ -1160,14 +1436,43 @@ interaction = {
 				estate = estate_church
 				desc = estate_influ_24
 				influence = 15
-				duration = 7300
+				duration = 10950
 			}
 			reduce_loyal_without_chur = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				stability = 1 
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_chur = no
+				NOT = {
+				   #if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
@@ -1225,7 +1530,37 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0			
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { average_effective_unrest = 2 }
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_chur = no
+				NOT = {
+				   #if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 	
@@ -1283,7 +1618,37 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				religious_unity = 1
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_chur = no
+				NOT = {
+				   #if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
@@ -1295,10 +1660,12 @@ interaction = {
 		name = "Chur_13"
 		icon = 24
 		
-		years_between_use = 25
+		years_between_use = 30
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -1314,14 +1681,23 @@ interaction = {
 				estate = estate_church
 				desc = estate_influ_25
 				influence = -25
-				duration = 7300
+				duration = 10950
 			}
 			reduce_loyal_without_chur = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 100
+					}
+				}
+			}
 		}
 	}	
 	
@@ -1333,10 +1709,12 @@ interaction = {
 		name = "Chur_3"
 		icon = 20
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -1359,8 +1737,23 @@ interaction = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					stability = 3
+				}
+			}
 		}
 	}
 	
@@ -1376,6 +1769,8 @@ interaction = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
 		}
 		
 		trigger = {
@@ -1385,7 +1780,7 @@ interaction = {
 		effect = {
 			random_list = {
 			33 = { remove_advisor_by_category = ADM }
-			34 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = DIP }
 			33 = { remove_advisor_by_category = MIL }
 			}
 			add_estate_loyalty = {
@@ -1396,13 +1791,22 @@ interaction = {
 				estate = estate_church
 				desc = estate_influ_1
 				influence = -10
-				duration = 7300
+				duration = 3650
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 100
+					}
+				}
+			}
 		}
 	}
 }
