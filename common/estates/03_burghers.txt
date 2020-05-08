@@ -28,6 +28,13 @@ estate_burghers =
 			owner = { government = republic }
 			development = 10
 			province_trade_power = 5
+			hidden_trigger = {
+				AND = {
+					owned_by = KOR
+					culture = korean
+					owner = { has_country_modifier = kor_factional_upheaval }
+				}
+			}
 		}
 	}
 
@@ -343,7 +350,13 @@ estate_burghers =
 		}
 		loyalty = 10
 	}
-	
+	loyalty_modifier = {
+		desc = EST_KOR_FACTIONAL_UPHEAVAL
+		trigger = {
+			has_country_modifier = kor_factional_upheaval
+		}
+		loyalty = -10
+	}
 	
 	#Custom Names
 	custom_name = {
@@ -356,6 +369,13 @@ estate_burghers =
 		desc = estate_shangbang
 		trigger = {
 			culture_group = east_asian
+		}
+	}
+	custom_name = {
+		desc = estate_neoconfucian_reformers
+		trigger = {
+			tag = KOR
+			religion = confucianism
 		}
 	}
 	custom_name = {
@@ -507,13 +527,25 @@ estate_burghers =
 			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 80 } } } add_years_of_income = 0.8 }
 			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 90 } } } add_years_of_income = 0.9 }
 			else	= {																						 add_years_of_income = 1   }
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = -10
+			if = {
+				limit = {
+					has_government_attribute = enables_permissive_burghers
+					is_at_war = yes
+				}
+				#no loss
+			}
+			else = {
+				add_estate_loyalty = {
+					estate = estate_burghers
+					loyalty = -10
+				}
 			}
 			if = {
 				limit = {
-					has_reform = integrate_moneyloaners_reform
+					OR = {
+						has_reform = integrate_moneyloaners_reform
+						has_government_attribute = enables_merchant_privileges
+					}
 				}
 				add_mercantilism = 1
 			}
