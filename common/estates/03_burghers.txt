@@ -513,20 +513,67 @@ estate_burghers =
 		}
 		
 		trigger = {
-			always = yes			
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_burghers
+				influence = 25
+			}
 		}
 		
 		effect = {
-				 if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 10 } } } add_years_of_income = 0.1 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 20 } } } add_years_of_income = 0.2 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 30 } } } add_years_of_income = 0.3 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 40 } } } add_years_of_income = 0.4 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 50 } } } add_years_of_income = 0.5 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 60 } } } add_years_of_income = 0.6 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 70 } } } add_years_of_income = 0.7 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 80 } } } add_years_of_income = 0.8 }
-			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 90 } } } add_years_of_income = 0.9 }
-			else	= {																						 add_years_of_income = 1   }
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 50
+						}	
+					}
+				}
+				add_years_of_income = 0.25
+			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 50
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 75
+						}	
+					}
+				}
+				add_years_of_income = 0.5
+			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 75
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_burghers
+							influence = 100
+						}	
+					}
+				}
+				add_years_of_income = 0.75
+			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 100
+					}
+				}
+				add_years_of_income = 1
+			}				
 			if = {
 				limit = {
 					has_government_attribute = enables_permissive_burghers
@@ -565,7 +612,71 @@ estate_burghers =
 			}
 		}
 	}
-	
+
+#############################################
+####### Impose a Tax
+#############################################
+
+	interaction = {
+		name = "Burg_11"
+		icon = 8
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
+			any_owned_province = {
+				has_estate = estate_burghers
+			}
+		}
+		
+		effect = {
+				 if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_burghers	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																						 add_years_of_income = 1   }
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -10
+			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_burghers
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 50
+					}
+				}
+			}
+		}
+	}
+
 #############################################
 ####### GRANT_MONOPOLY_CHARTER
 #############################################
@@ -639,7 +750,14 @@ estate_burghers =
 		}
 		
 		trigger = {		
-			always = yes	
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_burghers
+				influence = 25
+			}
 		}
 		
 		effect = {
@@ -654,7 +772,7 @@ estate_burghers =
 				}
 				add_dip_power = 50
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_burghers
@@ -669,7 +787,7 @@ estate_burghers =
 				}
 				add_dip_power = 100
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_burghers
@@ -684,7 +802,7 @@ estate_burghers =
 				}
 				add_dip_power = 150
 			}
-			if = {
+			else_if = {
 				limit = {
 					estate_influence = {
 						estate = estate_burghers
@@ -745,6 +863,10 @@ estate_burghers =
 				any_owned_province = {
 					has_estate = estate_burghers
 				}
+			}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
 			}
 		}
 		
@@ -813,6 +935,10 @@ estate_burghers =
 		
 		trigger = {
 			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -889,42 +1015,42 @@ estate_burghers =
 				}
 				create_admiral = { tradition = 100 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 90
 					NOT = { navy_tradition = 100 }
 				}
 				create_admiral = { tradition = 90 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 80
 					NOT = { navy_tradition = 90 }
 				}
 				create_admiral = { tradition = 80 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 70
 					NOT = { navy_tradition = 80 }
 				}
 				create_admiral = { tradition = 70 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 60
 					NOT = { navy_tradition = 70 }
 				}
 				create_admiral = { tradition = 60 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 50
 					NOT = { navy_tradition = 60 }
 				}
 				create_admiral = { tradition = 50 }
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 0
 					NOT = { navy_tradition = 50 }
@@ -971,42 +1097,42 @@ estate_burghers =
 				}
 				create_explorer = 100
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 90
 					NOT = { navy_tradition = 100 }
 				}
 				create_explorer = 90
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 80
 					NOT = { navy_tradition = 90 }
 				}
 				create_explorer = 80
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 70
 					NOT = { navy_tradition = 80 }
 				}
 				create_explorer = 70
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 60
 					NOT = { navy_tradition = 70 }
 				}
 				create_explorer = 60
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 50
 					NOT = { navy_tradition = 60 }
 				}
 				create_explorer = 50
 			}
-			if = {
+			else_if = {
 				limit = { 
 					navy_tradition = 0
 					NOT = { navy_tradition = 50 }
@@ -1094,10 +1220,10 @@ estate_burghers =
 		}
 		
 		trigger = {
-			#estate_loyalty = {
-			#	estate = estate_burghers
-			#	loyalty = 30
-			#}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 			num_of_ports = 10
 			any_owned_province = {
 				has_port = yes
@@ -1157,10 +1283,10 @@ estate_burghers =
 		}
 		
 		trigger = {
-			#estate_loyalty = {
-			#	estate = estate_burghers
-			#	loyalty = 33
-			#}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 			num_of_ports = 10
 			any_owned_province = {
 				has_port = yes
@@ -1551,9 +1677,9 @@ estate_burghers =
 				define_advisor = {
 					type = naval_reformer
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1562,9 +1688,9 @@ estate_burghers =
 				define_advisor = {
 					type = naval_reformer
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1610,9 +1736,9 @@ estate_burghers =
 				define_advisor = {
 					type = master_of_mint
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1621,9 +1747,9 @@ estate_burghers =
 				define_advisor = {
 					type = master_of_mint
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1688,7 +1814,10 @@ estate_burghers =
 		years_between_use = 30
 		
 		trigger = {
-			always = yes
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -1738,6 +1867,10 @@ estate_burghers =
 		
 		trigger = {
 			stability = -2
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -1794,6 +1927,10 @@ estate_burghers =
 		
 		trigger = {
 			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 		}
 		
 		effect = {
