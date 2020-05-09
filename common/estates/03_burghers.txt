@@ -445,59 +445,6 @@ estate_burghers =
 #############################################
 
 #############################################
-####### Make Promises
-#############################################
-
-	interaction = {
-		name = "Burg_6"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 5
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_5
-				influence = 10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 60
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 80
-				}
-			}
-		}
-	}
-
-#############################################
 ####### ASK_FOR_CONTRIBUTION
 #############################################
 
@@ -684,63 +631,6 @@ estate_burghers =
 	}
 
 #############################################
-####### GRANT_MONOPOLY_CHARTER
-#############################################
-	
-	interaction = {
-		name = "GRANT_MONOPOLY_CHARTER"
-		icon = 17
-		
-		years_between_use = 20
-		
-		potential = {
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_prestige = -5
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = EST_VAL_GRANTED_MONOPOLIES
-				influence = 10
-				duration = 7300
-			}
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 15
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 80
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 60
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = { prestige = 5 }
-			}
-		}
-	}
-	
-#############################################
 ####### DEMAND_SUPPORT_BURGHERS
 #############################################
 	
@@ -848,49 +738,40 @@ estate_burghers =
 	}
 
 #############################################
-####### Recruit from their Domain
+####### COMISSION_MERCHANT_SHIPS_FOR_WAR
 #############################################
 
 	interaction = {
-		name = "Burg_12"
-		icon = 12
+		name = "COMISSION_MERCHANT_SHIPS_FOR_WAR"
+		icon = 18
+		
+		years_between_use = 30
 		
 		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
+			num_of_ports = 1
+			primitives = no
 		}
 		
-		years_between_use = 20
-		
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_province_estate_3
-				any_owned_province = {
-					has_estate = estate_burghers
-				}
-			}
 			estate_loyalty = {
 				estate = estate_burghers
 				loyalty = 30
 			}
+			num_of_ports = 10
+			any_owned_province = {
+				has_port = yes
+				has_estate = estate_burghers
+			}
 		}
 		
 		effect = {
-			add_country_modifier = {
-				name = "idea_variation_estate_3"
-				duration = 3650
-			}
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_9
-				influence = 10
-				duration = 7300
-			}
+				loyalty = -20
+			}		
+			ships_scaled_to_fl_heavy = yes
 		}
 		
 		ai_will_do = {
@@ -898,19 +779,11 @@ estate_burghers =
 			
 			modifier = {
 				factor = 0
-				NOT = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 50
-					}
-				}
+				galley_fraction = 0.5
 			}
 			modifier = {
 				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 80
-				}
+				navy_size_percentage = 0.50 
 			}
 			modifier = {
 				factor = 0
@@ -918,17 +791,83 @@ estate_burghers =
 			}
 			modifier = {
 				factor = 0
-				manpower_percentage = 0.25
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+		}
+	}
+	
+#############################################
+####### Galleys
+#############################################
+
+	interaction = {
+		name = "Burg_14"
+		icon = 18
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			num_of_ports = 1
+			primitives = no
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
+			num_of_ports = 10
+			any_owned_province = {
+				has_port = yes
+				has_estate = estate_burghers
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -20
+			}		
+			ships_scaled_to_fl_galley = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { galley_fraction = 0.5 }
+			}
+			modifier = {
+				factor = 0
+				navy_size_percentage = 0.50 
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
 			}
 		}
 	}
 
 #############################################
-####### Ask for Reform Support
+####### Make Promises
 #############################################
 
 	interaction = {
-		name = "Burg_15"
+		name = "Burg_6"
 		icon = 17
 		
 		potential = {
@@ -937,34 +876,23 @@ estate_burghers =
 			NOT = { has_disaster = estate_nobility_disaster }
 		}
 		
-		years_between_use = 20
+		years_between_use = 10
 		
 		trigger = {
-			NOT = { has_country_modifier = idea_variation_estate_13 }
-			estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 30
-			}
+			always = yes
 		}
 		
 		effect = {
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = -10
+				loyalty = 5
 			}
 			add_estate_influence_modifier = {
 				estate = estate_burghers
-				desc = estate_influ_26
+				desc = estate_influ_5
 				influence = 10
-				duration = 7300
-			}
-			#reduce_loyal_without_burg = yes
-			
-			add_country_modifier = {
-				name = "idea_variation_estate_13"
 				duration = 3650
 			}
-			
 		}
 		
 		ai_will_do = {
@@ -972,11 +900,183 @@ estate_burghers =
 			
 			modifier = {
 				factor = 0
-				NOT = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 50
-					}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 80
+				}
+			}
+		}
+	}
+
+#############################################
+####### GRANT_MONOPOLY_CHARTER
+#############################################
+	
+	interaction = {
+		name = "GRANT_MONOPOLY_CHARTER"
+		icon = 17
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_prestige = -5
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_GRANTED_MONOPOLIES
+				influence = 10
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 5 }
+			}
+		}
+	}
+	
+#############################################
+####### Grant a Favour
+#############################################
+
+	interaction = {
+		name = "Burg_8"
+		icon = 25
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_dip_power = -50
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_7
+				influence = 15
+				duration = 7300
+			}
+			#reduce_loyal_without_burg = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { dip_power = 100 }
+			}
+		}
+	}
+
+#############################################
+####### Underline Privileges
+#############################################
+
+	interaction = {
+		name = "Burg_9"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			#custom_trigger_tooltip = {
+			#tooltip = IV_ESTATE_INTERACTION_3
+			# has_iv_gov_estate_3 = yes 
+			#}
+			always = yes
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_8
+				influence = 10
+				duration = 3650
+			}
+			reduce_loyal_without_burg = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 40
 				}
 			}
 			modifier = {
@@ -988,11 +1088,175 @@ estate_burghers =
 			}
 			modifier = {
 				factor = 0
-				NOT = { government_reform_progress = 90 }
+				#check_loyal_without_burg = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
 			}
 		}
 	}
+
+#############################################
+####### Recruit Minister (naval_reformer)
+#############################################
+
+	interaction = {
+		name = "Burg_10"
+		icon = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			num_of_ports = 1
+			primitives = no
+		}
+		
+		years_between_use = 30
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_24
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_burg = yes
+		}
+		
+		ai_will_do = {
+			factor = 0 #naval combat
+		}
+	}
 	
+#############################################
+####### RECRUIT_MINISTER (master_of_mint)
+#############################################
+
+	interaction = {
+		name = "RECRUIT_MINISTER"
+		icon = 10
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = master_of_mint
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = master_of_mint
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = EST_VAL_BURGHER_MINISTER
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_burg = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { inflation = 2 }
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_burg = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
 #############################################
 ####### GRANT_ADMIRALSHIP
 #############################################
@@ -1209,103 +1473,49 @@ estate_burghers =
 	}
 	
 #############################################
-####### COMISSION_MERCHANT_SHIPS_FOR_WAR
+####### Recruit from their Domain
 #############################################
 
 	interaction = {
-		name = "COMISSION_MERCHANT_SHIPS_FOR_WAR"
-		icon = 18
-		
-		years_between_use = 30
-		
-		potential = {
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-			num_of_ports = 1
-			primitives = no
-		}
-		
-		trigger = {
-			estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 30
-			}
-			num_of_ports = 10
-			any_owned_province = {
-				has_port = yes
-				has_estate = estate_burghers
-			}
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = -20
-			}		
-			ships_scaled_to_fl_heavy = yes
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				galley_fraction = 0.5
-			}
-			modifier = {
-				factor = 0
-				navy_size_percentage = 0.50 
-			}
-			modifier = {
-				factor = 0
-				is_at_war = no
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 60
-				}
-			}
-		}
-	}
-	
-#############################################
-####### Galleys
-#############################################
-
-	interaction = {
-		name = "Burg_14"
-		icon = 18
-		
-		years_between_use = 30
+		name = "Burg_12"
+		icon = 12
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
-			num_of_ports = 1
-			primitives = no
 		}
 		
+		years_between_use = 20
+		
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_3
+				any_owned_province = {
+					has_estate = estate_burghers
+				}
+			}
 			estate_loyalty = {
 				estate = estate_burghers
 				loyalty = 30
 			}
-			num_of_ports = 10
-			any_owned_province = {
-				has_port = yes
-				has_estate = estate_burghers
-			}
 		}
 		
 		effect = {
+			add_country_modifier = {
+				name = "idea_variation_estate_3"
+				duration = 3650
+			}
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = -20
-			}		
-			ships_scaled_to_fl_galley = yes
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_9
+				influence = 10
+				duration = 7300
+			}
 		}
 		
 		ai_will_do = {
@@ -1313,11 +1523,19 @@ estate_burghers =
 			
 			modifier = {
 				factor = 0
-				NOT = { galley_fraction = 0.5 }
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 50
+					}
+				}
 			}
 			modifier = {
 				factor = 0
-				navy_size_percentage = 0.50 
+				estate_influence = {
+					estate = estate_burghers
+					influence = 80
+				}
 			}
 			modifier = {
 				factor = 0
@@ -1325,14 +1543,81 @@ estate_burghers =
 			}
 			modifier = {
 				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 60
-				}
+				manpower_percentage = 0.25
 			}
 		}
 	}
 
+#############################################
+####### Ask for Reform Support
+#############################################
+
+	interaction = {
+		name = "Burg_15"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_burghers
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			#reduce_loyal_without_burg = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 3650
+			}
+			
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_burghers
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
+		}
+	}
+	
 #############################################
 ####### Government Interaction 
 #############################################
@@ -1519,71 +1804,12 @@ estate_burghers =
 	}
 
 #############################################
-####### Grant a Favour
+####### Limit Influence 
 #############################################
 
 	interaction = {
-		name = "Burg_8"
-		icon = 25
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		years_between_use = 20
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_dip_power = -50
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_7
-				influence = 15
-				duration = 7300
-			}
-			#reduce_loyal_without_burg = yes
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 40
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 75
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = { dip_power = 100 }
-			}
-		}
-	}
-
-#############################################
-####### Underline Privileges
-#############################################
-
-	interaction = {
-		name = "Burg_9"
-		icon = 17
+		name = "Burg_2"
+		icon = 24
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
@@ -1594,25 +1820,29 @@ estate_burghers =
 		years_between_use = 10
 		
 		trigger = {
-			#custom_trigger_tooltip = {
-			#tooltip = IV_ESTATE_INTERACTION_3
-			# has_iv_gov_estate_3 = yes 
-			#}
-			always = yes
+			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 30
+			}
 		}
 		
 		effect = {
+			random_list = {
+			33 = { remove_advisor_by_category = ADM }
+			34 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = MIL }
+			}
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = 10
+				loyalty = -10
 			}
 			add_estate_influence_modifier = {
 				estate = estate_burghers
-				desc = estate_influ_8
-				influence = 10
+				desc = estate_influ_1
+				influence = -10
 				duration = 3650
 			}
-			reduce_loyal_without_burg = yes
 		}
 		
 		ai_will_do = {
@@ -1620,184 +1850,11 @@ estate_burghers =
 			
 			modifier = {
 				factor = 0
-				estate_loyalty = {
-					estate = estate_burghers
-					loyalty = 40
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 80
-				}
-			}
-			modifier = {
-				factor = 0
-				#check_loyal_without_burg = no
 				NOT = {
-					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
-					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
-				   #if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
-					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
-					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
-					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
-					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
-					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
-					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
-					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
-					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
-					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
-				}
-			}
-		}
-	}
-
-#############################################
-####### Recruit Minister (naval_reformer)
-#############################################
-
-	interaction = {
-		name = "Burg_10"
-		icon = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-			num_of_ports = 1
-			primitives = no
-		}
-		
-		years_between_use = 20
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = naval_reformer
-					skill = 3
-					culture = ROOT #event_target:estate_estate_province
-					religion = ROOT #event_target:estate_estate_province
-					#location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = naval_reformer
-					skill = 2
-					culture = ROOT #event_target:estate_estate_province
-					religion = ROOT #event_target:estate_estate_province
-					#location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_24
-				influence = 15
-				duration = 7300
-			}
-			reduce_loyal_without_burg = yes
-		}
-		
-		ai_will_do = {
-			factor = 0 #naval combat
-		}
-	}
-	
-#############################################
-####### RECRUIT_MINISTER (master_of_mint)
-#############################################
-
-	interaction = {
-		name = "RECRUIT_MINISTER"
-		icon = 10
-		
-		years_between_use = 30
-		
-		potential = {
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = master_of_mint
-					skill = 3
-					culture = ROOT #event_target:estate_estate_province
-					religion = ROOT #event_target:estate_estate_province
-					#location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = master_of_mint
-					skill = 2
-					culture = ROOT #event_target:estate_estate_province
-					religion = ROOT #event_target:estate_estate_province
-					#location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = EST_VAL_BURGHER_MINISTER
-				influence = 15
-				duration = 10950
-			}
-			reduce_loyal_without_burg = yes
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_burghers
-					influence = 75
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = { inflation = 2 }
-			}
-			modifier = {
-				factor = 0
-				#check_loyal_without_burg = no
-				NOT = {
-					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
-					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
-				   #if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
-					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
-					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
-					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
-					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
-					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
-					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
-					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
-					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
-					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+					estate_influence = {
+						estate = estate_burghers
+						influence = 100
+					}
 				}
 			}
 		}
@@ -1910,63 +1967,6 @@ estate_burghers =
 				factor = 0
 				NOT = {
 					stability = 3
-				}
-			}
-		}
-	}
-
-#############################################
-####### Limit Influence 
-#############################################
-
-	interaction = {
-		name = "Burg_2"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			has_advisor = yes
-			estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 30
-			}
-		}
-		
-		effect = {
-			random_list = {
-			33 = { remove_advisor_by_category = ADM }
-			34 = { remove_advisor_by_category = DIP }
-			33 = { remove_advisor_by_category = MIL }
-			}
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_burghers
-				desc = estate_influ_1
-				influence = -10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				NOT = {
-					estate_influence = {
-						estate = estate_burghers
-						influence = 100
-					}
 				}
 			}
 		}
