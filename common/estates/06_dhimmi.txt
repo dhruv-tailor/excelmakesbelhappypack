@@ -91,6 +91,13 @@ estate_dhimmi = {
 		influence = 10		
 	}
 	influence_modifier = {
+		desc = EST_VAL_DHIMMI_NOBLES_REFORM
+		trigger = {
+			has_reform = dhimmi_nobles_reform
+		}
+		influence = 20
+	}
+	influence_modifier = {
 		desc = EST_VAL_RULED_BY_RELIGIOUS_MINORITY
 		trigger = {
 			NOT = { dominant_religion = ROOT }
@@ -140,6 +147,13 @@ estate_dhimmi = {
 			NOT = { piety = 0.75 }
 		}
 		loyalty = -5
+	}
+	loyalty_modifier = {
+		desc = EST_VAL_DHIMMI_NOBLES_REFORM_LOY
+		trigger = {
+			has_reform = dhimmi_nobles_reform
+		}
+		loyalty = 10
 	}
 	loyalty_modifier = {
 		desc = EST_VAL_VERY_PIOUS
@@ -209,12 +223,393 @@ estate_dhimmi = {
 #############################################
 
 #############################################
-####### Recruit Minister (Trade Efficiency)
+####### Impose New Religious Tax
+#############################################	
+
+	interaction = {
+		name = "DEMAND_CONTRIBUTION"
+		icon = 9
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_dhimmi
+				influence = 25
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_dhimmi
+							influence = 50
+						}	
+					}
+				}
+				add_years_of_income = 0.25
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 50
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_dhimmi
+							influence = 75
+						}	
+					}
+				}
+				add_years_of_income = 0.5
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 75
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_dhimmi
+							influence = 100
+						}	
+					}
+				}
+				add_years_of_income = 0.75
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 100
+					}
+				}
+				add_years_of_income = 1
+			}		
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = -15 #Take more offense than the Burghers do due to their supposedly protected status.
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_dhimmi
+						loyalty = 55
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 50
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Impose a Tax
 #############################################
 
 	interaction = {
-		name = "RECRUIT_MINISTER"
-		icon = 10
+		name = "Dhim_11"
+		icon = 8
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+				 if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_dhimmi	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																						 add_years_of_income = 1   }
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = -10
+			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_dhimmi
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_dhimmi
+						loyalty = 50
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Make Promises
+#############################################
+
+	interaction = {
+		name = "Dhim_6"
+		icon = 17
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 5
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 80
+				}
+			}
+		}
+	}
+	
+#############################################
+####### Grant a Favour
+#############################################
+
+	interaction = {
+		name = "Dhim_8"
+		icon = 25
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_adm_power = -50
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_7
+				influence = 15
+				duration = 7300
+			}
+			#reduce_loyal_without_dhim = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { adm_power = 100 }
+			}
+		}
+	}
+
+#############################################
+####### Underline Privileges
+#############################################
+
+	interaction = {
+		name = "Dhim_9"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_8
+				influence = 10
+				duration = 3650
+			}
+			reduce_loyal_without_dhim = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_dhim = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
+####### Promote Dhimmi Nobles
+#############################################	
+
+	interaction = {
+		name = "PROMOTE_DHIMMI_NOBLES"
+		icon = 8
 		
 		years_between_use = 30
 		
@@ -225,45 +620,66 @@ estate_dhimmi = {
 		}
 		
 		trigger = {
-			always = yes
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
 		}
 		
 		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = trader
-					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
+			add_country_modifier = {
+				name = "dhimmi_nobles"
+				duration = 10950
 			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = trader
-					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 20
 			}
 			add_estate_influence_modifier = {
 				estate = estate_dhimmi
-				desc = EST_VAL_DHIMMI_MINISTER
+				desc = EST_VAL_DHIMMI_NOBLES
 				influence = 15
 				duration = 10950
 			}
-			reduce_loyal_without_dhim = yes
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -15
+			}
+			#reduce_loyal_without_dhim = yes
 		}
 		
 		ai_will_do = {
-			factor = 0			
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 55
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 75
+				}
+			}
 		}
 	}
 
@@ -277,9 +693,18 @@ estate_dhimmi = {
 		
 		years_between_use = 10
 		
+		potential = {
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
 		trigger = {
-			any_owned_province = {
-				has_estate = estate_dhimmi
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
 			}
 		}
 		
@@ -305,48 +730,79 @@ estate_dhimmi = {
 		
 		ai_will_do = {
 			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 80
+				}
+			}
 			modifier = {
 				factor = 0
 				estate_loyalty = {
 					estate = estate_dhimmi
-					loyalty = 30
+					loyalty = 40
 				}				
 			}
 		}
 	}
 
 #############################################
-####### Promote Dhimmi Nobles
-#############################################	
+####### Recruit Minister (Institution Cost)
+#############################################
 
 	interaction = {
-		name = "PROMOTE_DHIMMI_NOBLES"
-		icon = 8
-		
-		years_between_use = 30
+		name = "Dhim_10"
+		icon = 10
 		
 		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_burghers_disaster }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 		}
 		
+		years_between_use = 30
+		
 		trigger = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
 		}
 		
 		effect = {
-			add_country_modifier = {
-				name = "dhimmi_nobles"
-				duration = 10950
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = idea_var_advisor_6
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
 			}
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 20
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = idea_var_advisor_6
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
 			}
+			
 			add_estate_influence_modifier = {
 				estate = estate_dhimmi
-				desc = EST_VAL_DHIMMI_NOBLES
+				desc = estate_influ_24
 				influence = 15
 				duration = 10950
 			}
@@ -354,7 +810,136 @@ estate_dhimmi = {
 		}
 		
 		ai_will_do = {
-			factor = 0
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { current_institution_growth = 0.1 }
+			}
+			modifier = {
+				factor = 0
+				current_institution_growth = 0.9
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_dhim = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
+####### Recruit Minister (Trade Efficiency)
+#############################################
+
+	interaction = {
+		name = "RECRUIT_MINISTER"
+		icon = 10
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = trader
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = EST_VAL_DHIMMI_MINISTER
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_dhim = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { trade_income_percentage = 0.5 }
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_dhim = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
@@ -375,7 +960,20 @@ estate_dhimmi = {
 		}
 		
 		trigger = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_dhimmi
+				influence = 25
+			}
 		}
 		
 		effect = {
@@ -443,127 +1041,361 @@ estate_dhimmi = {
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
 				NOT = {
 					estate_loyalty = {
 						estate = estate_dhimmi
-						loyalty = 50
+						loyalty = 55
 					}	
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 50
+					}
 				}
 			}
 			modifier = {
 				factor = 0
 				estate_influence = {
 					estate = estate_dhimmi
-					influence = 60
+					influence = 80
 				}
 			}			
 			modifier = {
 				factor = 0
 				manpower_percentage = 0.25				
 			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}			
 		}
 	}
 	
 #############################################
-####### Impose New Religious Tax
-#############################################	
+####### Recruit from their Domain
+#############################################
 
 	interaction = {
-		name = "DEMAND_CONTRIBUTION"
-		icon = 9
+		name = "Dhim_12"
+		icon = 12
 		
-		years_between_use = 10
+		years_between_use = 20
 		
 		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_burghers_disaster }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 		}
 		
 		trigger = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
 		}
 		
 		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_territory = {
-						estate = estate_dhimmi
-						territory = 15
-						}	
-					}
-				}
-				add_years_of_income = 0.25
+			add_country_modifier = {
+				name = "idea_variation_estate_1"
+				duration = 3650
 			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_dhimmi
-						territory = 15
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_dhimmi
-						territory = 20
-						}	
-					}
-				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_dhimmi
-						territory = 20
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_dhimmi
-						territory = 30
-						}	
-					}
-				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_dhimmi
-						territory = 30
-						}
-				}
-				add_years_of_income = 1
-			}		
 			add_estate_loyalty = {
 				estate = estate_dhimmi
-				loyalty = -15 #Take more offense than the Burghers do due to their supposedly protected status.
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_9
+				influence = 10
+				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
 				NOT = {
 					estate_loyalty = {
 						estate = estate_dhimmi
 						loyalty = 50
-					}	
+					}
 				}
 			}
 			modifier = {
 				factor = 0
-				treasury = 1
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
 			}
 		}
 	}
 
 #############################################
-####### Government Interaction 
+####### Ask for Reform Support
 #############################################
+
+	interaction = {
+		name = "Dhim_14"
+		icon = 17
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			#reduce_loyal_without_dhim = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 3650
+			}
+			
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_dhimmi
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_dhimmi
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
+		}
+	}
+
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Dhim_4"
+		icon = 1
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			legitimacy_equivalent = 10
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -3
+			add_devotion = -10
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 85 }
+			}
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Dhim_5"
+		icon = 31
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			prestige = 0
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Dhim_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+				tooltip = IV_ESTATE_ENDTIER			
+			}
+			NOT = { has_reform_level = 9 }
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 15
+			}
+			#reduce_loyal_without_dhim = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 40
+				}
+			}
+		}
+	}
 
 #############################################
 ####### Limit Influence 
@@ -573,20 +1405,33 @@ estate_dhimmi = {
 		name = "Dhim_2"
 		icon = 24
 		
+		years_between_use = 10
+		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
 		}
-		
-		years_between_use = 10
 		
 		trigger = {
 			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
 		}
 		
 		effect = {
 			random_list = {
 			33 = { remove_advisor_by_category = ADM }
-			34 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = DIP }
 			33 = { remove_advisor_by_category = MIL }
 			}
 			add_estate_loyalty = {
@@ -597,16 +1442,84 @@ estate_dhimmi = {
 				estate = estate_dhimmi
 				desc = estate_influ_1
 				influence = -10
-				duration = 7300
+				duration = 3650
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 100
+					}
+				}
+			}
 		}
 	}
 
+#############################################
+####### Confiscation of Lands
+#############################################
+
+	interaction = {
+		name = "Dhim_13"
+		icon = 24
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_dhimmi
+				desc = estate_influ_25
+				influence = -25
+				duration = 10950
+			}
+			#reduce_loyal_without_dhim = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 100
+					}
+				}
+			}
+		}
+	}	
+	
 #############################################
 ####### Execute Important Person
 #############################################
@@ -615,14 +1528,27 @@ estate_dhimmi = {
 		name = "Dhim_3"
 		icon = 20
 		
+		years_between_use = 20
+		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
 		}
-		
-		years_between_use = 15
 		
 		trigger = {
 			stability = -2
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_7
+				any_owned_province = {
+					has_estate = estate_dhimmi
+				}
+			}
 		}
 		
 		effect = {
@@ -637,426 +1563,27 @@ estate_dhimmi = {
 				influence = -20
 				duration = 7300
 			}
-			reduce_loyal_without_dhim = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Legitimacy
-#############################################
-
-	interaction = {
-		name = "Dhim_4"
-		icon = 1
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			OR = {
-			legitimacy = 50
-			republican_tradition = 50
-			devotion = 50
-			}
-		}
-		
-		effect = {
-			add_legitimacy = -10
-			add_republican_tradition = -3
-			add_devotion = -10	
-			add_horde_unity = -10
-			add_meritocracy = -10
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Prestige
-#############################################
-
-	interaction = {
-		name = "Dhim_5"
-		icon = 31
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			prestige = 0
-		}
-		
-		effect = {
-			add_prestige = -10
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Make Promises
-#############################################
-
-	interaction = {
-		name = "Dhim_6"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 5
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_5
-				influence = 10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Pass Reform
-#############################################
-
-	interaction = {
-		name = "Dhim_7"
-		icon = 38
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			government_reform_progress = 20
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_ENDTIER
-
-			}
-		}
-		
-		effect = {
-			change_government_reform_progress = -20
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 15
-			}
 			#reduce_loyal_without_dhim = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Grant a Favour
-#############################################
-
-	interaction = {
-		name = "Dhim_8"
-		icon = 25
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 20
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_adm_power = -50
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_7
-				influence = 15
-				duration = 7300
-			}
-			#reduce_loyal_without_dhim = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Underline Privileges
-#############################################
-
-	interaction = {
-		name = "Dhim_9"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			#custom_trigger_tooltip = {
-			#tooltip = IV_ESTATE_INTERACTION_7
-			# has_iv_gov_estate_7 = yes 
-			#}
-			has_reform = dhimmi_nobles_reform
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_8
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_dhim = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit Minister (Institution Embracement Cost)
-#############################################
-
-	interaction = {
-		name = "Dhim_10"
-		icon = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = idea_var_advisor_6
-					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = idea_var_advisor_6
-					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
+			factor = 1
 			
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_24
-				influence = 15
-				duration = 7300
-			}
-			reduce_loyal_without_dhim = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit from their Domain
-#############################################
-
-	interaction = {
-		name = "Dhim_12"
-		icon = 12
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_province_estate_7
-				any_owned_province = {
-					has_estate = estate_dhimmi
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_dhimmi
+						influence = 100
+					}
 				}
 			}
-		}
-		
-		effect = {
-			add_country_modifier = {
-				name = "idea_variation_estate_7"
-				duration = 3650
+			modifier = {
+				factor = 0
+				NOT = {
+					stability = 3
+				}
 			}
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_9
-				influence = -10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Confiscation of Lands
-#############################################
-
-	interaction = {
-		name = "Dhim_13"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 25
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = -20
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_25
-				influence = -25
-				duration = 7300
-			}
-			reduce_loyal_without_dhim = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}	
-
-#############################################
-####### Ask for Reform Support
-#############################################
-
-	interaction = {
-		name = "Dhim_14"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			NOT = { has_country_modifier = idea_variation_estate_13 }
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_dhimmi
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_dhimmi
-				desc = estate_influ_26
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_dhim = yes
-			
-			add_country_modifier = {
-				name = "idea_variation_estate_13"
-				duration = 1825
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
 		}
 	}
 }
