@@ -108,7 +108,7 @@ print("Processing {0} Tags".format(len(TAGS)))
 for tag in list(TAGS):
     # Process the country file for each tag
     process_country(tag, TAGS[tag])
-    print('.', end='', flush=True)
+    print('.', end=' ', flush=True)
 
 
 print("\nIdentified {0} unique colors".format(len(list(GROUPS))))

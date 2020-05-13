@@ -19,7 +19,7 @@ template = """l_english:
  ML_title_of_modpack.1:0 "{0}"
  ML_desc_of_modpack.1:0 "{1}"
 """.format("{}","{}", os.path.basename(__file__), os.path.basename(ARGS.input_filename.name))
-DefaultTitle = "The excelmakesbelhappypack: {}".format(ARGS.version)
+DefaultTitle = "Excelmakesbelhappypack Changelog" #"The excelmakesbelhappypack: {}".format(ARGS.version)
 a_string = "a test \" string \n"
 
 def escape(a_string):

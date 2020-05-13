@@ -49,21 +49,12 @@ estate_jains = {
 	country_modifier_happy = {
 		build_cost = -0.1
 		build_time = -0.1
-		#rat_1_6_minder_influence = 0.1
-		#rat_2_6_minder_influence = 0.1
-		#rat_3_6_minder_influence = 0.1
 	}
 	country_modifier_neutral = {
 		build_time = -0.05
-		#rat_1_6_minder_influence = 0.2
-		#rat_2_6_minder_influence = 0.2
-		#rat_3_6_minder_influence = 0.2
 	}	
 	country_modifier_angry = {
 		interest = 1
-		#rat_1_6_minder_influence = 0.33
-		#rat_2_6_minder_influence = 0.33
-		#rat_3_6_minder_influence = 0.33
 	}
 	
 	# These do not scale, but only applied in provinces owned by the estate
@@ -180,229 +171,91 @@ estate_jains = {
 		value = 100	# Code has a sanity check against pushing influence too high
 	}
 
-	#Interactions
-	
+#############################################
+####### Interactions 
+#############################################
+
+#############################################
+####### Impose a Tax
+#############################################
+
 	interaction = {
-		name = "PROCURE_LOANS"
-		icon = 35
-		
-		years_between_use = 5
-		
-		trigger = {
-			is_bankrupt = no
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_influence = {
-							estate = estate_jains
-							influence = 50
-						}
-					}
-				}
-				add_loan = {
-					interest_modifier = -0.5
-					fixed_interest = yes
-					duration = 60
-				}
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_jains
-						influence = 50
-					}
-				}
-				add_loan = {
-					interest_modifier = -1
-					fixed_interest = yes
-					duration = 60
-				}
-			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = EST_VAL_JAIN_LOANS
-				influence = 10
-				duration = 3650
-			}
-		}
-		ai_will_do = {
-		}
-	}
-	
-	interaction = {
-		name = "INVESTIGATE_CORRUPTION"
-		icon = 39
-		
-		years_between_use = 30
-		
-		trigger = {
-			corruption = 2
-		}
-		effect = {
-			add_corruption = -2
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = EST_VAL_JAIN_CORRUPTION
-				influence = 10
-				duration = 3650
-			}
-		}
-		ai_will_do = {
-			factor = 0
-		}
-	}
-	
-	interaction = {
-		name = "BUILD_JAIN_TEMPLE"
-		icon = 38
-		
-		years_between_use = 20
-		
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_jain_province
-				any_owned_province = {
-					has_estate = estate_jains
-					NOT = { has_province_modifier = jain_temples_built }
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-					NOT = {
-						any_owned_province = {
-							has_estate = estate_jains
-						}
-					}
-				}
-				custom_tooltip = jain_temples_tooltip
-			}
-			if = {
-				limit = {
-					NOT = { has_dlc = "Common Sense" }
-					NOT = {
-						any_owned_province = {
-							has_estate = estate_jains
-						}
-					}
-				}
-				custom_tooltip = jain_temples_tooltip_2
-			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = EST_VAL_JAINS_JAIN_TEMPLES
-				influence = 15
-				duration = 7300
-			}
-			random_owned_province = {
-				limit = {
-					has_estate = estate_jains
-					NOT = { has_province_modifier = jain_temples_built }
-				}
-				add_base_tax = 1
-				add_province_modifier = {
-					name = "jain_temples_built"
-					duration = 3650
-				}
-				
-			}
-		}
-		ai_will_do = {
-			factor = 0
-		}
-	}
-	
-	interaction = {
-		name = "PATRONIZE_JAIN_FAMILIES"
-		icon = 36
-		
-		years_between_use = 20
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_prestige = -5
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = 15
-			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = EST_VAL_JAINS_PATRONIZED
-				influence = 10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_jains
-					influence = 60
-				}				
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_jains
-					loyalty = 30
-				}				
-			}			
-		}
-	}
-	
-	interaction = {
-		name = "COMMISSION_JAIN_SCRIPTURES"
-		icon = 37
-		
-		years_between_use = 20
+		name = "Jain_11"
+		icon = 8
 		
 		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
+		years_between_use = 10
+		
 		trigger = {
-			always = yes
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_11
+				any_owned_province = {
+					has_estate = estate_jains
+				}
+			}
 		}
 		
 		effect = {
-			add_years_of_income = -0.25
+				 if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_jains	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																						 add_years_of_income = 1   }
+			custom_tooltip = this_scales_with_land
 			add_estate_loyalty = {
 				estate = estate_jains
-				loyalty = 15
+				loyalty = -10
 			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_jains
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
 		}
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
-				estate_influence = {
-					estate = estate_jains
-					influence = 70
+				NOT = {
+					estate_loyalty = {
+						estate = estate_jains
+						loyalty = 50
+					}
 				}
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_jains
-					loyalty = 30
-				}				
 			}
 		}
 	}
-	
+
+#############################################
+####### Demand Diplomatic Support
+#############################################
+
 	interaction = {
 		name = "DEMAND_SUPPORT_JAINS"
 		icon = 3
@@ -414,6 +267,15 @@ estate_jains = {
 			NOT = { has_estate = estate_vaisyas }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
@@ -478,1422 +340,26 @@ estate_jains = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-		}
-	}
-	
-##########################################################################
-####### Idea Variation Estate Start
-##########################################################################
-
-
-#############################################
-####### Influence/Loyalty Modifiers
-#############################################
-
-#############################################
-####### Monarchy
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_2_estate_1_11
-		}		
-		influence = 10
-	}
-
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_3_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_4_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_5_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_6_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_7_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_8_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_9_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_10_estate_1_11
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_11_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_12_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_13_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_14_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_15_estate_1_11
-		}		
-		influence = 10
-	}	
-	
-#############################################
-####### Republic
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_2_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_3_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_4_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_5_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_6_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_7_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_8_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_9_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_10_estate_1_11
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_11_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_12_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_13_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_14_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_15_estate_1_11
-		}		
-		influence = 10
-	}	
-
-#############################################
-####### Theocracy
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_2_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_3_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_4_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_5_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_6_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_7_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_8_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_9_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_10_estate_1_11
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_11_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_12_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_13_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_14_estate_1_11
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_15_estate_1_11
-		}		
-		influence = 10
-	}		
-	
-#############################################
-####### Monarchy
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_2_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_3_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_4_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_5_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_6_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_7_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_8_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_9_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_10_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_11_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_12_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_13_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_14_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = monarchy_tier_15_estate_1_11
-		}
-		loyalty = 500
-	}	
-
-#############################################
-####### Republic
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_2_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_3_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_4_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_5_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_6_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_7_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_8_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_9_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_10_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_11_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_12_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_13_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_14_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = republic_tier_15_estate_1_11
-		}
-		loyalty = 500
-	}		
-	
-#############################################
-####### Theocracy
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_2_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_3_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_4_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_5_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_6_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_7_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_8_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_9_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_10_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_11_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_12_estate_1_11
-		}
-		loyalty = 500
-	}	
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_13_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_14_estate_1_11
-		}
-		loyalty = 500
-	}
-loyalty_modifier = {
-		desc = estate_influ_22
-		trigger = {
-					has_reform = theocracy_tier_15_estate_1_11
-		}
-		loyalty = 500
-	}		
-
-#############################################
-####### Checks & Balances Reforms
-#############################################
-
-#############################################
-####### Monarchy
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_2_checks_1_1
-		}		
-		influence = 10
-	}
-
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_3_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_4_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_5_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_6_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_7_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_8_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_9_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_10_checks_1_1
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_11_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_12_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_13_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_14_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_15_checks_1_1
-		}		
-		influence = 10
-	}
-	
-#############################################
-####### Republic
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_2_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_3_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_4_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_5_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_6_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_7_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_8_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_9_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_10_checks_1_1
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_11_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_12_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_13_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_14_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_15_checks_1_1
-		}		
-		influence = 10
-	}	
-
-#############################################
-####### Theocracy
-#############################################
-
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_2_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_3_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_4_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_5_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_6_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_7_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_8_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_9_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_10_checks_1_1
-		}		
-		influence = 10
-	}	
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_11_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_12_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_13_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_14_checks_1_1
-		}		
-		influence = 10
-	}
-influence_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_15_checks_1_1
-		}		
-		influence = 10
-	}		
-	
-#############################################
-####### Monarchy
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_2_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_3_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_4_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_5_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_6_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_7_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_8_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_9_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_10_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_11_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_12_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_13_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_14_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = monarchy_tier_15_checks_1_1
-		}
-		loyalty = 250
-	}	
-
-#############################################
-####### Republic
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_2_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_3_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_4_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_5_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_6_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_7_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_8_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_9_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_10_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_11_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_12_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_13_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_14_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = republic_tier_15_checks_1_1
-		}
-		loyalty = 250
-	}		
-	
-#############################################
-####### Theocracy
-#############################################
-	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_2_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_3_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_4_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_5_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_6_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_7_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_8_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_9_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_10_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_11_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_12_checks_1_1
-		}
-		loyalty = 250
-	}	
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_13_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_14_checks_1_1
-		}
-		loyalty = 250
-	}
-loyalty_modifier = {
-		desc = estate_influ_27
-		trigger = {
-					has_reform = theocracy_tier_15_checks_1_1
-		}
-		loyalty = 250
-	}	
-
-#############################################
-####### Interactions 
-#############################################
-
-#############################################
-####### Government Interaction 
-#############################################
-
-
-
-#############################################
-####### Limit Influence 
-#############################################
-
-	interaction = {
-		name = "Jain_2"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			has_advisor = yes
-		}
-		
-		effect = {
-			random_list = {
-			33 = { remove_advisor_by_category = ADM }
-			34 = { remove_advisor_by_category = DIP }
-			33 = { remove_advisor_by_category = MIL }
+			factor = 1		
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_jains
+						influence = 50
+					}
+				}
 			}
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = -10
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_jains
+						loyalty = 60
+					}
+				}
 			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = estate_influ_1
-				influence = -10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-
-#############################################
-####### Execute Important Person
-#############################################
-
-	interaction = {
-		name = "Jain_3"
-		icon = 20
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			stability = -2
-		}
-		
-		effect = {
-			add_stability = -1
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = -20
-			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = estate_influ_2
-				influence = -20
-				duration = 7300
-			}
-			reduce_loyal_without_jain = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Legitimacy
-#############################################
-
-	interaction = {
-		name = "Jain_4"
-		icon = 1
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			OR = {
-			legitimacy = 50
-			republican_tradition = 50
-			devotion = 50
-			}
-		}
-		
-		effect = {
-			add_legitimacy = -10
-			add_republican_tradition = -4
-			add_devotion = -10	
-			add_horde_unity = -10
-			add_meritocracy = -10
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Prestige
-#############################################
-
-	interaction = {
-		name = "Jain_5"
-		icon = 31
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			prestige = 0
-		}
-		
-		effect = {
-			add_prestige = -10
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
 		}
 	}
 
@@ -1907,6 +373,17 @@ loyalty_modifier = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
@@ -1929,11 +406,86 @@ loyalty_modifier = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
 		}
 	}
-	
+
+#############################################
+####### Patronize Jain Families
+#############################################
+
+	interaction = {
+		name = "PATRONIZE_JAIN_FAMILIES"
+		icon = 36
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_prestige = -5
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 15
+			}
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = EST_VAL_JAINS_PATRONIZED
+				influence = 10
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}				
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}				
+			}			
+		}
+	}
 
 #############################################
 ####### Grant a Favour
@@ -1945,6 +497,17 @@ loyalty_modifier = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 20
@@ -1954,8 +517,7 @@ loyalty_modifier = {
 		}
 		
 		effect = {
-			add_adm_power = -25
-			add_dip_power = -25
+			add_dip_power = -50
 			add_estate_loyalty = {
 				estate = estate_jains
 				loyalty = 10
@@ -1970,8 +532,26 @@ loyalty_modifier = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { dip_power = 100 }
+			}
 		}
 	}
 
@@ -1985,15 +565,27 @@ loyalty_modifier = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
 		
 		trigger = {
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_INTERACTION_11
-			 has_iv_gov_estate_11 = yes 
-			}
+			#custom_trigger_tooltip = {
+			#tooltip = IV_ESTATE_INTERACTION_3
+			# has_iv_gov_estate_3 = yes 
+			#}
+			always = yes
 		}
 		
 		effect = {
@@ -2005,19 +597,51 @@ loyalty_modifier = {
 				estate = estate_jains
 				desc = estate_influ_8
 				influence = 10
-				duration = 7300
+				duration = 3650
 			}
 			reduce_loyal_without_jain = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_jain = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
 #############################################
-####### Recruit Minister
+####### Recruit Minister (interest)
 #############################################
 
 	interaction = {
@@ -2026,9 +650,20 @@ loyalty_modifier = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
-		years_between_use = 15
+		years_between_use = 30
 		
 		trigger = {
 			always = yes
@@ -2042,9 +677,9 @@ loyalty_modifier = {
 				define_advisor = {
 					type = idea_var_advisor_20
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -2053,9 +688,9 @@ loyalty_modifier = {
 				define_advisor = {
 					type = idea_var_advisor_20
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -2064,101 +699,274 @@ loyalty_modifier = {
 				estate = estate_jains
 				desc = estate_influ_24
 				influence = 15
-				duration = 7300
+				duration = 10950
 			}
 			reduce_loyal_without_jain = yes
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { num_of_loans = 2 }
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_jain = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 
 #############################################
-####### Impose a Tax
+####### Build Jain Temple
 #############################################
 
 	interaction = {
-		name = "Jain_11"
-		icon = 8
+		name = "BUILD_JAIN_TEMPLE"
+		icon = 38
+		
+		years_between_use = 20
 		
 		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_jain_province
+				any_owned_province = {
+					has_estate = estate_jains
+					NOT = { has_province_modifier = jain_temples_built }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+					NOT = {
+						any_owned_province = {
+							has_estate = estate_jains
+						}
+					}
+				}
+				custom_tooltip = jain_temples_tooltip
+			}
+			if = {
+				limit = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = {
+						any_owned_province = {
+							has_estate = estate_jains
+						}
+					}
+				}
+				custom_tooltip = jain_temples_tooltip_2
+			}
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = EST_VAL_JAINS_JAIN_TEMPLES
+				influence = 15
+				duration = 7300
+			}
+			random_owned_province = {
+				limit = {
+					has_estate = estate_jains
+					NOT = { has_province_modifier = jain_temples_built }
+				}
+				add_base_tax = 1
+				add_province_modifier = {
+					name = "jain_temples_built"
+					duration = 3650
+				}
+				
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 75
+				}
+			}
+		}
+	}
+
+#############################################
+####### Investigate Corruption
+#############################################
+
+	interaction = {
+		name = "INVESTIGATE_CORRUPTION"
+		icon = 39
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			corruption = 1
+		}
+		effect = {
+			add_corruption = -2
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = EST_VAL_JAIN_CORRUPTION
+				influence = 10
+				duration = 10950
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { corruption = 2 }
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
+		}
+	}
+
+#############################################
+####### Procure a Loan
+#############################################
+
+	interaction = {
+		name = "PROCURE_LOANS"
+		icon = 35
 		
 		years_between_use = 10
 		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
 		trigger = {
-			always = yes
+			is_bankrupt = no
 		}
 		
 		effect = {
 			if = {
 				limit = {
 					NOT = {
-						estate_territory = {
-						estate = estate_jains
-						territory = 15
-						}	
+						estate_influence = {
+							estate = estate_jains
+							influence = 50
+						}
 					}
 				}
-				add_years_of_income = 0.25
+				add_loan = {
+					interest_modifier = -0.5
+					fixed_interest = yes
+					duration = 60
+				}
 			}
 			if = {
 				limit = {
-					estate_territory = {
+					estate_influence = {
 						estate = estate_jains
-						territory = 15
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_jains
-						territory = 20
-						}	
+						influence = 50
 					}
 				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_jains
-						territory = 20
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_jains
-						territory = 30
-						}	
-					}
+				add_loan = {
+					interest_modifier = -1
+					fixed_interest = yes
+					duration = 60
 				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_jains
-						territory = 30
-						}
-				}
-				add_years_of_income = 1
-			}
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = -10
 			}
 			add_estate_influence_modifier = {
 				estate = estate_jains
-				desc = estate_influ_10
-				influence = -5
-				duration = 7300
+				desc = EST_VAL_JAIN_LOANS
+				influence = 10
+				duration = 3650
 			}
 		}
-		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { num_of_loans = 1 }
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_jains
+						influence = 50
+					}
+				}
+			}
 		}
 	}
 
@@ -2172,9 +980,20 @@ loyalty_modifier = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		trigger = {
 			custom_trigger_tooltip = {
@@ -2183,11 +1002,15 @@ loyalty_modifier = {
 					has_estate = estate_jains
 				}
 			}
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
 		}
 		
 		effect = {
 			add_country_modifier = {
-				name = "idea_variation_estate_11"
+				name = "idea_variation_estate_3"
 				duration = 3650
 			}
 			add_estate_loyalty = {
@@ -2197,71 +1020,72 @@ loyalty_modifier = {
 			add_estate_influence_modifier = {
 				estate = estate_jains
 				desc = estate_influ_9
-				influence = -10
+				influence = 10
 				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_jains
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
+			}
 		}
 	}
-
-#############################################
-####### Confiscation of Lands
-#############################################
-
-	interaction = {
-		name = "Jain_13"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 25
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_jains
-				loyalty = -20
-			}
-			add_estate_influence_modifier = {
-				estate = estate_jains
-				desc = estate_influ_25
-				influence = -25
-				duration = 7300
-			}
-			reduce_loyal_without_jain = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}	
 
 #############################################
 ####### Ask for Reform Support
 #############################################
 
 	interaction = {
-		name = "Jain_14"
+		name = "Jain_15"
 		icon = 17
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		trigger = {
 			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -2275,23 +1099,514 @@ loyalty_modifier = {
 				influence = 10
 				duration = 7300
 			}
-			reduce_loyal_without_jain = yes
+			#reduce_loyal_without_jain = yes
 			
 			add_country_modifier = {
 				name = "idea_variation_estate_13"
-				duration = 1825
+				duration = 3650
 			}
 			
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_jains
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_jains
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
+		}
+	}
+	
+#############################################
+####### Commission Jain Scriptures
+#############################################
+
+	interaction = {
+		name = "COMMISSION_JAIN_SCRIPTURES"
+		icon = 37
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_years_of_income = -0.25
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 0.5 }
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
 		}
 	}
 
-##########################################################################
-####### Idea Variation End
-##########################################################################
-	
+#############################################
+####### Government Interaction 
+#############################################
+
+	interaction = {
+		name = "Jain_1"
+		icon = 17
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_estate = estate_burghers }
+			NOT = { has_estate = estate_vaisyas }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			has_idea = republik7
+		}
+		
+		effect = {
+			#add_estate_influence_modifier = {
+			#	estate = estate_jains
+			#	desc = Jain_1_influ
+			#	influence = 20
+			#	duration = 7300
+			#}
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
+		}
+	}
+
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Jain_4"
+		icon = 1
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			legitimacy_equivalent = 10
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -3
+			add_devotion = -10
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 85 }
+			}
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Jain_5"
+		icon = 31
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			prestige = 0
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Jain_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_ENDTIER			
+			}
+			NOT = { has_reform_level = 9 }
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = 15
+			}
+			#reduce_loyal_without_jain = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 40
+				}
+			}
+		}
+	}
+
+#############################################
+####### Limit Influence 
+#############################################
+
+	interaction = {
+		name = "Jain_2"
+		icon = 24
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			random_list = {
+			33 = { remove_advisor_by_category = ADM }
+			34 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = MIL }
+			}
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = estate_influ_1
+				influence = -10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_jains
+						influence = 100
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Confiscation of Lands
+#############################################
+
+	interaction = {
+		name = "Jain_13"
+		icon = 24
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 30
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = estate_influ_25
+				influence = -25
+				duration = 10950
+			}
+			reduce_loyal_without_jain = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_jains
+						influence = 100
+					}
+				}
+			}
+		}
+	}	
+
+#############################################
+####### Execute Important Person
+#############################################
+
+	interaction = {
+		name = "Jain_3"
+		icon = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+		   #NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			stability = -2
+			estate_loyalty = {
+				estate = estate_jains
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_stability = -1
+			add_estate_loyalty = {
+				estate = estate_jains
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_jains
+				desc = estate_influ_2
+				influence = -20
+				duration = 7300
+			}
+			reduce_loyal_without_jain = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_jains
+						influence = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					stability = 3
+				}
+			}
+		}
+	}
 }

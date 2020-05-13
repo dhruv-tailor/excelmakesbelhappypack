@@ -235,62 +235,699 @@ estate_rajput = {
 			NOT = { local_autonomy = 26 }
 		}
 	}
-	
-	# Special interactions
-	
+
 #############################################
-####### Recruit Rajput Regiments
+####### Interactions
 #############################################
-	
+
+#############################################
+####### Impose a Tax
+#############################################
+
 	interaction = {
-		name = "RECRUIT_RAJPUT_REGIMENTS"
-		icon = 30
-		
-		years_between_use = 5
+		name = "Raj_11"
+		icon = 8
 		
 		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_global_flag = no_estate_interaction }
 			NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_12
+				any_owned_province = {
+					has_estate = estate_rajput
+				}
+			}
+		}
+		
+		effect = {
+				 if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_rajput	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																						 add_years_of_income = 1   }
+			custom_tooltip = this_scales_with_land
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -10
+			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_rajput
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 50
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Demand Military Support
+#############################################	
+
+	interaction = {
+		name = "DEMAND_SUPPORT_RAJPUTS"
+		icon = 4
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+			NOT = { has_estate = estate_nobles }
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_rajput
+				influence = 25
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 50
+						}	
+					}
+				}
+				add_mil_power = 50
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 50
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 75
+						}	
+					}
+				}
+				add_mil_power = 100
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 75
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 100
+						}	
+					}
+				}
+				add_mil_power = 150
+			}
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 100
+					}
+				}
+				add_mil_power = 200
+			}				
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -20
+			}
+		}
+		
+		
+		ai_will_do = {
+			factor = 1		
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 60
+					}
+				}
+			}
+		}
+	}
+	
+#############################################
+####### Enlist Purbias
+#############################################	
+
+	interaction = {
+		name = "LOOK_UP_PURBIAS"
+		icon = 32
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_rajput_province
+				any_owned_province = {
+					has_estate = estate_rajput
+				}
+			}
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					has_reform = governmental_purbias_register_reform
+				}
+				add_country_modifier = {
+					name = "look_up_purbias_upgraded"
+					duration = 3650
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = "look_up_purbias"
+					duration = 3650
+				}
+			}
+			add_years_of_income = -0.25
+			custom_tooltip = rajput_tax_burden_autonomy_tooltip
+			hidden_effect = {
+				every_owned_province = {
+					limit = { has_estate = estate_rajput }
+					add_local_autonomy = 15
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -5
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 0.5 }				
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				war_score = -10
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 45
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Make Promises
+#############################################
+
+	interaction = {
+		name = "Raj_6"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
 		
 		trigger = {
 			always = yes
 		}
 		
 		effect = {
-			rajput_scaled_to_fl = yes
 			add_estate_loyalty = {
 				estate = estate_rajput
-				loyalty = -15
+				loyalty = 5
 			}
 			add_estate_influence_modifier = {
 				estate = estate_rajput
-				desc = EST_VAL_RECRUITED_RAJPUTS
-				influence = 5
-				duration = 1825
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
 			}
 		}
+		
 		ai_will_do = {
 			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 60
+				}
+			}
 			modifier = {
 				factor = 0
 				estate_influence = {
 					estate = estate_rajput
-					influence = 70
-				}				
+					influence = 80
+				}
 			}
-			#modifier = {
-			#	factor = 0
-			#	ai_wants_raise_cossack = no
-			#}	
+		}
+	}
+
+#############################################
+####### Promote Rajput Nobility
+#############################################	
+
+	interaction = {
+		name = "PROMOTE_RAJPUT_NOBILITY"
+		icon = 34
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		effect = {
+			add_prestige = -5
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = EST_VAL_PROMOTED_RAJPUTS
+				influence = 10
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 15
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				add_estate_loyalty = {
+					estate = estate_nobles
+					loyalty = -15
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 5 }
+			}
+		}
+	}
+
+#############################################
+####### Grant a Favour
+#############################################
+
+	interaction = {
+		name = "Raj_8"
+		icon = 25
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_mil_power = -50
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_7
+				influence = 15
+				duration = 7300
+			}
+			#reduce_loyal_without_raj = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { mil_power = 100 }
+			}
+		}
+	}
+
+#############################################
+####### Underline Privileges
+#############################################
+
+	interaction = {
+		name = "Raj_9"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			#custom_trigger_tooltip = {
+			#tooltip = IV_ESTATE_INTERACTION_1
+			# has_iv_gov_estate_1 = yes 
+			#}
+			always = yes
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_8
+				influence = 10
+				duration = 3650
+			}
+			reduce_loyal_without_raj = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_raj = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
 		}
 	}
 	
 #############################################
+####### Recruit Minister (Land Fire Damage)
+#############################################
+
+	interaction = {
+		name = "Raj_10"
+		icon = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 30
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = idea_var_advisor_17
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = idea_var_advisor_17
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_24
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_raj = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { mil_tech = 16 }
+			}
+			modifier = {
+				factor = 0
+				war_score = -10
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_raj = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+					if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
 ####### Recruit Rajput General
 #############################################	
-	
+
 	interaction = {
 		name = "RECRUIT_RAJPUT_GENERAL"
 		icon = 31
@@ -299,7 +936,16 @@ estate_rajput = {
 		
 		potential = {
 			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
@@ -373,157 +1019,255 @@ estate_rajput = {
 		}
 		
 		ai_will_do = {
-			factor = 0
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 70
+				}
+			}
+			modifier = {
+				factor = 0
+				army_tradition = 40
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
 		}
 	}
-	
+
 #############################################
-####### Enlist Purbias
-#############################################	
-	
+####### Recruit Rajput Regiments
+#############################################
+
 	interaction = {
-		name = "LOOK_UP_PURBIAS"
-		icon = 32
+		name = "RECRUIT_RAJPUT_REGIMENTS"
+		icon = 30
 		
 		years_between_use = 10
 		
 		potential = {
 			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_rajput_province
-				any_owned_province = {
-					has_estate = estate_rajput
-				}
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
 			}
 		}
 		
 		effect = {
-			if = {
-				limit = {
-					has_reform = governmental_purbias_register_reform
-				}
-				add_country_modifier = {
-					name = "look_up_purbias_upgraded"
-					duration = 3650
+			rajput_scaled_to_fl = yes
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -15
+			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = EST_VAL_RECRUITED_RAJPUTS
+				influence = 5
+				duration = 3650
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 85
 				}
 			}
-			else = {
-				add_country_modifier = {
-					name = "look_up_purbias"
-					duration = 3650
+			modifier = {
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 55
+					}
 				}
 			}
-			add_years_of_income = -0.25
-			custom_tooltip = rajput_tax_burden_autonomy_tooltip
-			hidden_effect = {
-				every_owned_province = {
-					limit = { has_estate = estate_rajput }
-					add_local_autonomy = 15
+		}
+	}
+
+#############################################
+####### Recruit from their Domain
+#############################################
+
+	interaction = {
+		name = "Raj_12"
+		icon = 12
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 20
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_12
+				any_owned_province = {
+					has_estate = estate_rajput
 				}
+			}
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "idea_variation_estate_2"
+				duration = 3650
+			}
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_9
+				influence = 10
+				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
-				NOT = { years_of_income = 0.5 }				
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 50
+					}
+				}
 			}
 			modifier = {
 				factor = 0
-				is_at_war = no				
+				estate_influence = {
+					estate = estate_rajput
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
 			}
 		}
 	}
-	
+
 #############################################
-####### Demand Military Support
-#############################################	
-	
+####### Ask for Reform Support
+#############################################
+
 	interaction = {
-		name = "DEMAND_SUPPORT_RAJPUTS"
-		icon = 4
+		name = "Raj_14"
+		icon = 17
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
 		
 		years_between_use = 20
 		
-		potential = {
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_estate = estate_nobles }
-		}
-		
 		trigger = {
-			always = yes
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
 		}
 		
 		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 50
-						}	
-					}
-				}
-				add_mil_power = 50
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_rajput
-						influence = 50
-					}
-					NOT = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 75
-						}	
-					}
-				}
-				add_mil_power = 100
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_rajput
-						influence = 75
-					}
-					NOT = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 100
-						}	
-					}
-				}
-				add_mil_power = 150
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_rajput
-						influence = 100
-					}
-				}
-				add_mil_power = 200
-			}				
 			add_estate_loyalty = {
 				estate = estate_rajput
-				loyalty = -20
+				loyalty = -10
 			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			#reduce_loyal_without_raj = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 3650
+			}
+			
 		}
-		
 		
 		ai_will_do = {
-			factor = 0
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_rajput
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
 		}
 	}
-	
+
 #############################################
 ####### Exempt from Jaziya
 #############################################	
@@ -536,11 +1280,25 @@ estate_rajput = {
 		
 		potential = {
 			religion_group = muslim
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
-			any_owned_province = {
-				has_estate = estate_rajput
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_rajput_province
+				any_owned_province = {
+					has_estate = estate_rajput
+				}
 			}
 		}
 		
@@ -563,81 +1321,241 @@ estate_rajput = {
 		
 		ai_will_do = {
 			factor = 1
+			
 			modifier = {
 				factor = 0
-				estate_loyalty = {
-					estate = estate_rajput
-					loyalty = 30
-				}				
-			}
-		}
-	}
-	
-#############################################
-####### Promote Rajput Nobility
-#############################################	
-	
-	interaction = {
-		name = "PROMOTE_RAJPUT_NOBILITY"
-		icon = 34
-		
-		years_between_use = 20
-		
-		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		effect = {
-			add_prestige = -5
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = EST_VAL_PROMOTED_RAJPUTS
-				influence = 10
-				duration = 7300
-			}
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 15
-			}
-			if = {
-				limit = {
-					has_estate = estate_nobles
-				}
-				add_estate_loyalty = {
-					estate = estate_nobles
-					loyalty = -15
-				}
-			}
-		}
-		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_rajput
-					influence = 60
-				}				
+				NOT = { years_of_income = 1 }
 			}
 			modifier = {
 				factor = 0
 				estate_loyalty = {
 					estate = estate_rajput
-					loyalty = 30
+					loyalty = 60
 				}				
-			}			
+			}
 		}
 	}
-	
+
 #############################################
 ####### Government Interaction 
 #############################################
 
+	interaction = {
+		name = "Raj_1"
+		icon = 17
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+			NOT = { has_estate = estate_nobles }
+		}
+		
+		trigger = {
+			has_idea = monarchie6
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 60
+				}
+			}
+		}
+	}
 
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Raj_4"
+		icon = 1
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			legitimacy_equivalent = 10
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -3
+			add_devotion = -10
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 85 }
+			}
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Raj_5"
+		icon = 31
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			prestige = 0
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Raj_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_ENDTIER			
+			}
+			NOT = { has_reform_level = 9 }
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 15
+			}
+			#reduce_loyal_without_raj = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 40
+				}
+			}
+		}
+	}
 
 #############################################
 ####### Limit Influence 
@@ -649,12 +1567,27 @@ estate_rajput = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
 		
 		trigger = {
 			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -671,16 +1604,85 @@ estate_rajput = {
 				estate = estate_rajput
 				desc = estate_influ_1
 				influence = -10
-				duration = 7300
+				duration = 3650
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 100
+					}
+				}
+			}
 		}
 	}
 
+#############################################
+####### Confiscation of Lands
+#############################################
+
+	interaction = {
+		name = "Raj_13"
+		icon = 24
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 30
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_rajput
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_rajput
+				desc = estate_influ_25
+				influence = -25
+				duration = 10950
+			}
+			reduce_loyal_without_raj = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_rajput
+						influence = 100
+					}
+				}
+			}
+		}
+	}	
 
 #############################################
 ####### Execute Important Person
@@ -692,12 +1694,27 @@ estate_rajput = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+		   #NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
-		years_between_use = 15
+		years_between_use = 20
 		
 		trigger = {
 			stability = -2
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -716,507 +1733,23 @@ estate_rajput = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Legitimacy
-#############################################
-
-	interaction = {
-		name = "Raj_4"
-		icon = 1
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			OR = {
-			legitimacy = 50
-			republican_tradition = 50
-			devotion = 50
-			}
-		}
-		
-		effect = {
-			add_legitimacy = -10
-			add_republican_tradition = -3
-			add_devotion = -10	
-			add_horde_unity = -10
-			add_meritocracy = -10
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Prestige
-#############################################
-
-	interaction = {
-		name = "Raj_5"
-		icon = 31
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			prestige = 0
-		}
-		
-		effect = {
-			add_prestige = -10
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Make Promises
-#############################################
-
-	interaction = {
-		name = "Raj_6"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 5
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_5
-				influence = 10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-	
-#############################################
-####### Pass Reform
-#############################################
-
-	interaction = {
-		name = "Raj_7"
-		icon = 38
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			government_reform_progress = 20
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_ENDTIER			
-			}
-		}
-		
-		effect = {
-			change_government_reform_progress = -20
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 15
-			}
-			#reduce_loyal_without_raj = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Grant a Favour
-#############################################
-
-	interaction = {
-		name = "Raj_8"
-		icon = 25
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 20
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_mil_power = -50
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_7
-				influence = 15
-				duration = 7300
-			}
-			#reduce_loyal_without_raj = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Underline Privileges
-#############################################
-
-	interaction = {
-		name = "Raj_9"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_INTERACTION_12
-			 has_iv_gov_estate_12 = yes 
-			}
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_8
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_raj = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit Minister (Land Fire Damage)
-#############################################
-
-	interaction = {
-		name = "Raj_10"
-		icon = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = idea_var_advisor_17
-					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = idea_var_advisor_17
-					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
+			factor = 1
 			
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_24
-				influence = 15
-				duration = 7300
-			}
-			reduce_loyal_without_raj = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Impose a Tax
-#############################################
-
-	interaction = {
-		name = "Raj_11"
-		icon = 8
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_territory = {
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
 						estate = estate_rajput
-						territory = 15
-						}	
+						influence = 100
 					}
 				}
-				add_years_of_income = 0.25
 			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_rajput
-						territory = 15
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_rajput
-						territory = 20
-						}	
-					}
-				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_rajput
-						territory = 20
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_rajput
-						territory = 30
-						}	
-					}
-				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_rajput
-						territory = 30
-						}
-				}
-				add_years_of_income = 1
-			}
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_10
-				influence = -5
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit from their Domain
-#############################################
-
-	interaction = {
-		name = "Raj_12"
-		icon = 12
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_province_estate_12
-				any_owned_province = {
-					has_estate = estate_rajput
+			modifier = {
+				factor = 0
+				NOT = {
+					stability = 3
 				}
 			}
-		}
-		
-		effect = {
-			add_country_modifier = {
-				name = "idea_variation_estate_12"
-				duration = 3650
-			}
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_9
-				influence = -10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Confiscation of Lands
-#############################################
-
-	interaction = {
-		name = "Raj_13"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 25
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = -20
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_25
-				influence = -25
-				duration = 7300
-			}
-			reduce_loyal_without_raj = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}	
-
-#############################################
-####### Ask for Reform Support
-#############################################
-
-	interaction = {
-		name = "Raj_14"
-		icon = 17
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			NOT = { has_country_modifier = idea_variation_estate_13 }
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_rajput
-				desc = estate_influ_26
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_raj = yes
-			
-			add_country_modifier = {
-				name = "idea_variation_estate_13"
-				duration = 1825
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
 		}
 	}
 }
