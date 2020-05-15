@@ -1,33 +1,53 @@
 # excelmakesbelhappypack
+## V0.2.7 American Trade
+Trade: Added historical trade node connections in the Americas:
+    - st_lawrence to chesapeake
+    - james_bay to north_sea
+    - chesapeake to caribbean_trade
+    - brazil to caribbean_trade
+    - patagonia to lima
+    - caribbean_trade to english_channel
+(check changelog.txt for a link to a visualization)
+Estates: The Interactions unlocked via ideas now give just flat 10 loyalty.
+Ideas: Republican no longer gives max absolutism. Replaced with Diplomats +1.
+AI: Will now take up to 5 loans to build regular troops if needed.
+AI: Will now do all vanilla Estate Interactions if needed.
+AI: Adjusted logic in building forts.
+AI: Will evaluate Anglican Faith Aspects better.
+UX: Streamlining of the start_of_game experience.
+UI: Fixed Scrollbar for Macro Builder.
+UI: You can now properly save Army Templates.
+Flavor: New text for rebalanced idea groups. Now with 90% more alliteration.
+Other: A reasonable amount of other minor bug and glitch fixes.
 ## V0.2.6 Estates
-- AI will now do the Clergy, Nobility, Burghers, Cossacks Estate clicks
-- Estate Interactions colorcoded based on impact on loyalty and influence
-- Estate interactions sorted by function
-- Estate clicks normalized
+- AI will now do the Clergy, Nobility, Burghers, Cossacks Estate clicks.
+- Estate Interactions colorcoded based on impact on loyalty and influence.
+- Estate interactions sorted by function.
+- Estate clicks normalized.
 - Recruit from Domain and Ask for Reform Support, will now ADD Influence.
 - Impose a Tax now scales with land held by estate, not influence.
 - Can no longer Pass a Law with all government reforms.
-- AI Hard Mode bonuses nerfed by about 40%
-- AI less likely to abandon republicanism on a whim
-- AI will have a better army composition based on budget and tech
-- AI will be better at assigning tasks for its army
-- AI more likely to hire mercenaries when needed
-- AI will build forts if they can afford it. Not before.git  Like a dummy.
-- Removed the local autonomy increase for number owned provinces pending redesign of system
-- Everyone now gets a Leader without Upkeep slot for 250 development
-- Institutions screen in tech now has a BACK button
-- Reflavored idea groups that had their function changed, now with 69% more alliteration
-- Government buildings tooltips now explain the Empowered Edicts
-- Galley Ideas now has a scaling force limit modifiers instead of static
+- AI Hard Mode bonuses nerfed by about 40%.
+- AI less likely to abandon republicanism on a whim.
+- AI will have a better army composition based on budget and tech.
+- AI will be better at assigning tasks for its army.
+- AI more likely to hire mercenaries when needed.
+- AI will build forts if they can afford it. Not before. Like a dummy.
+- Removed the local autonomy increase for number owned provinces pending redesign.
+- Everyone now gets a Leader without Upkeep slot for 250 development.
+- Institutions screen in tech now has a BACK button.
+- New text for rebalanced idea groups. Now with 69% more alliteration.
+- Government buildings tooltips now explain the Empowered Edicts.
+- Galley Ideas now has a scaling force limit modifiers instead of static.
 ## V0.2.5.3
-- Substantially lowered the increase to cost of buildings caused by development
-- Experimental AI build order implemented
-- Revamp of the mission interface look
-- Fixes for Elective Monarchies - monarch points from ideas apply correctly
-- Fix linux/mac loading bug
-- A reasonable amount of other minor fixes
+- Substantially lowered the increase to cost of buildings caused by development.
+- Experimental AI build order implemented.
+- Revamp of the mission interface look.
+- Fixes for Elective Monarchies - monarch points from ideas apply correctly.
+- Fix linux/mac loading bug.
+- A reasonable amount of other minor fixes.
 ## V0.2.5.2
-- Ai and players have a decision to dev a lowest cost province when at the monarch cap.
+- AI has a decision to dev a lowest cost province when at the monarch cap.
 - Arumba changes to the dev idea. 
 ## V0.2.2
 - This pack and future versions are now available at github.com/TheDivexz/excelmakesbelhappypack/releases
