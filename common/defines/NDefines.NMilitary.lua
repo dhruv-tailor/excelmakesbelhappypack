@@ -7,7 +7,7 @@ NDefines.NMilitary.NAVAL_CASUALTY_MIN_MORALE_DAMAGE = 0.0
 NDefines.NMilitary.MERCENARY_SUPPORT_LIMIT_FRACTION = 0.1
 
 
-NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 20 -- doubled from 10. 
+NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 10 -- 20 causes issues  
 NDefines.NMilitary.LOOTED_MAX = 10 -- doubled from 5 ducats/mo max to 10 because of +looting speed multipliers in the mod
 
 -- #arumba
