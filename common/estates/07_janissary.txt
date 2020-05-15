@@ -188,303 +188,153 @@ estate_janissary = {
 	# Special interactions
 	
 #############################################
-####### Recruit Minister (Infantry Combat Ability)
-#############################################	
-	
-	interaction = {
-		name = "RECRUIT_MINISTER"
-		icon = 10
-		
-		years_between_use = 30
-		
-		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = idea_var_advisor_12
-					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					discount = yes
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = idea_var_advisor_12
-					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					discount = yes
-				}
-			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = EST_VAL_JANI_MINISTER
-				influence = 15
-				duration = 10950
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0			
-		}
-	}
-	
-	# Special interactions
-	
-#############################################
-####### Suppend Janissaries
-#############################################		
-	
-	interaction = {
-		name = "SPENDE_JANI"
-		icon = 7
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_years_of_income = -0.5
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 10
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0			
-		}
-	}
-	
-	# Special interactions
-	
-#############################################
-####### Unknown
-#############################################		
-	
-	interaction = {
-		name = "EINFLUSS_AM_HOF"
-		icon = 1
-		
-		years_between_use = 15
-		
-		potential = {
-			NOT = { has_disaster = estate_burghers_disaster }
-			NOT = { has_disaster = estate_church_disaster }
-			NOT = { has_disaster = estate_nobility_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = EST_VAL_JANI_MINISTER
-				influence = 15
-				duration = 5475
-			}
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 15
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 0			
-		}
-	}
-	
-#############################################
-####### Government Interaction none ATM
+####### Interactions
 #############################################
 
-
-
 #############################################
-####### Limit Influence 
+####### Impose a Tax
 #############################################
 
 	interaction = {
-		name = "Jani_2"
-		icon = 24
+		name = "Jani_11"
+		icon = 8
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
 		
 		trigger = {
-			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
 		}
 		
 		effect = {
-			random_list = {
-			33 = { remove_advisor_by_category = ADM }
-			34 = { remove_advisor_by_category = DIP }
-			33 = { remove_advisor_by_category = MIL }
-			}
+				 if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 10 } } } add_years_of_income = 0.1 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 20 } } } add_years_of_income = 0.2 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 30 } } } add_years_of_income = 0.3 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 40 } } } add_years_of_income = 0.4 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 50 } } } add_years_of_income = 0.5 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 60 } } } add_years_of_income = 0.6 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 70 } } } add_years_of_income = 0.7 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 80 } } } add_years_of_income = 0.8 }
+			else_if = { limit = { NOT = { estate_territory = { estate = estate_janissary	territory = 90 } } } add_years_of_income = 0.9 }
+			else	= {																							 add_years_of_income = 1   }
+			custom_tooltip = this_scales_with_land
 			add_estate_loyalty = {
 				estate = estate_janissary
 				loyalty = -10
 			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_1
-				influence = -10
-				duration = 7300
-			}
+			#add_estate_influence_modifier = {
+			#	estate = estate_janissary
+			#	desc = estate_influ_10
+			#	influence = -5
+			#	duration = 3650
+			#}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-
-#############################################
-####### Execute Important Person
-#############################################
-
-	interaction = {
-		name = "Jani_3"
-		icon = 20
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			stability = -2
-		}
-		
-		effect = {
-			add_stability = -1
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = -20
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_janissary
+						loyalty = 50
+					}
+				}
 			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_2
-				influence = -20
-				duration = 7300
-			}
-			reduce_loyal_without_jani = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
 		}
 	}
 
 #############################################
-####### Display Legitimacy
+####### Make Promises
 #############################################
 
 	interaction = {
-		name = "Jani_4"
-		icon = 1
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
+		name = "Jani_6"
+		icon = 17
 		
 		years_between_use = 10
 		
-		trigger = {
-			OR = {
-			legitimacy = 50
-			republican_tradition = 50
-			devotion = 50
-			}
-		}
-		
-		effect = {
-			add_legitimacy = -10
-			add_republican_tradition = -3
-			add_devotion = -10	
-			add_horde_unity = -10
-			add_meritocracy = -10
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Display Prestige
-#############################################
-
-	interaction = {
-		name = "Jani_5"
-		icon = 31
-		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
-		years_between_use = 10
-		
 		trigger = {
-			prestige = 0
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
 		}
 		
 		effect = {
-			add_prestige = -10
 			add_estate_loyalty = {
 				estate = estate_janissary
-				loyalty = 10
+				loyalty = 5
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 80
+				}
+			}
 		}
 	}
-
 	
-
 #############################################
 ####### Grant a Favour
 #############################################
@@ -493,18 +343,34 @@ estate_janissary = {
 		name = "Jani_8"
 		icon = 25
 		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
 		years_between_use = 20
 		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
 		trigger = {
-			always = yes
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
 		}
 		
 		effect = {
-			add_mil_power = -50 
+			add_mil_power = -50
 			add_estate_loyalty = {
 				estate = estate_janissary
 				loyalty = 10
@@ -519,8 +385,26 @@ estate_janissary = {
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { mil_power = 100 }
+			}
 		}
 	}
 
@@ -534,197 +418,20 @@ estate_janissary = {
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
-		
-		trigger = {
-			#custom_trigger_tooltip = {
-			#tooltip = IV_ESTATE_INTERACTION_5
-			# has_iv_gov_estate_5 = yes 
-			#}
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_8
-				influence = 10
-				duration = 7300
-			}
-			reduce_loyal_without_jani = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit Minister (Artillery Combat Ability)
-#############################################
-
-	interaction = {
-		name = "Jani_10"
-		icon = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					monthly_income = 25
-				}
-				define_advisor = {
-					type = idea_var_advisor_14
-					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			if = {
-				limit = { NOT = { monthly_income = 25 } }
-				define_advisor = {
-					type = idea_var_advisor_14
-					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
-					cost_multiplier = 0.5
-				}
-			}
-			
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_24
-				influence = 15
-				duration = 7300
-			}
-			reduce_loyal_without_jani = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Impose a Tax
-#############################################
-
-	interaction = {
-		name = "Jani_11"
-		icon = 8
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			if = {
-				limit = {
-					NOT = {
-						estate_territory = {
-						estate = estate_janissary
-						territory = 15
-						}	
-					}
-				}
-				add_years_of_income = 0.25
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_janissary
-						territory = 15
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_janissary
-						territory = 20
-						}	
-					}
-				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_janissary
-						territory = 20
-						}
-					NOT = {
-						estate_territory = {
-						estate = estate_janissary
-						territory = 30
-						}	
-					}
-				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
-					estate_territory = {
-						estate = estate_janissary
-						territory = 30
-						}
-				}
-				add_years_of_income = 1
-			}
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_10
-				influence = -5
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}
-
-#############################################
-####### Recruit from their Domain
-#############################################
-
-	interaction = {
-		name = "Jani_12"
-		icon = 12
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 15
 		
 		trigger = {
 			custom_trigger_tooltip = {
@@ -736,8 +443,395 @@ estate_janissary = {
 		}
 		
 		effect = {
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_8
+				influence = 10
+				duration = 3650
+			}
+			reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_jani = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
+####### Grant Political Influence
+#############################################		
+	
+	interaction = {
+		name = "EINFLUSS_AM_HOF"
+		icon = 1
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = EST_VAL_JANI_INFLUENCE
+				influence = 15
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 15
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = -15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 40
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 55
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Recruit Minister (Artillery Combat)
+#############################################
+
+	interaction = {
+		name = "Jani_10"
+		icon = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 30
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = idea_var_advisor_14
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = idea_var_advisor_14
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_24
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				NOT = { artillery_fraction = 0.25 }
+			}
+			modifier = {
+				factor = 0
+				war_score = -10
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_jani = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
+####### Recruit Minister (Infantry Combat)
+#############################################	
+	
+	interaction = {
+		name = "RECRUIT_MINISTER"
+		icon = 10
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			if = {
+				limit = {
+					monthly_income = 25
+				}
+				define_advisor = {
+					type = idea_var_advisor_12
+					skill = 3
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			if = {
+				limit = { NOT = { monthly_income = 25 } }
+				define_advisor = {
+					type = idea_var_advisor_12
+					skill = 2
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
+					cost_multiplier = 0.5
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = EST_VAL_JANI_MINISTER
+				influence = 15
+				duration = 10950
+			}
+			reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 75
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				war_score = -10
+			}
+			modifier = {
+				factor = 0
+				#check_loyal_without_jani = no
+				NOT = {
+					if = { limit = { has_estate = estate_church			} estate_loyalty = { estate = estate_church			loyalty = 45 } }
+					if = { limit = { has_estate = estate_nobles			} estate_loyalty = { estate = estate_nobles			loyalty = 45 } }
+					if = { limit = { has_estate = estate_burghers		} estate_loyalty = { estate = estate_burghers		loyalty = 45 } }
+					if = { limit = { has_estate = estate_cossacks		} estate_loyalty = { estate = estate_cossacks		loyalty = 45 } }
+					if = { limit = { has_estate = estate_dhimmi			} estate_loyalty = { estate = estate_dhimmi			loyalty = 45 } }
+				   #if = { limit = { has_estate = estate_janissary		} estate_loyalty = { estate = estate_janissary		loyalty = 45 } }
+					if = { limit = { has_estate = estate_nationalist	} estate_loyalty = { estate = estate_nationalist	loyalty = 45 } }
+					if = { limit = { has_estate = estate_jains			} estate_loyalty = { estate = estate_jains			loyalty = 45 } }
+					if = { limit = { has_estate = estate_rajput			} estate_loyalty = { estate = estate_rajput			loyalty = 45 } }
+					if = { limit = { has_estate = estate_brahmins		} estate_loyalty = { estate = estate_brahmins		loyalty = 45 } }
+					if = { limit = { has_estate = estate_maratha		} estate_loyalty = { estate = estate_maratha		loyalty = 45 } }
+					if = { limit = { has_estate = estate_vaisyas		} estate_loyalty = { estate = estate_vaisyas		loyalty = 45 } }
+				}
+			}
+		}
+	}
+
+#############################################
+####### Recruit from their Domain
+#############################################
+
+	interaction = {
+		name = "Jani_12"
+		icon = 12
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+		}
+		
+		effect = {
 			add_country_modifier = {
-				name = "idea_variation_estate_5"
+				name = "idea_variation_estate_1"
 				duration = 3650
 			}
 			add_estate_loyalty = {
@@ -747,54 +841,40 @@ estate_janissary = {
 			add_estate_influence_modifier = {
 				estate = estate_janissary
 				desc = estate_influ_9
-				influence = -10
+				influence = 10
 				duration = 7300
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_janissary
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
+			}
 		}
 	}
-
-#############################################
-####### Confiscation of Lands
-#############################################
-
-	interaction = {
-		name = "Jani_13"
-		icon = 24
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-		}
-		
-		years_between_use = 25
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = -20
-			}
-			add_estate_influence_modifier = {
-				estate = estate_janissary
-				desc = estate_influ_25
-				influence = -25
-				duration = 7300
-			}
-			reduce_loyal_without_jani = yes
-		}
-		
-		ai_will_do = {
-			factor = 0
-					
-		}
-	}	
 
 #############################################
 ####### Ask for Reform Support
@@ -804,14 +884,35 @@ estate_janissary = {
 		name = "Jani_14"
 		icon = 17
 		
+		years_between_use = 20
+		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
-		
-		years_between_use = 15
 		
 		trigger = {
 			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
 		}
 		
 		effect = {
@@ -825,18 +926,499 @@ estate_janissary = {
 				influence = 10
 				duration = 7300
 			}
-			reduce_loyal_without_jani = yes
+			#reduce_loyal_without_jani = yes
 			
 			add_country_modifier = {
 				name = "idea_variation_estate_13"
-				duration = 1825
+				duration = 3650
 			}
 			
 		}
 		
 		ai_will_do = {
-			factor = 0
-					
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_janissary
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_janissary
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
+		}
+	}
+
+#############################################
+####### Donate to the Janissaries
+#############################################		
+
+	interaction = {
+		name = "SPENDE_JANI"
+		icon = 7
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_years_of_income = -0.5
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 1 }
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 60
+				}
+			}
+		}
+	}
+
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Jani_4"
+		icon = 1
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			legitimacy_equivalent = 10
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -3
+			add_devotion = -10
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 85 }
+			}
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Jani_5"
+		icon = 31
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			prestige = 0
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Jani_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+				tooltip = IV_ESTATE_ENDTIER			
+			}
+			NOT = { has_reform_level = 9 }
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 15
+			}
+			#reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_janissary
+					loyalty = 40
+				}
+			}
+		}
+	}
+
+#############################################
+####### Limit Influence 
+#############################################
+
+	interaction = {
+		name = "Jani_2"
+		icon = 24
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			random_list = {
+			33 = { remove_advisor_by_category = ADM }
+			33 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = MIL }
+			}
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_1
+				influence = -10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_janissary
+						influence = 100
+					}
+				}
+			}
+		}
+	}
+
+#############################################
+####### Confiscation of Lands
+#############################################
+
+	interaction = {
+		name = "Jani_13"
+		icon = 24
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_25
+				influence = -25
+				duration = 10950
+			}
+			#reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_janissary
+						influence = 100
+					}
+				}
+			}
+		}
+	}	
+	
+#############################################
+####### Execute Important Person
+#############################################
+
+	interaction = {
+		name = "Jani_3"
+		icon = 20
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+			NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+		   #NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			stability = -2
+			estate_loyalty = {
+				estate = estate_janissary
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_5
+				any_owned_province = {
+					has_estate = estate_janissary
+				}
+			}
+		}
+		
+		effect = {
+			add_stability = -1
+			add_estate_loyalty = {
+				estate = estate_janissary
+				loyalty = -20
+			}
+			add_estate_influence_modifier = {
+				estate = estate_janissary
+				desc = estate_influ_2
+				influence = -20
+				duration = 7300
+			}
+			#reduce_loyal_without_jani = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_janissary
+						influence = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					stability = 3
+				}
+			}
 		}
 	}
 }

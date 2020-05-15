@@ -504,59 +504,6 @@ estate_church =
 #############################################
 	
 #############################################
-####### Make Promises
-#############################################
-
-	interaction = {
-		name = "Chur_6"
-		icon = 17
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 5
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = estate_influ_5
-				influence = 10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_church
-					loyalty = 60
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_church
-					influence = 80
-				}
-			}
-		}
-	}
-	
-#############################################
 ####### Impose a Tax
 #############################################
 
@@ -566,14 +513,32 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
 		
 		trigger = {
-			always = yes
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_1
+				any_owned_province = {
+					has_estate = estate_church
+				}
+			}
 		}
 		
 		effect = {
@@ -587,6 +552,7 @@ estate_church =
 			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 80 } } } add_years_of_income = 0.8 }
 			else_if = { limit = { NOT = { estate_territory = { estate = estate_church	territory = 90 } } } add_years_of_income = 0.9 }
 			else	= {																						 add_years_of_income = 1   }
+			custom_tooltip = this_scales_with_land
 			add_estate_loyalty = {
 				estate = estate_church
 				loyalty = -10
@@ -615,179 +581,6 @@ estate_church =
 	}
 
 #############################################
-####### Send Emissary to Pope
-#############################################	
-
-	interaction = {
-		name = "SEND_EMISSARY_TO_POPE"
-		icon = 14
-		
-		years_between_use = 20
-		
-		potential = {
-			religion = catholic
-			NOT = { tag = PAP }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_papal_influence = 10
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = EST_VAL_EMISSARY_TO_POPE
-				influence = 10
-				duration = 7300
-			}
-		}
-	
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_church
-					influence = 80
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = {
-					has_opinion = {
-						who = PAP
-						value = 100
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = {
-					reverse_has_opinion = {
-						who = PAP
-						value = 100
-					}
-				}
-			}
-		}	
-	}
-
-#############################################
-####### MAKE_GENEROUS_DONATION 
-#############################################
-	
-	interaction = {
-		name = "MAKE_GENEROUS_DONATION"
-		icon = 7
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_years_of_income = -0.25
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 15
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				NOT = { years_of_income = 0.5 }				
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_church
-					loyalty = 60
-				}
-			}			
-		}		
-	}
-	
-#############################################
-####### Seek Support of Clergy
-#############################################	
-	
-	interaction = {
-		name = "SEEK_SUPPORT_OF_CLERGY"
-		icon = 17
-		
-		years_between_use = 20
-		
-		potential = {
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			always = yes
-		}
-		
-		effect = {
-			add_prestige = -5
-			add_legitimacy = -5
-			add_republican_tradition = -3
-			add_devotion = -3
-			add_piety = 0.05
-			if = {
-				limit = { religion = protestant }
-				add_church_power = 10
-			}
-			add_patriarch_authority = 0.05
-			if = {
-				limit = { religion = reformed }
-				add_fervor = 10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = EST_VAL_SOUGHT_SUPPORT
-				influence = 10
-				duration = 7300
-			}
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 15
-			}
-			#reduce_loyal_without_chur = yes	
-		}
-	
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_church
-					loyalty = 60
-				}						
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_church
-					influence = 80
-				}						
-			}			
-		}
-	}
-	
-#############################################
 ####### Demand Administrative Support
 #############################################
 	
@@ -798,12 +591,28 @@ estate_church =
 		years_between_use = 20
 		
 		potential = {
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {		
-			always = yes			
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
+			estate_influence = {
+				estate = estate_church
+				influence = 25
+			}
 		}
 		
 		effect = {
@@ -888,158 +697,28 @@ estate_church =
 	}
 	
 #############################################
-####### Recruit from their Domain
+####### Make Promises
 #############################################
 
 	interaction = {
-		name = "Chur_12"
-		icon = 12
-		
-		years_between_use = 20
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-
-		}
-		
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = tooltip_own_province_estate_1
-				any_owned_province = {
-					has_estate = estate_church
-				}
-			}
-		}
-		
-		effect = {
-			add_country_modifier = {
-				name = "idea_variation_estate_1"
-				duration = 3650
-			}
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = estate_influ_9
-				influence = 10
-				duration = 7300
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				NOT = {
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 50
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_church
-					influence = 80
-				}
-			}
-			modifier = {
-				factor = 0
-				is_at_war = no
-			}
-			modifier = {
-				factor = 0
-				manpower_percentage = 0.25
-			}
-		}
-	}
-
-#############################################
-####### Ask for Reform Support
-#############################################
-
-	interaction = {
-		name = "Chur_14"
+		name = "Chur_6"
 		icon = 17
 		
-		years_between_use = 20
+		years_between_use = 10
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			NOT = { has_country_modifier = idea_variation_estate_13 }
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = estate_influ_26
-				influence = 10
-				duration = 7300
-			}
-			#reduce_loyal_without_chur = yes
-			
-			add_country_modifier = {
-				name = "idea_variation_estate_13"
-				duration = 3650
-			}
-			
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				NOT = {
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 50
-					}
-				}
-			}
-			modifier = {
-				factor = 0
-				estate_influence = {
-					estate = estate_church
-					influence = 80
-				}
-			}
-			modifier = {
-				factor = 0
-				NOT = { government_reform_progress = 90 }
-			}
-		}
-	}
-	
-#############################################
-####### Establist New World Missions
-#############################################
-	
-	interaction = {
-		name = "NEW_WORLD_MISSION"
-		icon = 15
-		
-		years_between_use = 20
-		
-		potential = {
-			has_idea_group = exploration_ideas
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
@@ -1047,144 +726,97 @@ estate_church =
 		}
 		
 		effect = {
-			add_country_modifier = {
-				name = "new_world_missions"
-				duration = 7300
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
 			}
 			add_estate_influence_modifier = {
 				estate = estate_church
-				desc = EST_VAL_NEW_WORLD_MISSION
-				influence = 15
-				duration = 7300
+				desc = estate_influ_5
+				influence = 10
+				duration = 3650
 			}
 		}
 		
 		ai_will_do = {
-			factor = 0 #AI always native coexistence
+			factor = 1
 			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
 			modifier = {
 				factor = 0
 				estate_influence = {
 					estate = estate_church
-					influence = 75
+					influence = 80
 				}
 			}
 		}
 	}
-
+	
 #############################################
-####### Government Interaction 
-#############################################
-
+####### Seek Support of Clergy
+#############################################	
+	
 	interaction = {
-		name = "Chur_1"
+		name = "SEEK_SUPPORT_OF_CLERGY"
 		icon = 17
 		
-		years_between_use = 10
+		years_between_use = 20
 		
 		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
-			has_idea = aristo4
-		}
-		
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_church
-					loyalty = 60
-				}
-			}
-		}
-	}
-
-#############################################
-####### Display Legitimacy
-#############################################
-
-	interaction = {
-		name = "Chur_4"
-		icon = 1
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			legitimacy_equivalent = 50
-		}
-		
-		effect = {
-			add_legitimacy = -10
-			add_republican_tradition = -3
-			add_devotion = -10	
-			add_horde_unity = -10
-			add_meritocracy = -10
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 10
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				estate_loyalty = {
-					estate = estate_church
-					loyalty = 60
-				}
-			}
-		}
-	}
-
-#############################################
-####### Display Prestige
-#############################################
-
-	interaction = {
-		name = "Chur_5"
-		icon = 31
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
+			legitimacy_equivalent = 5
 			prestige = 0
 		}
 		
 		effect = {
-			add_prestige = -10
+			add_prestige = -5
+			add_legitimacy = -5
+			add_republican_tradition = -1.5
+			add_devotion = -5
+			add_horde_unity = -5
+			add_meritocracy = -5
+			add_piety = 0.05
+			if = {
+				limit = { religion = protestant }
+				add_church_power = 10
+			}
+			add_patriarch_authority = 0.05
+			if = {
+				limit = { religion = reformed }
+				add_fervor = 10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = EST_VAL_SOUGHT_SUPPORT
+				influence = 10
+				duration = 7300
+			}
 			add_estate_loyalty = {
 				estate = estate_church
-				loyalty = 10
+				loyalty = 15
 			}
+			#reduce_loyal_without_chur = yes	
 		}
-		
+	
 		ai_will_do = {
 			factor = 1
 			
@@ -1193,64 +825,26 @@ estate_church =
 				estate_loyalty = {
 					estate = estate_church
 					loyalty = 60
-				}
+				}						
 			}
 			modifier = {
 				factor = 0
-				NOT = { prestige = 10 }
-			}
-		}
-	}
-
-#############################################
-####### Pass Reform
-#############################################
-
-	interaction = {
-		name = "Chur_7"
-		icon = 38
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		years_between_use = 10
-		
-		trigger = {
-			government_reform_progress = 20
-			custom_trigger_tooltip = {
-			tooltip = IV_ESTATE_ENDTIER			
-			}
-		}
-		
-		effect = {
-			change_government_reform_progress = -20
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = 15
-			}
-			#reduce_loyal_without_chur = yes
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				government_reform_progress = 40
-			}
-			modifier = {
-				factor = 0
-				estate_loyalty = {
+				estate_influence = {
 					estate = estate_church
-					loyalty = 40
-				}
+					influence = 80
+				}						
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 5 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 80 }
 			}
 		}
 	}
-
+	
 #############################################
 ####### Grant a Favour
 #############################################
@@ -1263,8 +857,17 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
@@ -1320,8 +923,17 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 10
@@ -1396,8 +1008,17 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 30
@@ -1414,9 +1035,9 @@ estate_church =
 				define_advisor = {
 					type = artist
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1425,9 +1046,9 @@ estate_church =
 				define_advisor = {
 					type = artist
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1485,8 +1106,17 @@ estate_church =
 		icon = 10
 		
 		potential = {
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 30
@@ -1503,9 +1133,9 @@ estate_church =
 				define_advisor = {
 					type = theologian
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1514,9 +1144,9 @@ estate_church =
 				define_advisor = {
 					type = theologian
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1573,8 +1203,17 @@ estate_church =
 		icon = 11
 		
 		potential = {
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		years_between_use = 30
@@ -1591,9 +1230,9 @@ estate_church =
 				define_advisor = {
 					type = inquisitor
 					skill = 3
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1602,9 +1241,9 @@ estate_church =
 				define_advisor = {
 					type = inquisitor
 					skill = 2
-					culture = event_target:estate_estate_province
-					religion = event_target:estate_estate_province
-					location = event_target:estate_estate_province
+					culture = ROOT #event_target:estate_estate_province
+					religion = ROOT #event_target:estate_estate_province
+					#location = event_target:estate_estate_province
 					cost_multiplier = 0.5
 				}
 			}
@@ -1653,6 +1292,635 @@ estate_church =
 	}
 
 #############################################
+####### Establist New World Missions
+#############################################
+	
+	interaction = {
+		name = "NEW_WORLD_MISSION"
+		icon = 15
+		
+		years_between_use = 20
+		
+		potential = {
+			has_idea_group = exploration_ideas
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "new_world_missions"
+				duration = 7300
+			}
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = EST_VAL_NEW_WORLD_MISSION
+				influence = 15
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0 #AI always native coexistence
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+		}
+	}
+
+#############################################
+####### Send Emissary to Pope
+#############################################	
+
+	interaction = {
+		name = "SEND_EMISSARY_TO_POPE"
+		icon = 14
+		
+		years_between_use = 20
+		
+		potential = {
+			religion = catholic
+			NOT = { tag = PAP }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_papal_influence = 10
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = EST_VAL_EMISSARY_TO_POPE
+				influence = 10
+				duration = 7300
+			}
+		}
+	
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					has_opinion = {
+						who = PAP
+						value = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					reverse_has_opinion = {
+						who = PAP
+						value = 100
+					}
+				}
+			}
+		}	
+	}
+
+#############################################
+####### Recruit from their Domain
+#############################################
+
+	interaction = {
+		name = "Chur_12"
+		icon = 12
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = tooltip_own_province_estate_1
+				any_owned_province = {
+					has_estate = estate_church
+				}
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "idea_variation_estate_1"
+				duration = 3650
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = estate_influ_9
+				influence = 10
+				duration = 7300
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				is_at_war = no
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.25
+			}
+		}
+	}
+
+#############################################
+####### Ask for Reform Support
+#############################################
+
+	interaction = {
+		name = "Chur_14"
+		icon = 17
+		
+		years_between_use = 20
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			NOT = { has_country_modifier = idea_variation_estate_13 }
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = estate_influ_26
+				influence = 10
+				duration = 7300
+			}
+			#reduce_loyal_without_chur = yes
+			
+			add_country_modifier = {
+				name = "idea_variation_estate_13"
+				duration = 3650
+			}
+			
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 50
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_church
+					influence = 80
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { government_reform_progress = 90 }
+			}
+		}
+	}
+	
+#############################################
+####### MAKE_GENEROUS_DONATION 
+#############################################
+	
+	interaction = {
+		name = "MAKE_GENEROUS_DONATION"
+		icon = 7
+		
+		years_between_use = 10
+		
+		potential = {
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			always = yes
+		}
+		
+		effect = {
+			add_years_of_income = -0.25
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 15
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { years_of_income = 0.5 }				
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}			
+		}		
+	}
+	
+#############################################
+####### Government Interaction 
+#############################################
+
+	interaction = {
+		name = "Chur_1"
+		icon = 17
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			has_idea = aristo4
+		}
+		
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+		}
+	}
+
+#############################################
+####### Display Legitimacy
+#############################################
+
+	interaction = {
+		name = "Chur_4"
+		icon = 1
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			legitimacy_equivalent = 10
+		}
+		
+		effect = {
+			add_legitimacy = -10
+			add_republican_tradition = -3
+			add_devotion = -10
+			add_horde_unity = -10
+			add_meritocracy = -10
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { legitimacy_equivalent = 85 }
+			}
+		}
+	}
+
+#############################################
+####### Display Prestige
+#############################################
+
+	interaction = {
+		name = "Chur_5"
+		icon = 31
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			prestige = 0
+		}
+		
+		effect = {
+			add_prestige = -10
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { prestige = 10 }
+			}
+		}
+	}
+
+#############################################
+####### Pass Reform
+#############################################
+
+	interaction = {
+		name = "Chur_7"
+		icon = 38
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		years_between_use = 10
+		
+		trigger = {
+			government_reform_progress = 20
+			custom_trigger_tooltip = {
+			tooltip = IV_ESTATE_ENDTIER			
+			}
+			NOT = { has_reform_level = 9 }
+		}
+		
+		effect = {
+			change_government_reform_progress = -20
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 15
+			}
+			#reduce_loyal_without_chur = yes
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				government_reform_progress = 40
+			}
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 40
+				}
+			}
+		}
+	}
+
+#############################################
+####### Limit Influence 
+#############################################
+
+	interaction = {
+		name = "Chur_2"
+		icon = 24
+		
+		years_between_use = 10
+		
+		potential = {
+			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
+			NOT = { has_disaster = estate_nobility_disaster }
+			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
+		}
+		
+		trigger = {
+			has_advisor = yes
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
+		}
+		
+		effect = {
+			random_list = {
+			33 = { remove_advisor_by_category = ADM }
+			33 = { remove_advisor_by_category = DIP }
+			33 = { remove_advisor_by_category = MIL }
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			add_estate_influence_modifier = {
+				estate = estate_church
+				desc = estate_influ_1
+				influence = -10
+				duration = 3650
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 100
+					}
+				}
+			}
+		}
+	}
+
+#############################################
 ####### Confiscation of Lands
 #############################################
 
@@ -1664,12 +1932,24 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
-			always = yes
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -1713,12 +1993,25 @@ estate_church =
 		
 		potential = {
 			NOT = { has_global_flag = no_estate_interaction }
+		   #NOT = { has_disaster = estate_church_disaster }
 			NOT = { has_disaster = estate_nobility_disaster }
 			NOT = { has_disaster = estate_burghers_disaster }
+			NOT = { has_disaster = estate_cossacks_disaster }
+			NOT = { has_disaster = estate_dhimmi_disaster }
+			NOT = { has_disaster = janissary_decadence }
+			NOT = { has_disaster = estate_jains_disaster }
+			NOT = { has_disaster = estate_rajput_disaster }
+			NOT = { has_disaster = estate_brahmins_disaster }
+			NOT = { has_disaster = estate_maratha_disaster }
+			NOT = { has_disaster = estate_vaisyas_disaster }
 		}
 		
 		trigger = {
 			stability = -2
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 30
+			}
 		}
 		
 		effect = {
@@ -1752,59 +2045,6 @@ estate_church =
 				factor = 0
 				NOT = {
 					stability = 3
-				}
-			}
-		}
-	}
-	
-#############################################
-####### Limit Influence 
-#############################################
-
-	interaction = {
-		name = "Chur_2"
-		icon = 24
-		
-		years_between_use = 10
-		
-		potential = {
-			NOT = { has_global_flag = no_estate_interaction }
-			NOT = { has_disaster = estate_nobility_disaster }
-			NOT = { has_disaster = estate_burghers_disaster }
-		}
-		
-		trigger = {
-			has_advisor = yes
-		}
-		
-		effect = {
-			random_list = {
-			33 = { remove_advisor_by_category = ADM }
-			33 = { remove_advisor_by_category = DIP }
-			33 = { remove_advisor_by_category = MIL }
-			}
-			add_estate_loyalty = {
-				estate = estate_church
-				loyalty = -10
-			}
-			add_estate_influence_modifier = {
-				estate = estate_church
-				desc = estate_influ_1
-				influence = -10
-				duration = 3650
-			}
-		}
-		
-		ai_will_do = {
-			factor = 1
-			
-			modifier = {
-				factor = 0
-				NOT = {
-					estate_influence = {
-						estate = estate_church
-						influence = 100
-					}
 				}
 			}
 		}
