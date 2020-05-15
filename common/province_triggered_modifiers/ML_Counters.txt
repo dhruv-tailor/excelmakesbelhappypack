@@ -1,89 +1,30 @@
-
-Monthly_Timer_Startup = {
-
-# Whether the triggered modifier is visible in the Province view window
-potential = {
-
+counter_of_institutions = {
+  # Whether the triggered modifier is visible in the Province view window
+  potential = {
+  always =yes
   }
 
-    # Whether the triggered modifier is active
-    trigger = {
+  # Whether the triggered modifier is active
+  trigger = {
       always = yes
   }
+
+  # The modifier to apply when the triggered modifier is active
+  
+  # Province scope
+  # Effects to execute when the triggered modifiers switches to active
   on_activation = {
-    # set counter YearsCounter to count years 
-    log = "Monthly_Timer_Startup"
-    #save the current month in month
-    export_to_variable = {
-      which = month
-      value = trigger_value:is_month
+  # set counter YearsCounter to count years 
+  remove_province_triggered_modifier = counter_of_institutions
+  REB = { 
+    country_event = {
+      id = increase_dev_event.10
+      days = 365
     }
-    if = {
-      limit = {
-        # if the prev month is december 
-        check_variable = {
-          PrevMonth =12
-        }
-      }
-      # set the the prev month to -1 
-      set_variable = {
-        which = PrevMonth
-        value = -1
-      }
-    }
-    log = "Month [This.month.GetValue] [This.PrevMonth.GetValue]"
-    if = {
-      limit = {
-        # check if the current month is higher than the prev one
-        check_variable = {
-          which = month
-          which = PrevMonth
-        } 
-        NOT = {
-          check_variable = {
-            which = PrevMonth
-            which = month
-          } 
-        }
-      } 
-      log = "Its a new month removing the timer"
-      remove_province_triggered_modifier = Monthly_Timer_Startup
-      every_country = {
-        country_event = {
-          id = Monthly_Timer.1
-          days = 0 #should fire on 1 of this month
-        }
-        country_event = {
-          id = Monthly_Timer.2
-          days = 1 #should fire on 2 of this month
-        }
-      }
-      REB = { 
-        if = {
-          limit = {
-            is_month = 1
-            NOT = { is_month = 2 }
-            #limit to the month of febaury
-          }
-          country_event = {
-            id = Monthly_Timer.111
-            days = 27
-          }
-        }
-        else = {
-          country_event = {
-            id = Monthly_Timer.111
-            days = 29 #should fire on 30 of this month
-          }
-        }
-      }
-    }
-      set_variable = {
-        which = PrevMonth
-        which = month
-      }
-      log = "this [This.month.GetValue]"
-    }
+  }
+  }
+  
+  # Effects to execute when the triggered modifiers switches to inactive
   on_deactivation = {
   
   } 

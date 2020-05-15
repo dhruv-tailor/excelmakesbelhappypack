@@ -37,13 +37,13 @@ cb_color_{0} = {{
         NOT = {{
             truce_with = FROM 
         }}
-        FROM = {{ is_neighbor_of = ROOT }}
+        ai = no
+        OR = {{
+{1}
+        }}
         OR = {{
 {2}
         }}
-        FROM = {{ OR = {{ 
-            {2}
-         }} }}
     }}
     
     war_goal = take_border
@@ -133,5 +133,5 @@ for i, v in enumerate(list(GROUPS)):
     output.write("\n\n")
 for itter in range(1,len(list(GROUPS))):
     output.write(""" cb_color_{0}_desc:0 "People have been complaining about Unresolved Margins, Color disputes, Precarious Perimeters and a Chroninc Chromatic Conflict between out nations. It needs to be resolved on the battlefield."
- cb_color_{0}:0 "Misplaced Border"\n""".format(itter))
+ cb_color_{0}:0 "Misplaced Border\n""".format(itter))
 output.close()

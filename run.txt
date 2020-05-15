@@ -1,16 +1,69 @@
-every_country = {    
-        export_to_variable = { #each country income
-            which = numX
-            value = trigger_value:monthly_income
-        }
-		set_variable = {
-			num = 300
-		}
-		if = {
+set_variable = {
+	which = ptPower
+	value = -999
+}
+every_owned_province = {
+	limit = {
+		province_has_center_of_trade_of_level = 1
+		NOT = { province_has_center_of_trade_of_level = 2 }
+	}
+	export_to_variable = {
+		which = ptPower
+		value = trigger_value:province_trade_power
+	}
+	if = {
+		limit = {
 			check_variable = {
-				num = 300
+				which = ptPower
+				which = root
 			}
-			add_prestige = 50
 		}
-		
-    }
+		ROOT = {
+			set_variable = {
+				which = ptPower
+				which = PREV
+			}
+		}
+	}
+}
+if = {
+	limit = {
+		check_variable = {
+			which = ptPower
+			value = 0
+		}
+	}
+	random_owned_province = {
+		limit = {
+			province_has_center_of_trade_of_level = 1
+			NOT = { province_has_center_of_trade_of_level = 2 }
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = ptPower
+					value = trigger_value:province_trade_power
+				}
+				check_variable = {
+					which = ptPower
+					which = root
+				}
+			}
+		}
+		add_center_of_trade_level = 1
+		random_owned_province = {
+			limit = { }
+		}
+		owner = {
+			log = "traseury"
+			set_variable = {
+				which = cost 
+				value = -200
+			}
+			add_power_effect = {
+				variable = cost
+				command = add_treasury
+			}
+			#add_treasury = -200 #center_of_trade_upgrade_cost?
+		}
+	}
+	
+}
