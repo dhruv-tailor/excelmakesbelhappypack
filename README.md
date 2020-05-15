@@ -1,24 +1,24 @@
 # excelmakesbelhappypack
 ## V0.2.7 American Trade
-Trade: Added historical trade node connections in the Americas:
+- Trade: Added historical trade node connections in the Americas:
     - st_lawrence to chesapeake
     - james_bay to north_sea
     - chesapeake to caribbean_trade
     - brazil to caribbean_trade
     - patagonia to lima
     - caribbean_trade to english_channel
-(check changelog.txt for a link to a visualization)
-Estates: The Interactions unlocked via ideas now give just flat 10 loyalty.
-Ideas: Republican no longer gives max absolutism. Replaced with Diplomats +1.
-AI: Will now take up to 5 loans to build regular troops if needed.
-AI: Will now do all vanilla Estate Interactions if needed.
-AI: Adjusted logic in building forts.
-AI: Will evaluate Anglican Faith Aspects better.
-UX: Streamlining of the start_of_game experience.
-UI: Fixed Scrollbar for Macro Builder.
-UI: You can now properly save Army Templates.
-Flavor: New text for rebalanced idea groups. Now with 90% more alliteration.
-Other: A reasonable amount of other minor bug and glitch fixes.
+  (check changelog.txt for a link to a visualization)
+- Estates: The Interactions unlocked via ideas now give just flat 10 loyalty.
+- Ideas: Republican no longer gives max absolutism. Replaced with Diplomats +1.
+- AI: Will now take up to 5 loans to build regular troops if needed.
+- AI: Will now do all vanilla Estate Interactions if needed.
+- AI: Adjusted logic in building forts.
+- AI: Will evaluate Anglican Faith Aspects better.
+- UX: Streamlining of the start_of_game experience.
+- UI: Fixed Scrollbar for Macro Builder.
+- UI: You can now properly save Army Templates.
+- Flavor: New text for rebalanced idea groups. Now with 90% more alliteration.
+- Other: A reasonable amount of other minor bug and glitch fixes.
 ## V0.2.6 Estates
 - AI will now do the Clergy, Nobility, Burghers, Cossacks Estate clicks.
 - Estate Interactions colorcoded based on impact on loyalty and influence.
