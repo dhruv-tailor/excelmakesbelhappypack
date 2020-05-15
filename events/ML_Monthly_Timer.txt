@@ -1,0 +1,76 @@
+namespace = Monthly_Timer
+country_event = { #fired for every country on the 1sth day of the month
+	title = "Monthly event 1" #stratup event 
+	id = Monthly_Timer.1
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		country_event ={
+			id = increase_dev_event.10 #triggers only on jan first
+			days = 0
+		}
+	}
+	option = {
+		
+	}
+}
+
+country_event = { #fired for every country on the 2sth day of the month
+	title = "Monthly event 1" #stratup event 
+	id = Monthly_Timer.2
+	hidden = yes
+	is_triggered_only = yes
+	option = {
+		country_event ={
+			id = increase_dev_event.21 # check if hit point cap
+			days = 0
+		}
+	}
+}
+
+country_event = {
+	title = "Monthly_Timer startup" #stratup event 
+	id = Monthly_Timer.101
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		tag = REB
+	}
+	option = {
+		country_event = {
+			id = Monthly_Timer.111
+			days = 12
+		}
+	}
+}
+country_event = {
+	title = "Monthly_Timer looping" #they looping event
+	id = Monthly_Timer.111
+	hidden = yes
+	is_triggered_only = yes
+	#fire_only_once = yes
+
+	trigger = {
+		tag = REB
+	}
+	
+	immediate = {
+
+	}
+	
+	option = {
+		1326 = {
+			if = {
+				limit = {
+					NOT = { has_province_modifier = Monthly_Timer_Startup }
+				}
+				log = "started Monthly_Timer_Startup in [This.GetName]"
+				export_to_variable = {
+					which = PrevMonth
+					value = trigger_value:is_month
+				  }
+				add_province_triggered_modifier = Monthly_Timer_Startup
+			}
+		}
+	}
+}
