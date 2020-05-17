@@ -1,37 +1,69 @@
-every_country = {    
-        export_to_variable = { #each country income
-            which = numX
-            value = trigger_value:monthly_income
-        }
-    }    
-    log = "startttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt [This.GetName] with [This.numX.GetValue]"
-    every_known_country = {
-        if = {
-            limit = {
-				calc_true_if = {
-					amount = 12
-					all_country = { 
-						ROOT = {
-							knows_country = PREV
-						}
-						monthly_income = PREV
-					}
+set_variable = {
+	which = ptPower
+	value = -999
+}
+every_owned_province = {
+	limit = {
+		province_has_center_of_trade_of_level = 1
+		NOT = { province_has_center_of_trade_of_level = 2 }
+	}
+	export_to_variable = {
+		which = ptPower
+		value = trigger_value:province_trade_power
+	}
+	if = {
+		limit = {
+			check_variable = {
+				which = ptPower
+				which = root
+			}
+		}
+		ROOT = {
+			set_variable = {
+				which = ptPower
+				which = PREV
+			}
+		}
+	}
+}
+if = {
+	limit = {
+		check_variable = {
+			which = ptPower
+			value = 0
+		}
+	}
+	random_owned_province = {
+		limit = {
+			province_has_center_of_trade_of_level = 1
+			NOT = { province_has_center_of_trade_of_level = 2 }
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = ptPower
+					value = trigger_value:province_trade_power
 				}
-				NOT = {
-					calc_true_if = {
-						amount = 13
-						all_country = {
-							ROOT = { 
-								knows_country = PREV
-							}
-							monthly_income = PREV
-						}
-					}
+				check_variable = {
+					which = ptPower
+					which = root
 				}
 			}
-            log = "13th highest known income is [This.GetName] with [This.numX.GetValue]d/mo"
-			save_global_event_target_as = my_country
-        }
-		switch_tag = event_target:my_country
-		
-    }
+		}
+		add_center_of_trade_level = 1
+		random_owned_province = {
+			limit = { }
+		}
+		owner = {
+			log = "traseury"
+			set_variable = {
+				which = cost 
+				value = -200
+			}
+			add_power_effect = {
+				variable = cost
+				command = add_treasury
+			}
+			#add_treasury = -200 #center_of_trade_upgrade_cost?
+		}
+	}
+	
+}

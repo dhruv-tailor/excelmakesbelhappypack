@@ -16,7 +16,7 @@ class IO(object):
 		print(fileName)
 		if not pathlib.Path(fileName).exists():
 			raise FileNotFoundError(fileName)
-		return open(fileNamefileName, encoding= "Cp1252")
+		return open(fileName, encoding= "Cp1252")
 
 	##
 	 # Reads a PDX-script file, reducing it to only the statements therein.
@@ -30,22 +30,23 @@ class IO(object):
 	 # @throws IOException
 	 #/
 	@staticmethod
-	def readFile(filename:str) -> List[str]:
+	def readFile(fileName:str) -> List[str]:
 		lines = []
-		with getANSIReader(fileName) as In:
+		with IO.getANSIReader(fileName) as In:
 			for line in In:
 				line = line.strip()
 				# Get rid of comments
 				commentIndex = line.find('#')
 				if (commentIndex != -1):
 					line = line[0:commentIndex]
-
+				if line == "":
+					continue
 				# Handle brackets
 				line = line.replace("{", "{\n", 1)
 				line = line.replace("}", "\n}\n", 1)
 
 				# Handle multiple actions in one line
-				line = re.sub("([\\w.\"])\\s+(\\w+\\s#[=<>])", "\1\n\2", line)
+				line = re.sub(r"([\\w.\"])\\s+(\\w+\\s#[=<>])", r"\1\n\2", line)
 
 				start = 0
 				end = line.find('\n')
@@ -53,7 +54,7 @@ class IO(object):
 				while True: # Substring and indexOf are used as it is faster than
 						# StringTokenizer or split
 					try:
-						s = line.substring(start, end)
+						s = line[start: end ]
 					except BaseException as error:
 						s = line[start:] # Final part
 					# Get rid of whitespace
@@ -61,7 +62,7 @@ class IO(object):
 					if not (s == ""):
 						lines.append(s)
 					start = end + 1
-					end = line.find('\n', start + 1)
+					end = line.find('\n', start+1)
 					if not (start != 0):
 						break
 				
@@ -87,7 +88,7 @@ class IO(object):
 		with IO.getReader(fileName) as In:
 			for line in In:
 				# Remove all comments
-				line = re.sub("#[^\"]*$", "",line)
+				line = re.sub(r"#[^\"]*$", "",line)
 			
 				line = line.strip()
 				# Remove localisation versioning  irrelevant to the parser
@@ -98,7 +99,7 @@ class IO(object):
 				key = line[0: index].lower()
 				# ":" used as delimiter, so index + 1
 				value = line[index + 1:]
-				value = re.sub("^\"(.*)\"$", "$1", value)
+				value = re.sub(r"^\"(.*)\"$", r"\1", value)
 				Map[key] = value
 
 	##
@@ -111,7 +112,7 @@ class IO(object):
 	 # @throws IOException
 	 #/
 	@staticmethod
-	def readExceptions(filename: str, Map: map) :
+	def readExceptions(fileName: str, Map: map) :
 		with IO.getReader(fileName) as In:
 			for line in In:
 				line = line.strip()
@@ -133,14 +134,14 @@ class IO(object):
 	 # @throws IOException
 	 #/
 	@staticmethod
-	def readLookupRules(filename: str, Map: map) :
+	def readLookupRules(fileName: str, Map: map) :
 		with IO.getReader(fileName) as In:
 			for line in In:
 				line = line.strip()
 				index = line.find(": ")
 				if (index == -1) :
 					continue				
-				value = line.substring[0, index]
+				value = line[0: index]
 				# ": " used as delimiter, so index + 2
 				keys = line[index + 2:].split(", ")
 				for key in keys:
@@ -160,17 +161,17 @@ class IO(object):
 			out.write(string + "\n")
 		out.close()
 	@staticmethod
-	def readHeaders(filename: str, headerList: List[str] , level: int):
-		if not pathlib.Path(filename).exists():
+	def readHeaders(fileName: str, headerList: List[str] , level: int):
+		if not pathlib.Path(fileName).exists():
 			raise Exception(f"file not exist: {filename}")
-		if not pathlib.Path(filename).is_dir():
-			file = readFile(fileName)
+		if not pathlib.Path(fileName).is_dir():
+			file = IO.readFile(fileName)
 		else :
 			paths = list(pathlib.Path(fileName).rglob('*.*'))
 			file = []
 			for path in paths:
 				if not pathlib.Path(path).is_dir():
-					file + + readFile(path)
+					file += IO.readFile(path)
 
 		nesting = 0
 		for line in file:
