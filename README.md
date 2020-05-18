@@ -1,5 +1,21 @@
 # excelmakesbelhappypack
-## V0.2.7 American Trade
+
+## V0.2.7.2 American Trade
+- Trade: Major historical rework of American Trade Nodes finished:
+    - Nodes shifted, restructured and renamed.
+    - Additional connection: Philippines -> Caribbean.
+    - Additional connection: Great Lakes -> Mississippi.
+    - Trade map reworked with path improvements.
+- AI: Hard Mode bonuses now scale with Current Age.
+- AI: Hard Mode bonuses redesigned slightly to be have an impact on more areas.
+- AI: Fierce Negotiators no longer get -10 impact on peace deals bonus.
+- Tech: Tech 30 and 31 grant a new idea group each.
+- Events: 'Sack of X' event no longer happens when unsieging your own cities.
+- Events: 'Sack of X' event now triggers only below 20% professionalism.
+- Features: Decision to grant new subjects the overlord's ideas added.
+- Balance: Raiding and looting impact on devastation lowered.
+- Other: A reasonable amount of other minor bug and glitch fixes.
+## V0.2.7.1 American Trade
 - Trade: Added historical trade node connections in the Americas:
     - st_lawrence to chesapeake
     - james_bay to north_sea
