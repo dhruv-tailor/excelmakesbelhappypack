@@ -488,9 +488,14 @@ ENG_missions_1_3 = {
 				has_country_modifier = expand_navy 
 			}
 			naval_reformer = 1
-			OR = {
-				drydock = 1
-				dock = 1
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+					}
+				}
+				amount = 1
 			}
 		}
         effect = {
@@ -518,13 +523,23 @@ GBR_missions_1_3 = {
         required_missions = { ENG_Royal_Navy }
         position = 24
         trigger = {
-			OR = {
-				drydock = 10
-				dock = 10
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+					}
+				}
+				amount = 10
 			}
-			OR = {
-				shipyard = 10
-				grand_shipyard = 10
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+					}
+				}
+				amount = 10
 			}
 			num_of_heavy_ship = 20
 		}
@@ -543,19 +558,16 @@ GBR_missions_1_3 = {
 		provinces_to_highlight = {
 			province_id = 4373
 			OR = {
-				AND = {
-					NOT = { has_building = shipyard }
-					NOT = { has_building = grand_shipyard }
-				}
+				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
 				NOT = { development = 10 }
 				NOT = { owned_by = ROOT }
 			}
 		}
         trigger = {
 			4373 = {
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
 				}
 				development = 10
 				owned_by = ROOT
@@ -1268,13 +1280,23 @@ ENG_missions_2_3 = {
 			}
 		}
         trigger = {
-			OR = {
-				drydock = 5
-				dock = 5
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+					}
+				}
+				amount = 5
 			}
-			OR = {
-				shipyard = 5
-				grand_shipyard = 5
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+					}
+				}
+				amount = 5
 			}
 			239 = {
 				owned_by = ROOT
@@ -1313,19 +1335,16 @@ GBR_missions_2_3 = {
 		provinces_to_highlight = {
 			province_id = 234
 			OR = {
-				AND = {
-					NOT = { has_building = drydock }
-					NOT = { has_building = dock }
-				}
+				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock } }
 				NOT = { development = 10 }
 				NOT = { owned_by = ROOT }
 			}
 		}
         trigger = {
 			234 = {
-				OR = {
-					has_building = drydock
-					has_building = dock
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+					province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
 				}
 				development = 10
 				owned_by = ROOT
@@ -1826,26 +1845,27 @@ ENG_missions_3_2 = {
 				area = yorkshire_area
 			}
 			province_has_center_of_trade_of_level = 1
-			NOT = { has_building = marketplace }
-			NOT = { has_building = trade_depot }
-			NOT = { has_building = stock_exchange }
+			NOT = { province_has_building_of_group = { group = trade all = yes } }
 		}
-        trigger = {
-			NOT = {
-				any_province = {
-					OR = {
-						area = home_counties_area
-						area = east_midlands_area
-						area = west_midlands_area
-						area = wessex_area
-						area = wales_area
-						area = east_anglia_area
-						area = yorkshire_area
-					}
-					province_has_center_of_trade_of_level = 1
-					NOT = { has_building = marketplace }
-					NOT = { has_building = trade_depot }
-					NOT = { has_building = stock_exchange }
+        # This mission is calling for a Marketplace+ in the provinces in England that have Centers of Trade
+		# A custom tooltip was needed as the double negative made this unreadable
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = mission_market_place_with_asian_traders.t
+				NOT = {
+					any_province = {
+						OR = {
+							area = home_counties_area
+							area = east_midlands_area
+							area = west_midlands_area
+							area = wessex_area
+							area = wales_area
+							area = east_anglia_area
+							area = yorkshire_area
+						}
+						province_has_center_of_trade_of_level = 1
+						NOT = {	province_has_building_of_group = { group = trade all = yes } }
+					}	
 				}
 			}
 		}

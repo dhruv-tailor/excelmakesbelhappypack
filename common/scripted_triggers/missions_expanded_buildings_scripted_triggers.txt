@@ -79,7 +79,7 @@ can_forcelimit_line = {
 
 province_has_building_of_group = {
 	#	"group" that can be checked:
-	#		building groups (trade, government, navy, production, army, taxation, defense, all)
+	#		building groups (trade, government, navy, production, manpower, forcelimit, army, taxation, defense, all)
 	#		-- government does not use universities
 	#
 	#	use "all" to check if the province has any of the group's/sub group's buildings
@@ -111,10 +111,12 @@ province_has_building_of_group = {
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_workshop
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_counting_house
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
-	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_barracks
-	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_training_fields
-	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_regimental_camp
-	#		PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_conscription_center
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_EOMAT_barracks
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_EOMAT_training_fields
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_ALL
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_EOMAT_regimental_camp
+	#		PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_EOMAT_conscription_center
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_temple
 	#		PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
@@ -140,10 +142,12 @@ province_has_building_of_group = {
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_workshop
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_EOMAT_counting_house
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
-	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_barracks
-	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_training_fields
-	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_regimental_camp
-	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_EOMAT_conscription_center
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_EOMAT_barracks
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_MANPOWER_EOMAT_training_fields
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_ALL
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_EOMAT_regimental_camp
+	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_EOMAT_conscription_center
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_temple
 	#		NOT_PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
@@ -407,7 +411,7 @@ province_has_building_of_group = {
 					which = check_$group$_buildings
 					value = 1
 				}
-				check_variable = { check_army_buildings = 1 }
+				check_variable = { check_manpower_buildings = 1 }
 			}
 		}
 		[[all]
@@ -419,9 +423,6 @@ province_has_building_of_group = {
 					has_building = manpower_lvl_1
 					has_building = barracks
 					has_building = training_fields
-					has_building = forcelimit_lvl_1
-					has_building = regimental_camp
-					has_building = conscription_center
 				}
 			}
 		]
@@ -453,7 +454,32 @@ province_has_building_of_group = {
 				}
 				has_building = training_fields
 			}
-			else_if = {
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_forcelimit_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = forcelimit_lvl_1
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
+			}
+		]
+		[[equal_or_more_advanced_than]
+			if = {
 				limit = {
 					variable_arithmetic_trigger = {
 						export_to_variable = {
@@ -470,6 +496,32 @@ province_has_building_of_group = {
 			}
 			else = {
 				has_building = conscription_center
+			}
+		]
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = check_$group$_buildings
+					value = 1
+				}
+				check_variable = { check_army_buildings = 1 }
+			}
+		}
+		[[all]
+			if = {
+				limit = {
+					always = $all$
+				}
+				OR = {
+					has_building = manpower_lvl_1
+					has_building = barracks
+					has_building = training_fields
+					has_building = forcelimit_lvl_1
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
 			}
 		]
 	}
