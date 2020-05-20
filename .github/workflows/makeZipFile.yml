@@ -13,7 +13,6 @@ jobs:
   # This workflow contains a single job called "build"
   zippingThePack:
     env:
-      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -59,8 +58,11 @@ jobs:
           asset_path: ./excelmakesbelhappypack.zip
           asset_name: excelmakesbelhappypack${{ env.RELEASE_VERSION }}-no-grahic.zip
           asset_content_type: application/zip
-    - name: Discord notification
-      uses: Ilshidur/action-discord@master
+
+    DiscordNotification:
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+    - uses: Ilshidur/action-discord@master
       if: startsWith(env.DISCORD_WEBHOOK, 'http')
       with:
         args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released. version {{ env.RELEASE_VERSION }}'
