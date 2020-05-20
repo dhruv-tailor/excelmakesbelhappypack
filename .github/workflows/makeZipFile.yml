@@ -21,7 +21,9 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
+    - run: |
+      cat exclude-list.txt >> exclude.txt
+       rsync -arv --exclude='.git/' --exclude-from=exclude.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
     - name: Zip Folder
       run: |
           zip -r excelmakesbelhappypack.zip ./excelmakesbelhappypack excelmakesbelhappypack.mod
@@ -45,8 +47,8 @@ jobs:
     - run: |
           rm -rf ./excelmakesbelhappypack
           rm -f excelmakesbelhappypack.zip
-          cat exclude-list-no-grahic.txt exclude-list.txt >> exclude
-          rsync -arv --exclude='.git/' --exclude-from=exclude --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
+          cat exclude-list-no-grahic.txt exclude-list.txt > exclude.txt
+          rsync -arv --exclude='.git/' --exclude-from=exclude.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
     - name: Zip Folder
       run: |
           rm -f excelmakesbelhappypack.zip
