@@ -44,4 +44,27 @@ jobs:
           asset_path: ./excelmakesbelhappypack.zip
           asset_name: excelmakesbelhappypack${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
+    - uses: actions/checkout@v2
+      with:
+        ref: 'refs/heads/no-graphic'
+    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.mod' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
+    - name: Zip Folder
+      run: |
+          zip -r excelmakesbelhappypack.zip ./excelmakesbelhappypack excelmakesbelhappypack.mod
+    - name: Upload Release Asset
+      id: upload-release-asset-no-grap 
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./excelmakesbelhappypack.zip
+          asset_name: excelmakesbelhappypack${{ env.RELEASE_VERSION }}-no-grahic.zip
+          asset_content_type: application/zip
+    - name: Discord notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: Ilshidur/action-discord@f2373432ba5105bf3ec960c9aaab6c6427a0ad89
+      with:
+        args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released. version {{ env.RELEASE_VERSION }}'
 
