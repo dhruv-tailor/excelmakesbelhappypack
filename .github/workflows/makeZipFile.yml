@@ -12,6 +12,9 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   zippingThePack:
+    env:
+      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -19,7 +22,7 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.mod' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
+    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
     - name: Zip Folder
       run: |
           zip -r excelmakesbelhappypack.zip ./excelmakesbelhappypack excelmakesbelhappypack.mod
@@ -27,8 +30,6 @@ jobs:
     - name: Create Release
       id: create_release
       uses: actions/create-release@latest
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
@@ -37,34 +38,26 @@ jobs:
     - name: Upload Release Asset
       id: upload-release-asset 
       uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./excelmakesbelhappypack.zip
           asset_name: excelmakesbelhappypack${{ env.RELEASE_VERSION }}.zip
           asset_content_type: application/zip
-    - uses: actions/checkout@v2
-      with:
-        ref: 'refs/heads/no-graphic'
-    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.mod' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
+    - run: rsync -arv --exclude='.git/' --exclude-from=exclude-list.txt --exclude-from=exclude-list-no-grahic.txt --exclude='.gitignore' --exclude='excelmakesbelhappypack.*' --exclude='*.py' --exclude='*.json' . ./excelmakesbelhappypack
     - name: Zip Folder
       run: |
           zip -r excelmakesbelhappypack.zip ./excelmakesbelhappypack excelmakesbelhappypack.mod
     - name: Upload Release Asset
       id: upload-release-asset-no-grap 
       uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./excelmakesbelhappypack.zip
           asset_name: excelmakesbelhappypack${{ env.RELEASE_VERSION }}-no-grahic.zip
           asset_content_type: application/zip
     - name: Discord notification
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      uses: Ilshidur/action-discord@f2373432ba5105bf3ec960c9aaab6c6427a0ad89
+      uses: Ilshidur/action-discord@master
+      if: startsWith(env.DISCORD_WEBHOOK, 'http')
       with:
         args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been released. version {{ env.RELEASE_VERSION }}'
 
