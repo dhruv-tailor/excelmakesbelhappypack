@@ -1,6 +1,10 @@
 
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import argparse , os, re, codecs
 from itertools import islice
+import subprocess
 
 PARSER = argparse.ArgumentParser(description = """
 On a push to this github it will read the reamde.MD and replace the loc file
@@ -36,12 +40,13 @@ def main():
 	filename = ARGS.output_filename.name
 	ARGS.output_filename.close()
 	readme = ARGS.input_filename
+	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,31p'".format(readme.name)
+	output,error = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+	#print(output, error)
 	with codecs.open(filename, "w", "utf-8-sig") as outFile:
 		title = escape(DefaultTitle)
-		head = ''.join(list(islice(readme, 30)))
-		desc = escape(head)
+		desc = escape(str(output))
 		outFile.write(template.format(title, desc))
-		
 		
 	with codecs.open(filename, "r", "utf-8-sig") as file:
 		print(file.read())
