@@ -28,28 +28,32 @@ a_string = "a test \" string \n"
 
 def escape(a_string):
 	"""A custom function that escpaes qoutes and newlines in a string for use in l_english.yml files"""
-	a_string = re.sub("#+(.*)", r"§G\1§!" , a_string)
-	return 	a_string.translate(str.maketrans({"\\":  r"\\", #escape baklashes
+	a_string = re.sub(r"#+([^\n\r]*)", "\u00A7G\\1\u00A7!" , a_string)
+	trans = str.maketrans({"\\":  r"\\", #escape baklashes
 										   "\n":  r"\n", # escape newlines and remvos coulurs
 										   "#":  r"", 
 										   "-":  r"\t", 
-                                          "\"":  "\\\""})) #escape "
+                                          "\"":  "\\\""}) #escape "
+	return a_string.translate(trans)
 	
 
 def main():
 	filename = ARGS.output_filename.name
 	ARGS.output_filename.close()
 	readme = ARGS.input_filename
-	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,31p'".format(readme.name)
-	output,error = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-	#print(output, error)
+	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,10p'".format(readme.name)
+	output, error = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+	output = output.decode("latin-1")
+	#print(output , error)
+	print(escape(output))
 	with codecs.open(filename, "w", "utf-8-sig") as outFile:
 		title = escape(DefaultTitle)
-		desc = escape(str(output))
+		desc = escape(output)
 		outFile.write(template.format(title, desc))
 		
 	with codecs.open(filename, "r", "utf-8-sig") as file:
-		print(file.read())
-
+		#print(file.read())
+		pass
+	print(filename)
 if __name__ == "__main__":
 	main()
