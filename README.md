@@ -1,9 +1,9 @@
 # excelmakesbelhappypack
-### Install instructions:
- Go to  the [Releases](/releases/latest) page and download the latest release.
- Go to %HOMEPATH%\Documents\Paradox Interactive\Europa Universalis IV\mod on your hard drive. The folder named "mod" might not exist if so create it. 
-Then unpack the .zip into the mod folder. 
-Enable the mod in your game launcher and enjoy the game
+### Installation instructions:
+- Go to the [Releases](/releases/latest) page and download the latest release.
+- Go to %HOMEPATH%\Documents\Paradox Interactive\Europa Universalis IV\mod on your hard drive. The folder named "mod" might not exist. If so, create it.
+- Unpack the .zip into the mod folder.
+- Enable the mod in your game launcher and enjoy the game!
 ## Changelog: <!---do not edit this line--->
 ### V0.2.7.2 American Trade
 - Trade: Major historical rework of American Trade Nodes finished:
