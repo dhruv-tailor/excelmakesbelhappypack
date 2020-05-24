@@ -43,7 +43,7 @@ def main():
 	readme = ARGS.input_filename
 	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,{}p'".format(readme.name, line_limit)
 	#this command only runs on system with bash installed
-	output = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+	output , _ = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 	output = output.decode("latin-1")
 	#print(output , error)
 	print(escape(output))
