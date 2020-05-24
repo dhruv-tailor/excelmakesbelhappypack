@@ -24,7 +24,7 @@ template = """l_english:
  ML_desc_of_modpack.1:0 "{1}"
 """.format("{}","{}", os.path.basename(__file__), os.path.basename(ARGS.input_filename.name))
 DefaultTitle = "Excelmakesbelhappypack {} Changelog ".format(ARGS.version) #"The excelmakesbelhappypack: {}".format(ARGS.version)
-line_limit = 31
+line_limit = 37
 
 def escape(a_string):
 	"""A custom function that escpaes qoutes and newlines in a string for use in l_english.yml files"""
