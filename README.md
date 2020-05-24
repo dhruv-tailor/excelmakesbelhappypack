@@ -1,5 +1,8 @@
 # excelmakesbelhappypack
-
+Install instructions: go to  the [Releases](https://github.com/Palakis/obs-websocket/releases) page and downlaod the latest release.
+Go to %HOMEPATH%\Documents\Paradox Interactive\Europa Universalis IV\mod on your hrad drive. The folder named mod might not exist if so create it. 
+Then unpack the .zip into they mod folder.
+Enable the mod in your game launcher and enjoy the game
 ## V0.2.7.2 American Trade
 - Trade: Major historical rework of American Trade Nodes finished:
     - Nodes shifted, restructured and renamed.
