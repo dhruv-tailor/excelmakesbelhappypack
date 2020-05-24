@@ -25,6 +25,7 @@ template = """l_english:
 """.format("{}","{}", os.path.basename(__file__), os.path.basename(ARGS.input_filename.name))
 DefaultTitle = "Excelmakesbelhappypack {} Changelog ".format(ARGS.version) #"The excelmakesbelhappypack: {}".format(ARGS.version)
 a_string = "a test \" string \n"
+line_limit = 31
 
 def escape(a_string):
 	"""A custom function that escpaes qoutes and newlines in a string for use in l_english.yml files"""
@@ -35,13 +36,13 @@ def escape(a_string):
 										   "-":  r"\t", 
                                           "\"":  "\\\""}) #escape "
 	return a_string.translate(trans)
-	
+
 
 def main():
 	filename = ARGS.output_filename.name
 	ARGS.output_filename.close()
 	readme = ARGS.input_filename
-	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,10p'".format(readme.name)
+	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,{}p'".format(readme.name, line_limit)
 	output, error = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 	output = output.decode("latin-1")
 	#print(output , error)
