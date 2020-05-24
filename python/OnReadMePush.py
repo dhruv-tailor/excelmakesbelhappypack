@@ -24,7 +24,6 @@ template = """l_english:
  ML_desc_of_modpack.1:0 "{1}"
 """.format("{}","{}", os.path.basename(__file__), os.path.basename(ARGS.input_filename.name))
 DefaultTitle = "Excelmakesbelhappypack {} Changelog ".format(ARGS.version) #"The excelmakesbelhappypack: {}".format(ARGS.version)
-a_string = "a test \" string \n"
 line_limit = 31
 
 def escape(a_string):
@@ -43,7 +42,8 @@ def main():
 	ARGS.output_filename.close()
 	readme = ARGS.input_filename
 	cmd = r"sed -n '/Changelog/,/endif/p' {} | sed -n '2,{}p'".format(readme.name, line_limit)
-	output, error = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+	#this command only runs on system with bash installed
+	output = subprocess.Popen(cmd, shell=True, executable="/bin/bash", stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 	output = output.decode("latin-1")
 	#print(output , error)
 	print(escape(output))
