@@ -1,6 +1,6 @@
 # excelmakesbelhappypack
 ### Installation instructions:
-- Go to the [Releases](/releases/latest) page and download the latest release.
+- Go to the [Releases](../../releases) page and download the latest release.
 - Go to %HOMEPATH%\Documents\Paradox Interactive\Europa Universalis IV\mod on your hard drive. The folder named "mod" might not exist. If so, create it.
 - Unpack the .zip into the mod folder.
 - Enable the mod in your game launcher and enjoy the game!
