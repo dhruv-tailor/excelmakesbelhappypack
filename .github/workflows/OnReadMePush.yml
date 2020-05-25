@@ -27,14 +27,21 @@ jobs:
       working-directory: python
       #run the python script
     - name: Run pyhton
+      id: pyhton
       working-directory: python
-      run: python OnReadMePush.py --verionNumber $( egrep -om1 "[0-9][0-9\.]+" ../README.md )
+      run: |
+        python OnReadMePush.py --verionNumber $( egrep -om1 "[0-9][0-9\.]+" ../README.md )
+        echo ::set-output name=status::$(git status --porcelain | wc -l  )
     - name: Commit to repository
+      if: contains( steps.pyhton.outputs.status, '1')
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
         git add .
         git commit -am "pushed by Github workflow OnReadMePush.yml using sript python.OnReadMePush.py "
         git push
+    - name: Else
+      if: contains( steps.pyhton.outputs.status, '0')
+      run: echo "::warning file=README.MD::No changes in changelog. "
     env:
       GITHUB_TOKEN: ${{ secrets.github_token }}
