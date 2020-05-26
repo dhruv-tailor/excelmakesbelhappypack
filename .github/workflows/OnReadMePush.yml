@@ -6,12 +6,11 @@ name: README to startup event
 on:
   push:
     paths:
-      - 'README.md'
-    tags-ignore:
-      - '*' #ignore tags pushes   
+      - 'README.md'  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  generate:
+  updateStartupEvent:
+    if: startsWith(github.ref, 'refs/heads')
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -20,11 +19,6 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     - run: git fetch --prune --unshallow
-    - name: 'Get Previous tag'
-      id: previoustag
-      uses: "WyriHaximus/github-action-get-previous-tag@master"
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - uses: actions/setup-python@v1
     - name: Install dependencies for python
       run: |
@@ -33,14 +27,21 @@ jobs:
       working-directory: python
       #run the python script
     - name: Run pyhton
+      id: pyhton
       working-directory: python
-      run: python OnReadMePush.py --verionNumber ${{ steps.previoustag.outputs.tag }}
+      run: |
+        python OnReadMePush.py --verionNumber $( egrep -om1 "[0-9][0-9\.]+" ../README.md )
+        echo ::set-output name=status::$(git status --porcelain | wc -l  )
     - name: Commit to repository
+      if: contains( steps.pyhton.outputs.status, '1')
       run: |
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config user.name "github-actions[bot]"
         git add .
         git commit -am "pushed by Github workflow OnReadMePush.yml using sript python.OnReadMePush.py "
         git push
+    - name: Else
+      if: contains( steps.pyhton.outputs.status, '0')
+      run: echo "::warning file=README.MD::No changes in changelog. "
     env:
       GITHUB_TOKEN: ${{ secrets.github_token }}
