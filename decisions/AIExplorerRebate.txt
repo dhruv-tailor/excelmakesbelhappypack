@@ -1,0 +1,57 @@
+country_decisions = { 
+    explorer_rebate ={
+        major = yes
+        potential = {
+            ai = yes
+            OR = {
+                num_of_conquistadors = 2
+                num_of_admirals = 2
+                num_of_explorers = 2
+            }
+        }
+        allow = {
+            OR = {
+                NOT = { has_country_flag = expRebate }
+                had_country_flag = {
+                    flag = expRebate
+                    days = 365
+                }
+            }
+        }
+        effect = {
+            clr_country_flag = expRebate
+            
+            export_to_variable = { which = numGen value = trigger_value:num_of_generals      }
+			export_to_variable = { which = numCon value = trigger_value:num_of_conquistadors }
+            export_to_variable = { which = numAdm value = trigger_value:num_of_admirals      }
+            export_to_variable = { which = numExp value = trigger_value:num_of_explorers     }
+            export_to_variable = { which = numFLP value = modifier:free_leader_pool          }
+            log = "[Root.GetName] [Root.numGen.GetValue] [Root.numCon.GetValue] [Root.numAdm.GetValue] [Root.numExp.GetValue] [Root.numFLP.GetValue]"
+
+              change_variable = { which = numGen which = numCon }
+              change_variable = { which = numGen which = numAdm }
+              change_variable = { which = numGen which = numExp }
+            subtract_variable = { which = numGen value = 4      } #-4 for each category
+            if = { limit = { is_monarch_leader = yes } subtract_variable = { which = numGen value = 1 } }
+            if = { limit = {    is_heir_leader = yes } subtract_variable = { which = numGen value = 1 } }
+            log = "[Root.GetName]: [Root.numGen.GetValue] - [Root.numFLP.GetValue]"
+            subtract_variable = { which = numFLP which = numGen }
+
+                 if = { limit = { NOT = { check_variable = { which = numFLP value = -4 } } } add_mil_power = 60 log = "60" }
+            else_if = { limit = { NOT = { check_variable = { which = numFLP value = -3 } } } add_mil_power = 48 log = "48" }
+            else_if = { limit = { NOT = { check_variable = { which = numFLP value = -2 } } } add_mil_power = 36 log = "36" }
+            else_if = { limit = { NOT = { check_variable = { which = numFLP value = -1 } } } add_mil_power = 24 log = "24" }
+            else_if = { limit = { NOT = { check_variable = { which = numFLP value =  0 } } } add_mil_power = 12 log = "12" }
+            set_country_flag = expRebate
+        }
+        ai_will_do = {
+            factor = 1
+        }
+    }
+}
+
+#num_of_generals
+#num_of_conquistadors
+#num_of_admirals
+#num_of_explorers
+#free_leader_pool
