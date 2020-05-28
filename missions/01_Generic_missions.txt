@@ -6,13 +6,13 @@ military_missions = { #Series name is displayed over the slot?
 	slot = 2 #ie, second upper left column
 	generic = yes #if a mission without generic = yes wants this slot then it overrides this.
 	ai = no #Can exist under the series itself or within individual missions.
-	potential = {
-		me_unique_missions_also_use_generic_missions = yes
-	} #These are triggers for the entire series
+	#potential = {
+	#	me_unique_missions_also_use_generic_missions = yes ## FLAG UNDEFINED
+	#} #These are triggers for the entire series
 	
 	#missions
 	#1st tier: (they appear in the order scripted here in the interface, all missions within one "series" has an arrow going down to the next one scripted)
-	build_army_mission = { #Localized as reclaim_maine_title and reclaim_maine_desc
+	excelbel_build_army_mission = { #Localized as reclaim_maine_title and reclaim_maine_desc
 		icon = mission_build_up_to_force_limit
 		required_missions = {  } #None
 		trigger = {
@@ -26,9 +26,9 @@ military_missions = { #Series name is displayed over the slot?
 		}
 	}
 	#2nd tier: (second because it is the second mission to be listed)
-	expand_country_mission = {
+	excelbel_expand_country_mission = {
 		icon = mission_conquer_50_development
-		required_missions = { build_army_mission }
+		required_missions = { excelbel_build_army_mission }
 		trigger = { grown_by_development = 50 }
 		effect = {
 			capital_scope = {
@@ -46,9 +46,9 @@ military_missions = { #Series name is displayed over the slot?
 		}
 	}
 	#3d Tier: (not actually scripted as third, it's third as it is the 3rd one in this mission series)
-	conquer_states = {
+	excelbel_conquer_states = {
 		icon = mission_cannons_firing
-		required_missions = { expand_country_mission }
+		required_missions = { excelbel_expand_country_mission }
 		trigger = { grown_by_states = 5 }
 		effect = {
 			add_country_modifier = {
@@ -58,9 +58,9 @@ military_missions = { #Series name is displayed over the slot?
 		}
 	}
 	#4th
-	assemble_an_army = {
+	excelbel_assemble_an_army = {
 		icon = mission_assemble_an_army
-		required_missions = { conquer_states }
+		required_missions = { excelbel_conquer_states }
 		trigger = { army_size = 80 }
 		effect = {
 			add_country_modifier = {
@@ -70,9 +70,9 @@ military_missions = { #Series name is displayed over the slot?
 		}
 	}
 	#5th
-	unite_home_region = {
+	excelbel_unite_home_region = {
 		icon = mission_unite_home_region
-		required_missions = { assemble_an_army }
+		required_missions = { excelbel_assemble_an_army }
 		provinces_to_highlight = {
 			region_for_scope_province = {
 				is_capital_of = ROOT
@@ -106,11 +106,11 @@ diplomatic_missions = {
 	
 	generic = yes
 	
-	potential = {
-	   me_unique_missions_also_use_generic_missions = yes
-	}
+	#potential = {
+	#  me_unique_missions_also_use_generic_missions = yes ## FLAG UNDEFINED
+	#}
 	
-	building_alliances = {
+	excelbel_building_alliances = {
 		icon = mission_alliances
 		required_missions = {  } #none
 		trigger = {
@@ -135,9 +135,9 @@ diplomatic_missions = {
 			}
 		}
 	}
-	have_two_subjects = {
+	excelbel_have_two_subjects = {
 		icon = mission_have_two_subjects
-		required_missions = { building_alliances }
+		required_missions = { excelbel_building_alliances }
 		trigger = { num_of_non_tributary_subjects = 2 }
 		effect = {
 			add_country_modifier = {
@@ -146,9 +146,9 @@ diplomatic_missions = {
 			}
 		}
 	}
-	establish_high_seas_navy = {
+	excelbel_establish_high_seas_navy = {
 		icon = mission_establish_high_seas_navy
-		required_missions = { have_two_subjects }
+		required_missions = { excelbel_have_two_subjects }
 		trigger = { 
 			OR = {
 				num_of_heavy_ship = 10 
@@ -162,9 +162,9 @@ diplomatic_missions = {
 			}
 		}
 	}
-	dominate_home_trade_node = {
+	excelbel_dominate_home_trade_node = {
 		icon = mission_dominate_home_trade_node
-		required_missions = { establish_high_seas_navy }
+		required_missions = { excelbel_establish_high_seas_navy }
 		trigger = {
 			home_trade_node = {
 				trade_share = {
@@ -236,9 +236,9 @@ diplomatic_missions = {
 			}
 		}
 	}
-	trade_company_region_abroad = {
+	excelbel_trade_company_region_abroad = {
 		icon = mission_trade_company_region_abroad
-		required_missions = { dominate_home_trade_node }
+		required_missions = { excelbel_dominate_home_trade_node }
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = trade_company_region_abroad_tooltip
@@ -272,10 +272,10 @@ administrative_missions = {
 	
 	generic = yes
 	
-	potential = {
-	   me_unique_missions_also_use_generic_missions = yes
-	}
-	high_income_mission = {
+	#potential = {
+	#   me_unique_missions_also_use_generic_missions = yes ## FLAG UNDEFINED
+	#}
+	excelbel_high_income_mission = {
 		icon = mission_high_income
 		required_missions = {  } #None
 		trigger = { share_of_starting_income = 1.5 }
@@ -286,12 +286,19 @@ administrative_missions = {
 			}
 		}
 	}
-	build_temples = {
+	excelbel_build_temples = {
 		icon = mission_early_game_buildings
-		required_missions = { high_income_mission }
+		required_missions = { excelbel_high_income_mission }
 		trigger = {
-			temple = 5
-			workshop = 5
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+						province_has_building_of_group = { group = taxation all = yes }
+					}
+				}
+				amount = 5
+			}
 		}
 		effect = {
 			add_adm_power = 50
@@ -301,9 +308,9 @@ administrative_missions = {
 			}
 		}
 	}
-	build_treasury = {
+	excelbel_build_treasury = {
 		icon = mission_war_chest
-		required_missions = { build_temples }
+		required_missions = { excelbel_build_temples }
 		trigger = { treasury = 2000 }
 		effect = {
 			add_country_modifier = {
@@ -312,9 +319,9 @@ administrative_missions = {
 			}
 		}
 	}
-	build_manufactories = {
+	excelbel_build_manufactories = {
 		icon = mission_have_manufactories
-		required_missions = { build_treasury }
+		required_missions = { excelbel_build_treasury }
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
@@ -340,9 +347,9 @@ administrative_missions = {
 			add_years_of_income = 1.5
 		}
 	}
-	imperial_ambition_mission = {
+	excelbel_imperial_ambition_mission = {
 		icon = mission_empire
-		required_missions = { build_manufactories }
+		required_missions = { excelbel_build_manufactories }
 		trigger = {
 			total_development = 1000
 		}
