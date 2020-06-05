@@ -5,6 +5,16 @@
 - Unpack the .zip into the mod folder.
 - Enable the mod in your game launcher and enjoy the game!
 ## Changelog: <!-- do not edit this line!! -->
+### V0.2.7.3 American Trade
+- Development Ideas MTTH modified:
+    - MTTH is tied directly to dev cost modifiers
+    - -50% dev cost is twice as likely to fire 
+    - +100% dev cost is half as likely to fire
+    - Removed MTTH modifiers: prosperity and stability
+- Further minor tweaks to American trade map
+    - Added a Pacific Islands Trade Node, rework of East Asia and Pacific trade nodes
+- All mission triggers now properly use the new mod buildings
+
 ### V0.2.7.2 American Trade
 - Trade: Major historical rework of American Trade Nodes finished:
     - Nodes shifted, restructured and renamed.
