@@ -1,0 +1,41 @@
+#When adding effects directly in on_actions always consider if it would be best to do so through a scripted effect. on_actions with a lot of script in them are harder to get an overview of.
+
+# ROOT = province, FROM = country
+on_trade_good_changed = {
+	hidden_effect = {
+		if = {
+			limit = {
+				ROOT = { trade_goods = silver }
+			}
+			ROOT = {
+				add_permanent_province_modifier = { 
+					name = silver_debuff
+					duration = -1
+					hidden = yes
+				}
+			}
+		}
+		if = {
+			limit = { 
+				ROOT = { 
+					AND = {
+						NOT = { trade_goods = silver }
+						has_province_modifier = silver_debuff
+					}
+				}
+			}
+			remove_province_modifier = silver_debuff
+		}
+		
+		if = {
+			limit = {
+				ROOT = { trade_goods = metalworking }
+				NOT = { has_global_flag = metalworking_start }
+			}
+			ROOT = { province_event = { id = prices_marcin.15 days = 1 } }
+			set_global_flag = metalworking_start
+		}
+
+	}
+}
+

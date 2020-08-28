@@ -1,0 +1,534 @@
+#(Nearly) all scopes are country scope
+#All parameters are optional (but it will not be much of an agenda without some of them...)
+
+# estate_agenda = {
+# 	max_days_active = 100 						#Lets you override the default of 20 years for an agenda
+# 	can_select = { triggers } 					#Conditions for whether the agenda can be offered to you
+# 	provinces_to_highlight = { triggers }		#Conditions for provinces to be highlighted by the agenda. Root = country, this = province.
+# 	selection_weight = {						#Determines how likely (compared to the estate's other agendas) this agenda is to be selected.
+# 		factor = 1.0 									#initial factor will ignore numbers below 1, use a modifier for that!
+# 		modifier = { factor = 10 triggers = yes }
+# 	}
+# 	pre_effect = { effects }					#Effects executed to set up the task (set flags and targets), before it is shown to the player.
+# 	immediate_effect = { effects } 				#Effects executed when the agenda is accepted by the country
+# 	task_requirements = { triggers } 			#Conditions for completing the task successfully
+# 	task_completed_effect = { effects } 		#Effects executed when the agenda is successfully completed
+# 	failing_effect = { effects } 				#Effects executed when the agenda is failed (i.e. when fail_if is true or time runs out)
+# 	fail_if = { triggers } 						#Conditions for when the agenda should be auto-failed
+# 	on_invalid = { effects } 					#Effects executed when the country no longer has that estate or the invalid_trigger is true. Useful for clearing flags, modifiers etc.
+# 	invalid_trigger = { triggers } 				#Conditions for when the agenda should end without it counting as a fail (executing on_invalid rather than failing_effect). Happens by default it the estate giving the agenda is removed.
+# 	modifier = { modifier } 					#Country modifier granted while the agenda is active
+# }
+
+
+estate_ghulams_develop_x = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		any_owned_province = {
+			is_state_core = root
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					check_variable = {
+						which = province_adm_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_adm_var
+					value = 0
+				}
+			}
+			export_to_variable = {
+				which = province_adm_var
+				value = trigger_value:base_tax
+			}
+			change_variable = {
+				which = province_adm_var
+				value = 2
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			base_tax = "province_adm_var"
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		add_years_of_income = 0.3
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_reduce_autonomy = {
+	selection_weight = {
+		factor = 2
+	}
+	can_select = {
+		any_owned_province = {
+			is_state_core = ROOT
+			local_autonomy = 25
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				local_autonomy = 25
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					check_variable = {
+						which = province_autonomy_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_autonomy_var
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					local_autonomy = 75
+				}
+				change_variable = {
+					which = province_autonomy_var
+					value = 3
+				}
+			}
+			else_if = {
+				limit = {
+					local_autonomy = 50
+				}
+				change_variable = {
+					which = province_autonomy_var
+					value = 2
+				}
+			}
+			else = {
+				change_variable = {
+					which = province_autonomy_var
+					value = 1
+				}
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+	task_requirements = {
+		event_target:agenda_province = {
+			if = { 
+				limit = {
+					check_variable = { which = province_autonomy_var value = 3 }
+				}
+				NOT = { local_autonomy = 75 }
+			}
+			else_if = { 
+				limit = {
+					check_variable = { which = province_autonomy_var value = 2 }
+				}
+				NOT = { local_autonomy = 50 }
+			}
+			else = {
+				NOT = { local_autonomy = 1 }
+			}
+		}
+	}
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			add_base_tax = 1
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_increase_absolutism = {
+	selection_weight = {
+		factor = 5
+	}
+	can_select = {
+		absolutism = 1
+		NOT = { absolutism = 75 }
+	}
+	pre_effect = {
+		export_to_variable = {
+			which = max_absolutism_var
+			value = trigger_value:absolutism
+		}
+		change_variable = {
+			which = max_absolutism_var
+			value = 10
+		}
+	}
+	provinces_to_highlight = {
+	}
+	fail_if = {
+	}
+    task_requirements = {
+		absolutism = max_absolutism_var
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		add_stability = 1
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_build_courthouse = {
+	selection_weight = {
+		factor = 2
+	}
+	can_select = {
+		adm_tech = 8
+		any_owned_province = {
+			is_state_core = ROOT
+			NOT = { has_building = courthouse }
+			NOT = { has_building = town_hall  }
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				NOT = { has_building = courthouse }
+				NOT = { has_building = town_hall  }
+			}
+			save_event_target_as = agenda_province
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			has_building = courthouse
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		if = { 
+			limit = {
+				absolutism = 1
+			}
+			add_absolutism = 5
+		}
+		else = {
+			event_target:agenda_province = {
+				add_province_modifier = {
+					name = "GE_Ghulams_Estate_Brought_Justice"
+					duration = 3650
+				}
+			}
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_diversify_court = {
+	selection_weight = {
+		factor = 10
+	}
+	can_select = {
+		any_owned_province = {
+			OR = {
+				culture = armenian
+				culture = georgian
+			}
+		}
+		NOT = {
+			OR = {
+				employed_advisor = {
+					culture = armenian
+				}
+				employed_advisor = {
+					culture = georgian
+				}
+			}
+		}
+	}
+	pre_effect = {
+	}
+	provinces_to_highlight = {
+	}
+	fail_if = {
+	}
+    task_requirements = {
+		OR = {
+			employed_advisor = {
+				culture = armenian
+			}
+			employed_advisor = {
+				culture = georgian
+			}
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		add_country_modifier = {
+			name = "GE_Ghulams_Estate_Ghulam_Advisors"
+			duration = 3650
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -10
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_expand_artillery = {
+	selection_weight = {
+		factor = 10
+		modifier = {
+			factor = 10
+			NOT = {
+				num_of_artillery = 1
+			}
+		}
+	}
+	can_select = {
+		mil_tech = 7
+		NOT = {
+			artillery_fraction = 0.3
+		}
+	}
+	pre_effect = {
+		ROOT = {
+			if = {
+				limit = {
+					check_variable = {
+						which = army_arty_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = army_arty_var
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					land_forcelimit = 100
+				}
+				change_variable = {
+					which = army_arty_var
+					value = 3
+				}
+			}
+			else_if = {
+				limit = {
+					land_forcelimit = 50
+				}
+				change_variable = {
+					which = army_arty_var
+					value = 2
+				}
+			}
+			else = {
+				change_variable = {
+					which = army_arty_var
+					value = 1
+				}
+			}
+		}
+	}
+	immediate_effect = {
+	}
+	on_invalid = {
+	}
+	provinces_to_highlight = {
+	}
+	task_requirements = {
+		if = { 
+			limit = {
+				check_variable = { which = army_arty_var value = 3 }
+			}
+			artillery_fraction = 0.3
+		}
+		else_if = { 
+			limit = {
+				check_variable = { which = army_arty_var value = 2 }
+			}
+			artillery_fraction = 0.2
+		}
+		else = { 
+			limit = {
+				check_variable = { which = army_arty_var value = 1 }
+			}
+			artillery_fraction = 0.1
+		}
+	}
+	fail_if = {
+		NOT = { always = yes }
+	}
+	task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		add_country_modifier = {
+			name = GE_Ghulams_Estate_New_Cannons
+			duration = 3650
+		}
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_ghulams_restore_order = {
+	selection_weight = {
+		factor = 10
+	}
+	can_select = {
+		num_of_rebel_armies = 1
+		num_of_rebel_controlled_provinces = 1
+	}
+	pre_effect = {
+	}
+	immediate_effect = {
+	}
+	on_invalid = {
+	}
+	provinces_to_highlight = {
+	}
+	task_requirements = {
+		NOT = { num_of_rebel_armies = 1 }
+		NOT = { num_of_rebel_controlled_provinces = 1 }	
+	}
+	fail_if = {
+		NOT = { always = yes }
+	}
+	task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_ghulams
+			loyalty = 10
+		}
+		add_ruler_modifier = {
+			name = GE_Ghulams_Estate_Order_Restored
+			duration = 3650
+		}
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_ghulams
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}

@@ -1,0 +1,2708 @@
+namespace = elections
+
+# Election!
+country_event = {
+	id = 700
+	title = "EVTNAME700"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	desc = {
+		trigger = {
+			NOT = { has_ruler_flag = leader_has_been_pushed_out }
+			NOT = { has_country_flag = caretaker_revolutionary_government }
+		}
+		desc = EVTDESC700
+	}
+	
+	desc = {
+		trigger = { has_ruler_flag = leader_has_been_pushed_out }
+		desc = elections.700.d
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = { 
+					OR = {
+						has_government_attribute = enable_factional_elections 
+						has_government_attribute = enables_veche_parties
+					}
+				}
+				if = {
+					limit = { has_ruler_flag = adm_ruler }
+					random_list = {
+						30 = { set_ruler_flag = adm_2_dev }
+						30 = { set_ruler_flag = adm_2_tax }
+						30 = { set_ruler_flag = adm_2_pope }
+						10 = { set_ruler_flag = rul_2_stab }
+					}
+				}
+				if = {
+					limit = { has_ruler_flag = dip_ruler }
+					random_list = {
+						30 = { set_ruler_flag = dip_2_merc }
+						30 = { set_ruler_flag = dip_2_trade }
+						30 = { set_ruler_flag = dip_2_ship }
+						10 = { set_ruler_flag = rul_2_stab }
+					}
+				}
+				if = {
+					limit = { has_ruler_flag = mil_ruler }
+					random_list = {
+						30 = { set_ruler_flag = mil_2_army }
+						30 = { set_ruler_flag = mil_2_leader }
+						30 = { set_ruler_flag = mil_2_main }
+						10 = { set_ruler_flag = rul_2_stab }
+					}
+				}
+				random_list = {
+					33 = { set_country_flag = adm_advisor }
+					33 = { set_country_flag = adm_stabcost }
+					33 = { set_country_flag = adm_pope }
+				}
+				random_list = {
+					33 = { set_country_flag = dip_trade }
+					33 = { set_country_flag = dip_invest }
+					33 = { set_country_flag = dip_gold }
+				}
+				random_list = {
+					33 = { set_country_flag = mil_army }
+					33 = { set_country_flag = mil_republic }
+					33 = { set_country_flag = mil_infantry }
+				}
+				if = {
+					limit = { 
+						NOT = {
+							OR = { 
+								has_ruler_flag = adm_ruler
+								has_ruler_flag = dip_ruler
+								has_ruler_flag = mil_ruler
+							}
+						}
+					}
+					random_list = {
+						10 = { set_ruler_flag = adm_ruler }
+						10 = { set_ruler_flag = dip_ruler }
+						10 = { set_ruler_flag = mil_ruler }
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_government_attribute = enables_sforza
+				}
+				random_list = {
+					20 = { set_country_flag = sforza_1 }
+					20 = { set_country_flag = sforza_2 }
+					20 = { set_country_flag = sforza_3 }
+					20 = { set_country_flag = sforza_4 }
+					20 = { set_country_flag = sforza_5 }
+				}
+			}
+		}
+	}
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_states_general_mechanic = yes }
+		NOT = { has_government_attribute = lottery_election }
+		NOT = { has_reform = pirate_republic_reform }
+		NOT = { has_reform = american_government }
+		NOT = { has_government_attribute = enables_elective_monarchy }
+		NOT = { has_reform = military_dictatorship_reform }
+		NOT = { has_reform = admiralty_reform }
+		NOT = { has_reform = prussian_republic_reform }
+		NOT = { has_disaster =  bonfire_of_the_vanities_disaster }
+		if = {
+			limit = {
+				has_country_flag = caretaker_revolutionary_government
+			}
+			republican_tradition = 50
+		}
+	}
+
+	after = {
+		clr_country_flag = caretaker_revolutionary_government
+	}
+
+	option = {
+		name = "EVTOPTA700"	# Current ruler stays
+		trigger = {
+			has_regency = no
+			NOT = { has_ruler_flag = leader_has_been_pushed_out }
+		}
+		ai_chance = { 
+			factor = 60
+			modifier = {
+				factor = 0
+				NOT = { republican_tradition = 25 }
+			}	
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 50 }
+			}				
+			modifier = {
+				factor = 0.5
+				NOT = { republican_tradition = 75 }
+			}	
+			modifier = {
+				factor = 2.0
+				republican_tradition = 90
+			}		
+		}
+		custom_tooltip = remains_ruler
+		add_absolutism = 2.5
+		if = {
+			limit = {
+				has_government_attribute = enables_demedici
+			}
+			random_list = {
+				10 = {
+					change_adm = 1
+					add_adm_power = 75
+				}
+				10 = {
+					change_dip = 1
+					add_dip_power = 75
+				}
+				10 = {
+					change_mil = 1
+					add_mil_power = 75
+				}
+			}
+		}
+		else = {
+			change_adm = 1
+			change_dip = 1
+			change_mil = 1
+		}
+		if = {
+			limit = {
+				has_government_attribute = enables_absolute_reelection
+			}
+			add_absolutism = 2
+		}
+		if = {
+			limit = { 
+				is_tribal = yes
+				government = republic
+				NOT = { has_dlc = "Dharma" }
+				NOT = { republican_tradition = 20 }	
+			}	
+			set_legacy_government = tribal_despotism_legacy
+		}
+		else_if = {
+			limit = {
+				is_tribal = no 
+				government = republic
+				NOT = { republican_tradition = 20 }				
+				NOT = { is_revolutionary_republic_trigger = yes }
+				has_dlc = "Res Publica"
+			}
+			add_government_reform = presidential_despot_reform	
+		}
+		else_if = {
+			limit = {
+				government = republic
+				NOT = { republican_tradition = 20 }	
+				is_revolutionary_republic_trigger = yes
+			}
+			change_government_to_monarchy = yes
+			add_government_reform = revolutionary_empire_reform
+		}
+		if = {
+			limit = {
+				is_tribal = no  
+				government = republic
+				NOT = { republican_tradition = 20 }
+				NOT = { has_dlc = "Res Publica" }
+			}
+			change_government_to_monarchy = yes
+			#set_legacy_government = despotic_monarchy
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_ruler_flag
+				adm_2_dev = {
+					add_ruler_modifier = {
+						name = "Adm_2_Dev"
+						duration = 3650
+					}
+				}
+				adm_2_tax = {
+					add_ruler_modifier = {
+						name = "Adm_2_Tax"
+						duration = 3650
+					}
+				}
+				adm_2_pope = {
+					add_papal_influence = 10
+					add_church_power = 15
+					add_fervor = 20
+				}
+				dip_2_merc = {
+					add_mercantilism = 1
+				}
+				dip_2_trade = {
+					add_ruler_modifier = {
+						name = "Dip_2_Trade"
+						duration = 3650
+					}
+				}
+				dip_2_ship = {
+					add_ruler_modifier = {
+						name = "Dip_2_Ship"
+						duration = 3650
+					}
+				}
+				mil_2_army = {
+					add_army_tradition = 10
+				}
+				mil_2_main = {
+					add_ruler_modifier = {
+						name = "Mil_2_Main"
+						duration = 3650
+					}
+				}
+				mil_2_leader = {
+					add_ruler_modifier = {
+						name = "Mil_2_Leader"
+						duration = 3650
+					}
+				}
+				rul_2_stab = {
+					add_stability = 1
+				}
+			}
+			
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_ruler_flag
+				adm_2_dev = {
+					add_ruler_modifier = {
+						name = "VP_Core"
+						duration = 3650
+					}
+				}
+				adm_2_tax = {
+					add_ruler_modifier = {
+						name = "VP_Missionary"
+						duration = 3650
+					}
+				}
+				adm_2_pope = {
+					add_patriarch_authority = 0.05
+				}
+				dip_2_merc = {
+					add_ruler_modifier = {
+						name = "VP_Merchant"
+						duration = 3650
+					}
+				}
+				dip_2_trade = {
+					add_ruler_modifier = {
+						name = "VP_Goods"
+						duration = 3650
+					}
+				}
+				dip_2_ship = {
+					add_ruler_modifier = {
+						name = "VP_Trade_power"
+						duration = 3650
+					}
+				}
+				mil_2_army = {
+					add_ruler_modifier = {
+						name = "VP_Warscore"
+						duration = 3650
+					}
+				}
+				mil_2_main = {
+					add_ruler_modifier = {
+						name = "VP_YOS"
+						duration = 3650
+					}
+				}
+				mil_2_leader = {
+					add_ruler_modifier = {
+						name = "VP_AE"
+						duration = 3650
+					}
+				}
+			}
+			
+		}
+		if = {
+			limit = {
+				has_country_flag = strengthened_signoria_flag
+			}
+			custom_tooltip = strengthened_signoria_election_tt
+			clr_country_flag = strengthened_signoria_flag
+		}
+		else = {
+			add_scaled_republican_tradition = -10
+		}
+		random_list = {
+			10 = {
+				add_adm_power = 50
+			}
+			10 = {
+				add_dip_power = 50
+			}
+			10 = {
+				add_mil_power = 50
+			}
+		}
+		add_karma = -5
+	}
+	option = {
+		name = "EVTOPTB700"	# An administrator type
+		ai_chance = { factor = 20 }
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = -1
+				adm = 1
+				dip = -1
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				mil = 1
+				adm = 4
+				dip = 1
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = 1
+				adm = 4
+				dip = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = enables_princes_of_novogorod
+			}
+			define_advisor = {
+				type = army_organiser 
+				skill = 2
+				cost_multiplier = 0.50
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_guilds 
+			}
+			add_faction_influence = {
+				faction = mr_guilds
+				influence = 20
+			}				
+		}
+		add_karma = 10
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "Adm_Advisor"
+						duration = -1
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "Adm_Stabcost"
+						duration = -1
+					}
+				}
+				adm_pope = {
+					add_papal_influence = 10
+					add_church_power = 15
+					add_fervor = 20
+				}
+			}
+			set_ruler_flag = adm_ruler
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "VP_Tax"
+						duration = -1
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "VP_Pious"
+						duration = -1
+					}
+				}
+				adm_pope = {
+					add_patriarch_authority = 0.05
+				}
+			}
+			set_ruler_flag = adm_ruler
+		}
+	}
+	
+	option = {
+		name = "EVTOPTC700"	# A diplomat
+		ai_chance = { factor = 20 }
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = -1
+				adm = -1
+				dip = 1			
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				dip = 4
+				adm = 1
+				mil = 1					
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				dip = 4
+				adm = 1
+				mil = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = enables_princes_of_novogorod
+			}
+			create_admiral = { tradition = 50 }
+		}
+		if = {
+			limit = { 
+				has_faction = mr_traders 
+			}
+			add_faction_influence = {
+				faction = mr_traders
+				influence = 20
+			}				
+		}
+		add_karma = 10		
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "Dip_Trade"
+						duration = -1
+					}
+				}
+				dip_gold = {
+					add_years_of_income = 0.4
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "Dip_Invest"
+						duration = -1
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "VP_Production"
+						duration = -1
+					}
+				}
+				dip_gold = {
+					add_ruler_modifier = {
+						name = "VP_Trade"
+						duration = -1
+					}
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "VP_Diprep"
+						duration = -1
+					}
+				}
+			}
+		}
+		set_ruler_flag = dip_ruler
+	}
+	option = {
+		name = "EVTOPTD700"	# A military man
+		ai_chance = { factor = 20 }
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = 1
+				adm = -1
+				dip = -1		
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				mil = 4
+				adm = 1
+				dip = 1					
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = 4
+				adm = 1
+				dip = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = enables_princes_of_novogorod
+			}
+			create_general = { tradition = 50 }
+		}
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 20
+			}				
+		}
+		add_karma = 10
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "Mil_Tradition"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_republican_tradition = 3
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "Mil_Infantry"
+						duration = -1
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "VP_Claims"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_ruler_modifier = {
+						name = "VP_Boyar"
+						duration = -1
+					}
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "VP_Endurance"
+						duration = -1
+					}
+				}
+			}
+		}
+		set_ruler_flag = mil_ruler
+	}
+
+	option = { # Nepotism choice, re-electing within dynasty
+		name = "EVTOPTE700"
+		trigger = {
+			has_government_attribute = enables_nepotism
+		}
+		ai_chance = { factor = 10 }
+		if = {
+			limit = {
+				has_country_flag = strengthened_signoria_flag
+			}
+			custom_tooltip = strengthened_signoria_election_tt
+			clr_country_flag = strengthened_signoria_flag
+		}
+		else = {
+			add_scaled_republican_tradition = -4
+		}
+		if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				NOT = { has_reform = signoria_reform }
+			}
+			define_ruler = {
+				mil = -2
+				adm = -2
+				dip = -2
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				has_reform = signoria_reform
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { has_reform = signoria_reform }
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = -2
+				adm = -2
+				dip = -2
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+			}
+		}
+		if = {
+			limit = {
+				has_government_attribute = enables_princes_of_novogorod
+			}
+			create_general = { tradition = 50 }
+		}
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 10
+			}				
+		}
+		hidden_effect = {
+			if = {
+				limit = { 
+					OR = {
+						has_government_attribute = enable_factional_elections 
+						 has_government_attribute = enables_veche_parties 
+					}
+				}
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	option = { # Nepotism choice, de'Medici
+		name = "EVTOPTF700"
+		trigger = {
+			has_government_attribute = enables_demedici
+		}
+		ai_chance = { factor = 10 }
+		add_scaled_republican_tradition = -5
+
+		define_ruler = {
+			min_age = 40
+			max_age = 50
+			dynasty = "de' Medici"
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_government_attribute = enable_factional_elections }
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	
+	option = { # dictator #Sforza 
+		name = "EVTOPTG700"
+		trigger = {
+			has_government_attribute = enables_sforza
+		}
+		ai_chance = { factor = 100 }
+		add_republican_tradition = -25
+
+		define_ruler = {
+			mil = 2
+			min_age = 30
+			max_age = 50
+		}
+		add_ruler_modifier = {
+			name = "Sforza_Lifetime"
+			duration = -1
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_1
+			}
+			define_ruler_to_general = {
+				fire = 3
+				shock = 4
+				manuever = 3
+				siege = 1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_2
+			}
+			define_ruler_to_general = {
+				fire = 4
+				shock = 2
+				manuever = 1
+				siege = 3
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_3
+			}
+			define_ruler_to_general = {
+				fire = 2
+				shock = 2
+				manuever = 6
+				siege = 2
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_4
+			}
+			define_ruler_to_general = {
+				fire = 5
+				shock = 3
+				manuever = 1
+				siege = 1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_5
+			}
+			define_ruler_to_general = {
+				fire = 5
+				shock = 4
+				manuever = 1
+				siege = 1
+			}
+		}
+	}
+
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTH700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 3
+			DIP = 3
+			MIL = 3
+			fixed = yes
+			culture = georgian
+		}
+		add_ruler_modifier = {
+			name = "Georgian_Ruler" #-25% State Maintenance, +1 Diprep
+			duration = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_government_attribute = enable_factional_elections }
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTI700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 2
+			DIP = 5
+			MIL = 2
+			fixed = yes
+			culture = circassian
+		}
+		add_ruler_modifier = {
+			name = "Circassian_Ruler" #25% Improve Relations
+			duration = -1
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "Dip_Trade"
+						duration = -1
+					}
+				}
+				dip_gold = {
+					add_years_of_income = 0.4
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "Dip_Invest"
+						duration = -1
+					}
+				}
+			}
+			set_ruler_flag = dip_ruler
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTJ700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 2
+			DIP = 2
+			MIL = 5
+			fixed = yes
+			culture = dagestani
+		}
+		add_ruler_modifier = {
+			name = "Dagestani_Ruler" #20% Force Limit
+			duration = -1
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "Mil_Tradition"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_republican_tradition = 3
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "Mil_Infantry"
+						duration = -1
+					}
+				}
+			}
+			set_ruler_flag = mil_ruler
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTK700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 5
+			DIP = 2
+			MIL = 2
+			fixed = yes
+			culture = armenian
+		}
+		if = {
+			limit = { religion_group = christian }
+			add_ruler_modifier = {
+				name = "Armenian_Zealous_Ruler" #+1 Tolerance of the True Faith
+				duration = -1
+			}
+		}
+		if = {
+			limit = { NOT = { religion_group = christian } }
+			add_ruler_modifier = {
+				name = "Armenian_Tolerant_Ruler" #+1 Tolerance of Heretics and Heathens
+				duration = -1
+			}
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "Adm_Advisor"
+						duration = -1
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "Adm_Stabcost"
+						duration = -1
+					}
+				}
+				adm_pope = {
+					add_papal_influence = 10
+					add_church_power = 15
+					add_fervor = 20
+				}
+			}
+			set_ruler_flag = adm_ruler
+		}
+	}
+	
+	after = {
+		clr_country_flag = adm_advisor
+		clr_country_flag = adm_pope
+		clr_country_flag = adm_stabcost
+		clr_country_flag = dip_invest
+		clr_country_flag = dip_trade
+		clr_country_flag = dip_gold
+		clr_country_flag = mil_republic
+		clr_country_flag = mil_infantry
+		clr_country_flag = mil_army
+		clr_ruler_flag = adm_2_dev
+		clr_ruler_flag = adm_2_pope
+		clr_ruler_flag = adm_2_tax
+		clr_ruler_flag = dip_2_merc
+		clr_ruler_flag = dip_2_ship
+		clr_ruler_flag = dip_2_trade
+		clr_ruler_flag = mil_2_army
+		clr_ruler_flag = mil_2_leader
+		clr_ruler_flag = mil_2_main
+		clr_ruler_flag = rul_2_stab
+		clr_country_flag = sforza_1
+		clr_country_flag = sforza_2
+		clr_country_flag = sforza_3
+		clr_country_flag = sforza_4
+		clr_country_flag = sforza_5
+	}
+}
+
+# Election!
+country_event = {
+	id = 701
+	title = "EVTNAME700"
+	desc = "EVTDESC701"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_states_general_mechanic = yes }
+		NOT = { has_government_attribute = lottery_election }
+		NOT = { has_reform = pirate_republic_reform }
+		NOT = { has_reform = american_government }
+		NOT = { has_government_attribute = enables_elective_monarchy }
+		NOT = { has_reform = military_dictatorship_reform }
+		NOT = { has_reform = admiralty_reform }
+		NOT = { has_reform = prussian_republic_reform }
+		NOT = { has_disaster =  bonfire_of_the_vanities_disaster }
+		NOT = { has_country_modifier = just_had_revolution_bringing_someone_to_power_timer }
+		if = {
+			limit = {
+				has_reform = junior_revolutionary_republic_reform
+				has_country_flag = caretaker_revolutionary_government
+			}
+			republican_tradition = 50
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = { 
+					OR = {
+						has_government_attribute = enable_factional_elections 
+						has_government_attribute = enables_veche_parties
+					}
+				}
+				random_list = {
+					33 = { set_country_flag = adm_advisor }
+					33 = { set_country_flag = adm_stabcost }
+					33 = { set_country_flag = adm_pope }
+				}
+				random_list = {
+					33 = { set_country_flag = dip_trade }
+					33 = { set_country_flag = dip_invest }
+					33 = { set_country_flag = dip_gold }
+				}
+				random_list = {
+					33 = { set_country_flag = mil_army }
+					33 = { set_country_flag = mil_republic }
+					33 = { set_country_flag = mil_infantry }
+				}
+			}
+			if = {
+				limit = {
+					has_government_attribute = enables_sforza
+				}
+				random_list = {
+					20 = { set_country_flag = sforza_1 }
+					20 = { set_country_flag = sforza_2 }
+					20 = { set_country_flag = sforza_3 }
+					20 = { set_country_flag = sforza_4 }
+					20 = { set_country_flag = sforza_5 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "EVTOPTB700"	# An administrator type
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		ai_chance = { factor = 40 }
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = -1
+				adm = 1
+				dip = -1
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				mil = 1
+				adm = 4
+				dip = 1					
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = 1
+				adm = 4
+				dip = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_guilds 
+			}
+			add_faction_influence = {
+				faction = mr_guilds
+				influence = 20
+			}				
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "Adm_Advisor"
+						duration = 1825
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "Adm_Stabcost"
+						duration = 1825
+					}
+				}
+				adm_pope = {
+					add_papal_influence = 10
+					add_church_power = 15
+					add_fervor = 20
+				}
+			}
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "VP_Tax"
+						duration = -1
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "VP_Pious"
+						duration = -1
+					}
+				}
+				adm_pope = {
+					add_patriarch_authority = 0.05
+				}
+			}
+		}
+		set_ruler_flag = adm_ruler
+	}
+	option = {
+		name = "EVTOPTC700"	# A diplomat
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		ai_chance = { factor = 30 }
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = -1
+				adm = -1
+				dip = 1			
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				dip = 4
+				adm = 1
+				mil = 1					
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				dip = 4
+				adm = 1
+				mil = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_traders 
+			}
+			add_faction_influence = {
+				faction = mr_traders
+				influence = 20
+			}				
+		}	
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "Dip_Trade"
+						duration = 1825
+					}
+				}
+				dip_gold = {
+					add_years_of_income = 0.4
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "Dip_Invest"
+						duration = 1825
+					}
+				}
+			}
+			set_ruler_flag = dip_ruler
+			
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "VP_Production"
+						duration = -1
+					}
+				}
+				dip_gold = {
+					add_ruler_modifier = {
+						name = "VP_Trade"
+						duration = -1
+					}
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "VP_Diprep"
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "EVTOPTD700"	# A military man
+		trigger = {
+			NOT = { has_government_attribute = enables_caucasus_candidates }
+		}
+		ai_chance = { factor = 30 }
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			define_ruler = {
+				mil = 1
+				adm = -1
+				dip = -1		
+				min_age = 40
+				max_age = 60
+			}
+		}
+		else_if = {
+			limit = { republic_with_female_rulers_trigger = yes }
+			define_ruler = {
+				mil = 4
+				adm = 1
+				dip = 1					
+				fixed = yes
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = 4
+				adm = 1
+				dip = 1					
+				fixed = yes
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 20
+			}				
+		}		
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "Mil_Tradition"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_republican_tradition = 3
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "Mil_Infantry"
+						duration = 1825
+					}
+				}
+			}
+			
+			
+		}
+		if = {
+			limit = { has_government_attribute = enables_veche_parties }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "VP_Claims"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_ruler_modifier = {
+						name = "VP_Boyar"
+						duration = -1
+					}
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "VP_Endurance"
+						duration = -1
+					}
+				}
+			}
+		}
+		set_ruler_flag = mil_ruler
+	}
+	option = { # Nepotism choice, re-electing within dynasty
+		name = "EVTOPTE700"
+		trigger = {
+			has_government_attribute = enables_nepotism
+			NOT = { has_reform = demedici_dynasty_reform }
+		}
+		ai_chance = { factor = 10 }
+		if = {
+			limit = {
+				has_country_flag = strengthened_signoria_flag
+			}
+			custom_tooltip = strengthened_signoria_election_tt
+			clr_country_flag = strengthened_signoria_flag
+		}
+		else = {
+			add_scaled_republican_tradition = -4
+		}
+		if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				NOT = { has_reform = signoria_reform }
+			}
+			define_ruler = {
+				mil = -2
+				adm = -2
+				dip = -2
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				has_reform = signoria_reform
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { 
+				has_reform = signoria_reform
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else = {
+			define_ruler = {
+				mil = -2
+				adm = -2
+				dip = -2
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 10
+			}				
+		}
+		hidden_effect = {
+			if = {
+				limit = { 
+					OR = {
+						has_government_attribute = enable_factional_elections 
+						 has_government_attribute = enables_veche_parties 
+					}
+				}
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	option = { # Nepotism choice, de'Medici
+		name = "EVTOPTF700"
+		trigger = {
+			has_government_attribute = enables_demedici
+		}
+		ai_chance = { factor = 10 }
+		add_scaled_republican_tradition = -5
+
+		define_ruler = {
+			min_age = 40
+			max_age = 50
+			dynasty = "de' Medici"
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_government_attribute = enable_factional_elections }
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	option = { # dictator #Sforza 
+		name = "EVTOPTG700"
+		trigger = {
+			has_government_attribute = enables_sforza
+		}
+		ai_chance = { factor = 100 }
+		add_republican_tradition = -20
+
+		define_ruler = {
+			mil = 2
+			min_age = 30
+			max_age = 50
+		}
+		add_ruler_modifier = {
+			name = "Sforza_Lifetime"
+			duration = -1
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_1
+			}
+			define_ruler_to_general = {
+				fire = 3
+				shock = 4
+				manuever = 3
+				siege = 1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_2
+			}
+			define_ruler_to_general = {
+				fire = 4
+				shock = 2
+				manuever = 1
+				siege = 3
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_3
+			}
+			define_ruler_to_general = {
+				fire = 2
+				shock = 2
+				manuever = 6
+				siege = 2
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_4
+			}
+			define_ruler_to_general = {
+				fire = 5
+				shock = 3
+				manuever = 1
+				siege = 1
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = sforza_5
+			}
+			define_ruler_to_general = {
+				fire = 5
+				shock = 4
+				manuever = 1
+				siege = 1
+			}
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTH700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 3
+			DIP = 3
+			MIL = 3
+			fixed = yes
+			culture = georgian
+		}
+		add_ruler_modifier = {
+			name = "Georgian_Ruler" #-25% State Maintenance, +1 Diprep
+			duration = -1
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_government_attribute = enable_factional_elections }
+				random_list = {
+					10 = { set_ruler_flag = adm_ruler }
+					10 = { set_ruler_flag = dip_ruler }
+					10 = { set_ruler_flag = mil_ruler }
+				}
+			}
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTI700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 2
+			DIP = 5
+			MIL = 2
+			fixed = yes
+			culture = circassian
+		}
+		add_ruler_modifier = {
+			name = "Circassian_Ruler" #25% Improve Relations
+			duration = -1
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				dip_trade = {
+					add_ruler_modifier = {
+						name = "Dip_Trade"
+						duration = -1
+					}
+				}
+				dip_gold = {
+					add_years_of_income = 0.4
+				}
+				dip_invest = {
+					add_ruler_modifier = {
+						name = "Dip_Invest"
+						duration = -1
+					}
+				}
+			}
+			set_ruler_flag = dip_ruler
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTJ700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 2
+			DIP = 2
+			MIL = 5
+			fixed = yes
+			culture = dagestani
+		}
+		add_ruler_modifier = {
+			name = "Dagestani_Ruler" #20% Force Limit
+			duration = -1
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				mil_army = {
+					add_ruler_modifier = {
+						name = "Mil_Tradition"
+						duration = -1
+					}
+				}
+				mil_republic = {
+					add_republican_tradition = 3
+				}
+				mil_infantry = {
+					add_ruler_modifier = {
+						name = "Mil_Infantry"
+						duration = -1
+					}
+				}
+			}
+			set_ruler_flag = mil_ruler
+		}
+	}
+	
+	option = { #Caucasus Elections
+		name = "EVTOPTK700"
+		trigger = {
+			has_government_attribute = enables_caucasus_candidates
+		}
+		ai_chance = { factor = 10 }
+
+		define_ruler = {
+			min_age = 30
+			max_age = 50
+			ADM = 5
+			DIP = 2
+			MIL = 2
+			fixed = yes
+			culture = armenian
+		}
+		if = {
+			limit = { religion_group = christian }
+			add_ruler_modifier = {
+				name = "Armenian_Zealous_Ruler" #+1 Tolerance of the True Faith
+				duration = -1
+			}
+		}
+		if = {
+			limit = { NOT = { religion_group = christian } }
+			add_ruler_modifier = {
+				name = "Armenian_Tolerant_Ruler" #+1 Tolerance of Heretics and Heathens
+				duration = -1
+			}
+		}
+		if = {
+			limit = { has_government_attribute = enable_factional_elections }
+			trigger_switch = {
+				on_trigger = has_country_flag
+				adm_advisor = {
+					add_ruler_modifier = {
+						name = "Adm_Advisor"
+						duration = -1
+					}
+				}
+				adm_stabcost = {
+					add_ruler_modifier = {
+						name = "Adm_Stabcost"
+						duration = -1
+					}
+				}
+				adm_pope = {
+					add_papal_influence = 10
+					add_church_power = 15
+					add_fervor = 20
+				}
+			}
+			set_ruler_flag = adm_ruler
+		}
+	}
+	
+	after = {
+		clr_country_flag = adm_advisor
+		clr_country_flag = adm_pope
+		clr_country_flag = adm_stabcost
+		clr_country_flag = dip_invest
+		clr_country_flag = dip_trade
+		clr_country_flag = dip_gold
+		clr_country_flag = mil_republic
+		clr_country_flag = mil_infantry
+		clr_country_flag = mil_army
+		clr_ruler_flag = adm_2_dev
+		clr_ruler_flag = adm_2_pope
+		clr_ruler_flag = adm_2_tax
+		clr_ruler_flag = dip_2_merc
+		clr_ruler_flag = dip_2_ship
+		clr_ruler_flag = dip_2_trade
+		clr_ruler_flag = mil_2_army
+		clr_ruler_flag = mil_2_leader
+		clr_ruler_flag = mil_2_main
+		clr_ruler_flag = rul_2_stab
+		clr_country_flag = sforza_1
+		clr_country_flag = sforza_2
+		clr_country_flag = sforza_3
+		clr_country_flag = sforza_4
+		clr_country_flag = sforza_5
+	}
+	
+}
+
+
+########################################
+# Colonial Nations                     #
+########################################
+
+# Election!
+country_event = {
+	id = elections.707
+	title = "elections.EVTNAME707"
+	desc = "elections.EVTDESC707"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "elections.EVTOPTB707"	# Bureaucrat Candidate
+		ai_chance = { factor = 20 }
+		FROM = {
+			define_ruler = {
+				adm = 4
+				mil = 2
+				dip = 2
+				fixed = yes
+			}
+			set_ruler_flag = appointed_by_overlord
+		}
+	}
+	option = {
+		name = "elections.EVTOPTC707"	# Diplomat Candidate
+		ai_chance = { factor = 20 }
+		FROM = {
+			define_ruler = {
+				adm = 2
+				dip = 4
+				mil = 2
+				fixed = yes
+			}
+			set_ruler_flag = appointed_by_overlord
+		}
+	}
+	option = {
+		name = "elections.EVTOPTD707"	# Military Candidate
+		ai_chance = { factor = 20 }
+		FROM = {
+			define_ruler = {
+				adm = 2
+				dip = 2
+				mil = 4
+				fixed = yes
+			}	
+			set_ruler_flag = appointed_by_overlord
+		}
+	}
+}
+
+# Colonial Assembly
+country_event = {
+	id = elections.711
+	title = "elections.EVTNAME711"
+	desc = "elections.EVTDESC711"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+
+	option = {
+		name = "elections.EVTOPTB711"	# Suspicious indeed...
+		tooltip = {
+			FROM = {
+				add_liberty_desire = 10
+			}
+		}
+	}
+}
+
+## Winds of Liberty
+#country_event = {
+#	id = elections.712
+#	title = "elections.EVTNAME712"
+#	desc = "elections.EVTDESC712"
+#	picture = ELECTION_REPUBLICAN_eventPicture
+#	
+#	is_triggered_only = yes
+#
+#	option = {
+#		name = "elections.EVTOPTB712"	# Most worrisome...
+#		tooltip = {
+#			FROM = {
+#				add_liberty_desire = -25
+#			}
+#		}
+#	}
+#}
+
+country_event = {
+	id = elections.7001
+	title = "elections.EVTNAME7001"
+
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	desc = {
+		trigger = { NOT = { has_ruler_flag = second_term } }
+		desc = "elections.EVTDESCB7001"
+	}
+	
+	desc = {
+		trigger = { has_ruler_flag = second_term }
+		desc = "elections.EVTDESCA7001"
+	}
+	
+	trigger = {
+		has_reform = american_government
+	}
+
+	option = {
+		name = "elections.EVTOPTA7001"	
+		
+		trigger = { NOT = { has_ruler_flag = second_term } }
+		
+		ai_chance = { factor = 60 }
+		custom_tooltip = remains_ruler
+		set_ruler_flag = second_term
+		if = {
+			limit = {
+				has_ruler_flag = federalist_in_office
+			}
+			add_faction_influence = {
+				faction = GE_federalists
+				influence = 5
+			}
+		}
+		if = {
+			limit = {
+				has_ruler_flag = republican_in_office
+			}
+			add_faction_influence = {
+				faction = GE_republicans
+				influence = 5
+			}
+		}
+		republican_tradition = -10
+	}
+	
+	option = {
+		name = "elections.EVTOPTB7001"	
+		ai_chance = { factor = 20 }
+			define_ruler = {
+				
+			}
+		add_faction_influence = {
+			faction = GE_federalists
+			influence = 10
+		}
+		set_ruler_flag = federalist_in_office
+	}
+	option = {
+		name = "elections.EVTOPTC7001"	
+		ai_chance = { factor = 20 }
+			define_ruler = {
+				
+			}
+		add_faction_influence = {
+			faction = GE_republicans
+			influence = 10
+		}
+		set_ruler_flag = republican_in_office
+	}
+}
+
+country_event = {
+	id = elections.7002
+	title = "elections.EVTNAME7001"
+	desc = "EVTDESC701"
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_reform = american_government
+	}
+	
+	option = {
+		name = "elections.EVTOPTB7001"	
+		ai_chance = { factor = 20 }
+			define_ruler = {
+				
+			}
+		add_faction_influence = {
+			faction = GE_federalists
+			influence = 10
+		}
+		set_ruler_flag = federalist_in_office
+	}
+	option = {
+		name = "elections.EVTOPTC7001"	
+		ai_chance = { factor = 20 }
+			define_ruler = {
+				
+			}
+		add_faction_influence = {
+			faction = GE_republicans
+			influence = 10
+		}
+		set_ruler_flag = republican_in_office
+	}
+}
+	
+# Dutch Republic
+country_event = {
+	id = elections.720
+	title = elections.720.t
+	desc = {
+		trigger = { has_reform = dutch_republic }
+		desc = elections.720.da
+	}
+	
+	desc = {
+		trigger = { has_reform = monastic_elections_reform }
+		desc = elections.720.dc
+	}
+	
+	desc = {
+		trigger = { has_reform = feuillant_reform }
+		desc = elections.720.de
+	}
+	
+	desc = {
+		trigger = { 
+			NOT = { has_reform = dutch_republic } 
+			NOT = { has_reform = crown_of_saint_wenceslaus }
+		}
+		desc = elections.720.db
+	}
+	
+	desc = {
+		trigger = {	has_reform = crown_of_saint_wenceslaus }
+		desc = elections.721.dc	
+	}
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_states_general_mechanic = yes
+		NOT = { has_reform = empire_of_japan_reform }
+		NOT = { has_government_attribute = enables_roman_empire }
+		OR = {
+			is_lesser_in_union = no
+			is_statists_in_power = yes
+		}
+	}
+	
+	option = {
+		name = elections.720.a
+		trigger = { 
+			NOT = { has_reform = monastic_elections_reform }
+			NOT = { has_reform = feuillant_reform }
+		}
+		define_ruler = {
+		}
+		change_statists_vs_orangists = -0.33
+	
+	}
+	
+	option = {
+		trigger = { has_reform = feuillant_reform }
+		name = elections.720.g
+		define_ruler = {
+		}
+		add_faction_influence = {
+			faction = rr_jacobins
+			influence = 20
+		}
+		change_statists_vs_orangists = -0.33
+	}
+	
+	option = {
+		trigger = { has_reform = feuillant_reform }
+		name = elections.720.h
+		define_ruler = {
+		}
+		add_faction_influence = {
+			faction = rr_girondists
+			influence = 20
+		}
+		change_statists_vs_orangists = -0.33
+	}
+	
+	option = {
+		trigger = { has_reform = dutch_republic }
+		name = elections.720.b
+		define_ruler = {
+			dynasty = "van Oranje"
+		}
+		change_statists_vs_orangists = 0.33
+	}
+
+	option = {
+		trigger = { 
+			NOT = { 
+				OR = { 
+					has_reform = dutch_republic 
+					has_reform = monastic_elections_reform 
+				} 
+			} 
+		}
+		name = elections.720.c
+		if = {
+			limit = {
+				has_reform = feuillant_reform
+				tag = FRA
+			}
+			define_ruler = {
+				dynasty = "Bonaparte"
+			}
+		}
+		else_if = {
+			limit = {
+				has_reform = feuillant_reform
+				NOT = { tag = FRA }
+			}
+			define_ruler = {
+			}
+		}
+		else = {
+			define_ruler = {
+				dynasty = historic_dynasty # Will pick one weighted by how many rulers a family has had
+			}
+		}
+		if = {
+			limit = {
+				has_reform = feuillant_reform
+			}
+			add_faction_influence = {
+				faction = rr_royalists
+				influence = 20
+			}
+		}
+		change_statists_vs_orangists = 0.33
+	}
+	
+	option = {
+		name = elections.720.e
+		trigger = { has_reform = monastic_elections_reform }
+		define_ruler = {
+		}
+		change_statists_vs_orangists = -0.33
+	}
+
+	option = {
+		trigger = { has_reform = monastic_elections_reform }
+		name = elections.720.f
+		define_ruler = {
+		}
+		change_statists_vs_orangists = 0.33
+	}
+}
+
+country_event = {
+	id = elections.721
+	title = elections.720.t
+	desc = {
+		trigger = { has_reform = dutch_republic }
+		desc = elections.721.da
+	}
+	
+	desc = {
+		trigger = { has_reform = monastic_elections_reform }
+		desc = elections.721.dc
+	}
+	
+	desc = {
+		trigger = { has_reform = feuillant_reform }
+		desc = elections.721.de
+	}
+	
+	desc = {
+		trigger = { NOT = { has_reform = dutch_republic } }
+		desc = elections.721.db
+	}
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_states_general_mechanic = yes
+		NOT = { has_reform = empire_of_japan_reform }
+		NOT = { has_government_attribute = enables_roman_empire }
+		OR = {
+			is_lesser_in_union = no
+			is_statists_in_power = yes
+		}
+	}
+	
+	option = {
+		name = elections.720.a
+		trigger = { 
+			NOT = { has_reform = monastic_elections_reform }
+			NOT = { has_reform = feuillant_reform }
+		}
+		define_ruler = {
+		}
+		change_statists_vs_orangists = -0.33
+	
+	}
+	
+	option = {
+		trigger = { has_reform = feuillant_reform }
+		name = elections.720.g
+		define_ruler = {
+		}
+		add_faction_influence = {
+			faction = rr_jacobins
+			influence = 20
+		}
+		change_statists_vs_orangists = -0.33
+	}
+	
+	option = {
+		trigger = { has_reform = feuillant_reform }
+		name = elections.720.h
+		define_ruler = {
+		}
+		add_faction_influence = {
+			faction = rr_girondists
+			influence = 20
+		}
+		change_statists_vs_orangists = -0.33
+	}
+	
+	option = {
+		trigger = { has_reform = dutch_republic }
+		name = elections.720.b
+		define_ruler = {
+			dynasty = "van Oranje"
+		}
+		change_statists_vs_orangists = 0.33
+	}
+
+	option = {
+		trigger = { 
+			NOT = { 
+				OR = { 
+					has_reform = dutch_republic 
+					has_reform = monastic_elections_reform 
+				} 
+			} 
+		}
+		name = elections.720.c
+		if = {
+			limit = {
+				has_reform = feuillant_reform
+				tag = FRA
+			}
+			define_ruler = {
+				dynasty = "Bonaparte"
+			}
+		}
+		else_if = {
+			limit = {
+				has_reform = feuillant_reform
+				NOT = { tag = FRA }
+			}
+			define_ruler = {
+			}
+		}
+		else = {
+			define_ruler = {
+				dynasty = historic_dynasty # Will pick one weighted by how many rulers a family has had
+			}
+		}
+		if = {
+			limit = {
+				has_reform = feuillant_reform
+			}
+			add_faction_influence = {
+				faction = rr_royalists
+				influence = 20
+			}
+		}
+		change_statists_vs_orangists = 0.33
+	}
+	
+	option = {
+		name = elections.720.e
+		trigger = { has_reform = monastic_elections_reform }
+		define_ruler = {
+		}
+		change_statists_vs_orangists = -0.33
+	}
+
+	option = {
+		trigger = { has_reform = monastic_elections_reform }
+		name = elections.720.f
+		define_ruler = {
+		}
+		change_statists_vs_orangists = 0.33
+	}
+}
+
+# Lottery Election by Daniel Tolman
+country_event = {
+	id = elections.800
+	title = elections.800.t
+	desc = elections.800.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		has_government_attribute = lottery_election
+		NOT = { has_disaster =  bonfire_of_the_vanities_disaster }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					NOT = { has_country_flag = ven_new_promissione_ducale }
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_a_@ROOT
+					random_gender = yes
+					min_age = 50
+					max_age = 75
+					adm = 2
+					dip = -1
+					mil = -1
+					option = 0
+				}
+			}
+			else_if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_a_@ROOT
+					random_gender = yes
+					min_age = 50
+					max_age = 75
+					adm = 3
+					dip = -1
+					mil = -1
+					option = 0
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { republic_with_female_rulers_trigger = yes }
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_a_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = 3
+					dip = -1
+					mil = -1
+					option = 0
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_a_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = 2
+					dip = -1
+					mil = -1
+					option = 0
+				}
+			}
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					NOT = { has_country_flag = ven_new_promissione_ducale }
+				}
+				
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = 2
+					mil = -1
+					random_gender = yes
+					option = 1
+				}
+			}
+			else_if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					random_gender = yes
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = 3
+					mil = -1
+					option = 0
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { republic_with_female_rulers_trigger = yes }
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = 3
+					mil = -1
+					option = 0
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_b_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = 2
+					mil = -1
+					option = 1
+				}
+			}
+			if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					NOT = { has_country_flag = ven_new_promissione_ducale }
+				}
+				
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = -1
+					mil = 2
+					random_gender = yes
+					option = 2
+				}
+			}
+			else_if = {
+				limit = {
+					republic_with_female_rulers_trigger = yes
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					random_gender = yes
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = -1
+					mil = 3
+					option = 0
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { republic_with_female_rulers_trigger = yes }
+					has_country_flag = ven_new_promissione_ducale
+				}
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = -1
+					mil = 3
+					option = 0
+				}
+			}
+			else = {
+				define_exiled_ruler = {
+					exiled_as = lottery_candidate_c_@ROOT
+					min_age = 50
+					max_age = 75
+					adm = -1
+					dip = -1
+					mil = 2
+					option = 2
+				}
+			}
+		}
+	}
+	
+	after = {
+		clear_exiled_ruler = lottery_candidate_a_@ROOT
+		clear_exiled_ruler = lottery_candidate_b_@ROOT
+		clear_exiled_ruler = lottery_candidate_c_@ROOT
+	}
+	
+	option = {
+		name = elections.800.a
+		ai_chance = {
+			factor = 0
+		}
+		set_ruler = lottery_candidate_a_@ROOT
+		add_republican_tradition = -25
+		if = {
+			limit = { 
+				has_faction = mr_guilds 
+			}
+			add_faction_influence = {
+				faction = mr_guilds
+				influence = 20
+			}				
+		}
+		custom_tooltip = lottery_candidate_bonus_one
+	}
+	option = {
+		name = elections.800.b
+		ai_chance = {
+			factor = 0
+		}
+		set_ruler = lottery_candidate_b_@ROOT
+		add_republican_tradition = -25
+		if = {
+			limit = { 
+				has_faction = mr_traders 
+			}
+			add_faction_influence = {
+				faction = mr_traders
+				influence = 20
+			}				
+		}
+		custom_tooltip = lottery_candidate_bonus_one
+	}
+	option = {
+		name = elections.800.c
+		ai_chance = {
+			factor = 0
+		}
+		set_ruler = lottery_candidate_c_@ROOT
+		add_republican_tradition = -25
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 20
+			}				
+		}
+		custom_tooltip = lottery_candidate_bonus_one
+	}
+	option = { # lottery
+		name = elections.800.da
+		ai_chance = {
+			factor = 90
+		}
+		random_list = {
+			33 = { 
+				set_ruler = lottery_candidate_a_@ROOT 
+				if = {
+					limit = { 
+						has_faction = mr_guilds 
+					}
+					add_faction_influence = {
+						faction = mr_guilds
+						influence = 20
+					}				
+				}
+				if = {
+					limit = { 
+						has_faction = rr_jacobins 
+					}
+					add_faction_influence = {
+						faction = rr_jacobins
+						influence = 20
+					}				
+				}
+			}
+			33 = { 
+				set_ruler = lottery_candidate_b_@ROOT 
+				if = {
+					limit = { 
+						has_faction = mr_traders 
+					}
+					add_faction_influence = {
+						faction = mr_traders
+						influence = 20
+					}				
+				}
+				if = {
+					limit = { 
+						has_faction = rr_royalists 
+					}
+					add_faction_influence = {
+						faction = rr_royalists
+						influence = 20
+					}				
+				}
+			}
+			33 = { 
+				set_ruler = lottery_candidate_c_@ROOT 
+				if = {
+					limit = { 
+						has_faction = mr_aristocrats 
+					}
+					add_faction_influence = {
+						faction = mr_aristocrats
+						influence = 20
+					}				
+				}
+				if = {
+					limit = { 
+						has_faction = rr_girondists 
+					}
+					add_faction_influence = {
+						faction = rr_girondists
+						influence = 20
+					}				
+				}
+			}
+		}
+		custom_tooltip = lottery_candidate_bonus_plural
+	}
+	option = { # nepotism
+		name = elections.800.e
+		trigger = {
+			has_government_attribute = enables_nepotism
+		}
+		ai_chance = { factor = 10 }
+		if = {
+			limit = {
+				has_country_flag = strengthened_signoria_flag
+			}
+			custom_tooltip = strengthened_signoria_election_tt
+			clr_country_flag = strengthened_signoria_flag
+		}
+		else = {
+			add_republican_tradition = -15
+		}
+		if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				NOT = { has_reform = signoria_reform }
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				mil = -1
+				adm = -1
+				dip = -1
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { 
+				republic_with_female_rulers_trigger = yes
+				has_reform = signoria_reform
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+				random_gender = yes # Allows random gender for republics
+			}
+		}
+		else_if = {
+			limit = { 
+				NOT = { republic_with_female_rulers_trigger = yes }
+				has_reform = signoria_reform
+			}
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				name = "lastname"
+			}
+		}
+		else = {
+			define_ruler = {
+				min_age = 30
+				max_age = 50
+				mil = -1
+				adm = -1
+				dip = -1
+				name = "lastname"
+			}
+		}
+		if = {
+			limit = { 
+				has_faction = mr_aristocrats 
+			}
+			add_faction_influence = {
+				faction = mr_aristocrats
+				influence = 10
+			}				
+		}
+	}
+	option = { # Nepotism choice, de'Medici
+		name = "EVTOPTF800f"
+		trigger = {
+			has_reform = demedici_dynasty_reform 
+		}
+		ai_chance = { factor = 10 }
+		add_republican_tradition = -15
+
+		define_ruler = {
+			mil = 0
+			adm = 0
+			dip = 0
+			min_age = 45
+			max_age = 55
+			dynasty = "de' Medici"
+		}
+	}
+}

@@ -1,0 +1,732 @@
+#(Nearly) all scopes are country scope
+#All parameters are optional (but it will not be much of an agenda without some of them...)
+
+# estate_agenda = {
+# 	max_days_active = 100 						#Lets you override the default of 20 years for an agenda
+# 	can_select = { triggers } 					#Conditions for whether the agenda can be offered to you
+# 	provinces_to_highlight = { triggers }		#Conditions for provinces to be highlighted by the agenda. Root = country, this = province.
+# 	selection_weight = {						#Determines how likely (compared to the estate's other agendas) this agenda is to be selected.
+# 		factor = 1.0 									#initial factor will ignore numbers below 1, use a modifier for that!
+# 		modifier = { factor = 10 triggers = yes }
+# 	}
+# 	pre_effect = { effects }					#Effects executed to set up the task (set flags and targets), before it is shown to the player.
+# 	immediate_effect = { effects } 				#Effects executed when the agenda is accepted by the country
+# 	task_requirements = { triggers } 			#Conditions for completing the task successfully
+# 	task_completed_effect = { effects } 		#Effects executed when the agenda is successfully completed
+# 	failing_effect = { effects } 				#Effects executed when the agenda is failed (i.e. when fail_if is true or time runs out)
+# 	fail_if = { triggers } 						#Conditions for when the agenda should be auto-failed
+# 	on_invalid = { effects } 					#Effects executed when the country no longer has that estate or the invalid_trigger is true. Useful for clearing flags, modifiers etc.
+# 	invalid_trigger = { triggers } 				#Conditions for when the agenda should end without it counting as a fail (executing on_invalid rather than failing_effect). Happens by default it the estate giving the agenda is removed.
+# 	modifier = { modifier } 					#Country modifier granted while the agenda is active
+# }
+
+
+estate_peasants_develop_grain = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		any_owned_province = {
+			is_state_core = root
+			trade_goods = grain
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				trade_goods = grain
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					check_variable = {
+						which = province_dip_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_dip_var
+					value = 0
+				}
+			}
+			export_to_variable = {
+				which = province_dip_var
+				value = trigger_value:base_production
+			}
+			change_variable = {
+				which = province_dip_var
+				value = 2
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			base_production = "province_dip_var"
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			add_province_modifier = {
+				name = "GE_Peasant_Estate_Growth"
+				duration = 3650
+			}
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_peasants_herd_cattle = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		any_owned_province = {
+			is_state_core = root
+			trade_goods = livestock
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				trade_goods = livestock
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					check_variable = {
+						which = province_dip_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_dip_var
+					value = 0
+				}
+			}
+			export_to_variable = {
+				which = province_dip_var
+				value = trigger_value:base_production
+			}
+			change_variable = {
+				which = province_dip_var
+				value = 1
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = province_adm_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_adm_var
+					value = 0
+				}
+			}
+			export_to_variable = {
+				which = province_adm_var
+				value = trigger_value:base_tax
+			}
+			change_variable = {
+				which = province_adm_var
+				value = 1
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			base_production = "province_dip_var"
+			base_tax = "province_adm_var"
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			add_base_manpower = 1
+			add_province_modifier = {
+				name = "GE_Peasant_Estate_Cattle"
+				duration = 3650
+			}
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_peasants_build_wood_workshop = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		adm_tech = 6
+		any_owned_province = {
+			is_state_core = root
+			NOT = { has_building = workshop }
+			NOT = { has_building = counting_house }
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				NOT = { has_building = workshop }
+				NOT = { has_building = counting_house }
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			add_province_modifier = {
+				name = "GE_Peasant_Estate_Construct_Workshop"
+				duration = 3650
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			has_building = workshop
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 10
+		}
+		add_years_of_income = 0.2
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_clergy_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_peasants_harvest_time = {
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 2
+			war_exhaustion = 1
+		}
+		modifier = {
+			factor = 5
+			war_exhaustion = 5
+		}
+		modifier = {
+			factor = 10
+			war_exhaustion = 10
+		}
+	}
+	can_select = {
+		is_at_war = yes
+	}
+	pre_effect = {
+	}
+	provinces_to_highlight = {
+	}
+	fail_if = {
+	}
+    task_requirements = {
+		custom_trigger_tooltip = {
+			tooltip = estate_peasants_harvest_time_tooltip
+			NOT = { had_recent_war = 5 }
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 5
+		}
+		add_country_modifier = {
+			name = GE_Peasant_Estate_Peace
+			duration = 3650
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_peasants_increase_privileges = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		NOT = {
+			has_estate_privilege = estate_peasants_land_rights
+		}
+	}
+	pre_effect = {
+	}
+	provinces_to_highlight = {
+	}
+	fail_if = {
+	}
+    task_requirements = {
+		has_estate_privilege = estate_peasants_land_rights
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 15
+		}
+		add_country_modifier = {
+			name = GE_Peasant_Estate_Fervor
+			duration = 3650
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -10
+			duration = 7300
+        }
+    }
+}
+
+estate_peasants_expand_lebensraum = {
+	can_select = {
+		is_free_or_tributary_trigger = yes
+		is_at_war = no
+		any_neighbor_country = {
+			NOT = { is_subject_of = root }
+			NOT = { overlord_of = root }
+			NOT = { alliance_with = root }
+			NOT = { ROOT = { truce_with = prev } }
+			NOT = { 
+				has_opinion = {
+					who = root
+					value = 50
+				}
+			}
+			ROOT = {
+				knows_country = prev
+			}
+			any_owned_province = {
+				any_neighbor_province = {
+					owned_by = root
+				}
+				NOT = {
+					OR = {
+						is_empty = yes
+						owned_by = root
+					}
+				}
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+				}
+			}
+			OR = {
+				is_part_of_hre = no
+				NOT = { hre_reform_passed = landfriede }
+				ROOT = { is_part_of_hre = no }
+			}
+		}
+	}
+	selection_weight = {
+		factor = 0.5
+		modifier = {
+			factor = 2
+			army_size_percentage = 0.75
+		}
+		modifier = {
+			factor = 2
+			army_size_percentage = 1
+		}
+	}
+	pre_effect = {
+		random_neighbor_country = {
+			limit = {
+				NOT = { is_subject_of = root }
+				NOT = { overlord_of = root }
+				NOT = { alliance_with = root }
+				NOT = { ROOT = { truce_with = prev } }
+				NOT = { 
+					has_opinion = {
+						who = root
+						value = 50
+					}
+				}
+				ROOT = {
+					knows_country = prev
+				}
+				any_owned_province = {
+					any_neighbor_province = {
+						owned_by = root
+					}
+					NOT = {
+						owned_by = root
+					}
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+					}
+				}
+				OR = {
+					is_part_of_hre = no
+					NOT = { hre_reform_passed = landfriede }
+					ROOT = { is_part_of_hre = no }
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_neighbor_province = {
+						owned_by = root
+					}
+					NOT = {
+						owned_by = root
+					}
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+					}
+				}
+				save_event_target_as = agenda_province
+			}
+		}
+	}
+	immediate_effect = {
+		if = {
+			limit = {
+				event_target:agenda_province = {
+					NOT = { is_claim = root }
+					NOT = { is_core = root }
+				}
+			}
+			event_target:agenda_province = {
+				if = {
+					limit = {
+						NOT = { is_claim = root }
+						NOT = { is_core = root }
+						OR = {
+							trade_goods = livestock
+							trade_goods = grain
+						}
+					}
+					add_claim = root
+				}
+			}
+		}
+	}
+	on_invalid = {
+		if = {
+			limit = {
+				event_target:agenda_province = {
+					is_claim = root
+					NOT = { is_permanent_claim = root }
+				}
+			}
+			event_target:agenda_province = {
+				if = {
+					limit = {
+						is_claim = root
+						NOT = { is_permanent_claim = root }
+					}
+					remove_claim = root
+				}
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	task_requirements = {
+		event_target:agenda_province = {
+			owned_by = root
+		}
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { is_claim = root }
+			NOT = { is_core = root }
+			NOT = { owned_by = root }
+		}
+	}
+	task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			add_province_modifier = {
+				name = "GE_Peasant_Estate_Lebensraum"
+				duration = 3650
+			}
+			add_nationalism = -10
+		}
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+		if = {
+			limit = {
+				event_target:agenda_province = {
+					is_claim = root
+					NOT = { is_permanent_claim = root }
+				}
+			}
+			event_target:agenda_province = {
+				if = {
+					limit = {
+						is_claim = root
+						NOT = { is_permanent_claim = root }
+					}
+					remove_claim = root
+				}
+			}
+		}
+    }
+}
+
+estate_peasants_inspire_peasants = {
+	can_select = {
+		government = republic
+		NOT = {
+			republican_tradition = 90
+		}
+	}
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 2
+			NOT = { republican_tradition = 75 }
+		}
+		modifier = {
+			factor = 2
+			NOT = { republican_tradition = 50 }
+		}
+		modifier = {
+			factor = 2
+			NOT = { republican_tradition = 25 }
+		} 
+	}
+	pre_effect = {
+		ROOT = {
+			if = {
+				limit = {
+					check_variable = {
+						which = country_republican_tradition
+						value = 1
+					}
+				}
+				set_variable = {
+					which = country_republican_tradition
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					republican_tradition = 85
+				}
+				change_variable = {
+					which = country_republican_tradition
+					value = 6
+				}
+			}
+			else_if = {
+				limit = {
+					republican_tradition = 70
+				}
+				change_variable = {
+					which = country_republican_tradition
+					value = 5
+				}
+			}
+			else_if = {
+				limit = {
+					republican_tradition = 55
+				}
+				change_variable = {
+					which = country_republican_tradition
+					value = 4
+				}
+			}
+			else_if = {
+				limit = {
+					republican_tradition = 40
+				}
+				change_variable = {
+					which = country_republican_tradition
+					value = 3
+				}
+			}
+			else_if = {
+				limit = {
+					republican_tradition = 25
+				}
+				change_variable = {
+					which = country_republican_tradition
+					value = 2
+				}
+			}
+			else = {
+				change_variable = {
+					which = country_republican_tradition
+					value = 1
+				}
+			}
+		}
+	}
+	immediate_effect = {
+		add_country_modifier = {
+			name = GE_Peasant_Estate_Stabilization
+			duration = 7300
+		}
+	}
+	on_invalid = {
+	}
+	provinces_to_highlight = {
+	}
+	task_requirements = {
+		if = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 6 }
+			}
+			republican_tradition = 100
+		}
+		else_if = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 5 }
+			}
+			republican_tradition = 85
+		}
+		else_if = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 4 }
+			}
+			republican_tradition = 70
+		}
+		else_if = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 3 }
+			}
+			republican_tradition = 55
+		}
+		else_if = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 2 }
+			}
+			republican_tradition = 40
+		}
+		else = { 
+			limit = {
+				check_variable = { which = country_republican_tradition value = 1 }
+			}
+			republican_tradition = 25
+		}
+	}
+	fail_if = {
+		NOT = {
+			has_country_modifier = GE_Peasant_Estate_Stabilization
+		}
+	}
+	task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_peasants
+			loyalty = 10
+		}
+		remove_country_modifier = GE_Peasant_Estate_Stabilization
+		add_country_modifier = {
+			name = GE_Peasant_Estate_Stabilized
+			duration = 9125
+		}
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_peasants
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
