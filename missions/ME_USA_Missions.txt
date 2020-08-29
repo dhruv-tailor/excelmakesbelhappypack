@@ -1,0 +1,1564 @@
+USA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "American Dream" }
+			AND = {
+				has_dlc = "American Dream"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		tag = USA
+	}
+	has_country_shield = yes
+
+	usa_the_continental_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			manpower = 10
+			num_of_states = 13
+			any_owned_province = {
+				has_owner_culture = yes
+			}
+		}
+		effect = {
+			country_event = { id = ME_USA_Events.6 }
+		}
+	}
+
+	usa_arm_the_populace = {
+		icon = mission_new_army
+		required_missions = { usa_the_continental_army }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_owner_culture = yes
+			NOT = { num_of_times_improved = 1 }
+			is_city = yes
+		}
+		trigger = {
+			all_owned_province = {
+				OR = {
+					has_owner_culture = no
+					num_of_times_improved = 1
+					is_city = no
+				}
+			}
+			OR = {
+				barracks = 5
+				training_fields = 5
+			}
+		}
+		effect = {
+			custom_tooltip = USA_ARM_THE_POPULACE_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_province_modifier = usa_the_continental_army_province_modifier
+					}
+					remove_province_modifier = usa_the_continental_army_province_modifier
+				}
+				every_owned_province = {
+					limit = {
+						has_owner_culture = yes
+					}
+					add_province_modifier = {
+						name = usa_arm_the_populace_province_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	usa_chain_of_command = {
+		icon = me_mission_modern_army
+		required_missions = { usa_arm_the_populace }
+		position = 5
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.2
+			}
+			else = {
+				army_tradition = 60
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_chain_of_command_modifier
+				duration = 7300
+			}
+		}
+	}
+
+	usa_amerindian_divisions = {
+		icon = me_mission_native_warriors
+		required_missions = { usa_chain_of_command }
+		position = 7
+		trigger = {
+			army_size = 100
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				OR = {
+					AND = {
+						government_rank = 3
+						OR = {
+							culture_group = apachean
+							culture_group = muskogean
+							culture_group = iroquoian
+						}
+					}
+					accepted_culture = apache
+					accepted_culture = mescalero
+					accepted_culture = lipan
+					accepted_culture = navajo
+					accepted_culture = creek
+					accepted_culture = choctaw
+					accepted_culture = chickasaw
+					accepted_culture = iroquois
+					accepted_culture = cherokee
+					accepted_culture = huron
+					accepted_culture = susquehannock
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						total_development = 1000
+						OR = {
+							culture_group = apachean
+							culture_group = muskogean
+							culture_group = iroquoian
+						}
+					}
+					accepted_culture = apache
+					accepted_culture = mescalero
+					accepted_culture = lipan
+					accepted_culture = navajo
+					accepted_culture = creek
+					accepted_culture = choctaw
+					accepted_culture = chickasaw
+					accepted_culture = iroquois
+					accepted_culture = cherokee
+					accepted_culture = huron
+					accepted_culture = susquehannock
+				}
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			add_country_modifier = {
+				name = usa_amerindian_divisions_modifier
+				duration = -1
+			}
+		}
+	}
+
+	usa_allot_reservations = {
+		icon = me_mission_native_chief
+		required_missions = { usa_amerindian_divisions usa_civilize_the_plains }
+		position = 8
+		provinces_to_highlight = {
+			province_id = 878
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 3 }
+				unrest = 1
+			}
+		}
+		trigger = {
+			NOT = { exists = NAH }
+			owns = 878
+			878 = {
+				num_of_times_improved = 3
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			country_event = { id = ME_USA_Events.4 }
+		}
+	}
+}
+
+USA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "American Dream" }
+			AND = {
+				has_dlc = "American Dream"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		tag = USA
+	}
+	has_country_shield = yes
+
+	usa_forge_the_constitution = {
+		icon = mission_rb_monopolize_the_channel
+		required_missions = { usa_independence_day }
+		position = 2
+		trigger = {
+			is_at_war = no
+			OR = {
+				stability = 2
+				has_country_modifier = usa_federation
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			if = {
+				limit = {
+					has_country_modifier = usa_confederacy
+				}
+				remove_country_modifier = usa_confederacy
+			}
+			add_country_modifier = {
+				name = usa_federation
+				duration = -1
+			}
+			remove_country_modifier = america_no_government_modifier
+			add_country_modifier = {
+				name = usa_forge_the_constitution_modifier
+				duration = -1
+			}
+		}
+	}
+
+	usa_establish_the_cabinet = {
+		icon = mission_alliances
+		required_missions = { usa_forge_the_constitution }
+		position = 3
+		trigger = {
+			ADM = 2
+			DIP = 2
+			MIL = 2
+		}
+		effect = {
+			define_advisor = {
+				type = usa_secretary_of_the_treasury
+				skill = 3
+				name = "Alexander Hamilton"
+				cost_multiplier = 0.75
+			}
+			define_advisor = {
+				type = usa_head_diplomat
+				skill = 3
+				name = "Benjamin Franklin"
+				cost_multiplier = 0.75
+			}
+			define_advisor = {
+				type = usa_secretary_of_war
+				skill = 3
+				name = "Henry Knox"
+				cost_multiplier = 0.75
+			}
+		}
+	}
+
+	usa_an_american_dollar = {
+		icon = mission_war_chest
+		required_missions = { usa_establish_the_cabinet }
+		position = 4
+		trigger = {
+			stability = 3
+			NOT = { inflation = 1 }
+		}
+		effect = {
+			remove_country_modifier = america_weak_currency_modifier
+		}
+	}
+
+	usa_indian_removal_act = {
+		icon = me_mission_native_european_help
+		required_missions = { usa_manifest_destiny }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			culture_group = muskogean
+		}
+		trigger = {
+			north_america = {
+				type = all
+				NOT = { culture_group = muskogean }
+			}
+			south_america = {
+				type = all
+				NOT = { culture_group = muskogean }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_indian_removal_act_modifier
+				duration = -1
+			}
+		}
+	}
+
+	usa_civilize_the_plains = {
+		icon = mission_colonial
+		required_missions = { usa_indian_removal_act }
+		position = 7
+		provinces_to_highlight = {
+			region = great_plains_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				has_owner_culture = no
+			}
+		}
+		trigger = {
+			great_plains_region = {
+				type = all
+				owned_by = ROOT
+				has_owner_culture = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_civilize_the_plains_modifier
+				duration = 10950
+			}
+		}
+	}
+
+	usa_gilded_valley = {
+		icon = mission_african_gold
+		required_missions = { usa_californian_compromise }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = northern_california_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 4638
+					NOT = { num_of_times_improved = 2 }
+				}
+			}
+		}
+		trigger = {
+			northern_california_area = {
+				type = all
+				owned_by = ROOT
+			}
+			4638 = {
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			4638 = {
+				change_trade_goods = gold
+			}
+		}
+	}
+
+	usa_gold_rush = {
+		icon = mission_zambezi_gold
+		required_missions = { usa_gilded_valley }
+		position = 13
+		provinces_to_highlight = {
+			province_id = 4638
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 10 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 4638
+			4638 = {
+				num_of_times_improved = 10
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			4638 = {
+				add_province_modifier = {
+					name = usa_gold_rush_province_modifier
+					duration = 183
+				}
+			}
+		}
+	}
+}
+
+USA_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "American Dream" }
+			AND = {
+				has_dlc = "American Dream"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		tag = USA
+	}
+	has_country_shield = yes
+
+	usa_independence_day = {
+		icon = mission_cannons_firing
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = USA_FORMED_1_YEAR_AGO
+				if = {
+					limit = {
+						has_country_flag = usa_formed
+					}
+					had_country_flag = { flag = usa_formed days = 365 }
+				}
+				else = {
+					has_country_flag = changed_from_colonial_nation
+					had_country_flag = { flag = changed_from_colonial_nation days = 365 }
+				}
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			country_event = { id = ME_USA_Events.3 }
+		}
+	}
+
+	usa_building_a_nation = {
+		icon = mission_early_game_buildings
+		required_missions = { usa_independence_day }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 1
+		}
+		trigger = {
+			stability = 2
+			legitimacy_equivalent = 100
+			all_owned_province = {
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_building_a_nation_modifier
+				duration = 12775
+			}
+		}
+	}
+
+	usa_greater_than_thirteen = {
+		icon = mission_conquer_50_development
+		required_missions = { usa_building_a_nation usa_safeguard_settlers }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = alabama_area
+				area = mississippi_area
+				area = choctaw_area
+				area = kentucky_area
+				area = illinois_country_area
+				area = miami_river_area
+				area = michigan_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			alabama_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			mississippi_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			choctaw_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			kentucky_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			illinois_country_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			miami_river_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			michigan_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			set_country_flag = usa_expand_the_frontier_decision_unlocked
+			custom_tooltip = USA_EXPAND_THE_FRONTIER_DECISION_UNLOCKED_TT
+		}
+	}
+
+	usa_manifest_destiny = {
+		icon = me_mission_native_european_colonist
+		required_missions = { usa_greater_than_thirteen }
+		position = 4
+		provinces_to_highlight = {
+			region = rio_grande_region
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						region = rio_grande_region
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				region = rio_grande_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_manifest_destiny_modifier
+				duration = 36500
+			}
+		}
+	}
+
+	usa_mexican_standoff = {
+		icon = mission_assemble_an_army
+		required_missions = { usa_manifest_destiny }
+		position = 6
+		provinces_to_highlight = {
+			area = texas_area
+			NOT = { owned_by = ROOT }
+			TEX = {
+				OR = {
+					NOT = { alliance_with = ROOT }
+					capital_scope = {
+						NOT = { region = rio_grande_region }
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					alliance_with = TEX
+					TEX = {
+						capital_scope = {
+							region = rio_grande_region
+						}
+					}
+				}
+				texas_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			set_country_flag = usa_expand_the_frontier_decision_expanded
+			custom_tooltip = USA_EXPAND_THE_FRONTIER_DECISION_EXPANDED_TT
+			if = {
+				limit = {
+					alliance_with = TEX
+					TEX = {
+						capital_scope = {
+							region = rio_grande_region
+						}
+					}
+				}
+				TEX = {
+					country_event = { id = ME_USA_Events.5 }
+				}
+			}
+			else = {
+				2499 = {
+					if = {
+						limit = {
+							is_empty = yes
+						}
+						add_siberian_construction = 100
+						add_base_tax = 2
+						add_base_production = 2
+						add_base_manpower = 2
+					}
+				}
+				coastal_prarie_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	usa_californian_compromise = {
+		icon = mission_settlers_north_america
+		required_missions = { usa_mexican_standoff }
+		position = 10
+		provinces_to_highlight = {
+			colonial_region = colonial_california
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						colonial_region = colonial_california
+						is_city = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				colonial_region = colonial_california
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					baja_california_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+				add_prestige = 10
+			}
+			add_country_modifier = {
+				name = usa_californian_compromise_modifier
+				duration = 10950
+			}
+		}
+	}
+
+	usa_a_western_gateway = {
+		icon = mission_colonial
+		required_missions = { usa_gilded_valley usa_continental_railroad }
+		position = 12
+		provinces_to_highlight = {
+			province_id = 4637
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Dharma"
+					NOT = { province_has_center_of_trade_of_level = 2 }
+					NOT = { num_of_times_improved = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Dharma" }
+					NOT = { num_of_times_improved = 5 }
+				}
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			treasury = 2500
+			owns = 4637
+			4637 = {
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					OR = {
+						province_has_center_of_trade_of_level = 2
+						num_of_times_improved = 5
+					}
+				}
+				else = {
+					num_of_times_improved = 5
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_treasury = -2500
+			add_country_modifier = {
+				name = usa_a_western_gateway_modifier
+				duration = 10950
+			}
+			4637 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				add_province_modifier = {
+					name = usa_a_western_gateway_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	usa_beacon_of_democracy = {
+		icon = mission_golden_century
+		required_missions = { usa_a_western_gateway }
+		position = 13
+		trigger = {
+			total_development = 2000
+			prestige = 80
+			army_size = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_beacon_of_democracy_modifier
+				duration = 36500
+			}
+		}
+	}
+
+	usa_expel_the_invaders = {
+		icon = mission_cannons_firing
+		required_missions = { usa_beacon_of_democracy }
+		position = 14
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = USA_NO_EUROPEAN_SUBJECTS_IN_AMERICA
+					NOT = {
+						any_country = {
+							capital_scope = {
+								continent = europe
+							}
+							any_subject_country = {
+								capital_scope = {
+									OR = {
+										continent = north_america
+										continent = south_america
+									}
+								}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = USA_SCORNFULLY_OR_INSULTED_EUROPEAN_WITH_SUBJECTS_IN_AMERICA
+					any_known_country = {
+						capital_scope = {
+							continent = europe
+						}
+						any_subject_country = {
+							capital_scope = {
+								OR = {
+									continent = north_america
+									continent = south_america
+								}
+							}
+						}
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_expel_the_invaders_modifier
+				duration = 3650
+			}
+			if = {
+				limit = {
+					any_known_country = {
+						capital_scope = {
+							continent = europe
+						}
+						any_subject_country = {
+							capital_scope = {
+								OR = {
+									continent = north_america
+									continent = south_america
+								}
+							}
+						}
+					}
+				}
+				every_known_country = {
+					limit = {
+						capital_scope = {
+							continent = europe
+						}
+						any_subject_country = {
+							capital_scope = {
+								OR = {
+									continent = north_america
+									continent = south_america
+								}
+							}
+						}
+					}
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_usa_defense_of_the_americas
+					}
+				}
+			}
+		}
+	}
+
+	usa_monroe_doctrine = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { usa_expel_the_invaders }
+		position = 15
+		trigger = {
+			all_countries_including_self = {
+				OR = {
+					capital_scope = {
+						NOT = { continent = north_america }
+						NOT = { continent = south_america }
+					}
+					is_subject = no
+					overlord = {
+						capital_scope = {
+							NOT = { continent = europe }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_monroe_doctrine_modifier_1
+				duration = -1
+			}
+			every_province = {
+				limit = {
+					OR = {
+						province_id = 2021
+						province_id = 2499
+						province_id = 1507
+						province_id = 2526
+						province_id = 1486
+						province_id = 1500
+						province_id = 1516
+						province_id = 1490
+						province_id = 1551
+						province_id = 835
+						province_id = 2935
+						province_id = 1531
+						province_id = 800
+						province_id = 809
+						province_id = 1536
+						province_id = 2868
+					}
+				}
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 50
+					key = usa_monroe_doctrine_trade_modifier
+				}
+			}
+			custom_tooltip = USA_MONROE_DOCTRINE_TT
+			hidden_effect = {
+				every_country = {
+					limit = {
+						is_subject = no
+						capital_scope = {
+							OR = {
+								continent = north_america
+								continent = south_america
+							}
+						}
+					}
+					add_country_modifier = {
+						name = usa_monroe_doctrine_modifier_2
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+}
+
+USA_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "American Dream" }
+			AND = {
+				has_dlc = "American Dream"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		tag = USA
+	}
+	has_country_shield = yes
+
+	usa_safeguard_settlers = {
+		icon = me_mission_native_european_colonist
+		required_missions = { }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				region = mississippi_region
+				region = great_lakes_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						OR = {
+							region = mississippi_region
+							region = great_lakes_region
+						}
+						is_city = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					region = mississippi_region
+					region = great_lakes_region
+				}
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_country = {
+						government = tribal
+						capital_scope = {
+							OR = {
+								region = mississippi_region
+								region = great_lakes_region
+							}
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						government = tribal
+						capital_scope = {
+							OR = {
+								region = mississippi_region
+								region = great_lakes_region
+							}
+						}
+					}
+					if = {
+						limit = {
+							is_neighbor_of = ROOT
+						}
+						reverse_add_casus_belli = {
+							target = ROOT
+							type = cb_annex
+							months = 60
+						}
+					}
+					else = {
+						custom_tooltip = USA_SAFEGUARD_SETTLERS_TT
+						hidden_effect = {
+							every_owned_province = {
+								limit = {
+									NOT = { is_core = ROOT }
+								}
+								add_permanent_claim = ROOT
+							}
+						}
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+		}
+	}
+
+	usa_the_white_house = {
+		icon = mission_rb_college_of_justice
+		required_missions = { usa_naval_station_newport }
+		position = 3
+		trigger = {
+			white_house_building = 1
+		}
+		effect = {
+			add_prestige = 10
+		}
+	}
+
+	usa_reconnect_with_the_west = {
+		icon = diplo_missions_icon
+		required_missions = { usa_the_white_house }
+		position = 4
+		trigger = {
+			OR = {
+				any_ally = {
+					total_development = 500
+					capital_scope = {
+						continent = europe
+					}
+				}
+				all_country = {
+					OR = {
+						capital_scope = {
+							NOT = { continent = europe }
+						}
+						NOT = { total_development = ROOT }
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_reconnect_with_the_west_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	usa_boston_harbor = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { usa_the_american_navy }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 968
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 16 }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+			}
+		}
+		trigger = {
+			owns = 968
+			968 = {
+				development = 16
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		}
+		effect = {
+			968 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	usa_hudson_bay_port = {
+		icon = mission_develop_nevas_port
+		required_missions = { usa_boston_harbor }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 965
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 965
+			965 = {
+				development = 20
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			965 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				add_province_modifier = {
+					name = usa_hudson_bay_port_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	usa_the_inland_trade = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { usa_hudson_bay_port }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				has_port = no
+				development = 16
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = usa_the_inland_trade_modifier
+				duration = 5475
+			}
+		}
+	}
+
+	usa_continental_canals = {
+		icon = mission_assemble_an_army
+		required_missions = { usa_the_inland_trade }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 959
+				province_id = 958
+				province_id = 954
+				province_id = 2557
+				province_id = 2023
+				province_id = 956
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 2 }
+			}
+		}
+		trigger = {
+			owns = 959
+			959 = {
+				num_of_times_improved = 2
+			}
+			owns = 958
+			958 = {
+				num_of_times_improved = 2
+			}
+			owns = 954
+			954 = {
+				num_of_times_improved = 2
+			}
+			owns = 2557
+			2557 = {
+				num_of_times_improved = 2
+			}
+			owns = 2023
+			2023 = {
+				num_of_times_improved = 2
+			}
+			owns = 956
+			956 = {
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			959 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+			958 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+			954 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+			2557 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+			2023 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+			956 = {
+				add_province_modifier = {
+					name = usa_continental_canals_province_modifier
+					duration = 18250
+				}
+			}
+		}
+	}
+
+	usa_new_orleans_outpost = {
+		icon = mission_dharma_mission_arabian_trade
+		required_missions = { usa_continental_canals }
+		position = 9
+		provinces_to_highlight = {
+			province_id = 893
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns = 893
+			893 = {
+				development = 20
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			893 = {
+				add_province_modifier = {
+					name = usa_new_orleans_outpost_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	usa_continental_railroad = {
+		icon = mission_early_game_buildings
+		required_missions = { usa_californian_compromise usa_new_orleans_outpost usa_fuel_the_fires }
+		position = 11
+		provinces_to_highlight = {
+			region = great_plains_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 90
+			}
+			else = {
+				adm_tech = 16
+			}
+			treasury = 1500
+			great_plains_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_treasury = -1500
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 10
+				add_dip_power = 10
+				add_mil_power = 10
+			}
+			set_country_flag = usa_encourage_entrepreneurs_decision_unlocked
+			custom_tooltip = USA_ENCOURAGE_ENTREPRENEURS_DECISION_UNLOCKED_TT
+			add_country_modifier = {
+				name = usa_continental_railroad_modifier
+				duration = -1
+			}
+		}
+	}
+
+	usa_market_economy = {
+		icon = econ_missions_icon
+		required_missions = { usa_continental_railroad }
+		position = 13
+		trigger = {
+			NOT = { mercantilism = 10 }
+		}
+		effect = {
+			custom_tooltip = USA_MARKET_ECONOMY_TT
+		}
+	}
+}
+
+USA_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "American Dream" }
+			AND = {
+				has_dlc = "American Dream"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		tag = USA
+	}
+	has_country_shield = yes
+
+	usa_the_continental_navy = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				has_flagship = yes
+				num_of_heavy_ship = 10
+			}
+			else = {
+				num_of_heavy_ship = 12
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_the_continental_navy_modifier
+				duration = 10950
+			}
+		}
+	}
+
+	usa_naval_station_newport = {
+		icon = mission_launch_a_flagship
+		required_missions = { usa_the_continental_navy }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 967
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+			}
+		}
+		trigger = {
+			owns = 967
+			967 = {
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		}
+		effect = {
+			set_country_flag = usa_build_the_executive_estates_decision_unlocked
+			custom_tooltip = USA_BUILD_THE_EXECUTIVE_ESTATES_DECISION_UNLOCKED_TT
+			967 = {
+				add_province_modifier = {
+					name = usa_naval_station_newport_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	usa_the_american_navy = {
+		icon = mission_spanish_armada
+		required_missions = { usa_naval_station_newport }
+		position = 4
+		trigger = {
+			all_country = {
+				OR = {
+					capital_scope = {
+						NOT = { region = british_isles_region }
+					}
+					NOT = { num_of_heavy_ship = ROOT }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_the_american_navy_modifier
+				duration = 18250
+			}
+		}
+	}
+
+	usa_found_the_coast_guard = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { usa_hudson_bay_port usa_the_american_navy }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 20
+				colonial_region = colonial_eastern_america
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_found_the_coast_guard_modifier
+				duration = -1
+			}
+		}
+	}
+
+	usa_build_manufactories = {
+		icon = mission_have_manufactories
+		required_missions = { }
+		position = 8
+		trigger = {
+			num_of_owned_manufactory_combined_trigger = { amount = 30 }
+		}
+		effect = {
+			custom_tooltip = USA_BUILD_MANUFACTORIES_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_manufactory_trigger = yes
+					}
+					add_province_modifier = {
+						name = usa_build_manufactories_province_modifier
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+
+	usa_a_new_revolution = {
+		icon = me_mission_russia_revolution
+		required_missions = { usa_build_manufactories }
+		position = 9
+		trigger = {
+			has_institution = enlightenment
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 25
+			}
+			else = {
+				adm_tech = 20
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 10
+				add_dip_power = 10
+				add_mil_power = 10
+			}
+			add_country_modifier = {
+				name = usa_a_new_revolution_modifier
+				duration = 10950
+			}
+		}
+	}
+
+	usa_fuel_the_fires = {
+		icon = mission_rb_prospect_for_coal
+		required_missions = { usa_a_new_revolution }
+		position = 10
+		trigger = {
+			has_institution = enlightenment
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				num_of_owned_provinces_with = {
+					value = 4
+					trade_goods = coal
+					development = 20
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 6
+					trade_goods = iron
+					development = 15
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = usa_fuel_the_fires_modifier
+				duration = 18250
+			}
+		}
+	}
+}

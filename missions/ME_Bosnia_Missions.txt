@@ -1,0 +1,241 @@
+BOS_missions_1 = {
+	slot = 1
+	ai = yes
+	potential = {
+		tag = BOS
+	}
+	has_country_shield = yes
+	
+	bos_secure_borders = {
+		required_missions = { }
+		icon = mission_consolidate_the_state
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 0.5
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = bos_serbia
+				duration = 7300
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			136 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4753 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	bos_the_coast = {
+		required_missions = { bos_secure_borders }
+		icon = mission_conquer_romania
+		provinces_to_highlight = {
+			OR = {
+				area = bosnia_area
+				province_id = 136
+				province_id = 4753
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			bosnia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			owns = 136
+			owns = 4753
+		}
+		effect = {
+			136 = {
+				add_base_tax = 2
+			}
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	bos_destroy_serbia = {
+		required_missions = { bos_the_coast }
+		icon = mission_the_third_rome
+		provinces_to_highlight = {
+			OR = {
+				area = rascia_area
+				area = serbia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			rascia_area = {
+				owned_by = ROOT
+			}
+			serbia_area = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = HUN
+				}
+				reverse_add_opinion = {
+					who = HUN
+					modifier = bos_hun_opinion
+				}
+			}
+			add_country_modifier = {
+				name = bos_prepare_a_crusade
+				duration = 7300
+			}
+		}
+	}
+	
+	bos_deus_vult = {
+		required_missions = { bos_destroy_serbia }
+		icon = mission_autocephalous_archbishopric
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+					exists = HAB
+					OR = {
+						exists = POL
+						exists = PLC
+					}
+				}
+				is_rival = TUR
+				HAB = {
+					is_rival = TUR
+				}
+				OR = {
+					POL = {
+						is_rival = TUR
+					}
+					PLC = {
+						is_rival = TUR
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					hre_size = 1
+				}
+				any_rival_country = {
+					emperor = {
+						is_rival = PREV
+					}
+				}
+			}
+			else = {
+				any_rival_country = {
+					any_country = {
+						alliance_with = ROOT
+						is_rival = PREV
+					}
+				}
+			}
+		}
+		effect = {
+			balkan_region = {
+				limit = {
+					owned_by = TUR
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = bos_crusade
+				duration = 3650
+			}
+		}
+	}
+	
+	bos_final_crusade = {
+		required_missions = { bos_deus_vult }
+		icon = mission_assemble_an_army
+		provinces_to_highlight = {
+			region = balkan_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			balkan_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bos_drove_back_kebab
+				duration = 10950
+			}
+		}
+	}
+	
+	bos_hum_gold = {
+		required_missions = { }
+		icon = mission_state_manufactories
+		provinces_to_highlight = {
+			province_id = 139
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			139 = {
+				owned_by = ROOT
+				base_production = 10
+			}
+		}
+		effect = {
+			139 = {
+				change_trade_goods = gold
+				add_province_modifier = {
+					name = bos_changed_good
+					duration = 7300
+				}
+				if = {
+					limit = {
+						base_production = 7
+					}
+					add_base_production = -6
+				}
+				else = {
+					set_base_production = 1
+				}
+			}
+		}
+	}
+}

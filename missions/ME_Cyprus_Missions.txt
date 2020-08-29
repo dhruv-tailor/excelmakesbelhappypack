@@ -1,0 +1,1325 @@
+CYP_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	cyp_wooden_wall = {
+		icon = mission_galleys_in_port
+		required_missions = {
+			cyp_kingdom_cyprus
+		}
+		position = 2
+		trigger = {
+			num_of_galley = 10
+			num_of_admirals = 1
+		}
+		effect = {
+			add_sailors = 500
+			add_country_modifier = {
+				name = cyp_wooden_wall
+				duration = 7120
+			}
+		}
+	}
+	
+	cyp_trade_rivalry = {
+		icon = mission_dominate_home_trade_node
+		required_missions = {
+			cyp_wooden_wall
+			cyp_aegean_trade
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 320
+				province_id = 321
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = VEN
+				}
+				OR = {
+					AND = {
+						num_of_galley = VEN
+						NOT = {
+							has_opinion = {
+								who = VEN
+								value = -50
+							}
+						}
+					}
+					AND = {
+						total_development = VEN
+						variable_arithmetic_trigger = {
+							custom_tooltip = CYP_HAS_100_MORE_TOTAL_DEVELOPMENT_THAN_VEN
+							export_to_variable = {
+								which = our_total_development
+								value = trigger_value:total_development
+							}
+							export_to_variable = {
+								which = their_total_development
+								value = trigger_value:total_development
+								who = VEN
+							}
+							change_variable = {
+								which = their_total_development
+								value = 100
+							}
+							check_variable = {
+								which = our_total_development
+								which = their_total_development
+							}
+						}
+					}
+				}
+			}
+			321 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			320 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_treasury = 300
+			320 = {
+				add_province_modifier = {
+					name = cyp_victory_cyprus
+					duration = -1
+				}
+			}
+			321 = {
+				add_province_modifier = {
+					name = cyp_victory_cyprus
+					duration = -1
+				}
+			}
+		}
+	}
+
+	cyp_aegean_bases = {
+		icon = me_mission_venice_ship_in_port
+		required_missions = {
+			cyp_trade_rivalry
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 320
+				province_id = 321
+				province_id = 2348
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
+			}
+		}
+		trigger = {
+			if = { 
+				limit = {
+					exists = VEN
+				}
+				is_rival = VEN
+			}
+			164 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 10
+			}
+			320 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 10
+			}
+			2348 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 10
+			}
+		}
+		effect = {
+			164 = {
+				add_province_modifier = {
+					name = cyp_trade_naval_bases
+					duration = -1
+				}
+			}
+			320 = {
+				add_province_modifier = {
+					name = cyp_trade_naval_bases
+					duration = -1
+				}
+			}
+			2348 = {
+				add_province_modifier = {
+					name = cyp_trade_naval_bases
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+CYP_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	cyp_aegean_trade = {
+		icon = mission_disrupt_portuguese_trade
+		required_missions = { 
+			cyp_wooden_wall 
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 320
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			320 = {
+				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			151 = {
+				trade_share = {
+					country = ROOT
+					share = 10
+				}
+			}
+		}
+		effect = {
+			320 = {
+				add_base_tax = 2
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+					add_center_of_trade_level = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+
+	cyp_trade_constantinople = {
+		icon = me_mission_venice_city_and_port
+		required_missions = { 
+			cyp_trade_rivalry 
+			cyp_aegean_trade
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+			}
+			NOT = {
+				aegean_archipelago_area = {
+					owned_by = ROOT
+					development = 15
+				}
+			}
+		}
+		trigger = {
+			num_of_light_ship = 25
+			aegean_archipelago_area = {
+				owned_by = ROOT
+				development = 15
+			}
+			151 = {
+				trade_share = {
+					country = ROOT
+					share = 10
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_aegean_merchant_flag
+				duration = 7300
+			}
+			random_owned_province = {
+				limit = {
+					area = aegean_archipelago_area
+					development = 15
+					province_has_center_of_trade_of_level = 1
+					NOT = { province_has_center_of_trade_of_level = 3 }
+				}
+				add_center_of_trade_level = 1
+			}
+			151 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = cyp_mercantile_fleet
+				}
+			}
+		}
+	}
+}
+
+CYP_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	cyp_kingdom_cyprus = {
+		icon = me_mission_cyprus_cyprus
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				navy_size_percentage = 1
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						army_size_percentage = 1
+						navy_size_percentage = 1
+					}
+				}
+				add_country_modifier = {
+					name = cyp_reinstated_crusading_army
+					duration = 7300
+				}
+				2302 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				327 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				
+			}
+			else = {
+				PAP = {
+					country_event = { id = ME_Cyprus_Events.2 }
+				}
+				320 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	cyp_landing_anatolia = {
+		icon = me_mission_crusade_crusaders_praying
+		required_missions = {
+			cyp_kingdom_cyprus
+		}
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2302
+				province_id = 327
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			2302 = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			327 = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				2302 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				327 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				add_papal_influence = 10
+			}
+			else_if = {
+				limit = {
+					religion = orthodox
+				}
+				add_patriarch_authority = 0.05
+			}
+			add_country_modifier = {
+				name = cyp_heathen_persecution
+				duration = 3650
+			}
+			2302 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = ROOT
+				}
+			}
+			327 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = ROOT
+				}
+			}
+		}
+	}
+
+	cyp_mercenaries = {
+		icon = me_mission_crusade_ospitaller_crusader
+		required_missions = { 
+			cyp_landing_anatolia 
+		}
+		position = 3
+		trigger = {
+			num_of_mercenaries = 5
+			mil_power = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_integrated_mercenaries
+				duration = 18250
+			}
+		}
+	}
+
+	cyp_crusade_anatolia = {
+		icon = me_mission_crusade_crusader_knight
+		required_missions = { 
+			cyp_mercenaries
+			cyp_modernize_knights
+		}
+		position = 4
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 7
+				region = anatolia_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_victory_turks
+				duration = 10950
+			}
+		}
+	}
+}
+
+CYP_slot_3_Catholic = { # Catholic
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_catholic
+		NOT = { has_country_flag = cyprus_is_orthodox }
+	}
+	has_country_shield = yes
+
+	cyp_principality_antioch = {
+		icon = me_mission_crusade_antioch_taken
+		required_missions = {
+			cyp_deus_vult
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = aleppo_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_principality_antioch_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+CYP_slot_3_Orthodox = { # Orthodox
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_orthodox
+		NOT = { has_country_flag = cyprus_is_catholic }
+	}
+	has_country_shield = yes
+
+	cyp_island_unification = {
+		icon = mission_arabian_sea_trade
+		required_missions = {
+			cyp_labyrinth
+			cyp_step_forward
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Cyprus_Events.9 days = 1200 tooltip = ME_Cyprus_Events.9.tooltip }
+			3003 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				add_province_modifier = {
+					name = cyp_forward_naval_base
+					duration = 	-1
+				}
+			}
+		}
+	}
+}
+
+CYP_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	cyp_knights_hospitallier = {
+		icon = me_mission_crusade_ospitaller_knight
+		required_missions = { 
+			cyp_kingdom_cyprus
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 320
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
+					KNI = {
+						is_at_war = no
+						is_subject = no
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
+					KNI = {
+						is_at_war = no
+						is_subject = no
+					}
+				}
+				320 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
+					KNI = {
+						is_at_war = no
+						is_subject = no
+					}
+				}
+				KNI = {
+					country_event = { id = ME_Cyprus_Events.4 }
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cyp_subdued_knights
+					duration = -1
+				}
+			}
+		}
+	}
+
+	cyp_modernize_knights = {
+		icon = me_mission_crusade_crusader_knight_banner
+		required_missions = { 
+			cyp_knights_hospitallier 
+		}
+		position = 3
+		trigger = {
+			army_size = 15
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.10
+			}
+			else = {
+				army_tradition = 35
+			}
+		}
+		effect = {
+			add_army_tradition = 20
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_country_modifier = {
+					name = cyp_reformed_crusader_knights_CoC
+					duration = 10950
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cyp_reformed_crusader_knights_moral
+					duration = 10950
+				}
+			}
+		}
+	}
+}
+
+CYP_slot_4_Catholic = { # Catholic
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_catholic
+		NOT = { has_country_flag = cyprus_is_orthodox }
+	}
+	has_country_shield = yes
+
+	cyp_county_tripoli = {
+		icon = me_mission_crusade_crusaders_flag
+		required_missions = {
+			cyp_deus_vult
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 378
+				AND = {
+					OR = {
+						province_id = 4297
+						province_id = 1855
+						province_id = 382
+					}
+					4279 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					1855 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					382 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+		trigger = {
+			378 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				4279 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				1855 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				382 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			378 = {
+				change_religion = catholic
+				change_province_name = "Tarabulus"
+				rename_capital = "Tripoli"
+				if = {
+					limit = {
+						has_building = fort_15th
+					}
+					remove_building = fort_15th
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = fort_16th
+					}
+					remove_building = fort_16th
+					add_building_construction = {
+						building = fort_17th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = fort_17th
+					}
+					remove_building = fort_17th
+					add_building_construction = {
+						building = fort_18th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				add_province_modifier = {
+					name = cyp_mount_lebanon
+					duration = -1
+				}
+			}
+		}
+	}
+
+	cyp_kingdom_jerusalem = {
+		icon = me_mission_crusade_jerusalem_taken
+		required_missions = {
+			cyp_principality_antioch
+			cyp_county_tripoli
+			cyp_retaking_jerusalem
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = aleppo_area
+				area = syria_area
+				area = palestine_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_at_war = no
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			syria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_the_deus_vult_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+CYP_slot_4_Orthodox = { # Orthodox
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_orthodox
+		NOT = { has_country_flag = cyprus_is_catholic }
+	}
+	has_country_shield = yes
+
+	cyp_labyrinth = {
+		icon = me_mission_greece_corfu
+		required_missions = {
+			cyp_hellenic_navy
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 163
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 163
+		}
+		effect = {
+			add_treasury = 75
+			country_event = { id = ME_Cyprus_Events.5 days = 60 tooltip = ME_Cyprus_Events.5.tooltip }
+			add_country_modifier = {
+				name = cyp_cretian_trade
+				duration = 3650
+			}
+		}
+	}
+
+	cyp_true_reform = {
+		icon = me_mission_greece_flag_people
+		required_missions = {
+			cyp_labyrinth
+			cyp_step_forward
+		}
+		position = 5
+		trigger = {
+			advisor = statesman
+			primary_culture = greek
+			adm_power = 50
+			dip_power = 50
+		}
+		effect = {
+			country_event = { id = ME_Cyprus_Events.24 }
+		}
+	}
+
+	cyp_greek_war_independence = {
+		icon = me_mission_greece_war_independence
+		required_missions = {
+			cyp_island_unification
+			cyp_true_reform
+			cyp_filike_eteria
+		}
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				TUR = {
+					war_with = ROOT
+				}
+			}
+			else = {
+				any_country = {
+					war_with = ROOT
+					capital_scope = {
+						area = northern_greece_area
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_greek_revolutionaries
+				duration = 3650
+			}
+		}
+	}
+
+	cyp_greek_independence = {
+		icon = me_mission_greece_flags
+		required_missions = {
+			cyp_greek_war_independence
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_at_war = no
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_greeece_united
+				duration = -1
+			}
+		}
+	}
+}
+
+CYP_slot_5_Catholic = { # Catholic
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_catholic
+		NOT = { has_country_flag = cyprus_is_orthodox }
+	}
+	has_country_shield = yes
+
+	cyp_roman_delegation = {
+		icon = me_mission_crusade_delegation
+		required_missions = { }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+			else = {
+				OR = {
+					is_defender_of_faith = yes
+					is_papal_controller = yes
+				}
+			}
+			advisor = diplomat
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = PAP	
+				}
+				PAP = {
+					add_historical_friend = ROOT
+				}
+				add_historical_friend = PAP
+			}
+			add_country_modifier = {
+				name = cyp_papal_seal_approval 
+				duration = -1
+			}
+			palestine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	cyp_deus_vult = {
+		icon = me_mission_crusade_cross
+		required_missions = {
+			cyp_roman_delegation
+		}
+		position = 4
+		trigger = {
+			advisor = theologian
+			if = {
+				limit = {
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 150
+				}
+			}
+			else = {
+				OR = {
+					is_defender_of_faith = yes
+					any_country = {
+						religion = ROOT
+						is_defender_of_faith = yes
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_deus_vult_modifier
+				duration = 5475
+			}
+			palestine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			379 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+		}
+	}
+
+	cyp_retaking_jerusalem = {
+		icon = me_mission_crusade_crusaders_holy_sepulchre
+		required_missions = {
+			cyp_deus_vult
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = palestine_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			change_government = monarchy
+			add_government_reform = crusader_kingdom
+			add_papal_influence = 30
+			add_country_modifier = {
+				name = cyp_catholic_jerusalem
+				duration = 7300
+			}
+			every_country = {
+				limit = {
+					religion_group = muslim
+				}
+				country_event = { id = ME_Cyprus_Events.16 }
+			}
+			every_country = {
+				limit = {
+					OR = {
+						religion_group = eastern
+						religion_group = dharmic
+						religion_group = pagan
+						religion_group = zoroastrian_group
+					}
+				}
+				country_event = { id = ME_Cyprus_Events.17 }
+			}
+		}
+	}
+}
+
+CYP_slot_5_Orthodox = { # Orthodox
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+		has_country_flag = cyprus_is_orthodox
+		NOT = { has_country_flag = cyprus_is_catholic }
+	}
+	has_country_shield = yes
+
+	cyp_hellenic_navy = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { }
+		position = 3
+		trigger = {
+			navy_size_percentage = 0.75
+			galley_fraction = 0.33
+		}
+		effect = {
+			add_country_modifier = {
+				name = cyp_hellenic_naval_marines
+				duration = -1
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+				}
+				add_unit_construction = {
+					type = galley
+					amount = 5
+					speed = 0.5
+					cost = 0
+				}
+			}
+		}
+	}
+
+	cyp_step_forward = {
+		icon = mission_invade_island
+		required_missions = {
+			cyp_hellenic_navy
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 164
+				province_id = 2348
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			164 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2348 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			164 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				add_province_modifier = {
+					name = cyp_forward_naval_base
+					duration = -1
+				}
+			}
+			2348 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			3003 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			164 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			320 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	cyp_filike_eteria = {
+		icon = me_mission_greece_ottoman_war
+		required_missions = {
+			cyp_labyrinth
+			cyp_step_forward
+		}
+		position = 5
+		trigger = {
+			NOT = {
+				has_opinion = {
+					who = TUR
+					value = -100
+				}
+			}
+			NOT = {
+				reverse_has_opinion = {
+					who = TUR
+					value = -100
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Cyprus_Events.10 }
+			add_country_modifier = {
+				name = cyp_filiki_eteria_modifier
+				duration = 3650
+			}
+		}
+	}
+}

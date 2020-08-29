@@ -1,0 +1,216 @@
+country_decisions = {
+	usa_second_thoughts = {
+		potential = {
+			tag = USA
+			NOT = { has_country_flag = usa_nah_annexation }
+			has_institution = enlightenment
+			NAH = {
+				vassal_of = ROOT
+				has_country_flag = usa_nah_reservation
+			}
+		}
+		allow = {
+			is_at_war = no
+			NAH = {
+				vassal_of = ROOT
+				is_at_war = no
+				NOT = { num_of_cities = 10 }
+				NOT = { liberty_desire = 50 }
+			}
+		}
+		effect = {
+			set_country_flag = usa_nah_annexation
+			inherit = NAH
+			custom_tooltip = USA_SECOND_THOUGHTS_TT
+			add_country_modifier = {
+				name = usa_second_thoughts_modifier
+				duration = -1
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	usa_expand_the_frontier = {
+		potential = {
+			tag = USA
+			has_country_flag = usa_expand_the_frontier_decision_unlocked
+			OR = {
+				colonial_louisiana = {
+					is_empty = yes
+				}
+				AND = {
+					has_country_flag = usa_expand_the_frontier_decision_expanded
+					colonial_california = {
+						is_empty = yes
+					}
+				}
+			}
+		}
+		provinces_to_highlight = {
+			OR = {
+				colonial_region = colonial_louisiana
+				AND = {
+					ROOT = { has_country_flag = usa_expand_the_frontier_decision_expanded }
+					colonial_region = colonial_california
+				}
+			}
+			is_empty = yes
+			any_neighbor_province = {
+				owned_by = ROOT
+			}
+		}
+		allow = {
+			dip_power = 100
+			NOT = { has_country_modifier = usa_expand_the_frontier_modifier }
+			if = {
+				limit = {
+					has_country_flag = usa_expand_the_frontier_decision_expanded
+				}
+				OR = {
+					colonial_louisiana = {
+						is_empty = yes
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					colonial_california = {
+						is_empty = yes
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				colonial_louisiana = {
+					is_empty = yes
+					any_neighbor_province = {
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = -100
+			add_country_modifier = {
+				name = usa_expand_the_frontier_modifier
+				duration = 730
+			}
+			random_province = {
+				limit = {
+					OR = {
+						colonial_region = colonial_louisiana
+						AND = {
+							ROOT = { has_country_flag = usa_expand_the_frontier_decision_expanded }
+							colonial_region = colonial_california
+						}
+					}
+					is_empty = yes
+					any_neighbor_province = {
+						owned_by = ROOT
+					}
+				}
+				add_siberian_construction = 100
+				area = {
+					limit = {
+						OR = {
+							colonial_region = colonial_louisiana
+							AND = {
+								ROOT = { has_country_flag = usa_expand_the_frontier_decision_expanded }
+								colonial_region = colonial_california
+							}
+						}
+						is_empty = yes
+					}
+					add_siberian_construction = 100
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
+	usa_build_the_executive_estates = {
+		major = yes
+		potential = {
+			tag = USA
+			has_country_flag = usa_build_the_executive_estates_decision_unlocked
+			owns_core_province = 953
+			953 = {
+				NOT = { has_construction = building }
+			}
+			NOT = { white_house_building = 1 }
+			NOT = {
+				any_province = {
+					has_building = white_house_building
+				}
+			}
+		}
+		allow = {
+			treasury = 2000
+			owns_core_province = 953
+			controls = 953
+			953 = {
+				NOT = { has_construction = missionary }
+				NOT = { has_construction = culture }
+				NOT = { has_construction = core }
+				NOT = { has_construction = building }
+				variable_arithmetic_trigger = {
+					custom_tooltip = HAS_NOT_USED_ALL_12_BUILDING_SLOTS
+					export_to_variable = {
+						which = num_of_used_building_slots
+						value = modifier:allowed_num_of_buildings
+					}
+					OR = {
+						NOT = { check_variable = { which = num_of_used_building_slots value = 12 } }
+						num_free_building_slots = 1
+					}
+				}
+			}
+		}
+		effect = {
+			953 = {
+				custom_tooltip = START_CONSTRUCTION_OF_WHITE_HOUSE_BUILDING
+				hidden_effect = {
+					add_building_construction = {
+						building = white_house_building
+						speed = 1
+						cost = 1
+					}
+				}
+			}
+			custom_tooltip = EFFECTS_OF_WHITE_HOUSE_BUILDING
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { treasury = 3000 }
+			}
+		}
+	}
+
+	usa_encourage_entrepreneurs = {
+		potential = {
+			tag = USA
+			has_country_flag = usa_encourage_entrepreneurs_decision_unlocked
+		}
+		allow = {
+			mercantilism = 10
+			NOT = { has_country_modifier = usa_encourage_entrepreneurs_modifier }
+		}
+		effect = {
+			add_mercantilism = -10
+			add_country_modifier = {
+				name = usa_encourage_entrepreneurs_modifier
+				duration = 1825
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+}

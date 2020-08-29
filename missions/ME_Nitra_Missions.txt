@@ -1,0 +1,752 @@
+SLO_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = SLO
+	}
+	has_country_shield = yes
+	
+	Nitra_invade_poland = {
+		icon = mission_conquer_5_states
+		position = 3
+		required_missions = { Nitra_gain_independence }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2960
+				province_id = 262
+				province_id = 2959
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2960 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			262 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2959 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = nitra_krakow_trade
+				}
+			}
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Nitra_conquer_red_ruthenia = {
+		icon = mission_break_the_tatar_yoke
+		position = 4
+		required_missions = { Nitra_invade_poland }
+		provinces_to_highlight = {
+			area = red_ruthenia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			red_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+		    add_adm_power = 100
+			silesia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Nitra_subjugate_silesia = {
+		icon = mission_landsknecht_soldier
+		position = 5
+		required_missions = { Nitra_conquer_red_ruthenia }
+		provinces_to_highlight = {
+			area = silesia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			silesia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "nitra_rex_sclavorum"
+				duration = 7300
+			}
+		}
+	}
+}
+
+SLO_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = SLO
+	}
+	has_country_shield = yes
+
+	Nitra_reclaim_moravia = {
+		icon = mission_cannons_firing
+		position = 3
+		required_missions = { Nitra_gain_independence }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 265
+				province_id = 4237
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			265 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4237 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "nitra_svatopluk_ambition"
+				duration = 3650
+			}
+			bohemia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			erzgebirge_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Nitra_czech_lands = {
+		icon = mission_eastern_european_city
+		position = 4
+		required_missions = { Nitra_reclaim_moravia }
+		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = erzgebirge_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bohemia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			erzgebirge_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+		    if = {
+				limit = {	
+					NOT = { accepted_culture = czech }
+				}
+				add_accepted_culture = czech
+			}
+			else = {
+				add_dip_power = 100
+			}
+			1770 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			134 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Nitra_break_habsburgs = {
+		icon = mission_the_austrian_succession
+		position = 5
+		required_missions = { Nitra_czech_lands }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1770
+				province_id = 134
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			134 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			1770 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 15
+			add_legitimacy_equivalent = { value = 15 }
+			add_country_modifier = {
+				name = "nitra_hasburgs"
+				duration = 7300
+			}
+		}
+	}
+
+	Nitra_great_moravia = {
+		icon = mission_empire
+		position = 6
+		required_missions = { Nitra_break_habsburgs Nitra_carpathian_hegemony Nitra_subjugate_silesia }
+		trigger = {
+			stability = 3
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 3
+			}
+			else = {
+				total_development = 1000
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = "great_moravian_empire"
+				duration = -1
+			}
+		}
+	}	
+}
+
+SLO_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = SLO
+	}
+	has_country_shield = yes
+	
+	Nitra_raise_an_army = {
+	    icon = mission_assemble_an_army
+		required_missions = {  }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = "nitra_freedom_fighters"
+				duration = 3650
+			}
+		}
+	}
+	
+	Nitra_gain_independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { Nitra_raise_an_army }
+		position = 2
+		provinces_to_highlight = {
+			area = slovakia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_subject = no
+			is_at_war = no
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_legitimacy_equivalent = { value = 10 }
+			add_country_modifier = {
+				name = "nitra_independence"
+				duration = 5475
+			}
+			265 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			4237 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			2960 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			2959 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			262 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			transdanubia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			
+		}
+	}
+	
+	Nitra_reclaim_transdanubia = {
+		icon = mission_crusade_for_varna
+		position = 3
+		required_missions = { Nitra_gain_independence }	
+		provinces_to_highlight = {
+			area = transdanubia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			transdanubia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+		    transdanubia_area = {
+                add_province_modifier = {
+                    name = "nitra_transdanubian_integration"
+					duration = 1825
+				}
+			}
+			alfold_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Nitra_invade_alfold = {
+		icon = mission_cossack_cavalry
+		position = 4
+		required_missions = { Nitra_reclaim_transdanubia }
+		provinces_to_highlight = {
+			area = alfold_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			alfold_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "nitra_suppress_magyars"
+				duration = 3650
+			}
+			transylvania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southern_transylvania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Nitra_carpathian_hegemony = {
+		icon = mission_unite_home_region
+		position = 5
+		required_missions = { Nitra_invade_alfold }
+		provinces_to_highlight = {
+			OR = {
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			carpathia_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = nitra_carpathian_hegemony
+					duration = 9125
+				}
+			}
+		}
+	}
+}
+
+SLO_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SLO
+	}
+	has_country_shield = yes
+	
+	Nitra_embrace_slovakization = {
+		icon = mission_alliances
+		position = 3
+		required_missions = { Nitra_gain_independence }
+		provinces_to_highlight = {
+			province_id = 1772
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			adm_power = 100
+			1772 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = -100
+			every_owned_province = {
+				limit = {
+					culture = slovak
+				}
+               add_province_modifier = {
+                    name = "nitra_slovakization"
+					duration = -1
+				}
+			}
+			1772 = {
+				add_base_tax = 3
+				rename_capital = "Presporok"
+			}
+			154 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					rename_capital = "Nove Zamky"
+				}
+			}
+			4236 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					rename_capital = "Trencin"
+				}
+			}
+			1318 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					rename_capital = "Levoca"
+				}
+			}
+			162 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					rename_capital = "Kosice"
+				}
+			}
+		}
+	}
+	
+	Nitra_codify_slovak_language = {
+		icon = mission_rb_monopolize_the_channel
+		position = 4
+		required_missions = { Nitra_embrace_slovakization }
+		provinces_to_highlight = {
+			area = slovakia_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 30
+			}
+		}
+		trigger = {
+			dip_power = 100
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy = 30 }
+			}
+		}
+		effect = {
+			add_dip_power = -100
+			add_country_modifier = {
+				name = "nitra_domestic_intelligence"
+				duration = -1
+			}
+		}
+	}
+	
+	Nitra_istropolitana = {
+		icon = mission_early_modern_university
+		position = 5
+		required_missions = { Nitra_codify_slovak_language Nitra_develop_presporok }
+		provinces_to_highlight = {
+			province_id = 1772
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			1772 = {
+				owned_by = ROOT
+				has_building = university
+			}
+		}
+		effect = {
+		    if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 5
+			}
+			else = {
+				add_adm_power = 75
+				add_dip_power = 75
+			}
+			add_country_modifier = {
+				name = "nitra_universitas_istropolitana"
+				duration = 7300
+			}
+		}
+	}
+}
+
+SLO_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SLO
+	}
+	has_country_shield = yes
+	
+	Nitra_devin = {
+	    icon = mission_colonial
+		required_missions = {  }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1772
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			1772 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			1772 = {
+				add_province_modifier = {
+					name = nitra_repair_devin
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	Nitra_land_of_castles = {
+	    icon = mission_conquer_50_development
+		required_missions = { Nitra_devin }
+		position = 3
+		provinces_to_highlight = {
+			area = slovakia_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { has_state_edict = edict_defensive_edict }
+				}
+			}
+		}
+		trigger = {
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		    if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				slovakia_area = {
+					type = all
+					has_state_edict = edict_defensive_edict
+				}
+			}
+			else = {
+				advisor = fortification_expert
+			}
+		}
+		effect = {
+			slovakia_area = {
+				add_province_modifier = {
+					name = nitra_land_castles
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	Nitra_develop_presporok = {
+		icon = mission_eastern_european_city
+		required_missions = { Nitra_embrace_slovakization }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 1772
+			OR = {
+				NOT = { owned_by = ROOT }
+			    NOT = { development = 30 }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+		    1772 = {
+				owned_by = ROOT
+			    development = 30
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			1772 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				add_province_modifier = {
+					name = "developed_presporok"
+					duration = 7300
+				}
+			}
+		}
+	}
+}

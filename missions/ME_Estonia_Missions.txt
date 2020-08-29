@@ -1,0 +1,195 @@
+EST_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = EST
+	}
+	has_country_shield = yes
+
+	est_win_independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = handel_herravalde
+				duration = 9125
+			}
+		}
+	}
+	
+	est_rivarly_with_russia = {
+		icon = mission_assemble_an_army
+		required_missions = { est_win_independence }
+		trigger = {
+			OR = {
+				is_rival = RUS
+				is_rival = MOS
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+				}
+			}
+		}
+		effect = {
+			pskov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	est_pskov_conquest = {
+		icon = mission_conquer_50_development
+		required_missions = { est_rivarly_with_russia }
+		provinces_to_highlight = {
+			area = pskov_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			pskov_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			novgorod_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tver_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	est_russia_ahniolation = {
+		icon = mission_unite_home_region
+		required_missions = { est_pskov_conquest }
+		provinces_to_highlight = {
+			OR = {
+				area = novgorod_area
+				area = tver_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tver_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			novgorod_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			livonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			curonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			samogitia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	est_unite_baltics = {
+		icon = mission_unite_home_region
+		required_missions = { est_russia_ahniolation }
+		provinces_to_highlight = {
+			OR = {
+				area = livonia_area
+				area = curonia_area
+				area = samogitia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			livonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			curonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			samogitia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "hegemonic_ambition"
+				duration = 9125
+			}
+		}
+	}
+}	
+
+EST_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = { 
+		tag = EST
+	}
+	has_country_shield = yes
+	
+	est_baltic_fleet = {
+		icon = mission_galleys_in_port
+		required_missions = { est_win_independence }
+		position = 2
+		trigger = { 
+			num_of_light_ship = 10
+		}
+		effect = {
+			add_country_modifier = {
+				name = "naval_enthusiasm_mission"
+				duration = 9125
+			}
+		}
+	}
+	
+	est_tradepower = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { est_baltic_fleet }
+		trigger = {
+			38 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_mercantilism = 2
+		}
+	}
+}

@@ -1,0 +1,570 @@
+﻿RYU_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = RYU
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		NOT = { has_country_flag = historical_pirate }
+	}
+	has_country_shield = yes
+
+	RYU_expand_your_army = {
+		icon = mission_asian_cannon
+		position = 1
+		required_missions = { }
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_deterrent
+				duration = 10950
+			}
+			kyushu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	RYU_expand = {
+		icon = mission_asian_city
+		position = 3
+		required_missions = { RYU_expand_your_army }
+		trigger = {
+			grown_by_development = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_growing
+				duration = 7300
+			}
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+
+	RYU_the_eastern_empire = {
+		icon = mission_kowtow
+		position = 5
+		required_missions = { RYU_expand RYU_sulfur_center }
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 75
+				superregion = far_east_superregion
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_great_far_eastern_empire
+				duration = -1
+			}
+		}
+	}
+}
+
+RYU_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = RYU
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		NOT = { has_country_flag = historical_pirate }
+	}
+	has_country_shield = yes
+
+	RYU_gunpowder_era = {
+		icon = mission_cannons_firing
+		position = 2
+		required_missions = { }
+		trigger = {
+			europe = {
+				has_discovered = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				capital_scope = {
+					change_trade_goods = gunpowder
+					add_province_modifier = {
+						name = RYU_centre_of_tge_gunpowder
+						duration = -1
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					add_province_modifier = {
+						name = RYU_center_of_gunpowder
+						duration = -1
+					}
+				}
+			}
+			
+		}
+	}
+
+	RYU_sulfur_center = {
+		icon = mission_dominate_home_trade_node
+		position = 4
+		required_missions = { RYU_gunpowder_era RYU_welcome_japanese_traders }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = marketplace }
+			NOT = { has_building = trade_depot }
+			NOT = { has_building = stock_exchange }
+		}
+		trigger = {
+			capital_scope = {
+				OR = { 
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_country_modifier = {
+				name = RYU_technology_sharing
+				duration = 9125
+			}
+		}
+	}
+}
+
+RYU_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RYU
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		NOT = { has_country_flag = historical_pirate }
+	}
+	has_country_shield = yes
+
+	RYU_welcome_japanese_traders = {
+		icon = mission_junk_boat
+		position = 3
+		required_missions = { }
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
+				}
+				japan_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			1376 = {
+				add_trade_node_income = 36
+			}
+		}
+	}
+
+	RYU_the_entrepot = {
+		icon = mission_asian_city
+		position = 4
+		required_missions = { RYU_welcome_japanese_traders RYU_tributary_fleet }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = japan_region
+					NOT = {
+						any_country = {
+							capital_scope = {
+								region = japan_region
+							}
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+				}
+				AND = {
+					OR = {
+						region = south_china_region
+						region = north_china_region
+					}
+					NOT = {
+						any_country = {
+							capital_scope = {
+								OR = {
+									region = south_china_region
+									region = north_china_region
+								}
+							}
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+				}
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				japan_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			OR = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = south_china_region
+							region = north_china_region
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				AND = {
+					south_china_region = {
+						type = all
+						owned_by = ROOT
+					}
+					north_china_region = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_the_medium
+				duration = 9125
+			}
+		}
+	}
+}
+
+RYU_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = RYU
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		NOT = { has_country_flag = historical_pirate }
+	}
+	has_country_shield = yes
+
+	RYU_fleet = {
+		icon = mission_sea_battles
+		position = 1
+		required_missions = { }
+		trigger = {
+			navy_size_percentage = 0.9
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				country_event = { id = ME_Ryukyu_Events.1 }
+			}
+			else = {
+				add_country_modifier = {
+					name = RYU_maritime_culture_thriving
+					duration = 10950
+				}
+			}
+		}
+	}
+
+	RYU_tributary_fleet = {
+		icon = mission_rice_field
+		position = 3
+		required_missions = { RYU_fleet }
+		trigger = {
+			num_of_light_ship = 10
+			navy_tradition = 30
+		}
+		effect = {
+			add_stability = 1
+			add_country_modifier = {
+				name = RYU_prospering_times
+				duration = 7300
+			}
+		}
+	}
+}
+
+RYU_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = RYU
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		NOT = { has_country_flag = historical_pirate }
+	}
+	has_country_shield = yes
+
+	RYU_foster = {
+		icon = mission_scholar_officials
+		position = 2
+		required_missions = { RYU_fleet }
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_country = {
+					is_emperor_of_china = yes
+				}
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = north_china_region
+							region = south_china_region
+							region = xinan_region
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				any_country = {
+					is_emperor_of_china = yes
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			else = {
+				OR = {
+					any_country = {
+						capital_scope = {
+							OR = {
+								region = north_china_region
+								region = south_china_region
+								region = xinan_region
+							}
+						}
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					AND = {
+						north_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						south_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						xinan_region = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_relations_with_china
+				duration = 9125
+			}
+		}
+	}
+
+	RYU_influence_the_heavenly_throne = {
+		icon = mission_chinese_general_riding
+		position = 4
+		required_missions = { RYU_tributary_fleet RYU_fleet }
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			NOT = {
+				any_country = {
+					is_emperor_of_china = yes
+				}
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = north_china_region
+							region = south_china_region
+							region = xinan_region
+						}
+					}
+					ROOT = {
+						has_spy_network_in = {
+							who = PREV
+							value = 100
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				any_country = {
+					is_emperor_of_china = yes
+					ROOT = {
+						has_spy_network_in = {
+							who = PREV
+							value = 100
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					any_country = {
+						capital_scope = {
+							OR = {
+								region = north_china_region
+								region = south_china_region
+								region = xinan_region
+							}
+						}
+						ROOT = {
+							has_spy_network_in = {
+								who = PREV
+								value = 100
+							}
+						}
+					}
+					AND = {
+						north_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						south_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						xinan_region = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RYU_chinese_approval
+				duration = 5475
+			}
+		}
+	}
+}

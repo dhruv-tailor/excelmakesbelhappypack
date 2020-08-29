@@ -1,0 +1,182 @@
+TRA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	tra_spread_wings = {
+		icon = mission_build_up_to_force_limit
+		trigger = {
+			manpower_percentage = 0.2
+		}
+		effect = {
+			add_manpower = 8
+			capital_scope = {
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+				infantry = ROOT
+			}
+		}
+	}
+	
+	tra_independence = {
+		icon = mission_cannons_firing
+		required_missions = { tra_spread_wings }
+		position = 3
+		trigger = {
+			is_at_war = no
+			is_subject = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = tra_recovering_from_war
+				duration = 9250
+			}
+			add_mil_power = 100
+			add_adm_power = 100
+		}
+	}
+	
+	tra_conquer_wallachia = {
+		icon = mission_assemble_an_army
+		required_missions = { tra_independence }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 160
+				province_id = 161
+				province_id = 2998
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			160 = {
+				owned_by = ROOT
+			}
+			161 = {
+				owned_by = ROOT
+			}
+			2998 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = tra_romanian_unification_underway
+				duration = 10950
+			}
+			add_adm_power = 100
+		}
+	}
+	
+	tra_conquer_silistria = {
+		icon = mission_cannons_firing 
+		required_missions = { tra_conquer_wallachia }
+		position = 6
+		trigger = {
+			OR = {
+				NOT = { exists = TUR }
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = TUR
+					war_score = 10
+				}
+			}
+		}
+		effect = {
+			159 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_prestige = 20
+		}
+	}
+}
+
+TRA_missions_2 = {	
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = TRA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	tra_repopulate_transylvania = {
+		icon = mission_high_income
+		required_missions = { tra_independence }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 1
+				NOT = { culture = romanian }
+			}
+		}
+		trigger = {
+			transylvania_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { devastation = 1 }
+				culture = romanian
+			}
+			southern_transylvania_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { devastation = 1 }
+				culture = romanian
+			}
+		}
+		effect = {
+			alfold_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_adm_power = 50
+			add_country_modifier = {
+				name = tra_romanians_in_transylvania
+				duration = -1
+			}
+		}
+	}
+	
+	tra_into_hungary = {
+		icon = mission_unite_home_region
+		required_missions = { tra_repopulate_transylvania tra_conquer_wallachia }
+		position = 6
+		provinces_to_highlight = {
+			area = alfold_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			alfold_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}

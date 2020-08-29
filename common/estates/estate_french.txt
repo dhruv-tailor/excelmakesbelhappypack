@@ -1,0 +1,372 @@
+# estate_french = {
+	# icon = 2
+	
+	# color = { 200 0 50 }
+	
+	# # Is estate kept in control of province on conquest?
+	# keep_on_conquest = no
+	
+	# # If true, country will get estate
+	# trigger = {
+		# tag = ENG
+		# mission_completed = UKS_Integrate_French_Concessions
+	# }
+	
+	# # If true, province can be granted to estate
+	# province_trigger = {
+		# always = no
+	# }	
+
+	# # Is used to weigh importance compared to other estates
+	# start_territory_weight = 0
+	
+	# # Min autonomy in estate provinces
+	# min_autonomy = 0
+	
+	# # Estate cancels out the following multiplicative local autonomy effects:
+	# autonomy_does_not_affect = local_manpower_modifier
+	# autonomy_does_not_affect = land_forcelimit_modifier
+
+	# country_modifier_happy = {
+	# }
+	# country_modifier_neutral = {
+	# }	
+	# country_modifier_angry = {
+	# }
+	
+	# #Not Used
+	# province_modifier_happy = {
+		# local_defensiveness = 0.15
+		# local_manpower_modifier = 0.2
+	# }
+	# province_modifier_neutral = {
+		# local_manpower_modifier = 0.2
+	# }	
+	# province_modifier_angry = {
+		# local_unrest = 5
+	# }		
+	
+	# # Influence modifiers
+	# base_influence = 50
+	
+	
+	# # Loyalty modifiers
+	# loyalty_modifier = {
+		# desc = EST_VAL_OTHER_ESTATE_IN_POWER_LOY
+		# trigger = {
+			# OR = {
+				# has_disaster = estate_church_disaster
+				# has_disaster = estate_burghers_disaster
+				# has_disaster = estate_brahmins_disaster
+				# has_disaster = estate_vaisyas_disaster
+				# has_disaster = estate_jains_disaster
+			# }
+		# }
+		# loyalty = -20
+	# }
+
+	# loyalty_modifier = {
+		# desc = ENG_not_loyal_France
+		# trigger = {
+			# FRA = {
+				# liberty_desire = 50
+			# }
+		# }
+		# loyalty = -10
+	# }
+
+	# # Does the AI want to give any extra territory beyond the minimum?		
+	
+	# # For province assignment
+	# ai_grant_province = {
+		# factor = 0
+	# }	
+	
+	# # Special interactions
+	# interaction = {
+		# name = ENG_Patronize
+		# icon = 7
+		
+		# years_between_use = 5
+		
+		# potential = {
+			# always = yes
+		# }
+		
+		# trigger = {
+			# estate_loyalty = {
+				# estate = estate_french
+				# loyalty = 40
+			# }		
+		# }
+		
+		# effect = {
+			# add_years_of_income = -1
+			# add_estate_loyalty = {
+				# estate = estate_french
+				# loyalty = 10
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_church
+				# loyalty = -5
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_burghers
+				# loyalty = -5
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_nobles
+				# loyalty = -5
+			# }
+			# hidden_effect = {
+				# change_variable = {
+					# which = ENG_Patronized
+					# value = 1
+				# }
+			# }
+		# }
+		
+		# ai_will_do = {
+			# factor = 1
+		# }
+	# }
+	# interaction = {
+		# name = "eng_recruit_minister"
+		# icon = 10
+		
+		# years_between_use = 25
+		
+		# potential = {
+			# NOT = { has_disaster = estate_church_disaster }
+			# NOT = { has_disaster = estate_burghers_disaster }
+		# }
+		
+		# trigger = {
+			# estate_loyalty = {
+				# estate = estate_french
+				# loyalty = 45
+			# }
+		# }
+		
+		# effect = {
+			# hidden_effect = {
+				# random_province = {
+					# limit = {
+						# OR = {
+							# culture = cosmopolitan_french
+							# culture = gascon
+							# culture = normand
+							# culture = aquitaine
+							# culture = burgundian
+							# culture = occitain
+							# culture = wallonian
+						# }
+					# }
+					# save_event_target_as = french_estate_province
+				# }
+			# }
+			# if = {
+				# limit = {
+					# monthly_income = 25
+					# has_saved_event_target = french_estate_province
+
+				# }
+				# define_advisor = {
+					# type = natural_scientist
+					# skill = 3
+					# culture = event_target:french_estate_province
+					# religion = event_target:french_estate_province
+					# location = event_target:french_estate_province
+					# cost_multiplier = 0.5
+				# }
+			# }
+			# else = {
+				# define_advisor = {
+					# type = natural_scientist
+					# skill = 2
+					# cost_multiplier = 0.5
+					# culture = event_target:french_estate_province
+					# religion = event_target:french_estate_province
+					# location = event_target:french_estate_province
+					
+				# }
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_church
+				# loyalty = -5
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_burghers
+				# loyalty = -5
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_nobles
+				# loyalty = -5
+			# }
+		# }
+		
+		# ai_will_do = {
+			# factor = 1
+		# }
+	# }
+	# interaction = {
+		# name = eng_demand_french_troops
+		# icon = 12
+		
+		# years_between_use = 20
+		
+		# potential = {
+		# }
+		
+		# trigger = {
+			# estate_loyalty = {
+				# estate = estate_french
+				# loyalty = 40
+			# }
+			# FRA = {
+				# manpower_percentage = 0.5
+			# }
+		# }
+		
+		# effect = {
+			# hidden_effect = {
+				# FRA = {
+					# every_owned_province = {
+						# limit = {
+							# region = france_region
+						# }
+						# ENG = {
+							# add_manpower = 0.25
+						# }
+						# FRA = {
+							# add_manpower = -0.25
+						# }
+					# }
+				# }
+			# }
+			# custom_tooltip = ENG_drafting
+			# FRA = {
+				# add_liberty_desire = 25
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_french
+				# loyalty = -15
+			# }
+		# }
+		
+		# ai_will_do = {
+			# factor = 1
+			# modifier = {
+				# factor = 0
+				# NOT = {
+					# estate_loyalty = {
+						# estate = estate_french
+						# loyalty = 50
+					# }	
+				# }
+			# }
+			# modifier = {
+				# factor = 0
+				# manpower_percentage = 0.25				
+			# }
+			# modifier = {
+				# factor = 0
+				# is_at_war = no
+			# }			
+		# }
+	# }
+	# interaction = {
+		# name = eng_demand_trade_support
+		# icon = 6
+		
+		# years_between_use = 15
+		
+		# potential = {
+			# mission_completed = UKS_quell_down
+		# }
+		
+		# trigger = {
+			# estate_loyalty = {
+				# estate = estate_french
+				# loyalty = 40
+			# }
+		# }
+		
+		# effect = {
+			# 186 = {
+				# add_trade_modifier = {
+					# who = ROOT
+					# duration = 5475
+					# power = 15
+					# key = UKS_trade_support
+				# }
+			# }
+			# 174 = {
+				# add_trade_modifier = {
+					# who = ROOT
+					# duration = 5475
+					# power = 15
+					# key = UKS_trade_support
+				# }
+			# }
+			# if = {
+				# limit = {
+					# mission_completed = UKS_our_possessions
+				# }
+				
+			# }
+			# add_estate_loyalty = {
+				# estate = estate_french
+				# loyalty = -5
+			# }
+		# }
+		
+		# ai_will_do = {
+			# factor = 1
+			# modifier = {
+				# factor = 0
+				# NOT = {
+					# estate_loyalty = {
+						# estate = estate_nobles
+						# loyalty = 50
+					# }	
+				# }
+			# }
+			# modifier = {
+				# factor = 0
+				# manpower_percentage = 0.25				
+			# }
+			# modifier = {
+				# factor = 0
+				# is_at_war = no
+			# }			
+		# }
+	# }
+	# interaction = {
+		# name = ENG_need_support
+		# icon = 1
+		
+		# years_between_use = 20
+		
+		# potential = {
+			# mission_completed = UKS_bromance
+		# }
+		
+		# trigger = {
+		# }
+		
+		# effect = {
+			# add_adm_power = 25
+			# add_dip_power = 25
+			# add_mil_power = 25
+			# add_estate_loyalty = {
+				# estate = estate_french
+				# loyalty = -10
+			# }
+		# }
+		
+		# ai_will_do = {
+			# factor = 1
+		# }
+	# }
+# }

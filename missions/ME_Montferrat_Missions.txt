@@ -1,0 +1,822 @@
+montferrat_missions_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MFA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	turn_over_savoy = {
+		icon = me_mission_get_pu
+		position = 1
+		required_missions = { }
+		trigger = {
+			is_subject = no
+			NOT = { truce_with = SAV }
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = SAV
+				}
+				add_casus_belli = {
+					target = SAV
+					type = cb_vassalize_mission
+				}
+			}
+			else = {
+				romandie_area = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_claim = ROOT
+				}
+				savoy_dauphine_area = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+						NOT = { is_claim = ROOT	}
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	vassalize_savoy = {
+		icon = me_mission_get_pu
+		position = 2
+		required_missions = { turn_over_savoy }
+		provinces_to_highlight = {
+			NOT = { exists = SAV }
+			OR = {
+				area = romandie_area
+				area = savoy_dauphine_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = SAV
+				}
+				overlord_of = SAV
+			}
+			else = {
+				romandie_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				savoy_dauphine_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_country_modifier = {
+				name = montferrat_vassalized_savoy
+				duration = 3650
+			}
+		}
+	}
+	
+	annex_or_integrate_savoy = {
+		icon = mission_alliances
+		position = 3
+		required_missions = { vassalize_savoy }
+		provinces_to_highlight = {
+			NOT = { exists = SAV }
+			OR = {
+				area = romandie_area
+				area = savoy_dauphine_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { has_country_modifier = loyal_subjects }
+			if = {
+				limit = {
+					exists = SAV
+				}
+				overlord_of = SAV
+				if = {
+					limit = {
+						SAV = {
+							vassal_of = ROOT
+						}
+					}
+					SAV = {
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 10
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						SAV = {
+							junior_union_with = ROOT
+						}
+					}
+					SAV = {
+						years_in_union_under = {
+							who = ROOT
+							years = 50
+						}
+					}
+				}
+				else = {
+					SAV = {
+						years_in_vassalage_under = {
+							all_subject_country = yes
+							who = ROOT
+							years = 20
+						}
+					}
+				}
+			}
+			else = {
+				romandie_area = {
+					type = all
+					owned_by = ROOT
+				}
+				savoy_dauphine_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = loyal_subjects
+				duration = 1825
+			}
+		}
+	}
+
+	gain_control_of_piedmont = {
+		icon = mission_conquer_50_development
+		position = 4
+		required_missions = { annex_or_integrate_savoy }
+		provinces_to_highlight = {
+			area = piedmont_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			is_free_or_tributary_trigger = yes
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_home_area_conquest
+				duration = 5475
+			}
+			piedmont_area = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			provence_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_ligurian_coast = {
+		icon = mission_establish_high_seas_navy
+		position = 5
+		required_missions = { gain_control_of_piedmont }
+		provinces_to_highlight = {
+			OR = {
+				area = provence_area
+				area = liguria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			provence_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			lombardy_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			languedoc_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			savoy_dauphine_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_northern_italy = {
+		icon = mission_build_up_to_force_limit
+		position = 6
+		required_missions = { conquer_ligurian_coast }
+		provinces_to_highlight = {
+			OR = {
+				area = lombardy_area
+				area = emilia_romagna_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			central_italy_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			lazio_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_central_italy = {
+		icon = mission_cannons_firing
+		position = 7
+		required_missions = { conquer_northern_italy }
+		provinces_to_highlight = {
+			OR = {
+				area = tuscany_area
+				area = central_italy_area
+				area = lazio_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			central_italy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lazio_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			naples_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+					NOT = { province_id = 118 }
+				}
+				add_permanent_claim = ROOT
+			}
+			calabria_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_southern_italy = {
+		icon = mission_assemble_an_army
+		position = 8
+		required_missions = { conquer_central_italy }
+		provinces_to_highlight = {
+			OR = {
+				area = naples_area
+				area = calabria_area
+				area = apulia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			naples_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			apulia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			western_sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			corsica_sardinia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_italian_islands = {
+		icon = mission_unite_home_region
+		position = 9
+		required_missions = { conquer_southern_italy }
+		provinces_to_highlight = {
+			OR = {
+				area = sicily_area
+				area = corsica_sardinia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			corsica_sardinia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_mil_power = 100
+			add_country_modifier = {
+				name = montferrat_italian_islands_conquest
+				duration = 10950
+			}
+		}
+	}
+}
+
+montferrat_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = MFA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	montferrat_gain_foothold_in_france = {
+		icon = mission_assemble_an_army
+		position = 6
+		required_missions = { conquer_ligurian_coast }
+		provinces_to_highlight = {
+			OR = {
+				area = languedoc_area
+				area = savoy_dauphine_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			languedoc_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			savoy_dauphine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			guyenne_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			pyrenees_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			173 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			massif_central_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	conquer_southern_france = {
+		icon = mission_unite_home_region
+		position = 7
+		required_missions = { montferrat_gain_foothold_in_france }
+		provinces_to_highlight = {
+			OR = {
+				area = guyenne_area
+				area = pyrenees_area
+				area = massif_central_area
+				province_id = 173
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			guyenne_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			pyrenees_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			massif_central_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			173 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 30
+			add_adm_power = 100
+			add_dip_power = 100
+			add_country_modifier = {
+				name = montferrat_southern_france_conquest
+				duration = 10950
+			}
+		}
+	}
+	
+	montferrat_army_tradition = {
+		icon = mission_assemble_an_army
+		position = 8
+		required_missions = { }
+		trigger = {
+			army_tradition = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_army_tradition_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	montferrat_navy_tradition = {
+		icon = mission_establish_high_seas_navy
+		position = 9
+		required_missions = { }
+		trigger = {
+			navy_tradition = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_navy_tradition_modifier
+				duration = 9125
+			}
+		}
+	}
+}
+
+montferrat_missions_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = MFA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	montferrat_build_trade_buildings = {
+		icon = mission_early_game_buildings
+		position = 6
+		required_missions = { }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = montferrat_trade_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	montferrat_build_production_buildings = {
+		icon = mission_early_game_buildings
+		position = 7
+		required_missions = { montferrat_build_trade_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = montferrat_production_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	montferrat_production_leader = {
+		icon = mission_trade_company_region_abroad
+		position = 8
+		required_missions = { montferrat_build_production_buildings }
+		trigger = {
+			production_leader = {
+				trade_goods = wine
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_production_leader_modifier
+				duration = 9125
+			}
+		}
+	}
+}
+
+montferrat_missions_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = MFA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	montferrat_trading_part = {
+		icon = mission_dominate_home_trade_node
+		position = 7
+		required_missions = { montferrat_build_trade_buildings }
+		trigger = {
+			trading_part = {
+				trade_goods = wine
+				value = 0.15
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_trading_part_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	montferrat_develop_country = {
+		icon = mission_conquer_50_development
+		position = 8
+		required_missions = { montferrat_build_production_buildings montferrat_build_government_buildings }
+		trigger = {
+			total_development = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = montferrat_developed_country
+				duration = 9125
+			}
+		}
+	}
+	
+	montferrat_great_power = {
+		icon = mission_conquer_50_development
+		position = 9
+		required_missions = { montferrat_develop_country }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				is_great_power = yes
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = NOT_MORE_THAN_7_HIGHER_DEVELOPED_COUNTRIES_THAN_MFA
+					NOT = {
+						calc_true_if = {
+							all_country = {
+								NOT = { tag = ROOT }
+								ROOT = {
+									NOT = { total_development = PREV }
+								}
+							}
+							amount = 8
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_country_modifier = {
+				name = montferrat_great_power_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+montferrat_missions_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = MFA
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	montferrat_build_naval_buildings = {
+		icon = mission_early_game_buildings
+		position = 6
+		required_missions = { }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = dock
+						has_building = drydock
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_yearly_sailors = 3
+			add_country_modifier = {
+				name = montferrat_naval_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	montferrat_build_government_buildings = {
+		icon = mission_early_game_buildings
+		position = 7
+		required_missions = { montferrat_build_naval_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+						has_building = university
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_country_modifier = {
+				name = montferrat_government_buildings
+				duration = 7300
+			}
+		}
+	}
+	
+	montferrat_build_army_buildings = {
+		icon = mission_early_game_buildings
+		position = 8
+		required_missions = { montferrat_build_government_buildings }
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = montferrat_army_buildings
+				duration = 7300
+			}
+		}
+	}
+}

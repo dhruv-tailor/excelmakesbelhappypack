@@ -1,0 +1,545 @@
+CHG_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = CHG
+	}
+	has_country_shield  = yes
+	
+	CHG_faithful_alignment = {
+        icon = me_mission_muslim_priest
+        required_missions = { }
+        position = 1
+        trigger = {
+			religion_group = muslim
+			OR = {
+				piety = 0.4
+				NOT = { piety = -0.4 }
+			}
+		}
+        effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						piety = 0.4
+					}
+					add_piety = 0.1
+				}
+				else = {
+					add_piety = -0.1
+				}
+			}
+			custom_tooltip = ME_Chagatai_Tooltip.1
+			khorasan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_faithful_sacrilage = {
+        icon = me_mission_great_mosque
+        required_missions = { CHG_faithful_alignment }
+        position = 2
+		provinces_to_highlight = {
+			region = khorasan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+        trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				region = khorasan_region
+			}
+		}
+        effect = {
+			persia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = CHG_bane_of_timur
+				duration = 10950
+			}
+        }
+    }
+	
+	CHG_revive_the_ilkhanate = {
+        icon = mission_persian_soldiers
+        required_missions = { CHG_faithful_sacrilage }
+        position = 3
+		provinces_to_highlight = {
+			region = persia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+        trigger = {
+			capital_scope = {
+				region = persia_region
+			}
+			persia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+        effect = {
+			4338 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+			}
+        }
+    }
+}
+
+CHG_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = CHG
+	}
+	has_country_shield  = yes
+	
+	CHG_fragmented_khanate = {
+        icon = mission_non-western_cavalry_raid
+        required_missions = { }
+        position = 1
+        trigger = {
+			stability = 2
+			legitimacy_equivalent = 99
+		}
+        effect = {
+			add_stability_or_adm_power = yes
+			add_country_modifier = { 
+				name = CHG_unification_attempts
+				duration = 7300
+			}
+        }
+    }
+	
+	CHG_yarkand_mongols = {
+        icon = mission_chinese_general_riding
+        required_missions = { CHG_fragmented_khanate  CHG_mongol_warfare }
+        position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = shanshan_area
+				area = kashgaria_area
+				area = tarim_basin_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+        trigger = {
+			shanshan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			kashgaria_area = {
+				type = all
+				owned_by = ROOT
+			}
+			tarim_basin_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_chagatayid_unity
+				duration = 10950
+			}
+			arys_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ferghana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transoxiana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_kazakh_mongols = {
+        icon = mission_central_asian_city
+        required_missions = { CHG_yarkand_mongols  }
+        position = 3
+        trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				culture = khazak
+			}
+		}
+        effect = {
+			add_legitimacy_equivalent = { value = 5 }
+			add_country_modifier = {
+				name = CHG_kazakh_host
+				duration = 7300
+			}
+        }
+    }
+}
+
+CHG_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CHG
+	}
+	has_country_shield  = yes
+	
+	CHG_mongol_warfare = {
+        icon = mission_steppe_warriors
+        required_missions = { }
+        position = 1
+        trigger = {
+			mil_tech = 4
+			employed_advisor = {
+				category = MIL
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_unrivaled_cavalry
+				duration = 5475
+			}
+        }
+    }
+	
+	CHG_oirat_mongols = {
+        icon = mission_crusade_for_varna
+        required_missions = { CHG_mongol_warfare }
+        position = 2 
+		provinces_to_highlight = {
+			OR = {
+				area = turpan_kumul_area
+				area = altai_sayan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+        trigger = {
+			turpan_kumul_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			altai_sayan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+        effect = {
+			add_dip_power = 100
+			add_country_modifier = {
+				name = CHG_rightful_mongol_conquest
+				duration = 10950
+			}
+			north_zungaria = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tannu_uriankhai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			uliastai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_finish_the_federation = {
+        icon = mission_steppe_warriors
+        required_missions = { CHG_oirat_mongols }
+        position = 3
+		provinces_to_highlight = {
+			province_id = 718
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					development = 6
+					NOT = { has_province_modifier = province_razed }
+				}
+			}
+		}
+        trigger = {
+			NOT = { exists = OIR }
+			718 = {
+				owned_by = ROOT
+				OR = {
+					NOT = { development = 6 }
+					has_province_modifier = province_razed
+				}
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_foiled_the_federation
+				duration = 10950
+			}
+        }
+    }
+	
+	CHG_trans_mongol_khanate = {
+        icon = me_mission_shiny_crown
+        required_missions = { CHG_kazakh_mongols CHG_finish_the_federation CHG_integrate_the_tribes }
+        position = 4
+		provinces_to_highlight = {
+			province_id = 2116
+			NOT = { owned_by = ROOT }
+		}
+        trigger = {
+			legitimacy_equivalent = 95
+			owns = 2116
+		}
+        effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			north_china_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_nomadic_scramble = {
+        icon = mission_war_chest
+        required_missions = { CHG_trans_mongol_khanate }
+        position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2171
+				province_id = 688
+				province_id = 1816
+			}
+			NOT = { owned_by = ROOT }
+		}
+        trigger = {
+			owns = 2171
+			owns = 688
+			owns = 1816
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_history_repeating
+				duration = 10950
+			}
+        }
+    }
+}
+
+CHG_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CHG
+	}
+	has_country_shield  = yes
+	
+	CHG_chinese_relations = {
+        icon = mission_chinese_general_riding
+        required_missions = { }
+        position = 1
+        trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					AND = {
+						exists = MNG
+						OR = {
+							army_size = MNG
+							AND = {
+								is_subject_of_type = tributary_state
+								is_subject_of = MNG
+							}
+							AND = {
+								MNG = {
+									is_emperor_of_china = yes
+									NOT = { imperial_mandate = 20 }
+								}
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = MNG }
+						army_size = 30
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						exists = MNG
+						OR = {
+							reverse_has_opinion = {
+								who = MNG
+								value = 75
+							}
+							army_size = MNG
+							MNG = { 
+								NOT = { stability = 0 }
+							}
+						}
+					}
+					AND = {
+						NOT = { exists = MNG }
+						army_size = 30
+					}
+				}
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_chinese_solution
+				duration = 7300
+			}
+			turpan_kumul_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			altai_sayan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ngari_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			amdo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_the_splinters = {
+        icon = mission_build_up_to_force_limit
+        required_missions = { CHG_chinese_relations CHG_mongol_warfare }
+        position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 706
+				province_id = 4204
+				area = ngari_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+        trigger = {
+			706 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4204 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ngari_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = CHG_mongol_levies
+				duration = 10950
+			}
+			kham_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+        }
+    }
+	
+	CHG_integrate_the_tribes = {
+        icon = mission_alliances
+        required_missions = { CHG_the_splinters }
+        position = 3
+		provinces_to_highlight = {
+			NOT = { has_dlc = "The Cossacks" }
+			owned_by = ROOT
+			unrest = 1
+		}
+        trigger = {
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				estate_loyalty = {
+					estate = estate_nomadic_tribes
+					loyalty = 70
+				}
+				estate_influence = {
+					estate = estate_nomadic_tribes
+					influence = 50
+				}
+			}
+			else = {
+				all_owned_province = {
+					NOT = { unrest = 1 }
+				}
+			}
+		}
+        effect = {
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				custom_tooltip = ME_Chagatai_Tooltip.3
+			}
+			else = {
+				add_mil_power = 100
+			}
+        }
+    }
+}

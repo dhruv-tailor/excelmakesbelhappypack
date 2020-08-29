@@ -1,0 +1,466 @@
+﻿Timurid_princes_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TRS
+			tag = AFG
+			tag = QOM
+			tag = KHO
+			tag = FRS
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Timurid_prince_power_strugle = {
+		icon = me_mission_timurids_princedom_the_power_struggle
+		required_missions = { }
+		position = 1
+		trigger = {
+			TIM = {
+				NOT = { has_country_modifier = shahrukhs_empire }
+			}
+		}
+		effect = {
+			set_country_flag = ME_can_use_timurid_legitimacy
+			custom_tooltip = ME_ALLOW_POWER_STRUGLE.tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = ME_yearly_timurid_legitimacy 
+					duration = -1
+					hidden = yes
+				}
+				set_variable = { timurid_legitimacy_value = 0 }
+			}
+		}
+	}
+	
+	Timurid_prince_expand_the_state = {
+		icon = me_mission_timurids_princedom_expand_our_realm
+		required_missions = { Timurid_prince_power_strugle }
+		position = 3
+		trigger = {
+			grown_by_development = 75
+		}
+		effect = {
+			add_prestige = 10
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 50
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 25 }
+			}
+			capital_scope = {
+				region = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Timurid_prince_claim_the_empire = {
+		icon = me_mission_timurids_princedom_claim_timur_empire
+		required_missions = { 
+			Timurid_prince_expand_the_state
+			Timurid_grand_ruler
+		}
+		position = 4
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 50 }
+		}
+		effect = {
+			set_country_flag = ME_ALLOW_FORMATION_OF_TIMURIDS
+			custom_tooltip = ALLOW_FORMATION_OF_TIMURIDS.tooltip
+		}
+	}
+}
+
+Timurid_princes_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TRS
+			tag = AFG
+			tag = QOM
+			tag = KHO
+			tag = FRS
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Timurid_support_within_the_people = {
+		icon = me_mission_timurids_princedom_support_by_the_people
+		required_missions = {
+			Timurid_prince_power_strugle
+			Timurid_heir_of_timur
+		}
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 0.01
+		}
+		trigger = {
+			all_owned_province = { 
+				NOT = { unrest = 0.01 }
+			}
+			OR = {
+				DIP = 4
+				calc_true_if = {
+					all_country = {
+						dynasty = "Timurid"
+						alliance_with = ROOT
+					}
+					amount = 2
+				}
+			}
+		}
+		effect = {
+			change_variable = { timurid_legitimacy_value = 5 }
+		}
+	}
+	
+	Timurid_grand_ruler = {
+		icon = me_mission_timurids_princedom_the_great_ruler
+		required_missions = {
+			Timurid_support_within_the_people
+		}
+		position = 3
+		trigger = {
+			OR = {
+				total_development = 400
+				AND = {
+					ADM = 4
+					DIP = 4
+					MIL = 4
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			change_variable = { timurid_legitimacy_value = 10 }
+		}
+	}
+}
+
+Timurid_princes_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TRS
+			tag = AFG
+			tag = QOM
+			tag = KHO
+			tag = FRS
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Timurid_heir_of_timur = {
+		icon = me_mission_timurids_princedom_heir_of_timur
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			TIM = {
+				NOT = { has_country_modifier = shahrukhs_empire }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_heir_of_timur
+				duration = 7300
+			}
+		}
+	}
+	
+	Timurid_stronger_than_our_competitors = {
+		icon = me_mission_timurids_princedom_strongest_amongst_many
+		required_missions = { Timurid_heir_of_timur }
+		position = 3
+		trigger = {
+			OR = {
+				army_size = 40
+				calc_true_if = {
+					all_country = {
+						dynasty = "Timurid"
+						NOT = { army_size = ROOT }
+					}
+					amount = 3
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					mission_completed = Timurid_prince_power_strugle
+				}
+				change_variable = { timurid_legitimacy_value = 5 }
+			}
+			add_prestige = 20
+			add_legitimacy_equivalent = { value = 10 }
+		}
+	}
+	
+	Timurid_ruler_of_our_region = {
+		icon = me_mission_timurids_princedom_ruler_of_our_region
+		required_missions = { 
+			Timurid_stronger_than_our_competitors
+			Timurid_grand_ruler
+		}
+		position = 4
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			capital_scope = {
+				region_for_scope_province = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = ME_uncontested_ruler
+				duration = -1
+			}
+		}
+	}
+}
+
+Timurid_princes_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TRS
+			tag = AFG
+			tag = QOM
+			tag = KHO
+			tag = FRS
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Timurid_pacify_the_persian_people = {
+		icon = me_mission_timurids_princedom_pacify_the_persians
+		required_missions = { 
+			Timurid_follow_seljuk_architecture
+			Timurid_heir_of_timur
+		}
+		position = 2
+		trigger = {
+			OR = {
+				government_rank = 3
+				dominant_culture = uzbehk
+				calc_true_if = {
+					accepted_culture = persian
+					accepted_culture = luri
+					accepted_culture = azerbaijani
+					accepted_culture = khorasani
+					accepted_culture = baluchi
+					accepted_culture = afghani
+					accepted_culture = kurdish
+					accepted_culture = mazandarani
+					amount = 5
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_pacified_the_persians
+				duration = -1
+			}
+		}
+	}
+	
+	Timurid_heal_the_persian_religious_turmoil = {
+		icon = me_mission_timurids_princedom_ending_the_turmoil
+		required_missions = { 
+			Timurid_pacify_the_persian_people
+		}
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				region = persia_region
+				region = khorasan_region
+			}
+			NOT = { religion = ROOT }
+			ROOT = {
+				NOT = {
+					OR = {
+						full_idea_group = humanist_ideas
+						AND = {
+							religious_unity = 1
+							is_year = 1480
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				full_idea_group = humanist_ideas
+				AND = {
+					religious_unity = 1
+					is_year = 1480
+				}
+				AND = {
+					persia_region = {
+						type = all
+						religion = ROOT
+					}
+					khorasan_region = {
+						type = all
+						religion = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = ME_healed_religious_turmoil
+				duration = 7300
+			}
+			khorasan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+Timurid_princes_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TRS
+			tag = AFG
+			tag = QOM
+			tag = KHO
+			tag = FRS
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	
+	Timurid_follow_seljuk_architecture = {
+		icon = me_mission_timurids_princedom_seljuk_architecture
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
+			calc_true_if = {
+				all_province = {
+					development = 30
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_seljuk_architecture
+				duration = 10950
+			}
+		}
+	}
+	
+	Timurid_pinnacle_of_islamic_art = {
+		icon = me_mission_timurids_princedom_pinnacle_of_islamic_art
+		required_missions = { Timurid_follow_seljuk_architecture }
+		position = 3
+		trigger = {
+			religion_group = muslim
+			OR = {
+				piety = 0.7
+				NOT = { piety = -0.7 }
+			}
+			prestige = 60
+			has_institution = renaissance
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_pinnacle_of_islamic_art
+				duration = 9125
+			}
+			persia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Timurid_restore_persia_and_khorasan_areas = {
+		icon = me_mission_timurids_princedom_reconstruct_the_persian_lands
+		required_missions = { 
+			Timurid_pinnacle_of_islamic_art
+			Timurid_heal_the_persian_religious_turmoil
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				region = persia_region
+				region = khorasan_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				unrest = 2
+			}
+		}
+		trigger = {
+			persia_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 2 }
+			}
+			khorasan_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 2 }
+			}
+		}
+		effect = {
+			custom_tooltip = ALLOW_PERSIAN_REGION_RESTORATION_EVENTS.tooltip
+			hidden_effect = {
+				set_country_flag = allow_persian_restoration
+				add_country_modifier = {
+					name = allow_persian_restoration_for_20_years
+					duration = 7300
+					hidden = yes
+				}
+			}
+		}
+	}
+}

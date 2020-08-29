@@ -1,0 +1,1319 @@
+SWE_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	sweden_organizing_our_provinces = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_at_war = no
+			manpower = 1
+			OR = {
+				regimental_camp = 15
+				conscription_center = 15
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
+				add_province_modifier = {
+					name = sweden_organizing_our_provinces_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	sweden_carolean_infantry = {
+		icon = me_mission_conquer
+		required_missions = { sweden_organizing_our_provinces sweden_defeating_the_tercios }
+		position = 3
+		trigger = {
+			is_year = 1600
+			OR = {
+				dynasty = "von Wittelsbach"
+				MIL = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_carolean_infantry_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	sweden_influence_in_livonia = {
+		icon = me_mission_sweden_livonia
+		required_missions = { sweden_cold_port_at_neva }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = livonia_area
+				area = estonia_ingria_area
+				area = curonia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			livonia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			estonia_ingria_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			curonia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = latvian
+			custom_tooltip = SWE_LATVIAN_CULTURE_WILL_NOT_COST_AN_ACCEPTED_CULTURE_SLOT
+			add_accepted_culture = estonian
+			custom_tooltip = SWE_ESTONIAN_CULTURE_WILL_NOT_COST_AN_ACCEPTED_CULTURE_SLOT
+			west_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_foothold_in_prussia = {
+		icon = me_mission_prussia_coat
+		required_missions = { sweden_influence_in_livonia }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = west_prussia_area
+				area = east_prussia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			west_prussia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_prussia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			NOT = { exists = TEU }
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_foothold_in_prussia_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	sweden_swedish_pomerania = {
+		icon = me_mission_sweden_pomerania
+		required_missions = { sweden_dealing_with_the_hansa sweden_foothold_in_prussia }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = vorpommern_area
+				area = hinter_pommern_area
+				area = mecklenburg_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			vorpommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			hinter_pommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mecklenburg_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			vorpommern_area = {
+				add_nationalism = -5
+			}
+			hinter_pommern_area = {
+				add_nationalism = -5
+			}
+			mecklenburg_area = {
+				add_nationalism = -5
+			}
+		}
+	}
+}
+
+SWE_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	sweden_defeating_the_tercios = {
+		icon = mission_cannons_firing
+		required_missions = { sweden_organizing_our_provinces }
+		position = 2
+		trigger = {
+			mil_tech = 12
+			MIL = 3
+			num_of_artillery = 15
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_defeating_the_tercios_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	sweden_cold_port_at_neva = {
+		icon = me_mission_sweden_neva
+		required_missions = { sweden_ending_the_kalmar_union }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 33
+				province_id = 34
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 33
+			owns_core_province = 34
+		}
+		effect = {
+			33 = {
+				add_base_production = 2
+			}
+			add_country_modifier = {
+				name = sweden_cold_port_at_neva_modifier
+				duration = 5475
+			}
+			livonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			estonia_ingria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			curonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_the_straits_of_denmark = {
+		icon = mission_disrupt_portuguese_trade
+		required_missions = { sweden_reclaiming_gotland }
+		position = 4
+		provinces_to_highlight = {
+			area = skaneland_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			skaneland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			skaneland_area = {
+				add_nationalism = -5
+			}
+			45 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			eastern_norway = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			western_norway = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_norway = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_dealing_with_the_hansa = {
+		icon = mission_rb_control_the_hansa
+		required_missions = { sweden_foothold_in_prussia sweden_the_straits_of_denmark }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			owns_core_province = 45
+			45 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			45 = {
+				add_trade_modifier = {
+					who = ROOT
+					power = 15
+					duration = -1
+					key = sweden_dealing_with_the_hansa_trade_modifier
+				}
+			}
+			add_country_modifier = {
+				name = sweden_dealing_with_the_hansa_modifier
+				duration = 7300
+			}
+			northern_norway = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_dominium_maris_baltici = {
+		icon = me_mission_sweden_dominium_maris_baltici
+		required_missions = { sweden_swedish_pomerania sweden_dealing_with_the_hansa }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = ostra_svealand_area
+				area = gotaland_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_state = no
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					OR = {
+						devastation = 1
+						unrest = 1
+						AND = {
+							NOT = { development = 20 }
+							OR = {
+								AND = {
+									area = ostra_svealand_area
+									NOT = {
+										ostra_svealand_area = {
+											development = 20
+										}
+									}
+								}
+								AND = {
+									area = gotaland_area
+									NOT = {
+										gotaland_area = {
+											development = 20
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			1926 = {
+				trade_share = {
+					country = ROOT
+					share = 80
+				}
+			}
+			ostra_svealand_area = {
+				type = all
+				owned_by = ROOT
+				is_state = yes
+			}
+			gotaland_area = {
+				type = all
+				owned_by = ROOT
+				is_state = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				ostra_svealand_area = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				gotaland_area = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				OR = {
+					in_golden_age = yes
+					AND = {
+						ADM = 4
+						DIP = 4
+						MIL = 4
+					}
+				}
+			}
+			else = {
+				ostra_svealand_area = {
+					development = 20
+				}
+				ostra_svealand_area = {
+					type = all
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
+				}
+				gotaland_area = {
+					development = 20
+				}
+				gotaland_area = {
+					type = all
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
+				}
+				ADM = 4
+				DIP = 4
+				MIL = 4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_dominium_maris_baltici_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+SWE_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	sweden_echoes_of_freedom = {
+		icon = me_mission_sweden_charles_xii
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				liberty_desire = 50
+			}
+			army_size_percentage = 1
+		}
+		effect = {
+			create_general = {
+				tradition = 40
+			}
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				add_country_modifier = {
+					name = sweden_echoes_of_freedom_modifier
+					duration = 7300
+					desc = UNTIL_LOYAL_FREE_OR_20_YEARS
+				}
+			}
+			else = {
+				add_mil_power = 100
+			}
+		}
+	}
+	
+	sweden_ending_the_kalmar_union = {
+		icon = mission_assemble_an_army
+		required_missions = { sweden_echoes_of_freedom }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			is_subject = no
+			is_at_war = no
+			owns = 1
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 30 }
+			add_ruler_modifier = {
+				name = sweden_ending_the_kalmar_union_modifier
+				duration = -1
+			}
+			33 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			34 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	sweden_reclaiming_gotland = {
+		icon = me_mission_sweden_gotland
+		required_missions = { sweden_ending_the_kalmar_union }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 25
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 25
+			if = {
+				limit = {
+					exists = HNS
+				}
+				NOT = { war_with = HNS }
+			}
+			if = {
+				limit = {
+					exists = HSA
+				}
+				NOT = { war_with = HSA }
+			}
+			if = {
+				limit = {
+					exists = DAN
+				}
+				NOT = { war_with = DAN }
+			}
+		}
+		effect = {
+			25 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				else = {
+					add_base_production = 2
+				}
+			}
+			skaneland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_liberate_norway = {
+		icon = me_mission_sweden_norway
+		required_missions = { sweden_the_straits_of_denmark }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = eastern_norway
+				area = western_norway
+				area = northern_norway
+				province_id = 315
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			eastern_norway = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			western_norway = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_norway = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			315 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_liberate_norway_modifier
+				duration = 5475
+			}
+			jutland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			denmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	sweden_uniting_the_three_crowns = {
+		icon = me_mission_shiny_crown
+		required_missions = { sweden_liberate_norway }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = jutland_area
+				area = denmark_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			jutland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			denmark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_uniting_the_three_crowns_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+SWE_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	sweden_expand_dalaskogen = {
+		icon = mission_african_gold
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 8
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 10 }
+				NOT = { base_production = 5 }
+			}
+		}
+		trigger = {
+			owns = 8
+			8 = {
+				development = 10
+				base_production = 5
+			}
+		}
+		effect = {
+			8 = {
+				if = {
+					limit = {
+						NOT = { has_province_modifier = stora_kopparberget_modifier }
+					}
+					add_permanent_province_modifier = {
+						name = stora_kopparberget_modifier
+						duration = -1
+					}
+				}
+				else = {
+					replace_province_modifier = {
+						remove = stora_kopparberget_modifier
+						add = sweden_stora_kopparberget_modifier_improved
+						time = -1
+						permanent = yes
+					}
+				}
+				add_province_modifier = {
+					name = sweden_expand_dalaskogen_province_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	sweden_foundation_of_karlskrona = {
+		icon = me_mission_aachen_city_view
+		required_missions = { sweden_expand_dalaskogen }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1982
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				has_province_modifier = sweden_snapphanarna_separatists
+			}
+		}
+		trigger = {
+			owns = 1982
+			1982 = {
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+				NOT = { has_province_modifier = sweden_snapphanarna_separatists }
+			}
+			years_of_income = 0.5
+		}
+		effect = {
+			country_event = { id = ME_Sweden_Events.1 }
+		}
+	}
+}
+
+SWE_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	sweden_the_city_of_gothenburg = {
+		icon = mission_hanseatic_city
+		required_missions = { sweden_expand_dalaskogen }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 4163
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					OR = {
+						is_state = no
+						is_prosperous = no
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					OR = {
+						AND = {
+							NOT = { has_building = temple }
+							NOT = { has_building = cathedral }
+						}
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			is_at_war = no
+			ADM = 3
+			owns = 4163
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				4163 = {
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				4163 = {
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+			}
+		}
+		effect = {
+			4163 = {
+				add_province_modifier = {
+					name = sweden_the_city_of_gothenburg_province_modifier
+					duration = -1
+				}
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				change_province_name = "Gothenburg"
+			}
+		}
+	}
+	
+	sweden_the_reformation_in_sweden = {
+		icon = mission_luther_theses
+		required_missions = { }
+		position = 3
+		trigger = {
+			current_age = age_of_reformation
+			religion_group = christian
+			any_owned_province = {
+				religion = protestant
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_the_reformation_in_sweden_modifier
+				duration = -1
+				desc = UNTIL_SWE_PICKS_PROTESTANT_OR_CATHOLIC_MISSION
+			}
+		}
+	}
+}
+
+SWE_missions_5_catholic_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = swe_protestant_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_support_the_roman_church = {
+		icon = me_mission_one_country_one_faith
+		required_missions = { sweden_the_reformation_in_sweden }
+		position = 4
+		trigger = {
+			NOT = { mission_completed = sweden_support_the_lutherans }
+			religion = catholic
+			OR = {
+				is_papal_controller = yes
+				AND = {
+					exists = PAP
+					reverse_has_opinion = {
+						who = PAP
+						value = 75
+					}
+				}
+				AND = {
+					NOT = { exists = PAP }
+					118 = {
+						religion = catholic
+					}
+				}
+			}
+			NOT = { has_country_modifier = the_statue_in_restraint_of_appeals }
+			is_excommunicated = no
+		}
+		effect = {
+			add_papal_influence = 10
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 15
+			}
+			add_country_modifier = {
+				name = sweden_support_the_roman_church_modifier
+				duration = 7300
+			}
+			capital_scope = {
+				add_province_modifier = {
+					name = sweden_support_the_roman_church_province_modifier
+					duration = 7300
+				}
+			}
+			remove_country_modifier = sweden_the_reformation_in_sweden_modifier
+			set_country_flag = swe_catholic_missions
+			swap_non_generic_missions = yes
+			hidden_effect = {
+				set_variable = { swe_num_of_wars_against_non_catholics = 0 }
+			}
+		}
+	}
+}
+
+SWE_missions_4_catholic = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = swe_catholic_missions
+		NOT = { has_country_flag = swe_protestant_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_deus_vult = {
+		icon = mission_hands_praying
+		required_missions = { sweden_support_the_roman_church }
+		position = 5
+		trigger = {
+			religion = catholic
+			army_size_percentage = 1
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				NOT = { ruler_has_personality = sinner_personality }
+			}
+			custom_trigger_tooltip = {
+				tooltip = SWE_DECLARED_WAR_AGAINST_7_NON_CATHOLICS
+				check_variable = { swe_num_of_wars_against_non_catholics = 7 }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { MIL = 6 }
+				}
+				change_mil = 1
+			}
+			else = {
+				add_mil_power = 100
+			}
+			add_years_of_income = 0.5
+		}
+	}
+}
+
+SWE_missions_5_catholic_2 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = swe_catholic_missions
+		NOT = { has_country_flag = swe_protestant_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_protect_scandinavia = {
+		icon = me_mission_scandinavia_coat
+		required_missions = { sweden_support_the_roman_church }
+		position = 5
+		provinces_to_highlight = {
+			region = scandinavia_region
+			OR = {
+				NOT = { religion = catholic }
+				owner = {
+					NOT = { religion = catholic }
+				}
+			}
+		}
+		trigger = {
+			is_year = 1570
+			scandinavia_region = {
+				type = all
+				religion = catholic
+				owner = {
+					religion = catholic
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_protect_scandinavia_modifier
+				duration = 10950
+			}
+			if = {
+				limit = {
+					any_country = {
+						religion = catholic
+						OR = {
+							is_neighbor_of = ROOT
+							tag = PAP
+							is_emperor = yes
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						religion = catholic
+						OR = {
+							is_neighbor_of = ROOT
+							tag = PAP
+							is_emperor = yes
+						}
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = sweden_protected_scandinavia_catholic
+					}
+				}
+			}
+		}
+	}
+	
+	sweden_bastion_of_catholicism = {
+		icon = mission_restore_faith_in_the_throne
+		required_missions = { sweden_deus_vult sweden_protect_scandinavia }
+		position = 6
+		trigger = {
+			religious_unity = 1
+			is_excommunicated = no
+			if = {
+				limit = {
+					exists = PAP
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = PAP
+						value = 125
+					}
+					alliance_with = PAP
+					PAP = {
+						ai_attitude = { who = ROOT attitude = attitude_friendly }
+					}
+				}
+			}
+			else = {
+				is_papal_controller = yes
+			}
+			OR = {
+				full_idea_group = religious_ideas
+				AND = {
+					has_country_modifier = the_blasphemy_act
+					has_country_modifier = the_advancement_of_true_religion_act
+				}
+				has_country_modifier = counter_reformation
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			add_papal_influence = 20
+			add_country_modifier = {
+				name = sweden_bastion_of_catholicism_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+SWE_missions_4_protestant_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = swe_catholic_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_support_the_lutherans = {
+		icon = mission_hands_praying
+		required_missions = { sweden_the_reformation_in_sweden }
+		position = 4
+		trigger = {
+			NOT = { mission_completed = sweden_support_the_roman_church }
+			OR = {
+				AND = {
+					religion = protestant
+					ruler_religion = protestant
+				}
+				AND = {
+					religion = reformed
+					ruler_religion = reformed
+				}
+			}
+			religious_unity = 0.3
+			NOT = { has_disaster = religious_turmoil }
+			NOT = { has_disaster = the_dacke_feud }
+		}
+		effect = {
+			add_years_of_income = 2
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -20
+			}
+			add_country_modifier = {
+				name = sweden_support_the_lutherans_modifier
+				duration = 5475
+			}
+			remove_country_modifier = sweden_the_reformation_in_sweden_modifier
+			set_country_flag = swe_protestant_missions
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+SWE_missions_4_protestant_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = swe_protestant_missions
+		NOT = { has_country_flag = swe_catholic_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_the_dacke_wars = {
+		icon = mission_cannons_firing
+		required_missions = { sweden_support_the_lutherans }
+		position = 5
+		trigger = {
+			OR = {
+				is_year = 1550
+				custom_trigger_tooltip = {
+					tooltip = SWE_HAD_DACKE_FEUD_DISASTER
+					has_country_flag = had_the_dacke_feud
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = had_the_dacke_feud
+				}
+				add_country_modifier = {
+					name = sweden_the_dacke_wars_modifier
+					duration = 9125
+				}
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						culture_group = scandinavian
+						local_autonomy = 10
+					}
+				}
+				every_owned_province = {
+					limit = {
+						culture_group = scandinavian
+						local_autonomy = 10
+					}
+					add_local_autonomy = -10
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_country_flag = had_the_dacke_feud }
+				}
+				add_prestige = 10
+			}
+		}
+	}
+}
+
+SWE_missions_5_protestant = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWE
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = swe_protestant_missions
+		NOT = { has_country_flag = swe_catholic_missions }
+	}
+	has_country_shield = yes
+	
+	sweden_defending_against_the_heretics = {
+		icon = mission_assemble_an_army
+		required_missions = { sweden_support_the_lutherans }
+		position = 5
+		trigger = {
+			NOT = { num_of_loans = 1 }
+			monthly_income = 0
+			all_neighbor_country = {
+				OR = {
+					religion = protestant
+					religion = reformed
+					NOT = { army_size = ROOT }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = protestant
+				}
+				add_church_power = 20
+			}
+			else_if = {
+				limit = {
+					religion = reformed
+				}
+				add_fervor = 20
+			}
+			add_country_modifier = {
+				name = sweden_defending_against_the_heretics_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	sweden_church_of_sweden = {
+		icon = mission_european_church
+		required_missions = { sweden_the_dacke_wars sweden_defending_against_the_heretics }
+		position = 6
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+			}
+			religious_unity = 0.9
+			is_at_war = no
+			capital_scope = {
+				has_owner_religion = yes
+				controlled_by = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 30
+				has_owner_religion = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sweden_church_of_sweden_modifier
+				duration = -1
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					if = {
+						limit = {
+							has_building = temple
+						}
+						remove_building = temple
+					}
+					add_building = cathedral
+				}
+				add_permanent_province_modifier = {
+					name = sweden_church_of_sweden_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}

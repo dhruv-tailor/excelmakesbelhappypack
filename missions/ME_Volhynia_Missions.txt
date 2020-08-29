@@ -1,0 +1,401 @@
+VOL_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = VOL
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	volhynia_declare_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 5
+		trigger = {
+			is_subject = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = "volhynia_rebuild_nation"
+				duration = 9125
+			}
+			podolia_volhynia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	volhynia_unite_galicia_volhynia = {
+		icon = mission_conquer_50_development
+		required_missions = { volhynia_declare_independence }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = podolia_volhynia_area
+				area = red_ruthenia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			podolia_volhynia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			red_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			west_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			moldavia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_dip_power = 25
+			add_adm_power = 25
+		}
+	}
+	
+	volhynia_conquer_malopolska = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { volhynia_unite_galicia_volhynia }
+		position = 8
+		provinces_to_highlight = {
+			area = malopolska_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			malopolska_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = polish
+			pripyat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	volhynia_demolish_poland = {
+		icon = mission_assemble_an_army
+		required_missions = { volhynia_conquer_malopolska }
+		position = 10
+		trigger = {
+			NOT = { exists = POL }
+			NOT = { exists = PLC }
+		}
+		effect = {
+			add_prestige = 20
+		}
+	}	
+}
+
+VOL_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = VOL
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	volhynia_conquer_west_dniepr = {
+		icon = mission_conquer_5_states
+		required_missions = { volhynia_unite_galicia_volhynia }
+		position = 8
+		provinces_to_highlight = {
+			area = west_dniepr_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			west_dniepr_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			zaporizhia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			280 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				move_capital_effect = yes
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				add_province_modifier = {
+					name = "re_establishment_of_kiev"
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	volhynia_conquer_belarus = {
+		icon = mission_assemble_an_army
+		required_missions = {
+			volhynia_conquer_malopolska
+			volhynia_conquer_west_dniepr
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = pripyat_area
+				area = minsk_area
+				area = white_ruthenia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			pripyat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			minsk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			white_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = byelorussian	
+			smolensk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	volhynia_demolish_lithuania = {
+		icon = mission_assemble_an_army
+		required_missions = { volhynia_conquer_belarus }
+		position = 10
+		trigger = {
+			NOT = { exists = LIT }
+			NOT = { exists = PLC }
+		}
+		effect = {
+			add_prestige = 20
+		}
+	}	
+}
+
+VOL_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = VOL
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	volhynia_conquer_moldavia = {
+		icon = mission_cossack_cavalry
+		required_missions = { volhynia_unite_galicia_volhynia }
+		position = 8
+		provinces_to_highlight = {
+			area = moldavia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			moldavia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			1756 = {				# Crimea
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 15
+					key = volhynia_control_danube
+				}
+				add_unit_construction = {
+					type = galley
+					amount = 5
+					speed = 0.5
+					cost = 0
+				}
+			}
+			yedisan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	volhynia_conquer_east_dniepr = {
+		icon = mission_unite_home_region
+		required_missions = { volhynia_conquer_west_dniepr }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = east_dniepr_area
+				province_id = 291
+				province_id = 298
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_dniepr_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			291 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			298 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "protectors_of_ruthenia"
+				duration = 9125
+			}
+		}
+	}
+	
+	volhynia_conquer_smolensk = {
+		icon = mission_cannons_firing
+		required_missions = { volhynia_conquer_east_dniepr }
+		position = 10
+		provinces_to_highlight = {
+			area = smolensk_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			smolensk_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			293 = {				# Kiev
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 15
+					key = volhynia_control_smolensk
+				}
+			}
+		}
+	}
+}
+
+VOL_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = VOL
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	volhynia_conquer_zaporozhia = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = {
+			volhynia_conquer_west_dniepr
+			volhynia_conquer_moldavia
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = zaporizhia_area
+				area = yedisan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			zaporizhia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yedisan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "mastery_of_the_steppes"
+				duration = 7300
+			}
+		}
+	}
+}

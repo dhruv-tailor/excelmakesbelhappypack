@@ -1,0 +1,3552 @@
+ZAZ_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_domestic_1 = { #rally hordes
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_1
+		}
+		position = 2
+		trigger = {
+			army_size_percentage = 1.0
+		}
+		effect = {
+			282 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_manpower = 1
+				}
+			}
+			283 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_manpower = 1
+				}
+			}
+			2406 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	
+	ZAZ_war_1 = { #baby's first raze
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_domestic_1
+		}
+		position = 4
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_province_modifier = province_razed }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 4
+				has_province_modifier = province_razed
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_taxes
+				duration = 9125
+			}
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+				}
+				add_local_autonomy = -15
+			}
+		}
+	}
+	
+	ZAZ_ally_tur = { #allign with turks
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_6
+		}
+		position = 5
+		trigger = {
+			exists = TUR
+			reverse_has_opinion = {
+				who = TUR
+				value = 100
+			}
+			custom_trigger_tooltip = {
+				tooltip = allied_turks_tooltip
+				NOT = { has_country_flag = zaz_allied_rus }
+				NOT = { has_country_flag = zaz_allied_gol }
+			}
+		}
+		effect = {
+			set_country_flag = zaz_allied_tur
+			country_event = { id = ME_Zaporozhie_Events.4 }
+			create_alliance	= TUR
+			if = {
+				limit = {
+					exists = POL
+				}
+				reverse_add_opinion = {
+					who = POL
+					modifier = zaz_hate_plc
+				}
+			}
+			if = {
+				limit = {
+					exists = LIT
+				}
+				reverse_add_opinion = {
+					who = LIT
+					modifier = zaz_hate_plc
+				}
+			}
+			reverse_add_opinion = {
+				who = TUR
+				modifier = zaz_tur_friend
+			}
+		}
+	}
+}
+
+ZAZ_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_indep_1 = { #muster manpower
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 1
+		trigger = {
+			manpower_percentage = 0.25
+		}
+		effect = {
+			add_yearly_manpower = 2.5
+			add_country_modifier = {
+				name = zaz_army
+				duration = 5475
+			}
+			282 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					infantry = ROOT
+				}
+			}
+			2406 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					infantry = ROOT
+				}
+			}
+			283 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					infantry = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_indep_7 = { #ambush plockas
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_3
+		}
+		provinces_to_highlight = {
+			province_id = 275
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { units_in_province = ROOT }
+				owner = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
+		position = 3
+		trigger = {
+			275 = {
+				OR = {
+					owned_by = ROOT
+					AND = {
+						owner = {
+							war_with = ROOT
+						}
+						units_in_province = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { owns = 275 }
+				}
+				country_event = { id = ME_Zaporozhie_Events.2 }
+			}
+			else = {
+				add_prestige = 10
+				add_manpower = 1000
+			}
+		}
+	}
+}
+
+ZAZ_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_indep_3 = { #independce war
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_1
+			ZAZ_indep_2
+		}
+		position = 2
+		trigger = {
+			stability = 1
+		}
+		effect = {
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				overlord = {
+					ROOT = {
+						declare_war_with_cb = {
+							who = PREV
+							casus_belli = cb_independence_war 
+						}
+					}
+				}
+			}
+			add_country_modifier = {
+				name = zaz_lit_kill
+				duration = 1825
+			}
+		}
+	}
+	
+	ZAZ_indep_4 = { #ambush vilnius
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_3
+		}
+		provinces_to_highlight = {
+			province_id = 272
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { units_in_province = ROOT }
+				owner = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
+		position = 3
+		trigger = {
+			272 = {
+				OR = {
+					owned_by = ROOT
+					AND = {
+						owner = {
+							war_with = ROOT
+						}
+						units_in_province = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { owns = 272 }
+				}
+				country_event = { id = ME_Zaporozhie_Events.1 }
+			}
+			else = {
+				add_prestige = 10
+				add_manpower = 1000
+			}
+		}
+	}
+	
+	ZAZ_indep_6 = { #finally indep
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_4
+		}
+		position = 4
+		trigger = {
+			OR = {
+				AND = {
+					is_subject = no
+					is_at_war = no
+				}
+				is_in_war = {
+					attacker_leader = ROOT
+					casus_belli = cb_independence_war
+					war_score = 40
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_in_war = {
+						attacker_leader = ROOT
+						casus_belli = cb_independence_war
+					}
+				}
+				random_country = {
+					limit = {
+						is_in_war = {
+							attacker_leader = ROOT
+							defender_leader = THIS
+							casus_belli = cb_independence_war
+						}
+					}
+					white_peace = ROOT
+				}
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					overlord = {
+						ROOT = {
+							grant_independence = yes
+						}
+					}
+				}
+			}
+			add_stability = 2
+		}
+	}
+	
+	ZAZ_ally_tartar = { #allign with hordes
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_6
+		}
+		position = 5
+		trigger = {
+			exists = GOL
+			reverse_has_opinion = {
+				who = GOL
+				value = 100
+			}
+			custom_trigger_tooltip = {
+				tooltip = allied_tartar_tooltip
+				NOT = { has_country_flag = zaz_allied_rus }
+				NOT = { has_country_flag = zaz_allied_tur }
+			}
+		}
+		effect = {
+			set_country_flag = zaz_allied_gol
+			country_event = { id = ME_Zaporozhie_Events.4 }
+			create_alliance	= GOL
+			if = {
+				limit = {
+					exists = MOS
+				}
+				reverse_add_opinion = {
+					who = MOS
+					modifier = zaz_hate_mos
+				}
+			}
+			reverse_add_opinion = {
+				who = GOL
+				modifier = zaz_gol_friend
+			}
+		}
+	}
+}
+
+ZAZ_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_indep_2 = { #prepare the settlements
+		icon = mission_have_two_subjects
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 282
+				province_id = 2406
+				province_id = 283
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 6 }
+			}
+		}
+		position = 1
+		trigger = {
+   			treasury = 100
+			owns = 282
+   			owns = 2406
+   			owns = 283
+     		282 = {
+				development = 6
+        	}
+       		2406 = {
+            	development = 6
+     		}
+       		283 = {
+          		development = 6
+			}
+		}
+		effect = {
+   			283 = {
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.33
+						cost = 0.33
+					}
+					add_province_modifier = {
+               			name = zaz_prepped
+              			duration = 3650
+           			}
+       			}
+				else = {
+					add_province_modifier = {
+						name = zaz_prepped
+						duration = 7000
+					}
+				}
+  			}
+		}
+	}
+	
+	ZAZ_indep_5 = { #ambush kaunas
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_3
+		}
+		provinces_to_highlight = {
+			province_id = 1936
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { units_in_province = ROOT }
+				owner = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
+		position = 3
+		trigger = {
+			1936 = {
+				OR = {
+					owned_by = ROOT
+					AND = {
+						owner = {
+							war_with = ROOT
+						}
+						units_in_province = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { owns = 1936 }
+				}
+				country_event = { id = ME_Zaporozhie_Events.3 }
+			}
+			else = {
+				add_prestige = 10
+				add_manpower = 1000
+			}
+		}
+	}
+}
+
+ZAZ_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_domestic_2 = { #budding khanate
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_2
+		}
+		position = 2
+		trigger = {
+			grown_by_development = 12
+		}
+		effect = {
+			add_yearly_manpower = 2.5
+			every_owned_province = {
+				limit = {
+					is_core = ROOT
+				}
+				add_local_autonomy = -15
+			}
+		}
+	}
+	
+	ZAZ_domestic_3 = { #proper khanate
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_domestic_2
+		}
+		position = 4
+		trigger = {
+			grown_by_development = 50
+		}
+		effect = {
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			add_country_modifier = {
+				name = zaz_proper_khan
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_ally_rus = { #allign with russia
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_indep_6
+		}
+		position = 5
+		trigger = {
+			exists = MOS
+			reverse_has_opinion = {
+				who = MOS
+				value = 100
+			}
+			custom_trigger_tooltip = {
+				tooltip = allied_rus_tooltip
+				NOT = { has_country_flag = zaz_allied_tur }
+				NOT = { has_country_flag = zaz_allied_gol }
+			}
+		}
+		effect = {
+			set_country_flag = zaz_allied_rus
+			country_event = { id = ME_Zaporozhie_Events.4 }
+			create_alliance	= MOS
+			if = {
+				limit = {
+					exists = POL
+				}
+				reverse_add_opinion = {
+					who = POL
+					modifier = zaz_hate_plc
+				}
+			}
+			if = {
+				limit = {
+					exists = LIT
+				}
+				reverse_add_opinion = {
+					who = LIT
+					modifier = zaz_hate_plc
+				}
+			}
+			reverse_add_opinion = {
+				who = MOS
+				modifier = zaz_rus_friend
+			}
+		}
+	}
+}
+
+#############
+#alligned with ottoman missions
+#############
+ZAZ_TUR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_tur
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_tur_war_1 = { #expand border
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tur
+		}
+		position = 6
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = insulted_lit_tooltip
+				reverse_has_opinion_modifier = {
+					who = LIT
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			1943 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1944 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			290 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_tur_war_6 = { #settle south ukraine
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_1
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1943
+				province_id = 1944
+				province_id = 290
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			1943 = {
+				owned_by = ROOT
+			}
+			1944 = {
+				owned_by = ROOT
+			}
+			290 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			sloboda_ukraine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			podolia_volhynia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur_war_7 = { #settle north ukraine
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_6
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = sloboda_ukraine_area
+				area = west_dniepr_area
+				area = east_dniepr_area
+				area = podolia_volhynia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			sloboda_ukraine_area = {
+				type = all
+				owned_by = ROOT
+			}
+			west_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+			east_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+			podolia_volhynia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			pripyat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			minsk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			white_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			smolensk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+ZAZ_TUR_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_tur
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_tur_war_2 = { #contest crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tur
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1974
+				province_id = 2412
+				province_id = 2411
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { is_claim = ROOT }
+		}
+		position = 6
+		trigger = {
+			1974 = {
+				OR = {
+					owned_by = ROOT
+					is_claim = ROOT
+				}
+			}
+			OR = {
+				2412 = {
+					OR = {
+						owned_by = ROOT
+						is_claim = ROOT
+					}
+				}
+				2411 = {
+					OR = {
+						owned_by = ROOT
+						is_claim = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			create_general = {
+				tradition = 75
+			}
+			282 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			283 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			2406 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+		}
+	}
+	
+	ZAZ_tur_war_3 = { #war with crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_2
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = zaporizhia_area
+				area = yedisan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 7
+		trigger = {
+			OR = {
+				offensive_war_with = CRI
+				NOT = { exists = CRI }
+			}
+		}
+		effect = {
+			zaporizhia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			yedisan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur_war_4 = { #end crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_3
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 284
+				province_id = 2413
+				province_id = 2414
+				province_id = 287
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			NOT = { exists = CRI }
+			284 = {
+				owned_by = ROOT
+			}
+			2413 = {
+				owned_by = ROOT
+			}
+			2414 = {
+				owned_by = ROOT
+			}
+			287 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			azov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur_war_5 = { #sieze ports
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_4
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = crimea_area
+				area = azov_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			crimea_area = {
+				type = all
+				owned_by = ROOT
+			}
+			azov_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			284 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 20
+					key = ZAZ_CRIMEAN_TRADE
+				}
+			}
+		}
+	}
+	
+	ZAZ_tur_war_8 = { #grand khan
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_5
+			ZAZ_tur_war_7
+			ZAZ_tur_war_9
+		}
+		provinces_to_highlight = {
+			OR = {
+				region = crimea_region
+				region = ruthenia_region
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			NOT = { exists = LIT }
+			army_size = POL
+			army_size = MOS
+			crimea_region = {
+				type = all
+				owned_by = ROOT
+			}
+			ruthenia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { alliance_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				add_country_modifier = {
+					name = zaz_unchecked_horde
+					duration = 10950
+				}
+				add_stability = -1
+			}
+			add_country_modifier = {
+				name = zaz_turkish_help
+				duration = 18250
+			}
+		}
+	}
+}
+
+ZAZ_TUR_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_tur
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_tur_dip_1 = { #
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tur
+		}
+		position = 6
+		trigger = { #get a different ally
+			any_ally = {
+				NOT = { tag = TUR }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_connections
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_tur_dip_2 = { #
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_dip_1
+		}
+		position = 7
+		trigger = { #embargo all ally's rivals
+			num_of_allies = 1
+			all_ally = {
+				all_rival_country = {
+					trade_embargo_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_tur_trade
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_tur_war_9 = { #conquer the steppe
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_war_4
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = lower_don_area
+				area = astrakhan_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			lower_don_area = {
+				type = all
+				owned_by = ROOT
+			}
+			astrakhan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_steppe_raiders
+				duration  = 9125
+			}
+		}
+	}
+}
+
+ZAZ_TUR_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_tur
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_tur_dip_3 = { #be in the same war and same side as tur
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tur
+		}
+		position = 6
+		trigger = {
+			is_in_war = {
+				attackers = TUR
+				attackers = ROOT
+			}
+		}
+		effect = {
+			set_country_flag = zaz_friends_with_tur
+			add_historical_friend = TUR
+		}
+	}
+	
+	ZAZ_tur_dip_4 = { #slave trade in ottomans
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_dip_3
+			ZAZ_tur_dip_2
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 286
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			286 = {
+				owned_by = ROOT
+			}
+			num_of_light_ship = 10
+		}
+		effect = {
+			286 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			151 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 18250
+					power = 15
+					key = ZAZ_SLAVE_TRADE
+				}
+			}
+		}
+	}
+}
+
+ZAZ_TUR_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_tur
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_tur_dip_5 = { #
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_dip_3
+		}
+		position = 7
+		trigger = {
+			OR = {
+				NOT = {
+					reverse_has_opinion = {
+						who = RUS
+						value = -190
+					}
+				}
+				NOT = {
+					reverse_has_opinion = {
+						who = MOS
+						value = -190
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = insulted_rus_tooltip
+				OR = {
+					reverse_has_opinion_modifier = {
+						who = MOS
+						modifier = insulted
+					}
+					reverse_has_opinion_modifier = {
+						who = RUS
+						modifier = insulted
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = MOS
+					NOT = { alliance_with = MOS }
+					NOT = { overlord_of = MOS }
+				}
+				add_historical_rival = MOS
+				MOS = { add_historical_rival = ROOT }
+			}
+			if = {
+				limit = {
+					exists = RUS
+					NOT = { alliance_with = RUS }
+					NOT = { overlord_of = RUS }
+				}
+				add_historical_rival = RUS
+				RUS = { add_historical_rival = ROOT }
+			}
+			add_country_modifier = {
+				name = zaz_rivaled_rus
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_tur_dip_6 = { #convert to islam
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_dip_5
+			ZAZ_tur_dip_4
+		}
+		position = 9
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = long_ally_of_otto_zaz_tooltip
+				had_country_flag = {
+					flag = zaz_friends_with_tur
+					days = 7300
+				}
+			}
+		}
+		effect = {	
+			country_event = { id = ME_Zaporozhie_Events.5 }
+		}
+	}
+}
+
+#############
+#alligned with russia
+#############
+ZAZ_RUS_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_rus
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_rus_dip_5 = { #
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_3
+		}
+		position = 7
+		trigger = {
+			NOT = {
+				reverse_has_opinion = {
+					who = TUR
+					value = -190
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = insulted_tur_tooltip
+				reverse_has_opinion_modifier = {
+					who = TUR
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Zaporozhie_Events.6 }
+		}
+	}
+	
+	ZAZ_rus_dip_7 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_4
+		}
+		provinces_to_highlight = {
+			area = red_ruthenia_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			red_ruthenia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 25
+		}
+	}
+}
+
+ZAZ_RUS_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_rus
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_rus_dip_3 = { #be in the same war and same side as rus
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_rus
+		}
+		position = 6
+		trigger = {
+			OR = {
+				is_in_war = {
+					attackers = MOS
+					attackers = ROOT
+				}
+				is_in_war = {
+					attackers = RUS
+					attackers = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_in_war = {
+						attackers = MOS
+						attackers = ROOT
+					}
+					NOT = { is_rival = MOS }
+					NOT = { is_enemy = MOS }
+				}
+				add_historical_friend = MOS
+				MOS = { add_historical_friend = ROOT }
+			}
+			else_if = {
+				limit = {
+					is_in_war = {
+						attackers = RUS
+						attackers = ROOT
+					}
+					NOT = { is_rival = RUS }
+					NOT = { is_enemy = RUS }
+				}
+				add_historical_friend = RUS
+				RUS = { add_historical_friend = ROOT }
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 20 }
+				add_mil_power = 50
+			}
+		}
+	}
+	
+	ZAZ_rus_dip_4 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_3
+			ZAZ_rus_dip_2
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 260
+			NOT = { is_claim = ROOT }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			260 = {
+				OR = {
+					is_claim = ROOT
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			malopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_rus_dip_6 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_4
+		}
+		provinces_to_highlight = {
+			area = malopolska_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			malopolska_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_trade_eff
+				duration = 9125
+			}
+		}
+	}
+}
+
+ZAZ_RUS_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_rus
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_rus_dip_1 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_rus
+		}
+		position = 6
+		trigger = { #get a different ally
+			any_ally = {
+				NOT = { tag = MOS }
+				NOT = { tag = RUS }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_connections
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_rus_dip_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_1
+		}
+		position = 7
+		trigger = {#eastern europe trade
+			280 = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = kaz_caravan
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_rus_ortho = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_dip_2
+		}
+		position = 8
+		trigger = {
+			religion = orthodox
+			patriarch_authority = 0.5
+		}
+		effect = {
+			add_patriarch_authority = 0.3
+			add_country_modifier = {
+				name = zaz_faith
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_rus_war_9 = { #conquer the steppe
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_4
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = lower_don_area
+				area = astrakhan_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			lower_don_area = {
+				type = all
+				owned_by = ROOT
+			}
+			astrakhan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_steppe_raiders
+				duration  = 9125
+			}
+		}
+	}
+	
+	ZAZ_rus_war_8 = { #grand khan
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_5
+			ZAZ_rus_war_7
+			ZAZ_rus_war_9
+			ZAZ_rus_dip_6
+			ZAZ_rus_dip_7
+		}
+		provinces_to_highlight = {
+			OR = {
+				region = crimea_region
+				region = ruthenia_region
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			NOT = { exists = LIT }
+			NOT = { exists = POL }
+			crimea_region = {
+				type = all
+				owned_by = ROOT
+			}
+			ruthenia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { alliance_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				add_country_modifier = {
+					name = zaz_unchecked_horde
+					duration = 10950
+				}
+				add_stability = -1
+			}
+			add_country_modifier = {
+				name = zaz_russian_help
+				duration = 18250
+			}
+		}
+	}
+	
+	ZAZ_rus_tur = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_8
+		}
+		position = 11
+		trigger = { #threaten ottos
+			army_size = TUR
+			is_neighbor_of = TUR
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_threaten_tur
+				duration = 9125
+			}
+		}
+	}
+}
+
+ZAZ_RUS_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_rus
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_rus_war_2 = { #contest crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_rus
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1974
+				province_id = 2412
+				province_id = 2411
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { is_claim = ROOT }
+		}
+		position = 6
+		trigger = {
+			1974 = {
+				OR = {
+					is_claim = ROOT
+					owned_by = ROOT
+				}
+			}
+			OR = {
+				2412 = {
+					OR = {
+						is_claim = ROOT
+						owned_by = ROOT
+					}
+				}
+				2411 = {
+					OR = {
+						is_claim = ROOT
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			create_general = {
+				tradition = 75
+			}
+			282 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			283 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			2406 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+		}
+	}
+	
+	ZAZ_rus_war_3 = { #war with crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_2
+		}
+		position = 7
+		trigger = {
+			OR = {
+				offensive_war_with = CRI
+				NOT = { exists = CRI }
+			}
+		}
+		effect = {
+			zaporizhia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			yedisan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_rus_war_4 = { #end crimea
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_3
+		}
+		provinces_to_highlight = {
+			OR = {
+				owned_by = ROOT
+				province_id = 284
+				province_id = 2413
+				province_id = 2414
+				province_id = 287
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			NOT = { exists = CRI }
+			284 = {
+				owned_by = ROOT
+			}
+			2413 = {
+				owned_by = ROOT
+			}
+			2414 = {
+				owned_by = ROOT
+			}
+			287 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			azov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_rus_war_5 = { #sieze ports
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_4
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = crimea_area
+				area = azov_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 9
+		trigger = {
+			crimea_area = {
+				type = all
+				owned_by = ROOT
+			}
+			azov_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			284 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 20
+					key = ZAZ_CRIMEAN_TRADE
+				}
+			}
+		}
+	}
+}
+
+ZAZ_RUS_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_rus
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_rus_war_1 = { #expand border
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_rus
+		}
+		position = 6
+		trigger = {
+			exists = LIT
+			custom_trigger_tooltip = {
+				tooltip = insulted_lit_tooltip
+				reverse_has_opinion_modifier = {
+					who = LIT
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			1943 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1944 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			290 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_rus_war_6 = { #settle south ukraine
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_1
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1943
+				province_id = 1944
+				province_id = 290
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			1943 = {
+				owned_by = ROOT
+			}
+			1944 = {
+				owned_by = ROOT
+			}
+			290 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			sloboda_ukraine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			podolia_volhynia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_rus_war_7 = { #settle north ukraine
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_rus_war_6
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = sloboda_ukraine_area
+				area = west_dniepr_area
+				area = east_dniepr_area
+				area = podolia_volhynia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			sloboda_ukraine_area = {
+				type = all
+				owned_by = ROOT
+			}
+			west_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+			east_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+			podolia_volhynia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			pripyat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			minsk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			white_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			smolensk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+#############
+#alligned with hordes
+#############
+ZAZ_GOL_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_gol
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_insult_tur = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tartar
+		}
+		position = 6
+		trigger = {
+			exists = TUR
+			custom_trigger_tooltip = {
+				tooltip = insulted_tur_tooltip
+				reverse_has_opinion_modifier = {
+					who = TUR
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_insult_tur
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_plc_3 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_insult_lit
+		}
+		provinces_to_highlight = {
+			province_id = 1756
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			1756 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			moldavia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_plc_5 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_2
+			ZAZ_plc_3
+		}
+		provinces_to_highlight = {
+			area = podolia_volhynia_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			podolia_volhynia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			pripyat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_plc_7 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_5
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = red_ruthenia_area
+				area = pripyat_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			red_ruthenia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			pripyat_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			malopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			269 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_plc_8 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_7
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = malopolska_area
+				province_id = 269
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			malopolska_area = {
+				type = all
+				owned_by = ROOT
+			}
+			269 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			wielkopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			256 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			257 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			1937 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_plc_9 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_8
+		}
+		provinces_to_highlight = {
+			OR = {
+				region = poland_region
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 12
+		trigger = {
+			poland_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_plc_buff
+				duration = 9125
+			}
+		}
+	}
+}
+
+ZAZ_GOL_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_gol
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_insult_lit = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tartar
+		}
+		position = 6
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = insulted_lit_tooltip
+				reverse_has_opinion_modifier = {
+					who = LIT
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			1756 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1943 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1944 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			290 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_plc_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_insult_lit
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1943
+				province_id = 1944
+				province_id = 290
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			1943 = {
+				owned_by = ROOT
+			}
+			1944 = {
+				owned_by = ROOT
+			}
+			290 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			podolia_volhynia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_plc_4 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_2
+		}
+		provinces_to_highlight = {
+			area = west_dniepr_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			west_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			minsk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			white_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_5
+		}
+		provinces_to_highlight = {
+			area = moldavia_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			moldavia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			wallachia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur
+		}
+		provinces_to_highlight = {
+			area = wallachia_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			wallachia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			bulgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_tur_3 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_2
+		}
+		provinces_to_highlight = {
+			area = bulgaria_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 11
+		trigger = {
+			bulgaria_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			149 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			1764 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_tur_4 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_3
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 149
+				province_id = 1764
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 12
+		trigger = {
+			1764 = {
+				owned_by = ROOT
+			}
+			149 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_tur_5 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_tur_4
+		}
+		provinces_to_highlight = {
+			province_id = 151
+			NOT = { owned_by = ROOT }
+		}
+		position = 12
+		trigger = {
+			151 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_tur_buff
+				duration = 9125
+			}
+			country_event = { id = ME_Zaporozhie_Events.9 }
+		}
+	}
+}
+
+ZAZ_GOL_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_gol
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_gol_politics = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tartar
+		}
+		position = 6
+		trigger = {
+			custom_trigger_tooltip = {
+			tooltip = zaz_allied_gol_long_tooltip
+				had_country_flag = {
+					flag = zaz_allied_gol
+					days = 7300
+				}
+			}
+			dip = 3
+			legitimacy_equivalent = 90
+			alliance_with = GOL
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { is_rival = GOL }
+					NOT = { is_enemy = GOL }
+				}
+				add_historical_friend = GOL
+				GOL = { add_historical_friend = ROOT }
+			}
+			set_country_flag = zaz_dynasties_gol
+			set_dynasty = GOL
+			add_dip_power = 50
+		}
+	}
+	
+	ZAZ_gol_politics_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_gol_politics
+		}
+		position = 7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = zaz_allied_gol_verylong_tooltip
+				had_country_flag = {
+					flag = zaz_allied_gol
+					days = 109
+				}
+			}
+			dip = GOL
+			legitimacy_equivalent = 90
+			total_development = 350
+			alliance_with = GOL
+		}
+		effect = {
+			add_prestige = 20
+			add_dip_power = 100
+		}
+	}
+	
+	ZAZ_plc_6 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_2
+		}
+		provinces_to_highlight = {
+			area = east_dniepr_area
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			east_dniepr_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			sloboda_ukraine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			smolensk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_ruthenia = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_plc_4
+			ZAZ_plc_6
+		}
+		provinces_to_highlight = {
+			region = ruthenia_region
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			ruthenia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			pskov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tver_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			moscow_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			oka_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = zaz_ruthenia
+				duration = 9125
+			}
+		}
+	}
+	
+	ZAZ_russia = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ruthenia
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = pskov_area
+				area = tver_area
+				area = moscow_area
+				area = oka_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			pskov_area = {
+				type = all
+				owned_by = ROOT
+			}
+			tver_area = {
+				type = all
+				owned_by = ROOT
+			}
+			moscow_area = {
+				type = all
+				owned_by = ROOT
+			}
+			oka_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			ryazan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vladimir_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			yaroslavl_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			novgorod_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_russia_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_russia
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = ryazan_area
+				area = vladimir_area
+				area = yaroslavl_area
+				area = novgorod_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 11
+		trigger = {
+			ryazan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			vladimir_area = {
+				type = all
+				owned_by = ROOT
+			}
+			yaroslavl_area = {
+				type = all
+				owned_by = ROOT
+			}
+			novgorod_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			russia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ZAZ_russia_3 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_russia_2
+		}
+		provinces_to_highlight = {
+			region = russia_region
+			NOT = { owned_by = ROOT }
+		}
+		position = 12
+		trigger = {
+			russia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = zaz_russia_buff
+				duration = 9125
+			}
+		}
+	}
+}
+
+ZAZ_GOL_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_gol
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_insult_cri = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tartar
+		}
+		position = 6
+		trigger = {
+			exists = CRI
+			custom_trigger_tooltip = {
+				tooltip = insulted_cri_tooltip
+				reverse_has_opinion_modifier = {
+					who = CRI
+					modifier = insulted
+				}
+			}
+		}
+		effect = {
+			yedisan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			zaporizhia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			282 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			2406 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+			283 = {
+				if = {
+					limit = {
+						is_core = CRI
+					}
+					remove_core = CRI
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_cri_1 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_insult_cri
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = yedisan_area
+				area = zaporizhia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			yedisan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			zaporizhia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			284 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2413 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2414 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			287 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_cri_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_cri_1
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 284
+				province_id = 287
+				province_id = 2413
+				province_id = 2414
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			284 = {
+				owned_by = ROOT
+			}
+			2413 = {
+				owned_by = ROOT
+			}
+			2414 = {
+				owned_by = ROOT
+			}
+			287 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = CIR
+				}
+				add_casus_belli = {
+					target = CIR
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				463 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_cri_3 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_cri_2
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2195
+				province_id = 463
+				province_id = 2197
+				province_id = 2201
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 9
+		trigger = {
+			owns_or_subject_of = 2195
+			owns_or_subject_of = 463
+			owns_or_subject_of = 2197
+			owns_or_subject_of = 2201
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = IME
+				}
+				add_casus_belli = {
+					target = IME
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				422 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = AVR
+				}
+				add_casus_belli = {
+					target = AVR
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				4306 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = GAZ
+				}
+				add_casus_belli = {
+					target = GAZ
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_trib = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_cri_3
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1856
+				province_id = 462
+				province_id = 422
+				province_id = 2196
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 9
+		trigger = {
+			owns_or_subject_of = 1856
+			owns_or_subject_of = 462
+			owns_or_subject_of = 422
+			owns_or_subject_of = 2196
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = GEO
+				}
+				add_casus_belli = {
+					target = GEO
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				423 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_trib_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_trib
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4301
+				province_id = 2203
+				province_id = 423
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 10
+		trigger = {
+			owns_or_subject_of = 4301
+			owns_or_subject_of = 2203
+			owns_or_subject_of = 423
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = SME
+				}
+				add_casus_belli = {
+					target = SME
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				2204 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+
+ZAZ_GOL_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ZAZ
+		has_country_flag = zaz_allied_gol
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+	
+	ZAZ_insult_theo = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_ally_tartar
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2410
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = insulted_feo_tooltip
+					reverse_has_opinion_modifier = {
+						who = FEO
+						modifier = insulted
+					}
+				}
+				2410 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			2410 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_attack_genoa = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_insult_theo
+		}
+		provinces_to_highlight = {
+			province_id = 2410
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			2410 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			285 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2447 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			286 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ZAZ_attack_genoa_2 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_attack_genoa
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 285
+				province_id = 2447
+				province_id = 286
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			285 = {
+				owned_by = ROOT
+			}
+			2447 = {
+				owned_by = ROOT
+			}
+			286 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			284 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 15
+					key = ZAZ_CRIMEAN_TRADE
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = TRE
+				}
+				add_casus_belli = {
+					target = TRE
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				330 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	ZAZ_treb = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_attack_genoa_2
+		}
+		provinces_to_highlight = {
+			province_id = 330
+			NOT = { country_or_subject_holds = ROOT }
+		}
+		position = 9
+		trigger = {
+			owns_or_subject_of = 330
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = CND
+				}
+				add_casus_belli = {
+					target = CND
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				328 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_trib_3 = {
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_cri_3
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2198
+				province_id = 4306
+				province_id = 2199
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 10
+		trigger = {
+			owns_or_subject_of = 2198
+			owns_or_subject_of = 2199
+			owns_or_subject_of = 4306
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = SRV
+				}
+				add_casus_belli = {
+					target = SRV
+					type = cb_force_tributary
+					months = 240
+				}
+			}
+			else = {
+				421 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	ZAZ_horde_trib_4 = {#caucasia subject
+		icon = mission_have_two_subjects
+		required_missions = {
+			ZAZ_horde_trib_3
+			ZAZ_horde_trib
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4303
+				province_id = 2204
+				province_id = 4305
+				province_id = 4299
+				province_id = 425
+				province_id = 421
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 11
+		trigger = {
+			owns_or_subject_of = 4303
+			owns_or_subject_of = 2204
+			owns_or_subject_of = 4305
+			owns_or_subject_of = 4299
+			owns_or_subject_of = 425
+			owns_or_subject_of = 421
+		}
+		effect = {
+			add_dip_power = 200
+		}
+	}
+}

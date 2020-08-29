@@ -1,0 +1,742 @@
+CN_Generic_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+	}
+	has_country_shield = yes
+
+	CN_forming_a_merchant_case = {
+		icon = mission_hanseatic_city
+		position = 1
+		required_missions = { }
+		trigger = {
+			OR = {
+				marketplace = 3
+				trade_depot = 3
+				stock_exchange = 3
+				any_owned_province = {
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 10
+			}
+			add_country_modifier = {
+				name = CN_merchant_guilds_shaping
+				duration = 7300
+			}
+		}
+	}
+
+	CN_dominate_home_trade_node = {
+		icon = mission_dominate_home_trade_node
+		position = 2
+		required_missions = { CN_forming_a_merchant_case }
+		trigger = {
+			home_trade_node = {
+				has_most_province_trade_power = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = CN_Tooltips.1
+			add_country_modifier = {
+				name = CN_positive_vibes
+				duration = 9125
+			}
+			hidden_effect = {
+				home_trade_node_effect_scope = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						province_has_center_of_trade_of_level = 1
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	CN_rapid_urbanization = {
+		icon = mission_colonial
+		position = 4
+		required_missions = { CN_growth_of_cities CN_dominate_home_trade_node }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { development = 18 }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						development = 18
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				any_owned_province = {
+					development = 18
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 5
+					development = 18
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = CN_Tooltips.2
+			set_country_flag = CN_cool_trade_goods
+		}
+	}
+}
+
+CN_Generic_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+	}
+	has_country_shield = yes
+
+	CN_encourage_immigration = {
+		icon = mission_establish_high_seas_navy
+		position = 1
+		required_missions = { }
+		trigger = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				colonial_parent = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
+			else = {
+				colonial_parent = {
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_CN_Events.1 } #Immigration
+		}
+	}
+
+	CN_growth_of_cities = {
+		icon = mission_settlers_north_america
+		position = 3
+		required_missions = { CN_encourage_immigration }
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_colony_thriving
+				duration = 5475
+			}
+		}
+	}
+
+	CN_support = {
+		icon = mission_alliances
+		position = 4
+		required_missions = { CN_colonial_laws }
+		trigger = {
+			OR = {
+				num_of_allies = 2
+				any_country = {
+					capital_scope = {
+						NOT = {
+							OR = {
+								continent = north_america
+								continent = south_america
+							}
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_developing_own_diplomacy
+				duration = 9125
+			}
+		}
+	}
+
+	CN_riches_of_the_new_world = {
+		icon = mission_war_chest
+		position = 6
+		required_missions = { CN_workshops }
+		trigger = {
+			OR = {
+				# gold = 3
+				production_leader = {
+					trade_goods = coffee
+				}
+				production_leader = {
+					trade_goods = tobacco
+				}
+				production_leader = {
+					trade_goods = sugar
+				}
+				production_leader = {
+					trade_goods = fur
+				}
+				production_leader = {
+					trade_goods = gems
+				}
+				production_leader = {
+					trade_goods = cotton
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = CN_Tooltips.6
+			hidden_effect = {
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = coffee
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = coffee
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = tobacco
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = tobacco
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = sugar
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = sugar
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = fur
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = fur
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = gems
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = gems
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						production_leader = {
+							trade_goods = cotton
+						}
+					}
+					every_owned_province = {
+						limit = {
+							trade_goods = cotton
+						}
+						add_province_modifier = {
+							name = CN_renowned_products
+							duration = 10950
+						}
+					}
+				}
+
+			}
+		}
+	}
+}
+
+CN_Generic_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+	}
+	has_country_shield = yes
+
+	CN_colonial_assembly = {
+		icon = mission_rb_monopolize_the_channel
+		position = 2
+		required_missions = { CN_encourage_immigration CN_beyond_our_borders }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = HAS_COLONIAL_ASSEMBLY
+				has_country_flag = colonial_assembly
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+				}
+				custom_tooltip = CN_Tooltips.5
+			}
+			set_country_flag = CN_dominion
+			add_country_modifier = {
+				name = CN_colonial_assembly_modifier
+				duration = 10950
+			}
+		}
+	}
+
+	CN_colonial_laws = {
+		icon = mission_rb_college_of_justice
+		position = 3
+		required_missions = { CN_colonial_assembly }
+		trigger = {
+			OR = {
+				NOT = { average_autonomy_above_min = 10 }
+				absolutism = 25
+			}
+		}
+		effect = {
+			country_event = { id = ME_CN_Events.3 }
+		}
+	}
+
+	CN_workshops = {
+		icon = mission_rb_the_bank_of_scotland
+		position = 5
+		required_missions = { }
+		trigger = {
+			OR = {
+				workshop = 5
+				counting_house = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_workshops_going_boom
+				duration = 5475
+			}
+		}
+	}
+
+	CN_manufactories = {
+		icon = mission_have_manufactories
+		position = 6
+		required_missions = { CN_workshops }
+		trigger = {
+			num_of_owned_manufactory_combined_trigger = { amount = 10 }
+		}
+		effect = {
+			add_years_of_income = 0.25
+			country_event = { id = ME_CN_Events.2 }
+		}
+	}
+}
+
+CN_Generic_missions_3_Gold_Producing_Cns = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+		capital_scope = {
+			OR = {
+				colonial_region = colonial_brazil
+				colonial_region = colonial_alaska
+				colonial_region = colonial_california
+				colonial_region = colonial_australia
+				colonial_region = colonial_mexico
+				colonial_region = colonial_peru
+			}
+		}
+	}
+	has_country_shield = yes
+
+	CN_mmm_myes_gold = {
+		icon = mission_african_gold #notafricanbutstillgold
+		position = 7
+		required_missions = { CN_manufactories }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = ROOT
+					trade_goods = gold
+					NOT = { num_of_times_improved = 3 }
+				}
+				AND = {
+					region_for_scope_province = {
+						is_capital_of = ROOT
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						trade_goods = gold
+						num_of_times_improved = 3
+					}
+				}
+				NOT = {
+					capital_scope = {
+						region_for_scope_province = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 3
+					trade_goods = gold
+					num_of_times_improved = 3
+				}
+				capital_scope = {
+					region_for_scope_province = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1.5 #50% better than GOLD RUSH!
+			random_owned_province = {
+				limit = {
+					trade_goods = gold
+				}
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = CN_influx_of_settlers
+					duration = 9125
+				}
+			}
+		}
+	}
+}
+
+CN_Generic_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+	}
+	has_country_shield = yes
+
+	CN_beyond_our_borders = {
+		icon = mission_brazilian_bandeirantes
+		position = 1
+		required_missions = {  }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { grown_by_development = 50 }
+				NOT = { grown_by_states = 2 }
+			}
+		}
+		trigger = {
+			OR = {
+				grown_by_development = 50
+				grown_by_states = 2
+				capital_scope = {
+					region_for_scope_province = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_centralization
+				duration = 9125
+			}
+			custom_tooltip = CN_Tooltips.8
+			hidden_effect = {
+				capital_scope = {
+					every_province = {
+						limit = {
+							region = PREV
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	CN_subdue_natives = {
+		icon = mission_iroquois_warriors
+		position = 3
+		required_missions = { CN_beyond_our_borders }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			owner = {
+				OR = {
+					is_colonial_nation = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			capital_scope = {
+				region_for_scope_province = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owner = {
+							is_colonial_nation = no
+							capital_scope = {
+								NOT = { continent = north_america }
+								NOT = { continent = south_america }
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_new_lands_new_opportunities
+				duration = 7300
+			}
+		}
+	}
+
+	CN_army = {
+		icon = mission_assemble_an_army
+		position = 4
+		required_missions = { CN_colonial_laws }
+		trigger = {
+			calc_true_if = {
+				army_size_percentage = 0.8
+				manpower_percentage = 0.8
+				num_of_generals = 2
+				amount = 2
+			}
+		}
+		effect = {
+			custom_tooltip = CN_Tooltips.3
+			set_country_flag = CN_freedom_fighters
+		}
+	}
+
+	CN_mercantilism = {
+		icon = mission_dominate_home_trade_node
+		position = 6
+		required_missions = { CN_workshops }
+		trigger = {
+			OR = {
+				mercantilism = 20
+				has_idea = shrewd_commerce_practise
+				has_idea = free_merchants
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_growing_economy
+				duration = 9125
+			}
+		}
+	}
+}
+
+CN_Generic_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		is_colonial_nation = yes
+	}
+	has_country_shield = yes
+
+	CN_colonial_expansion = {
+		icon = mission_colonial
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						any_province = {
+							region = PREV
+							is_capital_of = ROOT
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				any_province = {
+					region = PREV
+					is_capital_of = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_the_more_we_grow_the_more_we_plow #amazing name
+				duration = 9125
+			}
+		}
+	}
+
+	CN_extensive_colonization = {
+		icon = mission_settlers_north_america
+		position = 2
+		required_missions = { CN_colonial_expansion }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { num_of_colonies = 2 }
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_colonies = 2
+				capital_scope = {
+					region_for_scope_province = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_new_land_claimed
+				duration = 10950
+			}
+		}
+	}
+
+	CN_unite_the_region = {
+		icon = mission_unite_home_region
+		position = 4
+		required_missions = { CN_extensive_colonization CN_subdue_natives }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			capital_scope = {
+				region_for_scope_province = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_region_united
+				duration = 10950
+			}
+		}
+	}
+}

@@ -1,0 +1,116 @@
+GAL_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = GAL
+	}
+	has_country_shield = yes
+	
+	Galicia_Independence = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			else = {
+				add_prestige = 15
+				add_legitimacy_equivalent = { value = 15 }
+			}
+		}
+	}
+	
+	Galicia_Defensive_Mentality = {
+		icon = mission_conquer_50_development
+		required_missions = { Galicia_Independence }
+		provinces_to_highlight = {
+			province_id = 206
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			206 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			206 = {
+				add_province_modifier = { 
+					name = defensive_mentality
+					duration = 36500
+				}
+			}
+		}
+	}
+	
+	Galicia_Placate_France = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Galicia_Defensive_Mentality }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			region = france_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				reverse_has_opinion = {
+					who = FRA
+					value = 150
+				}
+			}
+			else = {
+				france_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			define_general = {
+				shock = 4
+				fire = 4
+				manuever = 5
+				siege = 1
+				name = "Jean de Lacroix"
+			}
+		}
+	}
+	
+	Galicia_Expand = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Galicia_Placate_France }
+		trigger = {
+			num_of_provinces_in_states = 5
+		}
+		effect = {
+			add_prestige = 40
+			add_dip_power = 300
+			add_mil_power = 300
+			add_adm_power = 300
+		}
+	}
+}

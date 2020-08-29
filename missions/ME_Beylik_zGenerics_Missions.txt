@@ -1,0 +1,199 @@
+#########
+#Made by claivin for Missions Expanded Mod
+#########
+
+beylik_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		NOT = { tag = RUM }
+		was_beylik = yes
+	}
+	has_country_shield = yes
+
+	beylik_castle = {
+		icon = me_bey_palace
+		required_missions = { beylik_force_limit_mission }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			is_capital = yes
+		}
+		trigger = {
+			capital_scope = {
+				fort_level = 3
+			}
+			total_development = 150
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = beylik_ghulams
+					duration = -1
+				}
+			}
+		}
+	}
+
+	beylik_officer_mission = {
+		icon = me_bey_general
+		required_missions = { beylik_castle }
+		position = 3
+		trigger = {
+			army_tradition = 50
+			barracks = 2
+			government_rank = 2
+		}
+		effect = {
+			create_general = {
+				tradition = 100
+			}
+		}
+	}
+}
+
+beylik_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		NOT = { tag = RUM }
+		was_beylik = yes
+	}
+	has_country_shield = yes
+
+	beylik_force_limit_mission = {
+		icon = me_rally_beys
+		required_missions = {}
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			is_subject = no
+			stability = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = beylik_freedom
+				duration = 3650
+			}
+			hidden_effect = {
+				anatolia_region = {
+					limit = {
+						OR = {
+							owned_by = TUR
+							any_neighbor_province = {
+								is_core = ROOT
+							}
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = beylik_anatolia_provinces_tooltip
+		}
+	}
+
+	beylik_anatolia = {
+		icon = me_bey_anatolia
+		required_missions = { beylik_force_limit_mission }
+		position = 2
+		provinces_to_highlight = {
+			region = anatolia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 24
+				region = anatolia_region
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				province_has_center_of_trade_of_level = 1
+				region = anatolia_region
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			country_event = {
+				id = ME_Beylik_Events.1
+			}
+		}
+	}
+
+	beylik_rum = {
+		icon = me_mission_ottomans_sultan_of_rum
+		required_missions = { beylik_anatolia }
+		position = 3
+		provinces_to_highlight = {
+			region = anatolia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tag = RUM
+			anatolia_region = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 15
+			country_event = {
+				id = ME_Beylik_Events.2
+			}
+		}
+	}
+}
+
+beylik_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		NOT = { tag = RUM }
+		was_beylik = yes
+	}
+	has_country_shield = yes
+
+	beylik_kill_tur = {
+		icon = me_mission_ottomans_return_to_full_strength
+		required_missions = { beylik_anatolia }
+		position = 3
+		provinces_to_highlight = {
+			is_core = TUR
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = TUR }
+			government_rank = 2
+			custom_trigger_tooltip = {
+				tooltip = beylik_kill_ottos_tt
+				all_province = {
+					OR = {
+						AND = {
+							is_core = TUR
+							owned_by = ROOT
+						}
+						NOT = { is_core = TUR }
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				great_power_rank = 6
+			}
+		}
+		effect = {
+			set_government_rank = 3
+			country_event = {
+				id = ME_Beylik_Events.8
+			}
+		}
+	}
+}

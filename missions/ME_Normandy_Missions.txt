@@ -1,0 +1,575 @@
+NRM_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = NRM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	nrm_find_allies = {
+		icon = mission_alliances
+		trigger = {
+			calc_true_if = {
+                 all_country = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 2
+            }
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_supporters
+				duration = 10950
+			}
+		}
+	}
+	
+	nrm_diplomacy = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { nrm_find_allies }
+		position = 3
+		trigger = {
+			num_of_allies = 4
+			OR = {
+				alliance_with = HAB
+				alliance_with = FRA
+				alliance_with = ENG
+				alliance_with = CAS
+				alliance_with = BUR
+				AND = {
+					NOT = { exists = HAB }
+					NOT = { exists = FRA }
+					NOT = { exists = ENG }
+					NOT = { exists = CAS }
+					NOT = { exists = BUR }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_diplomatic_service
+				duration = -1
+			}
+			126 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_malta = {
+		icon = mission_high_income
+		required_missions = { nrm_conquer_alencon }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 126
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 126
+		}
+		effect = {
+			sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	nrm_conquer_sicily = {
+		icon = mission_invade_island
+		required_missions = { nrm_conquer_malta }
+		position = 5
+		provinces_to_highlight = {
+			area = sicily_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			sicily_area = {
+				type = all 
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			121 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			123 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			122 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_naples = {
+		icon = mission_cannons_firing
+		required_missions = { nrm_conquer_sicily }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 120
+				province_id = 121
+				province_id = 122
+				province_id = 123
+				province_id = 1933
+				province_id = 1934
+				province_id = 2984
+				province_id = 2985
+				province_id = 2986
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 120
+			owns_core_province = 121
+			owns_core_province = 122
+			owns_core_province = 123
+			owns_core_province = 1933
+			owns_core_province = 1934
+			owns_core_province = 2984
+			owns_core_province = 2985
+			owns_core_province = 2986
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_neapolitan_trade
+				duration = -1
+			}
+			add_dip_power = 30
+			add_adm_power = 30
+			118 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_jerusalem = {
+		icon = mission_conquer_50_development
+		required_missions = { nrm_conquer_naples nrm_conquer_antioch }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 379
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 379
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_conquest_of_jerusalem
+				duration = -1
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_prestige = 50
+			set_country_flag = can_form_jerusalem
+		}
+	}
+}
+
+NRM_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = NRM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	nrm_rally_men = {
+		icon = mission_build_up_to_force_limit
+		trigger = {
+			is_subject = yes
+			NOT = { manpower_percentage = 0.5 }
+		}
+		effect = {
+			add_manpower = 10
+			add_country_modifier = {
+				name = nrm_prepared_for_war
+				duration = 18250
+			}
+		}
+	}
+	
+	nrm_independence_war = {
+		icon = mission_cannons_firing
+		required_missions = {	
+			nrm_denounce_france
+			nrm_find_allies
+			nrm_rally_men
+		}
+		trigger = {
+			is_subject = no
+			is_at_war = no
+			num_of_allies = 2
+		}
+		effect = {
+			1879 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			177 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_alencon = {
+		icon = mission_assemble_an_army
+		required_missions = { nrm_independence_war }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1879
+				province_id = 177
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 1879
+			owns_core_province = 177
+		}
+		effect = {
+			169 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			170 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			171 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			172 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4384 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_brittany = {
+		icon = mission_unite_home_region
+		required_missions = { nrm_conquer_alencon }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 169
+				province_id = 170
+				province_id = 171
+				province_id = 172
+				province_id = 4384
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 169
+			owns_core_province = 170
+			owns_core_province = 171
+			owns_core_province = 172
+			owns_core_province = 4384
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_integrate_bretons
+				duration = 18250
+			}
+			add_prestige = 20
+		}
+	}
+	
+	nrm_conquer_cyprus = {
+		icon = mission_invade_island
+		required_missions = { nrm_conquer_malta }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 321
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 321
+		}
+		effect = {
+			2313 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_antioch = {
+		icon = mission_galleys_in_port
+		required_missions = { nrm_conquer_cyprus nrm_conquer_sicily }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2313
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 2313
+		}
+		effect = {
+			379 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+NRM_missions_4 = {
+	slot = 4
+	generic = no 
+	ai = yes
+	potential = {
+		tag = NRM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	nrm_denounce_france = {
+		icon = mission_monarch_in_throne_room
+		trigger = {
+			liberty_desire = 10
+			is_subject = yes
+		}
+		effect = {
+			overlord = {
+				add_opinion = {
+					who = ROOT
+					modifier = denounced_by_normandy
+				}
+			}
+		}
+	}
+	
+	nrm_conquer_picardy = {
+		icon = mission_cannons_firing
+		required_missions = { nrm_conquer_alencon }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 89
+				province_id = 88
+				province_id = 87
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 89
+			owns_core_province = 88
+			owns_core_province = 87
+		}
+		effect = {
+			add_country_modifier = {
+				name = nrm_conquest_of_picardy
+				duration = 10950
+			}
+			add_adm_power = 100
+		}
+	}
+}
+
+NRM_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = NRM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	nrm_norman_navy = {
+		icon = mission_galleys_in_port
+		required_missions = { nrm_independence_war }
+		position = 3
+		trigger = {
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_mil_power = 100
+			add_sailors = 1000
+		}
+	}
+	
+	nrm_own_ports = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { nrm_norman_navy }
+		position = 5
+		trigger = {
+			num_of_ports = 10
+		}
+		effect = {
+			add_dip_power = 50
+			add_mil_power = 50
+			add_yearly_sailors = 5
+		}
+	}
+	
+	nrm_prepare_english_invasion = {
+		icon = mission_sea_battles
+		required_missions = { nrm_own_ports nrm_conquer_sicily }
+		position = 6
+		trigger = {
+			num_of_heavy_ship = 20
+			num_of_galley = 20
+		}
+		effect = {
+			236 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	nrm_hastings = {
+		icon = mission_conquer_5_states
+		required_missions = { nrm_prepare_english_invasion }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 236
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 236
+		}
+		effect = {
+			wessex_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}		
+	}
+}

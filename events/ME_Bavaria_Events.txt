@@ -1,0 +1,155 @@
+namespace = ME_Bavaria_Events
+
+country_event = {
+	id = ME_Bavaria_Events.1
+	title = ME_Bavaria_Events.EVTNAME1
+	desc = ME_Bavaria_Events.EVTDESC1
+	picture = HRE_eventPicture
+	
+	major = yes
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = bavaria_join_catholic_league
+		is_elector = no
+		OR = {
+			AND = {
+				has_dlc = "Art of War"
+				is_in_league_war = yes
+				any_elector = {
+					is_in_league_war = yes
+					is_league_enemy = ROOT
+					war_with = ROOT
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+			}
+			AND = {
+				NOT = { has_dlc = "Art of War" }
+				any_elector = {
+					war_with = ROOT
+					war_with = emperor
+					NOT = { religion = ROOT }
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				random_elector = {
+					limit = {
+						is_in_league_war = yes
+						is_league_enemy = ROOT
+						war_with = ROOT
+						capital_scope = {
+							controlled_by = ROOT
+						}
+					}
+					save_global_event_target_as = bav_hostile_elector
+				}
+			}
+			else = {
+				random_elector = {
+					limit = {
+						war_with = ROOT
+						war_with = emperor
+						NOT = { religion = ROOT }
+						capital_scope = {
+							controlled_by = ROOT
+						}
+					}
+					save_global_event_target_as = bav_hostile_elector
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Bavaria_Events1.EVTOPT1
+		
+		ai_chance = {
+			factor = 0.75
+			
+			modifier = {
+				factor = 0
+				event_target:bav_hostile_elector = {
+					NOT = { tag = PAL }
+				}
+			}
+		}
+		
+		elector = yes
+		custom_tooltip = BAV_ALLOWS_BECOMING_ELECTOR_CAN_BE_REVOKED
+		set_country_flag = bav_allows_becoming_elector_can_be_revoked
+		event_target:bav_hostile_elector = {
+			elector = no
+			add_opinion = {
+				who = ROOT
+				modifier = bavaria_claimed_electorate_opinion
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Bavaria_Events1.EVTOPT2
+		
+		ai_chance = { factor = 0.25 }
+		
+		add_prestige = -5
+		event_target:bav_hostile_elector = {
+			add_prestige = 5
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.2
+	title = ME_Bavaria_Events.EVTNAME2
+	desc = ME_Bavaria_Events.EVTDESC2
+	picture = HRE_eventPicture
+	
+	major = yes
+	
+	trigger = {
+		has_country_flag = bav_allows_becoming_elector_can_be_revoked
+		is_elector = yes
+		event_target:bav_hostile_elector = {
+			exists = yes
+			is_elector = no
+		}
+		capital_scope = {
+			controlled_by = event_target:bav_hostile_elector
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_Bavaria_Events2.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		add_prestige = -5
+		elector = no
+		event_target:bav_hostile_elector = {
+			add_prestige = 5
+			elector = yes
+		}
+		clr_country_flag = bav_allows_becoming_elector_can_be_revoked
+	}
+}

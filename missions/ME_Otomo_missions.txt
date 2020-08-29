@@ -1,0 +1,502 @@
+ME_OTM_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = OTM
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ME_otomo_contacting_the_europeans = { # Contacting the Europeans
+		icon = mission_alliances
+		required_missions = { }
+		position = 10
+		trigger = {
+			europe = {
+				has_discovered = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_contact_with_europe
+				duration = 3650
+			}
+		}
+	}
+	
+	ME_otomo_a_christian_clan = { # A Christian Clan?
+		icon = mission_european_church
+		required_missions = { ME_otomo_contacting_the_europeans }
+		position = 11
+		trigger = {
+			any_country = {
+				religion = catholic
+				reverse_has_opinion = {
+					who = ROOT
+					value = 80
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Otomo_Events.1 }
+		}
+	}
+	
+	ME_otomo_western_military_values = { # Western Military Values
+		icon = mission_have_two_subjects
+		required_missions = { ME_otomo_a_christian_clan ME_otomo_adoption_of_the_tercio }
+		position = 5
+		trigger = {
+			MIL = 5
+			OTM_ideas = 3
+		}
+		effect = {
+			change_technology_group = western
+			change_unit_type = western
+		}
+	}
+}
+
+ME_OTM_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = OTM
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ME_otomo_masters_of_kyushu = { # Masters of Kyushu
+		icon = mission_galleys_in_port
+		required_missions = { ME_otomo_mobilize_the_clan }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = northern_kyushu
+				area = kyushu_area
+			}
+			NOT = { province_id = 1015 }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			northern_kyushu = {
+				type = all
+				owned_by = ROOT
+			}
+			kyushu_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					province_id = 1015
+				}
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			sanindo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hokkaido_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ME_otomo_adoption_of_the_tercio = { # Adoption of the Tercio
+		icon = mission_assemble_an_army
+		required_missions = { ME_otomo_contacting_the_europeans }
+		position = 11
+		trigger = {
+			MIL = 4
+			mil_tech = 12
+			quality_ideas = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_portuguese_tercos
+				duration = 7300
+			}
+		}
+	}
+	
+	ME_otomo_rein_in_our_vassals = { # Rein in Our Vassals
+		icon = mission_build_up_to_force_limit
+		required_missions = { ME_otomo_a_new_shogunate }
+		position = 5
+		trigger = {
+			num_of_subjects = 1
+			all_subject_country = {
+				NOT = {	liberty_desire = 30 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_loyal_daimyos
+				duration = 7300
+			}
+		}
+	}
+}
+
+ME_OTM_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = OTM
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ME_otomo_mobilize_the_clan = { # Mobilize the Clan
+		icon = mission_chinese_general_riding
+		required_missions = { }
+		position = 8
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_the_clan_is_marching
+				duration = 7300
+			}
+			northern_kyushu = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kyushu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			shikoku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ME_otomo_the_mainland = { # The Mainland
+		icon = mission_conquer_50_development
+		required_missions = { ME_otomo_masters_of_kyushu ME_otomo_shikoku_domination }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = hokkaido_area
+				area = sanindo_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			hokkaido_area = {
+				type = all
+				owned_by = ROOT
+			}
+			sanindo_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_into_the_mainland
+				duration = 5475
+			}
+		}
+	}
+	
+	ME_otomo_a_new_shogunate = { # A New Shogunate
+		icon = mission_empire
+		required_missions = { ME_otomo_the_mainland }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				1020 = {
+					owned_by = ROOT
+				}
+				has_reform = shogunate
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = me_otomo_a_new_shogun
+				duration = -1
+			}
+			every_subject_country = {
+				add_liberty_desire = -5
+			}
+		}
+	}
+}
+
+ME_OTM_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = OTM
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ME_otomo_shikoku_domination = { # Shikoku Domination
+		icon = mission_japanese_samurai # There was no specified graphics file
+		required_missions = { ME_otomo_mobilize_the_clan }
+		position = 9
+		provinces_to_highlight = {
+			area = shikoku_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			shikoku_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_yearly_manpower = 0.6
+		}
+	}
+	
+	ME_otomo_master_gunners = { # Master Gunners
+		icon = mission_cannons_firing
+		required_missions = { ME_otomo_nanban_trade_port }
+		position = 11
+		trigger = {
+			MIL = 6
+			OTM_ideas = 7
+			any_country = {
+				technology_group = western
+				reverse_has_opinion = {
+					who = ROOT
+					value = 120
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_master_gunners
+				duration = -1
+			}
+		}
+	}
+	
+	ME_otomo_unify_the_isle = { # Unify the Isle
+		icon = mission_japanese_fort
+		required_missions = { ME_otomo_a_new_shogunate }
+		position = 12
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			japan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_adm_power = 100
+		}
+	}
+}
+
+ME_OTM_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = OTM
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+
+	ME_otomo_nanban_trade_port = { # The Nanban Trade Port
+		icon = mission_galleys_in_port
+		required_missions = { }
+		position = 10
+		provinces_to_highlight = {
+			province_id = 1014
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
+			}
+		}
+		trigger = {
+			owns = 1014
+			1014 = {
+				development = 15
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+		}
+		effect = {
+			1014 = {
+				create_or_add_center_of_trade_level = { level = 2 }
+			}
+		}
+	}
+	
+	ME_otomo_buzen_castle = { # The Buzen Castle
+		icon = mission_great_wall
+		required_missions = { ME_otomo_nanban_trade_port }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 1818
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+				NOT = { development = 20 }
+			}
+		}
+		trigger = {
+			owns = 1818
+			1818 = {
+				fort_level = 2
+				development = 20
+			}
+		}
+		effect = {
+			1818 = {
+				add_province_modifier = {
+					name = me_otomo_buzen_castle
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	ME_otomo_pride_of_kyushu = { # Pride of Kyushu
+		icon = mission_early_game_buildings
+		required_missions = { ME_otomo_buzen_castle ME_otomo_master_gunners }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = northern_kyushu
+				area = kyushu_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_state = no
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { num_of_times_improved = 1 }
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				northern_kyushu = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				kyushu_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				northern_kyushu = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					num_of_times_improved = 1
+				}
+				kyushu_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					num_of_times_improved = 1
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_otomo_pride_of_kyushu
+				duration = -1
+			}
+		}
+	}
+}

@@ -1,0 +1,954 @@
+MAL_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAL
+	}
+	has_country_shield = yes
+	
+	mal_revitalize_the_empire = {
+		required_missions = { }
+		icon = mission_assemble_an_army
+		position = 1
+		trigger = {
+			stability = 2
+			NOT = { num_of_loans = 1 }
+			army_size_percentage = 0.9
+		}
+		effect = {
+			add_country_modifier = {
+				name = the_new_mali
+				duration = 5475
+			}
+			jolof_area = {
+				limit = {
+					is_island = no
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mal_reintegrate_senegal = {
+		required_missions = {
+			mal_revitalize_the_empire
+		}
+		icon = mission_african_soldier
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = jolof_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 2239
+					NOT = { development = 10 }
+				}
+			}
+		}
+		trigger = {
+			jolof_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2239 = {
+				development = 10
+			}
+		}
+		effect = {
+			1114 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 10
+					key = WHERE_THE_RIVER_ENDS
+				}
+			}
+			add_country_modifier = {
+				name = african_expansion
+				duration = 10950
+			}
+		}
+	}
+	
+	mal_aditional_trading_posts = {
+		required_missions = {
+			mal_reintegrate_senegal
+		}
+		icon = mission_dominate_home_trade_node
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1111
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 1111
+		}
+		effect = {
+			1111 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					center_of_trade = 2
+				}
+			}
+		}
+	}
+	
+	mal_iberian_threat = {
+		required_missions = {
+			mal_aditional_trading_posts
+		}
+		icon = mission_high_income
+		position = 4
+		trigger = {
+			223 = {
+				OR = {
+					is_strongest_trade_power = ROOT
+					strongest_trade_power = {
+						variable_arithmetic_trigger = {
+							custom_tooltip = HAS_LESS_TRADE_INCOME_THAN_ROOT
+							export_to_variable = {
+								which = trade_income_of_this
+								value = trade_income_percentage
+							}
+							export_to_variable = {
+								which = monthly_income_of_this
+								value = monthly_income
+							}
+							multiply_variable = { which = trade_income_of_this which = monthly_income_of_this }
+							export_to_variable = {
+								which = trade_income_of_root
+								value = trade_income_percentage
+								who = ROOT
+							}
+							export_to_variable = {
+								which = monthly_income_of_root
+								value = monthly_income
+								who = ROOT
+							}
+							multiply_variable = { which = trade_income_of_root which = monthly_income_of_root }
+							NOT = { check_variable = { which = trade_income_of_this which = trade_income_of_root } }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = african_trade_infux
+				duration = 7300
+			}
+			add_mercantilism = 1
+		}
+	}
+	
+	mal_islamic_brotherhood = {
+		required_missions = {
+			mal_iberian_threat
+			mal_trans_saharan_empire
+		}
+		icon = mission_bedouins
+		position = 5
+		trigger = {
+			religion_group = muslim
+			223 = {
+				OR = {
+					is_strongest_trade_power = ROOT
+					strongest_trade_power = {
+						religion_group = muslim
+						OR = {
+							is_subject_of = ROOT
+							alliance_with = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = islamic_brotherhood
+				duration 3650
+			}
+			every_country = {
+				limit = {
+					capital_scope = { region = niger_region }
+					religion_group = muslim
+				}
+				add_country_modifier = {
+					name = european_technology
+					duration = 18250
+				}
+			}
+		}
+	}
+}
+
+MAL_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAL
+	}
+	has_country_shield = yes
+	
+	mal_consolidate_the_bend = {
+		required_missions = {
+			mal_the_old_borders
+		}
+		icon = mission_unite_home_region
+		position = 2
+		provinces_to_highlight = {
+			area = niger_bend_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			niger_bend_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = consolidated_the_bend
+				duration = 5475
+			}
+			jenne_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			baghena_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			dendi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mal_infrigement_doctrine = {
+		required_missions = {
+			mal_reintegrate_senegal
+		}
+		icon = mission_mosque
+		position = 3
+		provinces_to_highlight = {
+			province_id = 4565
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			4565 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			4565 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+			}
+			southern_morocco_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ouled_nail_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_morocco_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mal_trans_saharan_empire = {
+		required_missions = {
+			mal_infrigement_doctrine
+		}
+		icon = mission_empire
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = southern_morocco_area
+				area = ouled_nail_area
+				area = northern_morocco_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			southern_morocco_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ouled_nail_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_morocco_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			223 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 30
+					key = IBERIAN_INFLUX
+				}
+			}
+			add_country_modifier = {
+				name = transsaharan_empire
+				duration = 3650
+			}
+		}
+	}
+}
+
+MAL_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAL
+	}
+	has_country_shield = yes
+	
+	mal_the_old_borders = {
+		required_missions = { }
+		icon = mission_build_up_to_force_limit
+		position = 1
+		trigger = {
+			grown_by_states = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = restored_old_borders
+				duration = 5475
+			}
+			kong_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_volta_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_volta_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			niger_bend_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mal_continued_momentum = {
+		required_missions = {
+			mal_the_old_borders
+		}
+		icon = mission_impaled_soldies
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = upper_volta_area
+				area = lower_volta_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			upper_volta_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lower_volta_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gold_exports
+				duration = 10950
+			}
+			tekrur_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mal_the_rule_of_law = {
+		required_missions = {
+			mal_reintegrate_senegal
+			mal_continued_momentum
+		}
+		icon = mission_monarch_in_throne_room
+		position = 3
+		provinces_to_highlight = {
+			area = tekrur_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tekrur_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { ADM = 6 }
+				}
+				change_adm = 1
+			}
+			else = {
+				add_adm_power = 100
+			}
+			guinea_coast_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			replace_country_modifier = {
+				remove = african_expansion
+				add = african_empire
+				time = -1
+			}
+		}
+	}
+	
+	mal_ivory_coast = {
+		required_missions = {
+			mal_the_rule_of_law
+		}
+		icon = mission_trade_company_region_abroad
+		position = 4
+		provinces_to_highlight = {
+			area = guinea_coast_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_colony = yes
+			}
+		}
+		trigger = {
+			guinea_coast_area = {
+				type = all
+				is_colony = no
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = conqured_the_ivory_coast
+				duration = -1
+			}
+			add_mercantilism = 3
+		}
+	}
+
+	mal_glory_to_mali = {
+		required_missions = {
+			mal_trans_saharan_empire
+			mal_western_islamic_empire
+		}
+		icon = mission_have_two_subjects
+		position = 5
+		provinces_to_highlight = {
+			is_core = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			is_year = 1700
+			all_core_province = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = empire_under_the_sun
+				duration = -1
+			}
+		}
+	}
+}
+
+MAL_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAL
+	}
+	has_country_shield = yes
+	
+	mal_the_first_city = {
+		required_missions = {
+			mal_the_old_borders
+			mal_revitalize_islam
+		}
+		icon = mission_conquer_50_development
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1133
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1133 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			1133 = {
+				add_base_manpower = 2
+				add_base_production = 2
+				add_base_tax = 2
+			}
+			add_country_modifier = {
+				name = owner_of_first_city
+				duration = 9125
+			}
+		}
+	}
+	
+	mal_the_second_city = {
+		required_missions = {
+			mal_the_first_city
+		}
+		icon = mission_arabian_fort
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1132
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1132 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			every_known_country = {
+				limit = {
+					religion_group = muslim
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = western_jihad
+				}
+			}
+			set_country_flag = unlock_revive_the_historic_capital_flag
+			custom_tooltip = unlock_revive_the_historic_capital.tooltip
+		}
+	}
+	
+	mal_western_islamic_empire = {
+		required_missions = {
+			mal_the_second_city
+		}
+		icon = mission_non-western_cavalry_raid
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = upper_volta_area
+						area = lower_volta_area
+					}
+					NOT = { religion_group = muslim }
+				}
+				AND = {
+					province_id = 1124
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
+		trigger = {
+			niger_region = {
+				type = all
+				religion_group = muslim
+			}
+			sahel_region = {
+				type = all
+				religion_group = muslim
+			}
+			1124 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 50
+			1124 = {
+				custom_tooltip = conquest_of_joma_tt
+				add_province_triggered_modifier = conquest_of_joma
+			}
+			add_country_modifier = {
+				name = consolidated_islam
+				duration = -1
+			}
+		}
+	}
+	
+	mal_potential_of_timbuktu = {
+		required_missions = {
+			mal_pick_up_the_dregs
+		}
+		icon = mission_early_modern_university
+		position = 5
+		provinces_to_highlight = {
+			province_id = 1132
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
+		trigger = {
+			1132 = {
+				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			1127 = {
+				if = {
+					limit = {
+						is_city = no
+						NOT = { colonysize = 1 }
+						NOT = { owned_by = ROOT }
+					}
+					add_colonysize = 500
+				}
+				else_if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	mal_the_saharan_gap = {
+		required_missions = {
+			mal_potential_of_timbuktu
+		}
+		icon = mission_bedouins
+		position = 6
+		provinces_to_highlight = {
+			province_id = 1127
+			OR = {
+				is_city = no
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			1127 = {
+				is_city = yes
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Wealth of Nations"
+				}
+				add_country_modifier = {
+					name = closed_the_gap
+					duration = 7300
+				}
+			}
+			else = {
+				add_mercantilism = 3
+				define_advisor = {
+					type = trader
+					skill = 3
+					culture = ROOT
+					religion = ROOT
+					cost_multiplier = 0.5
+				}
+			}
+		}
+	}
+	
+	mal_northward_neighbours = {
+		required_missions = {
+			mal_the_saharan_gap
+			mal_celestial_guidance
+		}
+		icon = mission_iberian_conquistador
+		position = 7
+		trigger = {
+			europe = {
+				has_discovered = ROOT
+			}
+		}
+		effect = {
+			iberia_region = {
+				discover_country = ROOT
+			}
+			if = {
+				limit = {
+					any_country = {
+						capital_scope = {
+							region = iberia_region
+						}
+						religion = ROOT
+						NOT = { is_rival = ROOT }
+					}
+				}
+				every_country = {
+					limit = {
+						capital_scope = {
+							region = iberia_region
+						}
+						religion = ROOT
+						NOT = { is_rival = ROOT }
+					}
+					add_opinion = {
+						who = PREV
+						modifier = mali_friendly_neighbors
+					}
+				}
+			}
+			else = {
+				every_country = {
+					limit = {
+						capital_scope = {
+							region = iberia_region
+						}
+					}
+					add_opinion = {
+						who = PREV
+						modifier = mali_friendly_neighbors
+					}
+				}
+			}
+		}
+	}
+}
+
+MAL_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAL
+	}
+	has_country_shield = yes
+	
+	mal_revitalize_islam = {
+		required_missions = { }
+		icon = mission_mosque
+		position = 1
+		trigger = {
+			religious_unity = 0.80
+		}
+		effect = {
+			add_country_modifier = {
+				name = revilatized_islam
+				duration = 9125
+			}
+		}
+	}
+	
+	mal_great_minds_of_islam = {
+		required_missions = {
+			mal_revitalize_islam
+		}
+		icon = mission_alliances
+		position = 1
+		trigger = {
+			has_mil_advisor_2 = yes
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = gathered_great_minds
+				duration = 7300
+			}
+		}
+	}
+	
+	mal_pick_up_the_dregs = {
+		required_missions = {
+			mal_the_second_city
+		}
+		icon = mission_colonial
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2247
+				province_id = 1132
+				province_id = 1129
+				province_id = 1128
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			2247 = {
+				owned_by = ROOT
+			}
+			1132 = {
+				owned_by = ROOT
+			}
+			1129 = {
+				owned_by = ROOT
+			}
+			1128 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			1132 = {
+				add_province_modifier = {
+					name = revival_project
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	mal_university_of_sankore = {
+		required_missions = {
+			mal_pick_up_the_dregs
+		}
+		icon = mission_early_modern_university
+		position = 5
+		provinces_to_highlight = {
+			province_id = 1132
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 0.1
+				is_looted = yes
+				NOT = { development = 25 }
+			}
+		}
+		trigger = {
+			1132 = {
+				owned_by = ROOT
+				NOT = { devastation = 0.1 }
+				is_looted = no
+				development = 25
+			}
+		}
+		effect = {
+			1132 = {
+				custom_tooltip = the_university_of_sankore_modifier_tt
+				add_province_triggered_modifier = the_university_of_sankore_modifier
+			}
+		}
+	}
+	
+	mal_celestial_guidance = {
+		required_missions = {
+			mal_university_of_sankore
+		}
+		icon = mission_invade_island
+		position = 6
+		trigger = {
+			OR = {
+				advisor = philosopher
+				advisor = theologian
+			}
+		}
+		effect = {
+			create_explorer = { tradition = 50 }
+		}
+	}
+	
+	mal_the_footsteps_of_abu_bakr = {
+		required_missions = {
+			mal_the_saharan_gap
+			mal_celestial_guidance
+		}
+		icon = mission_colonial
+		position = 7
+		trigger = {
+			OR = {
+				north_america = {
+					OR = {
+						has_discovered = ROOT
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				south_america = {
+					OR = {
+						has_discovered = ROOT
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Mali_Events.1 }
+		}
+	}
+}

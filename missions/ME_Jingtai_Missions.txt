@@ -1,0 +1,111 @@
+JNG_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = JNG
+	}
+	has_country_shield = yes
+	
+	JNG_wrestle_the_dragon = {
+		required_missions = { }
+		icon = me_mission_ming_civil_war
+		position = 1
+		trigger = {
+			OR = {
+				war_with = MNG
+				NOT = { exists = MNG }
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			country_event = { id = ME_Ming_Events.5 }
+			if = {
+				limit = {
+					exists = MNG
+				}
+				add_country_modifier = {
+					name = JNG_guerilla_warfare
+					duration = -1
+					desc = JNG_WILL_LAST_UNTIL_END_OF_WAR
+				}
+				
+				if = {
+					limit = {
+						any_province = {
+							owned_by = MNG
+							NOT = { is_core = ROOT }
+						}
+					}
+					hidden_effect = {
+						every_province = {
+							limit = {
+								owned_by = MNG
+								NOT = { is_core = ROOT }
+							}
+							add_core = ROOT
+						}
+						custom_tooltip = GAIN_CORES_ON_ALL_OF_CHINA
+					}
+				}
+			}
+		}
+	}
+	
+	JNG_a_new_empire = {
+		required_missions = { JNG_wrestle_the_dragon }
+		icon = me_mission_ming_jade_dragon
+		position = 4
+		trigger = {
+			is_at_war = no
+			total_development = MNG
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 25 }
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			add_ruler_modifier = {
+				name = JNG_a_new_emperor
+				duration = -1
+			}
+		}
+	}
+	
+	JNG_one_to_rule_them_all = {
+		required_missions = { JNG_a_new_empire }
+		icon = me_mission_ming_mandate_of_heaven
+		position = 6
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				region = north_china_region
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				region = south_china_region
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				region = xinan_region
+			}
+			OR = {
+				NOT = { exists = MNG }
+				overlord_of = MNG
+			}
+		}
+		effect = {
+			custom_tooltip = JNG_BETTER_RULERS
+			add_prestige = 25
+			add_stability_or_adm_power = yes
+			add_country_modifier = {
+				name = JNG_teachings_of_an_empire
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+}

@@ -1,0 +1,1185 @@
+BEI_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = BEI
+	}
+	has_country_shield = yes
+	
+	Brunei_strength = {
+		icon = mission_assemble_an_army
+		position = 1
+		required_missions = { }
+		trigger = {
+			army_size_percentage = 0.8
+		}
+		effect = {
+			add_country_modifier = {
+				name = bei_strong
+				duration = 7300
+			}
+			631 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = SUL
+					SUL = {
+						is_subject = no
+					}
+				}
+				SUL = {
+					country_event = { id = ME_Brunei_Events.1 }
+				}
+			}
+		}
+	}
+	
+	Brunei_sulu = {
+		icon = mission_have_two_subjects
+		position = 2
+		required_missions = { Brunei_strength }
+		provinces_to_highlight = {
+			province_id = 651
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			651 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			652 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			653 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Brunei_maguindanao = {
+		icon = mission_cannons_firing
+		position = 3
+		required_missions = { Brunei_sulu }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 652
+				province_id = 653
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			652 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			653 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = filipino
+			moluccas_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Brunei_philippines = {
+		icon = mission_unite_home_region
+		position = 4
+		required_missions = { Brunei_maguindanao }
+		provinces_to_highlight = {
+			region = moluccas_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			is_empty = no
+		}
+		trigger = {
+			moluccas_region = {
+				type = all
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					is_empty = yes
+				}
+			}
+		}
+		effect = {
+			moluccas_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = bei_conversion
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	Brunei_develop_some_stuff = {
+		icon = mission_colonial
+		position = 5
+		required_missions = { }
+		provinces_to_highlight = {
+			area = brunei_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
+			}
+		}
+		trigger = {
+			brunei_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 10
+			}
+		}
+		effect = {
+			brunei_area = {
+				add_province_modifier = {
+					name = bei_development
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	Brunei_fort = {
+		icon = mission_conquer_50_development
+		position = 6
+		required_missions = { Brunei_develop_some_stuff }
+		trigger = {
+			any_owned_province = {
+				area = brunei_area
+				fort_level = 2
+			}
+		}
+		effect = {
+			brunei_area = {
+				add_province_modifier = {
+					name = bei_develop
+					duration = 18250
+				}
+			}
+		}
+	}
+	
+	Brunei_develop = {
+		icon = mission_early_game_buildings
+		position = 7
+		required_missions = { Brunei_fort }
+		provinces_to_highlight = {
+			area = brunei_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 15 }
+			}
+		}
+		trigger = {
+			brunei_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 15
+			}
+		}
+		effect = {
+			add_prestige = 10
+			custom_tooltip = me_bei_decision
+			set_country_flag = me_bei_overpopulation
+		}
+	}
+	
+	Brunei_sumatra_2 = {
+		icon = mission_junk_boat
+		position = 8
+		required_missions = { Brunei_sulawesi_2 }
+		provinces_to_highlight = {
+			area = south_sumatra_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			south_sumatra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			2679 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 400
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+BEI_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BEI
+	}
+	has_country_shield = yes
+	
+	Brunei_thalassocracy = {
+		icon = mission_sea_battles
+		position = 2
+		required_missions = { Brunei_fleet }
+		trigger = {
+			navy_size_percentage = 1
+			home_trade_node = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = thalassocracy
+				duration = -1
+			}
+		}
+	}
+	
+	Brunei_siak = {
+		icon = mission_assemble_an_army
+		position = 3
+		required_missions = { Brunei_malacca }
+		provinces_to_highlight = {
+			area = central_sumatra_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			central_sumatra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			batak_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			minangkabau_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_sumatra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_sumatra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_sumatra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Brunei_colonist = {
+		icon = mission_asian_trader
+		position = 5
+		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { development = 20 }
+		}
+		trigger = {
+			has_institution = renaissance
+			total_development = 175
+			capital_scope = {
+				development = 20
+			}
+			is_bankrupt = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = bei_colonist
+				duration = -1
+			}
+		}
+	}
+	
+	Brunei_settle_borneo = {
+		icon = mission_early_game_buildings
+		position = 6
+		required_missions = { Brunei_colonist }
+		provinces_to_highlight = {
+			area = kalimantan_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			kalimantan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			kalimantan_area = {
+				add_province_modifier = {
+					name = bei_new_colonies
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	Brunei_sulawesi_2 = {
+		icon = mission_colonial
+		position = 7
+		required_missions = { Brunei_settle_borneo }
+		provinces_to_highlight = {
+			OR = {
+				area = south_sulawesi_area
+				area = sulawesi_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			south_sulawesi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+			sulawesi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			2717 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			645 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+BEI_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = BEI
+	}
+	has_country_shield = yes
+	
+	Brunei_fleet = {
+		icon = mission_establish_high_seas_navy
+		position = 1
+		required_missions = { }
+		trigger = {
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = bei_navy_stonk
+				duration = 7300
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					exists = MNG
+					MNG = {
+						can_be_overlord = tributary_state
+					}
+				}
+				country_event = { id = ME_Brunei_Events.2 }
+			}
+			malaya_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malacca_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Brunei_malacca = {
+		icon = mission_asian_trader
+		position = 2
+		required_missions = { Brunei_fleet }
+		provinces_to_highlight = {
+			OR = {
+				area = malaya_area
+				area = malacca_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			malaya_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malacca_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			2394 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			594 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			central_sumatra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Brunei_sumatra = {
+		icon = mission_unite_home_region
+		position = 4
+		required_missions = { Brunei_siak Brunei_kedah }
+		provinces_to_highlight = {
+			OR = {
+				area = north_sumatra_area 
+				area = central_sumatra_area
+				area = south_sumatra_area
+				area = batak_area
+				area = minangkabau_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			north_sumatra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			central_sumatra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			south_sumatra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			batak_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			minangkabau_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			621 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 400
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			624 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 400
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Brunei_philippines_2 = {
+		icon = mission_colonial
+		position = 8
+		required_missions = { Brunei_sulawesi_2 }
+		provinces_to_highlight = {
+			region = moluccas_region
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			moluccas_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}
+
+BEI_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = BEI
+	}
+	has_country_shield = yes
+		
+	Brunei_expand_commerce = {
+		icon = mission_dominate_home_trade_node
+		position = 2
+		required_missions = { Brunei_fleet }
+		trigger = {
+			OR = {
+				marketplace = 5
+				trade_depot = 5
+				stock_exchange = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bei_expanding_commerce
+				duration = 9125
+			}
+		}
+	}
+	
+	Brunei_kedah = {
+		icon = mission_cannons_firing
+		position = 3
+		required_missions = { Brunei_malacca }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 594
+				province_id = 2394
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			594 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2394 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tenasserim_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			594 = {
+				add_nationalism = -15
+			}
+			2394 = {
+				add_nationalism = -15
+			}
+			add_mercantilism = 2
+		}
+	}
+	
+	Brunei_kutai_convert = {
+		icon = mission_hands_praying
+		position = 4
+		required_missions = { Brunei_kutai }
+		provinces_to_highlight = {
+			area = kutai_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
+		}
+		trigger = {
+			kutai_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+		}
+		effect = {
+			kutai_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = bei_centralization
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	Brunei_unite = {
+		icon = mission_unite_home_region
+		position = 5
+		required_missions = { Brunei_kutai_convert }
+		provinces_to_highlight = {
+			OR = {
+				area = brunei_area
+				area = kutai_area
+				area = kalimantan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			brunei_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kutai_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kalimantan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ara_golden_age
+				duration = 36500
+			}
+		}
+	}
+	
+	Brunei_majapahit = {
+		icon = mission_conquer_50_development
+		position = 6
+		required_missions = { Brunei_sulawesi }
+		provinces_to_highlight = {
+			OR = {
+				area = east_java_area
+				area = central_java_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_java_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			central_java_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			west_java_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 15
+					key = bei_let_the_trade_flow
+				}
+			}
+		}
+	}
+	
+	Brunei_sunda = {
+		icon = mission_asian_trader
+		position = 7
+		required_missions = { Brunei_majapahit }
+		provinces_to_highlight = {
+			area = west_java_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			west_java_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bei_trading_nation
+				duration = 7300
+			}
+			add_mercantilism = 2
+		}
+	}
+}
+
+BEI_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = BEI
+	}
+	has_country_shield = yes
+	
+	Brunei_insult = {
+		icon = mission_junk_boat
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			NOT = { exists = KUT }
+			area = kutai_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = KUT
+				}
+				KUT = {
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+					}
+				}
+			}
+			else = {
+				kutai_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = KUT
+				}
+				kutai_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				if = {
+					limit = {
+						NOT = { overlord_of = KUT }
+					}
+					add_casus_belli = {
+						target = KUT
+						type = cb_annex
+						months = 240
+					}
+				}
+			}
+			else = {
+				add_prestige = 20
+			}
+		}
+	}
+	
+	Brunei_kutai = {
+		icon = mission_build_up_to_force_limit
+		position = 3
+		required_missions = { Brunei_insult }
+		provinces_to_highlight = {
+			area = kutai_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kutai_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			kutai_area = {
+				add_province_modifier = {
+					name = bei_conversion
+					duration = 7300
+				}
+			}
+			641 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2715 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2716 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Brunei_sulawesi = {
+		icon = mission_assemble_an_army
+		position = 5
+		required_missions = { Brunei_kutai }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 641
+				province_id = 2715
+				province_id = 2716
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			641 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			2715 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			2716 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			641 = {
+				add_province_modifier = {
+					name = bei_makassar_conversion
+					duration = 7300 
+				}
+			}
+			2715 = {
+				add_province_modifier = {
+					name = bei_conversion
+					duration = 7300 
+				}
+			}
+			2716 = {
+				add_province_modifier = {
+					name = bei_conversion
+					duration = 7300 
+				}
+			}
+			649 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			650 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			east_java_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_java_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Brunei_spice = {
+		icon = mission_invade_island
+		position = 7
+		required_missions = { Brunei_sulawesi }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 649
+				province_id = 650
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			649 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			650 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			648 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 100
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Brunei_third = {
+		icon = mission_colonial
+		position = 8
+		required_missions = { Brunei_spice }
+		provinces_to_highlight = {
+			province_id = 648
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			648 = {
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			648 = {
+				add_permanent_province_modifier = {
+					name = spice_islands_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}

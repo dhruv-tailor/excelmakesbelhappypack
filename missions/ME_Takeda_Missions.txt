@@ -1,0 +1,490 @@
+TKD_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = TKD
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	takeda_eastern_kanto_province = {
+		icon = mission_japanese_fort
+		required_missions = { takeda_rivals_of_uesugi }
+		position = 3
+		provinces_to_highlight = {
+			area = eastern_kanto_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			eastern_kanto_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_eastern_kanto_province_modifier
+				duration = 5475
+			}
+		}
+	}
+}
+
+TKD_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = TKD
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	takeda_rivals_of_uesugi = {
+		icon = mission_japanese_samurai
+		required_missions = { takeda_tiger_of_kai }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1843
+				province_id = 1028
+				province_id = 1024
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = UES }
+			owns = 1843
+			owns = 1028
+			owns = 1024
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_rivals_of_uesugi_modifier
+				duration = 5475
+			}
+			eastern_kanto_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			thohoku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	takeda_conquest_of_tohoku = {
+		icon = mission_assemble_an_army
+		required_missions = { takeda_rivals_of_uesugi }
+		position = 3
+		provinces_to_highlight = {
+			area = thohoku_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			thohoku_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_conquest_of_tohoku_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	takeda_the_ainu_province = {
+		icon = mission_rb_control_state_religion
+		required_missions = { takeda_eastern_kanto_province takeda_conquest_of_tohoku }
+		position = 4
+		provinces_to_highlight = {
+			area = hokkaido_area
+			NOT = { province_id = 1032 }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			hokkaido_area = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					province_id = 1032
+				}
+			}
+		}
+		effect = {
+			hokkaido_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = takeda_the_ainu_province_province_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	takeda_takeda_cavalry = {
+		icon = mission_marwari_horses
+		required_missions = { takeda_rise_of_takeda_shingen }
+		position = 5
+		trigger = {
+			num_of_cavalry = 6
+			OR = {
+				MIL = 5
+				quality_ideas = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_takeda_cavalry_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+TKD_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = TKD
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	takeda_tiger_of_kai = {
+		icon = mission_the_tiger_triumphant
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_tiger_of_kai_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	takeda_rise_of_takeda_shingen = {
+		icon = me_mission_protect_throne
+		required_missions = { }
+		position = 4
+		trigger = {
+			OR = {
+				is_year = 1480
+				AND = {
+					has_heir = no
+					prestige = 20
+					army_size_percentage = 1
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Takeda_Events.1 }
+			hidden_effect = {
+				set_variable = { which = num_of_won_battles value = 0 }
+			}
+		}
+	}
+	
+	takeda_wind_fire_forest_mountain = {
+		icon = mission_conquer_50_development
+		required_missions = { takeda_rise_of_takeda_shingen }
+		position = 5
+		trigger = {
+			prestige = 30
+			custom_trigger_tooltip = {
+				tooltip = TKD_WON_AT_LEAST_12_BATTLES
+				check_variable = { which = num_of_won_battles value = 12 }
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = takeda_wind_fire_forest_mountain_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	takeda_koshu_hatto_no_shidai = {
+		icon = mission_golden_century
+		required_missions = { takeda_takeda_cavalry takeda_wind_fire_forest_mountain takeda_kai_a_daimyos_pride }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 0.01
+		}
+		trigger = {
+			OR = {
+				ADM = 5
+				full_idea_group = economic_ideas
+			}
+			stability = 2
+			NOT = { corruption = 0.01 }
+			all_owned_province = {
+				NOT = { unrest = 0.01 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_koshu_hatto_no_shidai_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+TKD_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = TKD
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	takeda_acquiring_a_coastline = {
+		icon = mission_trade_with_japan
+		required_missions = { takeda_tiger_of_kai }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1839
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 1839
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_acquiring_a_coastline_modifier
+				duration = 3650
+			}
+			1839 = {
+				add_base_production = 2
+			}
+		}
+	}
+	
+	takeda_the_twin_clans = {
+		icon = mission_japanese_samurai
+		required_missions = { takeda_acquiring_a_coastline }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4360
+				province_id = 1030
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 4360
+			owns = 1030
+		}
+		effect = {
+			add_yearly_manpower = 1
+			1030 = {
+				add_base_manpower = 1
+			}
+		}
+	}
+	
+	takeda_a_new_shogun = {
+		icon = mission_empire
+		required_missions = { takeda_the_twin_clans takeda_at_the_gates_of_kyoto }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { has_reform = shogunate }
+			}
+		}
+		trigger = {
+			OR = {
+				owns = 1020
+				has_reform = shogunate
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = takeda_a_new_shogun_modifier
+				duration = -1
+			}
+			if = {
+				limit = {
+					any_subject_country = {
+						is_subject_of_type = daimyo_vassal
+					}
+				}
+				every_subject_country = {
+					limit = {
+						is_subject_of_type = daimyo_vassal
+					}
+					add_liberty_desire = -10
+				}
+			}
+		}
+	}
+	
+	takeda_kai_a_daimyos_pride = {
+		icon = mission_japanese_fort
+		required_missions = { takeda_rise_of_takeda_shingen }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 1029
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				is_state = no
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					OR = {
+						AND = {
+							NOT = { has_building = temple }
+							NOT = { has_building = cathedral }
+						}
+						AND = {
+							NOT = { has_building = workshop }
+							NOT = { has_building = counting_house }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 1029
+			1029 = {
+				is_state = yes
+				development = 20
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				1029 = {
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				1029 = {
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+			}
+		}
+		effect = {
+			1029 = {
+				add_province_modifier = {
+					name = takeda_kai_a_daimyos_pride_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+TKD_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = TKD
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+	}
+	has_country_shield = yes
+	
+	takeda_at_the_gates_of_kyoto = {
+		icon = mission_city_of_the_world's_desire
+		required_missions = { takeda_acquiring_a_coastline }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_neighbor_province = {
+					owned_by = ROOT
+				}
+			}
+		}
+		trigger = {
+			1020 = {
+				OR = {
+					owned_by = ROOT
+					any_neighbor_province = {
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = takeda_at_the_gates_of_kyoto_modifier
+				duration = 1825
+			}
+		}
+	}
+}

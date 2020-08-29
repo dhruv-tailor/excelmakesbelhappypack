@@ -1,0 +1,712 @@
+MVA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MVA
+	}
+	has_country_shield = yes
+	
+	mva_prepare_for_independence = {
+		icon = mission_alliances
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 0.6
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_prepared_for_independence"
+				duration = 10950
+			}
+		}
+	}
+	
+	mva_declare_independence = {
+		icon = mission_cannons_firing
+		required_missions = { mva_prepare_for_independence }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 265
+				province_id = 4237
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			is_at_war = no
+			is_subject = no
+			owns = 265
+			owns = 4237
+		}
+		effect = {
+			265 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			4237 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			silesia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	
+	mva_conquer_silesia = {
+		icon = mission_unite_home_region
+		required_missions = { mva_declare_independence }
+		position = 5
+		provinces_to_highlight = {
+			area = silesia_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			silesia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			bohemia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_bohemia = {
+		icon = mission_cannons_firing
+		required_missions = { mva_conquer_silesia }
+		position = 6
+		provinces_to_highlight = {
+			area = bohemia_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			bohemia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			erzgebirge_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_sudetenland = {
+		icon = mission_unite_home_region
+		required_missions = { mva_conquer_bohemia }
+		position = 7
+		provinces_to_highlight = {
+			area = erzgebirge_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			erzgebirge_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			60 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1763 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	mva_conquer_sorbia = {
+		icon = mission_cannons_firing
+		required_missions = { mva_conquer_sudetenland }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 60
+				province_id = 1763
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 60
+			owns_core_province = 1763
+		}
+		effect = {
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wielkopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_galicia = {
+		icon = mission_unite_home_region
+		required_missions = { mva_conquer_sorbia }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = red_ruthenia_area
+				area = wielkopolska_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			red_ruthenia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			wielkopolska_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			malopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_poland = {
+		icon = mission_assemble_an_army
+		required_missions = { mva_conquer_galicia }
+		position = 10
+		provinces_to_highlight = {
+			area = malopolska_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			malopolska_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_conquest_of_poland"
+				duration = 10950
+			}
+		}
+	}
+}
+
+MVA_missions_2 = {
+	slot = 2
+	ai = yes
+	potential = {
+		tag = MVA
+	}
+	has_country_shield = yes
+	
+	mva_conquer_avaria = {
+		icon = mission_empire
+		required_missions = { mva_conquer_silesia }
+		position = 6
+		provinces_to_highlight = {
+			area = slovakia_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			slovakia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			transdanubia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transylvania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_nitra = {
+		icon = mission_unite_home_region
+		required_missions = { mva_conquer_avaria }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = transdanubia_area
+				area = transylvania_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			transdanubia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			transylvania_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			austria_proper_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_vienna = {
+		icon = mission_cannons_firing
+		required_missions = { mva_conquer_nitra }
+		position = 8
+		provinces_to_highlight = {
+			area = austria_proper_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			austria_proper_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			76 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			64 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			65 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	mva_follow_danube = {
+		icon = mission_conquer_5_states 
+		required_missions = { mva_conquer_vienna }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 76
+				province_id = 64
+				province_id = 65
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = { 
+			owns_core_province = 76
+			owns_core_province = 64
+			owns_core_province = 65
+		}
+		effect = {
+			inner_austria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_further_into_austria = {
+		icon = mission_conquer_50_development
+		required_missions = { mva_follow_danube }
+		position = 10
+		provinces_to_highlight = {
+			area = inner_austria_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			inner_austria_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_conquest_of_austria"
+				duration = 10950
+			}
+		}
+	}
+}
+
+MVA_missions_3 = {
+	slot = 3
+	ai = yes
+	potential = {
+		tag = MVA
+	}
+	has_country_shield = yes
+	
+	mva_conquer_south_hungary = {
+		icon = mission_conquer_50_development
+		required_missions = { mva_conquer_nitra }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = alfold_area
+				area = southern_transylvania_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			alfold_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			southern_transylvania_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			wallachia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			moldavia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mva_conquer_wallachia = {
+		icon = mission_conquer_5_states
+		required_missions = { mva_conquer_south_hungary }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = wallachia_area
+				area = moldavia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			wallachia_area = {	
+				type = all
+				owned_by = ROOT
+			    is_core = ROOT 
+			}
+			moldavia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_slavic_conquest"
+				duration = 10950				
+			}
+		}
+	}
+	
+	mva_great_moravia = {
+		icon = mission_empire 
+		required_missions = {
+			mva_conquer_wallachia 
+			mva_conquer_poland 
+			mva_further_into_austria 
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 3
+			}
+			else = {
+				total_development = 1000
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = "mva_greater_moravia"
+				duration = -1
+			}
+		}
+	}
+}
+
+MVA_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = MVA
+	}
+	has_country_shield = yes
+	
+	mva_st_thomas = {
+		icon = mission_european_church
+		provinces_to_highlight = {
+			province_id = 265
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			265 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {	
+			265 = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 1
+				}
+			}
+			add_country_modifier = {
+				name = "mva_cathedral"
+				duration = -1
+			}
+		}
+	}
+	
+	mva_urbanize_moravia = {
+		icon = mission_early_game_buildings
+		required_missions = { mva_st_thomas }
+		trigger = {
+			total_development = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_urban_cities"
+				duration = 10950
+			}
+		}
+	}
+	
+	mva_olomouc = {
+		icon = mission_have_manufactories
+		required_missions = { mva_urbanize_moravia }
+		provinces_to_highlight = {
+			province_id = 4237
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			4237 = {
+				owned_by = ROOT
+				has_building = university
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_education"
+				duration = 10950
+			}
+		}
+	}
+	
+	mva_spilberk = {
+		icon = mission_conquer_50_development
+		required_missions = { mva_olomouc }
+		provinces_to_highlight = {
+			province_id = 265
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			265 = {
+				owned_by = ROOT
+				OR = {
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_baroque"
+				duration = 10950
+			}
+		}
+	}
+	
+	mva_reduta_theatre = {
+		icon = mission_early_game_buildings
+		required_missions = { mva_spilberk }
+		trigger = {
+			prestige = 50
+			treasury = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_theatre"
+				duration = 10950
+			}
+			add_treasury = -100
+		}
+	}
+	
+	mva_enlightenment = {
+		icon = mission_religious
+		required_missions = { mva_reduta_theatre }
+		trigger = {
+			has_institution = enlightenment
+		}
+		effect = {
+			add_country_modifier = {
+				name = "mva_enlightenment_theory"
+				duration = -1
+			}
+		}
+	}
+}

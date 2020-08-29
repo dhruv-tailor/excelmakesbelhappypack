@@ -1,0 +1,213 @@
+ANS_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = ANS
+	}
+	has_country_shield = yes
+	
+	ans_hohenzollern = {
+		icon = mission_monarch_in_throne_room
+		trigger = {
+			prestige = BRA
+			prestige = 20
+			BRA = {
+				has_opinion = {
+					value = 100
+					who = ROOT
+				}
+			}
+			legitimacy = 100
+		}
+		effect = {
+			custom_tooltip = ME_ANS_hohenzollern
+		}
+	}
+	
+	ans_become_elector = {
+		icon = mission_alliances
+		required_missions = { ans_hohenzollern }
+		position = 3
+		trigger = {
+			prestige = 30
+			BRA = {
+				junior_union_with = ROOT
+				NOT = { liberty_desire = 50 }
+			}
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_elector = no
+					BRA = {
+						is_elector = yes
+					}
+				}
+				elector = yes
+				BRA = {
+					elector = no
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+			add_adm_power = 50
+			add_legitimacy_equivalent = { value = 5 }
+		}
+	}
+	
+	ans_kingdom_of_ansbach = {
+		icon = mission_conquer_50_development
+		required_missions = { ans_become_elector }
+		position = 5
+		provinces_to_highlight = {
+			area = mittelmark_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			is_elector = yes
+			legitimacy_equivalent = 100
+			total_development = 100
+			mittelmark_area = {
+				type = all
+				owned_by = ROOT
+			}
+			NOT = { exists = BRA }
+		}
+		effect = {
+			add_accepted_culture = prussian
+			add_prestige = 50
+			add_country_modifier = {
+				name = ANS_prussian_traditions
+				duration = -1
+			}
+		}
+	}
+}
+
+ANS_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = ANS
+	}
+	has_country_shield = yes
+	
+	ans_margraves_palace = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 71
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			years_of_income = 2.0
+			treasury = 100
+			owns = 71
+			71 = {
+				renaissance = 100
+			}
+		}
+		effect = {
+			add_years_of_income = -2
+			71 = {
+				add_province_modifier = {
+					name = ANS_Palace
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	ans_duke_of_Franconia = {
+		icon = mission_have_two_subjects
+		required_missions = { ans_margraves_palace }
+		position = 3
+		provinces_to_highlight = {
+			area = franconia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			franconia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			is_elector = yes
+			legitimacy_equivalent = 100
+			prestige = 50
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ANS_duke_of_Franconia
+				duration = -1
+			}
+		}
+	}
+	
+	ans_Ansbach_porcelain = {
+		icon = mission_have_manufactories
+		required_missions = { ans_duke_of_Franconia }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 61
+			NOT = { owned_by = ROOT }
+			owner = {
+				NOT = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
+				}
+			}
+		}
+		trigger = {
+			adm_tech = 24
+			custom_trigger_tooltip = {
+				tooltip = europeans_in_china_happened_tt
+				has_global_flag = europeans_in_china_happened
+			}
+			61 = {
+				OR = {
+					owned_by = ROOT
+					owner = {
+						has_opinion = {
+							value = 100
+							who = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			71 = {
+				add_province_modifier = {
+					name = ANS_ansbach_porcelain_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}

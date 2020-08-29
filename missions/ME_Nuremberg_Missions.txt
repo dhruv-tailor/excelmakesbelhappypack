@@ -1,0 +1,232 @@
+NUM_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = NUM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	num_city_above_all = {
+		icon = mission_eastern_european_city
+		provinces_to_highlight = {
+			province_id = 67
+			OR = {
+				NOT = { owned_by = ROOT }
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = 67_dev
+						value = development
+						who = 67
+					}
+					export_to_variable = {
+						which = 134_dev
+						value = development
+						who = 134
+					}
+					export_to_variable = {
+						which = 266_dev
+						value = development
+						who = 266
+					}
+					OR = {
+						check_variable = { which = 134_dev which = 67_dev }
+						check_variable = { which = 266_dev which = 67_dev }
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 67
+			variable_arithmetic_trigger = {
+				custom_tooltip = 67_HAS_MORE_DEV_THAN_134_AND_266
+				export_to_variable = {
+					which = 67_dev
+					value = development
+					who = 67
+				}
+				export_to_variable = {
+					which = 134_dev
+					value = development
+					who = 134
+				}
+				export_to_variable = {
+					which = 266_dev
+					value = development
+					who = 266
+				}
+				NOT = { check_variable = { which = 134_dev which = 67_dev } }
+				NOT = { check_variable = { which = 266_dev which = 67_dev } }
+			}
+		}
+		effect = {
+			67 = {
+				add_province_modifier = {
+					name = NUM_Hauptstadt
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	num_stadtbiblothek = {
+		icon = me_mission_man_in_library
+		position = 3
+		required_missions = { num_city_above_all }
+		provinces_to_highlight = {
+			province_id = 67
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+			}
+		}
+		trigger = {
+			67 = {
+				owned_by = ROOT
+				development = 25
+			}
+		}
+		effect = {
+			67 = {
+				add_institution_embracement = {
+					which = printing_press
+					value = 100
+				}
+				add_province_modifier = {
+					name = NUM_stadtbibliothek_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	num_german_renaissance = {
+		icon = mission_alliances
+		required_missions = { num_stadtbiblothek }
+		position = 5
+		trigger = {
+			has_institution = renaissance
+		}
+		effect = {
+			add_country_modifier = {
+				name = NUM_renaissance_modifier
+				desc = until_age_of_discovery_ends
+				duration = -1
+			}
+		}
+	}
+}
+
+NUM_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = NUM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	num_no_more_plagues = {
+		icon = mission_high_income
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 67
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			treasury = 100
+			owns = 67
+		}
+		effect = {
+			add_treasury = -100
+			67 = {
+				add_base_tax = 1 
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+	
+	num_expand_the_city = {
+		icon = mission_hanseatic_city
+		required_missions = { num_no_more_plagues }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 67
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			67 = {
+				owned_by = ROOT
+				development = 30
+			}
+		}
+		effect = {
+			67 = {
+				add_province_modifier = {
+					name = NUM_expansion_of_the_city
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	num_heydey = {
+		icon = mission_eastern_european_city
+		required_missions = { num_expand_the_city }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 67
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_state = no
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+			}
+		}
+		trigger = {
+			owns = 67
+			67 = {
+				is_state = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				67 = {
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				67 = {
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ara_golden_age
+				duration = 36500
+			}
+		}
+	}
+}

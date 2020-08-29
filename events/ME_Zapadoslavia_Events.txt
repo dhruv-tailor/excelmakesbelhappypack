@@ -1,0 +1,635 @@
+namespace = ME_Zapadoslavia_Events
+
+country_event = {
+	id = ME_Zapadoslavia_Events.1
+	title = ME_Zapadoslavia_Events.1.t
+	desc = ME_Zapadoslavia_Events.1.d
+	picture = RELIGION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = ZCV
+		NOT = { has_reform = west_slavic_monarchy }
+	}
+	
+	mean_time_to_happen = {
+		months = 10
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.1.a
+		
+		ai_chance = { factor = 90 }
+		
+		add_government_reform = west_slavic_monarchy
+		hidden_effect = {
+			set_country_flag = ME_unite_west_slavs
+			swap_non_generic_missions = yes
+			set_variable = {
+				which = ME_slovak_loyalty
+				value = 0
+			}
+			set_variable = {
+				which = ME_polish_loyalty
+				value = 0
+			}
+			set_variable = {
+				which = ME_czech_loyalty
+				value = 0
+			}
+		}
+		
+		custom_tooltip = ME_uniting_the_west_slavs.tooltip
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.1.b
+		
+		ai_chance = { factor = 10 }
+		
+		custom_tooltip = ME_will_not_unite_slavs
+	}
+}
+
+#West Slavic Succession
+country_event = {
+	id = ME_Zapadoslavia_Events.2
+	title = ME_Zapadoslavia_Events.2.t
+	desc = ME_Zapadoslavia_Events.2.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #A Slovak Candidate
+		name = ME_Zapadoslavia_Events.2.a
+		
+		define_ruler = {
+			culture = slovak
+			hide_skills = yes
+			dynasty = ROOT
+			age = 25
+		}
+		change_variable = { ME_slovak_loyalty = 5 }
+		add_faction_influence = {
+			faction = west_slav_slovaks
+			influence = 10
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = ME_lowered_penalties }
+			}
+			change_variable = { ME_polish_loyalty = -5 }
+			change_variable = { ME_czech_loyalty = -5 }
+		}
+		else = {
+			change_variable = { ME_polish_loyalty = -3 }
+			change_variable = { ME_czech_loyalty = -3 }
+		}
+	}
+	
+	option = { #A Polish Candidate
+		name = ME_Zapadoslavia_Events.2.b
+		
+		change_primary_culture = polish
+		define_ruler = {
+			culture = polish
+			hide_skills = yes
+			dynasty = ROOT
+			age = 25
+		}
+		change_variable = { ME_polish_loyalty = 5 }
+		add_faction_influence = {
+			faction = west_slav_poles
+			influence = 10
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = ME_lowered_penalties }
+			}
+			change_variable = { ME_slovak_loyalty = -5 }
+			change_variable = { ME_czech_loyalty = -5 }
+		}
+		else = {
+			change_variable = { ME_slovak_loyalty = -3 }
+			change_variable = { ME_czech_loyalty = -3 }
+		}
+	}
+	
+	option = { #A Czech Candidate
+		name = ME_Zapadoslavia_Events.2.c
+		
+		change_primary_culture = czech
+		define_ruler = {
+			culture = czech
+			hide_skills = yes
+			dynasty = ROOT
+			age = 25
+		}
+		change_variable = { ME_czech_loyalty = 5 }
+		add_faction_influence = {
+			faction = west_slav_czechs
+			influence = 10
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = ME_lowered_penalties }
+			}
+			change_variable = { ME_polish_loyalty = -5 }
+			change_variable = { ME_slovak_loyalty = -5 }
+		}
+		else = {
+			change_variable = { ME_polish_loyalty = -3 }
+			change_variable = { ME_slovak_loyalty = -3 }
+		}
+	}
+	
+	after = {
+		clr_country_flag = ME_FFS_STAP
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.3
+	title = ME_Zapadoslavia_Events.3.t
+	desc = ME_Zapadoslavia_Events.3.d
+	picture = RELIGION_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		has_reform = west_slavic_monarchy
+		NOT = { is_month = 1 }
+		NOT = { has_country_modifier = ME_loyalty_increased }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					faction_in_power = west_slav_slovaks
+				}
+				change_variable = { ME_slovak_loyalty = 1 }
+			}
+			else_if = {
+				limit = {
+					faction_in_power = west_slav_poles
+				}
+				change_variable = { ME_polish_loyalty = 1 }
+			}
+			else_if = {
+				limit = {
+					faction_in_power = west_slav_czechs
+				}
+				change_variable = { ME_czech_loyalty = 1 }
+			}
+			add_country_modifier = {
+				name = ME_loyalty_increased
+				duration = 31
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Zapadoslavia_Events.3.d
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.4
+	title = ME_Zapadoslavia_Events.4.t
+	desc = ME_Zapadoslavia_Events.4.d
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		has_reform = west_slavic_monarchy
+		has_country_flag = ME_unite_west_slavs
+		NOT = { has_province_modifier = ME_revolt_happened }
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = ME_revolt_happened
+				duration = 365
+				hidden = yes
+			}
+			random_owned_province = {
+				limit = {
+					culture_group = west_slavic
+					NOT = { culture = ROOT }
+				}
+				save_event_target_as = ME_city_revolt_target
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.4.a
+		
+		ai_chance = { factor = 0.5 }
+		
+		event_target:ME_city_revolt_target = {
+			spawn_rebels = {
+				size = 1
+				type = nationalist_rebels
+			}
+			if = {
+				limit = {
+					culture = slovak
+					ROOT = {
+						NOT = { faction_in_power = west_slav_slovaks }	
+					}
+				}
+				ROOT = {
+					change_variable = { ME_slovak_loyalty = -3 }
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						culture = schlesian
+						culture = polish
+					}
+					ROOT = {
+						NOT = { faction_in_power = west_slav_poles }
+					}
+				}
+				ROOT = {
+					change_variable = { ME_polish_loyalty = -3 }
+				}
+			}
+			else_if = {
+				limit = {
+					culture = czech
+					ROOT = {
+						NOT = { faction_in_power = west_slav_czechs }
+					}
+				}
+				ROOT = {
+					change_variable = { ME_czech_loyalty = -3 }
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.4.b
+		
+		ai_chance = { factor = 0.5 }
+		
+		event_target:ME_city_revolt_target = {
+			add_local_autonomy = 30
+			add_nationalism = 10
+			add_unrest = 10
+		}
+	}
+}	
+
+country_event = {
+	id = ME_Zapadoslavia_Events.5
+	title = ME_Zapadoslavia_Events.5.t
+	desc = ME_Zapadoslavia_Events.5.d
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		has_reform = west_slavic_monarchy
+		has_country_flag = ME_unite_west_slavs
+	}
+	
+	mean_time_to_happen = {
+		months = 75
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.5.a
+		
+		trigger = {
+			NOT = { ruler_has_personality = incorruptible_personality }
+		}
+		
+		ai_chance = { factor = 0.33 }
+		
+		add_corruption = 1
+		add_years_of_income = 0.3
+		random = {
+			33 = {
+				change_variable = { ME_slovak_loyalty = 5 }
+			}
+			33 = {
+				change_variable = { ME_czech_loyalty = 5 }
+			}
+			33 = {
+				change_variable = { ME_polish_loyalty = 5 }
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.5.b
+		
+		ai_chance = { factor = 0.33 }
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.5.c
+		
+		trigger = {
+			ruler_has_personality = embezzler_personality
+		}
+		
+		ai_chance = { factor = 0.33 }
+		
+		add_corruption = 1.5
+		add_years_of_income = 0.7
+		random = {
+			33 = {
+				change_variable = { ME_slovak_loyalty = 10 }
+			}
+			33 = {
+				change_variable = { ME_czech_loyalty = 10 }
+			}
+			33 = {
+				change_variable = { ME_polish_loyalty = 10 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.6
+	title = ME_Zapadoslavia_Events.6.t
+	desc = ME_Zapadoslavia_Events.6.d
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		has_reform = west_slavic_monarchy
+		NOT = { ADM = 3 }
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.6.a
+		
+		if = {
+			limit = {
+				NOT = { has_country_flag = ME_lowered_penalties }
+			}		
+			change_variable = { ME_slovak_loyalty = -5 }
+			change_variable = { ME_czech_loyalty = -5 }
+			change_variable = { ME_polish_loyalty = -5 }
+		}
+		else = {
+			change_variable = { ME_slovak_loyalty = -3 }
+			change_variable = { ME_czech_loyalty = -3 }
+			change_variable = { ME_polish_loyalty = -3 }
+		}
+	}
+}
+	
+country_event = {
+	id = ME_Zapadoslavia_Events.7
+	title = ME_Zapadoslavia_Events.7.t
+	desc = ME_Zapadoslavia_Events.7.d
+	picture = RELIGION_eventPicture
+	
+	trigger = {
+		has_reform = west_slavic_monarchy
+		ADM = 3
+	}
+	
+	mean_time_to_happen = {
+		months = 240
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.7.a
+		
+		change_variable = { ME_slovak_loyalty = 5 }
+		change_variable = { ME_czech_loyalty = 5 }
+		change_variable = { ME_polish_loyalty = 5 }
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.8
+	title = ME_Zapadoslavia_Events.8.t
+	desc = ME_Zapadoslavia_Events.8.d
+	picture = RELIGION_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		has_country_modifier = ME_legendary_bloodline
+		has_new_dynasty = yes
+		has_regency = no
+	}
+	
+	mean_time_to_happen = {
+		months = 2
+	}
+	
+	immediate = {
+		hidden_effect = {
+			remove_country_modifier = ME_legendary_bloodline
+		}
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.8.a
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.9
+	title = ME_Zapadoslavia_Events.9.t
+	desc = ME_Zapadoslavia_Events.9.d
+	picture = RELIGION_eventPicture
+	
+	hidden = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Zapadoslavia_Events.9.a
+		
+		define_ruler = {
+			name = "Interregnum"
+			culture = ROOT
+			adm = 0
+			dip = 0
+			mil = 0
+			regency = yes
+			fixed = yes
+		}
+		country_event = { id = ME_Zapadoslavia_Events.2 }
+	}
+}
+
+country_event = {
+	id = ME_Zapadoslavia_Events.10
+	title = ME_Zapadoslavia_Events.10.t
+	desc = ME_Zapadoslavia_Events.10.d
+	picture = CULTURE_eventPicture
+	
+	hidden = yes
+ 
+	trigger = {
+		has_reform = west_slavic_monarchy
+		any_owned_province = {
+			OR = {
+				culture = slovak
+				culture = polish
+				culture = schlesian
+				culture = czech
+			}
+			OR = {
+				AND = {
+					has_construction = building
+					NOT = { has_province_flag = got_loyalty_for_building }
+				}
+				AND = {
+					NOT = { has_construction = building }
+					has_province_flag = got_loyalty_for_building
+				}
+				AND = {
+					has_construction = culture
+					NOT = { has_province_flag = got_loyalty_for_culture }
+				}
+				AND = {
+					NOT = { has_construction = culture }
+					has_province_flag = got_loyalty_for_culture
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						culture = slovak
+						culture = polish
+						culture = schlesian
+						culture = czech
+					}
+					OR = {
+						AND = {
+							has_construction = building
+							NOT = { has_province_flag = got_loyalty_for_building }
+						}
+						AND = {
+							NOT = { has_construction = building }
+							has_province_flag = got_loyalty_for_building
+						}
+						AND = {
+							has_construction = culture
+							NOT = { has_province_flag = got_loyalty_for_culture }
+						}
+						AND = {
+							NOT = { has_construction = culture }
+							has_province_flag = got_loyalty_for_culture
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_construction = building
+						NOT = { has_province_flag = got_loyalty_for_building }
+					}
+					set_province_flag = got_loyalty_for_building
+					if = {
+						limit = {
+							culture = slovak
+						}
+						change_variable = { ME_slovak_loyalty = 1 }
+					}
+					else_if = {
+						limit = {
+							culture = czech
+						}
+						change_variable = { ME_czech_loyalty = 1 }
+					}
+					else_if = {
+						limit = {
+							OR = {
+								culture = polish
+								culture = schlesian
+							}
+						}
+						change_variable = { ME_polish_loyalty = 1 }
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_construction = building }
+						has_province_flag = got_loyalty_for_building
+					}
+					clr_province_flag = got_loyalty_for_building
+				}
+				if = {
+					limit = {
+						has_construction = culture
+						NOT = { has_province_flag = got_loyalty_for_culture }
+					}
+					set_province_flag = got_loyalty_for_culture
+					if = {
+						limit = {
+							culture = slovak
+						}
+						change_variable = { ME_slovak_loyalty = -1 }
+					}
+					else_if = {
+						limit = {
+							culture = czech
+						}
+						change_variable = { ME_czech_loyalty = -1 }
+					}
+					else_if = {
+						limit = {
+							OR = {
+								culture = polish
+								culture = schlesian
+							}
+						}
+						change_variable = { ME_polish_loyalty = -1 }
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_construction = culture }
+						has_province_flag = got_loyalty_for_culture
+					}
+					clr_province_flag = got_loyalty_for_culture
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Zapadoslavia_Events.10.a
+		
+		ai_chance = { factor = 100 }
+	}
+}

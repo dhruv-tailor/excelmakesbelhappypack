@@ -1,0 +1,1596 @@
+mexico_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEX
+	}
+	has_country_shield = yes
+
+	mex_capital = {
+		icon = mission_colonial
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				unrest = 1
+				devastation = 1
+			}
+		}
+		trigger = {
+			treasury = 100
+			OR = {
+				natural_scientist = 2
+				treasurer = 2
+				master_of_mint = 2
+			}
+			capital_scope = {
+				NOT = { unrest = 1 }
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			add_treasury = -100
+			if = {
+				limit = {
+					treasurer = 2
+				}
+				capital_scope = {
+					add_base_tax = 3
+				}
+				add_country_modifier = {
+					name = mex_desarollo1
+					duration = 9125
+				}
+			}
+			else_if = {
+				limit = {
+					natural_scientist = 2
+				}
+				capital_scope = {
+					add_base_production = 3
+				}
+				add_country_modifier = {
+					name = mex_desarollo2
+					duration = 9125
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = mex_desarollo3
+					duration = 9125
+				}
+				capital_scope = {
+					add_base_manpower = 3
+				}
+			}
+		}
+	}
+
+	mex_institution = {
+		icon = mission_asian_trader
+		position = 2
+		required_missions = {
+			mex_regaining_strength
+			mex_capital
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_institution_enabled = enlightenment
+				}
+				capital_scope = {
+					enlightenment = 75
+				}
+			}
+			else_if = {
+				limit = {
+					is_institution_enabled = manufactories
+				}
+				capital_scope = {
+					manufactories = 75
+				}
+			}
+			else_if = {
+				limit = {
+					is_institution_enabled = global_trade
+				}
+				capital_scope = {
+					global_trade = 75
+				}
+			}
+			else_if = {
+				limit = {
+					is_institution_enabled = printing_press
+				}
+				capital_scope = {
+					printing_press = 75
+				}
+			}
+			else_if = {
+				limit = {
+					is_institution_enabled = new_world_i
+				}
+				capital_scope = {
+					new_world_i = 75
+				}
+			}
+			else_if = {
+				limit = {
+					is_institution_enabled = renaissance
+				}
+				capital_scope = {
+					renaissance = 75
+				}
+			}
+			else = {
+				capital_scope = {
+					feudalism = 75
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_embracing_institution
+				duration = 9125
+			}
+			capital_scope = {
+				add_province_modifier = {
+					name = mex_embracing_institution
+					duration = 3650
+				}
+			}
+		}
+	}
+
+	mex_flow_cocoa = {
+		icon = me_mission_mexico_flow_cocoa
+		position = 3
+		required_missions = {
+			mex_control_trade
+		}
+		trigger = {
+			trading_bonus = {
+				trade_goods = cocoa
+				value = yes
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				trade_goods = cocoa
+				base_production = 6
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			custom_tooltip = MEX_FLOW_COCOA_TOOLTIP
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						trade_goods = cocoa
+					}
+					add_base_production = 3
+					add_province_modifier = {
+						name = mex_ibarra
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	mex_panaman_trade = {
+		icon = me_mission_venice_small_ship_in_port
+		position = 5
+		required_missions = {
+			mex_naval_preparation
+		}
+		provinces_to_highlight = {
+			province_id = 835
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { num_of_times_improved = 6 }
+			}
+		}
+		trigger = {
+			OR = {
+				treasury = 100
+				trader = 2
+			}
+			owns_core_province = 835
+			835 = {
+				num_of_times_improved = 6
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { trader = 2 }
+				}
+				add_treasury = -100
+			}
+			835 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				if = {
+					limit = {
+						has_building = shipyard
+					}
+					remove_building = shipyard
+					add_building_construction = {
+						building = grand_shipyard
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = grand_shipyard
+					}
+					add_base_production = 2
+				}
+				else = {
+					add_building_construction = {
+						building = shipyard
+						speed = 0.5
+						cost = 0
+					}
+				}
+			}
+		}
+	}
+
+	mex_cuban_isles = {
+		icon = mission_iberian_conquistador
+		position = 6
+		required_missions = {
+			mex_carribean_islands
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = dominica_area
+				area = hispaniola_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			dominica_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			hispaniola_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 2
+				OR = {
+					area = dominica_area
+					area = hispaniola_area
+				}
+				is_core = ROOT
+				OR = {
+					development = 15
+					base_production = 10
+				}
+			}
+		}
+		effect = {
+			random_province = {
+				limit = {
+					OR = {
+						area = dominica_area
+						area = hispaniola_area
+					}
+					province_has_center_of_trade_of_level = 1
+					NOT = { province_has_center_of_trade_of_level = 3 }
+				}
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			carribeans_region = {
+				limit = {
+					owned_by = ROOT
+					trade_goods = tobacco
+				}
+				add_province_modifier = {
+					name = mex_cuban_tobacco
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	mex_west_indies = {
+		icon = mission_trade_company_region_abroad
+		position = 9
+		required_missions = {
+			mex_cuban_isles
+			mex_florida
+		}
+		trigger = {
+			mercantilism = 33
+			OR = {
+				1516 = {
+					trade_share = {
+						country = ROOT
+						share = 70
+					}
+				}
+				AND = {
+					1516 = {
+						trade_share = {
+							country = ROOT
+							share = 50
+						}
+					}
+					any_country = {
+						1516 = {
+							trade_share = {
+								share = 1
+								country = PREV
+							}
+						}
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			carribeans_region = {
+				limit = {
+					NOT = { owned_by = ROOT  }
+					NOT = { is_core = ROOT  }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+mexico_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEX
+	}
+	has_country_shield = yes
+
+	mex_control_trade = {
+		icon = mission_dominate_home_trade_node
+		position = 2
+		required_missions = { mex_regaining_strength }
+		trigger = {
+			home_trade_node = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					home_trade_node = {
+						owned_by = ROOT
+					}
+				}
+				home_trade_node_effect_scope = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			else = {
+				capital_scope = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+		}
+	}
+
+	mex_flow_sugar = {
+		icon = mission_wine_monopolies
+		position = 3
+		required_missions = {
+			mex_control_trade
+		}
+		trigger = {
+			trading_bonus = {
+				trade_goods = sugar
+				value = yes
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				trade_goods = sugar
+				base_production = 6
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			custom_tooltip = MEX_FLOW_SUGAR_TOOLTIP
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						trade_goods = sugar
+					}
+					add_province_modifier = {
+						name = mex_piloncillo
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	mex_naval_preparation = {
+		icon = me_mission_mexico_navy
+		position = 4
+		required_missions = { mex_yucatan }
+		trigger = {
+			num_of_admirals = 1
+			navy_size_percentage = 0.75
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_sea_expansion
+				duration = 5475
+			}
+			487 = { #Jamaica
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT  }
+						NOT = { is_core = ROOT  }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			835 = { #Panama
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT  }
+						NOT = { is_core = ROOT  }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	mex_carribean_islands = {
+		icon = mission_colonize_the_caribbean
+		position = 5
+		required_missions = { mex_naval_preparation }
+		provinces_to_highlight = {
+			province_id = 487
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 487
+			1516 = { #Carribean
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 10
+			dominica_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			greater_antilles_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hispaniola_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	mex_sunshine_bays = {
+		icon = mission_portuguese_malacca
+		position = 6
+		required_missions = {
+			mex_carribean_islands
+			mex_control_mexico
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = lower_louisiana_area
+				area = west_florida_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lower_louisiana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_florida_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 2.5
+			florida_area = {
+				limit = {
+					NOT = { owned_by = ROOT  }
+					NOT = { is_core = ROOT  }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_florida_area = {
+				limit = {
+					NOT = { owned_by = ROOT  }
+					NOT = { is_core = ROOT  }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	mex_florida = {
+		icon = mission_advance_to_the_dnieper
+		position = 8
+		required_missions = { mex_sunshine_bays }
+		provinces_to_highlight = {
+			OR = {
+				area = florida_area
+				area = north_florida_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			florida_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_florida_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_yearly_sailors = 5
+			cuba_area = {
+				limit = {
+					NOT = { owned_by = ROOT  }
+					NOT = { is_core = ROOT  }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_cuba_area = {
+				limit = {
+					NOT = { owned_by = ROOT  }
+					NOT = { is_core = ROOT  }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+mexico_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEX
+	}
+	has_country_shield = yes
+
+	mex_regaining_strength = {
+		icon = me_mission_mexico_flag3
+		position = 1
+		required_missions = {  }
+		trigger = {
+			army_size_percentage = 0.75
+			stability = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_struggle_anew
+				duration = 3650
+			}
+		}
+	}
+
+	mex_first_expansion = {
+		icon = me_mission_mexico_colonisation
+		position = 2
+		required_missions = { mex_regaining_strength }
+		trigger = {
+			grown_by_states = 2
+		}
+		effect = {
+			add_prestige = 10
+			add_legitimacy_equivalent = { value = 5 }
+		}
+	}
+
+	mex_yucatan = {
+		icon = me_mission_mexico_battle1
+		position = 3
+		required_missions = { mex_first_expansion }
+		provinces_to_highlight = {
+			OR = {
+				area = yucatan_area
+				area = east_yucatan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			yucatan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_yucatan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_colonial_expansion
+				duration = 9125
+			}
+		}
+	}
+
+	mex_control_mexico = {
+		icon = mission_unite_home_region
+		position = 5
+		required_missions = { mex_yucatan }
+		provinces_to_highlight = {
+			colonial_region = colonial_mexico
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			any_country = {
+				capital_scope = {
+					colonial_region = colonial_mexico
+				}
+				military_strength = {
+					who = ROOT
+					value = 1
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				colonial_mexico = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				all_country = {
+					OR = {
+						capital_scope = {
+							NOT = { colonial_region = colonial_mexico }
+						}
+						NOT = {
+							military_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_glorious_domination
+				duration = 5475
+			}
+			lower_louisiana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_florida_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			nicaragua_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_plains_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_plains_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			high_plains_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			california_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			baja_california_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_california_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sonora_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	mex_southern_jungle = {
+		icon = me_mission_generic_jungle
+		position = 7
+		required_missions = { mex_control_mexico }
+		provinces_to_highlight = {
+			area = nicaragua_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			nicaragua_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_tropical_timber
+				duration = 7300
+			}
+		}
+	}
+
+	mex_tacos_hegemony = {
+		icon = me_mission_mexico_flag1
+		position = 10
+		required_missions = {
+			mex_west_indies
+			mex_southern_jungle
+			mex_extensive_mining
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				is_great_power = yes
+				NOT = { great_power_rank = 3 }
+			}
+			else = {
+				total_development = 500
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_tacos_hegemony_modifier
+				duration = -1
+			}
+			mindanao_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_mindanao_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			luzon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			palawan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southern_luzon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			visayas_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			venezuela_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			eastern_llanos = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			maracaibo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_llanos_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+mexico_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEX
+	}
+	has_country_shield = yes
+
+	mex_centralisation = {
+		icon = me_mission_mexico_centralisation
+		position = 2
+		required_missions = { mex_regaining_strength }
+		provinces_to_highlight = {
+			area_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				unrest = 1
+				AND = {
+					has_owner_religion = no
+					has_owner_culture = no
+				}
+			}
+		}
+		trigger = {
+			capital_scope = {
+				area_for_scope_province = {
+					type = all
+					owned_by = ROOT
+					NOT = { unrest = 1 }
+					OR = {
+						has_owner_religion = yes
+						has_owner_culture = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_centralisation_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	mex_control_rivalry = {
+		icon = me_mission_mexico_flag2
+		position = 3
+		required_missions = { mex_centralisation }
+		trigger = {
+			all_country = {
+				OR = {
+					is_colonial_nation = no
+					capital_scope = {
+						NOT = { colonial_region = colonial_mexico }
+					}
+					NOT = {
+						military_strength = {
+							who = ROOT
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			every_country = {
+				limit = {
+					is_colonial_nation = yes
+					capital_scope = {
+						colonial_region = colonial_mexico
+					}
+					NOT = {
+						military_strength = {
+							who = ROOT
+							value = 1
+						}
+					}
+				}
+				reverse_add_casus_belli = {
+					type = cb_vassalize_mission
+					months = 120
+					target = ROOT
+				}
+			}
+		}
+	}
+
+	mex_native_contact = {
+		icon = me_mission_native_agreement
+		position = 4
+		required_missions = { mex_yucatan }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2644
+				province_id = 852
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { exists = AZT }
+			NOT = { exists = TLX }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = AZT
+					exists = TLX
+				}
+				OR = {
+					AZT = {
+						has_opinion = {
+							who = ROOT
+							value = 120
+						}
+					}
+					TLX = {
+						has_opinion = {
+							who = ROOT
+							value = 120
+						}
+					}
+				}
+			}
+			else = {
+				owns = 2644
+				owns = 852
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = AZT
+					exists = TLX
+				}
+				country_event = { id = ME_Mexico_Events.1 }
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+		}
+	}
+
+	mex_northern_plains = {
+		icon = me_mission_mexico_horseman
+		position = 6
+		required_missions = { mex_control_mexico }
+		provinces_to_highlight = {
+			OR = {
+				area = central_plains_area
+				area = lower_plains_area
+				area = high_plains_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			central_plains_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lower_plains_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			high_plains_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mex_grazing_plains
+				duration = 7300
+			}
+			badlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			dakota_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_dakota_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	mex_protecting_lands = {
+		icon = me_mission_mexico_fort
+		position = 8
+		required_missions = { mex_northern_plains }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 885
+				province_id = 886
+				province_id = 2477
+				province_id = 2480
+				province_id = 2496
+				province_id = 2665
+				province_id = 2669
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 885
+			owns = 886
+			owns = 2477
+			owns = 2480
+			owns = 2496
+			owns = 2665
+			owns = 2669
+			OR = {
+				treasurer = 2
+				fortification_expert = 2
+			}
+			OR = {
+				has_idea = garrison_conscription
+				has_idea = defensive_mentality
+			}
+		}
+		effect = {
+			custom_tooltip = MEX_FORT_TOOLTIP
+			hidden_effect = {
+				2496 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				885 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				886 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				2669 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				2665 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				2477 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+				2480 = {
+					if = {
+						limit = {
+							OR = {
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+						add_base_manpower = 4
+					}
+					else = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+						}
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					add_province_modifier = {
+						name = mex_national_security
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+mexico_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEX
+	}
+	has_country_shield = yes
+
+	mex_religious_stability = {
+		icon = mission_european_church
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			has_owner_religion = no
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+				}
+				OR = {
+					christian_idea_groups_expanded = 1
+					muslim_idea_groups_expanded = 1
+					confucian_idea_groups_expanded = 1
+					muslim_idea_groups_expanded = 1
+					humanist_ideas = 1
+					religious_ideas = 1
+				}
+			}
+			else = {
+				OR = {
+					humanist_ideas = 1
+					religious_ideas = 1
+				}
+			}
+			religious_unity = 0.90
+			capital_scope = {
+				has_owner_religion = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					humanist_ideas = 1
+				}
+				add_country_modifier = {
+					name = mex_humanist_path1
+					duration = 10950
+				}
+			}
+			else = {
+				change_religious_influence_equivalent = { add = 15 }
+				add_country_modifier = {
+					name = mex_converting_integrating
+					duration = 10950
+				}
+			}
+		}
+	}
+
+	mex_conversion_mexico = {
+		icon = human_missions_icon
+		position = 2
+		required_missions = {
+			mex_religious_stability
+			mex_regaining_strength
+		}
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				has_owner_religion = no
+				unrest = 1
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+				}
+				OR = {
+					AND = {
+						OR = {
+							christian_idea_groups_expanded = 3
+							muslim_idea_groups_expanded = 3
+							confucian_idea_groups_expanded = 3
+							muslim_idea_groups_expanded = 3
+							religious_ideas = 3
+						}
+						all_owned_province = {
+							has_owner_religion = yes
+							NOT = { unrest = 1 }
+						}
+					}
+					AND = {
+						humanist_ideas = 3
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HERETIC
+							has_global_modifier_value = {
+								which = tolerance_heretic
+								value = 2
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HEATHENS
+							has_global_modifier_value = {
+								which = tolerance_heathen
+								value = 2
+							}
+						}
+					}
+
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						humanist_ideas = 3
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HERETIC
+							has_global_modifier_value = {
+								which = tolerance_heretic
+								value = 2
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HEATHENS
+							has_global_modifier_value = {
+								which = tolerance_heathen
+								value = 2
+							}
+						}
+					}
+					AND = {
+						religious_ideas = 3
+						all_owned_province = {
+							has_owner_religion = yes
+							NOT = { unrest = 1 }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					humanist_ideas = 3
+				}
+				add_country_modifier = {
+					name = mex_humanist_path2
+					duration = 7300
+				}
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+		}
+	}
+
+	mex_country_control = {
+		icon = me_mission_mexico_protest
+		position = 3
+		required_missions = {
+			mex_centralisation
+			mex_conversion_mexico
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+				}
+				OR = {
+					full_idea_group = christian_idea_groups_expanded
+					full_idea_group = muslim_idea_groups_expanded
+					full_idea_group = confucian_idea_groups_expanded
+					full_idea_group = muslim_idea_groups_expanded
+					full_idea_group = humanist_ideas
+					full_idea_group = religious_ideas
+				}
+			}
+			else = {
+				OR = {
+					full_idea_group = humanist_ideas
+					full_idea_group = religious_ideas
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Mexico_Events.8 }
+		}
+	}
+
+	mex_california = {
+		icon = mission_rb_take_gibraltar
+		position = 6
+		required_missions = { mex_control_mexico }
+		provinces_to_highlight = {
+			OR = {
+				area = california_area
+				area = baja_california_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			california_area = {
+				type = all
+				owned_by = ROOT
+			}
+			baja_california_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = MEX_CALIFORNIA_CLAIM_TOOLTIP
+			hidden_effect = {
+				colonial_california = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	mex_extensive_mining = {
+		icon = me_mission_mexico_gold_rush
+		position = 9
+		required_missions = {
+			mex_protecting_lands
+			mex_california
+		}
+		provinces_to_highlight = {
+			area = california_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				devastation = 1
+				unrest = 1
+			}
+		}
+		trigger = {
+			california_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { devastation = 1 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Mexico_Events.4 }
+		}
+	}
+}

@@ -1,0 +1,530 @@
+URB_mission_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = URB
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	urb_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				num_of_mercenaries = 3
+				army_size_percentage = 0.9
+			}
+			manpower_percentage = 0.8
+		}
+		effect = {
+			create_general = {
+				tradition = 40
+			}
+			add_country_modifier = {
+				name = "army_enthusiasm"
+				duration = 5475
+			}
+		}
+	}
+
+	urb_no_subject = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { urb_army }
+		position = 2
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			119 = {
+ 				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2976 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	urb_spoleto = {
+		icon = mission_unite_home_region
+		required_missions = { urb_no_subject }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 119
+				province_id = 2976
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			119 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2976 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.05
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			118 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	urb_firenze = {
+		icon = mission_early_game_buildings
+		required_missions = { urb_spoleto }
+		position = 4
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_prestige = 10
+		}
+	}
+
+	urb_genova = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { urb_firenze }
+		position = 5
+		provinces_to_highlight = {
+			area = liguria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			lombardy_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "urb_trade"
+				duration = 9125
+			}
+		}
+	}
+
+	urb_milano = {
+		icon = mission_cannons_firing
+		required_missions = { urb_genova }
+		position = 6
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			piedmont_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_prestige = 10
+		}
+	}
+
+	urb_north_italy = {
+		icon = mission_unite_home_region
+		required_missions = { urb_milano }
+		position = 7
+		provinces_to_highlight = {
+			area = piedmont_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			piedmont_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_army_tradition = 25
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.1
+			}
+			italy_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	urb_islands = {
+		icon = mission_invade_island
+		required_missions = { urb_north_italy }
+		position = 8
+		provinces_to_highlight = {
+			region = italy_region
+			NOT = { area = apulia_area }
+			NOT = { area = calabria_area }
+			NOT = { area = central_italy_area }
+			NOT = { area = naples_area }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			italy_region = {
+				type = all
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					area = apulia_area
+					area = calabria_area
+					area = central_italy_area
+					area = naples_area
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "urb_naval_base"
+				duration = 5475
+			}
+		}
+	}
+}
+
+URB_mission_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = URB
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	urb_roma = {
+		icon = mission_early_game_buildings
+		required_missions = { urb_spoleto }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 118
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			118 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_adm_power = 50
+			add_army_tradition = 10
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.05
+			}
+		}
+	}
+
+	urb_ferrara = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { urb_firenze }
+		position = 5
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "urb_fleet"
+				duration = 7300
+			}
+			create_admiral = { tradition = 50 }
+		}
+	}
+
+	urb_ven_fleet = {
+		icon = mission_galleys_in_port
+		required_missions = { urb_ferrara }
+		position = 6
+		trigger = {
+			OR = {
+				num_of_galley = VEN
+				NOT = { exists = VEN }
+			}
+			navy_size_percentage = 0.9
+		}
+		effect = {
+			venetia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "urb_fleet_2"
+				duration = 7300
+			}
+		}
+	}
+
+	urb_venezia = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { urb_ven_fleet }
+		position = 7
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "urb_trade"
+				duration = 9125
+			}
+		}
+	}
+
+	urb_south_italy = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { urb_north_italy }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = apulia_area
+				area = calabria_area
+				area = central_italy_area
+				area = naples_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			naples_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			central_italy_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			apulia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			calabria_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_army_tradition = 15
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				add_army_professionalism = 0.05
+			}
+		}
+	}
+}
+
+URB_mission_4_MoH = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Mandate of Heaven"
+	}
+	potential = {
+		tag = URB
+		has_dlc = "Mandate of Heaven"
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	urb_golden_age = {
+		icon = mission_early_game_buildings
+		required_missions = { urb_ducal_palace }
+		position = 6
+		trigger = {
+			in_golden_age = yes
+		}
+		effect = {
+			add_years_of_income = 2
+			add_country_modifier = {
+				name = "urb_gold"
+				duration = 9125
+			}
+		}
+	}
+}
+
+URB_mission_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = URB
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	urb_develop ={
+		icon = mission_colonial
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { development = 20 }
+		}
+		trigger = {
+			capital_scope = {
+				development = 20
+			}
+		}
+	}
+
+	urb_ducal_palace = {
+		icon = mission_european_church
+		required_missions = { urb_develop }
+		position = 5
+		trigger = {
+			adm_power = 150
+			treasury = 200
+		}
+		effect = {
+			add_adm_power = -150
+			add_treasury = -200
+			2977 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					if = {
+						limit = {
+							NOT = { has_building = university }
+						}
+						add_building = university
+					}
+					if = {
+						limit = {
+							NOT = { has_building = town_hall }
+						}
+						add_building = town_hall
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_institution_enabled = renaissance
+				}
+				capital_scope = {
+					add_institution_embracement = {
+						which = renaissance
+						value = 50
+					}
+				}
+			}
+		}
+	}
+
+	urb_print = {
+		icon = mission_asian_trader
+		required_missions = { urb_ducal_palace }
+		position = 6
+		trigger = {
+			is_institution_enabled = printing_press
+			adm_power = 100
+			treasury = 150
+		}
+		effect = {
+			add_adm_power = -100
+			add_treasury = -150
+			capital_scope = {
+				add_institution_embracement = {
+					which = printing_press
+					value = 50
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,621 @@
+#Made by SharkFins#
+###################
+lur_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = LRI
+	}
+	has_country_shield = yes
+	
+	LRI_subject = {
+		icon = mission_have_two_subjects
+		required_missions = { LRI_seek_support }
+		position = 2
+		trigger = {
+			num_of_subjects = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "obedient_subjects"
+				duration = 9125 #25 years
+			}
+		}
+	}
+}
+lur_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = LRI
+	}
+	has_country_shield = yes
+	LRI_seek_support = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
+		position = 1
+		trigger = {
+			calc_true_if = {
+				all_country = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "influential_diplomacy"
+				duration = 9125 #25 years
+			}
+			add_dip_power = 50
+		}
+	}
+	LRI_seek_allies = {
+		icon = mission_alliances
+		required_missions = { LRI_seek_support Free_LRI_Mission }
+		position = 3
+		trigger = {
+			num_of_allies = 2
+		}
+		effect = {
+			every_ally = {
+				add_trust = {
+					who = PREV
+					value = 10
+					mutual = yes
+				}
+			}
+			add_prestige = 10
+		}
+	}
+	LRI_Old_Lands = {
+		icon = mission_mosque
+		required_missions = { LRI_Heir_Mission }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = luristan_area
+				area = khuzestan_area
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			khuzestan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			luristan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			azerbaijan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			iraq_e_ajam_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = LRI_Heart
+				duration = 3650
+			}
+		}
+	}
+	LRI_Strike_North = {
+		icon = mission_pf_map_table
+		required_missions = {LRI_Old_Lands}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = azerbaijan_area
+				area = iraq_e_ajam_area
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			iraq_e_ajam_area = {
+				type = all
+				owned_by = ROOT
+			}
+			azerbaijan_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			tabriz_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	LRI_Tabriz = {
+		icon = mission_cannons_firing
+		required_missions = {LRI_Strike_North}
+		position = 6
+		provinces_to_highlight = {
+			area = tabriz_area
+			NOT = {
+				owned_by = ROOT
+			}
+		}	
+		trigger = {
+			tabriz_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			416 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+}
+lur_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = LRI
+	}
+	has_country_shield = yes
+	
+	LRI_Army_Mission = {
+		icon = mission_build_up_to_force_limit
+		required_missions = {}
+		position = 1
+		trigger = { 
+			army_size_percentage = 1
+		}
+		effect = { 
+			add_manpower = 5
+			add_country_modifier = {
+				name = LRI_Forever
+				duration = 3650
+			}
+			add_mil_power = 50
+		}
+	}
+	Free_LRI_Mission = {
+		icon = mission_assemble_an_army
+		required_missions = { LRI_Army_Mission }
+		position = 2
+		trigger = {
+			is_subject = no
+			is_at_war = no
+		}
+		effect = {
+			add_prestige = 15
+			add_legitimacy  = 30
+			412 = { #ahvaz
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4290 = { #Hoveyzeh
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	LRI_Heir_Mission = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { Free_LRI_Mission }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4290 #Hoveyzeh
+				province_id = 412 #Ahvaz
+				province_id = 4289
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			4290 = { #Hoveyzeh
+				owned_by = ROOT
+			}
+			412 = { #ahvaz
+				owned_by = ROOT
+			}
+			4289 = { #Shushtar
+				owned_by = ROOT
+			}
+			legitimacy = 80
+		}
+		effect = {
+			4289 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				change_culture = luri
+			}
+			add_country_modifier = {
+				name = LRI_Victor
+				duration = 9125
+			}
+			farsistan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			persian_gulf_coast = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	LRI_Retake_Fars	= {
+		icon = mission_persian_soldiers
+		required_missions = { LRI_Heir_Mission }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = persian_gulf_coast
+				area = farsistan_area
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			farsistan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			persian_gulf_coast = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			basra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bahrain_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			429 = { #Isfahan
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4335 = { #Kashan
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4171 = { #Arbaquh
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	LRI_Persia_Heart = {
+		icon = mission_unite_home_region
+		required_missions = { LRI_Retake_Fars }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 429 #Isfahan
+				province_id = 4171 # Abarquh
+				province_id = 4335 # Kashan
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			429 = { #Isfahan
+				owned_by = ROOT
+			}
+			4171 = { #Abarquh
+				owned_by = ROOT
+			}
+			4335 = { #Kashan
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			mogostan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kerman_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			433 = { #Yazd
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2222 = { #Arkadan
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = LRI_Push
+				duration = 3650
+			}
+		}
+	}
+	LRI_Persia_Reborn = {
+		icon = mission_empire
+		required_missions = {LRI_Persia_Heart LRI_Tabriz}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 433 #Yazd
+				province_id = 432 # Kerman
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			433 = { #Yazd
+				owned_by = ROOT
+			}
+			432 = { #Kerman
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = LRI_Reborn
+				duration = -1
+			}
+		}
+	}
+}	
+
+lur_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = LRI
+	}
+	has_country_shield = yes
+	LRI_economics_of_the_state = {
+		icon = mission_high_income
+		required_missions = { }
+		position = 2
+		trigger = { share_of_starting_income = 2 }
+		effect = {
+			add_country_modifier = {
+				name = "growing_economy"
+				duration = 14600 #40 years
+			}
+			add_adm_power = 50
+		}
+	}
+	LRI_buildings = {
+		icon = mission_early_game_buildings
+		required_missions = { LRI_economics_of_the_state }
+		position = 3
+		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+					has_building = workshop
+					has_building = counting_house
+				}
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "building_spree"
+				duration = 9125
+			}
+		}
+	}
+	LRI_Gulf = {
+		icon = mission_galleys_in_port
+		required_missions = {LRI_Retake_Fars}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = bahrain_area
+				area = basra_area
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			bahrain_area = {
+				type = all
+				owned_by = ROOT
+			}
+			basra_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = LRI_Trade
+				duration = 10950
+			}
+		}
+	}
+}
+lur_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = LRI
+	}
+	has_country_shield = yes
+	LRI_marketplaces = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { LRI_economics_of_the_state }
+		position = 3
+		trigger = {
+			any_owned_province = {
+				OR = {
+					has_building = marketplace
+					has_building = stock_exchange
+					has_building = trade_depot
+				}
+			}	
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						any_owned_province = {
+							OR = {
+								has_building = marketplace
+								has_building = stock_exchange
+								has_building = trade_depot
+							}
+						}
+					}
+				}
+				tooltip = {
+					capital_scope = {
+						add_trade_modifier = {
+							who = ROOT
+							duration = 5475
+							power = 15
+							key = KRD_supporting_trade
+						}
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_building = marketplace
+						has_building = stock_exchange
+						has_building = trade_depot
+					}
+				}
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 15
+					key = KRD_supporting_trade
+				}
+			}
+		}
+	}
+	LRI_dominate_trade = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { LRI_marketplaces LRI_Gulf }
+		position = 6
+		trigger = {
+			capital_scope = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			add_mercantilism = 5
+		}
+	}
+}

@@ -1,0 +1,199 @@
+ALS_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = ALS
+	}
+	has_country_shield = yes
+	
+	als_resist_foreign_invaders = {
+		icon = mission_conquer_50_development
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
+		trigger = {
+			owns = 75
+			75 = {
+				fort_level = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = als_prepared_for_the_worst
+				duration = 9125
+			}
+			188 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			189 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	als_conquer_lorraine = {
+		icon = mission_assemble_an_army
+		required_missions = { als_resist_foreign_invaders }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 188
+				province_id = 189
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			188 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			189 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		} 
+		effect = {
+			add_country_modifier = {
+				name = als_conquered_lorraine
+				duration = 18250
+			}
+			add_prestige = 5
+			add_adm_power = 50
+			193 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	als_conquer_franche_comte = {
+		icon = mission_unite_home_region
+		required_missions = { als_conquer_lorraine }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 193
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			193 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}
+
+ALS_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ALS
+	}
+	has_country_shield = yes
+	
+	als_strasbourg = {	
+		icon = mission_european_church
+		provinces_to_highlight = {
+			province_id = 75
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			treasury = 50
+			prestige = 5
+			adm_power = 50
+			owns = 75
+		}
+		effect = {
+			75 = {
+				if = {
+					limit = {
+						NOT = { has_building = temple }
+						NOT = { has_building = cathedral }
+					}
+					add_building = temple
+				}
+				else = {
+					add_base_tax = 2
+				}
+			}
+		}
+	}
+	
+	als_renaissance = {
+		icon = mission_alliances
+		required_missions = { als_strasbourg }
+		position = 3
+		trigger = {
+			has_institution = renaissance
+			OR = {
+				emperor = {
+					reverse_has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				is_emperor = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = als_embrace_renaissance
+				duration = 9125
+			}
+		}
+	}
+	
+	als_university = {
+		icon = mission_early_modern_university
+		required_missions = { als_renaissance }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			owns = 75
+			75 = {
+				has_building = university
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = als_education
+				duration = 9125
+			}
+			add_adm_power = 100
+			add_army_tradition = 15
+		}
+	}
+}

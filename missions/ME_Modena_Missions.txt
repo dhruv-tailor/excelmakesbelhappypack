@@ -1,0 +1,506 @@
+modenese_mission_group_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MOD
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	modena_military_buildup = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 0.9
+			manpower_percentage = 0.6
+		}
+		effect = {
+			add_country_modifier = {
+				name = "army_enthusiasm"
+				duration = 5475
+			}
+		}
+	}
+
+	modena_create_an_army = {
+		icon = mission_assemble_an_army
+		required_missions = { modena_military_buildup }
+		position = 3
+		trigger = {
+			army_size = 20
+			army_size_percentage = 0.9
+		}
+		effect = {
+			add_army_professionalism = 0.05
+			add_mil_power = 25
+		}
+	}
+
+	modena_fortify_modena = {
+		icon = me_mission_medieval_fort
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 106
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
+		position = 4
+		trigger = {
+			106 = {
+				owned_by = ROOT
+				fort_level = 2
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			add_prestige = 10
+			add_mil_power = 25
+		}
+	}
+
+	modena_control_east_adriatic = {
+		icon = mission_galleys_in_port
+		required_missions = { modena_unite_emilia_romagna }
+		provinces_to_highlight = {
+			area = east_adriatic_coast_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 5
+		trigger = {
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			137 = {				# Ragusa
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = modena_control_of_east_adriatic
+				}
+			}
+		}
+	}
+
+	modena_expand_into_northern_africa = {
+		icon = mission_arabian_fort
+		required_missions = { modena_unite_italy }
+		provinces_to_highlight = {
+			area = tunisia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 7
+		trigger = {
+			tunisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			341 = {				# Tunis
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 25
+					key = modena_control_of_tunisia
+				}
+			}
+			djerba_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			tripolitania_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+modenese_mission_group_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = MOD
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	modena_declare_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { modena_military_buildup }
+		position = 2
+		trigger = {
+			is_subject = no
+		}
+		effect = {
+			113 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	modena_take_ferrara = {
+		icon = mission_conquer_50_development
+		required_missions = { modena_declare_independence }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 113
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			113 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	modena_unite_emilia_romagna = {
+		icon = mission_cannons_firing
+		required_missions = { modena_take_ferrara }
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 4
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			109 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = "modena_emilia_romagna_united"
+				duration = 9125
+			}
+		}
+	}
+
+	modena_conquer_northern_italy = {
+		icon = mission_unite_home_region
+		required_missions = { modena_unite_emilia_romagna }
+		provinces_to_highlight = {
+			OR = {
+				area = venetia_area
+				area = lombardy_area
+				area = piedmont_area
+				area = liguria_area
+				area = emilia_romagna_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 5
+		trigger = {
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			italy_region = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	modena_unite_italy = {
+		icon = mission_empire
+		required_missions = { modena_conquer_northern_italy }
+		provinces_to_highlight = {
+			region = italy_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 6
+		trigger = {
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_country_modifier = {
+				name = "expansionist_country"
+				duration = 9125
+			}
+			tunisia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+
+modenese_mission_group_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = MOD
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	modena_develop_modena = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 106
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { num_of_times_improved = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					has_no_manufactory_trigger = yes
+				}
+			}
+		}
+		position = 1
+		trigger = {
+			106 = {
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					num_of_times_improved = 5
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			106 = {
+				add_base_manpower = 1
+				add_base_production = 1
+				add_base_tax = 1
+				add_province_modifier = {
+					name = "growth_of_capital"
+					duration = 9125
+				}
+			}
+		}
+	}
+
+	modena_build_buildings = {
+		icon = mission_colonial
+		required_missions = { modena_develop_modena }
+		provinces_to_highlight = {
+			province_id = 106
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		position = 2
+		trigger = {
+			106 = {
+				owned_by = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 50
+		}
+	}
+
+	modena_build_universities = {
+		icon = me_mission_generic_old_university
+		required_missions = { modena_build_buildings }
+		provinces_to_highlight = {
+			province_id = 106
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		position = 3
+		trigger = {
+			106 = {
+				owned_by = ROOT
+				has_building = university
+			}
+			university = 4
+		}
+		effect = {
+			change_innovativeness = 3
+			add_dip_power = 50
+		}
+	}
+
+	modena_build_cathedral = {
+		icon = mission_european_church
+		required_missions = { modena_build_universities }
+		provinces_to_highlight = {
+			province_id = 106
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = cathedral }
+			}
+		}
+		position = 4
+		trigger = {
+			106 = {
+				owned_by = ROOT
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "modena_cathedral_built"
+				duration = 7300
+			}
+		}
+	}
+
+	modena_build_manufactories = {
+		icon = mission_have_manufactories
+		required_missions = { modena_build_cathedral }
+		position = 5
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "proto_industrialization"
+				duration = 9125
+			}
+		}
+	}
+
+	modena_colonize_new_world = {
+		icon = mission_colonial
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "colonial_enthusiasm"
+				duration = 7300
+			}
+			add_dip_power = 50
+		}
+	}
+}

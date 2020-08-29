@@ -1,0 +1,127 @@
+######################################################################
+# Korean Military rooting for old ways
+######################################################################
+korean_military_rebels = {
+
+	color = { 170 95 25 }
+
+	area = nation 					# Stays within the nation
+	government = monarchy			# Likes monarchy
+	defection = none				# Does not defect
+	independence = none				# Does not strive for independence
+	unit_transfer = no
+	gfx_type = culture_owner	
+	will_relocate = yes	
+	
+	resilient = yes
+	reinforcing = yes
+	general = yes
+	smart = yes
+	
+	artillery = 0.3
+	infantry = 0.5
+	cavalry = 0.2
+	
+	morale = 1.5
+	
+	# Possible handle actions
+	handle_action_negotiate = yes
+	handle_action_stability = yes
+	handle_action_build_core = yes
+	handle_action_send_missionary = yes		
+	
+	# The rebel type with the highest modifier for this province gets picked
+	spawn_chance = {
+		factor = 1
+		modifier = {
+			factor = 0.01
+			is_overseas = yes
+		}
+		modifier = {
+			factor = 0
+			NOT = {
+				owner = {
+					OR = {
+						primary_culture = korean
+						primary_culture = chaoxian
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.0
+			owner = {
+				is_colonial_nation = yes
+			}
+		}
+		modifier = {
+			factor = 5
+			has_estate = estate_nobles
+		}
+		modifier = {
+			factor = 3.0
+			owner = {
+				has_country_modifier = KOR_military_new
+			}
+		}
+
+	}
+ 
+ 	# This is checked for EACH province in the Area of Operations
+	movement_evaluation = {
+		factor = 1
+		modifier = {
+			factor = 0.1
+			units_in_province = 1
+		}
+		modifier = {
+			factor = 0.001
+			controlled_by = REB
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 2
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 4
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 6
+		}
+	}
+ 
+ 	# Province Scope
+ 	siege_won_trigger = {
+		NOT = { local_autonomy = 50 }
+	}
+	siege_won_effect = {
+		add_local_autonomy = 5
+	}
+	
+	# Country scope
+	can_negotiate_trigger = {
+		always = yes
+	}
+	
+	# Country scope
+	can_enforce_trigger = {
+		always = yes
+	}
+	
+	# Localisation for their demands
+	demands_description = "korean_military_rebels_demand"
+	
+	# Country Scope	
+	demands_enforced_effect = {
+		every_owned_province = {
+			limit = {
+				has_rebel_faction = REB
+			}
+			add_local_autonomy = 25
+		}	
+		add_legitimacy = -50
+		set_country_flag = kor_no_more_western_reform
+	}
+}

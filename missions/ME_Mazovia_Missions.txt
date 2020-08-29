@@ -1,0 +1,157 @@
+MAZ_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MAZ
+	}
+	has_country_shield = yes
+
+	Mazovia_develop = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 256
+				province_id = 1938
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 12 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { has_building = courthouse }
+					NOT = { has_building = town_hall }
+				}
+			}
+		}
+		trigger = {
+			owns = 256
+			owns = 1938
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				256 = {
+					development = 12
+				}
+				1938 = {
+					development = 12
+				}
+			}
+			else = {
+				256 = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+					}
+				}
+				1938 = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+					}
+				}
+			}
+		}
+		effect = {
+			256 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			1938 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+
+	Mazovia_build_up_to_force_limit = {
+		icon = mission_assemble_an_army
+		required_missions = { Mazovia_develop }
+		position = 2
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_prestige = 25
+		}
+	}
+
+	Mazovia_declare_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { Mazovia_build_up_to_force_limit }
+		position = 3
+		trigger = {
+			is_subject = no
+		}
+		effect = {
+			malopolska_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wielkopolska_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	Mazovia_conquer_Poland = {
+		icon = mission_assemble_an_army
+		required_missions = { Mazovia_declare_independence }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = wielkopolska_area
+				area = malopolska_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			wielkopolska_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malopolska_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 25 }
+			add_prestige = 20
+			add_dip_power = 20
+			add_adm_power = 20
+			add_mil_power = 20
+		}
+	}
+
+	Mazovia_back_to_the_piast = {
+		icon = mission_empire
+		required_missions = { Mazovia_conquer_Poland }
+		position = 4
+		trigger = {
+			NOT = { exists = POL }
+			NOT = { exists = PLC }
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+}

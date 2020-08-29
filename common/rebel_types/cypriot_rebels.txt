@@ -1,0 +1,119 @@
+cypriot_rebels = {
+
+	color = { 25 180 25 }
+
+	province_id = 144
+	province_id = 146               # An FYI to anyone reading this, screw Paradox
+	government = any                # No special preference
+	defection = nation_rebel_tag            # If the country seeks independence, defection specifies what type of provinces it wants.
+	independence = nation_rebel_tag         # Seeks independence for spawn province culture. Will not spawn at all if there is no suitable tag.
+	defect_delay = 60                # Can spontaneously declare independence after 60 months (earliest)
+	unit_transfer = yes                # Units switch allegiance after enforcing demands.
+	gfx_type = culture_province    
+	will_relocate = yes    
+
+	resilient = no
+	reinforcing = yes
+	general = yes                
+	smart = yes
+
+	artillery = 0.1
+	infantry = 0.5
+	cavalry = 0.4
+
+	morale = 1.5
+
+	# Possible handle actions
+	handle_action_negotiate = yes
+	handle_action_stability = yes
+	handle_action_build_core = yes
+	handle_action_send_missionary = yes        
+	handle_action_change_culture = yes
+
+	spawn_chance = {
+		factor = 0
+	}
+
+	movement_evaluation = {
+		factor = 1
+		modifier = {
+			factor = 0.1
+			units_in_province = 1
+		}
+		modifier = {
+			factor = 0.001
+			controlled_by = REB
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 2
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 4
+		}
+		modifier = {
+			factor = 1.5
+			unrest = 6
+		}
+	}
+
+	siege_won_trigger = {
+		OR = {
+			region = balkan_region
+			region = anatolia_region
+		}
+	}
+	siege_won_effect = {
+		if = {
+			limit = { 
+				culture_group = byzantine
+				NOT = { is_core = CYP } 
+			}
+			add_core = CYP
+		}
+		add_nationalism = 10 # Add ten extra years of nationalism
+	}
+
+	# Country scope
+	can_negotiate_trigger = {
+		is_at_war = no
+	}
+
+	# Country scope
+	can_enforce_trigger = {
+		always = yes
+	}
+
+	demands_enforced_effect = {
+		add_prestige = -10
+		if = {
+			limit = {
+				exists = CYP
+			}
+			every_owned_province = {
+				limit = {
+					culture_group = byzantine
+					controlled_by = cypriot_rebels
+				}
+				if = {
+					limit = {
+						NOT = { is_core = CYP }
+					}
+					add_core = CYP
+				}
+				cede_province = CYP
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					culture_group = byzantine
+					NOT = { is_core = CYP }
+				}
+				add_core = CYP
+			}
+			release = CYP
+		}
+	}
+}

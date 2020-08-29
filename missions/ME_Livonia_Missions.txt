@@ -1,0 +1,561 @@
+LVA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = LVA
+	}
+	has_country_shield = yes
+	
+	livonia_reconquer_livonia = {
+		icon = mission_cossack_cavalry
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 37
+				province_id = 4241
+				province_id = 273
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 1
+		trigger = {
+			is_at_war = no
+			is_subject = no
+			37 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4241 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			273 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			estonia_ingria_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			38 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}	
+					add_permanent_claim = ROOT
+				}
+			}
+			39 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1935 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	livonia_demand_reintegration_riga = {
+		icon = mission_conquer_50_development
+		required_missions = { livonia_reconquer_livonia }
+		provinces_to_highlight = {
+			province_id = 38
+			NOT = { owned_by = ROOT	}
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 38
+			OR = {
+				NOT = { owned_by = RIG }
+				NOT = { is_core = RIG }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					RIG = {
+						owns_core_province = 38
+						was_player = no
+					}
+					army_size_percentage = 1
+					land_forcelimit = RIG
+					adm_power = 50
+					dip_power = 50
+				}
+				38 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			38 = {
+				if = {
+					limit = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					cede_province = ROOT
+					add_core = ROOT
+				}
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					move_capital_effect = yes
+				}
+				change_culture = latvian
+			}
+			add_adm_power = -50
+			add_dip_power = -50
+		}
+	}
+}
+
+LVA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = LVA
+	}
+	has_country_shield = yes
+	
+	livonia_conquer_estonia = {
+		icon = mission_cannons_firing
+		required_missions = { livonia_reconquer_livonia }
+		provinces_to_highlight = {
+			area = estonia_ingria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 2
+		trigger = {
+			estonia_ingria_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+		}
+		effect = {
+			35 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_accepted_culture = estonian
+		}	
+	}
+	
+	livonia_conquer_osel = {
+		icon = mission_invade_island
+		required_missions = {
+			livonia_conquer_estonia
+			livonia_conquer_southern_curonia
+		}
+		provinces_to_highlight = {
+			province_id = 35
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 3
+		trigger = {
+			35 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			33 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			34 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	livonia_baltic_empire = {
+		icon = mission_empire
+		required_missions = {
+			livonia_demand_reintegration_riga
+			livonia_conquer_osel
+			livonia_conquer_lithuania
+			livonia_conquer_west_prussia
+		}
+		provinces_to_highlight = {
+			region = baltic_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 5
+		trigger = {
+			baltic_region = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_prestige = 25
+			add_legitimacy_equivalent = { value = 25 }
+			1937 = {
+				change_culture = lithuanian
+			}
+			1859 = {
+				change_culture = prussian
+			}
+			2963 = {
+				change_culture = prussian
+			}
+			mazovia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			pskov_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			hinter_pommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			49 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+LVA_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = LVA
+	}
+	has_country_shield = yes
+	
+	livonia_colonize_africa = {
+		icon = mission_african_soldier
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 2239
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 1
+		trigger = {
+			owns_core_province = 2239
+		}
+		effect = {
+			2239 = {
+				change_province_name = "New Courland"
+				rename_capital = "St. Mary Island"
+			}
+			add_country_modifier = {
+				name = "colonial_enthusiasm"
+				duration = 9125
+			}
+			add_dip_power = 25
+		}
+	}
+	
+	livonia_conquer_southern_curonia = {
+		icon = mission_galleys_in_port
+		required_missions = { livonia_reconquer_livonia }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1935
+				province_id = 39
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 2
+		trigger = {
+			1935 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			39 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			samogitia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			lithuania_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			east_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			34 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			35 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	livonia_conquer_lithuania = {
+		icon = mission_conquer_5_states
+		required_missions = { livonia_conquer_southern_curonia }
+		provinces_to_highlight = {
+			OR = {
+				area = samogitia_area
+				area = lithuania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 4
+		trigger = {
+			samogitia_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+			lithuania_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+		}
+		effect = {
+			add_accepted_culture = lithuanian
+		}
+	}
+	
+	livonia_baltic_crusaders = {
+		icon = mission_hands_praying
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				region = baltic_region
+				area = pripyat_area
+				area = minsk_area
+				area = white_ruthenia_area
+				area = smolensk_area
+				area = karelia_area
+				area = novgorod_area
+				area = tver_area
+				area = pskov_area
+			}
+			NOT = { religion = catholic }
+		}
+		trigger = {
+			baltic_region = {
+                type = all
+				religion = catholic
+            }
+			pripyat_area = {
+				type = all
+				religion = catholic
+			}
+			minsk_area = {
+				type = all
+				religion = catholic
+			}
+			white_ruthenia_area = {
+				type = all
+				religion = catholic
+			}
+			smolensk_area = {
+				type = all
+				religion = catholic
+			}
+			karelia_area = {
+				type = all
+				religion = catholic
+			}
+			novgorod_area = {
+				type = all
+				religion = catholic
+			}
+			tver_area = {
+				type = all
+				religion = catholic
+			}
+			pskov_area = {
+				type = all
+				religion = catholic
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "livonia_holy_warriors"
+				duration = -1
+			}
+		}
+	}
+}
+
+LVA_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = LVA
+	}
+	has_country_shield = yes
+	
+	livonia_colonize_carribean = {
+		icon = mission_colonial
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 502
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		position = 1
+		trigger = {
+			owns_core_province = 502
+		}
+		effect = {
+			add_country_modifier = {
+				name = "colonial_enthusiasm"
+				duration = 9125
+			}
+			add_dip_power = 50
+		}
+	}
+	
+	livonia_conquer_east_prussia = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { livonia_conquer_southern_curonia }
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				province_id = 42
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 3
+		trigger = {
+			east_prussia_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+			42 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			west_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	livonia_conquer_west_prussia = {
+		icon = mission_assemble_an_army
+		required_missions = { livonia_conquer_east_prussia }
+		provinces_to_highlight = {
+			area = west_prussia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT	}
+		}
+		position = 4
+		trigger = {
+			west_prussia_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+		}
+		effect = {
+			38 = {				# Baltic Sea
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 40
+					key = livonia_baltic_sea_ambition
+				}
+			}
+			add_country_modifier = {
+				name = "livonia_prussian_discipline"
+				duration = 9125
+			}
+			add_accepted_culture = prussian
+			add_mil_power = 50
+		}
+	}
+}

@@ -1,0 +1,596 @@
+Croatia_missions_1 = {
+	slot = 1
+	ai = yes
+	generic = no
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = CRO
+	}
+	has_country_shield = yes
+
+	Croatia_Unite = {
+		icon = mission_unite_home_region
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			is_core = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			all_core_province = { 
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_unity"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_stonk = {
+		icon = mission_alliances
+		required_missions = { Croatia_Unite }
+		position = 2
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 0.75
+		}
+		effect = {
+			137 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			east_adriatic_coast_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_core = ROOT
+			}
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_get_the_croatian_land = {
+		icon = mission_unite_home_region
+		required_missions = { Croatia_stonk }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = east_adriatic_coast_area
+				province_id = 137
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			137 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			croatia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			slavonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_consolidate_croatia = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { Croatia_get_the_croatian_land }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = croatia_area
+				area = slavonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			slavonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			croatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			carinthia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_liberate_slovenes = {
+		icon = mission_conquer_50_development
+		required_missions = { Croatia_consolidate_croatia }
+		position = 5
+		provinces_to_highlight = {
+			area = carinthia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			carinthia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Classic = {
+		icon = mission_early_game_buildings
+		required_missions = { Croatia_liberate_slovenes }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { renaissance = 100 }
+		}
+		trigger = {
+			all_owned_province = { 
+				renaissance = 100
+			}
+		}
+		effect = {
+			venetia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Croatia_Venets = {
+		icon = mission_invade_island
+		required_missions = { Croatia_Classic }
+		position = 7
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			113 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Ferrara = {
+		icon = mission_war_chest
+		required_missions = { Croatia_Venets }
+		position = 8
+		provinces_to_highlight = {
+			province_id = 113
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			113 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+		}
+	}
+}
+
+Croatia_missions_2 = {
+	slot = 2
+	ai = yes
+	generic = no
+	potential = {
+		tag = CRO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Croatia_home_trade_node = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { Croatia_liberate_slovenes }
+		position = 6
+		trigger = {
+			137 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Venice = {
+		icon = mission_galleys_in_port
+		required_missions = { Croatia_home_trade_node }
+		position = 7
+		trigger = {
+			1308 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Both = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { Croatia_Venice }
+		position = 8
+		trigger = {
+			1308 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+			137 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+}
+
+Croatia_missions_3 = {
+	slot = 3
+	ai = yes
+	generic = no
+	potential = {
+		tag = CRO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Croatia_land_in_bari = {
+		icon = mission_invade_island
+		required_missions = { Croatia_liberate_slovenes }
+		position = 6
+		provinces_to_highlight = {
+			area = apulia_area
+           	NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			apulia_area = {
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			120 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Croatia_apulia = {
+		icon = mission_cannons_firing
+		required_missions = { Croatia_land_in_bari }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = apulia_area
+				province_id = 120
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			apulia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			120 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+		}
+	}
+	
+	Croatia_dominium_maris_adriaticum = {
+		icon = mission_sea_battles
+		required_missions = { Croatia_apulia Croatia_conquer_albania Croatia_Ferrara }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = apulia_area
+				province_id = 120
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			apulia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			120 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_mare_adriaticum"
+				duration = -1
+			}
+		}
+	}
+}
+
+Croatia_missions_4 = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = CRO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Croatia_Embrace_Global_trade = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { }
+		position = 6
+		trigger = {
+			has_institution = global_trade
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Stock_Exchange = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { Croatia_Embrace_Global_trade }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 137
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = stock_exchange }
+			}
+		}
+		trigger = {
+			137 = {
+				owned_by = ROOT
+				has_building = stock_exchange
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_trade"
+				duration = 7300
+			}
+		}
+	}
+	
+	Croatia_Papal_Controller = {
+		icon = mission_religious
+		required_missions = { }
+		position = 8
+		trigger = {
+			is_papal_controller = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = "croatia_holy"
+				duration = -1
+			}
+		}
+	}
+}
+
+Croatia_missions_5 = {
+	slot = 5
+	ai = yes
+	generic = no
+	potential = {
+		tag = CRO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Croatia_Conquer_bosnia = {
+		icon = mission_conquer_5_states
+		required_missions = { Croatia_liberate_slovenes }
+		position = 6
+		provinces_to_highlight = {
+			area = bosnia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			3001 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4780 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Croatia_Conquer_serbia = {
+		icon = mission_have_two_subjects
+		required_missions = { Croatia_Conquer_bosnia }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = serbia_area
+				area = rascia_area
+				province_id = 3001
+				province_id = 4780
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			3001 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4780 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			albania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Croatia_conquer_albania = {
+		icon = mission_conquer_50_development
+		required_missions = { Croatia_Conquer_serbia }
+		provinces_to_highlight = {
+			area = albania_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			albania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 30
+			add_dip_power = 25
+			add_adm_power = 25
+			add_mil_power = 25
+		}
+	}
+}

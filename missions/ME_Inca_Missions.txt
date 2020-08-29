@@ -1,0 +1,3479 @@
+inca_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+
+	inca_a_great_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+			army_size = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_a_great_army_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	inca_conquer_quito = {
+		icon = me_mission_mayas_battle
+		required_missions = { inca_a_great_army inca_the_incan_cores }
+		position = 2
+		provinces_to_highlight = {
+			area = quito_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			quito_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			quito_area = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
+			if = {
+				limit = {
+					antisuyu_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				antisuyu_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	inca_conquer_antisuyu = {
+		icon = mission_mayan_conquest
+		required_missions = { inca_conquer_quito }
+		position = 3
+		provinces_to_highlight = {
+			area = antisuyu_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			antisuyu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			antisuyu_area = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
+			if = {
+				limit = {
+					upper_peru = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				upper_peru = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					potosi_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				potosi_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	inca_conquer_upper_peru_and_potosi = {
+		icon = me_mission_native_warriors
+		required_missions = { inca_conquer_antisuyu }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = upper_peru
+				area = potosi_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			upper_peru = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			potosi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			upper_peru = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
+			potosi_area = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
+			794 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2837 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	inca_conquer_jujuy_and_santa_catalina = {
+		icon = me_mission_inca_flag
+		required_missions = { inca_conquer_upper_peru_and_potosi }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 794
+				province_id = 2837
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			794 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2837 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_legitimacy_equivalent = { value = 10 }
+			add_country_modifier = {
+				name = inca_conquer_jujuy_and_santa_catalina_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_military_buildup = {
+		icon = mission_early_game_buildings
+		required_missions = { inca_fortification_efforts }
+		position = 9
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { army_size_percentage = 1 }
+				}
+				capital_scope = {
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+					infantry = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = inca_military_buildup_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_secure_our_position = {
+		icon = mission_assemble_an_army
+		required_missions = { inca_military_buildup inca_strangers_from_a_new_world }
+		position = 10
+		trigger = {
+			any_known_country = {
+				custom_trigger_tooltip = {
+					tooltip = THIS_CAPITAL_IS_IN_EUROPE
+					capital_scope = {
+						continent = europe
+					}
+				}
+				war_with = ROOT
+				NOT = {
+					war_score_against = {
+						who = ROOT
+						value = -9
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_country_modifier = {
+				name = inca_secure_our_position_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_expel_the_foreigners = {
+		icon = mission_cannons_firing
+		required_missions = { inca_secure_our_position }
+		position = 11
+		provinces_to_highlight = {
+			is_core = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			is_at_war = no
+			all_core_province = {
+				owned_by = ROOT
+			}
+			any_owned_province = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = INC_ANY_CORE_COUNTRY_IS_EUROPEAN_OR_CN
+						any_core_country = {
+							exists = yes
+							OR = {
+								capital_scope = {
+									continent = europe
+								}
+								AND = {
+									is_colonial_nation = yes
+									overlord = {
+										capital_scope = {
+											continent = europe
+										}
+									}
+								}
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = INC_PREVIOUS_OWNER_IS_EUROPEAN_OR_CN
+						any_country = {
+							PREV = {
+								previous_owner = PREV
+							}
+							OR = {
+								capital_scope = {
+									continent = europe
+								}
+								AND = {
+									is_colonial_nation = yes
+									overlord = {
+										capital_scope = {
+											continent = europe
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = inca_expel_the_foreigners_modifier
+				duration = 9125
+			}
+			if = {
+				limit = {
+					has_dlc = "El Dorado"
+				}
+				custom_tooltip = INC_ALLOW_CB_AGAINST_EUROPEANS
+			}
+			else = {
+				custom_tooltip = INC_ALLOW_CB_AGAINST_EUROPEANS_NO_ED
+			}
+		}
+	}
+	
+	inca_destroy_european_administration = {
+		icon = me_mission_army
+		required_missions = { inca_expel_the_foreigners }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				colonial_region = colonial_peru
+				AND = {
+					colonial_region = colonial_colombia
+					colonial_colombia = {
+						owned_by = ROOT
+					}
+				}
+				AND = {
+					colonial_region = colonial_brazil
+					colonial_brazil = {
+						owned_by = ROOT
+					}
+				}
+				AND = {
+					colonial_region = colonial_la_plata
+					colonial_la_plata = {
+						owned_by = ROOT
+					}
+				}
+			}
+			has_discovered = ROOT
+			is_empty = no
+			owner = {
+				is_colonial_nation = yes
+			}
+		}
+		trigger = {
+			num_of_cities = 30
+			colonial_peru = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_REGION_NOT_OWNED_BY_CN
+					OR = {
+						owner = {
+							is_colonial_nation = no
+						}
+						is_empty = yes
+					}
+				}
+			}
+			if = {
+				limit = {
+					colonial_colombia = {
+						owned_by = ROOT
+					}
+				}
+				colonial_colombia = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = INC_REGION_NOT_OWNED_BY_CN
+						OR = {
+							owner = {
+								is_colonial_nation = no
+							}
+							is_empty = yes
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					colonial_brazil = {
+						owned_by = ROOT
+					}
+				}
+				colonial_brazil = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = INC_REGION_NOT_OWNED_BY_CN
+						OR = {
+							owner = {
+								is_colonial_nation = no
+							}
+							is_empty = yes
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					colonial_la_plata = {
+						owned_by = ROOT
+					}
+				}
+				colonial_la_plata = {
+					type = all
+					custom_trigger_tooltip = {
+						tooltip = INC_REGION_NOT_OWNED_BY_CN
+						OR = {
+							owner = {
+								is_colonial_nation = no
+							}
+							is_empty = yes
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_destroy_european_administration_modifier
+				duration = 7300
+			}
+			every_owned_province = {
+				limit = {
+					any_core_country = {
+						OR = {
+							capital_scope = {
+								continent = europe
+							}
+							AND = {
+								is_colonial_nation = yes
+								overlord = {
+									capital_scope = {
+										continent = europe
+									}
+								}
+							}
+						}
+					}
+				}
+				add_nationalism = -10
+			}
+		}
+	}
+	
+	inca_repulse_the_europeans = {
+		icon = me_mission_globe_map
+		required_missions = { inca_destroy_european_administration }
+		position = 13
+		provinces_to_highlight = {
+			continent = south_america
+			has_discovered = ROOT
+			is_empty = no
+			is_sea = no
+			owner = {
+				OR = {
+					capital_scope = {
+						continent = europe
+					}
+					is_colonial_nation = yes
+				}
+			}
+		}
+		trigger = {
+			south_america = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_REGION_NOT_OWNED_BY_CN_OR_EUROPEAN
+					OR = {
+						owner = {
+							capital_scope = {
+								NOT = { continent = europe }
+							}
+							is_colonial_nation = no
+						}
+						is_empty = yes
+						is_sea = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_army_tradition = 20
+			south_america = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					is_sea = no
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	inca_the_rule_of_the_sun = {
+		icon = me_mission_inca_crown
+		required_missions = { inca_repulse_the_europeans inca_military_advancement }
+		position = 14
+		provinces_to_highlight = {
+			continent = south_america
+			has_discovered = ROOT
+			is_sea = no
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			south_america = {
+				type = all
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					is_sea = yes
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = inca_repulse_the_europeans_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	inca_all_roads_lead_to_cusco = {
+		icon = me_mission_hungary_road
+		required_missions = { inca_the_rule_of_the_sun inca_dominate_brazil inca_colonize_caribbean_coast }
+		position = 17
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_capital_of = ROOT
+					OR = {
+						NOT = { development = 30 }
+						NOT = { continent = south_america }
+					}
+				}
+				AND = {
+					continent = south_america
+					is_sea = no
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+						NOT = { development = 5 }
+						unrest = 1
+					}
+				}
+			}
+			has_discovered = ROOT
+		}
+		trigger = {
+			capital_scope = {
+				development = 30
+				continent = south_america
+			}
+			south_america = {
+				type = all
+				OR = {
+					AND = {
+						owned_by = ROOT
+						num_of_times_improved = 1
+						development = 5
+						NOT = { unrest = 1 }
+					}
+					is_sea = yes
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			south_america = {
+				limit = {
+					is_sea = no
+					NOT = { has_province_modifier = inca_roads_province_modifier }
+				}
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+inca_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+
+	inca_the_incan_cores = {
+		icon = me_mission_inca_defeat_cusco
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				area = peruan_coast
+				area = kuntisuyu_area
+				area = huanuco_area
+				area = cajamarca_area
+				area = chimor_area
+			}
+			is_empty = no
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			peruan_coast = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_OWNS_CORE_ALL_OF_EXCEPT_EMPTY
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						is_empty = yes
+					}
+				}
+			}
+			kuntisuyu_area = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_OWNS_CORE_ALL_OF_EXCEPT_EMPTY
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						is_empty = yes
+					}
+				}
+			}
+			huanuco_area = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_OWNS_CORE_ALL_OF_EXCEPT_EMPTY
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						is_empty = yes
+					}
+				}
+			}
+			cajamarca_area = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_OWNS_CORE_ALL_OF_EXCEPT_EMPTY
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						is_empty = yes
+					}
+				}
+			}
+			chimor_area = {
+				type = all
+				custom_trigger_tooltip = {
+					tooltip = INC_OWNS_CORE_ALL_OF_EXCEPT_EMPTY
+					OR = {
+						AND = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+						is_empty = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_the_incan_cores_modifier
+				duration = 5475
+			}
+			if = {
+				limit = {
+					quito_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				quito_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2002 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								owned_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 200
+					change_native_ferocity = -10
+					change_native_hostileness = -10
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	inca_securing_gold_mines = {
+		icon = mission_zambezi_gold
+		required_missions = { inca_the_incan_cores inca_a_great_army inca_stabilized_government }
+		position = 2
+		trigger = {
+			gold = 5
+		}
+		effect = {
+			add_treasury = 200
+			add_country_modifier = {
+				name = inca_securing_gold_mines_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	inca_improved_gold_mining = {
+		icon = me_mission_hungary_gold_mine_west
+		required_missions = { inca_securing_gold_mines }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = gold
+			OR = {
+				NOT = { base_production = 5 }
+				NOT = { num_of_times_improved = 1 }
+			}
+		}
+		trigger = {
+			all_owned_province = {
+				OR = {
+					NOT = { trade_goods = gold }
+					AND = {
+						trade_goods = gold
+						base_production = 5
+						num_of_times_improved = 1
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns = 795
+					795 = {
+						trade_goods = gold
+						base_production = 5
+					}
+				}
+				add_treasury = 100
+			}
+			every_owned_province = {
+				limit = {
+					trade_goods = gold
+					base_production = 5
+					NOT = { province_id = 795 }
+				}
+				add_province_modifier = {
+					name = inca_improved_gold_mining_province_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	inca_el_dorado = {
+		icon = me_mission_inca_people_with_gold
+		required_missions = { inca_improved_gold_mining inca_advanced_native_administration }
+		position = 4
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { base_tax = 10 }
+		}
+		trigger = {
+			treasury = 1000
+			capital_scope = {
+				base_tax = 10
+			}
+		}
+		effect = {
+			add_treasury = -1000
+			capital_scope = {
+				if = {
+					limit = {
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = gold
+				}
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else = {
+					add_center_of_trade_level = 2
+				}
+				add_permanent_province_modifier = {
+					name = inca_el_dorado_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_improve_administration_in_chinchansuyu = {
+		icon = me_mission_inca_ruler_talking
+		required_missions = { inca_improve_administration_in_cuntinsuyu }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = huanuco_area
+				area = cajamarca_area
+				area = chimor_area
+				area = quito_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy_above_min = 0.1
+				unrest = 1
+			}
+		}
+		trigger = {
+			huanuco_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+			cajamarca_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+			chimor_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+			quito_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			huanuco_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 5475
+				}
+			}
+			cajamarca_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 5475
+				}
+			}
+			chimor_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 5475
+				}
+			}
+			quito_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	inca_roads_in_chinchansuyu = {
+		icon = me_mission_hungary_road
+		required_missions = { inca_improve_administration_in_chinchansuyu }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = huanuco_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = tax
+								1 = 809
+								2 = 810
+								3 = 811
+								4 = 814
+								5 = 2827
+								total = 15
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+				AND = {
+					area = cajamarca_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = tax
+								1 = 813
+								2 = 2824
+								3 = 2825
+								4 = 2943
+								total = 15
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+				AND = {
+					area = chimor_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = tax
+								1 = 812
+								2 = 2002
+								3 = 2821
+								4 = 2822
+								5 = 2826
+								total = 20
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+				AND = {
+					area = quito_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = tax
+								1 = 816
+								2 = 817
+								3 = 819
+								4 = 820
+								5 = 2820
+								total = 20
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+			}
+		}
+		trigger = {
+			huanuco_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_809_AREA_HAS_AT_LEAST_15_TAX
+				area_has_total_development_of_type = {
+					type = tax
+					1 = 809
+					2 = 810
+					3 = 811
+					4 = 814
+					5 = 2827
+					total = 15
+				}
+			}
+			cajamarca_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_813_AREA_HAS_AT_LEAST_15_TAX
+				area_has_total_development_of_type = {
+					type = tax
+					1 = 813
+					2 = 2824
+					3 = 2825
+					4 = 2943
+					total = 15
+				}
+			}
+			chimor_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_812_AREA_HAS_AT_LEAST_20_TAX
+				area_has_total_development_of_type = {
+					type = tax
+					1 = 812
+					2 = 2002
+					3 = 2821
+					4 = 2822
+					5 = 2826
+					total = 20
+				}
+			}
+			quito_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_816_AREA_HAS_AT_LEAST_20_TAX
+				area_has_total_development_of_type = {
+					type = tax
+					1 = 816
+					2 = 817
+					3 = 819
+					4 = 820
+					5 = 2820
+					total = 20
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			huanuco_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+			cajamarca_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+			chimor_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+			quito_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_trade_cities = {
+		icon = mission_early_game_buildings
+		required_missions = { inca_roads_in_chinchansuyu }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1				
+				}
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 20
+					key = inca_trade_cities_trade_modifier
+				}
+			}
+		}
+	}
+	
+	inca_fortification_efforts = {
+		icon = mission_junnagadh_fort
+		required_missions = { inca_conquer_jujuy_and_santa_catalina inca_trade_cities }
+		position = 8
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = fort_15th }
+			NOT = { has_building = fort_16th }
+			NOT = { has_building = fort_17th }
+			NOT = { has_building = fort_18th }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			capital_scope = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_fortification_efforts_modifier
+				duration = 7300
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+				}
+				add_province_modifier = {
+					name = inca_fortification_efforts_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	inca_strangers_from_a_new_world = {
+		icon = me_mission_inca_spanish_knight
+		required_missions = { inca_fortification_efforts inca_morays inca_manual_production }
+		position = 9
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = INC_HAS_DISCOVERED_ANY_EUROPEAN_OR_EUROPEAN_CN
+				any_province = {
+					has_discovered = ROOT
+					owner = {
+						OR = {
+							capital_scope = {
+								continent = europe
+							}
+							AND = {
+								is_colonial_nation = yes
+								overlord = {
+									capital_scope = {
+										continent = europe
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_country_modifier = {
+				name = inca_strangers_from_a_new_world_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	inca_diplomatic_ties = {
+		icon = me_mission_inca_ruler_talking
+		required_missions = { inca_strangers_from_a_new_world }
+		position = 10
+		trigger = {
+			any_known_country = {
+				custom_trigger_tooltip = {
+					tooltip = THIS_CAPITAL_IS_IN_EUROPE
+					capital_scope = {
+						continent = europe
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = INC_IMPROVED_OPINION_OF_THIS_BY_90
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = improved_relation
+						value = 90
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_country_modifier = {
+				name = inca_diplomatic_ties_modifier
+				duration = 5475
+			}
+			every_known_country = {
+				limit = {
+					capital_scope = {
+						continent = europe
+					}
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = improved_relation
+						value = 90
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = inca_improved_relations_to_europeans_opinion_modifier
+				}
+				add_trust = {
+					who = ROOT
+					value = 5
+					mutual = yes
+				}
+			}
+		}
+	}
+	
+	inca_seek_technological_adoption = {
+		icon = me_mission_generic_old_university
+		required_missions = { inca_diplomatic_ties }
+		position = 11
+		trigger = {
+			OR = {
+				any_known_country = {
+					custom_trigger_tooltip = {
+						tooltip = THIS_CAPITAL_IS_IN_EUROPE
+						capital_scope = {
+							continent = europe
+						}
+					}
+					ROOT = {
+						OR = {
+							custom_trigger_tooltip = {
+								tooltip = INC_HAS_BETTER_ADM_TECH
+								adm_tech = PREV
+							}
+							custom_trigger_tooltip = {
+								tooltip = INC_HAS_BETTER_DIP_TECH
+								dip_tech = PREV
+							}
+							custom_trigger_tooltip = {
+								tooltip = INC_HAS_BETTER_MIL_TECH
+								mil_tech = PREV
+							}
+						}
+					}
+				}
+				has_institution = printing_press
+				has_institution = global_trade
+				has_institution = manufactories
+				has_institution = enlightenment
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_country_modifier = {
+				name = inca_seek_technological_adoption_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_modern_military = {
+		icon = me_mission_inca_western_knight
+		required_missions = { inca_expel_the_foreigners inca_seek_technological_adoption }
+		position = 12
+		trigger = {
+			num_of_cavalry = 10
+			num_of_artillery = 5
+		}
+		effect = {
+			add_army_tradition = 20
+			add_country_modifier = {
+				name = inca_modern_military_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_military_advancement = {
+		icon = me_mission_inca_spanish_horseman
+		required_missions = { inca_modern_military }
+		position = 13
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				any_known_country = {
+					custom_trigger_tooltip = {
+						tooltip = THIS_CAPITAL_IS_IN_EUROPE
+						capital_scope = {
+							continent = europe
+						}
+					}
+					OR = {
+						total_development = 300
+						is_great_power = yes
+					}
+					ROOT = {
+						custom_trigger_tooltip = {
+							tooltip = INC_HAS_BETTER_MIL_TECH
+							mil_tech = PREV
+						}
+					}
+				}
+			}
+			else = {
+				any_known_country = {
+					custom_trigger_tooltip = {
+						tooltip = THIS_CAPITAL_IS_IN_EUROPE
+						capital_scope = {
+							continent = europe
+						}
+					}
+					total_development = 300
+					ROOT = {
+						custom_trigger_tooltip = {
+							tooltip = INC_HAS_BETTER_MIL_TECH
+							mil_tech = PREV
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+			add_army_tradition = 10
+		}
+	}
+	
+	inca_colonize_the_south_east = {
+		icon = me_mission_inca_priest
+		required_missions = { inca_to_the_east }
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = tucuman_area
+				area = chaco_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			tucuman_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			chaco_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_colonize_the_south_east_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_an_eastern_coast = {
+		icon = mission_seize_the_bengal_coast
+		required_missions = { inca_colonize_the_south_east }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				area = misiones_area
+				area = rio_grande_do_sol_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			misiones_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			rio_grande_do_sol_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			create_explorer = { tradition = 50 }
+			2887 = {
+				light_ship = ROOT
+				light_ship = ROOT
+				light_ship = ROOT
+				transport = ROOT
+				transport = ROOT
+				transport = ROOT
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+}
+
+inca_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+
+	inca_stabilized_government = {
+		icon = me_mission_crown_indian
+		required_missions = { }
+		position = 1
+		trigger = {
+			stability = 1
+			legitimacy_equivalent = 80
+		}
+		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = inca_stabilized_government_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_advisor_council = {
+		icon = mission_alliances
+		required_missions = { inca_stabilized_government }
+		position = 2
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = INC_HAS_AT_LEAST_TWO_ADVISORS
+				OR = {
+					AND = {
+						employed_advisor = {
+							category = ADM
+						}
+						employed_advisor = {
+							category = DIP
+						}
+					}
+					AND = {
+						employed_advisor = {
+							category = ADM
+						}
+						employed_advisor = {
+							category = MIL
+						}
+					}
+					AND = {
+						employed_advisor = {
+							category = DIP
+						}
+						employed_advisor = {
+							category = MIL
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					employed_advisor = {
+						category = ADM
+					}
+				}
+				add_adm_power = 30
+			}
+			if = {
+				limit = {
+					employed_advisor = {
+						category = DIP
+					}
+				}
+				add_dip_power = 30
+			}
+			if = {
+				limit = {
+					employed_advisor = {
+						category = MIL
+					}
+				}
+				add_mil_power = 30
+			}
+			add_country_modifier = {
+				name = inca_advisor_council_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_advanced_native_administration = {
+		icon = me_mission_inca_sapa_inca
+		required_missions = { inca_advisor_council }
+		position = 3
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { development = 25 }
+		}
+		trigger = {
+			ADM = 4
+			has_adm_advisor_3 = yes
+			capital_scope = {
+				development = 25
+			}
+		}
+		effect = {
+			add_prestige = 15
+			add_legitimacy_equivalent = { value = 15 }
+			add_country_modifier = {
+				name = inca_advanced_native_administration_modifier
+				duration = 9125
+			}
+			if = {
+				limit = {
+					NOT = { num_of_colonists = 1 }
+					NOT = { has_dlc = "El Dorado" }
+				}
+				add_country_modifier = {
+					name = inca_advanced_native_administration_modifier_no_dlc
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	inca_improve_administration_in_cuntinsuyu = {
+		icon = me_mission_inca_sedan_chair
+		required_missions = { inca_advanced_native_administration }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = kuntisuyu_area
+				area = peruan_coast
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy_above_min = 0.1
+				unrest = 1
+			}
+		}
+		trigger = {
+			kuntisuyu_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+			peruan_coast = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			kuntisuyu_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 7300
+				}
+			}
+			peruan_coast = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	inca_roads_in_cuntinsuyu = {
+		icon = mission_conquer_50_development
+		required_missions = { inca_improve_administration_in_cuntinsuyu }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = kuntisuyu_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = production
+								1 = 807
+								2 = 808
+								3 = 2829
+								4 = 2830
+								total = 20
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+				AND = {
+					area = peruan_coast
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = production
+								1 = 805
+								2 = 806
+								3 = 2828
+								total = 10
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+			}
+		}
+		trigger = {
+			kuntisuyu_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_807_AREA_HAS_AT_LEAST_20_PRODUCTION
+				area_has_total_development_of_type = {
+					type = production
+					1 = 807
+					2 = 808
+					3 = 2829
+					4 = 2830
+					total = 20
+				}
+			}
+			peruan_coast = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_805_AREA_HAS_AT_LEAST_10_PRODUCTION
+				area_has_total_development_of_type = {
+					type = production
+					1 = 805
+					2 = 806
+					3 = 2828
+					total = 10
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			kuntisuyu_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+			peruan_coast = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_capital_administration = {
+		icon = mission_develop_the_capital
+		required_missions = { inca_roads_in_cuntinsuyu inca_roads_in_antisuyu }
+		position = 6
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = courthouse }
+			NOT = { has_building = town_hall }
+		}
+		trigger = {
+			capital_scope = {
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				change_government_reform_progress = 10
+			}
+			else = {
+				add_adm_power = 50
+			}
+			add_country_modifier = {
+				name = inca_capital_administration_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	inca_morays = {
+		icon = me_mission_inca_farming
+		required_missions = { inca_trade_cities inca_centralization }
+		position = 8
+		trigger = {
+			farm_estate = 5
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					has_building = farm_estate
+				}
+				add_province_modifier = {
+					name = inca_morays_province_modifier
+					duration = -1
+				}
+			}
+			change_price = {
+				trade_goods = grain
+				key = inca_morays_price
+				value = 0.15
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_mitma = {
+		icon = me_mission_inca_shaman_ceremony
+		required_missions = { }
+		position = 9
+		trigger = {
+			num_of_colonists = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_mitma_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_colonize_puna_de_atacana = {
+		icon = mission_colonial
+		required_missions = { inca_mitma }
+		position = 10
+		provinces_to_highlight = {
+			province_id = 2839
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			2839 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			2839 = {
+				change_province_name = "Pat'acama"
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+						is_state = yes
+					}
+					add_prosperity = 50
+				}
+				else_if = {
+					limit = {
+						is_state = yes
+					}
+					add_next_institution_embracement_scaled = 2
+				}
+			}
+		}
+	}
+	
+	inca_colonize_iquitos = {
+		icon = mission_potosi_silver
+		required_missions = { inca_colonize_puna_de_atacana inca_improved_mining }
+		position = 11
+		provinces_to_highlight = {
+			area = iquitos_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			iquitos_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					iquitos_area = {
+						NOT = { trade_goods = gold }
+					}
+				}
+				random_province = {
+					limit = {
+						area = iquitos_area
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = iron
+				}
+			}
+			else = {
+				random_province = {
+					limit = {
+						area = iquitos_area
+					}
+					change_trade_goods = iron
+				}
+			}
+			add_country_modifier = {
+				name = inca_colonize_iquitos_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_home_of_inventions = {
+		icon = me_mission_renaissance
+		required_missions = { inca_seek_technological_adoption }
+		position = 12
+		trigger = {
+			num_of_owned_and_controlled_institutions = 2
+		}
+		effect = {
+			add_prestige = 10
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_country_modifier = {
+				name = inca_home_of_inventions_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_to_the_east = {
+		icon = mission_colonial
+		required_missions = { inca_secure_the_northern_chilenean_coast }
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = beni_area
+				area = paraguay_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			beni_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			paraguay_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_to_the_east_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	inca_colonize_ofaie_and_goias = {
+		icon = me_mission_inca_llama
+		required_missions = { inca_to_the_east }
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = ofaie_area
+				area = goias_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			ofaie_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			goias_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						ofaie_area = {
+							NOT = { trade_goods = gold }
+							NOT = { trade_goods = coffee }
+							NOT = { trade_goods = gems }
+						}
+						goias_area = {
+							NOT = { trade_goods = gold }
+							NOT = { trade_goods = coffee }
+							NOT = { trade_goods = gems }
+						}
+					}
+				}
+				add_years_of_income = 0.5
+				random_province = {
+					limit = {
+						OR = {
+							area = ofaie_area
+							area = goias_area
+						}
+						NOT = { trade_goods = gold }
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gold
+				}
+				random_province = {
+					limit = {
+						OR = {
+							area = ofaie_area
+							area = goias_area
+						}
+						NOT = { trade_goods = gold }
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gold
+				}
+				random_province = {
+					limit = {
+						OR = {
+							area = ofaie_area
+							area = goias_area
+						}
+						NOT = { trade_goods = gold }
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gold
+				}
+			}
+			else = {
+				add_years_of_income = 1.5
+			}
+		}
+	}
+	
+	inca_colonize_guayra_and_minas_gerais = {
+		icon = me_mission_inca_people_with_gold
+		required_missions = { inca_colonize_ofaie_and_goias }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				area = west_sao_paolo_area
+				area = minas_gerais_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			west_sao_paolo_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			minas_gerais_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_colonize_guayra_and_minas_gerais_modifier
+				duration = 9125
+			}
+			minas_gerais_area = {
+				add_base_production = 1
+			}
+			west_sao_paolo_area = {
+				add_base_tax = 1
+			}
+		}
+	}
+	
+	inca_dominate_brazil = {
+		icon = me_mission_portugal_brazil
+		required_missions = { inca_an_eastern_coast inca_colonize_guayra_and_minas_gerais inca_a_northern_coast }
+		position = 16
+		provinces_to_highlight = {
+			region = brazil_region
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+			ROOT = {
+				num_of_owned_provinces_with = {
+					value = 70
+					region = brazil_region
+					is_city = yes
+				}
+			}
+		}
+		trigger = {
+			1531 = {
+				is_strongest_trade_power = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 70
+				region = brazil_region
+				is_city = yes
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = inca_dominate_brazil_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+inca_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+
+	inca_temples_for_viracocha = {
+		icon = me_mission_inca_temple
+		required_missions = { inca_solar_cult }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "El Dorado"
+					is_religion_reformed = no
+				}
+				add_authority = 10
+			}
+			else = {
+				capital_scope = {
+					add_next_institution_embracement = 25
+				}
+			}
+		}
+	}
+	
+	inca_temples_for_pacha_kamaq = {
+		icon = me_mission_mayas_temple
+		required_missions = { inca_temples_for_viracocha }
+		position = 3
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				has_building = cathedral
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_next_institution_embracement = 10
+			}
+			add_country_modifier = {
+				name = inca_temples_for_pacha_kamaq_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_improve_administration_in_antisuyu = {
+		icon = me_mission_inca_crowning_of_ruler
+		required_missions = { inca_advanced_native_administration }
+		position = 4
+		provinces_to_highlight = {
+			area = antisuyu_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy_above_min = 0.1
+				unrest = 1
+			}
+		}
+		trigger = {
+			antisuyu_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			antisuyu_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	inca_roads_in_antisuyu = {
+		icon = mission_colonial
+		required_missions = { inca_improve_administration_in_antisuyu }
+		position = 5
+		provinces_to_highlight = {
+			area = antisuyu_area
+			OR = {
+				NOT = {
+					area_has_total_development_of_type = {
+						type = production
+						1 = 802
+						2 = 804
+						3 = 2831
+						4 = 2947
+						total = 15
+					}
+				}
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 1 }
+			}
+		}
+		trigger = {
+			antisuyu_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_802_AREA_HAS_AT_LEAST_15_PRODUCTION
+				area_has_total_development_of_type = {
+					type = production
+					1 = 802
+					2 = 804
+					3 = 2831
+					4 = 2947
+					total = 15
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			antisuyu_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_centralization = {
+		icon = me_mission_shiny_crown_indian
+		required_missions = { inca_roads_in_chinchansuyu inca_capital_administration inca_roads_in_collasuyu }
+		position = 7
+		trigger = {
+			NOT = { average_home_autonomy = 26 }
+			NOT = { unrest = -4 }
+		}
+		effect = {
+			add_years_of_income = 0.5
+			if = {
+				limit = {
+					OR = {
+						current_age = age_of_absolutism
+						current_age = age_of_revolutions
+					}
+				}
+				add_absolutism = 10
+			}
+			if = {
+				limit = {
+					has_regency = no
+					NOT = { ADM = 6 }
+				}
+				change_adm = 1
+			}
+			else = {
+				add_stability_or_adm_power = yes
+			}
+			add_legitimacy_equivalent = { value = 10 }
+		}
+	}
+	
+	inca_manual_production = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 8
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_manual_production_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_copper_mining = {
+		icon = me_mission_hungary_gold_mine_west
+		required_missions = { inca_manual_production }
+		position = 9
+		trigger = {
+			copper = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_copper_mining_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	inca_improved_mining = {
+		icon = me_mission_industrial_factory_worker
+		required_missions = { inca_copper_mining }
+		position = 10
+		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = copper
+			OR = {
+				NOT = { base_production = 5 }
+				NOT = { num_of_times_improved = 1 }
+			}
+		}
+		trigger = {
+			weapons = 1
+			all_owned_province = {
+				OR = {
+					NOT = { trade_goods = copper }
+					AND = {
+						trade_goods = copper
+						base_production = 5
+						num_of_times_improved = 1
+					}
+				}
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					trade_goods = copper
+				}
+				add_province_modifier = {
+					name = inca_improved_mining_province_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	inca_colonize_moxos = {
+		icon = me_mission_inca_llama
+		required_missions = { inca_colonize_puna_de_atacana inca_improved_mining }
+		position = 11
+		provinces_to_highlight = {
+			area = moxos_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			moxos_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					moxos_area = {
+						NOT = { trade_goods = gold }
+					}
+				}
+				random_province = {
+					limit = {
+						area = moxos_area
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = iron
+				}
+			}
+			else = {
+				random_province = {
+					limit = {
+						area = moxos_area
+					}
+					change_trade_goods = iron
+				}
+			}
+			add_country_modifier = {
+				name = inca_colonize_moxos_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	inca_secure_the_northern_chilenean_coast = {
+		icon = mission_secure_the_malabar_coast
+		required_missions = { inca_colonize_iquitos inca_colonize_moxos }
+		position = 12
+		provinces_to_highlight = {
+			area = northern_chile_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			northern_chile_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					northern_chile_area = {
+						NOT = { trade_goods = gold }
+					}
+				}
+				random_province = {
+					limit = {
+						area = northern_chile_area
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = iron
+				}
+			}
+			else = {
+				random_province = {
+					limit = {
+						area = northern_chile_area
+					}
+					change_trade_goods = iron
+				}
+			}
+			if = {
+				limit = {
+					northern_chile_area = {
+						NOT = { trade_goods = gold }
+					}
+				}
+				random_province = {
+					limit = {
+						area = northern_chile_area
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = iron
+				}
+			}
+			change_price = {
+				trade_goods = iron
+				key = inca_secure_the_northern_chilenean_coast_price
+				value = 0.1
+				duration = 3650
+			}
+		}
+	}
+	
+	inca_colonize_panama = {
+		icon = mission_caribbean_cn
+		required_missions = { inca_colonize_ucayali }
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = popayan_area
+				area = panama_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			popayan_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			panama_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			835 = {
+				add_trade_modifier = {
+					who = ROOT
+					power = 20
+					duration = -1
+					key = inca_colonize_panama_trade_modifier
+				}
+			}
+			panama_area = {
+				add_province_modifier = {
+					name = inca_colonize_panama_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_colonize_eastern_amazon = {
+		icon = me_mission_mayas_jungle
+		required_missions = { inca_to_the_east }
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = guapore_area
+				area = mato_grosso_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			guapore_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			mato_grosso_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			set_country_flag = inca_colonize_jungle_bonus
+			custom_tooltip = INCA_COLONIZE_JUNGLE_BONUS
+		}
+	}
+	
+	inca_a_northern_coast = {
+		icon = mission_secure_the_malabar_coast
+		required_missions = { inca_colonize_eastern_amazon }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				area = pontal_area
+				area = maranhao_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			pontal_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			maranhao_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_a_northern_coast_modifier
+				duration = 18250
+			}
+			749 = {
+				light_ship = ROOT
+				light_ship = ROOT
+				light_ship = ROOT
+				light_ship = ROOT
+				light_ship = ROOT
+			}
+		}
+	}
+}
+
+inca_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+
+	inca_solar_cult = {
+		icon = me_mission_inca_religious_ceremony
+		required_missions = { }
+		position = 1
+		trigger = {
+			religion = inti
+			advisor = theologian
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_solar_cult_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+inca_missions_5_ED = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "El Dorado"
+	}
+	potential = {
+		tag = INC
+		has_dlc = "El Dorado"
+	}
+	has_country_shield = yes	
+	
+	inca_the_power_of_the_sun = {
+		icon = me_mission_inca_priest
+		required_missions = { inca_solar_cult }
+		position = 2
+		trigger = {
+			authority = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = inca_the_power_of_the_sun_modifier
+				duration = 3650
+			}
+		}
+	}
+	
+	inca_inti_reforms = {
+		icon = me_mission_inca_shaman
+		required_missions = { inca_the_power_of_the_sun }
+		position = 3
+		trigger = {
+			has_all_inti_reforms = yes
+		}
+		effect = {
+			add_treasury = 100
+			add_stability_or_adm_power = yes
+			add_country_modifier = {
+				name = inca_inti_reforms_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	inca_technology_reform = {
+		icon = me_mission_inca_westernizing
+		required_missions = { inca_inti_reforms }
+		position = 4
+		trigger = {
+			is_religion_reformed = yes
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = inca_technology_reform_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+inca_missions_5_2 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = INC
+	}
+	has_country_shield = yes
+	
+	inca_improve_administration_in_collasuyu = {
+		icon = me_mission_inca_sapa_inca
+		required_missions = { inca_improve_administration_in_antisuyu }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = upper_peru
+				area = potosi_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy_above_min = 0.1
+				unrest = 1
+			}
+		}
+		trigger = {
+			upper_peru = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+			potosi_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 0.1 }
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			upper_peru = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 7300
+				}
+			}
+			potosi_area = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = inca_improve_administration_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	inca_roads_in_collasuyu = {
+		icon = me_mission_hungary_road
+		required_missions = { inca_improve_administration_in_collasuyu }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = upper_peru
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = manpower
+								1 = 2835
+								2 = 2838
+								3 = 2941
+								4 = 2942
+								total = 10
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+				AND = {
+					area = potosi_area
+					OR = {
+						NOT = {
+							area_has_total_development_of_type = {
+								type = manpower
+								1 = 795
+								2 = 797
+								3 = 2940
+								4 = 2946
+								total = 15
+							}
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+					}
+				}
+			}
+		}
+		trigger = {
+			upper_peru = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_2835_AREA_HAS_AT_LEAST_10_MANPOWER
+				area_has_total_development_of_type = {
+					type = manpower
+					1 = 2835
+					2 = 2838
+					3 = 2941
+					4 = 2942
+					total = 10
+				}
+			}
+			potosi_area = {
+				type = all
+				owned_by = ROOT
+				num_of_times_improved = 1
+			}
+			custom_trigger_tooltip = {
+				tooltip = INC_795_AREA_HAS_AT_LEAST_15_MANPOWER
+				area_has_total_development_of_type = {
+					type = manpower
+					1 = 795
+					2 = 797
+					3 = 2940
+					4 = 2946
+					total = 15
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			upper_peru = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+			potosi_area = {
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	inca_south_american_wool = {
+		icon = me_mission_inca_llama
+		required_missions = { inca_manual_production }
+		position = 9
+		trigger = {
+			wool = 5
+		}
+		effect = {
+			if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 2
+						trade_goods = livestock
+					}
+				}
+				random_owned_province = {
+					limit = {
+						trade_goods = livestock
+					}
+					change_trade_goods = wool
+				}
+			}
+			every_owned_province = {
+				limit = {
+					trade_goods = wool
+				}
+				add_province_modifier = {
+					name = inca_south_american_wool_province_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	inca_improved_wool_farming = {
+		icon = mission_early_game_buildings
+		required_missions = { inca_south_american_wool }
+		position = 10
+		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = wool
+			OR = {
+				NOT = { base_production = 5 }
+				NOT = { num_of_times_improved = 2 }
+			}
+		}
+		trigger = {
+			all_owned_province = {
+				OR = {
+					NOT = { trade_goods = wool }
+					AND = {
+						trade_goods = wool
+						base_production = 5
+						num_of_times_improved = 2
+					}
+				}
+			}
+		}
+		effect = {
+			change_price = {
+				trade_goods = wool
+				key = inca_improved_wool_farming_price
+				value = 0.1
+				duration = 10950
+			}
+			add_country_modifier = {
+				name = inca_improved_wool_farming_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	inca_incan_weaving = {
+		icon = mission_have_manufactories
+		required_missions = { inca_improved_wool_farming }
+		position = 11
+		trigger = {
+			textile = 5
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = inca_incan_weaving_modifier
+				duration = 9125
+			}
+			change_price = {
+				trade_goods = cloth
+				key = inca_incan_weaving_price
+				value = 0.1
+				duration = 10950
+			}
+		}
+	}
+	
+	inca_colonize_ucayali = {
+		icon = mission_colonial
+		required_missions = { inca_colonize_moxos }
+		position = 12
+		provinces_to_highlight = {
+			area = ucayali_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			ucayali_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			create_conquistador = { tradition = 50 }
+			add_country_modifier = {
+				name = inca_colonize_ucayali_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	inca_colonize_western_amazon = {
+		icon = me_mission_generic_jungle
+		required_missions = { inca_colonize_ucayali }
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = colombian_amazonas_area
+				area = western_llanos
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			colombian_amazonas_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			western_llanos = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_owned_province = {
+						has_terrain = jungle
+						OR = {
+							area = colombian_amazonas_area
+							area = western_llanos
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						has_terrain = jungle
+						OR = {
+							area = colombian_amazonas_area
+							area = western_llanos
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_western_amazon_province_modifier
+						duration = -1
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_modifier = inca_colonize_western_amazon_province_modifier }
+					has_terrain = jungle
+				}
+				add_province_modifier = {
+					name = inca_colonize_western_amazon_province_modifier
+					duration = 7300
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_modifier = inca_colonize_western_amazon_province_modifier }
+					has_terrain = jungle
+				}
+				add_province_modifier = {
+					name = inca_colonize_western_amazon_province_modifier
+					duration = 7300
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_modifier = inca_colonize_western_amazon_province_modifier }
+					has_terrain = jungle
+				}
+				add_province_modifier = {
+					name = inca_colonize_western_amazon_province_modifier
+					duration = 7300
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_modifier = inca_colonize_western_amazon_province_modifier }
+					has_terrain = jungle
+				}
+				add_province_modifier = {
+					name = inca_colonize_western_amazon_province_modifier
+					duration = 7300
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_modifier = inca_colonize_western_amazon_province_modifier }
+					has_terrain = jungle
+				}
+				add_province_modifier = {
+					name = inca_colonize_western_amazon_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	inca_colonize_colombia = {
+		icon = mission_african_gold
+		required_missions = { inca_colonize_western_amazon inca_colonize_panama }
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				area = cordillera_occidental_area
+				area = bogota_area
+				area = central_llanos_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			cordillera_occidental_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			bogota_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			central_llanos_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			change_price = {
+				trade_goods = coffee
+				key = inca_colonize_colombia_price_coffee
+				value = 0.1
+				duration = -1
+			}
+			change_price = {
+				trade_goods = gems
+				key = inca_colonize_colombia_price_gems
+				value = 0.1
+				duration = -1
+			}
+			if = {
+				limit = {
+					any_owned_province = {
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						OR = {
+							trade_goods = coffee
+							trade_goods = gems
+						}
+					}
+					add_province_modifier = {
+						name = inca_colonize_colombia_province_modifier
+						duration = -1
+					}
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = coffee
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = coffee
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = coffee
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gems
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gems
+				}
+				random_owned_province = {
+					limit = {
+						NOT = { has_province_modifier = inca_colonize_colombia_province_modifier }
+						OR = {
+							area = cordillera_occidental_area
+							area = bogota_area
+							area = central_llanos_area
+						}
+						NOT = { trade_goods = coffee }
+						NOT = { trade_goods = gems }
+					}
+					change_trade_goods = gems
+				}
+			}
+		}
+	}
+	
+	inca_colonize_caribbean_coast = {
+		icon = mission_colonize_the_caribbean
+		required_missions = { inca_colonize_colombia }
+		position = 16
+		provinces_to_highlight = {
+			OR = {
+				area = coquivacoa_area
+				area = maracaibo_area
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			coquivacoa_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+			maracaibo_area = {
+				type = all
+				owned_by = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					carribeans_region = {
+						is_empty = yes
+						has_port = yes
+					}
+				}
+				random_province = {
+					limit = {
+						region = carribeans_region
+						is_empty = yes
+						has_port = yes
+					}
+					add_siberian_construction = 200
+				}
+			}
+			else = {
+				1516 = {
+					add_trade_modifier = {
+						who = ROOT
+						power = 20
+						duration = 7300
+						key = inca_colonize_caribbean_coast_trade_modifier
+					}
+				}
+			}
+			carribeans_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hidden_effect = {
+				carribeans_region = {
+					discover_country = ROOT
+				}
+				1516 = {
+					discover_country = ROOT
+				}
+				1517 = {
+					discover_country = ROOT
+				}
+				1518 = {
+					discover_country = ROOT
+				}
+				1521 = {
+					discover_country = ROOT
+				}
+			}
+		}
+	}
+}

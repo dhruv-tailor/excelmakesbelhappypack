@@ -1,0 +1,311 @@
+Ulm_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ULM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ulm_get_allies = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 1
+		trigger = {
+			num_of_allies = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "influential_diplomacy"
+				duration = 10950
+			}
+		}
+	}
+	
+	ulm_get_army = {
+		icon = mission_assemble_an_army
+		required_missions = { ulm_get_allies }
+		position = 2
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 9125 #25 years
+			}
+		}
+	}
+	
+	ulm_city_of_worlds_desire = {
+		icon = mission_early_game_buildings
+		position = 3
+		required_missions = { ulm_get_army }
+		provinces_to_highlight = {
+			province_id = 1872
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				has_dlc = "Common Sense"
+			}
+		}
+		trigger = {
+			1872 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 20
+			}
+		}
+		effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				reverse_add_casus_belli = {
+					target = ROOT
+					type = cb_vassalize_mission
+					months = 120
+				}
+			}
+		}
+	}
+	
+	ulm_subjugate_someone = {
+		icon = mission_have_two_subjects
+		position = 4
+		required_missions = { ulm_city_of_worlds_desire }
+		trigger = {
+			num_of_subjects = 2 
+		}
+		effect = {
+			add_country_modifier = {
+				name = "influential_diplomacy"
+				duration = 10950
+			}
+			lower_swabia_area = {
+                limit = {
+                    NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+            }
+			upper_swabia_area = {
+                limit = {
+                    NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+            }
+		}
+	}
+	
+	ulm_unite_swabia = {
+		icon = mission_cannons_firing
+		position = 5
+		required_missions = { ulm_subjugate_someone }
+		provinces_to_highlight = {
+			OR = {
+				area = upper_swabia_area
+				area = lower_swabia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			upper_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lower_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			upper_rhineland_area = {
+                limit = {
+                    NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+            }
+		}
+	}
+	
+	ulm_unite_upper_rhineland = {
+		icon = mission_conquer_50_development
+		position = 6
+		required_missions = { ulm_unite_swabia }
+		provinces_to_highlight = {
+			area = upper_rhineland_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			upper_rhineland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 50
+			add_adm_power = 25
+			add_dip_power = 25
+			add_mil_power = 25
+		}
+	}
+}
+
+Ulm_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ULM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ulm_booming_textile_production = {
+		icon = mission_trade_company_region_abroad
+		position = 6
+		required_missions = { ulm_unite_swabia }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 68
+				province_id = 69
+				province_id = 1872
+				province_id = 1868
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			68 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			69 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			1872 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			1868 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+		}
+		effect = {
+			1872 = {
+				add_base_production = 3
+			}
+		}
+	}
+	
+	ulm_leading_producer = {
+		icon = mission_early_game_buildings
+		position = 7
+		required_missions = { ulm_booming_textile_production }
+		trigger = {
+			production_leader = {
+				trade_goods = cloth
+			}
+		}
+		effect = {
+			68 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			69 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1868 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+Ulm_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ULM
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	ulm_minster = {
+		icon = mission_european_church
+		position = 6
+		required_missions = { ulm_unite_swabia }
+		provinces_to_highlight = {
+			province_id = 1872
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			owns = 1872
+			1872 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			1872 = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 2
+				}
+			}
+		}
+	}
+}

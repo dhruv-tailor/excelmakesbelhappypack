@@ -1,0 +1,292 @@
+ICE_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ICE
+	}
+	has_country_shield = yes
+
+	ice_discover_new_world = {
+		icon = me_mission_iceland_discover_new_world
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				north_america = {
+					has_discovered = ROOT
+				}
+				south_america = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_colonial_excitement
+				duration = 7300
+			}
+			add_dip_power = 100
+		}
+	}
+
+	ice_colonize_greenland = {
+		icon = me_mission_iceland_colonize_greenland
+		required_missions = { ice_discover_new_world }
+		position = 2
+		provinces_to_highlight = {
+			area = greenland_area
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 2
+				area = greenland_area
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+
+	ice_colonize_vinland = {
+		icon = me_mission_iceland_colonize_vinland
+		required_missions = { ice_colonize_greenland }
+		position = 3
+		provinces_to_highlight = {
+			colonial_region = colonial_canada
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_canada
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+
+	ice_colonize_eastern_america = {
+		icon = me_mission_iceland_colonize_eastern_america
+		required_missions = { ice_colonize_vinland }
+		position = 4
+		provinces_to_highlight = {
+			colonial_region = colonial_eastern_america
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_eastern_america
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+	ice_become_a_colonial_power = {
+		icon = mission_colonial
+		required_missions = { ice_colonize_eastern_america }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 50
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_school_of_lief_erikson
+				duration = -1
+			}
+			add_dip_power = 100
+		}
+	}
+}
+
+ICE_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ICE
+	}
+	has_country_shield = yes
+
+	ice_build_to_force_limit = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { }
+		position = 1
+		trigger = {
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = ice_ready_for_conquest
+				duration = 9125
+			}
+			subarctic_islands_area	= {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ice_conquer_faroes = {
+		icon = mission_invade_island
+		required_missions = { ice_build_to_force_limit }
+		position = 2
+		provinces_to_highlight = {
+			area = subarctic_islands_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			subarctic_islands_area	= {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			subarctic_islands_area	= {
+				add_province_modifier = {
+					name = ice_integration
+					duration = 7300
+				}
+			}
+			kingdom_of_the_isles_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			369 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	ice_conquer_the_isles = {
+		icon = mission_invade_island
+		required_missions = { ice_conquer_faroes }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = kingdom_of_the_isles_area
+				province_id = 369
+			}
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kingdom_of_the_isles_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			369 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = ice_viking_empire
+					duration = -1
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			kingdom_of_the_isles_area = {
+				add_province_modifier = {
+					name = ice_integration
+					duration = 7300
+				}
+			}
+			369 = {
+				add_province_modifier = {
+					name = ice_integration
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	ice_build_a_cathedral_in_reykjavik = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 370
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = cathedral }
+			}
+		}
+		trigger = {
+			370 = {
+				owned_by = ROOT
+				has_building = cathedral
+			}
+		}
+		effect = {
+			370 = {
+				add_province_modifier = {
+					name = ice_reykjavik_cathedral
+					duration = -1
+				}
+			}
+		}
+	}
+}

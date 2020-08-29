@@ -1,0 +1,245 @@
+gazikumukh_missions_1 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = GAZ
+	}
+	has_country_shield = yes
+
+	GAZ_betrayal = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 1
+		trigger = {
+			num_of_allies = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "gazikumukh_renewal"
+				duration = 7300
+			}
+		}
+	}
+
+	GAZ_giant = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { GAZ_betrayal GAZ_heir }
+		position = 2
+		provinces_to_highlight = {
+           	province_id = 2208
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+        }
+		trigger = {
+			owns_core_province = 2208
+		}
+		effect = {
+			add_country_modifier = {
+				name = "gazikumukh_tame"
+				duration = 7300
+			}
+		}
+	}
+}
+
+gazikumukh_missions_2 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = GAZ
+	}
+	has_country_shield = yes
+	
+	GAZ_heir = {
+		icon = mission_noble_council
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+           	area = dagestan_area
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						area = dagestan_area
+					}
+				}
+			}
+        }
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				area = dagestan_area
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "gazikumukh_heir_to_dagestan"
+				duration = 7300
+			}
+			425 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			2208 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	GAZ_worth = {
+		icon = mission_persian_soldiers
+		required_missions = { GAZ_heir }
+		position = 2
+		provinces_to_highlight = {
+           	province_id = 425
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+        }
+        trigger = {
+        	owns_core_province = 425
+        }
+        effect = {
+        	add_country_modifier = {
+        		name = "gazikumukh_shamkhalate"
+        		duration = 10950
+        	}
+        }
+	}
+	
+	GAZ_whole = {
+		icon = mission_unite_home_region
+		required_missions = { GAZ_giant GAZ_worth GAZ_unity }
+		position = 3
+		provinces_to_highlight = {
+           	area = dagestan_area
+           	NOT = { owned_by = ROOT }
+        }
+        trigger = {
+        	dagestan_area = {
+				type = all
+        		owned_by = ROOT
+        	}
+        }
+        effect = {
+        	add_country_modifier = {
+        		name = "gazikumukh_dagestan"
+        		duration = -1
+        	}
+        }
+	}
+}
+
+gazikumukh_missions_3 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = GAZ
+	}
+	has_country_shield = yes
+	
+	GAZ_benign = {
+		icon = mission_great_wall
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 2198
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			2198 = {
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Gazikumukh_Events.1 }
+			2198 = {
+				add_province_modifier = {
+					name = "gazikumukh_overlord"
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	GAZ_unity = {
+		icon = mission_pf_map_table
+		required_missions = { GAZ_heir }
+		position = 2
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				dagestan_area = {
+					type = all
+					OR = {
+						culture = ROOT
+						accepted_culture = ROOT
+						AND = {
+							culture_group = ROOT
+							ROOT = {
+								government_rank = 3
+							}
+						}
+					}
+				}
+			}
+			else = {
+				dagestan_area = {
+					type = all
+					OR = {
+						culture = ROOT
+						accepted_culture = ROOT
+						AND = {
+							culture_group = ROOT
+							ROOT = {
+								total_development = 1000
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "gazikumukh_dawn"
+				duration = 9125
+			}
+		}
+	}
+}

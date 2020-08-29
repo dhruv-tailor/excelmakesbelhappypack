@@ -1,0 +1,136 @@
+namespace = paradox_or_mod_missions_events
+
+country_event = {
+	id = paradox_or_mod_missions_events.1
+	title = paradox_or_mod_missions_events.EVTNAME1
+	desc = paradox_or_mod_missions_events.EVTDESC1
+
+	hidden = yes
+	fire_only_once = yes
+
+	trigger = {
+		always = yes
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = missions_expanded_events.1 } # global flag
+			country_event = { id = golden_bull_events.1 } # global flag
+			set_global_flag = paradox_or_mod_missions_events_flag
+			every_country = {
+				if = {
+					limit = {
+						OR = {
+							country_has_both_paradox_and_me_missions = yes
+							country_has_both_paradox_and_golden_bull_missions = yes
+						}
+					}
+					country_event = { id = paradox_or_mod_missions_events.2 days = 1 }
+				}
+				else = {
+					set_country_flag = use_paradox_missions
+					clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+					clr_country_flag = use_golden_bull_missions_instead_of_paradox
+					swap_non_generic_missions = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = paradox_or_mod_missions_events1.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Choose whether to use Paradox' missions or ME missions
+country_event = {
+	id = paradox_or_mod_missions_events.2
+	title = paradox_or_mod_missions_events.EVTNAME2
+	desc = paradox_or_mod_missions_events.EVTDESC2
+	picture = DIPLOMACY_eventPicture
+
+	trigger = {
+		has_global_flag = paradox_or_mod_missions_events_flag
+		NOT = { has_country_flag = has_selected_missions_@ROOT }
+		OR = {
+			country_has_both_paradox_and_me_missions = yes
+			country_has_both_paradox_and_golden_bull_missions = yes
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = use_paradox_missions
+			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
+		}
+	}
+
+	option = { # Choose ME missions
+		name = paradox_or_mod_missions_events2.EVTOPT1
+
+		trigger = {
+			has_global_flag = missions_expanded_mod_active
+		}
+
+		ai_chance = {
+			factor = 0.5
+		}
+
+		custom_tooltip = CHOOSE_ME_MISSIONS
+		hidden_effect = {
+			clr_country_flag = use_paradox_missions
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
+			set_country_flag = use_missions_expanded_missions_instead_of_paradox
+			swap_non_generic_missions = yes
+		}
+	}
+
+	option = { # Choose Golden Bull missions
+		name = paradox_or_mod_missions_events2.EVTOPT2
+
+		trigger = {
+			has_global_flag = golden_bull_mod_active
+		}
+
+		ai_chance = {
+			factor = 0.5
+		}
+
+		custom_tooltip = CHOOSE_GOLDEN_BULL_MISSIONS
+		hidden_effect = {
+			clr_country_flag = use_paradox_missions
+			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			set_country_flag = use_golden_bull_missions_instead_of_paradox
+			swap_non_generic_missions = yes
+		}
+	}
+
+	option = { # Choose paradox' missions
+		name = paradox_or_mod_missions_events2.EVTOPT3
+
+		ai_chance = {
+			factor = 0
+		}
+
+		custom_tooltip = CHOOSE_PARADOX_MISSIONS
+		hidden_effect = {
+			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
+			set_country_flag = use_paradox_missions
+			swap_non_generic_missions = yes
+		}
+	}
+
+	after = {
+		# You can't swap missions again for the same country, but you may want to do it, if you changed tag to another country that has the choice:
+		if = {
+			limit = {
+				NOT = { has_country_flag = has_selected_missions_@ROOT }
+			}
+			set_country_flag = has_selected_missions_@ROOT
+		}
+	}
+}

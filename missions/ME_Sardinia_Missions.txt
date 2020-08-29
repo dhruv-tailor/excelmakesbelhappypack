@@ -1,0 +1,909 @@
+sardinia_missions_1 = {
+	slot = 1
+	ai = yes
+	generic = no
+	potential = {
+		tag = SAR
+	}
+	has_country_shield = yes
+
+	sardinia_a_united_country = {
+		icon = mission_unite_home_region
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 127
+				province_id = 2986
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
+		trigger = {
+			religious_unity = 1
+			127 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			2986 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_our_country_united
+				duration = 7300
+			}
+		}
+	}
+	
+	sardinia_develop_sardinia = {
+		icon = mission_conquer_50_development
+		required_missions = { sardinia_a_united_country }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 127
+				province_id = 2986
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+			}
+		}
+		trigger = {
+			127 = {
+				owned_by = ROOT
+				development = 25
+			}
+			2986 = {
+				owned_by = ROOT
+				development = 25
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_sardinia_developed
+				duration = -1
+			}
+			127 = {
+				add_province_modifier = {
+					name = sardinia_local_sardinia_developed
+					duration = -1
+				}
+			}
+			2986 = {
+				add_province_modifier = {
+					name = sardinia_local_sardinia_developed
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	sardinia_develop_corsica = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { sardinia_develop_sardinia }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1247
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+			}
+		}
+		trigger = {
+			1247 = {
+				owned_by = ROOT
+				development = 25
+			}
+		}
+		effect = {
+			1247 = {
+				add_province_modifier = {
+					name = sardinia_corsica_developed
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	sardinia_conquer_corfu = {
+		icon = mission_invade_island
+		required_missions = { sardinia_conquer_malta }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 142
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			142 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			142 = {
+				add_province_modifier = {
+					name = "sardinia_a_base_in_the_eastern_mediterranean"
+					duration = -1
+				}
+			}
+			add_country_modifier = {
+				name = "sardinia_glorious_conquest"
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_our_kingdom = {
+		icon = mission_empire
+		required_missions = { }
+		position = 5
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 2
+			}
+			else = {
+				total_development = 300
+			}
+			is_subject = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = "sardinia_our_kingdom"
+				duration = -1
+			}
+		}
+	}
+	
+	sardinia_a_sardinian_empire = {
+		icon = mission_empire
+		required_missions = { sardinia_our_kingdom }
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 3
+			}
+			else = {
+				total_development = 1000
+			}
+			is_subject = no
+		}
+		effect = {
+			remove_country_modifier = sardinia_our_kingdom
+			add_country_modifier = {
+				name = "sardinia_empire"
+				duration = -1
+			}
+		}
+	}
+	
+	sardinia_colonize_brazil = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_colombia }
+		position = 8
+		provinces_to_highlight = {
+			colonial_region = colonial_brazil
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_brazil
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "sardinia_colonization_boom"
+				duration = 7300
+			}
+		}
+	}
+}
+
+sardinia_missions_2 = {
+	slot = 2
+	ai = yes
+	generic = no
+	potential = {
+		tag = SAR
+	}
+	has_country_shield = yes
+
+	build_a_sizable_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_subject = no
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_ready_to_fight
+				duration = 7300
+			}
+			1247 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	sardinia_conquer_corsica = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { sardinia_build_a_respectable_navy build_a_sizable_army }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1247
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1247 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			333 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			126 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_conquer_malta = {
+		icon = mission_invade_island
+		required_missions = { sardinia_conquer_corsica }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 126
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			126 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			western_sicily_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sicily_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			142 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_conquer_sicily = {
+		icon = mission_empire
+		required_missions = { sardinia_conquer_malta }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = western_sicily_area
+				area = sicily_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			western_sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tunisia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_conquer_tunisia = {
+		icon = mission_galleys_in_port
+		required_missions = { sardinia_conquer_sicily }
+		position = 5
+		provinces_to_highlight = {
+			area = tunisia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_foothold_in_africa
+				duration = 7300
+			}
+		}
+	}
+	
+	sardinia_a_great_power = {
+		icon = mission_empire
+		required_missions = { sardinia_our_kingdom }
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				is_great_power = yes
+			}
+			else = {
+				total_development = 300
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_we_are_a_great_power
+				duration = -1
+			}
+		}
+	}
+	
+	sardinia_colonize_colombia = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_the_caribbean }
+		position = 7
+		provinces_to_highlight = {
+			colonial_region = colonial_colombia
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_colombia
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+	
+	sardinia_colonize_mexico = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_colombia }
+		position = 8
+		provinces_to_highlight = {
+			colonial_region = colonial_mexico
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_mexico
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+	
+	sardinia_become_a_colonial_power = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_mexico sardinia_colonize_louisiana sardinia_colonize_brazil}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 50
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_an_insurgent_colonial_power
+				duration = -1
+			}
+			add_dip_power = 100
+		}
+	}
+}
+
+sardinia_missions_3 = {
+	slot = 3
+	ai = yes
+	generic = no
+	potential = {
+		tag = SAR
+	}
+	has_country_shield = yes
+
+	sardinia_build_a_respectable_navy = {
+		icon = mission_galleys_in_port
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_subject = no
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_respected_navy
+				duration = 7300
+			}
+			2992 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	sardinian_naval_tradition = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { sardinia_build_a_respectable_navy }
+		position = 2
+		trigger = {
+			navy_tradition = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = a_sardinian_naval_tradition
+				duration = -1
+			}
+		}
+	}
+
+	sardinia_conquer_baleares = {
+		icon = mission_invade_island
+		required_missions = { sardinia_conquer_corsica }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 333
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			333 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			226 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+
+	sardinia_conquer_gibraltar = {
+		icon = mission_sea_battles
+		required_missions = { sardinia_conquer_baleares }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 226
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			226 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			367 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+
+	sardinia_conquer_azores = {
+		icon = mission_cannons_firing
+		required_missions = { sardinia_conquer_gibraltar }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 367
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			367 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			macaronesia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			create_explorer = { tradition = 50 }
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+			add_country_modifier = {
+				name = sardinia_colonial_excitement
+				duration = 7300
+			}
+		}
+	}
+
+	sardinia_colonize_the_caribbean = {
+		icon = mission_colonial
+		required_missions = { sardinia_conquer_azores }
+		position = 6
+		provinces_to_highlight = {
+			colonial_region = colonial_the_carribean
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 2
+				colonial_region = colonial_the_carribean
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_colonization_boom
+				duration = 3650
+			}
+		}
+	}
+	
+	sardinia_colonize_eastern_america = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_the_caribbean }
+		position = 7
+		provinces_to_highlight = {
+			colonial_region = colonial_eastern_america
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_eastern_america
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+	
+	sardinia_colonize_louisiana = {
+		icon = mission_colonial
+		required_missions = { sardinia_colonize_eastern_america }
+		position = 8
+		provinces_to_highlight = {
+			colonial_region = colonial_louisiana
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_louisiana
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_colonization_boom
+				duration = 7300
+			}
+		}
+	}
+}
+
+sardinia_missions_4 = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = SAR
+	}
+	has_country_shield = yes
+	
+	sardinia_a_base_in_italy = {
+		icon = mission_european_church
+		required_missions = { sardinia_build_a_respectable_navy }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2992
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2992 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			226 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			liguria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_take_liguria = {
+		icon = mission_have_two_subjects
+		required_missions = { sardinia_a_base_in_italy }
+		position = 3
+		provinces_to_highlight = {
+			area = liguria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			liguria_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
+		}
+		effect = {
+			piedmont_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_conquer_piedmont = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { sardinia_take_liguria }
+		position = 4
+		provinces_to_highlight = {
+			area = piedmont_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			lombardy_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+	
+	sardinia_conquer_lombardy = {
+		icon = mission_conquer_5_states
+		required_missions = { sardinia_conquer_piedmont }
+		position = 5
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			emilia_romagna_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			venetia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			savoy_dauphine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 3650
+			}
+		}
+	}
+	
+	sardinia_conquer_savoy = {
+		icon = mission_unite_home_region
+		required_missions = { sardinia_conquer_lombardy }
+		position = 6
+		provinces_to_highlight = {
+			area = savoy_dauphine_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			savoy_dauphine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sardinia_glorious_conquest
+				duration = 1825
+			}
+		}
+	}
+}
