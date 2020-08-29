@@ -7,5 +7,5 @@ tags={
 	"Gameplay"
 	"New Nations"
 }
-supported_version="1.29.*.*"
+supported_version="1.30.*.*"
 path="mod/excelmakesbelhappypack"
