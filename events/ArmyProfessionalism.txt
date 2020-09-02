@@ -12,6 +12,7 @@ country_event = {
 	title = army_professionalism_events.1.t
 	desc = army_professionalism_events.1.d
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
+	goto = from
 
 	trigger = {
 		has_dlc = "Cradle of Civilization"
@@ -71,6 +72,13 @@ country_event = {
 			factor = 0.5
 			army_professionalism = 0.30
 		}
+		modifier = {
+			factor = 0.5
+			FROM = {
+				owned_by = PAP
+				is_capital = yes
+			}
+		}
 	}
 
 	option = {
@@ -129,6 +137,7 @@ country_event = {
 				has_reform = steppe_horde
 			}
 		}
+		add_treasury = 1000
 		add_army_professionalism = -0.05
 		add_prestige = -10
 		add_horde_unity = 5
@@ -161,6 +170,7 @@ province_event = {
 	title = army_professionalism_events.2.t
 	desc = army_professionalism_events.2.d
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
+	goto = root
 
 	is_triggered_only = yes
 
@@ -182,6 +192,7 @@ province_event = {
 	title = army_professionalism_events.3.t
 	desc = army_professionalism_events.3.d
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
+	goto = root
 
 	is_triggered_only = yes
 
@@ -241,9 +252,7 @@ country_event = {
 		}
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -255,6 +264,7 @@ country_event = {
 	}
 	option = {
 		name = army_professionalism_events.4.b #Let them live of the land
+		goto = delayed_salaries_province
 		ai_chance = {
 			factor = 25
 		}
@@ -334,10 +344,12 @@ country_event = {
 		}
 	}
 	
+	is_triggered_only = yes
+
 	mean_time_to_happen = {
-		months = 500
+		days = 1
 		modifier = {
-			factor = 0.9
+			factor = 1.1
 			NOT = { had_recent_war = 20 } #20 year since last war
 		}
 	}
@@ -352,6 +364,7 @@ country_event = {
 	}
 	option = {
 		name = army_professionalism_events.5.b #We can let this slip for now.
+		goto = soldier_province
 		ai_chance = {
 			factor = 75
 		}
@@ -408,9 +421,7 @@ country_event = {
 		}
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -484,9 +495,7 @@ country_event = {
 		NOT = { has_country_modifier = wargames }
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -531,9 +540,7 @@ country_event = {
 		}
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 	immediate = {
 		hidden_effect = {
@@ -579,9 +586,7 @@ country_event = {
 		NOT = { army_professionalism = 1 }
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -619,9 +624,7 @@ country_event = {
 		NOT = { army_professionalism = 1 }
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 	immediate = {
 		hidden_effect = {
@@ -655,9 +658,7 @@ country_event = {
 		army_professionalism = 0.5
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -690,9 +691,7 @@ country_event = {
 		NOT = { army_professionalism = 1 }
 	}
 	
-	mean_time_to_happen = {
-		months = 500
-	}
+	is_triggered_only = yes
 	
 
 	option = {
@@ -712,7 +711,7 @@ country_event = {
 			name = "integration_of_local_militias"
 			duration = 3650
 		}
-		add_yearly_manpower = -2
+		add_yearly_manpower = -1
 	}
 }
 
@@ -722,6 +721,7 @@ province_event = {
 	title = army_professionalism_events.14.t
 	desc = army_professionalism_events.14.d
 	picture = LAND_MILITARY_eventPicture
+	goto = root
 
 	trigger = {
 		has_dlc = "Cradle of Civilization"
@@ -766,6 +766,7 @@ province_event = {
 	title = army_professionalism_events.15.t
 	desc = army_professionalism_events.15.d
 	picture = LAND_MILITARY_eventPicture
+	goto = root
 
 	trigger = {
 		has_dlc = "Cradle of Civilization"
@@ -819,6 +820,7 @@ country_event = {
 	title = army_professionalism_events.16.t
 	desc = army_professionalism_events.16.d
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
+	goto = cheating_rolls
 
 	trigger = {
 		has_dlc = "Cradle of Civilization"
@@ -830,14 +832,20 @@ country_event = {
 			NOT = { has_province_modifier = cheated_rolls }
 			is_state = yes
 		}
+		NOT = { has_country_modifier = corrupt_rolls_cooldown_timer }
 	}
 	
+	is_triggered_only = yes
 	
 	mean_time_to_happen = {
-		months = 700
+		days = 1
 		modifier = {
-			factor = 0.8
+			factor = 1.25
 			NOT = { army_professionalism = 0.2 }
+		}
+		modifier = { #hard to get professionalism up high enough before then
+			factor = 0.5
+			NOT = { is_year = 1500 }
 		}
 	}
 	
@@ -851,6 +859,11 @@ country_event = {
 					NOT = { has_province_modifier = cheated_rolls }
 				}
 				save_event_target_as = cheating_rolls
+			}
+			add_country_modifier = {
+				name = corrupt_rolls_cooldown_timer
+				duration = 7300
+				hidden = yes
 			}
 		}
 	}
@@ -930,6 +943,7 @@ province_event = {
 	title = army_professionalism_events.2.t
 	desc = army_professionalism_events.2.d
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
+	goto = root
 
 	is_triggered_only = yes
 

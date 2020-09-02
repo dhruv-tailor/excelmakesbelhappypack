@@ -1794,50 +1794,22 @@ country_event = {
 	desc = "flavor_tur.EVTDESC100"
 	picture = MILITARY_CAMP_eventPicture
 	
-	
 	fire_only_once = yes
 	major = yes
-	
-	trigger ={
-	
-		tag = TUR
-		OR = {
-			adm = 5
-			dip = 5
-			mil = 5
-		}
-		
-		OR = {
-		army_tradition = 50
-		has_estate = estate_janissary
-		}
-
-			
-	}
-	
-	mean_time_to_happen = {
-		months = 32
-	}
-	
+	is_triggered_only = yes
 	
 	option = {		# Continue building up the Janissaries
 		name = "flavor_tur.EVTOPTA100"
-		
+		add_country_modifier = {
+			name = tur_janissary
+			duration = -1
+		}
 		custom_tooltip = janissary_disaster_notifier
 		set_country_flag = janissary_timer
 	}
-	option = {		# Disband them
-		name = "flavor_tur.EVTOPTB100"
-		ai_chance = { factor = 0 }
-		add_prestige = -5
-		set_country_flag = NO_JANISSARIES
-	}
 }
 
-
-
-
-# The Devsirme System
+# The Janissaries and the Bektashi Order
 country_event = {
 	id = flavor_tur.101
 	title = "flavor_tur.EVTNAME101"
@@ -1876,69 +1848,34 @@ country_event = {
 	picture = MILITARY_CAMP_eventPicture
 	
 	trigger ={
-		OR = {
+		has_reform = ottoman_government
+		NOT = { has_disaster = janissary_decadence }
+		if = {
+			limit = {
+				NOT = { has_dlc = "Cradle of Civilization" }
+			}
 		has_country_modifier = tur_janissary
-		has_estate = estate_janissary
+			else = {
+				num_of_janissaries = 3
 		}
-		NOT = { 
-		has_disaster = janissary_decadence
 		}
+		has_regency = no
 	}
 	
 	is_triggered_only = yes
 	
 	option = {		# Give a reward and higher wages
 		name = "flavor_tur.EVTOPTA102"
-		if = {
-				limit = {
-					has_country_modifier = tur_janissary
-				}
 		add_years_of_income = -0.5
 		}
-		if = {
-				limit = {
-					has_estate = estate_janissary
-					
-				}
-		add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = -10
-			}
-		}
-		
-	}
 	option = {		# Refuse such blackmail
 		name = "flavor_tur.EVTOPTB102"
 		add_ruler_modifier = {
 			name = janissaries_denied_reward
 		}
-		if = {
-				limit = {
-					has_estate = estate_janissary
-					
-				}
-		add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = -20
-			}
-		}
-	}
-	option = {		# Give a reward and higher wages
-		name = "flavor_tur.EVTOPTA102"
-		ai_chance = { factor = 1000 }
-		trigger = {
-		ai = yes
-		}
-		
-		
-		add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 5
-			}
 		}
 }
 	
-
 
 # Janissaries Demand Pay
 country_event = {
@@ -1950,7 +1887,7 @@ country_event = {
 	trigger = {
 		OR = {
 		has_country_modifier = tur_janissary
-		has_estate = estate_janissary
+			num_of_janissaries = 10
 		}
 		NOT = { has_disaster = janissary_decadence }
 		NOT = {
@@ -1973,7 +1910,7 @@ country_event = {
 	}
 	
 	mean_time_to_happen = {
-		months = 1000
+		months = 700
 	}
 	
 	immediate = {
@@ -1988,96 +1925,91 @@ country_event = {
 	
 	option = {
 		name = "flavor_tur.EVTOPTA111"
-		if = {
-				limit = {
-					has_country_modifier = tur_janissary
-				}
 		add_years_of_income = -0.5
 		}
-		if = {
-				limit = {
-					has_estate = estate_janissary
-				}
-		add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 15
-			}
-		}
-	}
 	option = {
 		name = "flavor_tur.EVTOPTB111"
-		if = {
-				limit = {
-					has_country_modifier = tur_janissary
-				}
 			add_ruler_modifier = {
 			name = tur_janissaries_salary
 			}
 		}
-		if = {
-				limit = {
-					has_estate = estate_janissary
-				}
-		add_estate_loyalty = {
-				estate = estate_janissary
-				loyalty = 10
-			}
-		}
-		
-	}
 	option = {
 		name = "flavor_tur.EVTOPTC111"
 		add_stability = -1
 	}
 }
 
-
-
-
-
-
-# Janissary Landholders
+# Civilianization
 country_event = {
 	id = flavor_tur.105
 	title = "flavor_tur.EVTNAME105"
 	desc = "flavor_tur.EVTDESC105"
 	picture = MILITARY_CAMP_eventPicture
 	
-	
 	fire_only_once = yes
 	
 	trigger = {
-		OR = {
-		has_country_modifier = tur_janissary
-		has_estate = estate_janissary
+		if = {
+			limit = { has_dlc = "Cradle of Civilization" }
+			num_of_janissaries = 10
+			janissary_percentage = 0.1
 		}
+		if = {
+			limit = {
+				NOT = { has_dlc = "Cradle of Civilization" }
+			}
+		has_country_modifier = tur_janissary
+		}
+		NOT = { current_age = age_of_discovery }
+		NOT = { has_country_flag = had_janissary_civilianization }
+		NOT = { has_ruler_modifier = janissaries_disciplined }
 		NOT = { has_disaster = janissary_decadence }
     	}
 	
 	mean_time_to_happen = {
-		months = 1000
-		
+		months = 500
 	}
 	
-	immediate = {
-		set_country_flag = TUR_had_event_105
-	}
-	
-	option = {		# Allow them to hold land 
+	option = {		# Everyone needs to make a living.
 		name = "flavor_tur.EVTOPTA105"
+		if = {
+			limit = { NOT = { has_dlc = "Cradle of Civilization" } }
 		add_ruler_modifier = {
 			name = janissary_landholders
 		}
 	}
-	option = {		# They should know their place
+		else = {
+			add_ruler_modifier = {
+				name = janissary_landholders
+				duration = 3650
+			}
+		}
+		add_mercantilism = 1
+		add_estate_burghers_loyalty_effect = yes
+	}
+	option = {		# Let us increase drilling and salaries instead.
 		name = "flavor_tur.EVTOPTB105"
+		if = {
+			limit = {
+				NOT = { has_dlc = "Cradle of Civilization" }
+			}
 		add_ruler_modifier = {
 			name = janissaries_upset
 		}
+			set_country_flag = had_janissary_civilianization
+		}
+		else = {
+			add_ruler_modifier = {
+				name = janissaries_disciplined
+				duration = 3650
+			}
+		}
+		add_mercantilism = -1
+		reduce_estate_burghers_loyalty_effect = yes
 	}
 }
 
-# Janissary Landholders
+# Dissolution of the janissary corp - Tag Switch
 country_event = {
 	id = flavor_tur.106
 	title = "flavor_tur.106.t"
@@ -2087,7 +2019,8 @@ country_event = {
 	
 	trigger = {
 		has_country_modifier = tur_janissary
-		NOT = { tag = TUR }
+		NOT = { has_disaster = janissary_decadence }
+		NOT = { has_reform = ottoman_government }
     }
 	
 	mean_time_to_happen = {
@@ -2097,7 +2030,6 @@ country_event = {
 	
 	immediate = {
 		remove_country_modifier = tur_janissary
-		set_country_flag = NO_JANISSARIES
 	}
 	
 	option = {		# Ok.
