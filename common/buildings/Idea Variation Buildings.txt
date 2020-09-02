@@ -14,18 +14,34 @@
 
 # AI will consider buildings it does not have the tech for at 20% of scripted AI weight (in case it wants to save slots)
 
+# Building AI is now mainly hard-coded. The AI will estimate how much it gains yearly from each building,
+# convert the value to ducats, and take the building with biggest yearly return as a percentage of the build cost.
+# If lower than 1%, the AI will not consider the yearly return worth it.
+# It will also require higher yearly return if the economy in not in prime shape.
+# Forts' value also get converted to a yearly return based on terrain and strategic position, as well as available budget for fort maintenance.
+
+# AI can still be modded though; it will multiply the yearly return with the value of ai_will_do.
+# If you don't want the AI to build a building at all, make ai_will_do become 0.
+# AI will consider each building to be worth 0.01 ducats per year as a base, so making ai_will_do above cost will have them build it at some point.
+# It will still check whether it can afford a building before doing so though, but may save up to it.
+
+# for University Hard coded AI sees no value in this above the 0.01 ducats base. Let's multiply that
+
+# Known issues with AI 
+# AI don't see a value in free building slot that comes with a building, if AI is trying to replace it with something else he will stop functioning.   
+# Triggers & Ai will do values needs to be the same for every building of the same type. 
+# Floating modifiers can cause issues, because AI can replace buildings.     
 
 ################################################
 # Infrastructure / Infrastruktur
 ################################################
-infrastructure_lvl_1 = {
+infrastructure_lvl_1 = { # Dirt Track
 	cost = 100
 	time = 12
 
-
 	modifier = {
 
-	supply_limit_modifier = 0.25
+	#supply_limit_modifier = 0.25
 	province_trade_power_modifier = 0.25
 	local_friendly_movement_speed = 0.05
 	local_tax_modifier = 0.125
@@ -40,14 +56,13 @@ infrastructure_lvl_1 = {
 }
 
 infrastructure_lvl_2 = {
+	make_obsolete = infrastructure_lvl_1
 	cost = 200
 	time = 12
 
-	make_obsolete = infrastructure_lvl_1
-
 	modifier = {
 
-	supply_limit_modifier = 0.5
+	#supply_limit_modifier = 0.5
 	province_trade_power_modifier = 0.5
 	local_friendly_movement_speed = 0.1
 	local_tax_modifier = 0.25
@@ -62,13 +77,12 @@ infrastructure_lvl_2 = {
 }
 
 infrastructure_lvl_3 = {
+	make_obsolete = infrastructure_lvl_2
 	cost = 300
 	time = 12
 
-	make_obsolete = infrastructure_lvl_2
-
 	modifier = {
-	supply_limit_modifier = 0.75
+	#supply_limit_modifier = 0.75
 	province_trade_power_modifier = 0.75
 	local_friendly_movement_speed = 0.15
 	local_tax_modifier = 0.375
@@ -84,13 +98,14 @@ infrastructure_lvl_3 = {
 }
 
 infrastructure_lvl_4 = {
+	make_obsolete = infrastructure_lvl_3
 	cost = 400
 	time = 12
 
 	make_obsolete = infrastructure_lvl_3
 
 	modifier = {
-	supply_limit_modifier = 1.0
+	#supply_limit_modifier = 1.0
 	province_trade_power_modifier = 1.0
 	local_friendly_movement_speed = 0.2
 	local_tax_modifier = 0.5
@@ -113,119 +128,158 @@ infrastructure_lvl_4 = {
 ################################################
 #government_lvl_1 = {
 courthouse = {
-	cost = 250
+	cost = 75
 	time = 12
 
-
-	build_trigger = {
-
-		OR = {
-
-			#has_building = government_lvl_1
-			has_building = courthouse
-
-			NOT = {
-				any_province_in_state = {
-
-					has_construction = building
-				}
-			}
-		}
-		NOT = {
-		has_province_flag = idea_variation_government_buildings
-
-		}
-	}
-
 	modifier = {
-
-	local_state_maintenance_modifier = -0.25
-	local_autonomy = -0.05
-	local_monthly_devastation = -0.05
-	allowed_num_of_buildings = 1
-	statewide_governing_cost = -0.15
-
-	}
-
-	on_built = {
-		every_province_in_state = {
-			limit = {
-				NOT = { province_id = ROOT }
-			}
-			set_province_flag = idea_variation_government_buildings
-		}
-	}
-
-	on_destroyed = {
-		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
-		}
-	}
-
+		local_state_maintenance_modifier = -0.20
+		local_missionary_strength = 0.005
+		local_autonomy = -0.05
+		local_monthly_devastation = -0.05
+		allowed_num_of_buildings = 1
+				}
 	ai_will_do = {
-		factor = 100
-
+		factor = 4
+		modifier = {
+			factor = 30
+			NOT = { num_free_building_slots = 1 } # AI don't see value in free buildings slots 
+			}
+		modifier = {
+			factor = 2
+			is_capital = yes
+		}
+		modifier = {
+			factor = 2
+			development = 20
+		}
+		modifier = {
+			factor = 2
+			devastation = 10
+	}
+	modifier = {
+			factor = 2
+			devastation = 20
+	}
+		modifier = {
+			factor = 2
+			devastation = 30
+			}
+		modifier = {
+			factor = 2
+			devastation = 40
+		}
+	modifier = {
+			factor = 2
+			devastation = 50
+	}
+		modifier = {
+			factor = 2
+			AND = {
+				OR = { 
+					has_building = mills
+					has_building = farm_estate
+					has_building = tradecompany
+					has_building = plantations
+					has_building = textile
+					has_building = weapons
+					has_building = wharf
+					has_building = furnace 
+		}
+				devastation = 20
+		}
+	}
+		modifier = {
+			factor = 0.5
+			NOT = { is_state = yes }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { development = 10 }
+	}
 	}
 }
 
 #government_lvl_2 = {
 town_hall = {
-	cost = 500
-	time = 12
-
-
-	build_trigger = {
-		OR = {
-			#has_building = government_lvl_1
-			#has_building = government_lvl_2
-			has_building = courthouse
-			has_building = town_hall
-
-		}
-
-	}
-
 	#make_obsolete = government_lvl_1
 	make_obsolete = courthouse
+	cost = 150
+	time = 12
 
 	modifier = {
-		local_state_maintenance_modifier = -0.5
-		local_missionary_strength = 0.01
+		local_state_maintenance_modifier = -0.40
+		local_missionary_strength = 0.010
 		local_autonomy = -0.1
 		local_monthly_devastation = -0.1
 		allowed_num_of_buildings = 1
 		statewide_governing_cost = -0.30
 	}
-
-	on_destroyed = {
-		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+	ai_will_do = {
+		factor = 4
+		modifier = {
+			factor = 30
+			NOT = { num_free_building_slots = 1 } # AI don't see value in free buildings slots 
+		}
+		modifier = {
+			factor = 2
+			is_capital = yes
+	}
+		modifier = {
+			factor = 2
+			development = 20
+	}
+		modifier = {
+			factor = 2
+			devastation = 10
+		}
+		modifier = {
+			factor = 2
+			devastation = 20
+		}
+		modifier = {
+			factor = 2
+			devastation = 30
+		}
+		modifier = {
+			factor = 2
+			devastation = 40
+	}
+		modifier = {
+			factor = 2
+			devastation = 50
+	}
+		modifier = {
+			factor = 2
+			AND = {
+		OR = {
+					has_building = mills
+					has_building = farm_estate
+					has_building = tradecompany
+					has_building = plantations
+					has_building = textile
+					has_building = weapons
+					has_building = wharf
+					has_building = furnace 
+				}
+				devastation = 20
 		}
 	}
-
-	ai_will_do = {
-		factor = 100
-
+		modifier = {
+			factor = 0.5
+			NOT = { is_state = yes }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { development = 10 }
+		}
 	}
 }
 
 government_lvl_3 = {
-	cost = 750
-	time = 12
-
-
-	build_trigger = {
-
-		OR = {
-			#has_building = government_lvl_2
-			has_building = town_hall
-			has_building = government_lvl_3
-		}
-
-	}
-
 	#make_obsolete = government_lvl_2
 	make_obsolete = town_hall
+	cost = 225
+	time = 12
 
 	modifier = {
 		local_state_maintenance_modifier = -0.75
@@ -236,33 +290,71 @@ government_lvl_3 = {
 		allowed_num_of_buildings = 1
 
 	}
-
-	on_destroyed = {
-		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+	ai_will_do = {
+		factor = 4
+		modifier = {
+			factor = 30
+			NOT = { num_free_building_slots = 1 } # AI don't see value in free buildings slots 
+		}
+		modifier = {
+			factor = 2
+			is_capital = yes
+	}
+		modifier = {
+			factor = 2
+			development = 20
+	}
+		modifier = {
+			factor = 2
+			devastation = 10
+		}
+		modifier = {
+			factor = 2
+			devastation = 20
+		}
+		modifier = {
+			factor = 2
+			devastation = 30
+		}
+		modifier = {
+			factor = 2
+			devastation = 40
+	}
+		modifier = {
+			factor = 2
+			devastation = 50
+	}
+		modifier = {
+			factor = 2
+			AND = {
+		OR = {
+					has_building = mills
+					has_building = farm_estate
+					has_building = tradecompany
+					has_building = plantations
+					has_building = textile
+					has_building = weapons
+					has_building = wharf
+					has_building = furnace 
+				}
+				devastation = 20
 		}
 	}
-
-	ai_will_do = {
-		factor = 100
-
+		modifier = {
+			factor = 0.5
+			NOT = { is_state = yes }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { development = 10 }
+		}
 	}
 }
 
 government_lvl_4 = {
-	cost = 1000
-	time = 12
-
-
-	build_trigger = {
-
-		OR = {
-			has_building = government_lvl_3
-			has_building = government_lvl_4
-		}
-	}
-
 	make_obsolete = government_lvl_3
+	cost = 300
+	time = 12
 
 	modifier = {
 		local_state_maintenance_modifier = -1.0
@@ -272,67 +364,134 @@ government_lvl_4 = {
 		statewide_governing_cost = -0.60
 		allowed_num_of_buildings = 1
 	}
-
-	on_destroyed = {
-		every_province_in_state = {
-			clr_province_flag = idea_variation_government_buildings
+	ai_will_do = {
+		factor = 4
+		modifier = {
+			factor = 30
+			NOT = { num_free_building_slots = 1 } # AI don't see value in free buildings slots 
+		}
+		modifier = {
+			factor = 2
+			is_capital = yes
+	}
+		modifier = {
+			factor = 2
+			development = 20
+	}
+		modifier = {
+			factor = 2
+			devastation = 10
+				}
+		modifier = {
+			factor = 2
+			devastation = 20
+			}
+		modifier = {
+			factor = 2
+			devastation = 30
+		}
+		modifier = {
+			factor = 2
+			devastation = 40
+		}
+		modifier = {
+			factor = 2
+			devastation = 50
+	}
+		modifier = {
+			factor = 2
+			AND = {
+				OR = { 
+					has_building = mills
+					has_building = farm_estate
+					has_building = tradecompany
+					has_building = plantations
+					has_building = textile
+					has_building = weapons
+					has_building = wharf
+					has_building = furnace 
+			}
+				devastation = 20
 		}
 	}
-
-	ai_will_do = {
-		factor = 100
-
+		modifier = {
+			factor = 0.5
+			NOT = { is_state = yes }
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { development = 10 }
+		}
 	}
 }
 
 #government_lvl_5 = {    # uni
 university = {
-	cost = 600
+	cost = 300
 	time = 18
-
-	build_trigger = {
-		OR = {
-
-			#has_building = government_lvl_1
-			has_building = university
-
-			NOT = {
-				any_province_in_state = {
-
-					has_construction = building
-
-				}
-			}
-		}
-		NOT = {
-		has_province_flag = idea_variation_university
-		}
-	}
-
-	on_built = {
-		every_province_in_state = {
-			limit = {
-				NOT = { province_id = ROOT }
-			}
-			set_province_flag = idea_variation_university
-		}
-	}
-
-	on_destroyed = {
-		every_province_in_state = {
-			clr_province_flag = idea_variation_university
-		}
-	}
 
 	modifier = {
 	local_development_cost = -0.1
 	local_institution_spread = 0.25
 	allowed_num_of_buildings = 1
 	}
-
 	ai_will_do = {
-		factor = 100
-
+		factor = 300
+		modifier = {
+			factor = 2
+			is_capital = yes
+		}
+		modifier = {
+			factor = 100 # Prevents AI from replacing Universities
+			AND = {
+				NOT = { num_free_building_slots = 1 } 
+				has_building = university
+			}
+		}
+		modifier = {
+			factor = 2
+			has_latent_trade_goods = coal
+		}
+		modifier = {
+			factor = 1.5
+			province_has_center_of_trade_of_level = 1
+		}
+		modifier = {
+			factor = 1.5
+			province_has_center_of_trade_of_level = 2
+		}
+		modifier = {
+			factor = 1.5
+			province_has_center_of_trade_of_level = 3
+		}
+		modifier = {
+			factor = 1.5
+			OR = {
+				trade_goods = paper
+				trade_goods = gems
+				trade_goods = glass
+				trade_goods = chinaware
+				trade_goods = copper
+				trade_goods = iron
+				trade_goods = coal
+				trade_goods = ivory
+				trade_goods = slaves
+				trade_goods = spices
+				trade_goods = fur
+				trade_goods = incense
+				trade_goods = coffee
+				trade_goods = cotton
+				trade_goods = sugar
+				trade_goods = tobacco
+				trade_goods = tea
+				trade_goods = cocoa
+				trade_goods = cloth
+				trade_goods = silk
+				trade_goods = dyes
+				trade_goods = salt
+				trade_goods = gold
+			}
+		}
 	}
 }
 
