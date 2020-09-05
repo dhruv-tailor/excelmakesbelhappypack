@@ -1,12 +1,12 @@
 -- Only Changes to NDefines.NAI should be here.
 -- #arumba - changes to condottieri to block non-participation contracts
-NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.1 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.  
+NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_BREAK = -1.1 -- (was -1.8) --At this level of (lack of) participation from the player, the AI will break the condottieri agreement and tell all their friends.
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_PARTICIPATION_WARN = -0.5 -- At this level of (lack of) participation from the player, a warning alert will be displayed about impendent AI discontent.  -- (was -1.2)
 -- #arumba - AI should want to use its army, like a player
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_MILITARY_RULERS = 0.5 --If set to 1, AI will only send Condottieri while having a miliaristic ruler.
 NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_NEIGHBORS = 0.5 --If set to 1, AI will only send Condottieri to neighbors, regardless of access.
 NDefines.NAI.DIPLOMATIC_ACTION_GUARANTEE_POWERBALANCE_FACTOR = 25 --AI scoring for guarantee action is increased by this if a nation blocks a powerbalance threat.
-	--DIPLOMATIC_ACTION_GUARANTEE_POWERBALANCE_FACTOR = 80 
+	--DIPLOMATIC_ACTION_GUARANTEE_POWERBALANCE_FACTOR = 80
 
 NDefines.NAI.DIPLOMATIC_ACTION_SUBSIDIES_WAR_WITH_RIVAL_FACTOR = 15	--AI scoring for giving subsidies to a country that is at war with its rival.
 NDefines.NAI.DIPLOMATIC_ACTION_SUBSIDIES_POWERBALANCE_FACTOR = 15 --AI scoring to give subsidies to nations blocking/fighting power balance threat.
@@ -171,7 +171,7 @@ NDefines.NAI.NAVY_BUDGET_FRACTION = 0.5 -- AI will spend a maximum of this fract
 NDefines.NAI.FORT_BUDGET_FRACTION = 0.45 -- AI will spend a maximum of this fraction of monthly income on forts
 	-- FORT_BUDGET_FRACTION = 0.4, -- AI will spend a maximum of this fraction of monthly income on forts
 NDefines.NAI.MISSIONARY_MAINTENANCE_SHARE = 0.3	--The most an AI will spend of its income on a missionary
-	--MISSIONARY_MAINTENANCE_SHARE = 0.2 
+	--MISSIONARY_MAINTENANCE_SHARE = 0.2
 --NDefines.NAI.REGIMENTS_PER_GENERAL = 15	--AI will want one general for every this number of regiments (will not exceed free leader pool).
 NDefines.NAI.MIN_SHIPS_FOR_ADMIRAL = 20	--The minimum navy size for the AI to bother with an admiral.
 	--MIN_SHIPS_FOR_ADMIRAL = 10
@@ -183,8 +183,8 @@ NDefines.NAI.DESIRED_SURPLUS = 0.10 -- AI will aim for having at least this frac
 NDefines.NAI.BIGSHIP_FRACTION = 0.35 --The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 	-- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 NDefines.NAI.TRANSPORT_FRACTION = 0.3 --Max fraction of naval forcelimit that should be transports.
-	--TRANSPORT_FRACTION = 0.5 
-NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.4 --Maximum proportion of warships in home fleet. 
+	--TRANSPORT_FRACTION = 0.5
+NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.4 --Maximum proportion of warships in home fleet.
 	--HOME_FLEET_MAX_RATIO = 0.85
 
  -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
@@ -216,5 +216,4 @@ NDefines.NAI.ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.85
 	--ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.75
 --NDefines.NAI.PURSUE_DISTANCE = 100
 
-
-
+NDefines.NAI.ESTATE_MAX_PRIVILEDGES = 4
