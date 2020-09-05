@@ -61,15 +61,12 @@ gc_por_1 = {
 		}
 		
 		trigger = { 
-			custom_trigger_tooltip = {
-				tooltip = por_establishes_foothold_brazil.tooltip
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 					value = 10
 					colonial_region = colonial_brazil
 					is_city = yes
 				}
 			}
-		}
 		
 		effect = {
 			add_country_modifier = {
@@ -102,9 +99,10 @@ gc_por_1 = {
 			}
 			else = {
 				763 = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-						province_has_building_of_group = { group = trade all = yes }
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
 					}
 				}
 			}
@@ -156,11 +154,7 @@ gc_por_1 = {
 			custom_trigger_tooltip = {
 				tooltip = port_jesuits_tooltip
 				num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
-					OR = {
 						holy_order = jesuit_order
-						holy_order = dominican_order
-						holy_order = franciscan_order
-					}
 					colonial_region = colonial_brazil
 					value = 7
 				}
@@ -204,21 +198,23 @@ gc_por_1_b = {
 		provinces_to_highlight = {
 			trade_goods = wine
 			NOT = { owned_by = ROOT }
-			NOT = { province_has_building_of_group = { group = production all = yes } }
+			NOT = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
 			has_discovered = ROOT
 		}
 		
 		trigger = {
 			OR = {
-				custom_trigger_tooltip = {
-					tooltip = por_wine_tooltip
 					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 						value = 10
 						trade_goods = wine
-						custom_trigger_tooltip = {
-							tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-							province_has_building_of_group = { group = production all = yes }
-						}
+					OR = {
+						has_building = workshop
+						has_building = counting_house
 					}
 				}
 				trading_bonus = {
@@ -251,9 +247,10 @@ gc_por_1_b = {
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 10
-				custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_trade_depot
-						province_has_building_of_group = { group = trade equal_or_more_advanced_than = trade_depot }
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
+				
 				}
 			}
 		}
@@ -354,7 +351,9 @@ gc_por_2 = {
 		}
 	
 		effect = {
-			create_explorer = 60
+			create_explorer = {
+				tradition = 60
+			}
 			add_dip_power = 60
 		}
 	}
@@ -654,10 +653,18 @@ gc_por_3 = {
 				limit = {
 					alliance_with = ENG
 				}
-				POR = {
+				ENG = {
 					add_opinion = {
-						who = ROOT
+						who = root
 						modifier = anglo_portuguese_alliance
+					}
+				}
+				hidden_effect = {
+					root = {
+						add_opinion = {
+							who = ENG
+							modifier = anglo_portuguese_alliance
+						}
 					}
 				}
 			}
@@ -705,15 +712,12 @@ gc_por_3_b = {
 		}
 		
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = fra_carib_colony.tooltip
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 					value = 5
 					colonial_region = colonial_the_carribean
 					is_city = yes
 				}
 			}
-		}
 		
 		effect = {
 			custom_tooltip = portuguese_carib_tooltip
@@ -772,6 +776,19 @@ gc_por_3_c = {
 					NOT = { is_core = ROOT }
 					NOT = { is_permanent_claim = ROOT }
 				}
+				add_permanent_claim = ROOT
+			}
+			mozambique_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1186 = {
+				add_permanent_claim = ROOT
+			}
+			1192 = {
 				add_permanent_claim = ROOT
 			}
 		}
@@ -993,9 +1010,8 @@ gc_por_3_c = {
 				limit = {
 					has_dlc = "Dharma"
 				}
-				custom_trigger_tooltip = {
-					tooltip = por_indian_investment_tooltip
 					calc_true_if = {
+					desc = por_indian_investment_tooltip
 						india_superregion = {
 							type = all
 							has_trade_company_investment_in_area = {
@@ -1006,7 +1022,6 @@ gc_por_3_c = {
 						amount = 5
 					}
 				}
-			}
 			else = {
 				504 = {
 					is_strongest_trade_power = ROOT
@@ -1055,6 +1070,13 @@ gc_por_4 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			extremadura_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
 			lower_andalucia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -1071,6 +1093,7 @@ gc_por_4 = {
 		provinces_to_highlight = {
 			OR = {
 				area = leon_area
+				area = extremadura_area
 				area = lower_andalucia_area
 				area = galicia_area
 				area = asturias_area
@@ -1080,6 +1103,10 @@ gc_por_4 = {
 		
 		trigger = {
 			leon_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			extremadura_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
