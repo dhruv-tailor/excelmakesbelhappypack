@@ -37,7 +37,7 @@ VEN_missions_1 = {
 			213 = {
 				add_province_modifier = {
 					name = venice_venetian_trade_practices_modifier
-					duration = 7300
+					duration = -1
 				}
 			}
 		}
@@ -138,18 +138,18 @@ VEN_missions_1 = {
 		effect = {
 			add_country_modifier = {
 				name = venice_mountains_of_piedmont_modifier
-				duration = 7300
+				duration = -1
 			}
 			103 = {
 				add_province_modifier = {
 					name = venice_mountains_of_piedmont_province_modifier
-					duration = 10950
+					duration = -1
 				}
 			}
 			1875 = {
 				add_province_modifier = {
 					name = venice_mountains_of_piedmont_province_modifier
-					duration = 10950
+					duration = -1
 				}
 			}
 		}
@@ -176,7 +176,7 @@ VEN_missions_1 = {
 			add_prestige = 10
 			add_country_modifier = {
 				name = venice_reign_in_italy_modifier
-				duration = 9125
+				duration = -1
 			}
 		}
 	}
@@ -451,7 +451,7 @@ VEN_missions_2 = {
 		effect = {
 			add_country_modifier = {
 				name = venice_venetian_merchant_fleet_modifier
-				duration = 9125
+				duration = -1
 			}
 		}
 	}
@@ -549,7 +549,7 @@ VEN_missions_3 = {
 			add_mercantilism = 10
 			add_country_modifier = {
 				name = venice_mare_nostrum_modifier
-				duration = 18250
+				duration = -1
 			}
 		}
 	}
@@ -598,33 +598,10 @@ VEN_missions_3 = {
 		effect = {
 			add_navy_tradition = 25
 			112 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
-				}
+				add_shipyard_line = yes
 			}
 			1774 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
-				}
-			}
-			4729 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
+				add_shipyard_line = yes
 				}
 			}
 		}
@@ -663,7 +640,7 @@ VEN_missions_3 = {
 			}
 			add_country_modifier = {
 				name = venice_wooden_walls_of_venice_modifier_2
-				duration = 10950
+				duration = -1
 			}
 		}
 	}
@@ -679,7 +656,7 @@ VEN_missions_3 = {
 		effect = {
 			add_country_modifier = {
 				name = venice_mediterranean_admirality_modifier
-				duration = 18250
+				duration = -1
 			}
 		}
 	}
@@ -741,7 +718,7 @@ VEN_missions_4 = {
 			}
 			add_country_modifier = {
 				name = venice_prelude_to_bosporus_modifier
-				duration = 3650
+				duration = -1
 			}
 			137 = {
 				if = {
@@ -818,11 +795,7 @@ VEN_missions_4 = {
 					OR = {
 						NOT = { owned_by = ROOT }
 						NOT = { development = 10 }
-						AND = {
-							NOT = { has_building = marketplace }
-							NOT = { has_building = trade_depot }
-							NOT = { has_building = stock_exchange }
-						}
+						NOT = { province_has_building_of_group = { group = trade all = yes } }
 					}
 				}
 				AND = {
@@ -830,11 +803,7 @@ VEN_missions_4 = {
 					OR = {
 						NOT = { owned_by = ROOT }
 						NOT = { development = 25 }
-						AND = {
-							NOT = { has_building = marketplace }
-							NOT = { has_building = trade_depot }
-							NOT = { has_building = stock_exchange }
-						}
+						NOT = { province_has_building_of_group = { group = trade all = yes } }
 					}
 				}
 			}
@@ -845,26 +814,23 @@ VEN_missions_4 = {
 			owns = 130
 			4174 = {
 				development = 10
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
 				}
 			}
 			108 = {
 				development = 25
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
 				}
 			}
 			130 = {
 				development = 10
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
 				}
 			}
 		}
@@ -906,17 +872,7 @@ VEN_missions_4 = {
 					}
 					add_center_of_trade_level = 1
 				}
-				if = {
-					limit = {
-						NOT = { has_building = town_hall }
-					}
-					add_building = town_hall
-				}
-				else = {
-					add_base_tax = 1
-					add_base_production = 1
-					add_base_manpower = 1
-				}
+				add_courthouse_line = yes
 			}
 		}
 	}
@@ -927,13 +883,23 @@ VEN_missions_4 = {
 		position = 8
 		trigger = {
 			navy_size = 40
-			OR = {
-				shipyard = 5
-				grand_shipyard = 5
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+					}
+				}
+				amount = 5
 			}
-			OR = {
-				dock = 5
-				drydock = 5
+			calc_true_if = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
+						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+					}
+			}
+				amount = 5
 			}
 		}
 		effect = {
@@ -979,7 +945,7 @@ VEN_missions_5 = {
 			delta_area = {
 				add_province_modifier = {
 					name = venice_venetian_trade_practices_modifier
-					duration = 7300
+					duration = -1
 				}
 			}
 			358 = {
@@ -1002,15 +968,8 @@ VEN_missions_5 = {
 			province_id = 112
 			OR = {
 				NOT = { is_capital_of = ROOT }
-				AND = {
-					NOT = { has_building = temple }
-					NOT = { has_building = cathedral }
-				}
-				AND = {
-					NOT = { has_building = marketplace }
-					NOT = { has_building = trade_depot }
-					NOT = { has_building = stock_exchange }
-				}
+				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				NOT = { province_has_building_of_group = { group = trade all = yes } }
 			}
 		}
 		trigger = {
@@ -1018,14 +977,13 @@ VEN_missions_5 = {
 			monthly_income = 25
 			capital = 112
 			112 = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+					province_has_building_of_group = { group = taxation all = yes }
 				}
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
 				}
 			}
 		}
@@ -1033,16 +991,7 @@ VEN_missions_5 = {
 			add_years_of_income = 0.33
 			112 = {
 				add_base_production = 3
-				if = {
-					limit = {
-						NOT = { has_building = trade_depot }
-						NOT = { has_building = stock_exchange }
-					}
-					add_building = trade_depot
-				}
-				else = {
-					add_scaled_local_dip_power = 10
-				}
+				add_marketplace_line = yes
 			}
 		}
 	}
@@ -1102,17 +1051,12 @@ VEN_missions_5 = {
 		}
 		effect = {
 			112 = {
-				if = {
-					limit = {
-						NOT = { has_building = stock_exchange }
-					}
-					add_building = stock_exchange
-				}
+				add_marketplace_line = yes
 			}
 			venetia_area = {
 				add_province_modifier = {
 					name = venice_la_serenissima_modifier
-					duration = 7300
+					duration = -1
 				}
 			}
 		}
@@ -1137,7 +1081,7 @@ VEN_missions_5 = {
 				}
 				add_province_modifier = {
 					name = venice_glass_of_venice_modifier
-					duration = 9125
+					duration = -1
 				}
 			}
 		}
@@ -1156,7 +1100,7 @@ VEN_missions_5 = {
 			add_years_of_income = 2
 			add_country_modifier = {
 				name = venice_masters_of_glass_modifier
-				duration = 5475
+				duration = -1
 			}
 		}
 	}
