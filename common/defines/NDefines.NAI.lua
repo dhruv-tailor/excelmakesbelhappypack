@@ -175,23 +175,25 @@ NDefines.NAI.MISSIONARY_MAINTENANCE_SHARE = 0.3	--The most an AI will spend of i
 --NDefines.NAI.REGIMENTS_PER_GENERAL = 15	--AI will want one general for every this number of regiments (will not exceed free leader pool).
 NDefines.NAI.MIN_SHIPS_FOR_ADMIRAL = 20	--The minimum navy size for the AI to bother with an admiral.
 	--MIN_SHIPS_FOR_ADMIRAL = 10
+	--Disables debase currency for AI
+NDefines.NAI.DEBASE_THRESHOLD = -5000 -- AI will not debase if it has more gold than this.
 
 NDefines.NAI.CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 101 -- buildings don't get destroyed when sieged, not sure why AI cancels constructions at all
 	-- CANCEL_CONSTRUCTION_SIEGE_PROGRESS = 0, -- If chance of fort falling is at least this, AI will cancel constructions in the province
 NDefines.NAI.DESIRED_SURPLUS = 0.10 -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
 	-- DESIRED_SURPLUS = 0.1, -- AI will aim for having at least this fraction of their income as surplus when they don't have large savings
-NDefines.NAI.BIGSHIP_FRACTION = 0.35 --The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
+NDefines.NAI.BIGSHIP_FRACTION = 0.4 --The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
 	-- BIGSHIP_FRACTION = 0.4,	-- The proportion of big ships in an AI navy of light ships and big ships (for coastal sea countries, this fraction is mostly galleys)
-NDefines.NAI.TRANSPORT_FRACTION = 0.3 --Max fraction of naval forcelimit that should be transports.
+NDefines.NAI.TRANSPORT_FRACTION = 0.35 --Max fraction of naval forcelimit that should be transports.
 	--TRANSPORT_FRACTION = 0.5
-NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.4 --Maximum proportion of warships in home fleet.
+NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.6 --Maximum proportion of warships in home fleet.
 	--HOME_FLEET_MAX_RATIO = 0.85
 
  -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
 NDefines.NAI.DEVELOPMENT_CAP_BASE = 30 --set to 3 manually if using dev-click setting
 NDefines.NAI.DEVELOPMENT_CAP_MULT = 2  --set to 1 manually if using dev-click setting
 
-NDefines.NAI.ARTILLERY_FRACTION = 0.30 --Ratio of artillery to infantry AI will build.
+NDefines.NAI.ARTILLERY_FRACTION = 0.25 --Ratio of artillery to infantry AI will build.
 	--ARTILLERY_FRACTION = 0.35
 NDefines.NAI.FORCE_COMPOSITION_CHANGE_TECH_LEVEL = 16 --Tech level at which AI will double its artillery fraction.
 	--FORCE_COMPOSITION_CHANGE_TECH_LEVEL = 11
@@ -200,17 +202,22 @@ NDefines.NAI.MIN_CAV_PERCENTAGE = 0
 NDefines.NAI.MAX_CAV_PERCENTAGE = 100
 	-- MAX_CAV_PERCENTAGE = 50, -- For modding, actual ratio is dynamically computed but will be no higher than this.
 
---Part of troops assignment logic, AI will operate from his borders or allied borders during the war. by Spirit
-NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1.25	--Army <-> province distance impact on province evaluation
-	--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	--Army <-> province distance impact on province evaluation
-NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	10	--Border <-> province distance impact on province evaluation
-	--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 --Border <-> province distance impact on province evaluation
---NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 --AI will try to defend provinces under threat worth more than this percentage of total development
-NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 25
-	--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 --Homeland priorization when assigning armies to regions (only applied when actually threatened)
-NDefines.NAI.MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.2	--AI will only assign armies larger that this to a region
+--NAI Army Movements, AI will operate from his borders or allied borders during the war.
+--Note that armies prefer the province with the lowest score. Also applies to homeland prioritization.
+--by Spirit, dm me if u have any questions.
+NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 10 --Homeland priorization when assigning armies to regions (only applied when actually threatened)
+NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.03 --AI will try to defend provinces under threat worth more than this percentage of total development
+NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1.0	--Army <-> province distance impact on province evaluation
+NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	8.0	--Border <-> province distance impact on province evaluation
+NDefines.NAI.MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1	--AI will only assign armies larger that this to a region
+	--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 
+	--NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 
+	--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	
+	--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 
+
+
 	--MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1
-NDefines.NAI.ACCEPTABLE_BALANCE_DEFAULT = 1.6 --AI wants this advantage to enter battles typically. (There are some exceptions, e.g. offensives.)
+NDefines.NAI.ACCEPTABLE_BALANCE_DEFAULT = 1.8 --AI wants this advantage to enter battles typically. (There are some exceptions, e.g. offensives.)
 	--ACCEPTABLE_BALANCE_DEFAULT = 1.75
 NDefines.NAI.ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.85
 	--ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.75
