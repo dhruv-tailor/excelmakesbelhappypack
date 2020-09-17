@@ -15,6 +15,7 @@ NDefines.NDiplomacy.SPY_NETWORK_SIEGE_EFFECT = 0.5
 
 -- #arumba - trying to encourage shorter term/immediate impact contracts
 NDefines.NDiplomacy.CONDOTTIERI_MIN_DURATION = 12 -- Minimum duration for Condottieri agreements that must be paid for in advance and that cannot be cancelled.
-
-
-
+-- # buffed trade conflict
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_LIMIT = 0.08			-- How big share of the trade power needed on the target to be able to justify a trade conflict
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_ACTOR_LIMIT = 0.05	-- How big share of the trade power needed on the actor to be able to justify a trade conflict
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_COST = 2
