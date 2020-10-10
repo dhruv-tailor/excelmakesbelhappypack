@@ -1,0 +1,332 @@
+country_decisions = {
+	dev_click_on = {
+		major = yes
+		
+		potential = {
+			ai = no
+			has_country_flag = dev_click
+		}
+		
+		effect = {
+			clr_country_flag = dev_click
+		}
+	}
+	
+	dev_click_off = {
+		major = yes
+		
+		potential = {
+			ai = no
+			NOT = { has_country_flag = dev_click }
+		}
+		
+		effect = {
+			set_country_flag = dev_click
+		}
+	}
+	
+	adm_click = {
+		major = yes
+		potential = {
+			always = no
+			ai = yes
+			power_tech = {
+				power = adm
+				value = 990
+			}
+		}
+		effect = {
+			hidden_effect = {
+				set_base_target = {
+					which = base_target
+					base = adm
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = baseCost
+							value = 999
+						}
+					}
+					if = {
+						limit = {
+							NOT = { stability = 3 }
+						}
+						stab_cost = yes
+						add_stability = 1
+						log = "[This.GetName] raises stability**"
+					}
+					else = {
+						adm_power_cost = 75
+						add_inflation = -2
+						log = "[This.GetName] reduces inflation**"
+					}
+				}
+				else = {
+					event_target:base_target = {
+						add_power = {
+							power = adm
+						}
+						add_next_institution_embracement_scaled = 5
+						add_base_tax = 1
+						log = dev_info.1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+	
+	dip_click = {
+		major = yes
+		potential = {
+			always = no
+			ai = yes
+			power_tech = {
+				power = dip
+				value = 990
+			}
+		}
+		effect = {
+			hidden_effect = {
+				set_base_target = {
+					which = base_target
+					base = dip
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = baseCost
+							value = 999
+						}
+					}
+					dip_power_cost = 100
+					add_mercantilism = 1
+					log = "[This.GetName] promotes mercantilism**"
+				}
+				else = {
+					event_target:base_target = {
+						add_power = {
+							power = dip
+						}
+						add_next_institution_embracement_scaled = 5
+						add_base_production = 1
+						log = dev_info.2
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+	
+	mil_click = {
+		major = yes
+		potential = {
+			always = no
+			ai = yes
+			power_tech = {
+				power = mil
+				value = 990
+			}
+		}
+		effect = {
+			hidden_effect = {
+				set_base_target = {
+					which = base_target
+					base = mil
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = baseCost
+							value = 999
+						}
+					}
+					if = {
+						limit = {
+							NOT = { legitimacy_equivalent = 95 }
+						}
+						mil_power_cost = 100
+						
+						add_legitimacy = 10
+						add_horde_unity = 10
+						add_meritocracy = 10
+						add_devotion = 10
+						add_republican_tradition = 3
+						
+						add_absolutism = 2
+						
+						log = "[This.GetName] strengthens government**"
+					}
+					else = {
+						mil_power_cost = 50
+						
+							 if = { limit = { army_tradition = 80 } create_general = { tradition = 90 } }
+						else_if = { limit = { army_tradition = 60 } create_general = { tradition = 70 } }
+						else_if = { limit = { army_tradition = 40 } create_general = { tradition = 50 } }
+						else_if = { limit = { army_tradition = 20 } create_general = { tradition = 30 } }
+						else 	= { 								create_general = { tradition = 10 } }
+						
+						add_army_professionalism = 0.01
+						
+						log = "[This.GetName] recruits army leader**"
+					}
+				}
+				else = {
+					event_target:base_target = {
+						add_power = {
+							power = mil
+						}
+						add_next_institution_embracement_scaled = 5
+						add_base_manpower = 1
+						log = dev_info.3
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+	
+	spawn_click = {
+		major = yes
+		potential = {
+			always = no
+			ai = yes
+			is_lacking_institutions = yes
+			is_at_war = no
+			primitives = no
+			is_subject = no
+			
+			num_of_owned_provinces_with = {
+				value = 3
+				is_state_core = ROOT
+			}
+			
+			all_owned_province = {
+				OR = {
+					NOT = { is_state_core = ROOT }
+					NOT = { current_institution_growth = 0.5 }
+				}
+			}
+			
+			any_owned_province = {
+				is_state_core = ROOT
+				development = 5
+				NOT = { development = 28 }
+				NOT = { has_terrain = glacier }
+				NOT = { has_terrain = desert }
+				NOT = { has_climate = arctic }
+			}
+		}
+		allow = {
+			variable_arithmetic_trigger = {
+				export_to_variable = { variable_name = admPower 	value = trigger_value:adm_power }
+				export_to_variable = { variable_name = dipPower 	value = trigger_value:dip_power }
+				export_to_variable = { variable_name = milPower 	value = trigger_value:mil_power }
+				
+				change_variable = {
+					which = admPower
+					which = dipPower
+				}
+				change_variable = {
+					which = admPower
+					which = milPower
+				}
+				check_variable = {
+					which = admPower
+					value = 2300
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_institution = feudalism }
+					}
+					spawn_institution = {
+						institution = feudalism
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned feudalism in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = renaissance }
+					}
+					spawn_institution = {
+						institution = renaissance
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned renaissance in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = new_world_i }
+					}
+					spawn_institution = {
+						institution = new_world_i
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned new_world_i in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = printing_press }
+					}
+					spawn_institution = {
+						institution = printing_press
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned printing_press in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = global_trade }
+					}
+					spawn_institution = {
+						institution = global_trade
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned global_trade in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = manufactories }
+					}
+					spawn_institution = {
+						institution = manufactories
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned manufactories in [This.GetName]"
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_institution = enlightenment }
+					}
+					spawn_institution = {
+						institution = enlightenment
+					}
+					event_target:base_target = {
+						log = "[Root.GetName] spawned enlightenment in [This.GetName]"
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+}

@@ -1,0 +1,355 @@
+namespace = dev_events
+
+country_event = {
+	# institutions trigger
+	id = dev_events.1
+	title = dev_events.1.t
+	desc = dev_events.1.d
+	picture = INVENTION_eventPicture
+	hidden = yes
+
+	trigger = {
+		NOT = { is_month = 1 }
+		REB = {
+			OR = {
+				had_country_flag = { flag = janYear	days = 31 }
+				NOT = { has_country_flag = janYear }
+			}
+		}
+	}
+
+	immediate = {
+		REB = {
+			clr_country_flag = janYear
+			set_country_flag = janYear
+			country_event = { id = dev_events.2	days = 1 }
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	# institutions penalty
+	id = dev_events.2
+	title = dev_events.2.t
+	desc = dev_events.2.d
+	picture = INVENTION_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+
+	immediate = {
+		REB = {
+			log = "==yearly institution counter=="
+			
+			set_variable = { which = feudalismNo		value = 0.5 }
+			set_variable = { which = renaissanceNo		value = 0	}
+			set_variable = { which = newWorldINo		value = 0	}
+			set_variable = { which = printingPressNo	value = 0	}
+			set_variable = { which = globalTradeNo		value = 0	}
+			set_variable = { which = manufactoriesNo	value = 0	}
+			set_variable = { which = enlightenmentNo	value = 0	}
+			log = "feudalismNo [This.feudalismNo.GetValue]"
+			
+			export_to_variable = { which = current_year	value = trigger_value:is_year }
+			
+			if = { limit = { is_institution_enabled = renaissance }
+				if = { limit = { NOT = { check_variable = { which = renaissance_year value = 1449 } } } # check if first time
+					set_variable = { which = renaissance_year	which = current_year } # then it is the birth of the institution
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1450 }
+				subtract_variable 	  = { which = penalty		which = renaissance_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = renaissanceNo		which = penalty }
+				log = "renaissanceNo [This.renaissanceNo.GetValue]"
+			}
+			if = { limit = { is_institution_enabled = new_world_i }
+				if = { limit = { NOT = { check_variable = { which = new_world_i_year value = 1499 } } }
+					set_variable = { which = new_world_i_year	which = current_year } 
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1500 }
+				subtract_variable 	  = { which = penalty		which = new_world_i_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = newWorldINo			which = penalty }
+				log = "newWorldINo [This.newWorldINo.GetValue]"
+			}
+			if = { limit = { is_institution_enabled = printing_press }
+				if = { limit = { NOT = { check_variable = { which = printing_press_year value = 1549 } } }
+					set_variable = { which = printing_press_year	which = current_year }
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1550 }
+				subtract_variable 	  = { which = penalty		which = printing_press_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = printingPressNo		which = penalty }
+				log = "printingPressNo [This.printingPressNo.GetValue]"
+			}
+			if = { limit = { is_institution_enabled = global_trade }
+				if = { limit = { NOT = { check_variable = { which = global_trade_year value = 1599 } } }
+					set_variable = { which = global_trade_year	which = current_year }
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1600 }
+				subtract_variable 	  = { which = penalty		which = global_trade_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = globalTradeNo		which = penalty }
+				log = "globalTradeNo [This.globalTradeNo.GetValue]"
+			}
+			if = { limit = { is_institution_enabled = manufactories }
+				if = { limit = { NOT = { check_variable = { which = manufactories_year value = 1649 } } }
+					set_variable = { which = manufactories_year	which = current_year }
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1650 }
+				subtract_variable 	  = { which = penalty		which = manufactories_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = manufactoriesNo		which = penalty }
+				log = "manufactoriesNo [This.manufactoriesNo.GetValue]"
+			}
+			if = { limit = { is_institution_enabled = enlightenment }
+				if = { limit = { NOT = { check_variable = { which = enlightenment_year value = 1699 } } }
+					set_variable = { which = enlightenment_year	which = current_year }
+				}
+				set_variable 		  = { which = penalty		which = current_year }
+				MAX_value			  = { which = penalty		value = 1700 }
+				subtract_variable 	  = { which = penalty		which = enlightenment_year }
+				divide_variable 	  = { which = penalty		value = 100 }
+				MIN_value			  = { which = penalty		value = 0.5 }
+				
+				change_variable = { which = enlightenmentNo		which = penalty }
+				log = "enlightenmentNo [This.enlightenmentNo.GetValue]"
+			}
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	# adm_click
+	id = dev_events.3
+	title = dev_events.3.t
+	desc = dev_events.3.d
+	picture = INVENTION_eventPicture
+	hidden = yes
+
+	trigger = {
+		OR = {
+			ai = yes
+			has_country_flag = dev_click
+		}
+		power_tech = {
+			power = adm
+			value = 990
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_base_target = {
+				which = base_target
+				base = adm
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = baseCost
+						value = 999
+					}
+				}
+				if = {
+					limit = {
+						NOT = { stability = 3 }
+					}
+					stab_cost = yes
+					add_stability = 1
+					log = "[This.GetName] raises stability**"
+				}
+				else = {
+					adm_power_cost = 75
+					add_inflation = -2
+					log = "[This.GetName] reduces inflation**"
+				}
+			}
+			else = {
+				event_target:base_target = {
+					add_power = {
+						power = adm
+					}
+					add_next_institution_embracement_scaled = 5
+					add_base_tax = 1
+					add_devastation_reduction = yes
+					log = dev_info.1
+				}
+				change_variable = {
+					which = admClicks
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	# dip_click
+	id = dev_events.4
+	title = dev_events.4.t
+	desc = dev_events.4.d
+	picture = INVENTION_eventPicture
+	hidden = yes
+
+	trigger = {
+		OR = {
+			ai = yes
+			has_country_flag = dev_click
+		}
+		power_tech = {
+			power = dip
+			value = 990
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_base_target = {
+				which = base_target
+				base = dip
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = baseCost
+						value = 999
+					}
+				}
+				dip_power_cost = 100
+				add_mercantilism = 1
+				log = "[This.GetName] promotes mercantilism**"
+			}
+			else = {
+				event_target:base_target = {
+					add_power = {
+						power = dip
+					}
+					add_next_institution_embracement_scaled = 5
+					add_base_production = 1
+					add_devastation_reduction = yes
+					log = dev_info.2
+				}
+				change_variable = {
+					which = dipClicks
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	# mil_click
+	id = dev_events.5
+	title = dev_events.5.t
+	desc = dev_events.5.d
+	picture = INVENTION_eventPicture
+	hidden = yes
+
+	trigger = {
+		OR = {
+			ai = yes
+			has_country_flag = dev_click
+		}
+		power_tech = {
+			power = mil
+			value = 990
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_base_target = {
+				which = base_target
+				base = mil
+			}
+			if = {
+				limit = {
+					check_variable = {
+						which = baseCost
+						value = 999
+					}
+				}
+				if = {
+					limit = {
+						NOT = { legitimacy_equivalent = 95 }
+					}
+					mil_power_cost = 100
+					
+					add_legitimacy = 10
+					add_horde_unity = 10
+					add_meritocracy = 10
+					add_devotion = 10
+					add_republican_tradition = 3
+					
+					add_absolutism = 2
+					
+					log = "[This.GetName] strengthens government**"
+				}
+				else = {
+					mil_power_cost = 50
+					
+						 if = { limit = { army_tradition = 80 } create_general = { tradition = 90 } }
+					else_if = { limit = { army_tradition = 60 } create_general = { tradition = 70 } }
+					else_if = { limit = { army_tradition = 40 } create_general = { tradition = 50 } }
+					else_if = { limit = { army_tradition = 20 } create_general = { tradition = 30 } }
+					else 	= { 								create_general = { tradition = 10 } }
+					
+					add_army_professionalism = 0.01
+					
+					log = "[This.GetName] recruits army leader**"
+				}
+			}
+			else = {
+				event_target:base_target = {
+					add_power = {
+						power = mil
+					}
+					add_next_institution_embracement_scaled = 5
+					add_base_manpower = 1
+					add_devastation_reduction = yes
+					log = dev_info.3
+				}
+				change_variable = {
+					which = milClicks
+					value = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}

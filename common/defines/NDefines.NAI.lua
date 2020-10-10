@@ -190,8 +190,8 @@ NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.6 --Maximum proportion of warships in home
 	--HOME_FLEET_MAX_RATIO = 0.85
 
  -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
-NDefines.NAI.DEVELOPMENT_CAP_BASE = 30 --set to 3 manually if using dev-click setting
-NDefines.NAI.DEVELOPMENT_CAP_MULT = 2  --set to 1 manually if using dev-click setting
+NDefines.NAI.DEVELOPMENT_CAP_BASE = 100 --set to 3 manually if using dev-click setting
+NDefines.NAI.DEVELOPMENT_CAP_MULT = 20  --set to 1 manually if using dev-click setting
 
 NDefines.NAI.ARTILLERY_FRACTION = 0.25 --Ratio of artillery to infantry AI will build.
 	--ARTILLERY_FRACTION = 0.35
@@ -210,10 +210,10 @@ NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.03 --AI will try to defend province
 NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1.0	--Army <-> province distance impact on province evaluation
 NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	8.0	--Border <-> province distance impact on province evaluation
 NDefines.NAI.MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1	--AI will only assign armies larger that this to a region
-	--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5 
-	--NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 
-	--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5	
-	--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0 
+	--NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 3.5
+	--NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05
+	--NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT =	0.5
+	--NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT = 3.0
 
 
 	--MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1

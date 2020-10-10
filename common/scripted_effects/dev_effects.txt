@@ -1,0 +1,570 @@
+MIN_value = {
+	if = {
+		limit = {
+			check_variable = {
+				which = $which$
+				value = $value$
+			}
+		}
+		set_variable = {
+			which = $which$
+			value = $value$
+		}
+	}
+}
+
+MAX_value = {
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = $which$
+					value = $value$
+				}
+			}
+		}
+		set_variable = {
+			which = $which$
+			value = $value$
+		}
+	}
+}
+
+set_base_value = {
+	set_variable = { #100% base cost
+		which = $which$
+		value = 1 
+	}
+	
+	export_to_variable = {
+		variable_name = apowerCost
+		value = modifier:all_power_cost
+		who = owner
+	}
+	change_variable = { #power cost modifiers
+		which = $which$
+		which = apowerCost
+	}
+	
+	export_to_variable = {
+		variable_name = devCost
+		value = modifier:development_cost
+		who = owner
+	}
+	change_variable = { #country dev modifiers
+		which = $which$
+		which = devCost
+	}
+	
+	export_to_variable = {
+		variable_name = ldevCost
+		value = modifier:local_development_cost
+	}
+	change_variable = { #province dev modifiers
+		which = $which$
+		which = ldevCost
+	}
+	
+	#same day development
+	export_to_variable = {
+		variable_name = pDev
+		value = trigger_value:development
+	}
+	set_variable = {
+		which = counter
+		which = devCount
+	}
+	while = {
+		limit = {
+			check_variable = {
+				which = counter
+				value = 1
+			}
+		}
+		subtract_variable = {
+			which = counter
+			value = 1
+		}
+		set_variable = {
+			which = targetDev
+			which = pDev
+		}
+		subtract_variable = {
+			which = targetDev
+			which = counter
+		}
+		
+		if = {
+			limit = {
+				check_variable = {
+					which = targetDev
+					value = 40
+				}
+			}
+			change_variable = {
+				which = $which$
+				value = 0.12
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = targetDev
+					value = 30
+				}
+			}
+			change_variable = {
+				which = $which$
+				value = 0.09
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = targetDev
+					value = 20
+				}
+			}
+			change_variable = {
+				which = $which$
+				value = 0.06
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = targetDev
+					value = 10
+				}
+			}
+			change_variable = {
+				which = $which$
+				value = 0.03
+			}
+		}
+	}
+	
+	if = { #5% in capital per 100 country dev (up to 50%)
+		limit = {
+			is_capital = yes
+		}
+		export_to_variable = {
+			variable_name = totalDev
+			value = total_development
+			who = owner
+		}
+		if = { 
+			limit = {
+				check_variable = {
+					which = totalDev
+					value = 1000
+				}
+			}
+			set_variable = {
+				which = totalDev
+				value = -0.5
+			}
+		}
+		else = {
+			divide_variable = {
+				which = totalDev
+				value = -2000
+			}
+		}
+		change_variable = { 
+			which = $which$
+			which = totalDev
+		}
+	}
+	
+	if = { #dev efficiency from adm tech affects base cost by −10%
+		limit = {
+			owner = { adm_tech = 27 } 
+		}
+		multiply_variable = { 
+			which = $which$
+			value = 35
+		}
+	}
+	else_if  = {
+		limit = {
+			owner = { adm_tech = 23 } 
+		}
+		multiply_variable = { 
+			which = $which$
+			value = 40
+		}
+	}
+	else_if  = {
+		limit = {
+			owner = { adm_tech = 17 }
+		}
+		multiply_variable = { 
+			which = $which$
+			value = 45
+		}
+	}
+	else = {
+		multiply_variable = { 
+			which = $which$
+			value = 50
+		}
+	}
+}
+
+set_base_target = {
+	set_country_flag = $base$_flag
+	
+	set_variable = {
+		which = baseCost
+		value = 999
+	}
+	every_owned_province = {
+		limit = {
+			is_state_core = owner
+		}
+		
+		export_to_variable = { which = bTax 	value = base_tax }
+		export_to_variable = { which = bPro 	value = base_production }
+		export_to_variable = { which = bMan 	value = base_manpower }
+		
+		set_variable 	= { which = notTax 	which = bPro }
+		change_variable = { which = notTax 	which = bMan }
+		
+		set_variable 	= { which = notPro 	which = bMan }
+		change_variable = { which = notPro 	which = bTax }
+		
+		set_variable 	= { which = notMan 	which = bTax }
+		change_variable = { which = notMan 	which = bPro }
+		
+		
+		if = {
+			limit = {
+				owner = {
+					has_country_flag = adm_flag
+				}
+				NOT = {
+					check_variable = {
+						which = notTax
+						which = bTax
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = dip_flag
+				}
+				NOT = {
+					check_variable = {
+						which = notPro
+						which = bPro
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				owner = {
+					has_country_flag = mil_flag
+				}
+				NOT = {
+					check_variable = {
+						which = notMan
+						which = bMan
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					NOT = { controlled_by = owner }
+					has_siege = yes
+				}
+			}
+		}
+		else = {
+			set_base_value = {
+				which = baseCost
+			}
+			
+			if = { #dip prefer gold
+				limit = {
+					owner = {
+						has_country_flag = dip_flag
+					}
+					trade_goods = gold
+				}
+				owner = {
+					multiply_variable = {
+						which = baseCost
+						value = 2
+					}
+				}
+				
+				if = {
+					limit = {
+						NOT = {
+							check_variable = {
+								which = baseCost
+								which = PREV
+							}
+						}
+					}
+					owner = {
+						set_variable = {
+							which = baseCost
+							which = PREV
+						}
+					}
+					save_event_target_as = $which$
+				}
+				
+				owner = {
+					multiply_variable = {
+						which = baseCost
+						value = 0.5
+					}
+				}
+			}
+			else_if = { #institutions
+				limit = {
+					owner = {
+						has_country_flag = institution_flag
+					}
+					OR = {
+						$base$ = 100
+						NOT = { development = 5 }
+						development = 28
+						has_terrain = glacier
+						has_terrain = desert
+						has_climate = arctic
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						check_variable = {
+							which = baseCost
+							which = PREV
+						}
+					}
+				}
+				owner = {
+					set_variable = {
+						which = baseCost
+						which = PREV
+					}
+				}
+				save_event_target_as = $which$
+			}
+		}
+	}
+	
+	clr_country_flag = $base$_flag
+}
+
+binary_ad1 = {
+	if = {
+		limit = {
+			check_variable = {
+				which = $variable$
+				value = $valueAdd$
+			}
+		}
+		owner = {
+			add_$addcommand$_power = $valueSub$
+		}
+		
+		subtract_variable = {
+			which = $variable$
+			value = $valueAdd$
+		}
+	}
+}
+
+add_power = { #reddit.com/r/eu4/comments/dy7lyv
+	set_variable = {
+		which = temp
+		which = baseCost
+	}
+	
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 1024 	valueSub = -1024 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 512		valueSub = -512 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 256		valueSub = -256 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 128		valueSub = -128 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 64		valueSub = -64 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 32		valueSub = -32 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 16		valueSub = -16 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 8		valueSub = -8 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 4		valueSub = -4 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 2		valueSub = -2 }
+	binary_ad1 = { variable = temp	addcommand = $power$	valueAdd = 1		valueSub = -1 }
+	#log = dev_info.4
+}
+
+spawn_institution = {
+	set_base_target = {
+		which = base_target
+		base = $institution$
+	}
+	
+	event_target:base_target = {
+		set_variable = {
+			which = devCount
+			value = 0
+		}
+		
+		while = {
+			limit = {
+				NOT = { $institution$ = 100 }
+			}
+			set_base_value = {
+				which = baseCost
+			}
+			
+			export_to_variable = { variable_name = admPower 	value = trigger_value:adm_power 	who = PREV }
+			export_to_variable = { variable_name = dipPower 	value = trigger_value:dip_power 	who = PREV }
+			export_to_variable = { variable_name = milPower 	value = trigger_value:mil_power 	who = PREV }
+
+			
+			if = {
+				limit = {
+					check_variable = { which = admPower 	which = dipPower }
+					check_variable = { which = admPower 	which = milPower }
+				}
+				add_power = {
+					power = adm
+				}
+				add_next_institution_embracement_scaled = 5
+				add_base_tax = 1
+				log = dev_info.1
+			}
+			else_if = {
+				limit = {
+					check_variable = { which = dipPower	which = milPower }
+				}
+				add_power = {
+					power = dip
+				}
+				add_next_institution_embracement_scaled = 5
+				add_base_production = 1
+				log = dev_info.2
+			}
+			else = {
+				add_power = {
+					power = mil
+				}
+				add_next_institution_embracement_scaled = 5
+				add_base_manpower = 1
+				log = dev_info.3
+			}
+			
+			change_variable = {
+				which = devCount
+				value = 1
+			}
+		}
+		
+		set_variable = {
+			which = devCount
+			value = 0
+		}
+	}
+}
+
+binary_ad2 = {
+	if = {
+		limit = {
+			check_variable = {
+				which = $variable$
+				value = $valueAdd$
+			}
+		}
+		add_$addcommand$_power = $valueSub$
+		
+		subtract_variable = {
+			which = $variable$
+			value = $valueAdd$
+		}
+	}
+}
+
+stab_cost = {
+	export_to_variable = {
+		which = powerCost
+		value = modifier:all_power_cost
+	}
+	export_to_variable = {
+		which = stabCost
+		value = modifier:stability_cost_modifier
+	}
+	change_variable = {
+		which = stabCost
+		which = powerCost
+	}
+	change_variable = {
+		which = stabCost
+		value = 1
+	}
+	multiply_variable = {
+		which = stabCost
+		value = 100
+	}
+	log = dev_info.5
+	
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 1024 	valueSub = -1024 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 512		valueSub = -512 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 256		valueSub = -256 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 128		valueSub = -128 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 64		valueSub = -64 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 32		valueSub = -32 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 16		valueSub = -16 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 8		valueSub = -8 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 4		valueSub = -4 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 2		valueSub = -2 }
+	binary_ad2 = { variable = stabCost	addcommand = adm	valueAdd = 1		valueSub = -1 }
+}
+
+binary_ad3 = {
+	if = {
+		limit = {
+			check_variable = {
+				which = $variable$
+				value = $valueAdd$
+			}
+		}
+		add_devastation = $valueSub$
+		
+		subtract_variable = {
+			which = $variable$
+			value = $valueAdd$
+		}
+	}
+}
+
+add_devastation_reduction = {
+	export_to_variable = {
+		variable_name = pDev2
+		value = trigger_value:development
+	}
+	multiply_variable = {
+		which = pDev2
+		value = 5
+	}
+	divide_variable = {
+		which = pDev2
+		value = 6
+	}
+	
+	binary_ad3 = { variable = pDev2 	valueAdd = 64 	valueSub = -64 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 32 	valueSub = -32 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 16 	valueSub = -16 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 8 	valueSub = -8 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 4 	valueSub = -4 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 2 	valueSub = -2 }
+	binary_ad3 = { variable = pDev2 	valueAdd = 1 	valueSub = -1 }
+}
