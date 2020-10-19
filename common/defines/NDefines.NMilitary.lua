@@ -7,7 +7,7 @@ NDefines.NMilitary.NAVAL_CASUALTY_MIN_MORALE_DAMAGE = 0.0
 NDefines.NMilitary.MERCENARY_SUPPORT_LIMIT_FRACTION = 0.1
 
 
-NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 10 -- 20 causes issues  
+NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 10 -- 20 causes issues
 NDefines.NMilitary.LOOTED_MAX = 10 -- doubled from 5 ducats/mo max to 10 because of +looting speed multipliers in the mod
 
 -- #arumba
@@ -17,8 +17,9 @@ NDefines.NMilitary.SUPPLY_DEPOT_MIL_COST = 5	-- Mil power cost to build a supply
 -- SUPPLY_DEPOT_MIL_COST = 20	-- Mil power cost to build a supply depot in an area.
 NDefines.NMilitary.FORT_FLIPPING_TIME = 60		-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
 	-- FORT_FLIPPING_TIME = 30,					-- Number of days it takes an influencing fort to revert the control of a province if left unhindered.
-	
-NDefines.NMilitary.SUPPLYLIMIT_BASE_MULTIPLIER = 8.0	
+
+NDefines.NMilitary.SUPPLYLIMIT_BASE_MULTIPLIER = 8.0
 	-- SUPPLYLIMIT_BASE_MULTIPLIER = 6.0
-	
-	
+
+NDefines.NMilitary.MARINE_SHOCK_DAMAGE_TAKEN = -0.25
+NDefines.NMilitary.MARINE_DISEMBARK_SPEED_BONUS = 5.0
