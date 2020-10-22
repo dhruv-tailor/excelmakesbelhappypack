@@ -138,7 +138,177 @@ country_event = {
 	id = GE_privileges.7
 	title = GE_privileges.7.t
 	desc = GE_privileges.7.d
-	picture = TRADEGOODS_eventPicture
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Court_Incomes_Tooltip_Number
+				which = GE_Imperial_Court_Incomes
+			}
+			multiply_variable = {
+				which = GE_Imperial_Court_Incomes_Tooltip_Number
+				value = 10
+			}
+		}
+	}
+	
+	option = {
+		name = GE_privileges.7.a
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Court_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Court_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Court_Incomes
+							value = 1
+						}
+					}
+					add_treasury = 10
+					change_variable = {
+						which = GE_Imperial_Court_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Court_Incomes
+				value = 0
+			}
+		}
+		set_country_flag = GE_Imperial_Court_Flag
+		every_neighbor_country = {
+			limit = {
+				is_part_of_hre = yes
+				NOT = {
+					is_emperor = yes
+				}
+			}
+			country_event = {
+				id = GE_privileges.8
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = GE_opinion_abuse_of_imperial_power
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = GE_privileges.7.b
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Court_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Court_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Court_Incomes
+							value = 1
+						}
+					}
+					add_treasury = 10
+					change_variable = {
+						which = GE_Imperial_Court_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Court_Incomes
+				value = 0
+			}
+		}
+		set_country_flag = GE_Imperial_Court_Flag
+		every_neighbor_country = {
+			limit = {
+				is_part_of_hre = yes
+				NOT = {
+					any_ally = {
+						tag = ROOT
+					}
+					is_emperor = yes
+					overlord = {
+						tag = ROOT
+					}
+					any_neighbor_country = {
+						overlord = {
+							tag = ROOT
+						}
+					}
+				}
+			}
+			country_event = {
+				id = GE_privileges.8
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = GE_opinion_abuse_of_imperial_power
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = GE_privileges.7.c
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Court_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Court_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Court_Incomes
+							value = 1
+						}
+					}
+					add_treasury = 10
+					change_variable = {
+						which = GE_Imperial_Court_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		add_legitimacy = -10
+		remove_estate_privilege = estate_nobles_imperial_court
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+country_event = {
+	id = GE_privileges.8
+	title = GE_privileges.8.t
+	desc = GE_privileges.8.d
+	picture = COURT_eventPicture
 
 	is_triggered_only = yes
 
@@ -146,20 +316,491 @@ country_event = {
 	}
 	
 	option = {
-		name = GE_privileges.7.a
-		change_estate_land_share = {
-			estate = estate_nobles
-			share = 5
+		name = GE_privileges.8.a
+		every_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					owner = {
+						tag = FROM
+					}
+				}
+			}
+			add_province_modifier = {
+				name = GE_Imperial_Court_Tax
+				duration = 3650
+			}
+			hidden_effect = {
+				FROM = {
+					change_variable = {
+						which = GE_Imperial_Court_Incomes
+						value = 1
+					}
+				}
+			}
+		}
+		ai_chance = { 
+			factor = 10
 		}
 	}
 	option = {
-		name = GE_privileges.7.b
-		change_estate_land_share = {
-			estate = estate_nobles
-			share = -5
+		name = GE_privileges.8.b
+		FROM = {
+			country_event = {
+				id = GE_privileges.9
+			}
+		}
+		ai_chance = { 
+			factor = 1 
+		}
+	}
+}
+
+country_event = {
+	id = GE_privileges.9
+	title = GE_privileges.9.t
+	desc = GE_privileges.9.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.9.a
+		every_owned_province = {
+			every_neighbor_province = {
+				limit = {
+					owner = {
+						tag = FROM
+					}
+				}
+				add_claim = ROOT
+			}
 		}
 	}
 	option = {
-		name = GE_privileges.7.c
+		name = GE_privileges.9.b
+		add_legitimacy = -5
+	}
+}
+
+country_event = {
+	id = GE_privileges.10
+	title = GE_privileges.10.t
+	desc = GE_privileges.10.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Marshal_Incomes_Tooltip_Number
+				which = GE_Imperial_Marshal_Incomes
+			}
+			multiply_variable = {
+				which = GE_Imperial_Marshal_Incomes_Tooltip_Number
+				value = 250
+			}
+		}
+	}
+	
+	option = {
+		name = GE_privileges.10.a
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Marshal_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Marshal_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Marshal_Incomes
+							value = 1
+						}
+					}
+					add_manpower = 0.25
+					change_variable = {
+						which = GE_Imperial_Marshal_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Marshal_Incomes
+				value = 0
+			}
+		}
+		set_country_flag = GE_Imperial_Court_Flag
+		every_neighbor_country = {
+			limit = {
+				is_part_of_hre = yes
+				NOT = {
+					is_emperor = yes
+				}
+			}
+			country_event = {
+				id = GE_privileges.11
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = GE_opinion_abuse_of_imperial_power
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = GE_privileges.10.b
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Marshal_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Marshal_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Marshal_Incomes
+							value = 1
+						}
+					}
+					add_manpower = 0.25
+					change_variable = {
+						which = GE_Imperial_Marshal_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = GE_Imperial_Marshal_Incomes
+				value = 0
+			}
+		}
+		set_country_flag = GE_Imperial_Court_Flag
+		every_neighbor_country = {
+			limit = {
+				is_part_of_hre = yes
+				NOT = {
+					any_ally = {
+						tag = ROOT
+					}
+					is_emperor = yes
+					overlord = {
+						tag = ROOT
+					}
+				}
+			}
+			country_event = {
+				id = GE_privileges.11
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = GE_opinion_abuse_of_imperial_power
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = GE_privileges.10.c
+		if = {
+			limit = {
+				check_variable = {
+					which = GE_Imperial_Marshal_Incomes
+					value = 1
+				}
+			}
+			custom_tooltip = GE_Imperial_Marshal_Incomes_Tooltip
+			hidden_effect = {
+				while = {
+					limit = {
+						check_variable = {
+							which = GE_Imperial_Marshal_Incomes
+							value = 1
+						}
+					}
+					add_manpower = 0.25
+					change_variable = {
+						which = GE_Imperial_Marshal_Incomes
+						value = -1
+					}
+				}
+			}
+		}
+		add_legitimacy = -10
+		remove_estate_privilege = estate_nobles_imperial_court
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+country_event = {
+	id = GE_privileges.11
+	title = GE_privileges.11.t
+	desc = GE_privileges.11.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_privileges.11.a
+		every_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					owner = {
+						tag = FROM
+					}
+				}
+			}
+			add_province_modifier = {
+				name = GE_Imperial_Court_Manpower
+				duration = 3650
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						base_manpower = 1
+					}
+					FROM = {
+						change_variable = {
+							which = GE_Imperial_Marshal_Incomes
+							value = 1
+						}
+					}
+				}
+				# if = {
+					# limit = {
+						# base_manpower = 2
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 3
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 4
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 5
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 6
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 7
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 8
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 9
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+				# if = {
+					# limit = {
+						# base_manpower = 10
+					# }
+					# FROM = {
+						# change_variable = {
+							# which = GE_Imperial_Marshal_Incomes
+							# value = 1
+						# }
+					# }
+				# }
+			}
+		}
+		ai_chance = { 
+			factor = 10
+		}
+	}
+	option = {
+		name = GE_privileges.11.b
+		FROM = {
+			country_event = {
+				id = GE_privileges.12
+			}
+		}
+		ai_chance = { 
+			factor = 1 
+		}
+	}
+}
+
+country_event = {
+	id = GE_privileges.12
+	title = GE_privileges.12.t
+	desc = GE_privileges.12.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.12.a
+		every_owned_province = {
+			every_neighbor_province = {
+				limit = {
+					owner = {
+						tag = FROM
+					}
+				}
+				add_claim = ROOT
+			}
+		}
+	}
+	option = {
+		name = GE_privileges.12.b
+		add_legitimacy = -5
+	}
+}
+
+country_event = {
+	id = GE_privileges.13
+	title = GE_privileges.13.t
+	desc = GE_privileges.13.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.13.a
+		set_estate_privilege = estate_nobles_imperial_court
+	}
+	option = {
+		name = GE_privileges.13.b
+		add_legitimacy = 10
+	}
+}
+
+country_event = {
+	id = GE_privileges.14
+	title = GE_privileges.14.t
+	desc = GE_privileges.14.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.14.a
+		add_legitimacy = -10
+	}
+}
+
+country_event = {
+	id = GE_privileges.15
+	title = GE_privileges.15.t
+	desc = GE_privileges.15.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.15.a
+		set_estate_privilege = estate_nobles_imperial_marshall
+	}
+	option = {
+		name = GE_privileges.15.b
+		add_legitimacy = 10
+	}
+}
+
+country_event = {
+	id = GE_privileges.16
+	title = GE_privileges.16.t
+	desc = GE_privileges.16.d
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	option = {
+		name = GE_privileges.16.a
+		add_legitimacy = -10
 	}
 }

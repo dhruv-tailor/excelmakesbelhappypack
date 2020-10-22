@@ -1266,7 +1266,7 @@ country_event = {
 		}
 		modifier = {
 			factor = 0.75
-			full_all_reli_idea_groups = yes
+			full_idea_group = religious_ideas
 		}
 		modifier = {
 			factor = 1.25
@@ -3682,7 +3682,7 @@ country_event = {
 			}
 			add_estate_influence_modifier = {
 				estate = estate_church
-				desc = EST_VAL_CHURCH_ADVANCES
+				desc = EST_VAL_CLERGY_ADVANCES
 				influence = 10
 				duration = 3650
 			}
@@ -4515,7 +4515,7 @@ country_event = {
 
 	trigger = {
 		AND = {
-			has_government_attribute = enables_militant_orders
+			has_government_attribute = enables_ _orders
 			at_war_with_religious_enemy = yes
 			NOT = { has_country_modifier = Militant_Orders }
 		}
@@ -4549,7 +4549,7 @@ country_event = {
 	trigger = {
 		OR = {
 			AND = {
-				at_war_with_religious_enemy = no
+				NOT = { at_war_with_religious_enemy = yes }
 				has_country_modifier = Militant_Orders
 			}
 			AND = {
@@ -5101,7 +5101,7 @@ country_event = {
 		}
 		modifier = {
 			factor = 1.5
-			full_all_reli_idea_groups = yes
+			full_idea_group = religious_ideas
 		}
 		modifier = {
 			factor = 0.75
@@ -5113,7 +5113,7 @@ country_event = {
 		hidden_effect = {
 			random_owned_province = {
 				limit = {
-					province_has_building_of_group = { group = taxation all = yes }
+					has_building = temple
 					is_territory = no
 					NOT = { nationalism = 1 }
 					NOT = { religion = ROOT }
@@ -5249,11 +5249,19 @@ country_event = {
 		any_owned_province = {
 			OR = {
 				AND = {
-					province_has_building_of_group = { group = taxation all = yes }
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
 					NOT = { has_province_modifier = Church_Poorhouses }
 				}
 				AND = {
-					NOT = { province_has_building_of_group = { group = taxation all = yes } }
+					NOT = { 
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						} 
+					}
 					has_province_modifier = Church_Poorhouses
 				}
 			}
@@ -5267,7 +5275,10 @@ country_event = {
 	immediate = {
 		every_owned_province = {
 			limit = {
-				province_has_building_of_group = { group = taxation all = yes }
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 				NOT = {	has_province_modifier = Church_Poorhouses }
             }
 			add_province_modifier = {
@@ -5277,7 +5288,12 @@ country_event = {
 		}
 		every_owned_province = {
 			limit = {
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				NOT = { 
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					} 
+				}
 				has_province_modifier = Church_Poorhouses
             }
 			remove_province_modifier = Church_Poorhouses
@@ -5545,7 +5561,7 @@ country_event = {
 	option = {
 		name = reform_me_events.80.a
 		
-		add_stability = 1
+		
 	}
 }
 
@@ -7796,8 +7812,17 @@ country_event = {
 		any_owned_province = {
 			OR = {
 				AND = {
-					province_has_building_of_group = { group = production all = yes }
+					OR = {
+						has_building = workshop
+					}
 					NOT = { has_province_modifier = Promoted_Industry }
+				}
+				AND = {
+					OR = {
+						has_building = counting_house 
+						has_building = steam_factory
+					}
+					NOT = { has_province_modifier = Promoted_Industry_v2 }
 				}
 			}
 		}
@@ -7810,11 +7835,28 @@ country_event = {
 	immediate = {
 		every_owned_province = {
 			limit = {
-				province_has_building_of_group = { group = production all = yes }
+				OR = {
+					has_building = workshop 
+				}
 				NOT = {	has_province_modifier = Promoted_Industry }
             }
 			add_province_modifier = {
 				name = "Promoted_Industry"
+				duration = -1
+				hidden = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				OR = {
+					has_building = counting_house 
+					has_building = steam_factory
+				}
+				NOT = {	has_province_modifier = Promoted_Industry_v2 }
+            }
+			remove_province_modifier = Promoted_Industry
+			add_province_modifier = {
+				name = "Promoted_Industry_v2"
 				duration = -1
 				hidden = yes
 			}
@@ -8360,7 +8402,7 @@ country_event = {
 				NOT = { num_of_mercenaries = 10 }
 				has_country_modifier = Foreign_Regiments
             }
-			remove_province_modifier = Foreign_Regiments
+			remove_country_modifier = Foreign_Regiments
 		}
 	}
 	
@@ -8388,7 +8430,7 @@ country_event = {
 	}
 	
 	immediate = {
-		remove_province_modifier = Foreign_Regiments
+		remove_country_modifier = Foreign_Regiments
 	}
 	
 	option = {
@@ -9321,11 +9363,6 @@ country_event = {
 	title = reform_me_events.137.t
 	desc = reform_me_events.137.d
 	picture = WESTERNISATION_eventPicture
-	
-	trigger = {
-		ai = no #is_player = yes
-	}
-	
 	is_triggered_only = yes
 	
 	
@@ -9901,7 +9938,6 @@ country_event = {
 	title = reform_me_events.148.t
 	desc = reform_me_events.148.d
 	picture = WESTERNISATION_eventPicture
-	hidden = yes
 	
 
 	trigger = {
@@ -9944,7 +9980,6 @@ country_event = {
 	title = reform_me_events.149.t
 	desc = reform_me_events.149.d
 	picture = WESTERNISATION_eventPicture
-	hidden = yes
 	
 
 	trigger = {
@@ -12412,6 +12447,45 @@ country_event = {
 }
 
 country_event = {
+	id = reform_me_events.1680
+	title = reform_me_events.1680.t
+	desc = reform_me_events.1680.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		NOT = { has_government_attribute = enables_jurisprudence }
+		OR = {
+			has_country_modifier = Jurisprudence_1
+			has_country_modifier = Jurisprudence_2
+			has_country_modifier = Jurisprudence_3
+			has_country_modifier = Jurisprudence_4
+			has_country_modifier = Jurisprudence_5
+			has_country_modifier = Jurisprudence_6
+			has_country_modifier = Jurisprudence_7
+			has_country_modifier = Jurisprudence_8
+			has_country_modifier = Jurisprudence_9
+			has_country_modifier = Jurisprudence_10
+		}
+	}
+	immediate = {
+		remove_country_modifier = Jurisprudence_1
+		remove_country_modifier = Jurisprudence_2
+		remove_country_modifier = Jurisprudence_3
+		remove_country_modifier = Jurisprudence_4
+		remove_country_modifier = Jurisprudence_5
+		remove_country_modifier = Jurisprudence_6
+		remove_country_modifier = Jurisprudence_7
+		remove_country_modifier = Jurisprudence_8
+		remove_country_modifier = Jurisprudence_9
+		remove_country_modifier = Jurisprudence_10
+	}
+	option = {
+	}
+}
+
+country_event = {
 	id = reform_me_events.169
 	title = reform_me_events.169.t
 	desc = reform_me_events.169.d
@@ -14706,3 +14780,527 @@ country_event = {
 		
 	}
 }
+
+country_event = {
+	id = reform_me_events.204
+	title = reform_me_events.204.t
+	desc = reform_me_events.204.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		has_government_attribute = enables_presidental_authority 
+		OR = {
+			OR = {
+				adm = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Adm }
+			}
+			OR = {
+				dip = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Dip }
+			}
+			OR = {
+				mil = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Mil }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				adm = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Adm }
+			}
+			add_ruler_modifier = {
+				name = GE_Presidential_Adm
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				dip = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Dip }
+			}
+			add_ruler_modifier = {
+				name = GE_Presidential_Dip
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				mil = 4
+				NOT = { has_ruler_modifier = GE_Presidential_Mil }
+			}
+			add_ruler_modifier = {
+				name = GE_Presidential_Mil
+				duration = -1
+			}
+		}
+	}
+	
+	option = {
+		name = reform_me_events.204.a
+		
+	}
+}
+
+country_event = {
+	id = reform_me_events.205
+	title = reform_me_events.205.t
+	desc = reform_me_events.205.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+
+	trigger = {
+		OR = {
+			AND = {
+				has_government_attribute = enables_huaca_cults
+				any_owned_province = {
+					OR = {
+						AND = {
+							OR = {
+								has_owner_accepted_culture = yes
+								has_owner_culture = yes
+							}
+							NOT = { has_province_modifier = GE_Huaca_Cults }
+						}
+						AND = {
+							OR = {
+								has_owner_accepted_culture = no
+								has_owner_culture = no
+							}
+							has_province_modifier = GE_Huaca_Cults
+						}
+					}
+				}
+			}
+			AND = {
+				NOT = { has_government_attribute = enables_huaca_cults }
+				any_owned_province = {
+					has_province_modifier = GE_Huaca_Cults
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	option = {
+		name = reform_me_events.205.a
+		
+		every_owned_province = {
+			limit = {
+				OR = {
+					has_owner_accepted_culture = yes
+				}
+				NOT = { has_province_modifier = GE_Huaca_Cults }
+			}
+			add_province_modifier = {
+				name = GE_Huaca_Cults
+				duration = -1
+				hidden = yes
+			}
+		}
+		every_owned_province = {
+			limit = {
+				OR = {
+					has_owner_accepted_culture = no
+				}
+				has_province_modifier = GE_Huaca_Cults
+			}
+			remove_country_modifier = GE_Huaca_Cults
+		}
+		every_owned_province = {
+			limit = {
+				NOT = { has_government_attribute = enables_huaca_cults }
+			}
+			remove_country_modifier = GE_Huaca_Cults
+		}
+	}
+}
+
+country_event = {
+	id = reform_me_events.206
+	title = reform_me_events.206.t
+	desc = reform_me_events.206.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		has_government_attribute = enables_unified_drills
+		OR = {
+			AND = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 1
+				}
+				NOT = { has_country_modifier = GE_Shared_Drills_1 }
+			}
+			AND = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 2
+				}
+				NOT = { has_country_modifier = GE_Shared_Drills_2 }
+			}
+			AND = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 3
+				}
+				NOT = { has_country_modifier = GE_Shared_Drills_3 }
+			}
+			AND = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 4
+				}
+				NOT = { has_country_modifier = GE_Shared_Drills_4 }
+			}
+			AND = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 5
+				}
+				NOT = { has_country_modifier = GE_Shared_Drills_5 }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 1
+				}
+				NOT = {
+					calc_true_if = {
+						all_subject_country = {
+							NOT = {
+								is_colonial_nation = yes
+								is_subject_of_type = tributary_state
+							}
+							is_part_of_hre = yes
+						}
+						amount = 2
+					}
+				}
+			}
+			add_country_modifier = {
+				name = GE_Shared_Drills_1
+				duration = -1
+				hidden = yes
+			}
+			remove_country_modifier = GE_Shared_Drills_2
+			remove_country_modifier = GE_Shared_Drills_3
+			remove_country_modifier = GE_Shared_Drills_4
+			remove_country_modifier = GE_Shared_Drills_5
+		}
+		if = {
+			limit = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 2
+				}
+				NOT = { 				
+					calc_true_if = {
+						all_subject_country = {
+							NOT = {
+								is_colonial_nation = yes
+								is_subject_of_type = tributary_state
+							}
+							is_part_of_hre = yes
+						}
+						amount = 3
+					}
+				}
+			}
+			add_country_modifier = {
+				name = GE_Shared_Drills_2
+				duration = -1
+				hidden = yes
+			}
+			remove_country_modifier = GE_Shared_Drills_1
+			remove_country_modifier = GE_Shared_Drills_3
+			remove_country_modifier = GE_Shared_Drills_4
+			remove_country_modifier = GE_Shared_Drills_5
+		}
+		if = {
+			limit = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 3
+				}
+				NOT = { 				
+					calc_true_if = {
+						all_subject_country = {
+							NOT = {
+								is_colonial_nation = yes
+								is_subject_of_type = tributary_state
+							}
+							is_part_of_hre = yes
+						}
+						amount = 4
+					}
+				}
+			}
+			add_country_modifier = {
+				name = GE_Shared_Drills_3
+				duration = -1
+				hidden = yes
+			}
+			remove_country_modifier = GE_Shared_Drills_1
+			remove_country_modifier = GE_Shared_Drills_2
+			remove_country_modifier = GE_Shared_Drills_4
+			remove_country_modifier = GE_Shared_Drills_5
+		}
+		if = {
+			limit = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 4
+				}
+				NOT = { 				
+					calc_true_if = {
+						all_subject_country = {
+							NOT = {
+								is_colonial_nation = yes
+								is_subject_of_type = tributary_state
+							}
+							is_part_of_hre = yes
+						}
+						amount = 5
+					}
+				}
+			}
+			add_country_modifier = {
+				name = GE_Shared_Drills_4
+				duration = -1
+				hidden = yes
+			}
+			remove_country_modifier = GE_Shared_Drills_1
+			remove_country_modifier = GE_Shared_Drills_2
+			remove_country_modifier = GE_Shared_Drills_3
+			remove_country_modifier = GE_Shared_Drills_5
+		}
+		if = {
+			limit = {
+				calc_true_if = {
+					all_subject_country = {
+						NOT = {
+							is_colonial_nation = yes
+							is_subject_of_type = tributary_state
+						}
+						is_part_of_hre = yes
+					}
+					amount = 5
+				}
+			}
+			add_country_modifier = {
+				name = GE_Shared_Drills_5
+				duration = -1
+				hidden = yes
+			}
+			remove_country_modifier = GE_Shared_Drills_1
+			remove_country_modifier = GE_Shared_Drills_2
+			remove_country_modifier = GE_Shared_Drills_3
+			remove_country_modifier = GE_Shared_Drills_4
+		}
+	}
+	
+	option = {
+		name = reform_me_events.206.a
+		
+	}
+}
+
+country_event = {
+	id = reform_me_events.207
+	title = reform_me_events.207.t
+	desc = reform_me_events.207.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		OR = {
+			NOT = { has_government_attribute = enables_unified_drills }
+			AND = {
+				has_government_attribute = enables_unified_drills
+				NOT = { num_of_subjects = 1 }
+			}
+		}
+		OR = {
+			has_country_modifier = GE_Shared_Drills_1
+			has_country_modifier = GE_Shared_Drills_2
+			has_country_modifier = GE_Shared_Drills_3
+			has_country_modifier = GE_Shared_Drills_4
+			has_country_modifier = GE_Shared_Drills_5
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		remove_country_modifier = GE_Shared_Drills_1
+		remove_country_modifier = GE_Shared_Drills_2
+		remove_country_modifier = GE_Shared_Drills_3
+		remove_country_modifier = GE_Shared_Drills_4
+		remove_country_modifier = GE_Shared_Drills_5
+	}
+	
+	option = {
+		name = reform_me_events.207.a
+		
+	}
+}
+
+country_event = {
+	id = reform_me_events.208
+	title = reform_me_events.208.t
+	desc = reform_me_events.208.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		has_government_attribute = enables_artillery_academia 
+		OR = {
+			AND = {
+				army_tradition = 75
+				NOT = { has_country_modifier = GE_Academy_of_Artillery }
+			}
+			AND = {
+				NOT = { army_tradition = 75 }
+				has_country_modifier = GE_Academy_of_Artillery
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		if = {
+			limit = {
+				army_tradition = 75
+				NOT = {	has_country_modifier = GE_Academy_of_Artillery }
+            }
+			add_country_modifier = {
+				name = "GE_Academy_of_Artillery"
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				NOT = { army_tradition = 75 }
+				has_country_modifier = GE_Academy_of_Artillery
+            }
+			remove_province_modifier = GE_Academy_of_Artillery
+		}
+	}
+	
+	option = {
+		name = reform_me_events.208.a
+		
+	}
+}
+
+country_event = {
+	id = reform_me_events.209
+	title = reform_me_events.209.t
+	desc = reform_me_events.209.d
+	picture = WESTERNISATION_eventPicture
+	hidden = yes
+	
+
+	trigger = {
+		NOT = { has_government_attribute = enables_artillery_academia }
+		has_country_modifier = GE_Academy_of_Artillery
+	}
+	
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	immediate = {
+		remove_province_modifier = GE_Academy_of_Artillery
+	}
+	
+	option = {
+		name = reform_me_events.209.a
+		
+	}
+}
+

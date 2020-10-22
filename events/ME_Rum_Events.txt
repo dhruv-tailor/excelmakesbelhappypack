@@ -32,6 +32,34 @@ country_event = {
 		}
 		if = {
 			limit = {
+				is_expanded_mod_active = { mod = subjects }
+				can_be_overlord = muslim_tributary_vassal
+				TRA = {
+					NOT = { religion_group = muslim }
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = our_total_development
+							value = trigger_value:total_development
+						}
+						subtract_variable = { which = our_total_development value = 1 }
+						export_to_variable = {
+							which = their_total_development
+							value = trigger_value:total_development
+							who = PREV
+						}
+						subtract_variable = { which = their_total_development value = 1 }
+						divide_variable = { which = their_total_development value = 3 }
+						NOT = { check_variable = { which = our_total_development which = their_total_development } }
+					}
+				}
+			}
+			create_subject = {
+				subject = TRA
+				subject_type = muslim_tributary_vassal
+			}
+		}
+		else_if = {
+			limit = {
 				TRA = {
 					NOT = { vassal_of = ROOT }
 				}
@@ -259,18 +287,20 @@ country_event = {
 				change_religion = ROOT
 			}
 		}
-		#if = {
-		#	limit = {
-		#		is_expanded_mod_active = { mod = subjects }
-		#		can_be_overlord = iqta_vassal
-		#	}
-		#	create_subject = {
-		#		subject = SYR
-		#		subject_type = iqta_vassal
-		#	}
-		#}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+				can_be_overlord = iqta_vassal
+			}
+			create_subject = {
+				subject = SYR
+				subject_type = iqta_vassal
+			}
+		}
+		else = {
 			vassalize = SYR
 		}
+	}
 }
 
 country_event = {

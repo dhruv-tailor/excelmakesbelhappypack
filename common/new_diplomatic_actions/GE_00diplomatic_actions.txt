@@ -1,0 +1,330 @@
+# Triggers and effects will be given the Actor's scope, with the Recipient's as FROM
+
+static_actions = # static_actions is a reserved token.
+{
+	# alert_index maps to the frame of the alert icon
+	royal_marriage = 										{ alert_index = 1 alert_tooltip = ICON_RM }
+	requestpeace = 										{ alert_index = 2 alert_tooltip = ICON_PEACE  } # alert_index will be overwritten in code for this one.
+	allianceaction = 										{ alert_index = 3 alert_tooltip = ICON_ALLIANCE }
+# 4 is currently unused.
+	integrationaction = 									{ alert_index = 5 alert_tooltip = ICON_ANNEX }
+	annexationaction =									{ alert_index = 5 alert_tooltip = ICON_ANNEX }
+	vassalaction = 										{ alert_index = 6 alert_tooltip = ICON_VASSAL }
+	milaccess = 											{ alert_index = 7 alert_tooltip = ICON_ASKMIL }
+	fleet_access = 										{ alert_index = 8 alert_tooltip = ICON_ASKFLEET }
+	offermilaccess = 										{ alert_index = 9 alert_tooltip = ICON_OFFACC }
+	callaction = 											{ alert_index = 10 alert_tooltip = ICON_CALLALLY } # This one is referred to in the code (settings.cpp)
+	offerloan = 												{ alert_index = 11 alert_tooltip = ICON_OFFERLOAN }
+	sellprov = 												{ alert_index = 12 alert_tooltip = ICON_PROVSALE }
+		#13 is cursed
+	request_to_join_federation = 						{ alert_index = 14 alert_tooltip = ICON_FEDERATIONREQUEST }
+	invite_to_federation = 								{ alert_index = 15 alert_tooltip = ICON_FEDERATIONINVITE }
+	transfer_trade_power = 							{ alert_index = 16 alert_tooltip = TRANSFER_TRADE_POWER }
+	religious_unity_action = 							{ alert_index = 17 alert_tooltip = ICON_RELIGIOUS_UNITY }
+		# 18 is used by requestpeace
+	form_coalition = 										{ alert_index = 19 alert_tooltip = ICON_FORM_COALITION }
+	enforce_peace = 										{ alert_index = 20 alert_tooltip = ICON_ENFORCE_PEACE } # This one may be overwritten in code.
+	grant_electorate = 									{ alert_index = 21 alert_tooltip = ICON_GRANT_ELECTORATE }
+	demand_unlawful_territory_action = 			{ alert_index = 22 alert_tooltip = ICON_DEMAND_UNLAWFUL_TERRITORY }
+		# 23 is used by requestpeace
+		# 24 is used by requestpeace
+		# 25 is used by requestpeace
+		# 26 is used by requestpeace
+		# 27 is used by enforce_peace (when actor is coalition leader) with tooltip "ICON_ENFORCE_PEACE_COALITION_LEADER"
+	support_independence_action = 					{ alert_index = 28 alert_tooltip = support_independence }
+	steer_trade = 										{ alert_index = 29 alert_tooltip = ICON_STEER_TRADE }
+	ask_for_march = 										{ alert_index = 30 alert_tooltip = ICON_MARCH }
+	sell_ships_action = 									{ alert_index = 31 alert_tooltip = ICON_FLEETSALE }
+	grant_freecity = 										{ alert_index = 32 alert_tooltip = ICON_GRANT_FREECITY }
+# 33 is currently unused
+	invite_to_trade_league = 							{ alert_index = 34 alert_tooltip = ICON_TRADELEAGUEINVITE }
+	request_to_join_trade_league = 					{ alert_index = 35 alert_tooltip = ICON_TRADELEAGUEREQUEST }
+	sharemap = 											{ alert_index = 36 alert_tooltip = ICON_REQUESTSHAREMAP } # alert_tooltip gets special treatment in the code
+	condottieri_action = 								{ alert_index = 37 alert_tooltip = ICON_CONDOTTIERI }
+	offer_fleet_access = 								{ alert_index = 38 alert_tooltip = ICON_OFFERFLEET }
+	break_alliance = 										{ alert_index = 39 alert_tooltip = ICON_BREAK_ALLIANCE }
+	tributary_state_action = 							{ alert_index = 40 alert_tooltip = ICON_TRIBUTARY }
+	ask_for_tributary_state_action = 				{ alert_index = 41 alert_tooltip = ICON_ASK_TRIBUTARY }
+	knowledge_sharing = 								{ alert_index = 42 alert_tooltip = ICON_KNOWLEDGESHARE } #The answer to life
+# 43 is currently unused
+	charter_company = 								{ alert_index = 44 alert_tooltip = ICON_CHARTERCOMPANY }
+}
+
+
+grant_imperial_court = {
+	category = emperor
+
+
+	require_acceptance = no 
+
+	is_visible = {
+		is_emperor = yes
+		NOT = {
+			FROM = {
+				OR = {
+					has_country_flag = GE_HRE_Imperial_Court
+					has_country_flag = GE_HRE_Imperial_Marshall
+				}
+			}
+		}
+		FROM = {
+			is_part_of_hre = yes
+		}
+		NOT = {
+			any_country = {
+				has_country_flag = GE_HRE_Imperial_Court
+			}
+		}
+	}
+	is_allowed = {
+		is_emperor = yes
+		NOT = {
+			FROM = {
+				OR = {
+					has_country_flag = GE_HRE_Imperial_Court
+					has_country_flag = GE_HRE_Imperial_Marshall
+				}
+			}
+		}
+		FROM = {
+			is_part_of_hre = yes
+		}
+	}
+	on_accept = {
+		FROM = {
+			set_country_flag = GE_HRE_Imperial_Court
+			country_event = {
+				id = GE_privileges.13
+			}
+		}
+		ROOT = {
+			add_ruler_modifier = {
+				name = GE_HRE_Emperor_has_Judge
+				duration = -1
+			}
+			if = {
+				limit = {
+					NOT = {
+						ai = yes
+					}
+				}
+				add_imperial_influence = -5
+			}
+		}
+	}
+	on_decline = {
+	}
+
+	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
+	}
+
+	ai_will_do = { # this is a trigger
+		FROM = {
+			calc_true_if = {
+				is_elector = yes
+				any_ally = {
+					tag = ROOT
+				}
+				marriage_with = ROOT
+				ROOT = {				
+					has_opinion = {
+						who = FROM
+						value = 200
+					}
+				}
+				amount = 3
+			}
+		}
+	}
+}
+
+cancel_imperial_court =  {
+	category = emperor
+	require_acceptance = no
+	is_visible = {
+		is_emperor = yes
+		FROM = {
+			has_country_flag = GE_HRE_Imperial_Court
+		}
+	}
+	is_allowed = {
+		is_emperor = yes
+		FROM = {
+			has_country_flag = GE_HRE_Imperial_Court
+		}
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = GE_HRE_Imperial_Court
+			country_event = {
+				id = GE_privileges.14
+			}
+		}
+	}
+	ai_will_do = {
+		OR = {
+			FROM = {
+				NOT = {
+					calc_true_if = {
+						is_elector = yes
+						any_ally = {
+							tag = ROOT
+						}
+						marriage_with = ROOT
+						ROOT = {				
+							has_opinion = {
+								who = FROM
+								value = 200
+							}
+						}
+						amount = 3
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					has_ruler_modifier = GE_HRE_Emperor_has_Judge
+				}
+			}
+		}
+	}
+}
+
+grant_imperial_marshall = {
+	category = emperor
+
+
+	require_acceptance = no 
+
+	is_visible = {
+		is_emperor = yes
+		NOT = {
+			FROM = {
+				OR = {
+					has_country_flag = GE_HRE_Imperial_Court
+					has_country_flag = GE_HRE_Imperial_Marshall
+				}
+			}
+		}
+		FROM = {
+			is_part_of_hre = yes
+		}
+		NOT = {
+			any_country = {
+				has_country_flag = GE_HRE_Imperial_Marshall
+			}
+		}
+	}
+	is_allowed = {
+		is_emperor = yes
+		NOT = {
+			FROM = {
+				OR = {
+					has_country_flag = GE_HRE_Imperial_Court
+					has_country_flag = GE_HRE_Imperial_Marshall
+				}
+			}
+		}
+		FROM = {
+			is_part_of_hre = yes
+		}
+	}
+	on_accept = {
+		FROM = {
+			set_country_flag = GE_HRE_Imperial_Marshall
+			country_event = {
+				id = GE_privileges.15
+			}
+		}
+		ROOT = {
+			add_ruler_modifier = {
+				name = GE_HRE_Emperor_has_Marshall
+				duration = -1
+			}
+			if = {
+				limit = {
+					NOT = {
+						ai = yes
+					}
+				}
+				add_imperial_influence = -5
+			}
+		}
+	}
+	on_decline = {
+	}
+
+	ai_acceptance = { # This works similarly to variable_arithmetic_trigger, but does not support triggers generally. Instead, "limit" will be evaluated first and the rest ignored if it isn't passed.
+	}
+
+	ai_will_do = { # this is a trigger
+		FROM = {
+			calc_true_if = {
+				is_elector = yes
+				any_ally = {
+					tag = ROOT
+				}
+				marriage_with = ROOT
+				ROOT = {				
+					has_opinion = {
+						who = FROM
+						value = 200
+					}
+				}
+				amount = 3
+			}
+		}
+	}
+}
+
+cancel_imperial_marshall =  {
+	category = emperor
+	require_acceptance = no
+	is_visible = {
+		is_emperor = yes
+		FROM = {
+			has_country_flag = GE_HRE_Imperial_Marshall
+		}
+	}
+	is_allowed = {
+		is_emperor = yes
+		FROM = {
+			has_country_flag = GE_HRE_Imperial_Marshall
+		}
+	}
+	on_accept = {
+		FROM = {
+			clr_country_flag = GE_HRE_Imperial_Marshall
+			country_event = {
+				id = GE_privileges.16
+			}
+		}
+	}
+	ai_will_do = {
+		OR = {
+			FROM = {
+				NOT = {
+					calc_true_if = {
+						is_elector = yes
+						any_ally = {
+							tag = ROOT
+						}
+						marriage_with = ROOT
+						ROOT = {				
+							has_opinion = {
+								who = FROM
+								value = 200
+							}
+						}
+						amount = 3
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					has_ruler_modifier = GE_HRE_Emperor_has_Marshall
+				}
+			}
+		}
+	}
+}
