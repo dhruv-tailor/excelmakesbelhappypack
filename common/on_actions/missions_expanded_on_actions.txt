@@ -1,6 +1,158 @@
 # Missions Expanded on actions
 # Remember to keep the vanilla effects
 
+on_startup = {
+	emperor = {
+		save_global_event_target_as = Emperor
+	}
+	if = {
+		limit = {
+			is_emperor_of_china = yes
+		}
+		save_global_event_target_as = EmperorOfChina
+	}
+	events = {
+		muslim_school_events.20 #Pick School
+#		flavor_fra.15000 #Make the French Revolution happen if starting in 1789
+	}
+	if = {
+		limit = {
+			has_dlc = "Cradle of Civilization"
+			has_country_modifier = tur_janissary
+		}
+		remove_country_modifier = tur_janissary
+	}
+	initialize_schools_effect = yes #This is only used here but is used for readability of on_action file.
+	if = {
+		limit = {
+			NOT = { has_country_flag = new_flavour_bav_13_has_been_triggered }
+			OR = {
+				tag = UBV
+				tag = LBV
+				tag = ING
+			}
+		}
+		set_country_flag = new_flavour_bav_13_has_been_triggered
+		country_event = { id = new_flavour_bav.13 days = 90 } #better not to allow almost instant DOWs
+	}
+	if = {
+		limit = {
+			tag = FRA
+			started_in = 1789.7.14
+			NOT = { is_year = 1790 }
+			NOT = { has_disaster = french_revolution }
+		}
+		add_disaster_progress = {
+			value = 100
+			disaster = french_revolution
+		}
+	}
+	if = {
+		limit = {
+			exists = AVR
+		}
+		AVR = {
+			country_event = { id = ME_Avaria_Events.1 }
+		}
+	}
+	if = {
+		limit = {
+			tag = TKD
+		}
+		change_variable = { which = num_of_won_battles value = 0 }
+	}
+	if = {
+		limit = {
+			tag = SWE
+		}
+		change_variable = { swe_num_of_wars_against_non_catholics = 0 }
+	}
+	change_variable = { num_of_culture_converted_provinces = 0 }
+	change_variable = { num_converted_religion = 0 }
+}
+
+on_monarch_death = {
+	if = {
+		limit = {
+			tag = ANS
+			BRA = {
+				has_country_flag = albrecht_achilles_flag
+			}
+		}
+		BRA = {
+			clr_country_flag = albrecht_achilles_flag #Just to be sure
+			kill_heir = yes #If Albrecht Achilles dies in Ansbach he will also be dead in Brandenburg, will appear as normal death of heir to BRA.
+		}
+	}
+	if = {
+		limit = { has_country_modifier = sought_after_bachelor }
+		remove_country_modifier = sought_after_bachelor
+	}
+	if = {
+		limit = {
+			tag = SAX
+			has_country_flag = sax_thuringen_split_to_happen
+			OR = {
+				NOT = { dynasty = "von Wettin" }
+				NOT = { senior_union_with = THU }
+				has_regency = yes
+			}
+		}
+		clr_country_flag = sax_thuringen_split_to_happen
+	}
+	burgundian_inheritance_start_effect = yes
+	ladislaus_postumus_king_died_effect = yes
+	if = {
+		limit = {
+			has_ruler_flag = Ulugh_beg_is_ruler
+		}
+		ROOT = {
+			country_event = { id = ME_Timurid_Princes_Event.11 }
+		}
+	}
+	events = {
+		flavor_wal.1 # Vlad the Impaler. So that he doesn't try to usurp his father.
+		flavor_nav.4 # Navarra succession event
+		flavor_sax.8 # Treaty of Leipzig
+		flavor_pap.16 # Borgia Pope
+		flavor_pap.19 # death of borgia pope
+		flavor_tus.22 # Medici Pope
+		flavor_tus.24 # death of the Medici Pope
+		ME_Spain_Events.8
+		ME_Reform_Events.1
+		ME_Korea_Events.6
+		ME_Korea_Events.8
+	}
+	if = {
+		limit = {
+			tag = CRI
+			is_subject_of_type = timar
+		}
+		TUR = {
+			country_event = { id = ME_Crimea_Events.1 }
+		}
+	}
+	if = {
+		limit = {
+			has_reform = west_slavic_monarchy
+			NOT = { has_country_flag = ME_FFS_STAP }
+		}
+		set_country_flag = ME_FFS_STAP
+		country_event = { id = ME_Zapadoslavia_Events.9 }
+	}
+	if = {
+		limit = {
+			tag = ERE
+			mission_completed = ERE_tombs
+		}
+		random_owned_province = {
+			province_event = {
+				id = ME_Beylik_Events.14
+			}
+		}
+	}
+}
+
 on_heir_death = {
 	if = {
 		limit = { has_country_flag = heir_dip_education }
@@ -52,6 +204,113 @@ on_heir_death = {
 	}
 }
 
+# province
+on_adm_development = {
+	 if = {
+		limit = {
+			owner = {
+				has_reform = west_slavic_monarchy
+			}
+		}
+		if = {
+			limit = {
+				culture = slovak
+			}
+			owner = {
+				change_variable = { ME_slovak_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				culture = polish
+			}
+			owner = {
+				change_variable = { ME_polish_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				culture = czech
+			}
+			owner = {
+				change_variable = { ME_czech_loyalty = 0.5 }
+			}
+		}
+	}
+}
+
+# province
+on_dip_development = {
+	 if = {
+		limit = {
+			owner = {
+				has_reform = west_slavic_monarchy
+			}
+		}
+		if = {
+			limit = {
+				culture = slovak
+			}
+			owner = {
+				change_variable = { ME_slovak_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				culture = polish
+			}
+			owner = {
+				change_variable = { ME_polish_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				culture = czech
+			}
+			owner = {
+				change_variable = { ME_czech_loyalty = 0.5 }
+			}
+		}
+	}
+}
+
+# province
+on_mil_development = {
+	if = {
+		limit = {
+			owner = {
+				has_reform = west_slavic_monarchy
+			}
+		}
+		if = {
+			limit = {
+				culture = slovak
+			}
+			owner = {
+				change_variable = { ME_slovak_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					culture = polish
+					culture = schlesian
+				}
+			}
+			owner = {
+				change_variable = { ME_polish_loyalty = 0.5 }
+			}
+		}
+		else_if = {
+			limit = {
+				culture = czech
+			}
+			owner = {
+				change_variable = { ME_czech_loyalty = 0.5 }
+			}
+		}
+	}
+}
 
 on_province_culture_converted = {
 	if = {
