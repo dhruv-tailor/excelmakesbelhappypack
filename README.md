@@ -5,10 +5,13 @@
 - Unpack the .zip into the mod folder.
 - Enable the mod in your game launcher and enjoy the game!
 ## Changelog: <!-- do not edit this line!! -->
+
+### V0.30 Latest Patch
+- Mod has now been updated with the latest updates and works with 1.30 Austria version
 ### V0.2.7.3 American Trade
 - Development Ideas MTTH modified:
     - MTTH is tied directly to dev cost modifiers
-    - -50% dev cost is twice as likely to fire 
+    - -50% dev cost is twice as likely to fire
     - +100% dev cost is half as likely to fire
     - Removed MTTH modifiers: prosperity and stability
 - Further minor tweaks to American trade map
@@ -79,7 +82,7 @@
 - A reasonable amount of other minor fixes.
 ### V0.2.5.2
 - AI has a decision to dev a lowest cost province when at the monarch cap.
-- Arumba changes to the dev idea. 
+- Arumba changes to the dev idea.
 ### V0.2.2
 - This pack and future versions are now available at github.com/TheDivexz/excelmakesbelhappypack/releases
 - also other improvements to ai and development ideas
