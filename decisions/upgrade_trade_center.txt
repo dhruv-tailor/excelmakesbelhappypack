@@ -1,4 +1,5 @@
 country_decisions = {
+
 	upgrade_1_to_2 = {
 		major = yes
 		potential = {
@@ -13,23 +14,17 @@ country_decisions = {
 				}
 			}
 		}
-
 		allow = {
-			NOT = {
-				num_of_loans = 1
-			}
-			is_at_war = no
+			#NOT = { num_of_loans = 1 }
+			#is_at_war = no
 		}
-
 		effect = {
 			custom_tooltip = upgrade_1_to_2_tooltip
-			add_treasury = -200
 			hidden_effect = {
-				set_variable = 	{
+				set_variable = {
 					which = ptPower
 					value = -1
 				}
-
 				every_owned_province = {
 					limit = {
 						province_has_center_of_trade_of_level = 1
@@ -39,12 +34,10 @@ country_decisions = {
 							is_owned_by_trade_company = yes
 						}
 					}
-
 					export_to_variable = {
 						which = ptPower
 						value = trigger_value:province_trade_power
 					}
-
 					if = {
 						limit = {
 							check_variable = {
@@ -52,52 +45,65 @@ country_decisions = {
 								which = owner
 							}
 						}
-
 						owner = {
 							set_variable = {
 								which = ptPower
 								which = PREV
 							}
 						}
-
 						save_event_target_as = ptpFlag
 						#log = "find [This.GetName] [This.ptPower.GetValue]"
 					}
 				}
-
-				event_target:ptpFlag = {
-					add_center_of_trade_level = 1
-					#log = "final [This.GetName] [This.ptPower.GetValue]"
+				if = {
+					limit = { has_saved_event_target = ptpFlag }
+					event_target:ptpFlag = {
+						add_center_of_trade_level = 1
+							hidden_effect = {
+								owner = {
+									export_to_variable = {
+										which = cotuCost
+										value = modifier:center_of_trade_upgrade_cost
+									}
+									change_variable = {
+										which = cotuCost
+										value = 1
+									}
+									multiply_variable = {
+										which = cotuCost
+										value = -200
+									}
+									add_power_effect = { #command_variable_effect
+										variable = cotuCost
+										command = add_treasury
+									}
+								}
+							}
+						#log = "final [This.GetName] [This.ptPower.GetValue]"
+					}
 				}
-			}
+			}	
 		}
-
 		ai_will_do = {
-			factor = 1
-
+			factor = 0
+			
 			modifier = {
 				factor = 0
-				NOT = {
-					treasury = 400
-				}
+				NOT = { treasury = 400 }
 			}
 		}
 	}
-
+	
 	upgrade_2_to_3 = {
 		major = yes
 		potential = {
 			ai = no
 			treasury = 1000
-			any_owned_province =
-			{
+			any_owned_province = {
 				province_has_center_of_trade_of_level = 2
 				all_province_in_state = {
-					NOT = {
-						province_has_center_of_trade_of_level = 3
-					}
+					NOT = { province_has_center_of_trade_of_level = 3 }
 				}
-
 				OR = {
 					is_state = yes
 					is_owned_by_trade_company = yes
@@ -105,11 +111,8 @@ country_decisions = {
 			}
 		}
 		allow = {
-			NOT =
-			{ num_of_loans = 1
-			}
-
-			is_at_war = no
+			#NOT = { num_of_loans = 1 }
+			#is_at_war = no
 			     if = { limit = { NOT = { num_of_owned_provinces_with = { value =    1	province_has_center_of_trade_of_level = 3 } } } num_of_merchants =	 1  }
 			else_if = { limit = { NOT = { num_of_owned_provinces_with = { value =    2	province_has_center_of_trade_of_level = 3 } } } num_of_merchants =	 2  }
 			else_if = { limit = { NOT = { num_of_owned_provinces_with = { value =    3	province_has_center_of_trade_of_level = 3 } } } num_of_merchants =	 3  }
@@ -153,76 +156,80 @@ country_decisions = {
 			else_if = { limit = { NOT = { num_of_owned_provinces_with = { value =	41	province_has_center_of_trade_of_level = 3 } } } num_of_merchants =	41	}
 			else_if = { limit = { NOT = { num_of_owned_provinces_with = { value =	42	province_has_center_of_trade_of_level = 3 } } } num_of_merchants =	42	}
 		}
-
 		effect = {
 			custom_tooltip = upgrade_2_to_3_tooltip
-			add_treasury = -1000
 			hidden_effect = {
 				set_variable = {
 					which = ptPower
 					value = -1
 				}
-
 				every_owned_province = {
 					limit = {
 						province_has_center_of_trade_of_level = 2
 						all_province_in_state = {
-							NOT = {
-								province_has_center_of_trade_of_level = 3
-							}
+							NOT = { province_has_center_of_trade_of_level = 3 }
 						}
-
 						OR = {
 							is_state = yes
 							is_owned_by_trade_company = yes
 						}
 					}
-
 					export_to_variable = {
 						which = ptPower
 						value = trigger_value:province_trade_power
 					}
-
 					if = {
 						limit = {
-							check_variable =
-							{
+							check_variable = {
 								which = ptPower
 								which = owner
 							}
 						}
-
 						owner = {
 							set_variable = {
 								which = ptPower
 								which = PREV
 							}
 						}
-
-						save_event_target_as = ptpFlag2
+						save_event_target_as = ptpFlag
 						#log = "find [This.GetName] [This.ptPower.GetValue]"
 					}
 				}
-
-				event_target:ptpFlag2 =
-				{
-					add_center_of_trade_level = 1
-					#log = "final [This.GetName] [This.ptPower.GetValue]"
+				if = {
+					limit = { has_saved_event_target = ptpFlag }
+					event_target:ptpFlag = {
+						add_center_of_trade_level = 1
+							hidden_effect = {
+								owner = {
+									export_to_variable = {
+										which = cotuCost
+										value = modifier:center_of_trade_upgrade_cost
+									}
+									change_variable = {
+										which = cotuCost
+										value = 1
+									}
+									multiply_variable = {
+										which = cotuCost
+										value = -1000
+									}
+									add_power_effect = { #command_variable_effect
+										variable = cotuCost
+										command = add_treasury
+									}
+								}
+							}
+						#log = "final [This.GetName] [This.ptPower.GetValue]"
+					}
 				}
 			}
 		}
-
-		ai_will_do =
-		{
-			factor = 1
-
-			modifier =
-			{
+		ai_will_do = {
+			factor = 0
+			
+			modifier = {
 				factor = 0
-				NOT =
-				{
-					treasury = 2000
-				}
+				NOT = { treasury = 2000 }
 			}
 		}
 	}
