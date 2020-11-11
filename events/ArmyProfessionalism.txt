@@ -20,10 +20,13 @@ country_event = {
 		OR = {
 			FROM = {
 				owner = {
-					is_rival = ROOT
+					OR = {
+						is_rival = ROOT
+						ROOT = { is_rival = PREV }
+					}
 				}
 			}
-			NOT = { army_professionalism = 0.20 } #0.50
+			NOT = { army_professionalism = 0.20 } #Salaried Soldiers
 		}
 		NOT = {
 			has_country_modifier = enemies_sacked_city
@@ -32,16 +35,15 @@ country_event = {
 			NOT = { has_country_flag = had_living_of_the_land }
 			had_country_flag = { flag = had_living_of_the_land days = 7300 } #20 Years
 		}
-		NOT = { overlord = { FROM = { country_or_non_sovereign_subject_holds = PREV } } }
 		FROM = {
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			development = 10 #15
+			development = 10
 			fort_level = 1
 			OR = {
 				NOT = { has_province_flag = was_magdeburgerized }
 				had_province_flag = { flag = was_magdeburgerized days = 14600 } #40 Years
 			}
 			owner = {
+				war_with = ROOT
 				OR = {
 					NOT = { has_country_flag = was_plundered }
 					had_country_flag = { flag = was_plundered days = 10950 } #30 Years
@@ -122,6 +124,15 @@ country_event = {
 	}
 	option = {
 		name = army_professionalism_events.1.c #Such are the rules of warfare
+		trigger = {
+			NOT = {
+				has_dlc = "Emperor"
+				FROM = {
+					is_capital = yes
+					owned_by = PAP
+				}
+			}
+		}
 		ai_chance = {
 			factor = 25
 			modifier = {
@@ -137,6 +148,69 @@ country_event = {
 				has_reform = steppe_horde
 			}
 		}
+		add_army_professionalism = -0.05
+		add_prestige = -10
+		add_horde_unity = 5
+		add_loot_from_province_effect = yes
+		FROM = {
+			province_event = { id = army_professionalism_events.3 }
+			tooltip = {
+				add_devastation = 100
+				add_base_production = -2
+			}
+		}
+		tooltip = {
+			event_target:attacked_country = {
+				add_opinion = {
+					who = ROOT
+					modifier = sack_of_x
+				}
+				add_country_modifier = {
+					name = "enemies_sacked_city"
+					duration = 3650
+				}
+			}
+		}
+	}
+	option = {
+		name = army_professionalism_events.1.d2 # plunder the curia treasury
+		trigger = {
+			has_dlc = "Emperor"
+			FROM = {
+				is_capital = yes
+				owned_by = PAP
+			}
+		}
+		highlight = yes
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 0
+				is_core = FROM
+			}
+			modifier = {
+				factor = 0
+				primary_culture = FROM
+			}
+			modifier = {
+				factor = 5
+				has_reform = steppe_horde
+			}
+			modifier = {
+				factor = 100
+				NOT = {
+					religion = catholic
+				}
+			}
+			modifier = {
+				factor = 100
+				religion = catholic
+				OR = {
+					ruler_has_personality = sinner_personality
+					ruler_has_personality = malevolent_personality
+				}
+			}
+		}
 		add_treasury = 1000
 		add_army_professionalism = -0.05
 		add_prestige = -10
@@ -150,6 +224,7 @@ country_event = {
 			}
 		}
 		tooltip = {
+			reduce_curia_treasury_big_effect = yes
 			event_target:attacked_country = {
 				add_opinion = {
 					who = ROOT
@@ -190,7 +265,18 @@ province_event = {
 province_event = {
 	id = army_professionalism_events.3
 	title = army_professionalism_events.3.t
-	desc = army_professionalism_events.3.d
+	desc = {
+		trigger = {
+			owner = { NOT = { tag = PAP } }
+		}
+		desc = army_professionalism_events.3.d
+	}
+	desc = {
+		trigger = {
+			owner = { tag = PAP }
+		}
+		desc = army_professionalism_events.3.d2
+	}
 	picture = NOT_DISCIPLINED_SOLDIERS_eventPicture
 	goto = root
 
@@ -198,8 +284,34 @@ province_event = {
 
 	option = {
 		name = army_professionalism_events.3.a #Barbarians!
+		trigger = {
+			NOT = { 
+				owner = { tag = PAP }
+				has_dlc = "Emperor"
+			}
+		}
 		add_devastation = 100
 		add_base_production = -2
+		owner = {
+			add_country_modifier = {
+				name = "enemies_sacked_city"
+				duration = 3650
+			}
+			add_opinion = {
+				who = FROM
+				modifier = sack_of_x
+			}
+		}
+	}
+	option = {
+		name = army_professionalism_events.3.b
+		trigger = {
+			owner = { tag = PAP }
+			has_dlc = "Emperor"
+		}
+		add_devastation = 100
+		add_base_production = -2
+		reduce_curia_treasury_big_effect = yes
 		owner = {
 			add_country_modifier = {
 				name = "enemies_sacked_city"
@@ -429,7 +541,15 @@ country_event = {
 		ai_chance = {
 			factor = 50
 		}
-		add_years_of_income = -0.75
+		if = {
+			limit = {
+				monthly_income = 10
+			}
+			add_years_of_income = -0.5
+		}
+		else = {
+			add_treasury = -60
+		}
 		add_army_professionalism = 0.05
 		event_target:professional_country = {
 			add_opinion = {
@@ -673,7 +793,10 @@ country_event = {
 		ai_chance = {
 			factor = 25
 		}
-		add_yearly_manpower = -2
+		add_country_modifier = {
+			name = shortage_of_officers
+			duration = 5475
+		}
 	}
 }
 
@@ -957,4 +1080,4 @@ province_event = {
 			}
 		}
 	}
-}
+}	
