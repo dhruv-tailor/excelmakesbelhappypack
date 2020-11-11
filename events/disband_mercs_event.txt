@@ -1,0 +1,74 @@
+namespace = disband_mercs
+
+country_event = { # Disbands Mercs during peacetime
+	id = disband_mercs.1
+	title = disband_mercs.1.t
+	desc = disband_mercs.1.d
+	picture = SCOTTISH_MERCENARIES_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		ai = yes
+		is_at_war = no
+		any_hired_mercenary_company = {
+			hired_for_months = 18
+		}
+	}
+	
+	immediate = {
+		while = {
+			limit = {
+				any_hired_mercenary_company = {
+					hired_for_months = 18
+				}
+			}
+			hidden_effect = {
+				random_hired_mercenary_company = {
+					limit = {
+						hired_for_months = 18
+					}
+					disband_mercenary_company = THIS
+				}
+				log = "[This.GetName] disband_mercs.1"
+			}
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = { # Disbands Merc companies one at time, if AI went over the force limit.
+	id = disband_mercs.2
+	title = disband_mercs.2.t
+	desc = disband_mercs.2.d
+	picture = SCOTTISH_MERCENARIES_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		ai = yes
+		is_at_war = yes
+		army_size_percentage = 1.25
+		num_of_hired_mercenary_companies = 2
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_hired_mercenary_company = {
+				limit = {
+					hired_for_months = 1
+				}
+				disband_mercenary_company = THIS
+			}
+			add_yearly_manpower = 0.25
+			log = "[This.GetName] disband_mercs.2"
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
