@@ -5,60 +5,179 @@ province_event = {
 	title = mine_marcin.1.t
 	desc = mine_marcin.1.d
 	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
-
-
+	
+	goto = root
+	
 	trigger = {
 		has_building = mine
+		NOT = { has_province_flag = mine_marcin1 }
 	}
-	goto = root
-
+	
+	immediate = {
+		set_province_flag = mine_marcin1
+	}
+	
 	option = {
 		name = mine_marcin.1.a
+		
+		custom_tooltip = MINEs_tooltip
+		hidden_effect = {
+			random_list = {
+				70 = {
+					set_province_flag = mine_marcin2
+				}
+				30 = {
+					set_province_flag = mine_marcin3
+				}
+			}
+		}
+		owner = { add_yearly_manpower = -0.01 }
+	}
+	
+	option = {
+		name = mine_marcin.1.b
+		
+		ai_chance = { factor = 0 }
+		
+		remove_building = mine
+		add_province_modifier = {
+			name = mine_fail
+			duration = 3650
+		}
+	}
+}
+
+province_event = {
+	id = mine_marcin.2
+	title = mine_marcin.2.t
+	desc = mine_marcin.1.d
+	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
+	
+	goto = root
+	
+	trigger = {
+		has_building = mine
+		has_province_flag = mine_marcin2
+	}
+	
+	option = {
+		name = mine_marcin.2.a
 		ai_chance = { factor = 75 }
 		custom_tooltip = MINEs_tooltip
 		hidden_effect = {
 			random_list = {
 				70 = {
-					FROM = {
-						add_province_modifier = {
-							name = mine_fail
-							duration = 3650
-							desc = MINE_tooltip
-						}
-					}
+					#set_province_flag = mine_marcin2
 				}
 				30 = {
-					random_list = {
-						30 = {
-							FROM = { change_trade_goods = copper }
-						}
-						25 = {
-							random_list = {
-								50 = { FROM = { change_trade_goods = tin } }
-								50 = { FROM = { change_trade_goods = zinc }	}
-							}
-						}
-						15 = {
-							FROM = { change_trade_goods = iron }
-						}
-						10 = {
-							FROM = { change_trade_goods = lead }
-						}
-						5 = {
-							random_list = {
-								50 = { FROM = { change_trade_goods = silver } }
-								50 = { FROM = { change_trade_goods = gold }	}
-							}
-						}
-					}
-
+					clr_province_flag = mine_marcin2
+					set_province_flag = mine_marcin3
 				}
 			}
 		}
-		owner = { add_dip_power = -100 }
+		owner = { add_yearly_manpower = -0.02 }
 	}
-
-	immediate = {
-		FROM = { remove_building = mine }
+	
+	option = {
+		name = mine_marcin.2.b
+		
+		ai_chance = { factor = 0 }
+		
+		remove_building = mine
+		add_province_modifier = {
+			name = mine_fail
+			duration = 3650
+		}
 	}
 }
+
+province_event = {
+	id = mine_marcin.3
+	title = mine_marcin.3.t
+	desc = mine_marcin.3.d
+	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
+	
+	goto = root
+	
+	trigger = {
+		has_building = mine
+		has_province_flag = mine_marcin3
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_province_flag = copper
+			clr_province_flag = tin
+			clr_province_flag = zinc
+			clr_province_flag = iron
+			clr_province_flag = lead
+			clr_province_flag = silver
+			clr_province_flag = gold
+			
+			random_list = {
+				35 = {
+					set_province_flag = copper
+				}
+				30 = {
+					random_list = {
+						50 = { set_province_flag = tin }
+						50 = { set_province_flag = zinc }
+					}
+				}
+				20 = {
+					set_province_flag = iron
+				}
+				10 = {
+					set_province_flag = lead
+				}
+				5 = {
+					random_list = {
+						50 = { set_province_flag = silver }
+						50 = { set_province_flag = gold }
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		hidden_effect = {
+			clr_province_flag = copper
+			clr_province_flag = tin
+			clr_province_flag = zinc
+			clr_province_flag = iron
+			clr_province_flag = lead
+			clr_province_flag = silver
+			clr_province_flag = gold
+		}
+	}
+	
+	option = {
+		name = mine_marcin.3.a
+		
+		remove_building = mine
+		
+			 if = { limit = { has_province_flag = copper } change_trade_goods = copper }
+		else_if = { limit = { has_province_flag = tin	 } change_trade_goods = tin	   }
+		else_if = { limit = { has_province_flag = zinc	 } change_trade_goods = zinc   }
+		else_if = { limit = { has_province_flag = iron	 } change_trade_goods = iron   }
+		else_if = { limit = { has_province_flag = lead	 } change_trade_goods = lead   }
+		else_if = { limit = { has_province_flag = silver } change_trade_goods = silver }
+		else_if = { limit = { has_province_flag = gold	 } change_trade_goods = gold   }
+		
+		owner = { add_dip_power = -80 }
+	}
+	
+	option = {
+		name = mine_marcin.1.b
+		
+		ai_chance = { factor = 0 }
+		
+		remove_building = mine
+		add_province_modifier = {
+			name = mine_fail
+			duration = 3650
+		}
+	}
+}
+
