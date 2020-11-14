@@ -14,24 +14,61 @@ province_event = {
 	}
 	
 	immediate = {
-		set_province_flag = mine_marcin1
+		hidden_effect = {
+			set_province_flag = mine_marcin1
+			set_variable = {
+				which = FailChance
+				value = 80
+			}
+			set_variable = {
+				which = SuccessChance
+				value = 20
+			}
+		}
 	}
 	
 	option = {
 		name = mine_marcin.1.a
+		trigger = {
+			NOT = { development = 4 }
+		}
 		
 		custom_tooltip = MINEs_tooltip
-		hidden_effect = {
-			random_list = {
-				70 = {
-					set_province_flag = mine_marcin2
-				}
-				30 = {
-					set_province_flag = mine_marcin3
-				}
-			}
+		dig_more_var = yes
+		owner = { add_yearly_manpower = -0.1 }
+	}
+	
+	option = {
+		name = mine_marcin.1.adm
+		trigger = {
+			base_tax = 2
 		}
-		owner = { add_yearly_manpower = -0.01 }
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_tax = -1
+	}
+	
+	option = {
+		name = mine_marcin.1.dip
+		trigger = {
+			base_production = 2
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_production = -1
+	}
+	
+	option = {
+		name = mine_marcin.1.mil
+		trigger = {
+			base_manpower = 2
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_manpower = -1
 	}
 	
 	option = {
@@ -42,7 +79,7 @@ province_event = {
 		remove_building = mine
 		add_province_modifier = {
 			name = mine_fail
-			duration = 3650
+			duration = 1825 #5 years
 		}
 	}
 }
@@ -60,22 +97,69 @@ province_event = {
 		has_province_flag = mine_marcin2
 	}
 	
-	option = {
-		name = mine_marcin.2.a
-		ai_chance = { factor = 75 }
-		custom_tooltip = MINEs_tooltip
+	immediate = {
 		hidden_effect = {
-			random_list = {
-				70 = {
-					#set_province_flag = mine_marcin2
-				}
-				30 = {
-					clr_province_flag = mine_marcin2
-					set_province_flag = mine_marcin3
-				}
+			multiply_variable = {
+				which = FailChance
+				value = 0.8
+			}
+			set_variable = {
+				which = SuccessChance
+				which = FailChance
+			}
+			multiply_variable = {
+				which = SuccessChance
+				value = -1
+			}
+			change_variable = {
+				which = SuccessChance
+				value = 100
 			}
 		}
-		owner = { add_yearly_manpower = -0.02 }
+	}
+	
+	option = {
+		name = mine_marcin.2.a
+		trigger = {
+			NOT = { development = 4 }
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		owner = { add_yearly_manpower = -0.1 }
+	}
+	
+	option = {
+		name = mine_marcin.1.adm
+		trigger = {
+			base_tax = 2
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_tax = -1
+	}
+	
+	option = {
+		name = mine_marcin.1.dip
+		trigger = {
+			base_production = 2
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_production = -1
+	}
+	
+	option = {
+		name = mine_marcin.1.mil
+		trigger = {
+			base_manpower = 2
+		}
+		
+		custom_tooltip = MINEs_tooltip
+		dig_more_var = yes
+		add_base_manpower = -1
 	}
 	
 	option = {
@@ -86,7 +170,7 @@ province_event = {
 		remove_building = mine
 		add_province_modifier = {
 			name = mine_fail
-			duration = 3650
+			duration = 1825 #5 years
 		}
 	}
 }
@@ -106,34 +190,108 @@ province_event = {
 	
 	immediate = {
 		hidden_effect = {
-			clr_province_flag = copper
-			clr_province_flag = tin
-			clr_province_flag = zinc
-			clr_province_flag = iron
-			clr_province_flag = lead
-			clr_province_flag = silver
-			clr_province_flag = gold
+			#mining goods
+			#none	0
+			#copper	1
+			#tin	2
+			#zinc	3
+			#iron	4
+			#lead	5
+			#silver	6
+			#gold	7
 			
-			random_list = {
-				35 = {
-					set_province_flag = copper
-				}
-				30 = {
-					random_list = {
-						50 = { set_province_flag = tin }
-						50 = { set_province_flag = zinc }
+			set_variable = { which = tg0	value = 0 }
+			set_variable = { which = tg1	value = 0 }
+			set_variable = { which = tg2	value = 0 }
+			
+				 if = { limit = { trade_goods = copper }	set_variable = { which = tg0	value = 1 } }
+			else_if = { limit = { trade_goods = tin	   }	set_variable = { which = tg0	value = 2 } }
+			else_if = { limit = { trade_goods = zinc   }	set_variable = { which = tg0	value = 3 } }
+			else_if = { limit = { trade_goods = iron   }	set_variable = { which = tg0	value = 4 } }
+			else_if = { limit = { trade_goods = lead   }	set_variable = { which = tg0	value = 5 } }
+			else_if = { limit = { trade_goods = silver }	set_variable = { which = tg0	value = 6 } }
+			else_if = { limit = { trade_goods = gold   }	set_variable = { which = tg0	value = 7 } }
+			
+			while = {
+				limit = {
+					OR = {
+						NOT = { #goods not set
+							check_variable = {
+								which = tg1
+								value = 1
+							}
+						}
+						is_variable_equal = { #is current goods
+							which = tg1
+							which = tg0
+						}
 					}
 				}
-				20 = {
-					set_province_flag = iron
+				random_list = {
+					35 = {
+						set_variable = { which = tg1	value = 1 }
+					}
+					30 = {
+						random_list = {
+							50 = { set_variable = { which = tg1	value = 2 } }
+							50 = { set_variable = { which = tg1	value = 3 } }
+						}
+					}
+					20 = {
+						set_variable = { which = tg1	value = 4 }
+					}
+					10 = {
+						set_variable = { which = tg1	value = 5 }
+					}
+					5 = {
+						random_list = {
+							50 = { set_variable = { which = tg1	value = 6 } }
+							50 = { set_variable = { which = tg1	value = 7 } }
+						}
+					}
 				}
-				10 = {
-					set_province_flag = lead
+			}
+			
+			while = {
+				limit = {
+					OR = {
+						NOT = { #goods not set
+							check_variable = {
+								which = tg2
+								value = 1
+							}
+						}
+						is_variable_equal = { #is current goods
+							which = tg2
+							which = tg0
+						}
+						is_variable_equal = { #is other goods
+							which = tg2
+							which = tg1
+						}
+					}
 				}
-				5 = {
-					random_list = {
-						50 = { set_province_flag = silver }
-						50 = { set_province_flag = gold }
+				random_list = {
+					35 = {
+						set_variable = { which = tg2	value = 1 }
+					}
+					30 = {
+						random_list = {
+							50 = { set_variable = { which = tg2	value = 2 } }
+							50 = { set_variable = { which = tg2	value = 3 } }
+						}
+					}
+					20 = {
+						set_variable = { which = tg2	value = 4 }
+					}
+					10 = {
+						set_variable = { which = tg2	value = 5 }
+					}
+					5 = {
+						random_list = {
+							50 = { set_variable = { which = tg2	value = 6 } }
+							50 = { set_variable = { which = tg2	value = 7 } }
+						}
 					}
 				}
 			}
@@ -142,13 +300,9 @@ province_event = {
 	
 	after = {
 		hidden_effect = {
-			clr_province_flag = copper
-			clr_province_flag = tin
-			clr_province_flag = zinc
-			clr_province_flag = iron
-			clr_province_flag = lead
-			clr_province_flag = silver
-			clr_province_flag = gold
+			set_variable = { which = tg0	value = 0 }
+			set_variable = { which = tg1	value = 0 }
+			set_variable = { which = tg2	value = 0 }
 		}
 	}
 	
@@ -156,16 +310,36 @@ province_event = {
 		name = mine_marcin.3.a
 		
 		remove_building = mine
+		add_province_modifier = {
+			name = mine_fail
+			duration = 1825 #5 years
+		}
 		
-			 if = { limit = { has_province_flag = copper } change_trade_goods = copper }
-		else_if = { limit = { has_province_flag = tin	 } change_trade_goods = tin	   }
-		else_if = { limit = { has_province_flag = zinc	 } change_trade_goods = zinc   }
-		else_if = { limit = { has_province_flag = iron	 } change_trade_goods = iron   }
-		else_if = { limit = { has_province_flag = lead	 } change_trade_goods = lead   }
-		else_if = { limit = { has_province_flag = silver } change_trade_goods = silver }
-		else_if = { limit = { has_province_flag = gold	 } change_trade_goods = gold   }
+			 if = { limit = { NOT = { check_variable = { which = tg1	value = 2 } } }	change_trade_goods = copper	}
+		else_if = { limit = { NOT = { check_variable = { which = tg1	value = 3 } } }	change_trade_goods = tin	}
+		else_if = { limit = { NOT = { check_variable = { which = tg1	value = 4 } } }	change_trade_goods = zinc	}
+		else_if = { limit = { NOT = { check_variable = { which = tg1	value = 5 } } }	change_trade_goods = iron	}
+		else_if = { limit = { NOT = { check_variable = { which = tg1	value = 6 } } }	change_trade_goods = lead	}
+		else_if = { limit = { NOT = { check_variable = { which = tg1	value = 7 } } }	change_trade_goods = silver	}
+		else	= {																		change_trade_goods = gold	}
+	}
+	
+	option = {
+		name = mine_marcin.3.b
 		
-		owner = { add_dip_power = -80 }
+		remove_building = mine
+		add_province_modifier = {
+			name = mine_fail
+			duration = 1825 #5 years
+		}
+		
+			 if = { limit = { NOT = { check_variable = { which = tg2	value = 2 } } }	change_trade_goods = copper	}
+		else_if = { limit = { NOT = { check_variable = { which = tg2	value = 3 } } }	change_trade_goods = tin	}
+		else_if = { limit = { NOT = { check_variable = { which = tg2	value = 4 } } }	change_trade_goods = zinc	}
+		else_if = { limit = { NOT = { check_variable = { which = tg2	value = 5 } } }	change_trade_goods = iron	}
+		else_if = { limit = { NOT = { check_variable = { which = tg2	value = 6 } } }	change_trade_goods = lead	}
+		else_if = { limit = { NOT = { check_variable = { which = tg2	value = 7 } } }	change_trade_goods = silver	}
+		else	= {																		change_trade_goods = gold	}
 	}
 	
 	option = {
@@ -176,7 +350,7 @@ province_event = {
 		remove_building = mine
 		add_province_modifier = {
 			name = mine_fail
-			duration = 3650
+			duration = 1825 #5 years
 		}
 	}
 }
