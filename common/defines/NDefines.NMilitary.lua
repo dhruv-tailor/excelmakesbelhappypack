@@ -1,9 +1,5 @@
 -- Only Changes to NDefines.NMilitary should be here.
 NDefines.NMilitary.FORT_DEVASTATION_IMPACT = -10
-NDefines.NMilitary.GALLEY_BONUS_INLAND_SEA = 0.0
-NDefines.NMilitary.GALLEY_DICE_MALLUS_HIGH_SEA = -1
-NDefines.NMilitary.NAVAL_BASE_ENGAGEMENT_WIDTH = 60 	-- Number of ships that can fire per round
-NDefines.NMilitary.NAVAL_CASUALTY_MIN_MORALE_DAMAGE = 0.0
 NDefines.NMilitary.MERCENARY_SUPPORT_LIMIT_FRACTION = 0.1
 
 
@@ -21,5 +17,16 @@ NDefines.NMilitary.FORT_FLIPPING_TIME = 60		-- Number of days it takes an influe
 NDefines.NMilitary.SUPPLYLIMIT_BASE_MULTIPLIER = 8.0
 	-- SUPPLYLIMIT_BASE_MULTIPLIER = 6.0
 
+
+-- Artemis Naval stuff
+NDefines.NMilitary.GALLEY_BONUS_INLAND_SEA = 0.0
+NDefines.NMilitary.GALLEY_DICE_MALLUS_HIGH_SEA = -1
+NDefines.NMilitary.NAVAL_BASE_ENGAGEMENT_WIDTH = 60 	-- Number of ships that can fire per round
+NDefines.NMilitary.NAVAL_CASUALTY_MIN_MORALE_DAMAGE = 0.0
 NDefines.NMilitary.MARINE_SHOCK_DAMAGE_TAKEN = -0.25
 NDefines.NMilitary.MARINE_DISEMBARK_SPEED_BONUS = 5.0
+NDefines.NMilitary.PARTICIPATION_SCORE_BLOCKADE = 0.002
+NDefines.NMilitary.HEAVY_SHIP_TIME = 430				-- _MDEF_HEAVY_SHIP_TIME = 10,
+NDefines.NMilitary.LIGHT_SHIP_TIME = 265				-- _MDEF_LIGHT_SHIP_TIME = 10,
+NDefines.NMilitary.MONTHLY_REPAIR = 0.19
+NDefines.NMilitary.GALLEY_COMBAT_WIDTH = 0.5
