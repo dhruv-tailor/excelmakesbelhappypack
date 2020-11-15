@@ -1686,6 +1686,7 @@ dock = {
 		naval_forcelimit = 1
 		ship_recruit_speed = -0.05
 		local_sailors_modifier = 0.5
+		local_ship_repair = 0.1
 	}
 
 	ai_will_do = {
@@ -1720,7 +1721,7 @@ dock = {
 	}
 }
 
-navymanpower_lvl_2 = {
+shipyard = {
 	cost = 250
 	time = 12
 
@@ -1730,12 +1731,8 @@ navymanpower_lvl_2 = {
 			has_idea = handel5
 			has_idea = galle1
 			has_idea = merchant_marine_2
-		}
-		NOT = {
-			OR = {
-				has_building = navyforcelimit_lvl_2
-				has_building = grand_shipyard
-			}
+			has_idea = gross6
+			has_idea = grand_navy_2
 		}
 	}
 
@@ -1745,6 +1742,7 @@ navymanpower_lvl_2 = {
 		naval_forcelimit = 2
 		ship_recruit_speed = -0.1
 		local_sailors_modifier = 0.75
+		local_ship_repair = 0.2
 	}
 
 	ai_will_do = {
@@ -1789,21 +1787,19 @@ drydock = {
 		OR = {
 			has_idea = handel5
 			has_idea = galle1
-		}
-		NOT = {
-			OR = {
-				has_building = navyforcelimit_lvl_2
-				has_building = grand_shipyard
-			}
+			has_idea = gross6
+			has_idea = grand_navy_2
+			has_idea = merchant_marine_2
 		}
 	}
 
-	make_obsolete = navymanpower_lvl_2
+	make_obsolete = shipyard
 
 	modifier = {
 		naval_forcelimit = 3
 		ship_recruit_speed = -0.15
 		local_sailors_modifier = 1.0
+		local_ship_repair = 0.3
 	}
 
 	ai_will_do = {
@@ -1838,165 +1834,63 @@ drydock = {
 	}
 }
 
-################################################
-# Shipyard
-################################################
-
-shipyard = {
-	cost = 100
-	time = 12
-
-	build_trigger = {
-		has_port = yes
-	}
-
-	modifier = {
-		naval_forcelimit = 1
-		local_ship_repair = 0.05
-		local_sailors_modifier = 0.5
-	}
-
-	ai_will_do = {
-		factor = 0.4
-		modifier = {
-			factor = 1.2
-			NOT = { has_owner_accepted_culture = yes }
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 1
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 2
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 3
-			}
-		}
-		modifier = {
-			factor = 0.25
-			NOT = { is_state = yes }
-		}	
-	}
-}
-
-navyforcelimit_lvl_2 = {
-	cost = 250
+grand_shipyard = {
+	cost = 550
 	time = 12
 
 	build_trigger = {
 		has_port = yes
 		OR = {
+			has_idea = handel5
+			has_idea = galle1
 			has_idea = gross6
 			has_idea = grand_navy_2
-		}
-		NOT = {
-			OR = {
-				has_building = navymanpower_lvl_2
-				has_building = drydock
-			}
+			has_idea = merchant_marine_2
 		}
 	}
 
-	make_obsolete = shipyard
+	make_obsolete = drydock
 
 	modifier = {
-		naval_forcelimit = 2
-		local_ship_repair = 0.1
-		local_sailors_modifier = 1.0
+		naval_forcelimit = 4
+		ship_recruit_speed = -0.30
+		local_sailors_modifier = 2.0
+		local_ship_repair = 0.5
 	}
 
 	ai_will_do = {
-		factor = 0.4
-		modifier = {
-			factor = 1.2
-			NOT = { has_owner_accepted_culture = yes }
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 1
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 2
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 3
-			}
-		}
+		factor = 0.5
 		modifier = {
 			factor = 0.25
 			NOT = { is_state = yes }
-		}	
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { base_manpower = 5 }
+			NOT = { 
+				OR = {
+					province_has_center_of_trade_of_level = 1
+					province_has_center_of_trade_of_level = 2
+					province_has_center_of_trade_of_level = 3
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			province_has_center_of_trade_of_level = 3	
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { base_manpower = 4 }
+		}		
+		modifier = {
+			factor = 0.75
+			NOT = { base_manpower = 5 }
+		}
 	}
 }
 
-grand_shipyard = {
-	cost = 400
-	time = 12
 
-	build_trigger = {
-		has_port = yes
-		has_idea = gross6
-		NOT = {
-			OR = {
-				has_building = navymanpower_lvl_2
-				has_building = drydock
-			}
-		}
-	}
-
-	make_obsolete = navyforcelimit_lvl_2
-
-	modifier = {
-		naval_forcelimit = 3
-		local_ship_repair = 0.15
-		local_sailors_modifier = 1.5
-	}
-
-	ai_will_do = {
-		factor = 0.4
-		modifier = {
-			factor = 1.2
-			NOT = { has_owner_accepted_culture = yes }
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 1
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 2
-			}
-		}
-		modifier = {
-			factor = 1.2
-			FROM = {
-				colony = 3
-			}
-		}
-		modifier = {
-			factor = 0.25
-			NOT = { is_state = yes }
-		}	
-	}
-}
 
 ################################################
 # Fleetbase
