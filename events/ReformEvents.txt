@@ -3501,7 +3501,7 @@ country_event = {
 			}
 			add_estate_influence_modifier = {
 				estate = estate_church
-				desc = EST_VAL_CHURCH_ADVANCES
+				desc = EST_VAL_CHURCH_ADVANCE
 				influence = 10
 				duration = 3650
 			}
@@ -6993,12 +6993,11 @@ country_event = {
 	trigger = {
 		has_government_attribute = enables_industrialism
 		any_owned_province = {
-			OR = {
-				AND = {
-					province_has_building_of_group = { group = production all = yes }
-					NOT = { has_province_modifier = Promoted_Industry }
-				}
-			}
+			province_has_building_of_group = { group = production all = yes }
+			NOT = { has_province_modifier = Promoted_Industry }
+			NOT = { has_province_modifier = Promoted_Industry_v2 }
+			NOT = { has_province_modifier = Promoted_Industry_v3 }
+			NOT = { has_province_modifier = Promoted_Industry_v4 }
 		}
 	}
 
@@ -7008,14 +7007,65 @@ country_event = {
 
 	immediate = {
 		every_owned_province = {
-			limit = {
-				province_has_building_of_group = { group = production all = yes }
-				NOT = {	has_province_modifier = Promoted_Industry }
-            }
-			add_province_modifier = {
-				name = "Promoted_Industry"
-				duration = -1
-				hidden = yes
+			if = {
+				limit = {
+					has_building = workshop
+					NOT = {	has_province_modifier = Promoted_Industry }
+				}
+				add_province_modifier = {
+					name = "Promoted_Industry"
+					duration = -1
+					hidden = yes
+				}
+				#remove_province_modifier = Promoted_Industry
+				remove_province_modifier = Promoted_Industry_v2
+				remove_province_modifier = Promoted_Industry_v3
+				remove_province_modifier = Promoted_Industry_v4
+			}
+			else_if = {
+				limit = {
+					has_building = production_lvl_2
+					NOT = {	has_province_modifier = Promoted_Industry_v2 }
+				}
+				add_province_modifier = {
+					name = "Promoted_Industry_v2"
+					duration = -1
+					hidden = yes
+				}
+				remove_province_modifier = Promoted_Industry
+				#remove_province_modifier = Promoted_Industry_v2
+				remove_province_modifier = Promoted_Industry_v3
+				remove_province_modifier = Promoted_Industry_v4
+			}
+			else_if = {
+				limit = {
+					has_building = production_lvl_3
+					NOT = {	has_province_modifier = Promoted_Industry_v3 }
+				}
+				add_province_modifier = {
+					name = "Promoted_Industry_v3"
+					duration = -1
+					hidden = yes
+				}
+				remove_province_modifier = Promoted_Industry
+				remove_province_modifier = Promoted_Industry_v2
+				#remove_province_modifier = Promoted_Industry_v3
+				remove_province_modifier = Promoted_Industry_v4
+			}
+			else_if = {
+				limit = {
+					has_building = counting_house
+					NOT = {	has_province_modifier = Promoted_Industry_v4 }
+				}
+				add_province_modifier = {
+					name = "Promoted_Industry_v4"
+					duration = -1
+					hidden = yes
+				}
+				remove_province_modifier = Promoted_Industry
+				remove_province_modifier = Promoted_Industry_v2
+				remove_province_modifier = Promoted_Industry_v3
+				#remove_province_modifier = Promoted_Industry_v4
 			}
 		}
 	}
