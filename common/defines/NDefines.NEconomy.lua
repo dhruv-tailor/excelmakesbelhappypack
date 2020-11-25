@@ -6,5 +6,5 @@ NDefines.NEconomy.CARAVAN_FACTOR = 20.0
 NDefines.NEconomy.CARAVAN_POWER_MAX = 10
 NDefines.NEconomy.EDICTS_COST_INCREASE = 1		-- % increase on state maintenance.  *reduced from 200% to 100% to allow more tactical usage of edicts.
 NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3	-- months lasting at least. removed because its annoying to remember managing and being blocked from doing it when you remember.
-NDefines.NEconomy.MAX_BUILDING_SLOTS = 16
+NDefines.NEconomy.MAX_BUILDING_SLOTS = 15
 NDefines.NEconomy.OPEN_SEA_MODIFIER = 1						-- _EDEF_OPEN_SEA_MODIFIER_
