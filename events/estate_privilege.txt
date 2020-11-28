@@ -1,0 +1,184 @@
+namespace = estate_privilege
+
+country_event = { #Day 1 OPM Strat
+	id = estate_privilege.2
+	title = estate_privilege.2.t
+	desc = estate_privilege.2.d
+	picture = INVENTION_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		ai = yes
+		NOT = { num_of_cities = 2 }
+		NOT = { has_country_flag = estate_privilege }
+		OR = {
+			AND = {
+				OR = {
+					has_estate = estate_church
+					has_estate = estate_brahmins
+				}
+				NOT = { has_estate_privilege = estate_church_religious_state }
+				NOT = { has_estate_privilege = estate_brahmins_brahmin_governance }
+			}
+			AND = {
+				OR = {
+					has_estate = estate_burghers
+					has_estate = estate_jains
+				}
+				NOT = { has_estate_privilege = estate_burghers_land_of_commerce }
+				NOT = { has_estate_privilege = estate_jains_diplomacy }
+			}
+			AND = {
+				OR = {
+					has_estate = estate_nobles
+					has_estate = estate_maratha
+					has_estate = estate_rajput
+				}
+				NOT = { has_estate_privilege = estate_nobles_nobility_primacy }
+				NOT = { has_estate_privilege = estate_maratha_military }
+				NOT = { has_estate_privilege = estate_rajput_military }
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = estate_privilege
+	}
+	
+	option = {
+		if = { #estate_church
+			limit = {
+				OR = {
+					has_estate = estate_church
+					has_estate = estate_brahmins
+				}
+				NOT = { has_estate_privilege = estate_church_religious_state }
+				NOT = { has_estate_privilege = estate_brahmins_brahmin_governance }
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				set_estate_privilege = estate_church_religious_state
+			}
+			else = {
+				set_estate_privilege = estate_brahmins_brahmin_governance
+			}
+		}
+		
+		if = { #estate_burghers
+			limit = {
+				OR = {
+					has_estate = estate_burghers
+					has_estate = estate_jains
+				}
+				NOT = { has_estate_privilege = estate_burghers_land_of_commerce }
+				NOT = { has_estate_privilege = estate_jains_diplomacy }
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				set_estate_privilege = estate_burghers_land_of_commerce
+			}
+			else = {
+				set_estate_privilege = estate_jains_diplomacy
+			}
+		}
+		
+		if = { #estate_nobles
+			limit = {
+				OR = {
+					has_estate = estate_nobles
+					has_estate = estate_maratha
+					has_estate = estate_rajput
+				}
+				NOT = { has_estate_privilege = estate_nobles_nobility_primacy }
+				NOT = { has_estate_privilege = estate_maratha_military }
+				NOT = { has_estate_privilege = estate_rajput_military }
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				set_estate_privilege = estate_nobles_nobility_primacy
+			}
+			else_if = {
+				limit = {
+					has_estate = estate_maratha
+				}
+				set_estate_privilege = estate_maratha_military
+			}
+			else = {
+				set_estate_privilege = estate_rajput_military
+			}
+		}
+		
+		if = { #sale_of_titles
+            limit = { current_age = age_of_discovery }
+            add_years_of_estate_land_income = 2.5
+        }
+        else_if = {
+            limit = { current_age = age_of_reformation }
+            add_years_of_estate_land_income = 2.0
+        }
+        else_if = {
+            limit = { current_age = age_of_absolutism }
+            add_years_of_estate_land_income = 1.5
+        }
+        else_if = {
+            limit = { current_age = age_of_revolutions }
+            add_years_of_estate_land_income = 1.0
+        }
+        give_estate_land_share_gigantic = { estate = all }
+        add_estate_loyalty = {
+            estate = all
+            loyalty = 10
+            short = yes
+        }
+		if = {
+			limit = {
+				has_country_flag = recent_land_distribution
+			}
+			clr_country_flag = recent_land_distribution
+		}
+		set_country_flag = recent_land_distribution
+		
+		if = { #estate_privileges_and_agendas_events.2.a
+			limit = {
+				religion = hinduism
+				has_estate = estate_brahmins
+			}
+			set_estate_privilege = estate_brahmins_statutory_rights
+		}
+		else_if = {
+			limit = {
+				OR = {
+					government = monarchy
+					government = tribal
+					has_reform = ottoman_government
+				}
+				has_estate = estate_nobles
+			}
+			set_estate_privilege = estate_nobles_statutory_rights
+		}
+		else_if = {
+			limit = {
+				OR = {
+					government = republic
+					has_parliament = yes
+				}
+				has_estate = estate_burghers
+			}
+			set_estate_privilege = estate_burghers_statutory_rights
+		}
+		else_if = {
+			limit = {
+				government = theocracy
+				has_estate = estate_church
+			}
+			set_estate_privilege = estate_church_statutory_rights
+		}
+	}
+}
