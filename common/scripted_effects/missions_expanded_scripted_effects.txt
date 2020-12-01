@@ -663,6 +663,42 @@ add_prestige_or_monarch_power = {
 	}
 }
 
+## adds army tradition until 100 is reached and then adds the rest as mil power
+### add_prestige_or_monarch_power = { amount = <number> }
+add_army_tradition_or_mil_power = {
+	tooltip = {
+		add_army_tradition = $amount$
+	}
+	custom_tooltip = ME_ADD_ARMY_TRADITION_OR_MIL_POWER
+	hidden_effect = {
+		set_variable = {
+			which = army_trad_to_add
+			value = $amount$
+		}
+		while = {
+			limit = {
+				check_variable = {
+					which = army_trad_to_add
+					value = 1
+				}
+			}
+			if = {
+				limit = {
+					NOT = { prestige = 100 }
+				}
+				add_army_tradition
+			}
+			else = {
+				add_mil_power = 1
+			}
+			subtract_variable = {
+				which = army_trad_to_add
+				value = 1
+			}
+		}
+	}
+}
+
 ## breaks the alliance between current scope and who
 ### break_alliance_with = { who = <scope> }
 break_alliance_with = {

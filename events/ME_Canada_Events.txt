@@ -146,16 +146,182 @@ country_event = {
 }
 
 # The British North American Act
+country_event = {
+	id = ME_Canada_Events.4
+	title = ME_Canada_Events.4.T
+	desc = ME_Canada_Events.4.D
+	picture = WESTERNISATION_eventPicture
 
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			overlord = { save_global_event_target_as = canada_overlord }
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.4.OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+		overlord = {
+			country_event = { id = ME_Canada_Events.5 }
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.4.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		declare_war_with_cb = {
+			casus_belli = cb_independence_war
+			who = event_target:canada_overlord
+		}
+		custom_tooltip = CAN_SUPPORT_CANADIAN_INDEPENDENCE_RIVALS
+		hidden_effect = { set_country_flag = can_seek_support }
+	}
+}
 
 # Support Canadian Independence
+country_event = {
+	id = ME_Canada_Events.5
+	title = ME_Canada_Events.5.T
+	desc = ME_Canada_Events.5.D
+	picture = COUNTRY_COLLAPSE_eventPicture
 
+	major = yes
+
+	trigger = {
+		CAN = { mission_completed = can_british_north_america }
+		is_rival = event_target:canada_overlord
+		CAN = {
+			war_with = event_target:canada_overlord
+			has_country_flag = can_seek_support
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.08 #scaling down to 1 month
+			CAN = {
+				war_score_against = {
+					who = event_target:canada_overlord
+					value = 15
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.5.OPT1
+
+		ai_chance = {
+			factor = 33
+		}
+
+		CAN = {
+			add_manpower = 4
+			create_general = { tradition = 50 }
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.5.OPT2
+
+		ai_chance = {
+			factor = 33
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.5.OPT3
+
+		ai_chance = {
+			factor = 33
+		}
+
+		join_all_offensive_wars_of = CAN
+	}
+}
 
 # North American Act
+country_event = {
+	id = ME_Canada_Events.6
+	title = ME_Canada_Events.6.T
+	desc = ME_Canada_Events.6.D
+	picture = BIG_BOOK_eventPicture
 
+	is_triggered_only = yes
+
+	trigger = {
+		is_expanded_mod_active = { mod = subjects }
+	}
+
+	option = {
+		name = ME_Canada_Events.6.OPT1
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.2
+				ai = yes
+			}
+		}
+		add_prestige = -20
+		create_subject = {
+			subject_type = autonomous_dominion
+			subject = FROM
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.6.OPT2
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0.8
+				ai = yes
+			}
+		}
+		add_prestige = 20
+		FROM = {
+			add_liberty_desire = 35
+			country_event = { id = ME_Canada_Events.7 }
+		}
+	}
+}
 
 # A Look for outside Support?
+country_event = {
+	id = ME_Canada_Events.7
+	title = ME_Canada_Events.7.T
+	desc = ME_Canada_Events.7.D
+	picture = LIBERUM_VETO_eventPicture
 
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.7.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		every_country = {
+			limit = {
+				is_rival = event_target:canada_overlord
+			}
+			country_event = { id = ME_Canada_Events.8 }
+		}
+	}
+}
 
 # Canada looks for Support!
 country_event = {
@@ -195,7 +361,7 @@ country_event = {
 			factor = 33
 		}
 
-		#join_all_offensive_war_of = CAN
+		join_all_offensive_wars_of = CAN
 	}
 }
 
@@ -438,13 +604,19 @@ country_event = {
 
 	option = {
 		name = ME_Canada_Events.12.OPT1
-
+		trigger = {
+			is_expanded_mod_active = { mod = trade_goods }
+		}
 
 		ai_chance = {
 			factor = 50
 		}
 		custom_tooltip = CUISINES_OF_CANADA.TT
 		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
 				2012 = { change_trade_goods = maple_syrup }
 				2584 = { change_trade_goods = maple_syrup }
 				2583 = { change_trade_goods = maple_syrup }
@@ -458,6 +630,87 @@ country_event = {
 				998 = { change_trade_goods = maple_syrup }
 				999 = { change_trade_goods = maple_syrup }
 				993 = { change_trade_goods = maple_syrup }
+			}
+			else = {
+				2012 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				2584 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				2583 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				2581 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				992 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				1001 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				998 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				2671 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				2588 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				995 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				998 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				999 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+				993 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+			}
 		}
 		canada_region = {
 			limit = {
@@ -496,15 +749,34 @@ country_event = {
 	option = {
 		name = ME_Canada_Events.13.OPT1
 		custom_tooltip = CAN_MAPLE_SYRUP.TT
-
+		trigger = {
+			is_expanded_mod_active = { mod = trade_goods }
+		}
 		ai_chance = {
 			factor = 50
 		}
 
-
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
 			2580 = { change_trade_goods = maple_syrup }
 			2579 = { change_trade_goods = maple_syrup }
-
+		}
+		else = {
+			2580 = {
+				add_province_modifier = {
+					name = can_maple_syrup_modifier
+					duration = -1
+				}
+			}
+			2579 = {
+					add_province_modifier = {
+						name = can_maple_syrup_modifier
+						duration = -1
+					}
+				}
+		}
 	}
 
 	option = {
@@ -617,9 +889,22 @@ country_event = {
 		}
 
 		FROM = {
-
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = native_reserve
+					}
+				}
+				create_subject = {
+					subject_type = native_reserve
+					subject = FROM
+				}
+			}
+			else = {
 				vassalize = ROOT
-
+			}
 		}
 	}
 
@@ -647,7 +932,6 @@ country_event = {
 	picture = REVOLT_eventPicture
 
 	fire_only_once = yes
-	is_triggered_only = yes
 
 	trigger = {
 		tag = CAN
@@ -656,7 +940,9 @@ country_event = {
 		has_country_flag = canada_refused_reform_3
 	}
 
-	
+	mean_time_to_happen = {
+		months = 6
+	}
 
 	option = {
 		name = ME_Canada_Events.17.OPT1
@@ -1239,7 +1525,7 @@ country_event = {
 				id = ME_Canada_Events.23
 			}
 		}
-		#join_all_offensive_war_of = event_target:canada_fighting_with
+		join_all_offensive_wars_of = event_target:canada_fighting_with
 	}
 
 	option = {
@@ -2046,23 +2332,20 @@ country_event = {
 		994 = {
 			if = {
 				limit = { owned_by = ROOT }
-				set_seat_in_parliament = yes
 			}
-			
+			set_seat_in_parliament = yes
 		}
 		993 = {
 			if = {
 				limit = { owned_by = ROOT }
-				set_seat_in_parliament = yes
 			}
-			
+			set_seat_in_parliament = yes
 		}
 		2012 = {
 			if = {
 				limit = { owned_by = ROOT }
-				set_seat_in_parliament = yes
 			}
-			
+			set_seat_in_parliament = yes
 		}
 	}
 
@@ -2147,7 +2430,42 @@ country_event = {
 }
 
 #INDEPENDENCE OF CANADA
+country_event = {
+	id = ME_Canada_Events.36
+	title = ME_Canada_Events.36.T
+	desc = ME_Canada_Events.36.D
+	picture = STREET_SPEECH_eventPicture
 
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		CAN = { mission_completed = can_british_north_america }
+		tag = event_target:canada_overlord
+		CAN = {
+			is_subject_of = event_target:canada_overlord
+			capital_scope = { has_rebel_faction = pretender_rebels  }
+		}
+
+	}
+
+	option = {
+		name = ME_Canada_Events.36.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		add_casus_belli = {
+			type = cb_vassalize_mission
+			target = CAN
+		}
+		CAN = { grant_independence = yes }
+	}
+}
 
 #Rebellions of Upper and Lower Canada
 country_event = {
@@ -2157,8 +2475,6 @@ country_event = {
 	picture = REVOLT_eventPicture
 
 	is_triggered_only = yes
-
-
 
 	trigger = {
 		tag = CAN
@@ -3380,7 +3696,12 @@ country_event = {
 
 	option = {
 		name = ME_Canada_Events.52.OPT4
-
+		trigger = {
+			OR = {
+				MIL = 4
+				has_mil_advisor_2 = yes
+			}
+		}
 
 		ai_chance = {
 			factor = 25
