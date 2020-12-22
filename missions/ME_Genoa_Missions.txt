@@ -1,17 +1,857 @@
-GEN_missions_1 = {
+genoa_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		tag = GEN
+		OR = {
+			tag = GEN
+			#AND = {
+			#	tag = ITA
+			#	was_tag = GEN
+			#}
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
-	GEN_westward = {
-		icon = mission_monarch_in_throne_room
+
+	gen_roman_diplomacy = {
+		icon = mission_pf_cross
 		required_missions = { }
 		position = 1
+		trigger = {
+			if = {
+				limit = {
+					exists = BYZ
+					BYZ = {
+						owns = 151
+					}
+				}
+				BYZ = {
+					OR = {
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
+						OR = {
+							alliance_with = GEN
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+				}
+			}
+			else = {
+				1320 = { #Constantinople
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						BYZ = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+						alliance_with = BYZ
+					}
+				}
+				custom_tooltip = GEN_BYZ_ALLIANCE_TT
+				tooltip = {
+					add_province_modifier = {
+						name = gen_frank_roman_trade_aggreement
+						duration = -1
+					}
+				}
+				hidden_effect = {
+					BYZ = {
+						1320 = {
+							every_trade_node_member_province = {
+								limit = { owned_by = ROOT }
+								add_province_modifier = {
+									name = gen_frank_roman_trade_aggreement
+									duration = -1
+								}
+							}
+						}
+					}
+					GEN = {
+						1320 = {
+							every_trade_node_member_province = {
+								limit = { owned_by = ROOT }
+								add_province_modifier = {
+									name = gen_frank_roman_trade_aggreement
+									duration = -1
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				151 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	gen_urbs_custoditas_deo = {
+		icon = mission_eastern_european_city
+		required_missions = {
+			gen_roman_diplomacy
+			gen_mighty_fleet
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 151
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = BYZ
+						overlord_of = BYZ
+					}
+				}
+				151 = {
+					OR = {
+						owned_by = ROOT
+						AND = {
+							owned_by = BYZ
+							1320 = { #Constantinople
+								trade_share = {
+									country = ROOT
+									share = 25
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				owns_core_province = 151
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = BYZ
+						overlord_of = BYZ
+					}
+				}
+				if = {
+					limit = {
+						religion = catholic
+					}
+					add_country_modifier = {
+						name = gen_mending_schism
+						duration = 7300
+					}
+				}
+				else_if = {
+					limit = {
+						religion = orthodox
+					}
+					add_patriarch_authority = 0.10
+				}
+				else = {
+					add_country_modifier = {
+						name = gen_conquest_constantinople
+						duration = 7300
+					}
+				}
+			}
+			else = {
+				add_years_of_income = 2.5
+				151 = {
+					random_list = {
+						50 = {
+							change_religion = ROOT
+						}
+						50 = {
+							change_culture = ROOT
+						}
+					}
+				}
+				thrace_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				hudavendigar_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	gen_reign_in_crimea = {
+		icon = mission_dominate_genoa
+		required_missions = { gen_theodoro }
+		position = 5
+		provinces_to_highlight = {
+			area = crimea_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1322 = {
+				is_strongest_trade_power = ROOT
+			}
+			if = {
+				limit = {
+					has_dlc = "Mare Nostrum"
+				}
+				crimea_area = {
+					type = all
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						owner = { is_in_trade_league_with = ROOT }
+					}
+				}
+			}
+			else = {
+				crimea_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			285 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			crimea_area = {
+				add_province_modifier = {
+					name = gen_krymchaks
+					duration = 10950
+				}
+			}
+			azov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_river_don = {
+		icon = overseas_empire
+		required_missions = {
+			gen_reign_in_crimea
+			gen_traders_steppes
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = zaporizhia_area
+				area = lower_don_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = MOS
+						alliance_with = RUS
+					}
+				}
+				lower_don_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						OR = {
+							owned_by = MOS
+							owned_by = RUS
+						}
+					}
+				}
+				zaporizhia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						OR = {
+							owned_by = MOS
+							owned_by = RUS
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						alliance_with = GLH
+						alliance_with = GOL
+					}
+				}
+				lower_don_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						OR = {
+							owned_by = GLH
+							owned_by = GOL
+						}
+					}
+				}
+				zaporizhia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						OR = {
+							owned_by = GLH
+							owned_by = GOL
+						}
+					}
+				}
+			}
+			else = {
+				lower_don_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				zaporizhia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			lower_don_area = {
+				add_province_modifier = {
+					name = gen_return_genoese_ruling
+					duration = 9125
+				}
+			}
+			zaporizhia_area = {
+				add_province_modifier = {
+					name = gen_return_genoese_ruling
+					duration = 9125
+				}
+			}
+			random_province = {
+				limit = {
+					area = lower_don_area
+				}
+				random_list = {
+					33 = { add_base_tax = 1 }
+					33 = { add_base_production = 1 }
+					33 = { add_base_manpower = 1 }
+				}
+			}
+			random_province = {
+				limit = {
+					area = zaporizhia_area
+				}
+				random_list = {
+					33 = { add_base_tax = 1 }
+					33 = { add_base_production = 1 }
+					33 = { add_base_manpower = 1 }
+				}
+			}
+		}
+	}
+
+	gen_gibraltar = {
+		icon = conquer_malacca
+		required_missions = { gen_tangiers }
+		position = 10
+		provinces_to_highlight = {
+			province_id = 226
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			226 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_protecting_trade
+				duration = 7300
+			}
+		}
+	}
+
+	gen_port_panama = {
+		icon = mission_rb_scottish_the_darien_scheme
+		required_missions = { gen_another_route_india }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 835
+		}
+		trigger = {
+			835 = {
+				is_city = yes
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = GEN_TRADERS_BURGEOIS_HAPPY_TT
+			add_mercantilism = 5
+			835 = {
+				add_permanent_province_modifier = {
+					name = gen_port_new_world
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Res Publica"
+					faction_in_power = mr_traders
+				}
+				835 = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			else_if = {
+				limit = {
+					has_estate = estate_burghers
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				835 = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			else = {
+				835 = { add_base_production = 3 }
+			}
+		}
+	}
+}
+
+genoa_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = GEN
+			#AND = {
+			#	tag = ITA
+			#	was_tag = GEN
+			#}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	gen_genoese_colonies = {
+		icon = fortify_malta
+		required_missions = {
+			gen_mighty_fleet
+		}
+		position = 2
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			148 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			325 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			328 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			330 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			318 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4706 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1756 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	gen_theodoro = {
+		icon = dalmatian_conquest
+		required_missions = {
+			gen_genoese_colonies
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 2410
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2410 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			2410 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 15
+					key = gen_theodoro_loc
+				}
+			}
+		}
+	}
+
+	gen_levant_trade = {
+		icon = kingdom_of_cyprus
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 321
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			321 = {
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Res Publica"
+					}
+					has_province_modifier = trade_post_modifier
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Maritime_Republics_Events.7
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			cukurova_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			mashriq_region = {
+				discover_country = ROOT
+			}
+			persia_region = {
+				discover_country = ROOT
+			}
+		}
+	}
+
+	gen_wealth_orient = {
+		icon = purely_for_commerce
+		required_missions = {
+			gen_levant_trade
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = aleppo_area
+				area = cukurova_area
+				area = syria_area
+			}
+			NOT = { owned_by = ROOT }
+			has_port = yes
+		}
+		trigger = {
+			aleppo_area = {
+				has_port = yes
+				owned_by = ROOT
+			}
+			cukurova_area = {
+				has_port = yes
+				owned_by = ROOT
+			}
+			syria_area = {
+				has_port = yes
+				owned_by = ROOT
+			}
+			410 = {
+				owner = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					428 = {
+						owner = {
+							NOT = { owns = 410 }
+						}
+					}
+				}
+				428 = {
+					owner = {
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+							is_rival = ROOT
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					454 = {
+						owner = {
+							NOT = { owns = 410 }
+							NOT = { owns = 428 }
+						}
+					}
+				}
+				454 = {
+					owner = {
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+							is_rival = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Genoa_Events.6
+			}
+			2313 = {
+				add_province_modifier = {
+					name = gen_safe_crusading_port
+					duration = -1
+				}
+			}
+			327 = {
+				add_province_modifier = {
+					name = gen_safe_crusading_port
+					duration = -1
+				}
+			}
+			1855 = {
+				add_province_modifier = {
+					name = gen_safe_crusading_port
+					duration = -1
+				}
+			}
+		}
+	}
+
+	gen_traders_steppes = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 7
+		trigger = {
+			OR = {
+				DIP = 6
+				diplomat = 2
+			}
+			if = {
+				limit = {
+					exists = MOS
+				}
+				MOS = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = RUS
+				}
+				RUS = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = GLH
+				}
+				GLH = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = GOL
+				}
+				GOL = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			country_event = {
+				id = ME_Genoa_Events.4
+			}
+			zaporizhia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_don_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_westward = {
+		icon = me_mission_venice_navy
+		required_missions = { }
+		position = 8
 		trigger = {
 			1293 = {
 				has_merchant = ROOT
@@ -27,13 +867,31 @@ GEN_missions_1 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			337 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			338 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
-	GEN_tangiers = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { GEN_westward }
-		position = 2
+
+	gen_tangiers = {
+		icon = control_the_means_of_transaction
+		required_missions = { gen_westward }
+		position = 9
 		provinces_to_highlight = {
 			province_id = 334
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -44,7 +902,43 @@ GEN_missions_1 = {
 			}
 		}
 		effect = {
-			226 = {
+			add_country_modifier = {
+				name = gen_route_india
+				duration = 18250
+			}
+			define_explorer = {
+				fire = 2
+				shock = 1
+				manuever = 3
+				siege = 0
+				name = "Antonio da Noli"
+				trait = ironside_personality
+			}
+			cap_verde_area = {
+				discover_country = ROOT
+			}
+			upper_andalucia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			cap_verde_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			macaronesia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1749 = {
 				if = {
 					limit = {
 						NOT = { owned_by = ROOT }
@@ -53,103 +947,748 @@ GEN_missions_1 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			add_country_modifier = {
-				name = gen_merchants_feel_secure
-				duration = 7300
+			4563 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
-			add_mercantilism = 2
+			224 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2470 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
-	GEN_gibraltar = {
-		icon = mission_galleys_in_port
-		required_missions = { GEN_tangiers }
-		position = 3
-		provinces_to_highlight = {
-			province_id = 226
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			226 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 2
-			add_country_modifier = {
-				name = gen_protecting_trade
-				duration = 7300
-			}
-		}
-	}
-	
-	GEN_fleet = {
+
+	gen_another_route_india = {
 		icon = mission_establish_high_seas_navy
-		required_missions = { }
-		position = 4
-		trigger = {
-			navy_size_percentage = 1
+		required_missions = { gen_tangiers }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = macaronesia_area
+				area = cap_verde_area
+			}
 		}
-		effect = {
-			127 = {
-				if = {
-					limit = {
-						NOT = { is_core = ROOT }
-					}
-					add_core = ROOT
+		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 1
+					area = macaronesia_area
+					has_colonist = yes
+				}
+				num_of_owned_provinces_with = {
+					value = 1
+					area = macaronesia_area
+				}
+				num_of_owned_provinces_with = {
+					value = 1
+					area = cap_verde_area
+					has_colonist = yes
+				}
+				num_of_owned_provinces_with = {
+					value = 1
+					area = cap_verde_area
 				}
 			}
-			2410 = {
-				if = {
-					limit = {
-						NOT = { is_core = ROOT }
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_colonial_expedition
+				duration = 10950
+			}
+			west_african_sea_region = {
+				discover_country = ROOT
+			}
+			guinea_region = {
+				discover_country = ROOT
+			}
+		}
+	}
+
+	gen_cape_good_hope = {
+		icon = colonize_the_cape
+		required_missions = {
+			gen_another_route_india
+		}
+		position = 11
+		provinces_to_highlight = {
+			area = cape_of_good_hope_area
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 2
+				area = cape_of_good_hope_area
+			}
+		}
+		effect = {
+			custom_tooltip = GEN_COLONISING_TT
+			random_owned_province = {
+				limit = {
+					area = cape_of_good_hope_area
+				}
+				heavy_ship = ROOT
+				heavy_ship = ROOT
+				heavy_ship = ROOT
+			}
+			if = {
+				limit = {
+					cape_of_good_hope_area = {
+						is_city = no
+						owned_by = ROOT
 					}
-					add_core = ROOT
+					limpopo_area = {
+						is_city = no
+						owned_by = ROOT
+					}
+				}
+				cape_of_good_hope_area = {
+					limit = {
+						is_city = no
+						owned_by = ROOT
+					}
+					add_colonysize = 150
+				}
+				limpopo_area = {
+					limit = {
+						is_city = no
+						owned_by = ROOT
+					}
+					add_colonysize = 150
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						area = cape_of_good_hope_area
+						cape_of_good_hope_area = {
+							type = all
+							PREV = { base_production = PREV }
+						}
+					}
+					add_building_construction = {
+						building = shipyard
+						speed = 1.5
+						cost = 0
+					}
 				}
 			}
 		}
 	}
-	
-	GEN_theodoro = {
-		icon = mission_cannons_firing
-		required_missions = { GEN_fleet }
-		position = 5
+
+	gen_spice_venture = {
+		icon = sources_of_trade
+		required_missions = {
+			gen_cape_good_hope
+		}
+		position = 12
 		provinces_to_highlight = {
-			province_id = 2410
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				region = deccan_region
+				region = coromandel_region
+			}
+			trade_goods = spices
 		}
 		trigger = {
-			2410 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			calc_true_if = {
+				amount = 5
+				all_province = {
+					OR = {
+						region = deccan_region
+						region = coromandel_region
+					}
+					trade_goods = spices
+					has_discovered = ROOT
+				}
+			}
+			1340 = {
+				has_merchant = ROOT
 			}
 		}
 		effect = {
-			2410 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = 5475
-					power = 15
-					key = gen_theodoro_loc
+			add_country_modifier = {
+				name = gen_specie_indian
+				duration = 10950
+			}
+			1340 = {
+				every_trade_node_member_province = {
+					limit = {
+						trade_goods = spices
+					}
+					if = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { owned_by = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	gen_traders_asia = {
+		icon = the_shape_of_trades_to_come
+		required_missions = {
+			gen_spice_venture
+		}
+		position = 13
+		provinces_to_highlight = {
+			trade_goods = spices
+		}
+		trigger = {
+			535 = {
+				owned_by = ROOT
+				is_core = ROOT
+				if = {
+					limit = {
+						has_dlc = "Res Publica"
+					}
+					has_province_modifier = trade_post_modifier
+				}
+				else = {
+					base_production = 7
+				}
+			}
+			OR = {
+				development_in_provinces = {
+					value = 100
+					trade_goods = spices
+				}
+				trading_bonus = {
+					trade_goods = spices
+					value = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_indian_spices
+				duration = -1
+			}
+			country_event = {
+				id = ME_Maritime_Republics_Events.8
+			}
+			535 = {
+				if = {
+					limit = {
+						has_dlc = "Res Publica"
+					}
+					add_province_modifier = {
+						name = gen_genoese_haven_dlc
+						duration = -1
+					}
+				}
+				else = {
+					add_province_modifier = {
+						name = gen_genoese_haven
+						duration = -1
+					}
 				}
 			}
 		}
 	}
 }
 
-GEN_missions_2 = {
-	slot = 2
+genoa_missions_3 = {
+	slot = 3
 	generic = no
 	ai = yes
 	potential = {
-		tag = GEN
+		OR = {
+			tag = GEN
+			#AND = {
+			#	tag = ITA
+			#	was_tag = GEN
+			#}
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
-	GEN_Niza = {
-		icon = mission_conquer_50_development
-		required_missions = { GEN_Army }
+
+	gen_mighty_fleet = {
+		icon = overshadow_venice
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				navy_size_percentage = 1
+				AND = {
+					num_of_galley = 12
+					navy_size_percentage = 0.75
+				}
+			}
+			num_of_admirals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_genoese_naval_tactics
+				duration = 7300
+			}
+			corsica_sardinia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			115 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			163 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			2410 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	gen_doge_dominion = {
+		icon = mission_raid_on_venice
+		required_missions = {
+			gen_mighty_fleet
+		}
 		position = 2
+		trigger = {
+			naval_strength = {
+				who = VEN
+				value = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_facing_doge
+				duration = 9125
+			}
+			112 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			142 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_conquest_venice = {
+		icon = expand_the_doges_palace
+		required_missions = {
+			gen_doge_dominion
+			gen_genoese_colonies
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 112
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				owns_core_province = 112
+				VEN = {
+					owns_core_province = 112
+					is_subject_of = ROOT
+				}
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = {
+				value = 3
+			}
+			add_mercantilism = 5
+			add_ruler_modifier = {
+				name = gen_victory_doge
+				duration = 7300
+			}
+			venetia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_italian_trade = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = {
+			gen_conquest_venice
+			gen_take_back_whats_ours
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = venetia_area
+				area = liguria_area
+			}
+			OR = {
+				NOT = { devastation = 2 }
+				NOT = { unrest = 3 }
+				NOT = { local_autonomy = 15 }
+			}
+		}
+		trigger = {
+			1308 = {
+				is_strongest_trade_power = ROOT
+			}
+			1298 = {
+				is_strongest_trade_power = ROOT
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { devastation = 2 }
+				NOT = { unrest = 3 }
+				NOT = { local_autonomy = 15 }
+			}
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { devastation = 2 }
+				NOT = { unrest = 3 }
+				NOT = { local_autonomy = 15 }
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			if = {
+				limit = {
+					has_dlc = "Res Publica"
+					faction_in_power = mr_traders
+				}
+				add_dip_power = 100
+			}
+			else_if = {
+				limit = {
+					has_estate = estate_burghers
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				add_dip_power = 100
+			}
+			add_country_modifier = {
+				name = gen_genoese_assault
+				duration = -1
+			}
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					any_owned_province = {
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					create_flagship = {
+						name = "San Giovanni Battista"
+						type = heavy_ship
+					}
+				}
+			}
+			341 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			321 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			358 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			213 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			220 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_alexandria = {
+		icon = fortify_malta
+		required_missions = { gen_italian_trade }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 358
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			358 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_mediterranean_ambition
+				duration = 5475
+			}
+			delta_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			bahari_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	gen_trading_egypt = {
+		icon = mission_colonize_the_west
+		required_missions = { gen_alexandria }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = delta_area
+				area = bahari_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_port = yes
+		}
+		trigger = {
+			delta_area = {
+				has_port = yes
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bahari_area = {
+				has_port = yes
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_trading_egypt
+				duration = 18250
+			}
+		}
+	}
+
+	gen_mare_nostrum = {
+		icon = reform_the_monte
+		required_missions = {
+			gen_wealth_orient
+			gen_trading_egypt
+			gen_tripoli
+		}
+		position = 7
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = GEN_MARE_NOSTRUM_TT
+				358 = {
+					is_strongest_trade_power = ROOT
+					any_country = {
+						358 = {
+							trade_share = {
+								share = 10
+								country = PREV
+							}
+						}
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				341 = {
+					is_strongest_trade_power = ROOT
+					any_country = {
+						341 = {
+							trade_share = {
+								share = 10
+								country = PREV
+							}
+						}
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				1298 = {
+					is_strongest_trade_power = ROOT
+					any_country = {
+						1298 = {
+							trade_share = {
+								share = 10
+								country = PREV
+							}
+						}
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				1293 = {
+					is_strongest_trade_power = ROOT
+					any_country = {
+						1293 = {
+							trade_share = {
+								share = 10
+								country = PREV
+							}
+						}
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				OR = {
+					1308 = {
+						is_strongest_trade_power = ROOT
+						any_country = {
+							1308 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
+							}
+							NOT = {
+								naval_strength = {
+									who = ROOT
+									value = 0.5
+								}
+							}
+						}
+					}
+					1320 = {
+						is_strongest_trade_power = ROOT
+						any_country = {
+							1320 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
+							}
+							NOT = {
+								naval_strength = {
+									who = ROOT
+									value = 0.5
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 10
+			add_country_modifier = {
+				name = gen_mediterranean_trade_republic
+				duration = 18250
+			}
+		}
+	}
+
+	gen_nice = {
+		icon = unify_piedmont
+		required_missions = { gen_merchant_army }
+		position = 9
 		provinces_to_highlight = {
 			province_id = 102
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -169,44 +1708,24 @@ GEN_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			if = {
-				limit = {
-					exists = SAV
-					NOT = { overlord_of = SAV }
-				}
-				add_casus_belli = {
-					target = SAV
-					type = cb_annex
-					months = 240
-				}
-			}
 			102 = {
 				add_local_autonomy = -25
 				add_nationalism = -10
 			}
 		}
 	}
-	
-	GEN_Piedmont = {
-		icon = mission_have_two_subjects
-		required_missions = { GEN_Niza }
-		position = 3
+
+	gen_conquer_piedmont = {
+		icon = glory_to_turin
+		required_missions = { gen_nice }
+		position = 11
 		provinces_to_highlight = {
-			OR = {
-				province_id = 103
-				province_id = 2981
-				province_id = 1875
-			}
+			area = piedmont_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			103 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2981 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1875 = {
+			piedmont_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -216,13 +1735,97 @@ GEN_missions_2 = {
 				duration = 7300
 			}
 			add_accepted_culture = piedmontese
+			hidden_effect = {
+				add_country_modifier = {
+					name = gen_conquest_piedmont
+					duration = -1
+				}
+			}
 		}
 	}
-	
-	GEN_sassari = {
+
+	gen_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = { gen_reign_in_italy }
+		position = 13
+		trigger = {
+			all_country = {
+				OR = {
+					AND = {
+						NOT = { culture_group = latin }
+						NOT = {
+							capital_scope = {
+								region = italy_region
+							}
+						}
+					}
+					NOT = {
+						army_strength = {
+							who = ROOT
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+		}
+	}
+}
+
+genoa_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = GEN
+			#AND = {
+			#	tag = ITA
+			#	was_tag = GEN
+			#}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	gen_tyrrenean_hegemony = {
 		icon = mission_invade_island
-		required_missions = { GEN_fleet }
-		position = 5
+		required_missions = {
+			gen_mighty_fleet
+		}
+		position = 2
+		trigger = {
+			any_country = {
+				1298 = {
+					trade_share = {
+						share = 1
+						country = PREV
+					}
+				}
+				NOT = {
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 20
+			country_event = {
+				id = ME_Genoa_Events.1
+			}
+		}
+	}
+
+	gen_take_back_whats_ours = {
+		icon = seize_sardinia
+		required_missions = {
+			gen_tyrrenean_hegemony
+		}
+		position = 3
 		provinces_to_highlight = {
 			province_id = 127
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -233,66 +1836,160 @@ GEN_missions_2 = {
 			}
 		}
 		effect = {
-			add_mercantilism = 2
-			add_prestige = 25
-			add_dip_power = 50
 			add_mil_power = 50
 			add_adm_power = 50
 		}
 	}
-}
 
-GEN_missions_3 = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		tag = GEN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	gen_tyrrenean_wood = {
+		icon = mission_sea_battles
+		required_missions = {
+			gen_take_back_whats_ours
+			gen_tyrrenean_islands
+		}
+		position = 3
+		provinces_to_highlight = {
+			trade_goods = naval_supplies
+		}
+		trigger = {
+			development_in_provinces = {
+				trade_goods = naval_supplies
+				value = 25
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_tyrrenean_wood
+				duration = -1
+			}
+			add_country_modifier = {
+				name = gen_timber_surplus
+				duration = 10950
+			}
+		}
 	}
-	has_country_shield = yes
-	
-	GEN_Army = {
-		icon = mission_assemble_an_army
+
+	gen_trade_trouble_tunis = {
+		icon = personal_diplomacy
+		required_missions = { gen_italian_trade }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 341
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			341 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_protecting_maghreb_trade
+				duration = 9125
+			}
+			tunisia_area = {
+				limit = {
+					has_port = yes
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			djerba_area = {
+				limit = {
+					has_port = yes
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			354 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	gen_tripoli = {
+		icon = mission_occupy_alexandria
+		required_missions = { gen_trade_trouble_tunis }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 354
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			354 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_genoese_fortress
+				duration = 9125
+			}
+		}
+	}
+
+	gen_la_superba = {
+		icon = secure_the_republic
 		required_missions = { }
-		position = 1
+		position = 7
+		provinces_to_highlight = {
+			province_id = 101
+			has_trade_building_trigger = no
+			OR = {
+				NOT = { has_building = workshop }
+				NOT = { has_building = courthouse }
+			}
+		}
+		trigger = {
+			monthly_income = 20
+			num_of_galley = 20
+			101 = {
+				has_trade_building_trigger = yes
+				OR = {
+					has_building = workshop
+					has_building = courthouse
+				}
+			}
+		}
+		effect = {
+			101 = {
+				add_base_production = 3
+				add_province_modifier = {
+					name = gen_superba
+					duration = -1
+				}
+			}
+			add_years_of_income = 0.5
+		}
+	}
+
+	gen_merchant_army = {
+		icon = military_self_reliance
+		required_missions = { }
+		position = 8
 		trigger = {
 			army_size_percentage = 0.75
 			num_of_generals = 1
 		}
 		effect = {
-			if = {
-				limit = {
-					exists = MLO
-					NOT = { overlord_of = MLO }
-				}
-				add_casus_belli = {
-					target = MLO
-					type = cb_annex
-					months = 240
-				}
+			add_country_modifier = {
+				name = gen_merchant_army
+				duration = 9125
 			}
-			if = {
+			tuscany_area = {
 				limit = {
-					exists = LUC
-					NOT = { overlord_of = LUC }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				add_casus_belli = {
-					target = LUC
-					type = cb_annex
-					months = 240
-				}
-			}
-			if = {
-				limit = {
-					exists = SAV
-					NOT = { overlord_of = SAV }
-				}
-				add_casus_belli = {
-					target = SAV
-					type = cb_annex
-					months = 240
-				}
+				add_permanent_claim = ROOT
 			}
 			2980 = {
 				if = {
@@ -321,17 +2018,317 @@ GEN_missions_3 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			121 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	gen_rout_tuscans = {
+		icon = reclaim_the_ducal_lands
+		required_missions = { gen_merchant_army }
+		position = 10
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
 			add_country_modifier = {
-				name = gen_merchant_army
+				name = gen_arts
+				duration = 9125
+			}
+			add_accepted_culture = tuscan
+			hidden_effect = {
+				add_country_modifier = {
+					name = gen_conquest_tuscany
+					duration = -1
+				}
+			}
+		}
+	}
+
+	gen_reign_in_italy = {
+		icon = expand_the_terraferma
+		required_missions = { gen_defeat_milan gen_conquer_piedmont gen_rout_tuscans }
+		position = 12
+		provinces_to_highlight = {
+			province_id = 121
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			121 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_italian_trade_conquered
+				duration = 18250
+			}
+		}
+	}
+}
+
+genoa_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = GEN
+			#AND = {
+			#	tag = ITA
+			#	was_tag = GEN
+			#}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	gen_market_dominance = {
+		icon = medici_bank_ledgers
+		required_missions = {
+		}
+		position = 1
+		trigger = {
+			mercantilism = 27
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_genoese_market_dominance
 				duration = 9125
 			}
 		}
 	}
-	
-	GEN_Milan = {
-		icon = mission_cannons_firing
-		required_missions = { GEN_Army }
+
+	gen_anziani_ruling = {
+		icon = pulverize_pisa
+		required_missions = {
+			gen_market_dominance
+		}
 		position = 2
+		provinces_to_highlight = {
+			province_id = 115
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 115
+		}
+		effect = {
+			add_years_of_income = 1
+			115 = {
+				add_nationalism = -10
+				add_province_modifier = {
+					name = gen_anziani_fall
+					duration = 3650
+				}
+			}
+		}
+	}
+
+	gen_tyrrenean_islands = {
+		icon = invest_in_the_rich_trades
+		required_missions = {
+			gen_tyrrenean_hegemony
+			gen_anziani_ruling
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = corsica_sardinia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			corsica_sardinia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			corsica_sardinia_area = {
+				add_province_modifier = {
+					name = gen_genoese_ruling
+					duration = -1
+				}
+				add_devastation = -10
+			}
+			127 = {
+				add_province_modifier = {
+					name = gen_nuraghe
+					duration = -1
+				}
+			}
+		}
+	}
+
+	gen_pine_islands = {
+		icon = a_question_of_spain
+		required_missions = {
+			gen_tyrrenean_wood
+			gen_tyrrenean_islands
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = baleares_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			baleares_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			333 = {
+				add_province_modifier = {
+					name = gen_pine_timber
+					duration = -1
+				}
+			}
+		}
+	}
+
+	gen_bona_tabarca = {
+		icon = mission_arabian_fort
+		required_missions = { gen_trade_trouble_tunis }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1882
+				province_id = 2455
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1882 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2455 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			1882 = {
+				add_province_modifier = {
+					name = gen_genoese_fortress
+					duration = 5475
+				}
+			}
+			2455 = {
+				add_province_modifier = {
+					name = gen_genoese_fortress
+					duration = 5475
+				}
+			}
+		}
+	}
+
+	gen_art_sculture = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 101
+			OR = {
+				NOT = { has_building = temple }
+				NOT = { has_building = cathedral }
+			}
+		}
+		trigger = {
+			is_institution_enabled = renaissance
+			101 = {
+				has_trade_building_trigger = yes
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			OR = {
+				has_adm_advisor_2 = yes
+				ADM = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = gen_san_giovanni_battista
+				duration = 9125
+			}
+			101 = {
+				add_permanent_province_modifier = {
+					name = gen_santa_maria_carignano
+					duration = -1
+				}
+			}
+		}
+	}
+
+	gen_trade_building = {
+		icon = mission_dominate_home_trade_node
+		required_missions = {
+			gen_la_superba
+			gen_art_sculture
+		}
+		position = 8
+		provinces_to_highlight = { }
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				NOT = { province_id = 101 }
+				base_production = 10
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			random_owned_province = {
+				limit = {
+					base_production = 10
+					has_trade_building_trigger = yes
+				}
+				if = {
+					limit = {
+						has_building = marketplace
+					}
+					remove_building = marketplace
+					add_building_construction = {
+						building = trade_depot
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = trade_depot
+					}
+					remove_building = trade_depot
+					add_building_construction = {
+						building = stock_exchange
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_production = 3
+				}
+			}
+		}
+	}
+
+	gen_acquire_parma = {
+		icon = ansbach_succession
+		required_missions = { gen_merchant_army }
+		position = 9
 		provinces_to_highlight = {
 			province_id = 105
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -349,28 +2346,17 @@ GEN_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			if = {
-				limit = {
-					exists = MLO
-					NOT = { overlord_of = MLO }
-				}
-				add_casus_belli = {
-					target = MLO
-					type = cb_annex
-					months = 240
-				}
-			}
 			105 = {
 				add_local_autonomy = -25
 				add_nationalism = -10
 			}
 		}
 	}
-	
-	GEN_Lombardy = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { GEN_Milan }
-		position = 3
+
+	gen_defeat_milan = {
+		icon = seize_lombardy
+		required_missions = { gen_acquire_parma }
+		position = 11
 		provinces_to_highlight = {
 			area = lombardy_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -387,332 +2373,12 @@ GEN_missions_3 = {
 				duration = 7300
 			}
 			add_accepted_culture = lombard
-		}
-	}
-	
-	GEN_Italy = {
-		icon = mission_unite_home_region
-		required_missions = { GEN_Lombardy GEN_Piedmont GEN_Tuscany }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = calabria_area
-				area = naples_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			calabria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			naples_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = gen_italy_conquered
-				duration = -1
-			}
-		}
-	}
-}
-
-GEN_missions_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		tag = GEN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	GEN_Lucca = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { GEN_Army }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 2980
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			2980 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			tuscany_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = LAN
-					NOT = { overlord_of = LAN }
-				}
-				add_casus_belli = {
-					target = LAN
-					type = cb_annex
-					months = 240
+			hidden_effect = {
+				add_country_modifier = {
+					name = gen_conquest_lombardy
+					duration = -1
 				}
 			}
-			if = {
-				limit = {
-					exists = SIE
-					NOT = { overlord_of = SIE }
-				}
-				add_casus_belli = {
-					target = SIE
-					type = cb_annex
-					months = 240
-				}
-			}
-			2980 = {
-				add_local_autonomy = -25
-				add_nationalism = -10
-			}
-		}
-	}
-	
-	GEN_Tuscany = {
-		icon = mission_assemble_an_army
-		required_missions = { GEN_Lucca }
-		position = 3
-		provinces_to_highlight = {
-			area = tuscany_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			tuscany_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = gen_arts
-				duration = 9125
-			}
-			add_accepted_culture = tuscan
-		}
-	}
-	
-	GEN_alexandria = {
-		icon = mission_assemble_an_army
-		required_missions = { GEN_tunis }
-		position = 5
-		provinces_to_highlight = {
-			province_id = 358
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			358 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 2
-			add_country_modifier = {
-				name = "mediterranean_ambition"
-				duration = 5475
-			}
-		}
-	}
-}
-
-GEN_missions_5 = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential = {
-		tag = GEN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	GEN_insult = {
-		icon = mission_pf_cross
-		required_missions = { }
-		position = 1
-		trigger = {
-			if = {
-				limit = {
-					exists = BYZ
-					BYZ = {
-						owns = 151
-					}
-				}
-				BYZ = {
-					OR = {
-						has_opinion_modifier = {
-							who = ROOT
-							modifier = insulted
-						}
-						has_opinion_modifier = {
-							who = ROOT
-							modifier = scornfully_insulted
-						}
-					}
-				}
-			}
-			else = {
-				151 = {
-					owner = {
-						OR = {
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = insulted
-							}
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = scornfully_insulted
-							}
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			151 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
-					}
-					add_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	GEN_second_sack = {
-		icon = mission_eastern_european_city
-		required_missions = { GEN_insult }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 151
-			NOT = { controlled_by = ROOT }
-		}
-		trigger = {
-			151 = {
-				controlled_by = ROOT
-			}
-		}
-		effect = {
-			add_years_of_income = 2.5
-			thrace_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			hudavendigar_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	GEN_Bosphorus = {
-		icon = mission_non-western_soldiers
-		required_missions = { GEN_second_sack }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				area = thrace_area
-				area = hudavendigar_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			thrace_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			hudavendigar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 2
-			add_country_modifier = {
-				name = "black_sea_ambition"
-				duration = 5475
-			}
-		}
-	}
-	
-	GEN_tunis = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { }
-		position = 4
-		provinces_to_highlight = {
-			province_id = 341
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			341 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 2
-			358 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			354 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			add_country_modifier = {
-				name = gen_protecting_maghreb_trade
-				duration = 9125
-			}
-		}
-	}
-	
-	GEN_tripoli = {
-		icon = mission_arabian_fort
-		required_missions = { GEN_tunis }
-		position = 5
-		provinces_to_highlight = {
-			province_id = 354
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			354 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = gen_maghreb_ambition
-				duration = 9125
-			}
-			add_mercantilism = 2
 		}
 	}
 }

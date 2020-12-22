@@ -1,4 +1,4 @@
-Albania_missions_1 = {
+albania_missions_1 = {
 	slot = 1
 	ai = yes
 	generic = no
@@ -8,141 +8,160 @@ Albania_missions_1 = {
 	}
 	has_country_shield = yes
 	
-	Albania_sea_route = {
-		icon = mission_galleys_in_port
-		position = 2
-		required_missions = { Albania_army_of_the_mountains }
+	alb_ready_hinterlands = {
+		icon = mission_early_game_buildings
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { num_of_times_improved_by_owner = 2 }
+		}
+		trigger = {
+			capital_scope = { num_of_times_improved_by_owner = 2 }
+		}
+		effect = {
+			add_mil_power = 50
+			albania_area = {
+				limit = { owned_by = ALB }
+				add_province_modifier = {
+					name = alb_mountain_passes
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	alb_pearl_adriatic = {
+		icon = prosperity_for_all
+		position = 3
+		required_missions = { alb_defense_kruje }
 		provinces_to_highlight = {
 			province_id = 4174
 			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				NOT = { owned_by = ROOT }
+				devastation = 1
+				NOT = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		trigger = {
+			owns = 4174
 			4174 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				NOT = { devastation = 1 }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
-			num_of_light_ship = 4
 		}
 		effect = {
 			4174 = {
-				if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 1 }
-					}
-					center_of_trade = 1
+				add_province_modifier = {
+					name = alb_adriatic_entrepot
+					duration = 10950 #30 years
 				}
-				else_if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 3 }
-					}
-					add_center_of_trade_level = 1
-				}
-			}
-			rascia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
 	
-	Albania_flourishing_economy = {
-		icon = mission_high_income
+	alb_albanian_merchants = {
+		icon = mission_dominate_home_trade_node
 		position = 4
-		required_missions = { Albania_sea_route }
+		required_missions = { alb_pearl_adriatic }
 		provinces_to_highlight = {
-			OR = {
-				AND = {
-					area = rascia_area
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-				AND = {
-					province_id = 1766
-					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { development = 10 }
+			owned_by = ROOT
+			NOT = {
+				has_building = marketplace
+				has_building = trade_depot
+				has_building = stock_exchange
+			}
+			ROOT = {
+				NOT = {
+					calc_true_if = {
+						all_owned_province = {
+							OR = {
+								has_building = marketplace
+								has_building = trade_depot
+								has_building = stock_exchange
+							}
+						}
+						amount = 3
 					}
 				}
 			}
 		}
 		trigger = {
-			1766 = {
-				owned_by = ROOT
-				development = 10
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
 			}
-			rascia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+				amount = 3
 			}
+		}
+		effect = {
+			home_trade_node_effect_scope = {
+				random_trade_node_member_province = {
+					limit = { owned_by = ROOT }
+					add_trade_modifier = {
+						who = ROOT
+						duration = 5475 #15 years
+						power = 25
+						key = alb_competition_venice
+					}
+				}
+			}
+			add_country_modifier = {
+				name = alb_competition_venice
+				duration = 5475 #15 years
+			}
+		}
+	}
+	
+	alb_surpass_italians = {
+		icon = support_the_bulk_trades
+		position = 7
+		required_missions = { alb_albanian_navy }
+		trigger = {
+			1308 = { #venice node
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			137 = { #ragusa node
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			naval_forcelimit = 30
 		}
 		effect = {
 			add_country_modifier = {
-				name = alb_economic_resurgence
-				duration = 7300
+				name = alb_traders_adriatic
+				duration = 5475 #15 years
 			}
-			137 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	Albania_trade_in_ragusa = {
-		icon = mission_dominate_home_trade_node
-		position = 5
-		required_missions = { Albania_flourishing_economy }
-		provinces_to_highlight = {
-			province_id = 137
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { development = 10 }
-			}
-		}
-		trigger = {
-			137 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				development = 18
-			}
-		}
-		effect = {
-			137 = {
-				if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 1 }
-					}
-					center_of_trade = 1
-				}
-				else_if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 3 }
-					}
-					add_center_of_trade_level = 1
-				}
-				add_trade_modifier = {
-					who = ROOT
-					duration = 7300
-					power = 20
-					key = alb_fall_of_ragasu
-				}
-			}
+			add_mercantilism = 3
+			add_dip_power = 100
 		}
 	}
 }
 
-Albania_missions_2 = {
+albania_missions_2 = {
 	slot = 2
 	ai = yes
 	generic = no
@@ -152,129 +171,140 @@ Albania_missions_2 = {
 	}
 	has_country_shield = yes
 	
-	Albania_army_of_the_mountains = {
-		icon = mission_assemble_an_army
-		position = 1
-		required_missions = { }
-		trigger = {
-			army_size_percentage = 1
-			num_of_generals = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = alb_mountaineers
-				duration = 3650
-			}
-		}
-	}
-	
-	Albania_black_eagle = {
-		icon = mission_build_up_to_force_limit
+	alb_defense_kruje = {
+		icon = mission_establish_the_prikazy
 		position = 2
-		required_missions = { Albania_army_of_the_mountains }
+		required_missions = {
+			alb_ready_hinterlands
+			alb_league_lezhe
+		}
+		provinces_to_highlight = {
+			province_id = 4750
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			army_size = 20
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				army_professionalism = 0.25
-			}
-			else = {
-				army_tradition = 25
+			owns = 4750
+			OR = {
+				advisor = fortification_expert
+				monthly_mil = 11
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = alb_black_eagle
-				duration = -1
+			4750 = {
+				add_province_modifier = {
+					name = alb_kruje_castle
+					duration = -1
+				}
 			}
 		}
 	}
 	
-	Albania_ancestral_mountains = {
-		icon = mission_monarch_in_throne_room
+	alb_perfect_tactics = {
+		icon = mission_assemble_an_army
 		position = 3
-		required_missions = { Albania_offensive }
+		required_missions = { alb_defense_kruje }
+		trigger = {
+			cavalry_fraction = 0.33
+			army_tradition = 20
+		}
+		effect = {
+			if = {
+				limit = { has_dlc = "Cradle of Civilization" }
+				add_army_professionalism = 0.10
+			}
+			add_country_modifier = {
+				name = alb_mountain_ambush
+				duration = 5475 #15 years
+			}
+		}
+	}
+	
+	alb_promote_arts = {
+		icon = mission_early_modern_university
+		position = 4
+		required_missions = { alb_pearl_adriatic }
+		trigger = {
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
+			monthly_adm = 8
+			monthly_dip = 8
+			monthly_mil = 8
+		}
+		effect = {
+			define_advisor = {
+				type = theologian
+				name = "Frang Bardhi"
+				skill = 3
+				cost_multiplier = 0.25
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 100
+			}
+			else = { add_prestige = 10 }
+		}
+	}
+	
+	alb_albanian_navy = {
+		icon = mission_galleys_in_port
+		position = 6
+		required_missions = { alb_expansion_beyond }
 		provinces_to_highlight = {
-			OR = {
-				AND = {
-					province_id = 143
-					NOT = { owned_by = ROOT }
+			province_id = 4754
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			navy_size_percentage = 1
+			num_of_galley = 10
+			owns = 4754
+		}
+		effect = {
+			add_navy_tradition = 15
+			4754 = {
+				if = {
+					limit = { can_build = shipyard }
+					add_building_construction = {
+						building = shipyard
+						speed = 1.5
+						cost = 0
+					}
 				}
-				AND = {
-					is_capital_of = ROOT
-					NOT = { base_manpower = 5 }
+				else = {
+					add_province_modifier = {
+						name = alb_harbor_albania
+						duration = -1
+					}
 				}
 			}
 		}
+	}
+	
+	alb_illyrian_bosnia = {
+		icon = mission_eastern_european_city
+		position = 7
+		required_missions = { alb_conquest_serbia }
+		provinces_to_highlight = {
+			area = bosnia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			143 = {
+			bosnia_area = {
+				type = all
 				owned_by = ROOT
 			}
-			capital_scope = {
-				base_manpower = 5
-			}
-		}
-		effect = {
-			143 = {
-				add_fort_line = yes
-			}
-			add_country_modifier = {
-				name = alb_forts
-				duration = 18250
-			}
-		}
-	}
-	
-	Albania_unite_the_balkans = {
-		icon = mission_unite_home_region
-		position = 5
-		required_missions = { Albania_flourishing_economy Albania_macedonia }
-		trigger = {
-			army_size = 25
-			monthly_income = 30
-		}
-		effect = {
-			balkan_region = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			add_prestige = 20
-		}
-	}
-	
-	Albania_empire = {
-		icon = mission_empire
-		position = 6
-		required_missions = { Albania_unite_the_balkans }
-		provinces_to_highlight = {
-			region = balkan_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			balkan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = alb_triumph
-				duration = 18250
+				name = alb_church_bosnia
+				duration = 7300 #20 years
 			}
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
-			add_army_tradition = 25
+			add_prestige = 10
 		}
 	}
 }
 
-Albania_missions_3 = {
+albania_missions_3 = {
 	slot = 3
 	ai = yes
 	generic = no
@@ -284,93 +314,274 @@ Albania_missions_3 = {
 	}
 	has_country_shield = yes
 	
-	Albania_offensive = {
-		icon = mission_non-western_soldiers
-		position = 2
-		required_missions = { Albania_army_of_the_mountains }
+	alb_league_lezhe = {
+		icon = mission_build_up_to_force_limit
+		position = 1
+		required_missions = { }
 		trigger = {
-			OR = {
-				war_with = TUR
-				NOT = { exists = TUR }
-			}
+			army_size_percentage = 1
+			crown_land_share = 35
 		}
 		effect = {
 			add_country_modifier = {
-				name = albania_great_balkan_war
-				duration = 5475
+				name = alb_league_lezhe_mod
+				duration = 5475 #15 years
 			}
-			add_yearly_manpower = 1
-			macedonia_area = {
+		}
+	}
+	
+	alb_albanians_durres = {
+		icon = take_the_littoral
+		position = 2
+		required_missions = { alb_league_lezhe }
+		provinces_to_highlight = {
+			province_id = 4174
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = { controls = 4174 }
+		effect = {
+			add_war_exhaustion = -2
+			if = {
+				limit = { is_at_war = yes }
+				4174 = { add_devastation = -100 }
+			}
+			else = {
+				4174 = { add_devastation = -50 }
+			}
+		}
+	}
+	
+	alb_surpass_ottomans = {
+		icon = mission_non-western_soldiers
+		position = 3
+		required_missions = {
+			alb_albanians_durres
+			alb_vengeance_vlore
+		}
+		provinces_to_highlight = {
+			region = balkan_region
+			owned_by = TUR
+		}
+		trigger = {
+			OR = {
+				war_score_against = {
+					who = TUR
+					value = 50
+				}
+				AND = {
+					balkan_region = {
+						type = all
+						NOT = { owned_by = TUR }
+					}
+					total_development = 100
+				}
+			}
+		}
+		effect = {
+			add_casus_belli = {
+				target = TUR
+				type = cb_alb_dismantle_empire
+				months = 240
+			}
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
+					balkan_region = {
+						type = all
+						NOT = { owned_by = TUR }
+					}
+				}
+				add_country_modifier = {
+					name = alb_christianity_restored
+					duration = 7300 #20 years
+				}
+			}
+		}
+	}
+	
+	alb_defense_christendom = {
+		icon = mission_crusade_for_varna
+		position = 4
+		required_missions = { alb_surpass_ottomans }
+		provinces_to_highlight = {
+			region = balkan_region
+			owner = { religion_group = muslim }
+			calc_true_if = {
+				balkan_region = {
+					type = all
+					owner = { religion_group = muslim }
+				}
+				amount = 10
+			}
+		}
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = wonwarTUR
+					has_country_flag = wonwarTUR
+				}
+				NOT = { exists = TUR }
+			}
+			NOT = {
+				calc_true_if = {
+					balkan_region = {
+						type = all
+						owner = { religion_group = muslim }
+					}
+					amount = 10
+				}
+			}
+		}
+		effect = {
+			rascia_area = {
+				limit = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
+			
+			country_event = { #Albania Defeats the Turks
+				id = ME_Albania_Events.1
+			}
+			
+			if = {
+				limit = { religion = catholic }
+				add_papal_influence = 25
+			}
+			else = {
+				add_country_modifier = {
+					name = alb_champion_balkans
+					duration = -1
+				}
+			}
+			
+			add_prestige = 20
 		}
 	}
 	
-	Albania_save_our_people = {
+	alb_expansion_beyond = {
 		icon = mission_unite_home_region
-		position = 3
-		required_missions = { Albania_offensive }
+		position = 5
+		required_missions = { alb_defense_christendom }
 		provinces_to_highlight = {
-			province_id = 143
-			NOT = { controlled_by = ROOT }
+			area = rascia_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			143 = {
-				controlled_by = ROOT
+			rascia_area = {
+				type = all
+				owned_by = ROOT
 			}
 		}
 		effect = {
-			143 = {
-				infantry = ROOT
-				infantry = ROOT
+			serbia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 			add_country_modifier = {
-				name = albania_support
-				duration = 1825
+				name = alb_illyrian_heritage
+				duration = 7300 #20 years
 			}
 		}
 	}
 	
-	Albania_macedonia = {
-		icon = mission_cannons_firing
-		position = 4
-		required_missions = { Albania_save_our_people }
+	alb_conquest_serbia = {
+		icon = defeat_the_serbs
+		position = 6
+		required_missions = { alb_expansion_beyond }
 		provinces_to_highlight = {
-			area = macedonia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			area = serbia_area
+			NOT = { owned_by = ROOT }
+			NOT = { province_id = 4239 }
 		}
 		trigger = {
-			macedonia_area = {
+			serbia_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					owned_by = ROOT
+					province_id = 4239
+				}
 			}
 		}
 		effect = {
-			add_years_of_income = 1
-			148 = {
-				add_base_tax = 1
-				add_base_manpower = 1
-				add_base_production = 1
+			bosnia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-			3001 = {
-				add_base_tax = 1
-				add_base_manpower = 1
-				add_base_production = 1
+			east_adriatic_coast_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-			1853 = {
-				add_base_tax = 1
-				add_base_manpower = 1
-				add_base_production = 1
+			
+			add_prestige = 10
+			add_mil_power = 50
+			
+			if = {
+				limit = { owns = 4239 }
+				4239 = {
+					add_province_modifier = {
+						name = alb_bastion_hungary
+						duration = -1
+					}
+				}
+				add_mil_power = 50
+			}
+		}
+	}
+	
+	alb_illyrian_realization = {
+		icon = mission_conquer_5_states
+		position = 8
+		required_missions = {
+			alb_illyrian_bosnia
+			alb_subjugate_dalmatia
+		}
+		provinces_to_highlight = {
+			culture_group = south_slavic
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					calc_true_if = {
+						all_owned_province = { culture_group = south_slavic }
+						amount = 20
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_owned_province = { culture_group = south_slavic }
+				amount = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = alb_illyrian_realized
+				duration = 9125 #25 years
+			}
+			
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 100
+			}
+			else = { add_prestige = 50 }
+			
+			random_owned_area = {
+				limit = { is_state = yes }
+				add_prosperity = 20
+				
+				type = all
 			}
 		}
 	}
 }
 
-Albania_missions_4 = {
+albania_missions_4 = {
 	slot = 4
 	ai = yes
 	generic = no
@@ -379,107 +590,366 @@ Albania_missions_4 = {
 		tag = ALB
 	}
 	has_country_shield = yes
-	Albania_byzantine_legacy = {
-		icon = mission_empire
-		position = 1
-		required_missions = { }
+	
+	alb_vengeance_vlore = {
+		icon = shield_of_christendom
+		position = 2
+		required_missions = { alb_league_lezhe }
 		provinces_to_highlight = {
-			province_id = 4175
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { development = 10 }
-			}
+			province_id = 143
+			NOT = { controlled_by = ROOT }
 		}
 		trigger = {
-			OR = { 
-				NOT = { exists = BYZ }
-				NOT = {
-					reverse_has_opinion = {
-						who = BYZ
-						value = -50
+			OR = {
+				AND = {
+					controls = 143
+					custom_trigger_tooltip = {
+						tooltip = alb_vengeance_vlore_tt
+						143 = {
+							owner = {
+								ROOT = {
+									war_score_against = {
+										who = PREV
+										value = 15
+									}
+								}
+							}
+						}
 					}
 				}
-			}
-			4175 = {
-				owned_by = ROOT
-				development = 10
+				owns = 143
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					has_dlc = "Rule Britannia"
-				}
-				change_innovativeness = 10
-			}
-			else = {
-				add_adm_power = 20
-				add_dip_power = 20
-				add_mil_power = 20
-			}
 			add_country_modifier = {
-				name = alb_decay
-				duration = 5475
+				name = alb_ottoman_offensive
+				duration = 3650 #10 years
 			}
-		}
-	}
-	
-	Albania_troubled_times = {
-		icon = mission_have_two_subjects
-		position = 3
-		required_missions = { Albania_byzantine_legacy }
-		trigger = {
-			num_of_allies = 2
-			NOT = { exists = BYZ }
-		}
-		effect = {
-			thrace_area = {
+			northern_greece_area = {
 				limit = {
-					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = alb_bastion
-				duration = 7300
-			}
 		}
 	}
 	
-	Albania_rise_of_constantinople = {
-		icon = mission_cannons_firing
-		position = 5
-		required_missions = { Albania_troubled_times }
+	alb_papal_favor = {
+		icon = show_piety
+		position = 3
+		required_missions = { alb_organize_crusade }
+		trigger = {
+			religion = catholic
+			reverse_has_opinion = {
+				who = PAP
+				value = 125
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = alb_athleta_christi
+				duration = 7300 #20 years
+			}
+			capital_scope = { add_cardinal = yes }
+		}
+	}
+	
+	alb_subjugate_dalmatia = {
+		icon = capture_adriatic_ports
+		position = 7
+		required_missions = { alb_conquest_serbia }
 		provinces_to_highlight = {
-			province_id = 151
+			area = east_adriatic_coast_area
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			151 = {
+			east_adriatic_coast_area = {
+				type = all
 				owned_by = ROOT
 			}
 		}
 		effect = {
-			151 = {
-				if = {
-					limit = {
-						NOT = { is_core = ROOT }
-					}
-					add_core = ROOT
+			137 = {
+				add_province_modifier = {
+					name = alb_secured_routes
+					duration = 7300 #20 years
 				}
-				change_culture = ROOT
-				change_province_name = "Skenderpolis"
-				rename_capital = "Skenderpolis"
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 1
 			}
+			add_dip_power = 50
+		}
+	}
+}
+
+albania_missions_5 = {
+	slot = 5
+	ai = yes
+	generic = no
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = ALB
+	}
+	has_country_shield = yes
+	
+	alb_secure_position = {
+		icon = mission_alliances
+		position = 1
+		required_missions = { }
+		trigger = {
+			calc_true_if = {
+				all_known_country = {
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = alb_seeking_protection
+				duration = 5475 #15 years
+			}
+		}
+	}
+	
+	alb_organize_crusade = {
+		icon = mission_reliable_allies
+		position = 2
+		required_missions = { alb_secure_position }
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_tta
+					exists = HUN
+					HUN = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_ttb
+					exists = ARA
+					ARA = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+				
+				NOT = { exists = TUR }
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_ttc
+					TUR = {
+						any_rival_country = {
+							total_development = 150
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+				is_rival = TUR
+			}
+		}
+		effect = {
 			if = {
 				limit = {
-					NOT = { capital = 151 }
+					NOT = { exists = TUR }
 				}
-				set_capital = 151
+				add_prestige = 25
+			}
+			else = {
+				if = {
+					limit = { is_rival = TUR }
+					add_country_modifier = {
+						name = alb_led_crusade
+						duration = 7300 #20 years
+					}
+				}
+				else = {
+					tooltip = {
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = HUN
+						HUN = {
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+					HUN = {
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
+						}
+					}
+				}
+				if = {
+					limit = {
+						exists = ARA
+						ARA = {
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+					ARA = {
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
+						}
+					}
+				}
+				TUR = {
+					every_rival_country = {
+						limit = {
+							total_development = 150
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+							NOT = { tag = HUN }
+							NOT = { tag = ARA }
+						}
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	alb_imperial_appeal = {
+		icon = mission_empire
+		position = 3
+		required_missions = { alb_organize_crusade }
+		trigger = {
+			if = {
+				limit = { hre_size = 1 }
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				total_development = 50
+			}
+			else = {
+				all_rival_country = {
+					NOT = {
+						military_strength = {
+							who = ROOT
+							value = 0.8
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { hre_size = 1 }
+				emperor = {
+					country_event = { #Albania Appeals to the Empire
+						id = ME_Albania_Events.4
+					}
+				}
+				add_dip_power = 50
+			}
+			else = {
+				add_power_projection = {
+					type = mission_rewards_power_projection
+					amount = 25
+				}
+			}
+		}
+	}
+	
+	alb_greater_albania = {
+		icon = become_king
+		position = 5
+		required_missions = { }
+		trigger = {
+			total_development = 150
+			crown_land_share = 60
+			estate_loyalty = {
+				estate = all
+				loyalty = 60
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						government_rank = 2
+						is_part_of_hre = yes
+					}
+				}
+				add_legitimacy = 20
+				every_owned_province = { add_local_autonomy = -5 }
+			}
+			else = { set_government_rank = 2 }
+			
+			add_country_modifier = {
+				name = alb_albanian_expansion
+				duration = 10950 #30 years
+			}
+			change_government_reform_progress = 20
+		}
+	}
+	
+	alb_question_nationalism = {
+		icon = pacify_the_albanian_lands
+		position = 7
+		required_missions = { alb_greater_albania }
+		provinces_to_highlight = {
+			culture = albanian
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					calc_true_if = {
+						all_owned_province = { culture = albanian }
+						amount = 8
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				calc_true_if = {
+					all_owned_province = { culture = albanian }
+					amount = 8
+				}
+				num_accepted_cultures = 3
+			}
+		}
+		effect = {
+			if = {
+				limit = { num_accepted_cultures = 3 }
+				add_country_modifier = {
+					name = alb_cultural_harmony
+					duration = 10950 #30 years
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = alb_albanian_domination
+					duration = 10950 #30 years
+				}
 			}
 		}
 	}

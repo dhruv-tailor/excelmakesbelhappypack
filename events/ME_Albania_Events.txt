@@ -1,0 +1,244 @@
+namespace = ME_Albania_Events
+
+country_event = {
+	id = ME_Albania_Events.1
+	title = ME_Albania_Events.1.t
+	desc = ME_Albania_Events.1.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	
+	major_trigger = {
+		knows_country = ROOT
+		OR = {
+			NOT = { exists = TUR }
+			knows_country = TUR
+		}
+	}
+	
+	option = {
+		name = ME_Albania_Events.1.a
+		
+		add_stability_or_adm_power = yes
+		
+		custom_tooltip = alb_defended_christianity_tt
+		every_known_country = {
+			limit = {
+				religion_group = christian
+				knows_country = ROOT
+				OR = {
+					NOT = { exists = TUR }
+					knows_country = TUR
+				}
+			}
+			hidden_effect = {
+				add_opinion = {
+					who = ROOT
+					modifier = alb_defended_christianity
+				}
+			}
+		}
+		
+		change_government_reform_progress = 25
+	}
+}
+
+country_event = {
+	id = ME_Albania_Events.2
+	title = ME_Albania_Events.2.t
+	desc = ME_Albania_Events.2.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Albania_Events.2.a
+		
+		add_opinion = {
+			who = FROM
+			modifier = alb_turks_defeated
+		}
+		
+		reverse_add_opinion = {
+			who = FROM
+			modifier = alb_turks_defeated
+		}
+		
+		add_trust = {
+			who = FROM
+			value = 10
+			mutual = yes
+		}
+		
+		#add_favors = 15
+		create_alliance = FROM
+		hidden_effect = { set_country_flag = joined_crusade }
+		
+		FROM = {
+			country_event = { #X Sends Their Support!
+				id = ME_Albania_Events.3
+				days = 1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Albania_Events.2.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_stability_or_adm_power = yes
+		
+		reverse_add_opinion = {
+			who = FROM
+			modifier = alb_well_wishes
+		}
+	}
+}
+
+country_event = {
+	id = ME_Albania_Events.3
+	title = ME_Albania_Events.3.t
+	desc = ME_Albania_Events.3.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Albania_Events.3.a
+		
+		add_manpower = 1
+		
+		if = {
+			limit = {
+				NOT = { has_country_modifier = alb_western_arms }
+			}
+			add_country_modifier = {
+				name = alb_western_arms
+				duration = 5475 #15 years
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Albania_Events.4
+	title = ME_Albania_Events.4.t
+	desc = ME_Albania_Events.4.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Albania_Events.4.a
+		
+		FROM = {
+			country_event = { #Albania Joins the Empire!
+				id = ME_Albania_Events.8
+				days = 1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Albania_Events.4.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_stability_or_adm_power = yes
+	}
+}
+
+country_event = {
+	id = ME_Albania_Events.5
+	title = ME_Albania_Events.5.t
+	desc = ME_Albania_Events.5.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+	hidden = yes
+	
+	trigger = {
+		tag = ALB
+		war_score_against = {
+			who = TUR
+			value = 10
+		}
+		NOT = { has_country_flag = winningTUR }
+		NOT = { has_country_flag = wonwarTUR }
+	}
+	
+	immediate = { set_country_flag = winningTUR }
+	
+	option = { }
+}
+
+country_event = {
+	id = ME_Albania_Events.6
+	title = ME_Albania_Events.6.t
+	desc = ME_Albania_Events.6.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+	hidden = yes
+	
+	trigger = {
+		tag = ALB
+		war_with = TUR
+		NOT = {
+			war_score_against = {
+				who = TUR
+				value = 10
+			}
+		}
+		has_country_flag = winningTUR
+		NOT = { has_country_flag = wonwarTUR }
+	}
+	
+	immediate = { clr_country_flag = winningTUR }
+	
+	option = { }
+}
+
+country_event = {
+	id = ME_Albania_Events.7
+	title = ME_Albania_Events.7.t
+	desc = ME_Albania_Events.7.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+	hidden = yes
+	
+	trigger = {
+		tag = ALB
+		NOT = { war_with = TUR }
+		has_country_flag = winningTUR
+		NOT = { has_country_flag = wonwarTUR }
+	}
+	
+	immediate = {
+		clr_country_flag = winningTUR
+		set_country_flag = wonwarTUR
+	}
+	
+	option = { }
+}
+
+country_event = {
+	id = ME_Albania_Events.8
+	title = ME_Albania_Events.8.t
+	desc = ME_Albania_Events.8.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Albania_Events.8.a
+		
+		set_in_empire = yes
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				set_in_empire = no
+			}
+		}
+	}
+}

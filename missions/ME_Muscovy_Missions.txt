@@ -1,4 +1,4 @@
-Muscovy_missions_1 = {
+MOS_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -8,189 +8,236 @@ Muscovy_missions_1 = {
 	}
 	has_country_shield = yes
 	
-	Muscovy_Four_year_plan_haha = {
-		icon = mission_early_game_buildings
+	muscovy_influence_patriarchate = {
+		icon = mission_autocephalous_archbishopric
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			province_id = 295
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
 		trigger = {
-			adm_tech = 6
-			dip_power = 140
-			DIP = 4
+			OR = {
+				NOT = { has_estate = estate_church }
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			295 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			owns = 295
+		}
+		effect = {
+			add_patriarch_authority = 0.05
+			295 = { add_base_tax = 1 }
+		}
+	}
+	
+	muscovy_town_church = {
+		icon = mission_sovereign_principality
+		required_missions = { muscovy_influence_patriarchate }
+		position = 3
+		provinces_to_highlight = {
+			num_free_building_slots = 1
+			owned_by = ROOT
+			NOT = { development = 15 }
+			OR = {
+				NOT = {
+					has_building = temple
+					has_building = cathedral
+				}
+				has_owner_religion = no
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				NOT = { development = 15 }
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				has_owner_religion = yes
+				value = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = muscovy_churches_people
+				duration = 5475 #15 years
+			}
+		}
+	}
+	
+	muscovy_proclamation_faith = {
+		icon = mission_land_of_churches
+		required_missions = {
+			muscovy_town_church
+			muscovy_conquer_raiders
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 310
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = {
+							has_building = temple
+							has_building = cathedral
+						}
+					}
+				}
+				AND = {
+					province_id = 303
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = {
+							has_building = temple
+							has_building = cathedral
+						}
+					}
+				}
+				AND = {
+					province_id = 1082
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = {
+							has_building = temple
+							has_building = cathedral
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			310 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			303 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			1082 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			owns = 310
+			owns = 303
+			owns = 1082
+		}
+		effect = {
+			310 = {
+				if = {
+					limit = { has_owner_religion = no }
+					change_religion = ROOT
+				}
+				else = {
+					add_province_modifier = {
+						name = muscovy_increased_followers
+						duration = -1
+					}
+				}
+			}
+			303 = { change_religion = ROOT }
+			1082 = { change_religion = ROOT }
+			
+			310 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			303 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			1082 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			
+			add_patriarch_authority = 0.05
+		}
+	}
+	
+	muscovy_cathedral_basil = {
+		icon = mission_land_of_churches
+		required_missions = { muscovy_proclamation_faith }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 295
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved_by_owner = 5 }
+					}
+				}
+				AND = {
+					is_capital_of = ROOT
+					has_owner_religion = no
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					has_institution = renaissance
+					advisor = artist
+				}
+				AND = {
+					owns = 295
+					295 = { num_of_times_improved_by_owner = 5 }
+					capital_scope = { has_owner_religion = yes }
+					is_at_war = no
+				}
+			}
 		}
 		effect = {
 			if = {
 				limit = {
-					any_owned_province = {
-						can_workshop_line = yes
-					}
+					295 = { has_building = cathedral }
 				}
-				random_owned_province = {
-					limit = {
-						can_workshop_line = yes
-					}
-					add_workshop_line = yes
-				}
-				if = {
-					limit = {
-						any_owned_province = {
-							can_workshop_line = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-							can_workshop_line = yes
-						}
-						add_workshop_line = yes
-					}
-					if = {
-						limit = {
-							any_owned_province = {
-								can_workshop_line = yes
-					}
-				}
-				random_owned_province = {
-					limit = {
-								can_workshop_line = yes
-							}
-							add_workshop_line = yes
-						}
-					}
-					else = {
-						random_owned_province = {
-							add_base_tax = 1
-						}
-					}
-				}
-				else = {
-					random_owned_province = {
-						add_base_tax = 1
-					}
-					random_owned_province = {
-						add_base_tax = 1
-					}
-				}
+				add_prestige = 10
 			}
 			else = {
-				random_owned_province = {
-					add_base_tax = 1
-				}
-				random_owned_province = {
-					add_base_tax = 1
-				}
-				random_owned_province = {
-					add_base_tax = 1
+				295 = {
+					remove_building = temple
+					add_building = cathedral
 				}
 			}
-			add_dip_power = -70
-		}
-	}
-	
-	Muscovy_Moscow = {
-		icon = mission_colonial
-		required_missions = { Muscovy_Four_year_plan_haha }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 295
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			dip_tech = 4
-			dip_power = 140
-			owns = 295
-		}
-		effect = {
-			295 = {
-				add_marketplace_line = yes
-			}
-			add_dip_power = -70
-		}
-	}
-	
-	Muscovy_Religious_Effort = {
-		icon = mission_religious
-		required_missions = { }
-		position = 4
-		trigger = {
-			religious_unity = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Muscovy_Religious"
-				duration = 7300
-			}
-		}
-	}
-	
-	Muscovy_Infantry_Effort = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 6
-		trigger = {
-			num_of_infantry = 40
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Muscovy_Infantry"
-				duration = 7300
-			}
-		}
-	}
-	
-	Muscovy_Streltsy = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { Muscovy_Infantry_Effort }
-		position = 7
-		trigger = {
-			if = {
-				limit = { 
-					has_dlc = "Third Rome"
-				}
-				num_of_streltsy = 20
-			}
-			else = {
-				num_of_infantry = 40
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Muscovy_Infantry"
-				duration = 7300
-			}
-		}
-	}
-	
-	Muscovy_Cavalry_Effort = {
-		icon = mission_conquer_5_states
-		required_missions = { Muscovy_Streltsy }
-		position = 8
-		trigger = {
-			num_of_cavalry = 20
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Muscovy_Cavalry"
-				duration = 7300
-			}
-		}
-	}
-	
-	Muscovy_Artillery_Effort = {
-		icon = mission_cannons_firing
-		required_missions = { Muscovy_Cavalry_Effort }
-		position = 9
-		trigger = {
-			num_of_artillery = 80
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Muscovy_artillery"
-				duration = 7300
+			define_advisor = {
+				type = muscovy_architect
+				name = "Postnik Yakovlev"
+				skill = 1
+				cost_multiplier = 0.5
+				culture = russian
+				religion = orthodox
 			}
 		}
 	}
 }
 
-Muscovy_missions_2 = {
+MOS_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -200,286 +247,156 @@ Muscovy_missions_2 = {
 	}
 	has_country_shield = yes
 	
-	mu_invade_novgorod_mission = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { Muscovy_Army }
+	muscovy_republic_pskov = {
+		icon = mission_seize_north_sea_trade
+		required_missions = { muscovy_stability_regained }
 		position = 2
 		provinces_to_highlight = {
-			province_id = 310
 			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				province_id = 1960
+				province_id = 274
 			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			OR = {
-				offensive_war_with = NOV
-				owns_core_province = 310
-			}
+			mission_completed = muscovy_fall_novgorod
+			owns = 1960
+			owns = 274
 		}
 		effect = {
-			novgorod_area = {
+			add_legitimacy_equivalent = { value = 10 }
+			274 = { add_base_production = 3 }
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			beloozero_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			north_karelia = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			4148 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
+					274 = {
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
 					}
-					add_permanent_claim = ROOT
 				}
-			}
-			33 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			34 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			1961 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
+				add_estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 10
 				}
 			}
 		}
 	}
 	
-	Muscovy_Conquer_Novgorod = {
-		icon = mission_unite_home_region
-		required_missions = { mu_invade_novgorod_mission }
+	muscovy_demands_loyalty = {
+		icon = mission_dethrone_the_rurikovichs
+		required_missions = { muscovy_fall_novgorod }
 		position = 3
 		provinces_to_highlight = {
 			OR = {
-				area = novgorod_area
-				area = beloozero_area
-				area = north_karelia
-				province_id = 4148
-				province_id = 33
-				province_id = 34
-				province_id = 1961
+				province_id = 4116
+				province_id = 4249
+				province_id = 294
+				province_id = 4248
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			north_karelia = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			beloozero_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			novgorod_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4148 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			33 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			34 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1961 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			owns = 4116
+			owns = 4249
+			owns = 294
+			owns = 4248
+			NOT = { exists = TVE }
+			NOT = { exists = OKA }
 		}
 		effect = {
-			pomor_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			arkhangelsk_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			1777 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
+			add_legitimacy_equivalent = { value = 10 }
+			add_prestige = 10
+			add_dip_power = 50
+			
+			4116 = { add_local_autonomy = -25 }
+			4249 = { add_local_autonomy = -25 }
+			294 = { add_local_autonomy = -25 }
+			4248 = { add_local_autonomy = -25 }
 		}
 	}
 	
-	Muscovy_Pomorye = {
-		icon = mission_galleys_in_port
-		required_missions = { Muscovy_Conquer_Novgorod }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = pomor_area
-				area = arkhangelsk_area
-				province_id = 1777
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			pomor_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			arkhangelsk_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1777 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			30 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			estonia_ingria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			livonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			curonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Muscovy_Viborg = {
-		icon = mission_conquer_50_development
-		required_missions = { Muscovy_Pomorye }
+	muscovy_conquer_raiders = {
+		icon = mission_recruit_the_cossacks
+		required_missions = { muscovy_dynasty_rule }
 		position = 5
 		provinces_to_highlight = {
-			province_id = 30
+			OR = {
+				area = samara_area
+				area = kazan_area
+				area = volga_area
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			30 = {
+			samara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kazan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			volga_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			finland_area = {
+			add_country_modifier = {
+				name = muscovy_steppes_pacified
+				duration = 7300 #20 years
+			}
+			bashkiria_area = {
 				limit = {
-					NOT = { owned_by = ROOT	}
+					NOT = { is_permanent_claim = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
-			}
-			bothnia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			4151 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
 			}
 		}
 	}
 	
-	Muscovy_Finland = {
-		icon = mission_unite_home_region
-		required_missions = { Muscovy_Viborg }
+	muscovy_wealth_zlatoust = {
+		icon = mission_war_chest
+		required_missions = { muscovy_conquer_raiders }
 		position = 6
 		provinces_to_highlight = {
 			OR = {
-				area = finland_area
-				area = bothnia_area
-				province_id = 4151
+				AND = {
+					area = bashkiria_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 2444
+					NOT = { base_production = 5 }
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			finland_area = {
+			bashkiria_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
 			}
-			bothnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4151 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			2444 = { base_production = 5 }
 		}
 		effect = {
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
+			2444 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				2444 = { add_prosperity = 50 }
+			}
+			else = { add_years_of_income = 0.33 }
 		}
 	}
 }
 
-Muscovy_missions_3 = {
+MOS_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -489,275 +406,366 @@ Muscovy_missions_3 = {
 	}
 	has_country_shield = yes
 	
-	Muscovy_Army = {
-		icon = mission_build_up_to_force_limit
+	muscovy_stability_regained = {
+		icon = mission_defeat_muscovy
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			units_in_province = REB
+			owned_by = ROOT
+			ROOT = { has_country_flag = shemyaka_rebellion }
+		}
 		trigger = {
-			army_size_percentage = 0.8
-			manpower_percentage = 0.25
+			if = {
+				limit = { has_country_flag = shemyaka_rebellion }
+				NOT = { num_of_rebel_armies = 1 }
+				stability = 0
+			}
+			else = {
+				is_year = 1450
+				stability = 1
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "thriving_arms_industry"
-				duration = 9125
+			add_yearly_manpower = 2
+			
+			#tr_invade_novgorod_mission from TR_Russian_missions.txt
+			novgorod_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			beloozero_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			pomor_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			north_karelia = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			arkhangelsk_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			4148 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1777 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			33 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			34 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1961 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			
+			custom_tooltip = muscovy_stability_regained_tta
+			hidden_effect = {
+				every_subject_country = { add_liberty_desire = -10 }
 			}
 		}
 	}
-	
-	Muscovy_Tver = {
-		icon = mission_conquer_5_states
-		required_missions = { Muscovy_Army }
+
+	muscovy_fall_novgorod = {
+		icon = mission_novgorod_the_great
+		required_missions = { muscovy_stability_regained }
 		position = 2
 		provinces_to_highlight = {
-			OR = {
-				province_id = 294
-				province_id = 4248
-				province_id = 4249
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			province_id = 310
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			294 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4248 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4249 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				AND = {
+					war_with = NOV
+					war_score_against = {
+						who = NOV
+						value = 75
+					}
+					controls = 310
+				}
+				owns_core_province = 310
 			}
 		}
 		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
+			russia_region = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					NOT = { owns_core_province = 310 }
+					NOT = {
+						any_country = {
+							ai = no
+						}
+					}
+				}
+				country_event = {
+					id = ME_Muscovy_Events.10 #Subjugation of Novgorod
+					days = 0
+				}
+			}
 		}
 	}
 	
-	Muscovy_Integrate = {
-		icon = mission_have_two_subjects
-		required_missions = { Muscovy_Tver }
+	muscovy_retrieve_codex = {
+		icon = mission_weather_the_troubles
+		required_missions = { muscovy_fall_novgorod }
 		position = 3
 		provinces_to_highlight = {
 			OR = {
-				province_id = 308
-				province_id = 4250
-				province_id = 4147
+				province_id = 4255
+				province_id = 301
+				province_id = 300
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			308 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4250 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4147 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
-		}
-	}
-	
-	Muscovy_LO = {
-		icon = mission_have_two_subjects
-		required_missions = { Muscovy_Pomorye }
-		position = 5
-		provinces_to_highlight = {
-			OR = {
-				area = curonia_area
-				area = estonia_ingria_area
-				area = livonia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			curonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			estonia_ingria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			livonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			lithuania_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			samogitia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Muscovy_Lithuania = {
-		icon = mission_conquer_5_states
-		required_missions = { Muscovy_LO }
-		position = 6
-		provinces_to_highlight = {
-			OR = {
-				area = lithuania_area
-				area = samogitia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			lithuania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			samogitia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			east_prussia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Muscovy_Nogai = {
-		icon = mission_non-western_cavalry_raid
-		required_missions = { Muscovy_Great_Horde }
-		position = 7
-		provinces_to_highlight = {
-			OR = {
-				area = lower_yik_area
-				area = nogai_area
-				area = bashkiria_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			lower_yik_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			nogai_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			bashkiria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
-		}
-	}
-	
-	mu_russian_colony_in_west_siberia_new = {
-		icon = mission_colonial
-		required_missions = { Muscovy_Nogai }
-		position = 8
-		provinces_to_highlight = {
-			region = west_siberia_region
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = russia_westsiberia.tooltip
-				num_of_owned_provinces_with = {
-					region = west_siberia_region
-					value = 15
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "colonial_enthusiasm"
-				duration = 5475
-			}
-			add_dip_power = 100
-			west_siberia_region = {
-				limit = {
-					trade_goods = fur
-					owned_by = ROOT
-				}
-				add_province_modifier = {
-					name = "siberian_fur_production"
-					duration = 5475
-				}
-			}
-		}
-	}
-	
-	mu_russian_colony_in_east_siberia = {
-		icon = mission_trade_company_region_abroad
-		position = 9
-		required_missions = { mu_russian_colony_in_west_siberia_new }
-		provinces_to_highlight = {
 			OR = {
 				AND = {
-					region = east_siberia_region
-					NOT = { owned_by = ROOT }
+					has_opinion = {
+						who = RYA
+						value = 190
+					}
+					alliance_with = RYA
+					marriage_with = RYA
+					RYA = { is_at_war = no }
+					is_at_war = no
 				}
 				AND = {
-					province_id = 1043
-					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+					owns = 4255
+					owns = 301
+					owns = 300
+				}
+				RYA = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_opinion = {
+						who = RYA
+						value = 190
+					}
+					alliance_with = RYA
+					marriage_with = RYA
+					RYA = { is_at_war = no }
+					is_at_war = no
+				}
+				RYA = {
+					country_event = {
+						id = ME_Muscovy_Events.20 #A Deal from Moscow
+						days = 0
 					}
 				}
 			}
-			has_discovered = ROOT
+			else = { #ME_Muscovy_Events.30: must hold ryazan
+				if = {
+					limit = { has_dlc = "Mandate of Heaven" }
+					add_country_modifier = {
+						name = muscovy_keepers_codex
+						duration = -1
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = muscovy_keepers_codex_noDLC
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	
+	muscovy_dynasty_rule = {
+		icon = mission_the_third_rome
+		required_missions = {
+			muscovy_demands_loyalty
+			muscovy_retrieve_codex
+			muscovy_incorporate_rurikovich
+		}
+		position = 4
+		provinces_to_highlight = {
+			region = russia_region
+			owner = {
+				NOT = { tag = ROOT }
+				capital_scope = { region = russia_region }
+				army_size = ROOT
+			}
 		}
 		trigger = {
+			legitimacy_equivalent = 90
+			army_size = 50
+			
 			custom_trigger_tooltip = {
-				tooltip = russia_eastsiberia.tooltip
-				num_of_owned_provinces_with = {
-					region = east_siberia_region
-					value = 10
+				tooltip = muscovy_dynasty_rule_tta
+				
+				NOT = {
+					any_known_country = {
+						NOT = { tag = ROOT }
+						capital_scope = { region = russia_region }
+						army_size = ROOT
+					}
 				}
 			}
-			owns_core_province = 1043
 		}
 		effect = {
-			add_country_modifier = {
-				name = "colonial_enthusiasm"
-				duration = 5475
-			}
-			1043 = {
-				add_shipyard_line = yes
-				add_province_modifier = {
-					name = "russian_pacific_port"
-					duration = -1
+			smolensk_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
+			}
+			saratov_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tambov_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_don_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			samara_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kazan_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			volga_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+
+			add_country_modifier = {
+				name = muscovy_outwards_expansion
+				duration = 7300 #20 years
+			}
+		}
+	}
+	
+	muscovy_city_artillery = {
+		icon = mission_cannons_firing
+		required_missions = { muscovy_dynasty_rule }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = smolensk_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 293
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+			}
+		}
+		trigger = {
+			smolensk_area = {
+				type = all
+				owned_by = ROOT
+			}
+			mil_tech = 7
+			293 = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Muscovy_Events.40 #Artillery Fields of Smolensk
+				days = 0
 			}
 		}
 	}
 }
 
-Muscovy_missions_4 = {
+MOS_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -767,179 +775,195 @@ Muscovy_missions_4 = {
 	}
 	has_country_shield = yes
 	
-	Muscovy_Odoyev = {
-		icon = mission_have_two_subjects
-		required_missions = { Muscovy_Army }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 4116
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			4116 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
-		}
-	}
-	
-	Muscovy_Ryazan = {
-		icon = mission_assemble_an_army
-		required_missions = { Muscovy_Odoyev }
+	muscovy_incorporate_rurikovich = {
+		icon = mission_conquer_tver
+		required_missions = { muscovy_fall_novgorod }
 		position = 3
 		provinces_to_highlight = {
 			OR = {
-				province_id = 300
-				province_id = 301
-				province_id = 4255
+				province_id = 308
+				province_id = 4250
+				province_id = 4147
+				province_id = 4261
+				province_id = 312
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { owned_by = ROOT } 
 		}
 		trigger = {
-			300 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			301 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4255 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			owns = 308
+			owns = 4250
+			owns = 4147
+			owns = 4261
+			owns = 312
+			NOT = { exists = YAR }
+			NOT = { exists = BLO }
+			NOT = { exists = RSO }
 		}
 		effect = {
-			ruthenia_region = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+			custom_tooltip = muscovy_incorporate_rurikovich_tta
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							is_core = YAR
+							is_core = BLO
+							is_core = RSO
+						}
+					}
+					add_local_autonomy = -10
 				}
-				add_permanent_claim = ROOT
+			}
+			remove_country_modifier = annexers_legacy
+			add_dip_power = 100
+			
+			change_estate_land_share = {
+				estate = all
+				share = -5
 			}
 		}
 	}
 	
-	Muscovy_Ruthenia = {
-		icon = mission_conquer_5_states
-		required_missions = { Muscovy_Ryazan }
-		position = 4
-		provinces_to_highlight = {
-			region = ruthenia_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			ruthenia_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-		}
-		effect = {
-			zaporizhia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			yedisan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			azov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			284 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			285 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2447 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	Muscovy_Crimea  = {
-		icon = mission_non-western_cavalry_raid
-		required_missions = { Muscovy_Ruthenia }
+	muscovy_not_great = {
+		icon = mission_break_the_tatar_yoke
+		required_missions = { muscovy_dynasty_rule }
 		position = 5
 		provinces_to_highlight = {
 			OR = {
-				province_id = 284
-				province_id = 285
-				province_id = 2447
-				area = azov_area
-				area = yedisan_area
-				area = zaporizhia_area
+				AND = {
+					OR = {
+						area = saratov_area
+						area = tambov_area
+						area = lower_don_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 303
+					NOT = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						AND = {
+							OR = {
+								has_building = temple
+								has_building = cathedral
+							}
+							development = 15
+						}
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			284 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			285 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2447 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			azov_area = {
+			saratov_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			zaporizhia_area = {
+			tambov_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			yedisan_area = {
+			lower_don_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+			}
+			303 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+					AND = {
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						}
+						development = 15
+					}
+				}
 			}
 		}
 		effect = {
-			2410 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
+			if = {
+				limit = {
+					303 = {
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
 					}
-					add_permanent_claim = ROOT
 				}
+				saratov_area = {
+					add_province_modifier = {
+						name = muscovy_supressing_steppes
+						duration = 5475 #15 years
+					}
+				}
+				tambov_area = {
+					add_province_modifier = {
+						name = muscovy_supressing_steppes
+						duration = 5475 #15 years
+					}
+				}
+				lower_don_area = {
+					add_province_modifier = {
+						name = muscovy_supressing_steppes
+						duration = 5475 #15 years
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = muscovy_peaceful_integration
+					duration = 7300 #20 years
+				}
+			}
+			astrakhan_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	muscovy_city_steppes = {
+		icon = mission_collect_yasak
+		required_missions = { muscovy_not_great }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 464
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = temple }
+				NOT = { has_building = cathedral }
+			}
+		}
+		trigger = {
+			owns = 464
+			464 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			is_at_war = no
+		}
+		effect = {
+			464 = {
+				change_religion = ROOT
+				change_culture = ROOT
+				create_or_add_center_of_trade_level = { level = 1 }
 			}
 		}
 	}
 }
 
-Muscovy_missions_5 = {
+MOS_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -949,336 +973,107 @@ Muscovy_missions_5 = {
 	}
 	has_country_shield = yes
 	
-	Muscovy_Reassert = {
-		icon = mission_unite_home_region
-		required_missions = { Muscovy_Army }
+	muscovy_the_boyars = {
+		icon = mission_unite_the_princes
+		required_missions = { muscovy_stability_regained }
 		position = 2
+		provinces_to_highlight = { }
 		trigger = {
-			dip_power = 140
-			DIP = 2
+			OR = {
+				NOT = {
+					estate_territory = {
+						estate = estate_nobles
+						territory = 25
+					}
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 55
+				}
+			}
 		}
 		effect = {
-			add_dip_power = -140
-			volga_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			kama_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			kazan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			475 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2444 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
+			country_event = {
+				id = ME_Muscovy_Events.50 #The Powerful on their Knees
+				days = 0
 			}
 		}
 	}
 	
-	Muscovy_Bashkir_Or_War = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { Muscovy_Reassert }
+	muscovy_sudebnik_codex = {
+		icon = mission_establish_the_prikazy
+		required_missions = { muscovy_the_boyars }
 		position = 3
 		provinces_to_highlight = {
-			province_id = 2444
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			num_free_building_slots = 1
+			owned_by = ROOT
+			NOT = { has_building = courthouse }
+			NOT = { has_building = town_hall }
 		}
 		trigger = {
 			OR = {
-				2444 = {
-					country_or_non_sovereign_subject_holds = ROOT
+				num_of_owned_provinces_with = {
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+					}
+					value = 5
 				}
-				is_in_war = {
-					attacker_leader = ROOT
-					defender_leader = KAZ
-				}
+				adm = 5
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "thriving_arms_industry"
-				duration = 9125
+			country_event = {
+				id = ME_Muscovy_Events.60 #Zemsky Sobor
+				days = 0
 			}
 		}
 	}
 	
-	Muscovy_Rush_B = {
-		icon = mission_conquer_5_states
-		required_missions = { Muscovy_Bashkir_Or_War }
-		position = 3
+	muscovy_kremlin_walls = {
+		icon = mission_conquer_moscow
+		required_missions = { muscovy_sudebnik_codex }
+		position = 4
 		provinces_to_highlight = {
-			province_id = 2444
-			NOT = { controlled_by = ROOT }
+			is_capital_of = ROOT
+			OR = {
+				NOT = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				NOT = { development = 25 }
+			}
 		}
 		trigger = {
-			OR = {
-				2444 = {
-					controlled_by = ROOT
+			has_institution = renaissance
+			capital_scope = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
-				is_in_war = {
-					attacker_leader = ROOT
-					defender_leader = KAZ
-				}
+				development = 25
 			}
 		}
 		effect = {
-			add_prestige = 20
-		}
-	}
-	
-	Muscovy_Kazan  = {
-		icon = mission_non-western_cavalry_raid
-		required_missions = { Muscovy_Rush_B }
-		position = 5
-		provinces_to_highlight = {
-			OR = {
-				province_id = 475
-				province_id = 2444
-				area = volga_area
-				area = kama_area
-				area = kazan_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			2444 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			475 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			volga_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			kazan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			kama_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			astrakhan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			lower_don_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			299 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
+			295 = {
+				add_province_modifier = {
+					name = muscovy_walls_modifier
+					duration = 7300 #20 years
 				}
 			}
-			tambov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			define_advisor = {
+				type =  fortification_expert
+				name = "Ridolfo Fioriavanti"
+				skill = 2
+				cost_multiplier = 0.5
+				culture = romagnan
+				religion = catholic
+				location = 4730
 			}
-			saratov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			2208 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	Muscovy_Great_Horde  = {
-		icon = mission_chinese_general_riding
-		required_missions = { Muscovy_Kazan }
-		position = 6
-		provinces_to_highlight = {
-			OR = {
-				province_id = 2208
-				province_id = 299
-				area = astrakhan_area
-				area = lower_don_area
-				area = tambov_area
-				area = saratov_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			2208 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			299 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			astrakhan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lower_don_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			tambov_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			saratov_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			circassia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			dagestan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			bashkiria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			lower_yik_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			nogai_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Muscovy_Caucasia  = {
-		icon = mission_non-western_cavalry_raid
-		required_missions = { Muscovy_Great_Horde }
-		position = 7
-		provinces_to_highlight = {
-			OR = {
-				area = circassia_area
-				area = dagestan_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			circassia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			dagestan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
-		}
-	}
-	
-	Muscovy_Ally_Georgia = {
-		icon = mission_alliances
-		required_missions = { Muscovy_Caucasia }
-		position = 8
-		provinces_to_highlight = {
-			OR = {
-				area = samtskhe_area
-				area = imereti_area
-				area = georgia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				AND = {
-					samtskhe_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					imereti_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					georgia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-				}
-				alliance_with = SME
-				alliance_with = GEO
-				alliance_with = IME
-			}
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
 		}
 	}
 }
