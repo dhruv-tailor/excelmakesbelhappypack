@@ -1084,7 +1084,7 @@ genoa_missions_2 = {
 						}
 					}
 					add_building_construction = {
-						building = shipyard
+						building = dock
 						speed = 1.5
 						cost = 0
 					}
@@ -1942,20 +1942,31 @@ genoa_missions_4 = {
 		position = 7
 		provinces_to_highlight = {
 			province_id = 101
-			has_trade_building_trigger = no
 			OR = {
-				NOT = { has_building = workshop }
-				NOT = { has_building = courthouse }
+				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { province_has_building_of_group = { group = production all = yes } }
+					NOT = { province_has_building_of_group = { group = government all = yes } }
+				}
 			}
 		}
 		trigger = {
 			monthly_income = 20
 			num_of_galley = 20
 			101 = {
-				has_trade_building_trigger = yes
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
+				}
 				OR = {
-					has_building = workshop
-					has_building = courthouse
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
+						province_has_building_of_group = { group = production all = yes }
+					}
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_ALL
+						province_has_building_of_group = { group = government all = yes }
+					}
 				}
 			}
 		}
@@ -2241,17 +2252,20 @@ genoa_missions_5 = {
 		provinces_to_highlight = {
 			province_id = 101
 			OR = {
-				NOT = { has_building = temple }
-				NOT = { has_building = cathedral }
+				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				NOT = { province_has_building_of_group = { group = taxation all = yes } }
 			}
 		}
 		trigger = {
 			is_institution_enabled = renaissance
 			101 = {
-				has_trade_building_trigger = yes
-				OR = {
-					has_building = temple
-					has_building = cathedral
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
+				}
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+					province_has_building_of_group = { group = taxation all = yes }
 				}
 			}
 			OR = {
@@ -2286,7 +2300,10 @@ genoa_missions_5 = {
 				value = 3
 				NOT = { province_id = 101 }
 				base_production = 10
-				has_trade_building_trigger = yes
+				custom_trigger_tooltip = {
+					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+					province_has_building_of_group = { group = trade all = yes }
+				}
 			}
 		}
 		effect = {
@@ -2294,13 +2311,24 @@ genoa_missions_5 = {
 			random_owned_province = {
 				limit = {
 					base_production = 10
-					has_trade_building_trigger = yes
+					province_has_building_of_group = { group = trade all = yes }
 				}
 				if = {
 					limit = {
 						has_building = marketplace
 					}
 					remove_building = marketplace
+					add_building_construction = {
+						building = trade_lvl_2
+						speed = 1
+						cost = 0
+					}
+				}
+				else if = {
+					limit = {
+						has_building = trade_lvl_2
+					}
+					remove_building = trade_lvl_2
 					add_building_construction = {
 						building = trade_depot
 						speed = 1
