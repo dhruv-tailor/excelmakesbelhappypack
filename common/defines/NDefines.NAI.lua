@@ -200,14 +200,14 @@ NDefines.NAI.MAX_CAV_PERCENTAGE = 100  --from 50. For modding, actual ratio is d
 --NAI Army Movements, AI will operate from his borders or allied borders during the war.
 --Note that armies prefer the province with the lowest score. Also applies to homeland prioritization.
 --by Spirit, dm me if u have any questions.
-NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 10 --from 3.5. Homeland priorization when assigning armies to regions (only applied when actually threatened)
+NDefines.NAI.REGION_PLANNING_HOMELAND_PRIORIZATION = 6 --from 3.5 Homeland priorization when assigning armies to regions (only applied when actually threatened)
 --NDefines.NAI.IMPORANT_PROVINCE_THRESHOLD = 0.05 --AI will try to defend provinces under threat worth more than this percentage of total development
-NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1.0	--from 0.5. Army <-> province distance impact on province evaluation
-NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	10.0 --from 3.0	--Border <-> province distance impact on province evaluation
+NDefines.NAI.ARMY_DISTANCE_SCORE_IMPACT	= 1	--from 0.5 Divides returning score. Army <-> province distance impact on province evaluation / divides total score by this amount
+NDefines.NAI.BORDER_DISTANCE_SCORE_IMPACT =	15 --from 3.0 Border <-> province distance impact on province evaluation / actual distance penalty
 --NDefines.NAI.MIN_FORCE_LIMIT_SHARE_REGION_ASSIGN = 0.1	--AI will only assign armies larger that this to a region
 
 
-NDefines.NAI.ACCEPTABLE_BALANCE_DEFAULT = 1.8 --from 1.75. AI wants this advantage to enter battles typically. (There are some exceptions, e.g. offensives.)
+--NDefines.NAI.ACCEPTABLE_BALANCE_DEFAULT = 1.75 --AI wants this advantage to enter battles typically. (There are some exceptions, e.g. offensives.)
 NDefines.NAI.ACCEPTABLE_BALANCE_FRIEND_IN_COMBAT = 0.85 --from 0.75
 --NDefines.NAI.PURSUE_DISTANCE = 100
 
