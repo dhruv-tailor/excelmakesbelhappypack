@@ -186,8 +186,8 @@ NDefines.NAI.TRANSPORT_FRACTION = 0.35 -- from 0.5. Max fraction of naval forcel
 NDefines.NAI.HOME_FLEET_MAX_RATIO = 0.6 --from 0.85. Maximum proportion of warships in home fleet.
 
  -- AI will not develop provinces that have more development than this or DEVELOPMENT_CAP_MULT*original development (whichever is bigger)
-NDefines.NAI.DEVELOPMENT_CAP_BASE = 100 --set to 3 manually if using dev-click setting
-NDefines.NAI.DEVELOPMENT_CAP_MULT = 20  --set to 1 manually if using dev-click setting
+NDefines.NAI.DEVELOPMENT_CAP_BASE = 60 --set to 3 manually if using dev-click setting
+NDefines.NAI.DEVELOPMENT_CAP_MULT = 5  --set to 1 manually if using dev-click setting
 
 NDefines.NAI.TRADE_COMPANY_INVESTMENT_COST_THRESHOLD = 2 --from 1. How many times the cost of the investment must be in the treasury to consider buying it
 
