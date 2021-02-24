@@ -1,0 +1,97 @@
+goods_check = {
+	ROOT = {
+		set_variable = {
+			which = $goods$_price
+			which = high_price
+		}
+	}
+	if = {
+		limit = {
+			REB = {
+				check_variable = {
+					which = $goods$_price
+					which = ROOT
+				}
+			}
+		}
+		REB = {
+			ROOT = {
+				set_variable = {
+					which = $goods$_price
+					which = PREV
+				}
+				set_variable = {
+					which = high_price
+					which = $goods$_price
+				}
+			}
+		}
+		save_event_target_as = build_target
+	}
+}
+
+value_check = {
+	ROOT = {
+		export_to_variable = {
+			which = tgsVar
+			value = modifier:trade_goods_size
+			who = PREV
+		}
+		export_to_variable = {
+			which = tgsmVar
+			value = modifier:trade_goods_size_modifier
+			who = PREV
+		}
+		set_variable = {
+			tvVar = 1
+		}
+		change_variable = {
+			which = tvVar
+			which = tgsmVar
+		}
+		multiply_variable = {
+			which = tvVar
+			which = tgsVar
+		}
+		REB = {
+			ROOT = {
+				set_variable = {
+					which = $goods$_price
+					which = PREV
+				}
+			}
+		}
+		multiply_variable = {
+			which = tvVar
+			which = $goods$_price
+		}
+	}
+	if = {
+		limit = {
+			can_build = counting_house
+			NOT = { has_building = workshop }
+		}
+		ROOT = {
+			multiply_variable = {
+				tvVar = 2
+			}
+		}
+	}
+	if = {
+		limit = {
+			ROOT = {
+				check_variable = {
+					which = tvVar
+					which = high_price
+				}
+			}
+		}
+		ROOT = {
+			set_variable = {
+				which = high_price
+				which = tvVar
+			}
+		}
+		save_event_target_as = build_target
+	}
+}

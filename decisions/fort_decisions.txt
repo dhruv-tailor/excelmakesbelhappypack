@@ -1,5 +1,5 @@
-country_decisions = {
-	build_forts = {
+country_decisions = { 
+	build_forts = { #fort upgrade
 		major = yes
 		
 		potential = {
@@ -673,6 +673,431 @@ country_decisions = {
 				factor = 0
 				NOT = { treasury = 2000 }
 			}
+		}
+	}
+	
+	remove_forts = { #removing forts
+		major = yes
+		
+		potential = {
+			ai = yes
+			primitives = no
+			is_at_war = no
+			
+			any_owned_province = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				
+				is_capital = no
+				NOT = { province_group = strait_provinces }
+				NOT = { nationalism = 1 }
+				
+				any_neighbor_province = {
+					owned_by = ROOT
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+					NOT = { nationalism = 1 }
+				}
+			}
+		}
+		
+		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+					
+					is_capital = no
+					NOT = { province_group = strait_provinces }
+					NOT = { nationalism = 1 }
+					
+					any_neighbor_province = {
+						owned_by = ROOT
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+						NOT = { nationalism = 1 }
+					}
+				}
+				
+				save_event_target_as = fort_one
+				
+				random_neighbor_province = {
+					limit = {
+						owned_by = ROOT
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+						NOT = { nationalism = 1 }
+					}
+					
+					save_event_target_as = fort_two
+				}
+			}
+			
+			if = { #capital/strait
+				limit = {
+					event_target:fort_two = {
+						OR = {
+							is_capital = yes
+							province_group = strait_provinces
+						}
+					}
+				}
+				
+				event_target:fort_one = {
+					save_event_target_as = fort_delete
+				}
+			}
+			else = {
+				if = { #mountain
+					limit = {
+						event_target:fort_one = {
+							has_terrain = mountain
+							has_terrain = desert_mountains
+						}
+						event_target:fort_two = {
+							NOT = {
+								has_terrain = mountain
+								has_terrain = desert_mountains
+							}
+						}
+					}
+					
+					event_target:fort_two = {
+						save_event_target_as = fort_delete
+					}
+				}
+				else_if = {
+					limit = {
+						event_target:fort_two = {
+							has_terrain = mountain
+							has_terrain = desert_mountains
+						}
+						event_target:fort_one = {
+							NOT = {
+								has_terrain = mountain
+								has_terrain = desert_mountains
+							}
+						}
+					}
+					
+					event_target:fort_one = {
+						save_event_target_as = fort_delete
+					}
+				}
+				else = {
+					if = { #hills/highlands
+						limit = {
+							event_target:fort_one = {
+								OR = {
+									has_terrain = hills
+									has_terrain = highlands
+									has_terrain = desert_highlands
+								}
+							}
+							event_target:fort_two = {
+								NOT = {
+									has_terrain = mountain
+									has_terrain = desert_mountains
+									has_terrain = hills
+									has_terrain = highlands
+									has_terrain = desert_highlands
+								}
+							}
+						}
+						
+						event_target:fort_two = {
+							save_event_target_as = fort_delete
+						}
+					}
+					else_if = {
+						limit = {
+							event_target:fort_two = {
+								OR = {
+									has_terrain = hills
+									has_terrain = highlands
+									has_terrain = desert_highlands
+								}
+							}
+							event_target:fort_one = {
+								NOT = {
+									has_terrain = mountain
+									has_terrain = desert_mountains
+									has_terrain = hills
+									has_terrain = highlands
+									has_terrain = desert_highlands
+								}
+							}
+						}
+						
+						event_target:fort_one = {
+							save_event_target_as = fort_delete
+						}
+					}
+					else = {
+						if = { #center of trade
+							limit = {
+								event_target:fort_one = {
+									province_has_center_of_trade_of_level = 1
+								}
+								event_target:fort_two = {
+									NOT = { province_has_center_of_trade_of_level = 1 }
+								}
+							}
+							
+							event_target:fort_two = {
+								save_event_target_as = fort_delete
+							}
+						}
+						else_if = {
+							limit = {
+								event_target:fort_two = {
+									province_has_center_of_trade_of_level = 1
+								}
+								event_target:fort_one = {
+									NOT = { province_has_center_of_trade_of_level = 1 }
+								}
+							}
+							
+							event_target:fort_one = {
+								save_event_target_as = fort_delete
+							}
+						}
+						else = {
+							if = { #glacier/forest/woods/jungle/marsh
+								limit = {
+									event_target:fort_one = {
+										OR = {
+											has_terrain = glacier
+											has_terrain = forest
+											has_terrain = woods
+											has_terrain = jungle
+											has_terrain = marsh
+											has_terrain = steppe_mountains
+										}
+									}
+									event_target:fort_two = {
+										NOT = {
+											has_terrain = mountain
+											has_terrain = desert_mountains
+											has_terrain = hills
+											has_terrain = highlands
+											has_terrain = desert_highlands
+											has_terrain = glacier
+											has_terrain = forest
+											has_terrain = woods
+											has_terrain = jungle
+											has_terrain = marsh
+											has_terrain = steppe_mountains
+										}
+									}
+								}
+								
+								event_target:fort_two = {
+									save_event_target_as = fort_delete
+								}
+							}
+							else_if = {
+								limit = {
+									event_target:fort_two = {
+										OR = {
+											has_terrain = glacier
+											has_terrain = forest
+											has_terrain = woods
+											has_terrain = jungle
+											has_terrain = marsh
+											has_terrain = steppe_mountains
+										}
+									}
+									event_target:fort_one = {
+										NOT = {
+											has_terrain = mountain
+											has_terrain = desert_mountains
+											has_terrain = hills
+											has_terrain = highlands
+											has_terrain = desert_highlands
+											has_terrain = glacier
+											has_terrain = forest
+											has_terrain = woods
+											has_terrain = jungle
+											has_terrain = marsh
+											has_terrain = steppe_mountains
+										}
+									}
+								}
+								
+								event_target:fort_one = {
+									save_event_target_as = fort_delete
+								}
+							}
+							else = {
+								if = { #neighbor_province
+									limit = {
+										variable_arithmetic_trigger  = {
+											export_to_variable = {
+												which = num1
+												value = 0
+											}
+											export_to_variable = {
+												which = num2
+												value = 0
+											}
+											
+											event_target:fort_one = {
+												all_neighbor_province = {
+													OR = {
+														NOT = { owned_by = ROOT }
+														ROOT = {
+															variable_arithmetic_trigger  = {
+																change_variable = {
+																	which = num1
+																	value = 1
+																}
+																always = yes
+															}
+														}
+													}
+												}
+											}
+											event_target:fort_two = {
+												all_neighbor_province = {
+													OR = {
+														NOT = { owned_by = ROOT }
+														ROOT = {
+															variable_arithmetic_trigger  = {
+																change_variable = {
+																	which = num2
+																	value = 1
+																}
+																always = yes
+															}
+														}
+													}
+												}
+											}
+											
+											NOT = {
+												check_variable = {
+													which = num1
+													which = num2
+												}
+											}
+										}
+									}
+									
+									event_target:fort_one = {
+										save_event_target_as = fort_delete
+									}
+								}
+								else_if = {
+									limit = {
+										variable_arithmetic_trigger  = {
+											export_to_variable = {
+												which = num1
+												value = 0
+											}
+											export_to_variable = {
+												which = num2
+												value = 0
+											}
+											
+											event_target:fort_one = {
+												all_neighbor_province = {
+													OR = {
+														NOT = { owned_by = ROOT }
+														ROOT = {
+															variable_arithmetic_trigger  = {
+																change_variable = {
+																	which = num1
+																	value = 1
+																}
+																always = yes
+															}
+														}
+													}
+												}
+											}
+											event_target:fort_two = {
+												all_neighbor_province = {
+													OR = {
+														NOT = { owned_by = ROOT }
+														ROOT = {
+															variable_arithmetic_trigger  = {
+																change_variable = {
+																	which = num2
+																	value = 1
+																}
+																always = yes
+															}
+														}
+													}
+												}
+											}
+											
+											NOT = {
+												check_variable = {
+													which = num2
+													which = num1
+												}
+											}
+										}
+									}
+									
+									event_target:fort_two = {
+										save_event_target_as = fort_delete
+									}
+								}
+								else = {
+									random_list = {
+										1 = {
+											event_target:fort_one = {
+												save_event_target_as = fort_delete
+											}
+										}
+										1 = {
+											event_target:fort_two = {
+												save_event_target_as = fort_delete
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+				
+			event_target:fort_delete = {
+				remove_building = fort_15th
+				remove_building = fort_16th
+				remove_building = fort_17th
+				remove_building = fort_18th
+				
+				log = "[Root.GetName] removed fort [This.GetName]"
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1000
 		}
 	}
 }
