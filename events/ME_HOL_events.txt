@@ -1,0 +1,232 @@
+namespace = ME_HOL_events
+
+# Expedition to Danzig
+country_event = {
+	id = ME_HOL_events.1
+	title = ME_HOL_events.EVTNAME1
+	desc = ME_HOL_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.EVTOPT1 #Send expedition to Danzig
+		
+		if = {
+			limit = {
+				ai = no
+			}
+			add_sailors = -250
+			add_treasury = -50
+		}
+		43 = {
+			owner = {
+				country_event = {
+					id = ME_HOL_events.2
+					days = 30
+				}
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.EVTOPT2 #Don't Send expedition to Danzig
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Dutch Expedition
+country_event = {
+	id = ME_HOL_events.2
+	title = ME_HOL_events_2.t
+	desc = ME_HOL_events_2.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events_2.a #Accept Expedition
+		
+		FROM = {
+			country_event = {
+				id = ME_HOL_events.3
+			}
+		}
+		add_country_modifier = {
+			name = ME_HOL_Danzig_Amsterdam_Connection_1 #10%TE
+			duration = 3650
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = ME_HOL_Danzig_Amsterdam_Connection_3
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events_2.b #Don't Accept Expedition
+
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Dutch Expedition Returns
+country_event = {
+	id = ME_HOL_events.3
+	title = ME_HOL_events_3.t
+	desc = ME_HOL_events_3.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events_3.a 
+		
+		add_country_modifier = {
+			name = ME_HOL_Danzig_Amsterdam_Connection_2 #-10%Diptech
+			duration = 3650
+		}
+		reverse_add_opinion = {	who = FROM modifier = ME_HOL_Danzig_Amsterdam_Connection_3 }
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+#Copenhagen Treaty #Lubeck
+country_event = {
+	id = ME_HOL_events.4
+	title = ME_HOL_events.4.t
+	desc = ME_HOL_events.4.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.4.a
+		
+		FROM = {
+			country_event = {
+				id = ME_HOL_events.5
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.4.b
+		
+		45 = {
+			add_claim = FROM
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Copenhagen Treaty #Holland
+country_event = {
+	id = ME_HOL_events.5
+	title = ME_HOL_events.5.t
+	desc = ME_HOL_events.5.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.5.a 
+		
+		ROOT = {
+			add_country_modifier = {
+				name = ME_HOL_Treaty_Of_Copenhagen
+				duration = 3650
+			}
+			45 = { #Lubeck
+				add_trade_modifier = {
+					who = ROOT
+					duration = 3650
+					power = 25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+			1926 = { #Baltic
+				add_trade_modifier = {
+					who = ROOT
+					duration = 3650
+					power = 25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+		}
+		FROM = {
+			add_country_modifier = {
+				name = ME_HOL_Treaty_Of_Copenhagen
+				duration = 3650
+			}
+			45 = { #Lubeck
+				add_trade_modifier = {
+					who = FROM
+					duration = 3650
+					power = -25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+			1926 = { #Baltic
+				add_trade_modifier = {
+					who = FROM
+					duration = 3650
+					power = -25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+		}
+		random_country = {
+			limit = {
+				45 = { #Lubeck
+					trade_share = {
+						country = PREV
+						share = 5
+					}
+				}
+			}
+			ROOT = { add_treasury = -10	}
+			country_event = {
+				id = ME_HOL_events.6
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.5.b 
+		
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Copenhagen Treaty #Randoms
+country_event = {
+	id = ME_HOL_events.6
+	title = ME_HOL_events.6.t
+	desc = ME_HOL_events.6.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.6.a 
+		add_treasury = 10
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ME_HOL_events.6.b
+		random_owned_province = {
+			limit = { has_port = yes }
+			light_ship = ROOT
+			light_ship = ROOT
+		}
+		ai_chance = { factor = 50 }
+	}
+}
