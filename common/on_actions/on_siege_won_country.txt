@@ -1,0 +1,63 @@
+# country
+# root = winning country, from = location
+on_siege_won_country = {
+	if = {
+		limit = {
+			from = { owned_by = SAX }
+			OR = {
+				is_in_war = {
+					defenders = root
+					defenders = THU
+					defenders = emperor
+					attackers = SAX
+				}
+				is_in_war = {
+					attackers = root
+					attackers = THU
+					attackers = emperor
+					defenders = SAX
+				}
+			}
+			THU = {
+				dynasty = "von Wettin"
+				is_elector = no
+				is_emperor = no
+				alliance_with = emperor
+			}
+			SAX = {
+				is_elector = yes
+				all_owned_province = {
+					NOT = { controlled_by = SAX }
+					OR = {
+						controlled_by = THU
+						controller = {
+							OR = {
+								is_in_war = {
+									defenders = this
+									defenders = THU
+									defenders = emperor
+									attackers = SAX
+								}
+								is_in_war = {
+									attackers = this
+									attackers = THU
+									attackers = emperor
+									defenders = SAX
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		THU = { country_event = { id = flavor_sax.10 } } # Ask Emperor for Saxon Electorate
+	}
+	events = {
+		tyw_events.14 # Fall of Prague in Religious War
+		flavor_oir.5 # Oirats capture Beijing
+	}
+	random_events = {
+		10 = army_professionalism_events.1 #City Sacked
+		100 = 0
+	}
+}
