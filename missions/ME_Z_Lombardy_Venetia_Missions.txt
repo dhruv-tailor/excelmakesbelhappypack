@@ -1,0 +1,1050 @@
+LombardyVenetia_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LVN
+			AND = {
+				OR = {
+					tag = MLO
+					tag = VEN
+				}
+				has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+			}
+			#tag = ITA
+		}
+	}
+	has_country_shield = yes
+
+	lvn_unification_northern_italy = {
+		icon = up_the_adige
+		required_missions = {
+			lvn_united_crowns
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = emilia_romagna_area
+				area = liguria_area
+				area = lombardy_area
+				area = piedmont_area
+				area = po_valley_area
+				area = venetia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			po_valley_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			hidden_effect = {
+				add_country_modifier = {
+					name = lvn_accepted_cultures
+					duration = 3
+				}
+			}
+			add_accepted_culture = piedmontese
+			add_accepted_culture = ligurian
+			add_accepted_culture = romagnan
+			add_yearly_manpower = 1
+		}
+	}
+
+	lvn_humiliation_rivals = {
+		icon = end_the_habsburgs
+		required_missions = {
+			lvn_unification_northern_italy
+			lvn_defense_northern_italy
+		}
+		position = 14
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+				}
+				OR = {
+					has_won_war_against = {
+						who = FRA
+						max_years_since = 50
+					}
+					total_development = FRA
+				}
+			}
+			if = {
+				limit = {
+					hre_size = 1
+					emperor = {
+						NOT = { tag = HAB }
+					}
+				}
+				OR = {
+					total_development = emperor
+					has_won_war_against = {
+						who = HAB
+						max_years_since = 50
+					}
+					total_development = HAB
+				}
+			}
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				OR = {
+					has_won_war_against = {
+						who = HAB
+						max_years_since = 50
+					}
+					total_development = HAB
+				}
+			}
+			else = {
+				total_development = 500
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 100
+			}
+		}
+	}
+}
+
+LombardyVenetia_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LVN
+			AND = {
+				OR = {
+					tag = MLO
+					tag = VEN
+				}
+				has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+			}
+			#tag = ITA
+		}
+	}
+	has_country_shield = yes
+
+	lvn_esercito_lombardo_veneto = {
+		icon = professional_army
+		required_missions = {
+			lvn_united_crowns
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 104
+				province_id = 112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 10 }
+				NOT = { has_manpower_building_trigger = yes }
+				NOT = { has_forcelimit_building_trigger = yes }
+			}
+		}
+		trigger = {
+			OR = {
+				has_mil_advisor_3 = yes
+				MIL = 6
+			}
+			104 = {
+				owned_by = ROOT
+				base_manpower = 10
+				has_manpower_building_trigger = yes
+				has_forcelimit_building_trigger = yes
+			}
+			112 = {
+				owned_by = ROOT
+				base_manpower = 10
+				has_manpower_building_trigger = yes
+				has_forcelimit_building_trigger = yes
+			}
+		}
+		effect = {
+			country_event = { id = ME_Lombardy_Venetia_Events.2 }
+			104 = {
+				add_permanent_province_modifier = {
+					name = lvn_teulie
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	lvn_defense_northern_italy = {
+		icon = fortify_the_passes
+		required_missions = {
+			lvn_unification_northern_italy
+			lvn_esercito_lombardo_veneto
+		}
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				area = emilia_romagna_area
+				area = liguria_area
+				area = lombardy_area
+				area = piedmont_area
+				area = po_valley_area
+				area = venetia_area
+			}
+			OR = {
+				has_terrain = mountain
+				has_terrain = hills
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						OR = {
+							area = emilia_romagna_area
+							area = liguria_area
+							area = lombardy_area
+							area = piedmont_area
+							area = po_valley_area
+							area = venetia_area
+						}
+						OR = {
+							has_terrain = mountain
+							has_terrain = hills
+						}
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			army_size_percentage = 1
+			OR = {
+				army_professionalism = 0.33
+				army_tradition = 50
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				OR = {
+					area = emilia_romagna_area
+					area = liguria_area
+					area = lombardy_area
+					area = piedmont_area
+					area = po_valley_area
+					area = venetia_area
+				}
+				OR = {
+					has_terrain = mountain
+					has_terrain = hills
+				}
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			if = {
+				limit = {
+					exists = FRA
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = FRA
+				}
+			}
+			if = {
+				limit = {
+					hre_size = 1
+					emperor = {
+						NOT = { tag = HAB }
+					}
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = emperor
+				}
+				if = {
+					limit = {
+						exists = HAB
+					}
+					add_casus_belli = {
+						type = cb_italy_humiliation_rivals
+						target = HAB
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = HAB
+				}
+			}
+		}
+	}
+}
+
+LombardyVenetia_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LVN
+			AND = {
+				OR = {
+					tag = MLO
+					tag = VEN
+				}
+				has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+			}
+			#tag = ITA
+		}
+	}
+	has_country_shield = yes
+
+	lvn_united_crowns = {
+		icon = king_of_kings
+		required_missions = {
+			mlo_glory_milan
+			ven_stato_terra
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = lombardy_area
+				area = po_valley_area
+				area = venetia_area
+			}
+			OR = {
+				AND = {
+					ROOT = { tag = MLO }
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 50 }
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							OR = {
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+					}
+				}
+				AND = {
+					ROOT = { NOT = { tag = MLO } }
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 50 }
+						}
+					}
+					OR = {
+						AND = {
+							ROOT = {
+								overlord_of = MLO
+							}
+							OR = {
+								NOT = { owned_by = MLO }
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							OR = {
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				is_great_power = yes
+			}
+			else = {
+				total_development = 500
+			}
+			prestige = 50
+			if = {
+				limit = {
+					tag = MLO
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					lombardy_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+					po_valley_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+					venetia_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+				}
+				else = {
+					lombardy_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+					po_valley_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+					venetia_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					lombardy_area = {
+						type = all
+						OR = {
+							AND = {
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
+								ROOT = {
+									overlord_of = MLO
+								}
+								owned_by = MLO
+								NOT = { devastation = 1 }
+								NOT = { unrest = 0.1 }
+								NOT = { local_autonomy = 10 }
+							}
+						}
+					}
+					po_valley_area = {
+						type = all
+						OR = {
+							AND = {
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
+								ROOT = {
+									overlord_of = MLO
+								}
+								owned_by = MLO
+								NOT = { devastation = 1 }
+								NOT = { unrest = 0.1 }
+								NOT = { local_autonomy = 10 }
+							}
+						}
+					}
+					venetia_area = {
+						type = all
+						OR = {
+							AND = {
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
+								ROOT = {
+									overlord_of = MLO
+								}
+								owned_by = MLO
+								NOT = { devastation = 1 }
+								NOT = { unrest = 0.1 }
+								NOT = { local_autonomy = 10 }
+							}
+						}
+					}
+				}
+				else = {
+					lombardy_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+					po_valley_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+					venetia_area = {
+						type = all
+						owned_by = ROOT
+						NOT = { devastation = 1 }
+						NOT = { unrest = 0.1 }
+						NOT = { local_autonomy = 10 }
+					}
+				}
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 }
+			if = {
+				limit = {
+					OR = {
+						overlord_of = VEN
+						overlord_of = MLO
+					}
+				}
+				country_event = { id = ME_Lombardy_Venetia_Events.1 }
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lombardy_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			piedmont_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			po_valley_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			venetia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	lvn_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = {
+			lvn_esercito_lombardo_veneto
+			lvn_united_crowns
+			lvn_real_marina
+		}
+		position = 13
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+			complete_conquest_of_rome_missions = yes
+		}
+	}
+}
+
+LombardyVenetia_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LVN
+			AND = {
+				OR = {
+					tag = MLO
+					tag = VEN
+				}
+				has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+			}
+			#tag = ITA
+		}
+	}
+	has_country_shield = yes
+
+	lvn_real_marina = {
+		icon = imperial_navy
+		required_missions = {
+			lvn_united_crowns
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 101
+				province_id = 112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 15 }
+				NOT = { has_shipyard_building_trigger = yes }
+			}
+		}
+		trigger = {
+			OR = {
+				has_mil_advisor_3 = yes
+				MIL = 6
+			}
+			101 = {
+				owned_by = ROOT
+				base_production = 15
+				has_shipyard_building_trigger = yes
+			}
+			112 = {
+				owned_by = ROOT
+				base_production = 15
+				has_shipyard_building_trigger = yes
+			}
+		}
+		effect = {
+			101 = {
+				add_permanent_province_modifier = {
+					name = lvn_marina_grande
+					duration = 7300
+				}
+			}
+			112 = {
+				add_permanent_province_modifier = {
+					name = lvn_marina_grande
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	lvn_mediterranean_piracy = {
+		icon = indonesian_trade
+		required_missions = {
+			lvn_real_marina
+		}
+		position = 14
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				navy_size = TUR
+			}
+			if = {
+				limit = {
+					any_country = {
+						culture_group = maghrebi
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi #NO COUNTRY THAT HAS MAGHREBI CULTURE HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
+							1298 = {
+								trade_share = {
+									country = PREV
+									share = 5
+								}
+							}
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi
+							1308 = {
+								trade_share = {
+									country = PREV
+									share = 5
+								}
+							}
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_TT
+					NOT = {
+						any_country = { #NO COUNTRY HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
+							1298 = {
+								trade_share = {
+									country = PREV
+									share = 5
+								}
+							}
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_TT
+					NOT = {
+						any_country = {
+							1308 = {
+								trade_share = {
+									country = PREV
+									share = 5
+								}
+							}
+							naval_strength = {
+								who = ROOT
+								value = 0.5
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				TUR = {
+					capital_scope = {
+						if = {
+							limit = {
+								NOT = { is_core = ROOT }
+								NOT = { owned_by = ROOT }
+								has_port = yes
+							}
+							add_permanent_claim = ROOT
+						}
+						area = {
+							limit = {
+								NOT = { is_core = ROOT }
+								NOT = { owned_by = ROOT }
+								has_port = yes
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+				}
+			}
+			add_country_modifier = {
+				name = lvn_challenging_berbers
+				duration = 9125
+			}
+		}
+	}
+
+}
+
+LombardyVenetia_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LVN
+			AND = {
+				OR = {
+					tag = MLO
+					tag = VEN
+				}
+				has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+			}
+			#tag = ITA
+		}
+	}
+	has_country_shield = yes
+
+	lvn_industrialise_oltrepo = {
+		icon = develop_the_po_valley
+		required_missions = {
+			lvn_united_crowns
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = emilia_romagna_area
+				area = liguria_area
+				area = lombardy_area
+				area = piedmont_area
+				area = po_valley_area
+				area = venetia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { base_production = 12 }
+					NOT = { has_production_building_trigger = yes }
+				}
+				AND = {
+					NOT = { has_manufactory_trigger = yes }
+					NOT = { num_of_times_improved = 3 }
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LVN_INDUSTRIALISE_TT
+				lombardy_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+				piedmont_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+				po_valley_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+				venetia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+				emilia_romagna_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+				liguria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						AND = {
+							base_production = 12
+							has_production_building_trigger = yes
+						}
+						AND = {
+							has_manufactory_trigger = yes
+							num_of_times_improved = 3
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = DARSENA_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_darsena
+						duration = -1
+					}
+				}
+				custom_tooltip = INDUSTRIALISATION_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
+				}
+			}
+			else = {
+				custom_tooltip = INDUSTRIALISATION_LVN_NON_TGE_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							area = lombardy_area
+							area = piedmont_area
+							area = po_valley_area
+							province_id = 105
+							province_id = 106
+							province_id = 113
+						}
+					}
+					if = {
+						limit = {
+							is_expanded_mod_active = { mod = trade_goods }
+							OR = {
+								trade_goods = rice
+								trade_goods = olive_oil
+								trade_goods = cheese
+								trade_goods = potato
+							}
+						}
+						add_province_modifier = {
+							name = lvn_darsena
+							duration = -1
+						}
+					}
+					else = {
+						add_province_modifier = {
+							name = lvn_industrialisation_sprint
+							duration = 18250
+						}
+					}
+				}
+			}
+		}
+	}
+}

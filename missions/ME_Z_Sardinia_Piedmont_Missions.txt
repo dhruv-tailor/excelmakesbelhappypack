@@ -1,0 +1,999 @@
+SardiniPiedmont_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SPI
+			AND = {
+				OR = {
+					tag = SAR
+					tag = SAV
+				}
+				has_country_flag = spi_without_spi
+			}
+			#tag = ITA
+		}
+		OR = {
+			AND = {
+				was_tag = SAV
+				OR = {
+					NOT = { has_dlc = "Emperor" }
+					AND = {
+						has_dlc = "Emperor"
+						has_country_flag = use_missions_expanded_missions_instead_of_paradox
+					}
+				}
+			}
+			was_tag = SAR
+		}
+	}
+	has_country_shield = yes
+
+	spi_matter_balance = {
+		icon = counter_reformation
+		position = 9
+		required_missions = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					religion_group = christian
+					exists = PAP
+				}
+				PAP = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = -100
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					humanist_ideas = 1
+					religious_ideas = 1
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = SPI_cassa_TT
+			tooltip = {
+				add_country_modifier = {
+					name = spi_cassa_ecclesiastica
+					duration = 12775
+				}
+			}
+			custom_tooltip = SPI_blessing_TT
+			tooltip = {
+				add_country_modifier = {
+					name = spi_papal_blessing
+					duration = 7300
+				}
+			}
+			custom_tooltip = SPI_pious_TT
+			tooltip = {
+				add_country_modifier = {
+					name = spi_pious_ruling
+					duration = 9125
+				}
+			}
+			custom_tooltip = SPI_progressive_TT
+			tooltip = {
+				add_country_modifier = {
+					name = spi_progressive_society
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						PAP = {
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -100
+								}
+							}
+						}
+					}
+					add_country_modifier = {
+						name = spi_cassa_ecclesiastica
+						duration = 12775
+					}
+					if = {
+						limit = {
+							has_estate = estate_church
+						}
+						change_estate_land_share = {
+							estate = estate_church
+							share = -100
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+					add_country_modifier = {
+						name = spi_papal_blessing
+						duration = 7300
+					}
+				}
+				if = {
+					limit = {
+						religious_ideas = 1
+					}
+					add_country_modifier = {
+						name = spi_pious_ruling
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = {
+						humanist_ideas = 1
+					}
+					add_country_modifier = {
+						name = spi_progressive_society
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+
+	spi_education_universities = {
+		icon = found_the_vatican_library
+		required_missions = {
+			spi_matter_balance
+			spi_artistical_resurgence
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2986
+				province_id = 103
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			2986 = {
+				owned_by = ROOT
+				has_building = university
+			}
+			103 = {
+				owned_by = ROOT
+				has_building = university
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_public_education
+				duration = 5475
+			}
+			define_advisor = {
+				type = natural_scientist
+				skill = 3
+				cost_multiplier = 0.50
+				name = "Cosma Excarcioni"
+			}
+		}
+	}
+
+	spi_imperial_powerness = {
+		icon = up_the_adige
+		required_missions = {
+			spi_northern_meddling
+		}
+		position = 12
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				OR = {
+					has_won_war_against = {
+						who = emperor
+						max_years_since = 50
+					}
+					total_development = emperor
+					has_won_war_against = {
+						who = HAB
+						max_years_since = 50
+					}
+					total_development = HAB
+				}
+			}
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				OR = {
+					has_won_war_against = {
+						who = HAB
+						max_years_since = 50
+					}
+					total_development = HAB
+				}
+			}
+			else = {
+				total_development = 300
+			}
+			if = {
+				limit = {
+					exists = FRA
+				}
+				OR = {
+					has_won_war_against = {
+						who = FRA
+						max_years_since = 50
+					}
+					total_development = FRA
+				}
+			}
+		}
+		effect = {
+			add_prestige_or_monarch_power = { amount = 15 }
+			add_army_tradition_or_mil_power = { amount = 10 }
+		}
+	}
+
+	spi_barbarians_italy = {
+		icon = end_the_habsburgs
+		required_missions = {
+			spi_imperial_powerness
+			spi_lombardo_veneto
+		}
+		position = 13
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = SPI_NO_BARBAR_TT
+				piedmont_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+				lombardy_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+				po_valley_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+				venetia_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+				emilia_romagna_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+				liguria_area = {
+					type = all
+					owner = {
+						culture_group = latin
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_dismanter_empires
+				duration = 7300
+			}
+		}
+	}
+}
+
+SardiniPiedmont_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SPI
+			AND = {
+				OR = {
+					tag = SAR
+					tag = SAV
+				}
+				has_country_flag = spi_without_spi
+			}
+			#tag = ITA
+		}
+		OR = {
+			AND = {
+				was_tag = SAV
+				OR = {
+					NOT = { has_dlc = "Emperor" }
+					AND = {
+						has_dlc = "Emperor"
+						has_country_flag = use_missions_expanded_missions_instead_of_paradox
+					}
+				}
+			}
+			was_tag = SAR
+		}
+	}
+	has_country_shield = yes
+
+	spi_artistical_resurgence = {
+		icon = sponsor_the_arts
+		required_missions = {
+			spi_mountain_islands
+		}
+		position = 10
+		trigger = {
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
+			has_mil_advisor_3 = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_resurgence
+				duration = 3650
+			}
+		}
+	}
+
+	spi_northern_meddling = {
+		icon = a_show_of_strength
+		required_missions = {
+			spi_regia_armata_sarda
+		}
+		position = 11
+		trigger = {
+			if = {
+				limit = {
+					exists = MLO
+				}
+				MLO = {
+					NOT = { army_size = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					exists = VEN
+				}
+				VEN = {
+					NOT = { army_size = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					exists = LVN
+				}
+				LVN = {
+					NOT = { army_size = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { exists = MLO }
+					NOT = { exists = VEN }
+					NOT = { exists = LVN }
+				}
+				army_size = 50
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = VEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = VEN
+				}
+			}
+			if = {
+				limit = {
+					exists = MLO
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+				}
+			}
+			if = {
+				limit = {
+					exists = LVN
+				}
+				LVN = {
+					reverse_add_casus_belli = {
+						type = cb_italy_humiliation_rivals
+						target = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = HAB
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = HAB
+				}
+			}
+			if = {
+				limit = {
+					exists = FRA
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = FRA
+				}
+			}
+		}
+	}
+
+	spi_lombardo_veneto = {
+		icon = king_of_kings
+		required_missions = {
+			spi_northern_meddling
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 104
+				province_id = 112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 104
+			owns_core_province = 112
+			if = {
+				limit = {
+					exists = MLO
+				}
+				OR = {
+					overlord_of = MLO
+					italy_region = {
+						type = all
+						NOT = { owned_by = MLO }
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = VEN
+				}
+				OR = {
+					overlord_of = VEN
+					italy_region = {
+						type = all
+						NOT = { owned_by = VEN }
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = LVN
+				}
+				OR = {
+					overlord_of = LVN
+					italy_region = {
+						type = all
+						NOT = { owned_by = LVN }
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				add_country_modifier = {
+					name = spi_lombardo_veneto
+					duration = -1
+				}
+			}
+			add_accepted_culture = lombard
+			add_accepted_culture = venetian
+		}
+	}
+}
+
+SardiniPiedmont_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SPI
+			AND = {
+				OR = {
+					tag = SAR
+					tag = SAV
+				}
+				has_country_flag = spi_without_spi
+			}
+			#tag = ITA
+		}
+		OR = {
+			AND = {
+				was_tag = SAV
+				OR = {
+					NOT = { has_dlc = "Emperor" }
+					AND = {
+						has_dlc = "Emperor"
+						has_country_flag = use_missions_expanded_missions_instead_of_paradox
+					}
+				}
+			}
+			was_tag = SAR
+		}
+	}
+	has_country_shield = yes
+
+	spi_mountain_islands = {
+		icon = develop_the_po_valley
+		required_missions = {
+			sav_dual_cities
+			sar_dual_cities
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = piedmont_area
+				area = liguria_area
+				area = corsica_sardinia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					OR = {
+						devastation = 1
+						NOT = { prosperity = 50 }
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					devastation = 1
+				}
+			}
+		}
+		trigger = {
+			total_development = 350
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				piedmont_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						prosperity = 50
+						NOT = { devastation = 1 }
+					}
+				}
+				liguria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						prosperity = 50
+						NOT = { devastation = 1 }
+					}
+				}
+				corsica_sardinia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						prosperity = 50
+						NOT = { devastation = 1 }
+					}
+				}
+			}
+			else = {
+				piedmont_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					NOT = { devastation = 1 }
+				}
+				liguria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					NOT = { devastation = 1 }
+				}
+				corsica_sardinia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					NOT = { devastation = 1 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_fusione_perfetta
+				duration = -1
+			}
+			if = {
+				limit = {
+					OR = {
+						overlord_of = SAR
+						overlord_of = SAV
+					}
+				}
+				country_event = { id = ME_Sardinia_Piedmont_Events.1 }
+			}
+		}
+	}
+
+	spi_regia_armata_sarda = {
+		icon = establish_a_standing_army
+		position = 10
+		required_missions = {
+			spi_mountain_islands
+		}
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				AND = {
+					army_size_percentage = 0.75
+					manpower_percentage = 0.5
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					army_tradition = 50
+					army_professionalism = 0.33
+				}
+			}
+			else = {
+				army_tradition = 50
+			}
+		}
+		effect = {
+			country_event = { id = ME_Sardinia_Piedmont_Events.3 }
+			103 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_province_modifier = {
+						name = spi_regia_accademia_militare
+						duration = -1
+					}
+				}
+			}
+			add_country_modifier = {
+				name = spi_italian_unifier
+				duration = -1
+			}
+			italy_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	spi_fall_dukedom = {
+		icon = tuscan_birthright
+		position = 11
+		required_missions = {
+			spi_regia_armata_sarda
+		}
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_florentine_mind
+				duration = 9125
+			}
+		}
+	}
+
+	spi_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = {
+			spi_lombardo_veneto
+			spi_fall_dukedom
+			spi_fall_thousand_sigil
+			spi_conquest_sicily
+		}
+		position = 13
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT #TODO - MAKE A UNITED ONE
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+			complete_conquest_of_rome_missions = yes
+		}
+	}
+}
+
+SardiniPiedmont_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SPI
+			AND = {
+				OR = {
+					tag = SAR
+					tag = SAV
+				}
+				has_country_flag = spi_without_spi
+			}
+			#tag = ITA
+		}
+		OR = {
+			AND = {
+				was_tag = SAV
+				OR = {
+					NOT = { has_dlc = "Emperor" }
+					AND = {
+						has_dlc = "Emperor"
+						has_country_flag = use_missions_expanded_missions_instead_of_paradox
+					}
+				}
+			}
+			was_tag = SAR
+		}
+	}
+	has_country_shield = yes
+
+	spi_port_modernization = {
+		icon = establish_a_standing_army
+		position = 11
+		required_missions = {
+			spi_regia_armata_sarda
+			spi_industrialisation_attempts
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 102
+				province_id = 101
+				province_id = 127
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_shipyard_building_trigger = yes }
+					NOT = { has_dock_building_trigger = yes }
+				}
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			102 = {
+				owned_by = ROOT
+				development = 30
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+			101 = {
+				owned_by = ROOT
+				development = 30
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+			127 = {
+				owned_by = ROOT
+				development = 30
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = spi_naval_preparation
+				duration = 9125
+			}
+		}
+	}
+
+	spi_fall_thousand_sigil = {
+		icon = union_with_naples
+		position = 12
+		required_missions = {
+			spi_port_modernization
+		}
+		provinces_to_highlight = {
+			province_id = 121
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			121 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = end_borboni
+				duration = 9125
+			}
+		}
+	}
+}
+
+SardiniPiedmont_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SPI
+			AND = {
+				OR = {
+					tag = SAR
+					tag = SAV
+				}
+				has_country_flag = spi_without_spi
+			}
+			#tag = ITA
+		}
+		OR = {
+			AND = {
+				was_tag = SAV
+				OR = {
+					NOT = { has_dlc = "Emperor" }
+					AND = {
+						has_dlc = "Emperor"
+						has_country_flag = use_missions_expanded_missions_instead_of_paradox
+					}
+				}
+			}
+			was_tag = SAR
+		}
+	}
+	has_country_shield = yes
+
+	spi_industrialisation_attempts = {
+		icon = public_works
+		position = 10
+		required_missions = { }
+		trigger = {
+			num_of_owned_manufactory_trigger = { amount = 10 }
+		}
+		effect = {
+			custom_tooltip = SPI_MANU_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_manufactory_trigger = yes
+					}
+					add_province_modifier = {
+						name = spi_industrialisaton_sprint
+						duration = 5475
+					}
+				}
+			}
+		}
+	}
+
+	spi_mining_investments = {
+		icon = reform_the_monte
+		position = 11
+		required_missions = {
+			spi_industrialisation_attempts
+		}
+		provinces_to_highlight = {
+			province_id = 2986
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 5 }
+				NOT = { has_production_building_trigger = yes }
+				devastation = 1
+			}
+		}
+		trigger = {
+			treasury = 500
+			2986 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+				has_production_building_trigger = yes
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Sardinia_Piedmont_Events.2 }
+		}
+	}
+
+	spi_conquest_sicily = {
+		icon = danubian_power
+		position = 12
+		required_missions = {
+			spi_port_modernization
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = western_sicily_area
+				area = sicily_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { province_id = 226 }
+		}
+		trigger = {
+			western_sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sicily_area = {
+				type = all
+				OR = {
+					NOT = { province_id = 126 }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			western_sicily_area = {
+				add_province_modifier = {
+					name = spi_dream_independence
+					duration = 3650
+				}
+			}
+			sicily_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = spi_dream_independence
+					duration = 3650
+				}
+			}
+		}
+	}
+}

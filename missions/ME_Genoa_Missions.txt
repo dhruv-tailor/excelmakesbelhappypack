@@ -28,22 +28,18 @@ genoa_missions_1 = {
 				}
 				BYZ = {
 					OR = {
-						OR = {
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = insulted
-							}
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = scornfully_insulted
-							}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
 						}
-						OR = {
-							alliance_with = GEN
-							has_opinion = {
-								who = ROOT
-								value = 125
-							}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 125
 						}
 					}
 				}
@@ -78,25 +74,17 @@ genoa_missions_1 = {
 					}
 				}
 				hidden_effect = {
-					BYZ = {
-						1320 = {
-							every_trade_node_member_province = {
-								limit = { owned_by = ROOT }
-								add_province_modifier = {
-									name = gen_frank_roman_trade_aggreement
-									duration = -1
+					1320 = {
+						every_trade_node_member_province = {
+							limit = {
+								OR = {
+									owned_by = ROOT
+									owned_by = BYZ
 								}
 							}
-						}
-					}
-					GEN = {
-						1320 = {
-							every_trade_node_member_province = {
-								limit = { owned_by = ROOT }
-								add_province_modifier = {
-									name = gen_frank_roman_trade_aggreement
-									duration = -1
-								}
+							add_province_modifier = {
+								name = gen_frank_roman_trade_aggreement
+								duration = -1
 							}
 						}
 					}
@@ -125,6 +113,36 @@ genoa_missions_1 = {
 		position = 2
 		provinces_to_highlight = {
 			province_id = 151
+			OR = {
+				AND = {
+					NOT = { owned_by = ROOT }
+					OR = {
+						ROOT = {
+							NOT = { alliance_with = BYZ }
+							NOT = { overlord_of = BYZ }
+						}
+						NOT = { owned_by = BYZ }
+						AND = {
+							owned_by = BYZ
+							1320 = { #Constantinople
+								NOT = {
+									trade_share = {
+										country = ROOT
+										share = 25
+									}
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { is_core = ROOT }
+					ROOT = {
+						NOT = { alliance_with = BYZ }
+						NOT = { overlord_of = BYZ }
+					}
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -186,13 +204,31 @@ genoa_missions_1 = {
 			else = {
 				add_years_of_income = 2.5
 				151 = {
-					random_list = {
-						50 = {
-							change_religion = ROOT
+					if = {
+						limit = {
+							NOT = { religion = ROOT }
+							NOT = { culture = ROOT }
 						}
-						50 = {
-							change_culture = ROOT
+						random_list = {
+							50 = {
+								change_religion = ROOT
+							}
+							50 = {
+								change_culture = ROOT
+							}
 						}
+					}
+					else_if = {
+						limit = {
+							NOT = { religion = ROOT }
+						}
+						change_religion = ROOT
+					}
+					else_if = {
+						limit = {
+							NOT = { culture = ROOT }
+						}
+						change_culture = ROOT
 					}
 				}
 				thrace_area = {
@@ -220,6 +256,12 @@ genoa_missions_1 = {
 		provinces_to_highlight = {
 			area = crimea_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { has_dlc = "Mare Nostrum" }
+				owner = {
+					NOT = { is_in_trade_league_with = ROOT }
+				}
+			}
 		}
 		trigger = {
 			1322 = {
@@ -282,6 +324,38 @@ genoa_missions_1 = {
 				area = lower_don_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					ROOT = {
+						alliance_with = RUS
+					}
+					NOT = { owned_by = RUS }
+				}
+				AND = {
+					ROOT = {
+						NOT = { alliance_with = RUS }
+						alliance_with = MOS
+					}
+					NOT = { owned_by = MOS }
+				}
+				AND = {
+					ROOT = {
+						NOT = { alliance_with = RUS }
+						NOT = { alliance_with = MOS }
+						alliance_with = GOL
+					}
+					NOT = { owned_by = GOL }
+				}
+				AND = {
+					ROOT = {
+						NOT = { alliance_with = RUS }
+						NOT = { alliance_with = MOS }
+						NOT = { alliance_with = GOL }
+						alliance_with = GLH
+					}
+					NOT = { owned_by = GLH }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -291,23 +365,38 @@ genoa_missions_1 = {
 						alliance_with = RUS
 					}
 				}
-				lower_don_area = {
-					type = all
-					OR = {
-						owned_by = ROOT
+				if = {
+					limit = {
+						alliance_with = RUS
+					}
+					lower_don_area = {
+						type = all
 						OR = {
-							owned_by = MOS
+							owned_by = ROOT
+							owned_by = RUS
+						}
+					}
+					zaporizhia_area = {
+						type = all
+						OR = {
+							owned_by = ROOT
 							owned_by = RUS
 						}
 					}
 				}
-				zaporizhia_area = {
-					type = all
-					OR = {
-						owned_by = ROOT
+				else = {
+					lower_don_area = {
+						type = all
 						OR = {
+							owned_by = ROOT
 							owned_by = MOS
-							owned_by = RUS
+						}
+					}
+					zaporizhia_area = {
+						type = all
+						OR = {
+							owned_by = ROOT
+							owned_by = MOS
 						}
 					}
 				}
@@ -319,23 +408,38 @@ genoa_missions_1 = {
 						alliance_with = GOL
 					}
 				}
-				lower_don_area = {
-					type = all
-					OR = {
-						owned_by = ROOT
+				if = {
+					limit = {
+						alliance_with = GOL
+					}
+					lower_don_area = {
+						type = all
 						OR = {
-							owned_by = GLH
+							owned_by = ROOT
+							owned_by = GOL
+						}
+					}
+					zaporizhia_area = {
+						type = all
+						OR = {
+							owned_by = ROOT
 							owned_by = GOL
 						}
 					}
 				}
-				zaporizhia_area = {
-					type = all
-					OR = {
-						owned_by = ROOT
+				else = {
+					lower_don_area = {
+						type = all
 						OR = {
+							owned_by = ROOT
 							owned_by = GLH
-							owned_by = GOL
+						}
+					}
+					zaporizhia_area = {
+						type = all
+						OR = {
+							owned_by = ROOT
+							owned_by = GLH
 						}
 					}
 				}
@@ -414,6 +518,11 @@ genoa_missions_1 = {
 		position = 11
 		provinces_to_highlight = {
 			province_id = 835
+			OR = {
+				is_city = no
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			has_discovered = ROOT
 		}
 		trigger = {
 			835 = {
@@ -432,19 +541,18 @@ genoa_missions_1 = {
 			}
 			if = {
 				limit = {
-					has_dlc = "Res Publica"
-					faction_in_power = mr_traders
-				}
-				835 = {
-					create_or_add_center_of_trade_level = { level = 1 }
-				}
-			}
-			else_if = {
-				limit = {
-					has_estate = estate_burghers
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 60
+					OR = {
+						AND = {
+							has_dlc = "Res Publica"
+							faction_in_power = mr_traders
+						}
+						AND = {
+							has_estate = estate_burghers
+							estate_loyalty = {
+								estate = estate_burghers
+								loyalty = 60
+							}
+						}
 					}
 				}
 				835 = {
@@ -580,13 +688,6 @@ genoa_missions_2 = {
 			}
 		}
 		effect = {
-			crimea_area = {
-				limit = {
-					NOT = { owned_by = ROT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
 			2410 = {
 				add_trade_modifier = {
 					who = ROOT
@@ -594,6 +695,13 @@ genoa_missions_2 = {
 					power = 15
 					key = gen_theodoro_loc
 				}
+			}
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -604,23 +712,30 @@ genoa_missions_2 = {
 		position = 5
 		provinces_to_highlight = {
 			province_id = 321
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			321 = {
-				owned_by = ROOT
-				if = {
-					limit = {
-						has_dlc = "Res Publica"
-					}
-					has_province_modifier = trade_post_modifier
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Res Publica"
+					NOT = { has_province_modifier = trade_post_modifier }
 				}
 			}
 		}
-		effect = {
-			country_event = {
-				id = ME_Maritime_Republics_Events.7
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Res Publica"
+				}
+				321 = {
+					owned_by = ROOT
+					has_province_modifier = trade_post_modifier
+				}
 			}
+			else = {
+				owns = 321
+			}
+		}
+		effect = {
+			country_event = { id = ME_Maritime_Republics_Events.7 }
 			aleppo_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -662,9 +777,33 @@ genoa_missions_2 = {
 		position = 6
 		provinces_to_highlight = {
 			OR = {
-				area = aleppo_area
-				area = cukurova_area
-				area = syria_area
+				AND = {
+					area = aleppo_area
+					NOT = {
+						aleppo_area = {
+							has_port = yes
+							owned_by = ROOT
+						}
+					}
+				}
+				AND = {
+					area = cukurova_area
+					NOT = {
+						cukurova_area = {
+							has_port = yes
+							owned_by = ROOT
+						}
+					}
+				}
+				AND = {
+					area = syria_area
+					NOT = {
+						syria_area = {
+							has_port = yes
+							owned_by = ROOT
+						}
+					}
+				}
 			}
 			NOT = { owned_by = ROOT }
 			has_port = yes
@@ -685,11 +824,13 @@ genoa_missions_2 = {
 			410 = {
 				owner = {
 					OR = {
+						tag = ROOT
 						has_opinion = {
 							who = ROOT
 							value = 100
 						}
 						is_rival = ROOT
+						is_enemy = ROOT
 					}
 				}
 			}
@@ -709,6 +850,7 @@ genoa_missions_2 = {
 								value = 100
 							}
 							is_rival = ROOT
+							is_enemy = ROOT
 						}
 					}
 				}
@@ -730,15 +872,14 @@ genoa_missions_2 = {
 								value = 100
 							}
 							is_rival = ROOT
+							is_enemy = ROOT
 						}
 					}
 				}
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Genoa_Events.6
-			}
+			country_event = { id = ME_Genoa_Events.6 }
 			2313 = {
 				add_province_modifier = {
 					name = gen_safe_crusading_port
@@ -771,20 +912,6 @@ genoa_missions_2 = {
 			}
 			if = {
 				limit = {
-					exists = MOS
-				}
-				MOS = {
-					OR = {
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-						is_rival = ROOT
-					}
-				}
-			}
-			else_if = {
-				limit = {
 					exists = RUS
 				}
 				RUS = {
@@ -794,6 +921,22 @@ genoa_missions_2 = {
 							value = 100
 						}
 						is_rival = ROOT
+						is_enemy = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+				}
+				MOS = {
+					OR = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_rival = ROOT
+						is_enemy = ROOT
 					}
 				}
 			}
@@ -808,6 +951,7 @@ genoa_missions_2 = {
 							value = 100
 						}
 						is_rival = ROOT
+						is_enemy = ROOT
 					}
 				}
 			}
@@ -822,15 +966,14 @@ genoa_missions_2 = {
 							value = 100
 						}
 						is_rival = ROOT
+						is_enemy = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			add_dip_power = 50
-			country_event = {
-				id = ME_Genoa_Events.4
-			}
+			country_event = { id = ME_Genoa_Events.4 }
 			zaporizhia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -902,10 +1045,6 @@ genoa_missions_2 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = gen_route_india
-				duration = 18250
-			}
 			define_explorer = {
 				fire = 2
 				shock = 1
@@ -913,6 +1052,10 @@ genoa_missions_2 = {
 				siege = 0
 				name = "Antonio da Noli"
 				trait = ironside_personality
+			}
+			add_country_modifier = {
+				name = gen_route_india
+				duration = 18250
 			}
 			cap_verde_area = {
 				discover_country = ROOT
@@ -981,12 +1124,6 @@ genoa_missions_2 = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { gen_tangiers }
 		position = 10
-		provinces_to_highlight = {
-			OR = {
-				area = macaronesia_area
-				area = cap_verde_area
-			}
-		}
 		trigger = {
 			OR = {
 				num_of_owned_provinces_with = {
@@ -997,6 +1134,7 @@ genoa_missions_2 = {
 				num_of_owned_provinces_with = {
 					value = 1
 					area = macaronesia_area
+					is_city = yes
 				}
 				num_of_owned_provinces_with = {
 					value = 1
@@ -1006,6 +1144,7 @@ genoa_missions_2 = {
 				num_of_owned_provinces_with = {
 					value = 1
 					area = cap_verde_area
+					is_city = yes
 				}
 			}
 		}
@@ -1029,9 +1168,6 @@ genoa_missions_2 = {
 			gen_another_route_india
 		}
 		position = 11
-		provinces_to_highlight = {
-			area = cape_of_good_hope_area
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 2
@@ -1043,6 +1179,7 @@ genoa_missions_2 = {
 			random_owned_province = {
 				limit = {
 					area = cape_of_good_hope_area
+					has_port = yes
 				}
 				heavy_ship = ROOT
 				heavy_ship = ROOT
@@ -1099,13 +1236,6 @@ genoa_missions_2 = {
 			gen_cape_good_hope
 		}
 		position = 12
-		provinces_to_highlight = {
-			OR = {
-				region = deccan_region
-				region = coromandel_region
-			}
-			trade_goods = spices
-		}
 		trigger = {
 			calc_true_if = {
 				amount = 5
@@ -1151,19 +1281,35 @@ genoa_missions_2 = {
 		}
 		position = 13
 		provinces_to_highlight = {
-			trade_goods = spices
+			province_id = 535
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				AND = {
+					has_dlc = "Res Publica"
+					NOT = { has_province_modifier = trade_post_modifier }
+				}
+				AND = {
+					NOT = { has_dlc = "Res Publica" }
+					NOT = { base_production = 7 }
+				}
+			}
 		}
 		trigger = {
-			535 = {
-				owned_by = ROOT
-				is_core = ROOT
-				if = {
-					limit = {
-						has_dlc = "Res Publica"
-					}
+			if = {
+				limit = {
+					has_dlc = "Res Publica"
+				}
+				535 = {
+					owned_by = ROOT
+					is_core = ROOT
 					has_province_modifier = trade_post_modifier
 				}
-				else = {
+			}
+			else = {
+				535 = {
+					owned_by = ROOT
+					is_core = ROOT
 					base_production = 7
 				}
 			}
@@ -1179,12 +1325,10 @@ genoa_missions_2 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Maritime_Republics_Events.8 }
 			add_country_modifier = {
 				name = gen_indian_spices
 				duration = -1
-			}
-			country_event = {
-				id = ME_Maritime_Republics_Events.8
 			}
 			535 = {
 				if = {
@@ -1228,6 +1372,7 @@ genoa_missions_3 = {
 		required_missions = { }
 		position = 1
 		trigger = {
+			num_of_admirals = 1
 			OR = {
 				navy_size_percentage = 1
 				AND = {
@@ -1235,7 +1380,6 @@ genoa_missions_3 = {
 					navy_size_percentage = 0.75
 				}
 			}
-			num_of_admirals = 1
 		}
 		effect = {
 			add_country_modifier = {
@@ -1293,9 +1437,17 @@ genoa_missions_3 = {
 		}
 		position = 2
 		trigger = {
-			naval_strength = {
-				who = VEN
-				value = 1
+			if = {
+				limit = {
+					exists = VEN
+				}
+				naval_strength = {
+					who = VEN
+					value = 1
+				}
+			}
+			else = {
+				navy_size = 50
 			}
 		}
 		effect = {
@@ -1334,20 +1486,26 @@ genoa_missions_3 = {
 		provinces_to_highlight = {
 			province_id = 112
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				ROOT = {
+					NOT = { overlord_of = VEN }
+				}
+				VEN = {
+					NOT = { owns_core_province = 112 }
+				}
+			}
 		}
 		trigger = {
 			OR = {
 				owns_core_province = 112
 				VEN = {
-					owns_core_province = 112
 					is_subject_of = ROOT
+					owns_core_province = 112
 				}
 			}
 		}
 		effect = {
-			add_legitimacy_equivalent = {
-				value = 3
-			}
+			add_legitimacy_equivalent = { value = 3 }
 			add_mercantilism = 5
 			add_ruler_modifier = {
 				name = gen_victory_doge
@@ -1376,9 +1534,10 @@ genoa_missions_3 = {
 				area = liguria_area
 			}
 			OR = {
-				NOT = { devastation = 2 }
-				NOT = { unrest = 3 }
-				NOT = { local_autonomy = 15 }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				devastation = 2
+				unrest = 3
+				local_autonomy = 15
 			}
 		}
 		trigger = {
@@ -1407,17 +1566,18 @@ genoa_missions_3 = {
 			add_mercantilism = 5
 			if = {
 				limit = {
-					has_dlc = "Res Publica"
-					faction_in_power = mr_traders
-				}
-				add_dip_power = 100
-			}
-			else_if = {
-				limit = {
-					has_estate = estate_burghers
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 60
+					OR = {
+						AND = {
+							has_dlc = "Res Publica"
+							faction_in_power = mr_traders
+						}
+						AND = {
+							has_estate = estate_burghers
+							estate_loyalty = {
+								estate = estate_burghers
+								loyalty = 60
+							}
+						}
 					}
 				}
 				add_dip_power = 100
@@ -1535,8 +1695,24 @@ genoa_missions_3 = {
 		position = 6
 		provinces_to_highlight = {
 			OR = {
-				area = delta_area
-				area = bahari_area
+				AND = {
+					area = delta_area
+					NOT = {
+						delta_area = {
+							has_port = yes
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				AND = {
+					area = bahari_area
+					NOT = {
+						bahari_area = {
+							has_port = yes
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_port = yes
@@ -1572,14 +1748,14 @@ genoa_missions_3 = {
 				tooltip = GEN_MARE_NOSTRUM_TT
 				358 = {
 					is_strongest_trade_power = ROOT
-					any_country = {
-						358 = {
-							trade_share = {
-								share = 10
-								country = PREV
+					NOT = {
+						any_country = {
+							358 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -1589,14 +1765,14 @@ genoa_missions_3 = {
 				}
 				341 = {
 					is_strongest_trade_power = ROOT
-					any_country = {
-						341 = {
-							trade_share = {
-								share = 10
-								country = PREV
+					NOT = {
+						any_country = {
+							341 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -1606,14 +1782,14 @@ genoa_missions_3 = {
 				}
 				1298 = {
 					is_strongest_trade_power = ROOT
-					any_country = {
-						1298 = {
-							trade_share = {
-								share = 10
-								country = PREV
+					NOT = {
+						any_country = {
+							1298 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -1623,14 +1799,14 @@ genoa_missions_3 = {
 				}
 				1293 = {
 					is_strongest_trade_power = ROOT
-					any_country = {
-						1293 = {
-							trade_share = {
-								share = 10
-								country = PREV
+					NOT = {
+						any_country = {
+							1293 = {
+								trade_share = {
+									share = 10
+									country = PREV
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -1641,14 +1817,14 @@ genoa_missions_3 = {
 				OR = {
 					1308 = {
 						is_strongest_trade_power = ROOT
-						any_country = {
-							1308 = {
-								trade_share = {
-									share = 10
-									country = PREV
+						NOT = {
+							any_country = {
+								1308 = {
+									trade_share = {
+										share = 10
+										country = PREV
+									}
 								}
-							}
-							NOT = {
 								naval_strength = {
 									who = ROOT
 									value = 0.5
@@ -1658,14 +1834,14 @@ genoa_missions_3 = {
 					}
 					1320 = {
 						is_strongest_trade_power = ROOT
-						any_country = {
-							1320 = {
-								trade_share = {
-									share = 10
-									country = PREV
+						NOT = {
+							any_country = {
+								1320 = {
+									trade_share = {
+										share = 10
+										country = PREV
+									}
 								}
-							}
-							NOT = {
 								naval_strength = {
 									who = ROOT
 									value = 0.5
@@ -1699,6 +1875,10 @@ genoa_missions_3 = {
 			}
 		}
 		effect = {
+			102 = {
+				add_local_autonomy = -25
+				add_nationalism = -10
+			}
 			piedmont_area = {
 				if = {
 					limit = {
@@ -1707,10 +1887,6 @@ genoa_missions_3 = {
 					}
 					add_permanent_claim = ROOT
 				}
-			}
-			102 = {
-				add_local_autonomy = -25
-				add_nationalism = -10
 			}
 		}
 	}
@@ -1730,11 +1906,11 @@ genoa_missions_3 = {
 			}
 		}
 		effect = {
+			add_accepted_culture = piedmontese
 			add_country_modifier = {
 				name = gen_defensive_on_the_alps
 				duration = 7300
 			}
-			add_accepted_culture = piedmontese
 			hidden_effect = {
 				add_country_modifier = {
 					name = gen_conquest_piedmont
@@ -1749,27 +1925,22 @@ genoa_missions_3 = {
 		required_missions = { gen_reign_in_italy }
 		position = 13
 		trigger = {
-			all_country = {
-				OR = {
-					AND = {
-						NOT = { culture_group = latin }
-						NOT = {
-							capital_scope = {
-								region = italy_region
-							}
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT #TODO - MAKE A UNITED ONE
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
 						}
-					}
-					NOT = {
-						army_strength = {
-							who = ROOT
-							value = 1
-						}
+						army_size = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
+			complete_conquest_of_rome_missions = yes
 		}
 	}
 }
@@ -1797,26 +1968,28 @@ genoa_missions_4 = {
 		}
 		position = 2
 		trigger = {
-			any_country = {
-				1298 = {
-					trade_share = {
-						share = 1
-						country = PREV
+			all_country = {
+				OR = {
+					1298 = {
+						NOT = {
+							trade_share = {
+								share = 1
+								country = PREV
+							}
+						}
 					}
-				}
-				NOT = {
-					naval_strength = {
-						who = ROOT
-						value = 1
+					NOT = {
+						naval_strength = {
+							who = ROOT
+							value = 1
+						}
 					}
 				}
 			}
 		}
 		effect = {
 			add_navy_tradition = 20
-			country_event = {
-				id = ME_Genoa_Events.1
-			}
+			country_event = { id = ME_Genoa_Events.1 }
 		}
 	}
 
@@ -1848,13 +2021,10 @@ genoa_missions_4 = {
 			gen_tyrrenean_islands
 		}
 		position = 3
-		provinces_to_highlight = {
-			trade_goods = naval_supplies
-		}
 		trigger = {
 			development_in_provinces = {
-				trade_goods = naval_supplies
 				value = 25
+				trade_goods = naval_supplies
 			}
 		}
 		effect = {
@@ -1943,10 +2113,11 @@ genoa_missions_4 = {
 		provinces_to_highlight = {
 			province_id = 101
 			OR = {
+				NOT = { owned_by = ROOT }
 				NOT = { province_has_building_of_group = { group = trade all = yes } }
-				AND = {
-					NOT = { province_has_building_of_group = { group = production all = yes } }
-					NOT = { province_has_building_of_group = { group = government all = yes } }
+				NOT = {
+					province_has_building_of_group = { group = production all = yes }
+					province_has_building_of_group = { group = government all = yes }
 				}
 			}
 		}
@@ -1954,6 +2125,7 @@ genoa_missions_4 = {
 			monthly_income = 20
 			num_of_galley = 20
 			101 = {
+				owned_by = ROOT
 				custom_trigger_tooltip = {
 					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
 					province_has_building_of_group = { group = trade all = yes }
@@ -1971,6 +2143,7 @@ genoa_missions_4 = {
 			}
 		}
 		effect = {
+			add_years_of_income = 0.5
 			101 = {
 				add_base_production = 3
 				add_province_modifier = {
@@ -1978,7 +2151,6 @@ genoa_missions_4 = {
 					duration = -1
 				}
 			}
-			add_years_of_income = 0.5
 		}
 	}
 
@@ -1991,6 +2163,24 @@ genoa_missions_4 = {
 			num_of_generals = 1
 		}
 		effect = {
+			if = {
+				limit = {
+					exists = VEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = VEN
+				}
+			}
+			if = {
+				limit = {
+					exists = MLO
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+				}
+			}
 			add_country_modifier = {
 				name = gen_merchant_army
 				duration = 9125
@@ -2056,11 +2246,11 @@ genoa_missions_4 = {
 			}
 		}
 		effect = {
+			add_accepted_culture = tuscan
 			add_country_modifier = {
 				name = gen_arts
 				duration = 9125
 			}
-			add_accepted_culture = tuscan
 			hidden_effect = {
 				add_country_modifier = {
 					name = gen_conquest_tuscany
@@ -2168,11 +2358,11 @@ genoa_missions_5 = {
 		}
 		effect = {
 			corsica_sardinia_area = {
+				add_devastation = -10
 				add_province_modifier = {
 					name = gen_genoese_ruling
 					duration = -1
 				}
-				add_devastation = -10
 			}
 			127 = {
 				add_province_modifier = {
@@ -2252,20 +2442,26 @@ genoa_missions_5 = {
 		provinces_to_highlight = {
 			province_id = 101
 			OR = {
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				NOT = { owned_by = ROOT }
+				NOT = {
+					province_has_building_of_group = { group = trade all = yes }
+					province_has_building_of_group = { group = taxation all = yes }
+				}
 			}
 		}
 		trigger = {
 			is_institution_enabled = renaissance
 			101 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
-				}
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+				owned_by = ROOT
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
+						province_has_building_of_group = { group = trade all = yes }
+					}
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
+						province_has_building_of_group = { group = taxation all = yes }
+					}
 				}
 			}
 			OR = {
@@ -2294,7 +2490,6 @@ genoa_missions_5 = {
 			gen_art_sculture
 		}
 		position = 8
-		provinces_to_highlight = { }
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 3
@@ -2310,6 +2505,7 @@ genoa_missions_5 = {
 			add_years_of_income = 2
 			random_owned_province = {
 				limit = {
+					NOT = { province_id = 101 }
 					base_production = 10
 					province_has_building_of_group = { group = trade all = yes }
 				}
@@ -2367,16 +2563,16 @@ genoa_missions_5 = {
 			}
 		}
 		effect = {
+			105 = {
+				add_local_autonomy = -25
+				add_nationalism = -10
+			}
 			lombardy_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			105 = {
-				add_local_autonomy = -25
-				add_nationalism = -10
 			}
 		}
 	}
@@ -2396,11 +2592,11 @@ genoa_missions_5 = {
 			}
 		}
 		effect = {
+			add_accepted_culture = lombard
 			add_country_modifier = {
 				name = gen_trade_with_alps
 				duration = 7300
 			}
-			add_accepted_culture = lombard
 			hidden_effect = {
 				add_country_modifier = {
 					name = gen_conquest_lombardy
