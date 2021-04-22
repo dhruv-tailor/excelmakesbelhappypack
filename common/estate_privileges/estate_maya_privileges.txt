@@ -1,10 +1,16 @@
 estate_maya_honor_kuhun = {
 	icon = privilege_build_jain_temple
-	land_share = 1
+	loyalty = 0.1
 	influence = 0.1
 	is_valid = {
 		NOT = { has_country_modifier = estate_maya_high_influence }
 		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
+	}
+	on_granted = {
+		add_estate_loyalty = {
+			estate = estate_maya
+			loyalty = 10
+		}
 	}
 	can_select = {
 		NOT = {
@@ -13,16 +19,6 @@ estate_maya_honor_kuhun = {
 				influence = 90
 			}
 		}
-	}
-	on_granted = {
-		add_estate_loyalty = {
-			estate = estate_maya
-			loyalty = 10
-		}
-	}
-	cooldown_years = 10
-	on_cooldown_expires = {
-		remove_estate_privilege = estate_maya_honor_kuhun
 	}
 	ai_will_do = {
 		factor = 1
@@ -45,8 +41,9 @@ estate_maya_honor_kuhun = {
 
 estate_maya_recruit_sage = {
 	icon = privilege_admin_power
-	land_share = 3
-	influence = 0.15
+	max_absolutism = -5
+	influence = 0.05
+	loyalty = 0.05
 	is_valid = {
 		NOT = { has_country_modifier = estate_maya_high_influence }
 		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
@@ -58,6 +55,9 @@ estate_maya_recruit_sage = {
 				influence = 90
 			}
 		}
+	}
+	benefits = {
+		adm_advisor_cost = -0.1
 	}
 	on_granted = {
 		if = {
@@ -88,10 +88,6 @@ estate_maya_recruit_sage = {
 			}
 		}
 	}
-	cooldown_years = 30
-	on_cooldown_expires = {
-		remove_estate_privilege = estate_maya_recruit_sage
-	}
 	ai_will_do = {
 		factor = 0
 	}
@@ -99,8 +95,8 @@ estate_maya_recruit_sage = {
 
 estate_maya_create_great_stella = {
 	icon = privilege_build_jain_temple
-	land_share = 5
-	influence = 0.15
+	max_absolutism = -5
+	influence = 0.1
 	is_valid = {
 		NOT = { has_country_modifier = estate_maya_high_influence }
 		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
@@ -120,19 +116,9 @@ estate_maya_create_great_stella = {
 	benefits = {
 		years_of_nationalism = -5
 	}
-	cooldown_years = 20
-	on_cooldown_expires = {
-		remove_estate_privilege = estate_maya_create_great_stella
-	}
+	cooldown_years = 5
 	ai_will_do = {
 		factor = 1
-		modifier = {
-			factor = 0
-			estate_loyalty = {
-				estate = estate_maya
-				loyalty = 40
-			}
-		}
 		modifier = {
 			factor = 0
 			estate_influence = {
@@ -145,14 +131,16 @@ estate_maya_create_great_stella = {
 
 estate_maya_support_mayan_schools = {
 	icon = privilege_give_money
+	max_absolutism = -10
 	land_share = 5
-	influence = 0.2
+	loyalty = 0.1
+	influence = 0.1
 	is_valid = {
 		NOT = { has_country_modifier = estate_maya_high_influence }
 		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
 	}
 	can_select = {
-		years_of_income = 0.25
+		years_of_income = 0.5
 		NOT = {
 			estate_influence = {
 				estate = estate_maya
@@ -161,24 +149,16 @@ estate_maya_support_mayan_schools = {
 		}
 	}
 	on_granted = {
-		add_years_of_income = -0.25
+		add_years_of_income = -0.5
 	}
 	benefits = {
 		idea_cost = -0.1
 	}
-	cooldown_years = 10
-	on_cooldown_expires = {
-		remove_estate_privilege = estate_maya_support_mayan_schools
+	penalties = {
+		yearly_corruption = 0.02
 	}
 	ai_will_do = {
 		factor = 1
-		modifier = {
-			factor = 0
-			estate_loyalty = {
-				estate = estate_maya
-				loyalty = 40
-			}
-		}
 		modifier = {
 			factor = 0
 			estate_influence = {
@@ -195,7 +175,8 @@ estate_maya_support_mayan_schools = {
 
 estate_maya_edit_the_chronicles = {
 	icon = privilege_commission_jain_scripture
-	land_share = 5
+	max_absolutism = 5
+	loyalty = -0.15
 	is_valid = {
 		NOT = { has_country_modifier = estate_maya_high_influence }
 		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
@@ -210,19 +191,27 @@ estate_maya_edit_the_chronicles = {
 		}
 		estate_loyalty = {
 			estate = estate_maya
-			loyalty = 20
+			loyalty = 30
 		}
 	}
 	on_granted = {
-		add_legitimacy_equivalent = { value = 20 }
+		add_legitimacy_equivalent = { value = 10 }
 		add_estate_loyalty = {
 			estate = estate_maya
-			loyalty = -20
+			loyalty = -10
 		}
 	}
-	cooldown_years = 50
-	on_cooldown_expires = {
-		remove_estate_privilege = estate_maya_edit_the_chronicles
+	cooldown_years = 20
+	benefits = {
+		legitimacy = 0.2
+		horde_unity = 0.2
+		devotion = 0.2
+		meritocracy = 0.2
+		republican_tradition = 0.1
+	}
+	penalties = {
+		yearly_absolutism = -0.01
+		prestige = -0.05
 	}
 	ai_will_do = {
 		factor = 1
@@ -231,7 +220,7 @@ estate_maya_edit_the_chronicles = {
 			NOT = {
 				estate_loyalty = {
 					estate = estate_maya
-					loyalty = 60
+					loyalty = 50
 				}
 			}
 		}
@@ -239,6 +228,77 @@ estate_maya_edit_the_chronicles = {
 			factor = 0
 			legitimacy_equivalent = 50
 		}
+	}
+}
+
+estate_maya_teach_heir_privilege = {
+	icon = privilege_admin_power
+	max_absolutism = -5
+	land_share = 10
+	loyalty = 0.1
+	influence = 0.1
+	is_valid = {
+		NOT = { has_country_modifier = estate_maya_high_influence }
+		NOT = { has_estate_privilege = estate_maya_reduce_influence_of_scribes }
+		NOT = { government = theocracy }
+		has_government_attribute = heir
+	}
+	can_select = {
+		NOT = {
+			estate_influence = {
+				estate = estate_maya
+				influence = 90
+			}
+		}
+	}
+	benefits = {
+		monarch_admin_power = 1
+		monarch_diplomatic_power = 1
+		monarch_military_power = 1
+	}
+	penalties = {
+		prestige = -0.25
+		legitimacy = -0.1
+		horde_unity = -0.1
+		devotion = -0.1
+		meritocracy = -0.1
+		republican_tradition = -0.05
+	}
+	on_granted = {
+		if = {
+			limit = {
+				has_heir = yes
+				NOT = { has_heir_flag = got_stats_from_maya_estate }
+			}
+			set_heir_flag = got_stats_from_maya_estate
+			random_list = {
+				25 = {
+					trigger = {
+						NOT = { heir_adm = 6 }
+					}
+					change_heir_adm = 1
+				}
+				25 = {
+					trigger = {
+						NOT = { heir_dip = 6 }
+					}
+					change_heir_dip = 1
+				}
+				25 = {
+					trigger = {
+						NOT = { heir_mil = 6 }
+					}
+					change_heir_mil = 1
+				}
+				25 = {
+					# No Effect
+				}
+			}
+		}
+	}
+	cooldown_years = 10
+	ai_will_do = {
+		factor = 0
 	}
 }
 

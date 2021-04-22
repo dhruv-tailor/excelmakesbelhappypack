@@ -370,15 +370,6 @@ country_event = { # Trade Treaty with the Mamluks
 			}
 			add_permanent_claim = ROOT
 		}
-		4316 = {
-			if = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
 		MAM = {
 			add_opinion = {
 				who = FROM
@@ -400,11 +391,10 @@ country_event = { # An Ambassador From Venice
 	option = {
 		name = ME_Venice_Events.10.OPT1
 		ai_chance = {
-			factor = 50
+			factor = 25
 			modifier = {
 				factor = 2
 				OR = {
-					alliance_with = FROM
 					FROM = {
 						OR = {
 							naval_strength = {
@@ -414,10 +404,6 @@ country_event = { # An Ambassador From Venice
 							army_strength = {
 								who = ROOT
 								value = 1
-							}
-							has_opinion = {
-								who = ROOT
-								value = 150
 							}
 						}
 					}
@@ -444,11 +430,6 @@ country_event = { # An Ambassador From Venice
 				id = ME_Venice_Events.11
 			}
 		}
-		358 = {
-			remove_core = ROOT
-			add_core = FROM
-			cede_province = FROM
-		}
 		add_country_modifier = {
 			name = ven_mam_spice_trade_ally
 			duration = 7300
@@ -458,8 +439,29 @@ country_event = { # An Ambassador From Venice
 	option = {
 		name = ME_Venice_Events.10.OPT2
 		ai_chance = {
-			factor = 50
-			
+			factor = 75
+			modifier = {
+				factor = 2
+				OR = {
+					NOT = { alliance_with = FROM }
+					FROM = {
+						OR = {
+							NOT = {
+								naval_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		add_prestige = 5
 		FROM = {
@@ -494,10 +496,12 @@ country_event = { # Treaty with the Mamluks!
 			create_alliance = MAM
 		}
 		custom_tooltip = VEN_MAM_TRADE_ALLIACE
-		hidden_effect = {
-			add_country_modifier = {
-				name = ven_mam_trade_alliance
+		358 = {
+			add_trade_modifier = {
+				who = ROOT
 				duration = -1
+				power = 20
+				key = ven_mam_trade_alliance
 			}
 		}
 	}
@@ -544,7 +548,12 @@ country_event = { #Breakdown of the Trade Treaty
 	trigger = {
 		tag = VEN
 		VEN = {
-			has_country_modifier = ven_mam_trade_alliance
+			358 = {
+				has_trade_modifier = {
+					who = ROOT
+					key = ven_mam_trade_alliance
+				}
+			}
 			NOT = { alliance_with = MAM }
 		}
 	}
@@ -554,13 +563,18 @@ country_event = { #Breakdown of the Trade Treaty
 		ai_chance = {
 			factor = 100
 		}
-		remove_country_modifier = ven_mam_trade_alliance
+		358 = {
+			remove_trade_modifier = {
+				who = ROOT
+				key = ven_mam_trade_alliance
+			}
+		}
 		remove_opinion = {
 			who = MAM
 			modifier = ven_mamluks_accept
 		}
 		MAM = {
-			remove_country_modifier = ven_mam_trade_alliance
+			remove_country_modifier = ven_mam_spice_trade_ally
 			remove_opinion = {
 				who = ROOT
 				modifier = ven_mamluks_accept
@@ -605,7 +619,7 @@ country_event = {
 						alliance_with = MAM
 						army_strength = {
 							who = MAM
-							value = 1.1
+							value = 1.25
 						}
 					}
 				}
@@ -623,16 +637,11 @@ country_event = {
 			}
 		}
 		
-		if = {
-			limit = {
-				is_subject = yes
-			}
 			overlord = {
 				ROOT = {
 					grant_independence = yes
 				}
 			}
-		}
 		FROM = {
 			vassalize = ROOT
 		}
@@ -711,7 +720,7 @@ country_event = { # Passage in the Red Sea
 	option = {
 		name = ME_Venice_Events.16.OPT1
 		ai_chance = {
-			factor = 99
+			factor = 50
 		}
 		
 		2315 = {
@@ -723,9 +732,46 @@ country_event = { # Passage in the Red Sea
 	option = {
 		name = ME_Venice_Events.16.OPT2
 		ai_chance = {
-			factor = 1
+			factor = 50
 		}
 		
-		break_alliance_with = { who = FROM }
+		FROM = {
+			country_event = {
+				id = ME_Venice_Events.13
+			}
+		}
+	}
+}
+
+country_event = { #Glass in Alexandria
+	id = ME_Venice_Events.17
+	title = ME_Venice_Events.17.T
+	desc = ME_Venice_Events.17.D
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Venice_Events.17.OPT1
+		ai_chance = {
+			factor = 50
+	}
+
+		358 = {
+			change_trade_goods = glass
+		}
+		change_price = {
+			trade_goods = glass
+			key = ven_the_delta_price_modifier
+			value = 0.1
+			duration = -1
+		}
+	}
+
+	option = {
+		name = ME_Venice_Events.17.OPT2
+		ai_chance = {
+			factor = 50
+		}
 	}
 }
