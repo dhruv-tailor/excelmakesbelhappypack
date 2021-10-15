@@ -456,7 +456,13 @@ GRA_ADU_missions_4 = {
 				duration = -1
 			}
 			223 = {
-				add_university_line = yes
+				if = {
+					limit = {
+						owned_by = ROOT
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
 			}
 		}
 	}
@@ -584,16 +590,13 @@ GRA_ADU_missions_5 = {
 			province_id = 225
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { province_has_building_of_group = { group = taxation equal_or_more_advanced_than = cathedral } }
+				NOT = { has_building = cathedral }
 			}
 		}
 		trigger = {
 			225 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
-						province_has_building_of_group = { group = taxation equal_or_more_advanced_than = cathedral }
-				}
+				has_building = cathedral
 			}
 		}
 		effect = {
@@ -640,16 +643,19 @@ GRA_ADU_missions_5 = {
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				NOT = { global_trade = 100 }
-				NOT = { province_has_building_of_group = { group = production all = yes } }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
 				NOT = { development = 40 }
 			}
 		}
 		trigger = {
 			225 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-					province_has_building_of_group = { group = production all = yes }
+				OR = {
+					has_building = workshop
+					has_building = counting_house
 				}
 				global_trade = 100
 				development = 40

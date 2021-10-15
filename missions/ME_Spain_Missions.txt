@@ -524,9 +524,11 @@ SPA_missions_2 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
-						province_has_building_of_group = { group = army all = yes }
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+						has_building = regimental_camp
+						has_building = conscription_center
 					}
 				}
 				amount = 10
@@ -548,9 +550,11 @@ SPA_missions_2 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_ALL
-						province_has_building_of_group = { group = navy all = yes }
+					OR = {
+						has_building = dock
+						has_building = drydock
+						has_building = shipyard
+						has_building = grand_shipyard
 					}
 				}
 				amount = 10
@@ -1634,9 +1638,9 @@ SPA_missions_3 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-						province_has_building_of_group = { group = production all = yes }
+					OR = {
+						has_building = workshop
+						has_building = counting_house
 					}
 				}
 				amount = 10
@@ -1658,9 +1662,10 @@ SPA_missions_3 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-						province_has_building_of_group = { group = trade all = yes }
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
 					}
 				}
 				amount = 10
@@ -1836,7 +1841,12 @@ SPA_missions_4 = {
 		position = 2
 		required_missions = { spain_become_an_empire spain_beginning_of_a_colonial_empire }
 		trigger = {
-			colony = 5
+			calc_true_if = {
+				amount = 5
+				all_subject_country = {
+					is_colonial_nation = yes
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -2266,6 +2276,13 @@ SPA_missions_4 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			north_brabant_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 			100 = {
 				if = {
 					limit = {
@@ -2331,6 +2348,7 @@ SPA_missions_4 = {
 			OR = {
 				area = flanders_area
 				area = holland_area
+				area = north_brabant_area
 				province_id = 100
 				province_id = 4382
 				province_id = 4381
@@ -2349,6 +2367,10 @@ SPA_missions_4 = {
 				type = all
 				owned_by = ROOT
 			}
+			north_brabant_area = {
+				type = all
+				owned_by = ROOT
+			}
 			owns = 100
 			owns = 4382
 			owns = 4381
@@ -2364,6 +2386,7 @@ SPA_missions_4 = {
 					OR = {
 						area = flanders_area
 						area = holland_area
+						area = north_brabant_area
 						province_id = 100
 						province_id = 4382
 						province_id = 4381
@@ -2530,14 +2553,9 @@ SPA_missions_4 = {
 		required_missions = { }
 		position = 17
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-						province_has_building_of_group = { group = taxation all = yes }
-					}
-				}
-				amount = 10
+			OR = {
+				temple = 10
+				cathedral = 10
 			}
 		}
 		effect = {
@@ -2554,15 +2572,7 @@ SPA_missions_4 = {
 		position = 18
 		required_missions = { spain_build_churches }
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_EOMAT_cathedral
-						province_has_building_of_group = { group = taxation equal_or_more_advanced_than = cathedral }
-					}
-				}
-				amount = 10
-			}
+			cathedral = 10
 		}
 		effect = {
 			add_years_of_income = 2
@@ -2824,14 +2834,10 @@ SPA_missions_5 = {
 			colonial_region = colonial_peru
 			OR = {
 				trade_goods = gold
-				trade_goods = silver
 				AND = {
 					colonial_peru = {
 						type = all
-						NOT = {
-							trade_goods = gold
-							trade_goods = silver
-						}
+						NOT = { trade_goods = gold }
 					}
 				}
 			}
@@ -2842,19 +2848,13 @@ SPA_missions_5 = {
 			if = {
 				limit = {
 					colonial_peru = {
-						OR = {
-							trade_goods = gold
-							trade_goods = silver
-						}
+						trade_goods = gold
 					}
 				}
 				colonial_peru = {
 					type = all
 					OR = {
-						NOT = {
-							trade_goods = gold
-							trade_goods = silver
-						}
+						NOT = { trade_goods = gold }
 						country_or_non_sovereign_subject_holds = ROOT
 					}
 				}

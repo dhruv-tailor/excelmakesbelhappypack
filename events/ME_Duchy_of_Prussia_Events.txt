@@ -1,0 +1,342 @@
+namespace = ME_Ducal_Prussia_Events
+
+#This file contains events relating to the Duchy of Prussia and Curonia, polish vassals
+# The Duchy of Prussia
+country_event = {
+	id = ME_Ducal_Prussia_Events.1
+	title = ME_Ducal_Prussia_Events.1.t
+	desc = ME_Ducal_Prussia_Events.1.d
+	picture = COURT_eventPicture
+
+	fire_only_once = yes
+	
+	is_triggered_only = yes #Triggered by a Polish mission
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.1.a
+		
+		ai_chance = { factor = 100 }
+		
+		east_prussia_area = {
+			limit = {
+				NOT = { province_id = 42 }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			remove_core = owner
+			cede_province = PRU
+			add_core = PRU
+		}
+		DNZ = {
+			every_owned_province = {
+				if = {
+					limit = {
+						is_core = PREV
+					}
+					remove_core = owner
+					add_core = ROOT
+				}
+				cede_province = ROOT
+			}
+		}
+		create_subject = {
+			subject = PRU
+			subject_type = march
+		}
+		custom_tooltip = PRU_MARCH_GIVES_FOLLOWING_BONUSES
+		add_yearly_manpower = 1.5
+		set_country_flag = pru_march_gives_bonuses
+		PRU = {
+			set_country_flag = PRU_ducal
+			set_country_flag = has_selected_missions_PRU
+			swap_non_generic_missions = yes
+			override_country_name = Ducal_PRU
+		}	
+		
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			custom_tooltip = PRU_complete_pru_missions
+		}
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.1.b
+		
+		ai_chance = { factor = 0 }
+		
+
+	}
+}
+
+# The Duchy of Curonia
+country_event = {
+	id = ME_Ducal_Prussia_Events.2
+	title = ME_Ducal_Prussia_Events.2.t
+	desc = ME_Ducal_Prussia_Events.2.d
+	picture = COURT_eventPicture
+
+	fire_only_once = yes
+	
+	is_triggered_only = yes #Triggered by a Polish mission
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.2.a #Yes
+		
+		ai_chance = { factor = 1 }
+		
+		39 = {
+			if = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						owner = { ai = yes }
+						owned_by = ROOT
+					}
+				}
+				cede_province = KUR
+				add_core = KUR
+				hidden_effect = {
+					remove_core = ROOT
+				}
+			}
+		}
+		1935 = {
+			if = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						owner = { ai = yes }
+						owned_by = ROOT
+					}
+				}
+				cede_province = KUR
+				add_core = KUR
+				hidden_effect = {
+					remove_core = ROOT
+				}
+			}
+		}
+		
+		custom_tooltip = KUR_MARCH_GIVES_FOLLOWING_BONUSES
+		add_years_of_income = 1.5
+		set_country_flag = kur_march_gives_bonuses
+		
+		create_subject = {
+			subject = KUR
+			subject_type = march
+		}
+		KUR = {
+			add_idea_group = exploration_ideas
+			set_country_flag = KUR_ducal
+			set_country_flag = has_selected_missions_KUR
+			swap_non_generic_missions = yes
+			override_country_name = Ducal_KUR
+		}
+		
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			custom_tooltip = KUR_complete_kur_missions
+		}
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.2.b
+		
+		ai_chance = { factor = 0 }
+		
+
+	}
+}
+
+country_event = {
+	id = ME_Ducal_Prussia_Events.3
+	title = ME_Ducal_Prussia_Events.3.t
+	desc = ME_Ducal_Prussia_Events.3.d
+	picture = COURT_eventPicture
+	
+	is_triggered_only = yes #Triggered by a Curonian mission
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.3.a #Yes
+		
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = { treasury = 200 }
+				NOT = { has_country_flag = Ducal_KUR_chance }
+			}
+		}
+		
+		custom_tooltip = KUR_offer_100_ducats #actually 200
+		tooltip = {
+			1114 = { cede_province = ROOT }
+		}
+		1114 = {
+			owner = {
+				country_event = { id = ME_Ducal_Prussia_Events.5 }
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.3.b #Ask the Poles
+		
+		trigger = {
+			NOT = { has_country_flag = Ducal_KUR_chance }
+		}
+		ai_chance = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				treasury = 200
+			}
+		}
+		
+		custom_tooltip = KUR_we_will_ask_for_money
+		overlord = {
+			country_event = { id = ME_Ducal_Prussia_Events.4 }
+		}
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.3.c #Nah, Thanks
+		
+		ai_chance = { factor = 0 }
+		
+		trigger = {
+			NOT = { has_country_flag = Ducal_KUR_chance }
+		}
+	}
+	after = { clr_country_flag = Ducal_KUR_chance }
+}
+
+country_event = {
+	id = ME_Ducal_Prussia_Events.4
+	title = ME_Ducal_Prussia_Events.4.t
+	desc = ME_Ducal_Prussia_Events.4.d
+	picture = COURT_eventPicture
+	
+	is_triggered_only = yes #Triggered by a Curonian event
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.4.a #Yes
+		
+		ai_chance = { factor = 1 }
+		
+		FROM = {
+			add_treasury = 200
+			set_country_flag = Ducal_KUR_chance
+		}
+		add_treasury = -200
+		
+		FROM = {
+			country_event = { id = ME_Ducal_Prussia_Events.3 }
+		}
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.4.b #Nah
+		
+		ai_chance = { factor = 0 }
+
+		add_prestige = -5
+	}
+}
+
+country_event = {
+	id = ME_Ducal_Prussia_Events.5
+	title = ME_Ducal_Prussia_Events.5.t
+	desc = ME_Ducal_Prussia_Events.5.d
+	picture = COURT_eventPicture
+	
+	is_triggered_only = yes #Triggered by a Curonian event
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.5.a #Yes
+		
+		ai_chance = { factor = 1 }
+		FROM = {
+			add_treasury = -200
+		}
+		add_treasury = 200
+		1114 = { cede_province = FROM }
+	}
+	
+	option = {
+		name = ME_Ducal_Prussia_Events.5.c #Nah, Thanks
+		
+		ai_chance = { factor = 0 }
+		
+		add_prestige_or_monarch_power = { amount = 10 }
+	}
+}
+
+# country_event = {
+	# id = ME_Ducal_Prussia_Events.6
+	# title = ME_Ducal_Prussia_Events.6.t
+	# desc = ME_Ducal_Prussia_Events.6.d
+	# picture = COURT_eventPicture
+	
+	# mean_time_to_happen = {
+		# months = 120
+	# }
+	
+	# trigger = {
+		# is_religion_enabled = protestant
+		# PRU = {
+			# is_subject_of = ROOT
+			# has_country_flag = PRU_ducal
+			# ai = no
+		# }
+		# primary_culture = polish
+		# religion = catholic
+	# }
+	# option = {
+		# name = ME_Ducal_Prussia_Events.6.a #Yes
+		
+		# ai_chance = { factor = 1 }
+		
+		# PRU = {
+			# if = {
+				# limit = {
+					# religion = catholic
+				# }
+				# change_religion = protestant
+			# }
+		# }
+		
+		# add_country_modifier = {
+			# name = Ducal_PRU_peaceful
+			# duration = 10950
+		# }
+	# }
+	
+	# option = {
+		# name = ME_Ducal_Prussia_Events.6.c #Nah, Thanks
+		
+		# ai_chance = { factor = 0 }
+		
+		# PRU = {
+			# if = {
+				# limit = {
+					# religion = protestant
+				# }
+				# change_religion = catholic
+			# }
+			# add_liberty_desire = 25
+		# }
+		
+		# add_country_modifier = {
+			# name = Ducal_PRU_inquisitive
+			# duration = 5475
+		# }
+		
+		
+	# }
+# }

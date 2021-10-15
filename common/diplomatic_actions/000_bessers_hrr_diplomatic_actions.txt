@@ -1,0 +1,117 @@
+grant_electorate = {
+	condition = {
+		tooltip = GOLDEN_BULL_TO_MANY_ECCLESIASTICAL_ELECTORS_8_ELECTORS
+		potential = {
+			has_global_flag = hre_golden_bull_enacted
+			NOT = { has_global_flag = hre_golden_bull_removed }
+			num_of_max_electors = { value = 8 }
+			FROM = {
+				is_an_ecclesiastical_country = yes
+			}
+		}
+		allow = {
+			NOT = {
+				calc_true_if = {
+					all_elector = {
+						is_an_ecclesiastical_country = yes
+					}
+					amount = 4
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = GOLDEN_BULL_TO_MANY_ECCLESIASTICAL_ELECTORS
+		potential = {
+			has_global_flag = hre_golden_bull_enacted
+			NOT = { has_global_flag = hre_golden_bull_removed }
+			NOT = { num_of_max_electors = { value = 8 } }
+			FROM = {
+				is_an_ecclesiastical_country = yes
+			}
+		}
+		allow = {
+			NOT = {
+				calc_true_if = {
+					all_elector = {
+						is_an_ecclesiastical_country = yes
+					}
+					amount = 3
+				}
+			}
+		}
+	}
+	condition = {
+		tooltip = GOLDEN_BULL_TO_MANY_SECULAR_ELECTORS
+		potential = {
+			has_global_flag = hre_golden_bull_enacted
+			NOT = { has_global_flag = hre_golden_bull_removed }
+			FROM = {
+				is_a_secular_country = yes
+			}
+		}
+		allow = {
+			NOT = {
+				calc_true_if = {
+					all_elector = {
+						is_a_secular_country = yes
+					}
+					amount = 4
+				}
+			}
+		}
+	}
+}
+
+requestpeace = {
+	condition = {
+		tooltip = CANNOT_SIGN_SEPERATE_PEACE_IN_HRE_ITALIAN_WAR
+		potential = {
+			is_in_war = {
+				participants = ROOT
+				participants = FROM
+				casus_belli = cb_hre_italian_war
+			}
+			NOT = {
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = FROM
+					casus_belli = cb_hre_italian_war
+				}
+			}
+			NOT = {
+				is_in_war = {
+					defender_leader = ROOT
+					attacker_leader = FROM
+					casus_belli = cb_hre_italian_war
+				}
+			}
+		}
+		allow = {
+			always = no
+		}
+	}
+}
+
+demand_unlawful_territory_action = {
+	condition = {
+		tooltip = CANNOT_DEMAND_UNLAWFUL_TERRITORY_ON_TARGET_OF_CALLED_REICHSTAG
+		potential = {
+			always = yes
+		}
+		allow = {
+			FROM = {
+				OR = {
+					NOT = { has_country_flag = was_target_of_called_reichstag }
+					had_country_flag = { flag = was_target_of_called_reichstag days = 365 }
+				}
+			}
+		}
+	}
+	effect = {
+		FROM = {
+			clr_country_flag = was_target_of_demand_unlawful_territory_action
+			set_country_flag = was_target_of_demand_unlawful_territory_action
+		}
+	}
+}

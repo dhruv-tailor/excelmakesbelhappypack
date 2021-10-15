@@ -4,92 +4,85 @@ ANS_missions_1 = {
 	ai = yes
 	potential = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = ANS
+		OR = {
+			tag = ANS
+			AND = {
+				was_tag = ANS
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
-	
-	ans_hohenzollern = {
-		icon = mission_monarch_in_throne_room
-		trigger = {
-			prestige = BRA
-			prestige = 20
-			BRA = {
-				has_opinion = {
-					value = 100
-					who = ROOT
-				}
-			}
-			legitimacy = 100
-		}
-		effect = {
-			custom_tooltip = ME_ANS_hohenzollern
-		}
-	}
-	
-	ans_become_elector = {
-		icon = mission_alliances
-		required_missions = { ans_hohenzollern }
-		position = 3
-		trigger = {
-			prestige = 30
-			BRA = {
-				junior_union_with = ROOT
-				NOT = { liberty_desire = 50 }
-			}
+
+	ANS_a_magraves_ambition = {
+		icon = reclaim_the_ducal_lands
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 71
 			OR = {
-				is_emperor = yes
-				emperor = {
-					has_opinion = {
-						value = 100
-						who = ROOT
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 4 }
+			}
+		}
+		trigger = {
+			OR = {
+				army_size_percentage = 0.9
+				71 = {
+					owned_by = ROOT
+					base_manpower = 4
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ansbach_Events.1 }
+		}
+	}
+	
+	ANS_duke_of_franconia = {
+		icon = sway_cologne
+		required_missions = { ANS_a_magraves_ambition }
+		position = 3
+		provinces_to_highlight = {
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ANS_most_frc_dev
+				NOT = {
+					any_country = {
+						primary_culture = franconian
+						total_development = ROOT
 					}
 				}
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					is_elector = no
-					BRA = {
-						is_elector = yes
-					}
-				}
-				elector = yes
-				BRA = {
-					elector = no
-				}
+			add_country_modifier = {
+				name = ANS_to_unify_franconia
+				duration = 9125
 			}
-			else = {
-				add_prestige = 10
+			67 = {
+				add_core = ROOT
 			}
-			add_adm_power = 50
-			add_legitimacy_equivalent = { value = 5 }
 		}
 	}
 	
-	ans_kingdom_of_ansbach = {
-		icon = mission_conquer_50_development
-		required_missions = { ans_become_elector }
+	ANS_free_cities = {
+		icon = imperial_capitals
+		required_missions = { ANS_duke_of_franconia }
 		position = 5
 		provinces_to_highlight = {
-			area = mittelmark_area
-			NOT = { owned_by = ROOT }
+			province_id = 67
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			is_elector = yes
-			legitimacy_equivalent = 100
-			total_development = 100
-			mittelmark_area = {
-				type = all
-				owned_by = ROOT
+			67 = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			NOT = { exists = BRA }
 		}
 		effect = {
-			add_accepted_culture = prussian
-			add_prestige = 50
 			add_country_modifier = {
-				name = ANS_prussian_traditions
+				name = ANS_burgraves_of_nuremberg
 				duration = -1
 			}
 		}
@@ -102,28 +95,64 @@ ANS_missions_5 = {
 	ai = yes
 	potential = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = ANS
+		OR = {
+			tag = ANS
+			AND = {
+				was_tag = ANS
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
 	
-	ans_margraves_palace = {
-		icon = mission_monarch_in_throne_room
+	ANS_finish_the_church = {
+		icon = new_st_peters_basilica
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
 			province_id = 71
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
-			years_of_income = 2.0
-			treasury = 100
-			owns = 71
 			71 = {
-				renaissance = 100
+				owned_by = ROOT
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
-			add_years_of_income = -2
+			71 = {
+				add_or_upgrade_tax_building = yes
+			}
+			add_prestige_or_monarch_power = { amount = 10 }
+		}
+	}
+	
+	ANS_margraves_palace = {
+		icon = take_the_bishoprics
+		required_missions = { ANS_finish_the_church }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 71
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_courthouse_building_trigger = yes }
+				NOT = { renaissance = 100 }
+				NOT = { num_of_times_improved = 5 }
+			}
+		}
+		trigger = {
+			owns = 71
+			71 = {
+				num_of_times_improved = 5
+				has_courthouse_building_trigger = yes
+				renaissance = 100
+				owned_by = ROOT
+			}
+		}
+		effect = {
 			71 = {
 				add_province_modifier = {
 					name = ANS_Palace
@@ -133,43 +162,9 @@ ANS_missions_5 = {
 		}
 	}
 	
-	ans_duke_of_Franconia = {
-		icon = mission_have_two_subjects
-		required_missions = { ans_margraves_palace }
-		position = 3
-		provinces_to_highlight = {
-			area = franconia_area
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			franconia_area = {
-				type = all
-				owned_by = ROOT
-			}
-			is_elector = yes
-			legitimacy_equivalent = 100
-			prestige = 50
-			OR = {
-				is_emperor = yes
-				emperor = {
-					has_opinion = {
-						value = 100
-						who = ROOT
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ANS_duke_of_Franconia
-				duration = -1
-			}
-		}
-	}
-	
-	ans_Ansbach_porcelain = {
-		icon = mission_have_manufactories
-		required_missions = { ans_duke_of_Franconia }
+	ANS_Ansbach_porcelain = {
+		icon = porcelain_from_meissen
+		required_missions = { ANS_margraves_palace }
 		position = 5
 		provinces_to_highlight = {
 			province_id = 61

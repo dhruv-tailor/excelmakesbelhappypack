@@ -1,0 +1,1171 @@
+TEU_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
+	}
+	has_country_shield = yes
+
+	TEU_avenge_tannenberg = {
+		icon = mission_teutonic_knights
+		required_missions = { TEU_fc }
+		position = 2
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = POL
+				}
+				owned_by = POL
+				NOT = {
+					has_won_war_against = {
+						who = POL
+					}
+					prestige = POL
+				}
+			}
+			else_if = {
+				limit = {
+					exists = PLC
+				}
+				owned_by = PLC
+				NOT = {
+					has_won_war_against = {
+						who = PLC
+					}
+					prestige = PLC
+				}
+			}
+			else = {
+				province_id = 4524
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = PLC
+				}
+				has_won_war_against = {
+					who = PLC
+				}
+				prestige = PLC
+			}
+			else_if = {
+				limit = {
+					exists = POL
+				}
+				has_won_war_against = {
+					who = POL
+				}
+				prestige = POL
+			}
+			else = {
+				4524 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+
+		}
+		effect = {
+			country_event = { id = ME_Teutonic_Order_Events.1 } #Poland bad Teutonic Order Good
+			tooltip = {
+				add_country_modifier = {
+					name = TEU_grunwald
+					duration = 7300
+				}
+				create_general = { tradition = 50 }
+			}
+			mazovia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wielkopolska_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hinter_pommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	TEU_borderlands = {
+		icon = develop_our_capital
+		required_missions = { TEU_avenge_tannenberg }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = wielkopolska_area
+				area = kuyavia_area
+				area = mazovia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = wielkopolska_area
+					area = kuyavia_area
+					area = mazovia_area
+				}
+				value = 6
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_army_tradition_or_mil_power = { amount = 15 }
+		}
+	}
+
+	TEU_curtail_the_burghers = {
+		icon = appease_the_estates
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = TEU_curtailed_prussian_conf
+					has_country_flag = pru_confederation_curtailed
+				}
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = TEU_prussian_conf_fired
+						has_country_flag = pru_confederation_happened
+					}
+					is_at_war = no
+				}
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+		}
+	}
+
+	TEU_restore_control = {
+		icon = reform_the_state
+		required_missions = { TEU_curtail_the_burghers }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				unrest = 0
+				local_autonomy_above_min = 10
+			}
+		}
+		trigger = {
+			stability = 3
+			all_owned_province = {
+				NOT = { unrest = 0 }
+				NOT = { local_autonomy_above_min = 10 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_control
+				duration = 10950
+			}
+			custom_tooltip = TEU_get_25_monarch_power
+			hidden_effect = {
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
+					}
+					add_adm_power = 25
+					add_dip_power = 25
+					add_mil_power = 25
+				}
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+					}
+					add_adm_power = 25
+					add_dip_power = 25
+					add_mil_power = 25
+				}
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+					}
+					add_adm_power = 25
+					add_dip_power = 25
+					add_mil_power = 25
+				}
+			}
+		}
+	}
+}
+
+TEU_Missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
+	}
+	has_country_shield = yes
+
+	TEU_fc = {
+		icon = protect_against_the_turks
+		required_missions = {  }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				army_size_percentage = 0.8
+				num_of_mercenaries = 1
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			samogitia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			4524 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	TEU_samogitia = {
+		icon = fortress_switzerland
+		required_missions = { TEU_solidify_relations TEU_fc }
+		position = 2
+		provinces_to_highlight = {
+			area = samogitia_area
+			NOT = {
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					owner = {
+						tag = LIV
+						alliance_with = ROOT
+					}
+				}
+			}
+		}
+		trigger = {
+			samogitia_area = {
+				type = all
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					owner = {
+						tag = LIV
+						alliance_with = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_samogitia
+				duration = 9125
+			}
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 25
+			}
+			reverse_add_opinion = {
+				who = LIV
+				modifier = teu_reconquered_samogitia
+			}
+		}
+	}
+
+	TEU_pomerania = {
+		icon = purely_for_commerce
+		required_missions = { TEU_avenge_tannenberg }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = hinter_pommern_area
+				area = vorpommern_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = vorpommern_area
+					area = hinter_pommern_area
+				}
+				value = 4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_revenge
+				duration = 9125
+			}
+			mittelmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			neumark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	TEU_brandenburg = {
+		icon = electorate_of_brandenburg
+		required_missions = { TEU_pomerania }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = mittelmark_area
+				area = neumark_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = mittelmark_area
+					area = neumark_area
+				}
+				value = 5
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_country_modifier = {
+				name = TEU_brandenburg_acquired
+				duration = 9125
+			}
+		}
+	}
+
+	TEU_end_confederations = {
+		icon = friends_in_high_places
+		required_missions = { TEU_curtail_the_burghers }
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				crown_land_share = 50
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 65
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 30
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_stability_for_days
+				duration = 10950
+			}
+			add_dip_power = 100
+		}
+	}
+}
+
+TEU_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
+	}
+	has_country_shield = yes
+
+	TEU_solidify_relations = {
+		icon = expand_the_confederacy
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owner = {
+				tag = LIV
+			}
+			NOT = {
+				ROOT = {
+					reverse_has_opinion = {
+						who = LIV
+						value = 150
+					}
+					alliance_with = LIV
+				}
+			}
+		}
+		trigger = {
+			OR  ={
+				AND = {
+					reverse_has_opinion = {
+						who = LIV
+						value = 150
+					}
+					alliance_with = LIV
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						area = curonia_area
+						area = livonia_area
+						is_core = LIV
+					}
+					value = 3
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					reverse_has_opinion = {
+						who = LIV
+						value = 150
+					}
+					alliance_with = LIV
+				}
+				custom_tooltip = TEU_reward_if_ally_yes
+				hidden_effect = {
+					add_trust = {
+						who = LIV
+						value = 10
+						mutual = yes
+					}
+					add_country_modifier = {
+						name = TEU_diplomacy
+						duration = 9125
+					}
+				}
+			}
+			else = {
+				custom_tooltip = TEU_reward_if_ally
+			}
+
+			tooltip = {
+				add_trust = {
+					who = LIV
+					value = 10
+					mutual = yes
+				}
+				add_country_modifier = {
+					name = TEU_diplomacy
+					duration = 9125
+				}
+			}
+
+			if = {
+				limit = {
+					NOT = {
+						reverse_has_opinion = {
+							who = LIV
+							value = 150
+						}
+						alliance_with = LIV
+					}
+					num_of_owned_provinces_with = {
+						OR = {
+							area = curonia_area
+							area = livonia_area
+							is_core = LIV
+						}
+						value = 3
+					}
+				}
+				custom_tooltip = TEU_reward_if_war_yes
+				hidden_effect = {
+					add_country_modifier = {
+						name = TEU_conquest_of_livonia
+						duration = 7300
+					}
+					curonia_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					livonia_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					estonia_ingria_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			else = {
+				custom_tooltip = TEU_reward_if_war
+			}
+
+			tooltip = {
+				curonia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				livonia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				estonia_ingria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				add_country_modifier = {
+					name = TEU_conquest_of_livonia
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	TEU_appeal = {
+		icon = lead_the_empire
+		required_missions = { TEU_solidify_relations }
+		position = 3
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				owned_by = emperor
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						culture_group = germanic
+					}
+				}
+				culture_group = germanic
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				emperor = {
+					OR = {
+						has_opinion = {
+							who = root
+							value = 100
+						}
+						has_opinion_modifier = {
+							who = root
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = root
+							modifier = scornfully_insulted
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						culture_group = germanic
+					}
+				}
+				any_country = {
+					culture_group = germanic
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			else = {
+				prestige = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_holy_roman_mercenaries
+				duration = 10950
+			}
+			add_country_modifier = {
+				name = "mercenaries_to_the_standard"
+				duration = -1
+				hidden = yes
+			}
+			custom_tooltip = TEU_more_mercs_available
+		}
+	}
+
+	TEU_fortress_of_marienburg = {
+		icon = ansbach_succession
+		required_missions = { TEU_teutonic_cities }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 1841
+			OR = {
+				NOT = { base_manpower = 5 }
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			1841 = {
+				owned_by = ROOT
+				base_manpower = 5
+			}
+			OR = {
+				fortification_expert = 1
+				has_mil_advisor_2 = yes
+			}
+		}
+		effect = {
+			1841 = {
+				add_province_modifier = {
+					name = TEU_marienburg
+					duration = -1
+				}
+			}
+		}
+	}
+
+	TEU_prussian_ascendance = {
+		icon = an_army_with_a_state
+		required_missions = { TEU_brandenburg }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 50
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { is_state = yes }
+				local_autonomy_above_min = 10
+				nationalism = 1
+			}
+		}
+		trigger = {
+			OR = {
+				tag = PRU
+				50 = {
+					owned_by = ROOT
+					is_core = ROOT
+					is_state = yes
+					NOT = { local_autonomy_above_min = 10 }
+					NOT = { nationalism = 1 }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { tag = PRU }
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = BRA_prussian_ambition
+						duration = -1
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					add_country_modifier = {
+						name = BRA_prussian_ambition_2
+						duration = 5475
+					}
+				}
+			}
+			custom_tooltip = BRA_Prussian_modifier
+			complete_prussian_ascendance_missions = yes
+		}
+	}
+
+}
+
+TEU_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
+	}
+	has_country_shield = yes
+
+	TEU_merchant_navy = {
+		icon = unite_the_league
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				num_of_light_ship = 10
+				navy_size_percentage = 0.95
+			}
+		}
+		effect = {
+			25 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			41 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = TEU_navy
+				}
+			}
+			#country_event = { id = ME_Teutonic_Order_Events.4 } this is gonna be automatic for denmark
+		}
+	}
+
+	TEU_restore_control_in_gotland = {
+		icon = return_visby_to_the_league
+		required_missions = { TEU_merchant_navy }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 25
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			25 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			25 = {
+				add_province_modifier = {
+					name = TEU_naval_base
+					duration = -1
+				}
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			#Victual brothers are gone but still
+		}
+	}
+
+	TEU_teutonic_cities = {
+		icon = connect_further_austria
+		required_missions = { }
+		position = 3
+		provinces_to_highlight = {
+			culture = prussian
+			owned_by = ROOT
+		}
+		trigger = {
+			development_in_provinces = {
+				culture = prussian
+				value = 85
+			}
+		}
+		effect = {
+			add_adm_power = 50
+
+			add_country_modifier = {
+				name = TEU_development_of_kulm_law
+				duration = -1
+			}
+		}
+	}
+
+	TEU_grossschaffer = {
+		icon = adjust_the_general_means
+		required_missions = { TEU_teutonic_cities }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1841
+				province_id = 41
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			share_of_starting_income = 2.5
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1841 = { owned_by = ROOT }
+			41 = { owned_by = ROOT }
+		}
+		effect = {
+			1841 = {
+				add_province_modifier = {
+					name = TEU_seat_of_schaeffer
+					duration = -1
+				}
+			}
+			41 = {
+				add_province_modifier = {
+					name = TEU_seat_of_schaeffer
+					duration = -1
+				}
+			}
+			define_advisor = {
+				type = trader
+				skill = 2
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+		}
+	}
+
+	TEU_reformation = {
+		icon = victor_for_the_true_faith
+		required_missions = { TEU_religious_Foundations }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = hussite
+				religion = anglican
+			}
+		}
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = hussite
+				religion = anglican
+				custom_trigger_tooltip = {
+					tooltip = obj_force_converted_tooltip
+					has_country_flag = force_converted
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { religion = catholic }
+				}
+				custom_tooltip = HES_reward_if_we_are_not_catholic_yes
+				hidden_effect = {
+					add_church_power = 50
+					add_fervor = 50
+					add_country_modifier = {
+						name = TEU_books_of_prussia
+						duration = 9125
+					}
+				}
+			}
+			else = {
+				custom_tooltip = HES_reward_if_we_are_not_catholic
+			}
+			tooltip = {
+				add_church_power = 50
+				add_fervor = 50
+				add_country_modifier = {
+					name = TEU_books_of_prussia
+					duration = 9125
+				}
+			}
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_tooltip = HES_reward_if_we_are_catholic_yes
+				hidden_effect = {
+					add_papal_influence = 50
+				#	set_country_flag = TEU_brotherly_order
+				}
+			}
+			else = {
+				custom_tooltip = HES_reward_if_we_are_catholic
+			}
+			tooltip = {
+				add_papal_influence = 50
+				add_country_modifier = {
+					name = TEU_loyal_to_the_pope
+					duration = 9125
+				}
+				#custom_tooltip = TEU_disable_prussia_formation_make_LO_subject
+			}
+		}
+	}
+}
+
+TEU_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
+	}
+	has_country_shield = yes
+
+	TEU_hanseatic_cities = {
+		icon = defend_the_city
+		required_missions = { TEU_merchant_navy }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 43
+				province_id = 41
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+			}
+		}
+		trigger = {
+			43 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+			41 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+			reverse_has_opinion = {
+				who = HSA
+				value = 100
+			}
+		}
+		effect = {
+			43 = {
+				add_or_upgrade_trade_building = yes
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 15
+			}
+		}
+	}
+
+	TEU_reaffirm_amber_monopoly = {
+		icon = kingdom_of_lombardy
+		required_missions = { TEU_teutonic_cities TEU_hanseatic_cities }
+		position = 4
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active  = { mod = trade_goods }
+				}
+				trade_goods = amber
+			}
+			else = {
+				OR = {
+					province_id = 43
+					province_id = 41
+				}
+			}
+		}
+		trigger = {
+			reverse_has_opinion = {
+				who = HSA
+				value = 125
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active  = { mod = trade_goods }
+				}
+				OR = {
+					development_in_provinces = {
+						trade_goods = amber
+						value = 40
+					}
+					custom_trigger_tooltip = {
+						tooltip = TEU_faceting
+						always = no
+					}
+				}
+			}
+			else = {
+				OR = {
+					development_in_provinces = {
+						OR = {
+							province_id = 43
+							province_id = 41
+						}
+						value = 40
+					}
+					custom_trigger_tooltip = {
+						tooltip = TEU_faceting
+						always = no
+					}
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			country_event = { id = ME_Teutonic_Order_Events.2 } #Trade Deal!
+		}
+	}
+
+	TEU_religious_Foundations = {
+		icon = show_piety
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+				NOT = { religion = catholic }
+				NOT = { exists = PAP }
+			}
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = TEU_devotion_tooltip
+					has_global_modifier_value = {
+						which = devotion
+						value = 0.5
+					}
+				}
+				NOT = { government = theocracy }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TEU_pious_power
+				duration = 9125
+			}
+		}
+	}
+
+	TEU_internal_mission = {
+		icon = chivalry_is_not_dead
+		required_missions = { TEU_religious_Foundations }
+		position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_tax_building_trigger = yes }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 10
+			}
+			custom_trigger_tooltip = {
+				tooltip = TEU_ttf_tooltip
+				has_global_modifier_value = {
+					which = tolerance_own
+					value = 6 #this thing works but always shows up as +600.0% Tolerance of true faith
+				}
+			}
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+			add_country_modifier = {
+				name = TEU_piety
+				duration = 5475
+			}
+			custom_tooltip = TEU_every_church
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_tax_building_trigger = yes
+					}
+					add_devastation = -25
+					add_prosperity = 25
+				}
+			}
+		}
+	}
+}
+
+#EVENT ABOUT THE LIVONIAN BISHOPS TOO MUCH INFLUENCE?

@@ -316,16 +316,20 @@ mixed_republic_reform = {
 			which = Plutocrat_Influence
 			value = 1
 		}
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
 	}
 	removed_effect = {
 		change_variable = {
 			which = Plutocrat_Influence
 			value = -1
 		}
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
 	}
 	modifiers = {
 		reform_progress_growth = 0.15
-		stability_cost_modifier = -0.15
+		total_liberalism_modifier = 0.10
 	}
 	ai = {
 		factor = 1
@@ -744,7 +748,7 @@ national_guard_reform_republic = {
 	}
 	modifiers = {
 		land_morale = 0.05
-		recover_army_morale_speed = 0.1
+		army_tradition_decay = 0.01
 	}
 	custom_attributes = {
 		enables_patriotism = yes #+25% Manpower in primary culture provinces
@@ -775,10 +779,11 @@ mercenary_corps_reform_republic = {
 	modifiers = {
 		mercenary_manpower = 0.25
 		reinforce_speed = 0.25
-		merc_maintenance_modifier = -0.25
+		merc_maintenance_modifier = -0.15
 	}
 	custom_attributes = {
-		enables_foreign_worship = yes #10% Religious Unity if you employ mercenaries
+		#enables_foreign_worship = yes #10% Religious Unity if you employ mercenaries
+		enables_foreign_experts = yes #+1% Mercenary Disciple for each ally of a foreign culturegroup you have.
 	}
 	ai = {
 		factor = 1
@@ -802,16 +807,122 @@ professional_army_reform_republic = {
 	}
 	potential = {}
 	modifiers = {
-		discipline = 0.025
-		mercenary_discipline = -0.10
-		land_maintenance_modifier = 0.10
-		drill_decay_modifier = -0.20
+		drill_gain_modifier = 0.25
+		yearly_army_professionalism = 0.001
 	}
 	custom_attributes = {
-		enables_general_guards = yes #+1.25 AP per General
+		#enables_general_guards = yes #+1.25 AP per General
+		enables_elite_regiments = yes #Elite Regiments, +50% Drill gain, -50% reinforcement speed, +10% ICA
 	}
 	ai = {
 		factor = 1
+	}
+}
+
+permanent_marathas_council_reform_republic = {
+	icon = "noble_indian"
+	allow_normal_conversion = yes
+	effect = {
+		change_variable = {
+			which = Oliarch_Influence
+			value = 1
+		}
+	}
+	removed_effect = {
+		change_variable = {
+			which = Oliarch_Influence
+			value = -1
+		}
+	}
+	potential = {
+		has_dlc = "Dharma"
+		has_estate = estate_maratha
+		technology_group = indian
+	}
+	modifiers = {
+		leader_land_shock = 1
+		maratha_influence_modifier = 0.1
+		maratha_loyalty_modifier = 0.05
+		nobles_influence_modifier = -0.1
+		nobles_loyalty_modifier = -0.05
+	}
+	custom_attributes = {
+		maratha_general_interaction = yes
+	}
+	ai = {
+		factor = 3
+		modifier = {
+			factor = 0.1
+			estate_influence = {
+				estate = estate_maratha
+				influence = 90
+			}			
+		}
+	}
+}
+
+governmental_purbias_register_reform_republic = {
+	icon = "rajput_kingdom"
+	effect = {
+		change_variable = {
+			which = Oliarch_Influence
+			value = 1
+		}
+	}
+	removed_effect = {
+		change_variable = {
+			which = Oliarch_Influence
+			value = -1
+		}
+	}
+	potential = {
+		has_dlc = "Dharma"
+		has_estate = estate_rajput
+		technology_group = indian
+	}
+	modifiers = {
+		recover_army_morale_speed = 0.05
+		rajput_influence_modifier = 0.1
+		rajput_loyalty_modifier = 0.05
+		nobles_influence_modifier = -0.1
+		nobles_loyalty_modifier = -0.05
+	}
+	custom_attributes = {
+		better_purbias_interaction = yes
+	}
+	effect = {
+		if = {
+			limit = {
+				has_country_modifier = look_up_purbias
+			}
+			remove_country_modifier = look_up_purbias
+			add_country_modifier = {
+				name = look_up_purbias_upgraded
+				duration = -1
+			}
+		}
+	}
+	removed_effect = {
+		if = {
+			limit = {
+				has_country_modifier = look_up_purbias_upgraded
+			}
+			remove_country_modifier = look_up_purbias_upgraded
+			add_country_modifier = {
+				name = look_up_purbias
+				duration = -1
+			}
+		}
+	}
+	ai = {
+		factor = 3
+		modifier = {
+			factor = 0.1
+			estate_influence = {
+				estate = estate_rajput
+				influence = 90
+			}			
+		}
 	}
 }
 
@@ -841,37 +952,6 @@ volost_colonies_reform = {
 	modifiers = {
 		production_efficiency = 0.20
 		min_autonomy_in_territories = -0.05
-	}
-	ai = {
-		factor = 100
-	}
-}
-
-island_republic_reform = {
-	icon = admiralty_reform
-	allow_normal_conversion = yes
-	potential = {
-		OR = {
-			tag = PIS
-			has_reform = island_republic_reform
-		}
-	}
-	effect = {
-		change_variable = {
-			which = Plutocrat_Influence
-			value = 1
-		}
-	}
-	removed_effect = {
-		change_variable = {
-			which = Plutocrat_Influence
-			value = -1
-		}
-	}
-	modifiers = {
-		navy_tradition = 1
-		global_ship_trade_power = 0.15
-		naval_forcelimit_modifier = 0.15
 	}
 	ai = {
 		factor = 100
@@ -1138,8 +1218,39 @@ hansa_representatives_reform = {
 			value = -1
 		}
 	}
+	# custom_attributes = {
+		# enables_return_to_sender = yes #25% Trade Value in coastal burgher provinces
+	# }#fixdis
+	ai = {
+		factor = 100
+	}
+}
+
+confederate_nations_reform = {
+	icon = peasant_republic
+	allow_normal_conversion = yes
+	potential = {
+		NOT = {
+			has_reform = pirate_republic_reform
+		}
+	}
+	modifiers = {
+		num_accepted_cultures = 2
+	}
+	effect = {
+		change_variable = {
+			which = Populist_Influence
+			value = 1
+		}
+	}
+	removed_effect = {
+		change_variable = {
+			which = Populist_Influence
+			value = -1
+		}
+	}
 	custom_attributes = {
-		 enables_return_to_sender = yes #25% Trade Value in coastal burgher provinces
+		enables_nations_of_the_republic = yes #-10%GC for accepted cultures&+15% tax
 	}
 	ai = {
 		factor = 100
@@ -1147,6 +1258,50 @@ hansa_representatives_reform = {
 }
 
 #T6
+
+supreme_court_reform = {
+	icon = judge
+	allow_normal_conversion = yes
+	potential = {
+		always = yes
+	}
+	effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	removed_effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	modifiers = {
+		country_admin_power = 1
+		max_absolutism = -10
+		total_liberalism_modifier = 0.10
+		advisor_pool = 1
+	}
+	ai = {
+		factor = 1
+	}
+}
+
+cultural_judges_reform = {
+	icon = judge
+	allow_normal_conversion = yes
+	potential = {
+		always = yes
+	}
+	modifiers = {
+		culture_conversion_cost = -0.15
+		#same_culture_advisor_cost = -0.10
+		global_unrest = 1
+	}
+	custom_attributes = {
+		enables_cultural_supremacy = yes #-15% governing cap cost for primary culture provinces
+	}
+	ai = {
+		factor = 1
+	}
+}
 
 confederation_of_states_reform = {
 	icon = confederation_of_states
@@ -1158,10 +1313,19 @@ confederation_of_states_reform = {
 			has_reform = confederation_of_states_reform
 		}
 	}
+	effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	removed_effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
 	modifiers = {
 		diplomatic_upkeep = 1
 		improve_relation_modifier = 0.15
 		max_absolutism = -10
+		total_liberalism_modifier = 0.10
 	}
 	ai = {
 		factor = 100
@@ -1231,6 +1395,14 @@ empowered_sovereign_trade_companies_reform = {
 			value = 3
 		}
 	}
+	effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	removed_effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
 	modifiers = {
 		max_absolutism = -5
 		trade_company_investment_cost = -0.10
@@ -1270,9 +1442,81 @@ empowered_consolidation_of_power_reform = {
 		factor = 1
 	}
 }
-
+empowered_senate_reform = {
+	icon = judge
+	allow_normal_conversion = yes
+	potential = { 
+		check_variable = {
+			which = Populist_Influence			
+			value = 3
+		}
+	}
+	trigger = {
+		check_variable = {
+			which = Populist_Influence			
+			value = 3
+		}
+	}
+	effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	removed_effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	modifiers = {
+		max_absolutism = -10
+		free_dip_policy = 1
+		yearly_corruption = -0.10
+		total_liberalism_modifier = 0.10
+	}
+	ai = {
+		factor = 1
+	}
+}
 
 #T7
+
+national_principle_reform = {
+	icon = soldiers
+	allow_normal_conversion = yes
+	potential = {
+		always = yes
+	}
+	modifiers = {
+		free_mil_policy = 1
+		possible_mil_policy = 1
+	}
+	ai = {
+		factor = 1
+	}
+}
+
+liberal_principle_reform = {
+	icon = free_city
+	allow_normal_conversion = yes
+	potential = {
+		always = yes
+	}
+	effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	removed_effect = {
+		GE_remove_liberalism = yes
+		GE_set_liberalism = yes
+	}
+	modifiers = {
+		total_liberalism_modifier = 0.20
+	}
+	custom_attributes = {
+		enables_capitalism = yes #+25% goods produced and -100% tax income if you have over 75% liberalism
+	}
+	ai = {
+		factor = 1
+	}
+}
 
 tolerant_principle_reform = {
 	icon = dutch_tolerance
@@ -1330,13 +1574,12 @@ empowered_principle_of_heritage_reform = {
 		}
 	}
 	modifiers = {
-		possible_mil_policy = 1
-		free_mil_policy = 1
+		noble_privilege_slots = 0.01
 		nobles_loyalty_modifier = 0.05
 	}
-	# custom_attributes = {
-		# enables_knightly_privileges = yes
-	# }
+	custom_attributes = {
+		enables_veteran_general = yes
+	}
 	ai = {
 		factor = 1
 	}
@@ -1400,6 +1643,21 @@ empowered_principle_of_power_reform = {
 
 #T8
 
+one_man_one_vote_reform = {
+	icon = peasant_republic
+	allow_normal_conversion = yes
+	potential = {
+		always = yes
+	}
+	modifiers = {
+		global_unrest = -1
+		promote_culture_cost = -0.50
+	}
+	ai = {
+		factor = 1
+	}
+}
+
 regents_reform = {
 	icon = regents
 	allow_normal_conversion = yes
@@ -1440,6 +1698,8 @@ peasantry_reform = {
 		factor = 100
 	}
 }
+
+#T9
 
 raadspensionaris_reform = {
 	icon = raadspensionaris

@@ -1,0 +1,247 @@
+namespace = besseres_hrr_incident_golden_bull_events
+
+country_event = {
+	id = besseres_hrr_incident_golden_bull_events.1
+	title = besseres_hrr_incident_golden_bull_events.EVTNAME1
+	desc = besseres_hrr_incident_golden_bull_events.EVTDESC1
+	picture = HRE_eventPicture
+
+	major = yes
+	major_trigger = {
+		is_emperor = no
+		is_part_of_hre = no
+	}
+
+	fire_only_once = yes
+
+	trigger = {
+		has_dlc = "Emperor"
+		NOT = { active_imperial_incident = any }
+		is_emperor = yes
+		NOT = { has_global_flag = hre_golden_bull_incident_active }
+		NOT = { has_global_flag = hre_golden_bull_enacted }
+		has_regency = no
+		is_part_of_hre = yes
+		hre_leagues_enabled = no
+		hre_reform_passed = emperor_reichsreform
+		NOT = { hre_reform_passed = erbkaisertum }
+		NOT = { hre_reform_passed = emperor_erbkaisertum }
+		OR = {
+			current_age = late_middle_ages
+			# 1356
+			current_age = age_of_feudalism
+			current_age = age_of_discovery
+			current_age = age_of_reformation
+		}
+		OR = {
+			AND = {
+				has_dlc = "Art of War"
+				NOT = { had_global_flag = { flag = evangelical_union_happened days = 1825 } }
+			}
+			AND = {
+				NOT = { has_dlc = "Art of War" }
+				NOT = { is_year = 1600 }
+			}
+		}
+		NOT = { has_reform = salic_reform }
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			current_age = age_of_discovery
+		}
+		modifier = {
+			factor = 0.25
+			current_age = age_of_reformation
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_golden_bull_events1.EVTOPT1
+
+		set_global_flag = hre_golden_bull_incident_active
+		set_imperial_incident = besseres_hrr_incident_golden_bull
+	}
+}
+
+country_event = {
+	id = besseres_hrr_incident_golden_bull_events.2
+	title = besseres_hrr_incident_golden_bull_events.EVTNAME2
+	desc = besseres_hrr_incident_golden_bull_events.EVTDESC2
+	picture = HRE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = besseres_hrr_incident_golden_bull_events2.EVTOPT1
+
+		ai_chance = {
+			factor = 0.75
+		}
+
+		set_global_flag = hre_golden_bull_enacted
+		if = {
+			limit = {
+				has_global_flag = hre_golden_bull_incident_active
+			}
+			custom_tooltip = GOLDEN_BULL_NO_ANTI_KING_CB
+			custom_tooltip = ELECTORS_NOW_HAVE_TO_BE_SECULAR_AND_ECCLESIASTICAL
+			custom_tooltip = CURRENT_ELECTORS_COMPOSITION_1
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							is_elector = yes
+							is_an_ecclesiastical_country = yes
+						}
+						any_elector = {
+							is_an_ecclesiastical_country = yes
+						}
+					}
+				}
+				every_province = {
+					limit = {
+						is_capital = yes
+						owner = {
+							is_elector = yes
+							is_an_ecclesiastical_country = yes
+						}
+					}
+					custom_tooltip = THIS_OWNER_ELECTOR_NAME
+				}
+			}
+			else = {
+				custom_tooltip = THIS_NO_ELECTOR_NAME
+			}
+			custom_tooltip = CURRENT_ELECTORS_COMPOSITION_2
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							is_elector = yes
+							is_a_secular_country = yes
+						}
+						any_elector = {
+							is_a_secular_country = yes
+						}
+					}
+				}
+				every_province = {
+					limit = {
+						is_capital = yes
+						owner = {
+							is_elector = yes
+							is_a_secular_country = yes
+						}
+					}
+					custom_tooltip = THIS_OWNER_ELECTOR_NAME
+				}
+			}
+			else = {
+				custom_tooltip = THIS_NO_ELECTOR_NAME
+			}
+			custom_tooltip = CURRENT_ELECTORS_COMPOSITION_3
+			custom_tooltip = " "
+			if = {
+				limit = {
+					allows_female_emperor = yes
+				}
+				set_allow_female_emperor = no
+				set_global_flag = hre_golden_bull_disallowed_female_emperor
+			}
+			else = {
+				custom_tooltip = HRE_GOLDEN_BULL_ONLY_MALE_EMPERORS
+			}
+			add_ruler_modifier = {
+				name = enacted_golden_bull
+				duration = -1
+			}
+			custom_tooltip = EMPEROR_GAINS_THESE_BONUSES_BECAUSE_OF_THE_GOLDEN_BULL
+			custom_tooltip = ELECTORS_GAIN_THESE_BONUSES_BECAUSE_OF_THE_GOLDEN_BULL
+			custom_tooltip = MEMBERS_GAIN_THESE_BONUSES_BECAUSE_OF_THE_GOLDEN_BULL
+			custom_tooltip = ELECTORS_OPINION_CHANGE_BECAUSE_OF_GOLDEN_BULL
+			custom_tooltip = MEMBERS_OPINION_CHANGE_BECAUSE_OF_GOLDEN_BULL
+			hidden_effect = {
+				every_elector = {
+					limit = {
+						NOT = { tag = ROOT }
+					}
+					if = {
+						limit = {
+							has_reform = salic_reform
+						}
+						add_government_reform = feudalism_reform
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = enacted_golden_bull_opinion
+					}
+					ROOT = { add_truce_with = PREV }
+				}
+				every_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						is_elector = no
+						is_part_of_hre = yes
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = enacted_golden_bull_member_opinion
+					}
+				}
+				country_event = { id = besseres_hrr_events.10 }
+			}
+		}
+		else = {
+			custom_tooltip = GOLDEN_BULL_ENACTED_TT
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_golden_bull_events2.EVTOPT2
+
+		ai_chance = {
+			factor = 0.25
+			modifier = {
+				factor = 100
+				# 1356
+				NOT = { current_age = age_of_feudalism }
+				NOT = { current_age = late_middle_ages }
+				NOT = { current_age = high_middle_ages }
+				NOT = { current_age = age_of_discovery }
+			}
+			modifier = {
+				factor = 100
+				OR = {
+					NOT = {
+						calc_true_if = {
+							all_country = {
+								is_part_of_hre = yes
+								is_a_secular_country = yes
+							}
+							amount = 4
+						}
+					}
+					NOT = {
+						calc_true_if = {
+							all_country = {
+								is_part_of_hre = yes
+								is_an_ecclesiastical_country = yes
+							}
+							amount = 3
+						}
+					}
+				}
+			}
+		}
+
+		add_legitimacy = -20
+		add_prestige = -10
+	}
+
+	after = {
+		clr_global_flag = hre_golden_bull_incident_active
+	}
+}

@@ -1403,8 +1403,8 @@ emp_burgundy_4 = {
 				calc_true_if = {
 					desc = emp_bur_influence_the_princes_trigger_tooltip3
 					all_country = {
-						OR = {
-							capital_scope = {
+						capital_scope = {
+							OR = {
 								region = north_german_region
 								region = south_german_region
 							}
@@ -1771,21 +1771,43 @@ emp_burgundy_5 = {
 				tooltip = burgundy_has_secured_succession_tt
 				OR = {
 					has_country_flag = bur_crisis_has_happened
-					AND = {
-						is_year = 1500
-						NOT = { has_country_modifier = burgundian_succession_crisis }
-						NOT = { has_country_flag = burgundian_succession_start }
-					}
+					is_year = 1500
 				}
 			}
 			is_subject = no
 			is_at_war = no
+			NOT = { active_imperial_incident = any }
 		}
 		effect = {
 			if = {
 				limit = {
 					is_emperor = no
 					is_part_of_hre = no
+					tag = BUR
+					is_subject = no
+					is_at_war = no
+					hre_size = 1
+					is_subject = no
+					has_female_heir = no
+					NOT = {
+						has_country_flag = burgundian_succession_start
+					}
+					OR = {
+						had_country_flag = {
+							flag = bur_crisis_has_happened
+							days = 1825
+						}
+						had_country_flag = {
+							flag = charles_died
+							days = 1825
+						}
+						AND = {
+							NOT = {
+								has_ruler = "Philippe III"
+							}
+							has_heir = yes
+						}
+					}
 				}
 				country_event = {
 					id = incidents_bur_join_empire.1
@@ -1794,6 +1816,7 @@ emp_burgundy_5 = {
 			else_if = {
 				limit = {
 					is_part_of_hre = no
+					hre_size = 1
 				}
 				set_in_empire = yes	
 				every_owned_province = {
@@ -1823,14 +1846,14 @@ emp_burgundy_5 = {
 		icon = join_the_empire
 		required_missions = { emp_bur_secure_succession }
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = burgundy_has_resolved_imperial_issue_tt
-				is_subject = no
-				OR = {
-					is_part_of_hre = yes
-					is_emperor = yes
+			is_subject = no
+			OR = {
+				is_part_of_hre = yes
+				is_emperor = yes
+				NOT = { hre_size = 1 }
+				custom_trigger_tooltip = {
+					tooltip = burgundy_has_resolved_imperial_issue_tt
 					has_country_flag = burgundy_refused_empire
-					emperor = { exists = no }
 				}
 			}
 		}

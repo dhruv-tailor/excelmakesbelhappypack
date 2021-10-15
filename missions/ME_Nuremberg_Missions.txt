@@ -3,61 +3,34 @@ NUM_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = NUM
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = NUM
+			AND = {
+				was_tag = NUM
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
 	
-	num_city_above_all = {
-		icon = mission_eastern_european_city
+	NUM_city_above_all = {
+		icon = ansbach_succession
 		provinces_to_highlight = {
 			province_id = 67
 			OR = {
 				NOT = { owned_by = ROOT }
-				variable_arithmetic_trigger = {
-					export_to_variable = {
-						which = 67_dev
-						value = development
-						who = 67
-					}
-					export_to_variable = {
-						which = 134_dev
-						value = development
-						who = 134
-					}
-					export_to_variable = {
-						which = 266_dev
-						value = development
-						who = 266
-					}
-					OR = {
-						check_variable = { which = 134_dev which = 67_dev }
-						check_variable = { which = 266_dev which = 67_dev }
-					}
-				}
+				NOT = { higher_development_than = 134 }
+				NOT = { higher_development_than = 266 }
+				NOT = { development = 25 }
 			}
 		}
 		trigger = {
-			owns = 67
-			variable_arithmetic_trigger = {
-				custom_tooltip = 67_HAS_MORE_DEV_THAN_134_AND_266
-				export_to_variable = {
-					which = 67_dev
-					value = development
-					who = 67
-				}
-				export_to_variable = {
-					which = 134_dev
-					value = development
-					who = 134
-				}
-				export_to_variable = {
-					which = 266_dev
-					value = development
-					who = 266
-				}
-				NOT = { check_variable = { which = 134_dev which = 67_dev } }
-				NOT = { check_variable = { which = 266_dev which = 67_dev } }
+			67 = {
+				owned_by = ROOT
+				higher_development_than = 134
+				higher_development_than = 266
+				development = 25
 			}
 		}
 		effect = {
@@ -70,28 +43,54 @@ NUM_missions_1 = {
 		}
 	}
 	
-	num_stadtbiblothek = {
-		icon = me_mission_man_in_library
+	NUM_german_renaissance = {
+		icon = reclaim_the_ducal_lands
+		required_missions = { NUM_city_above_all }
 		position = 3
-		required_missions = { num_city_above_all }
+		trigger = {
+			has_institution = renaissance
+		}
+		effect = {
+			if = {
+				limit = {
+					current_age = age_of_discovery
+				}
+				add_country_modifier = {
+					name = NUM_renaissance_modifier
+					desc = until_age_of_discovery_ends
+					duration = -1
+				}
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+		}
+	}
+	
+	NUM_stadtbiblothek = {
+		icon = me_mission_man_in_library
+		position = 5
+		required_missions = { NUM_german_renaissance }
 		provinces_to_highlight = {
 			province_id = 67
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { development = 25 }
+				NOT = { num_of_times_improved = 10 }
 			}
 		}
 		trigger = {
 			67 = {
 				owned_by = ROOT
-				development = 25
+				num_of_times_improved = 10
 			}
 		}
 		effect = {
 			67 = {
 				add_institution_embracement = {
 					which = printing_press
-					value = 100
+					value = 50
 				}
 				add_province_modifier = {
 					name = NUM_stadtbibliothek_modifier
@@ -101,21 +100,7 @@ NUM_missions_1 = {
 		}
 	}
 	
-	num_german_renaissance = {
-		icon = mission_alliances
-		required_missions = { num_stadtbiblothek }
-		position = 5
-		trigger = {
-			has_institution = renaissance
-		}
-		effect = {
-			add_country_modifier = {
-				name = NUM_renaissance_modifier
-				desc = until_age_of_discovery_ends
-				duration = -1
-			}
-		}
-	}
+	
 }
 
 NUM_missions_5 = {
@@ -123,36 +108,48 @@ NUM_missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = NUM
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = NUM
+			AND = {
+				was_tag = NUM
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
 	
-	num_no_more_plagues = {
-		icon = mission_high_income
+	NUM_no_more_plagues = {
+		icon = plague_doctor_training
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
 			province_id = 67
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_buildings_in_province = 2 }
+			}
 		}
 		trigger = {
-			treasury = 100
-			owns = 67
+			67 = {
+				owned_by = ROOT
+				num_of_buildings_in_province = 2
+			}
 		}
 		effect = {
-			add_treasury = -100
 			67 = {
 				add_base_tax = 1 
 				add_base_production = 1
 				add_base_manpower = 1
 			}
+			custom_tooltip = emp_ven_plague_doctor_training_tt
+			set_country_flag = has_competent_doctors
 		}
 	}
 	
-	num_expand_the_city = {
-		icon = mission_hanseatic_city
-		required_missions = { num_no_more_plagues }
+	NUM_expand_the_city = {
+		icon = public_works
+		required_missions = { NUM_no_more_plagues }
 		position = 3
 		provinces_to_highlight = {
 			province_id = 67
@@ -177,9 +174,9 @@ NUM_missions_5 = {
 		}
 	}
 	
-	num_heydey = {
+	NUM_heydey = {
 		icon = mission_eastern_european_city
-		required_missions = { num_expand_the_city }
+		required_missions = { NUM_expand_the_city }
 		position = 5
 		provinces_to_highlight = {
 			province_id = 67
@@ -192,20 +189,17 @@ NUM_missions_5 = {
 				}
 				AND = {
 					NOT = { has_dlc = "Mandate of Heaven" }
-					NOT = { province_has_building_of_group = { group = production all = yes } }
+					NOT = { has_production_building_trigger = yes }
 				}
 			}
 		}
 		trigger = {
-			owns = 67
-			67 = {
-				is_state = yes
-			}
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
 				}
 				67 = {
+					owned_by = ROOT
 					custom_trigger_tooltip = {
 						tooltip = IS_PROSPEROUS
 						is_prosperous = yes
@@ -214,10 +208,8 @@ NUM_missions_5 = {
 			}
 			else = {
 				67 = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-						province_has_building_of_group = { group = production all = yes }
-					}
+					owned_by = ROOT
+					has_production_building_trigger = yes
 				}
 			}
 		}
@@ -225,6 +217,11 @@ NUM_missions_5 = {
 			add_country_modifier = {
 				name = ara_golden_age
 				duration = 36500
+			}
+			67 = {
+				create_or_add_center_of_trade_level = {
+					level = 1
+				}
 			}
 		}
 	}

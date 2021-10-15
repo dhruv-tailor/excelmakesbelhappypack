@@ -1,0 +1,383 @@
+# usage:
+## calculate_total_war_score_cost = { target = FROM multiplier = 0.5 multiplier_trigger = "culture = ROOT" variable = name variable_scope = ROOT round = 0 }
+### target = the country of which the cost is checked
+### multiplier_trigger is optional
+### multiplier multiplies with the province war score cost, just like war goals can. To not get a special multiplier use 1
+### variable = the variable the result will be stored in
+### variable_scope = the scope in which the variable should be saved
+### round is optional, rounds to the specified amount of decimals (possible values are 0 to 3, 3 is default)
+#### must be used in country scope
+calculate_total_war_score_cost = {
+	hidden_effect = {
+		set_variable = { which = calculated_warscore_cost value = 0 }
+		every_province = {
+			limit = {
+				owned_by = $target$
+			}
+			# Base Cost
+			set_variable = { which = calculated_warscore_cost value = 5 }
+			# Development
+			export_to_variable = {
+				which = current_dev
+				value = trigger_value:development
+			}
+			if = {
+				limit = {
+					check_variable = { which = current_dev value = 30 }
+				}
+				set_variable = { which = current_dev value = 30 }
+			}
+			change_variable = { which = calculated_warscore_cost which = current_dev }
+			# Capital
+			if = {
+				limit = {
+					is_capital = yes
+				}
+				set_variable = { which = current_capital_cost which = calculated_warscore_cost }
+				multiply_variable = { which = current_capital_cost value = 0.2 }
+				change_variable = { which = calculated_warscore_cost which = current_capital_cost }
+			}
+			# Trade Power
+			export_to_variable = {
+				which = current_trade_power
+				value = modifier:province_trade_power_value
+			}
+			multiply_variable = { which = current_trade_power value = 0.2 }
+			change_variable = { which = calculated_warscore_cost which = current_trade_power }
+			# Great Projects (capped at 10)
+			set_variable = { which = current_cost_from_great_projects value = 0.33 }
+			set_variable = { which = current_num_great_projects value = 0 }
+			if = {
+				limit = {
+					has_great_project = { type = any }
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 2
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 3
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 4
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 5
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 6
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 7
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 8
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 9
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_great_project = { type = any }
+						amount = 10
+					}
+				}
+				change_variable = { which = current_num_great_projects value = 1 }
+			}
+			multiply_variable = { which = current_cost_from_great_projects which = current_num_great_projects }
+			multiply_variable = { which = current_cost_from_great_projects which = calculated_warscore_cost }
+			change_variable = { which = calculated_warscore_cost which = current_cost_from_great_projects }
+			# Cap Total at 100%
+			cap_calculated_war_score = yes
+			# Autonomy
+			export_to_variable = {
+				which = current_autonomy
+				value = trigger_value:local_autonomy
+			}
+			multiply_variable = { which = current_autonomy value = -0.33 }
+			divide_variable = { which = current_autonomy value = 100 }
+			multiply_variable = { which = current_autonomy which = calculated_warscore_cost }
+			change_variable = { which = calculated_warscore_cost which = current_autonomy }
+			# Owner Size
+			export_to_variable = {
+				which = current_owner_dev
+				value = trigger_value:total_development
+				who = owner
+			}
+			divide_variable = { which = current_owner_dev value = 15 }
+			multiply_variable = { which = current_owner_dev value = -0.01 }
+			if = {
+				limit = {
+					NOT = { check_variable = { which = current_owner_dev value = -1 } }
+				}
+				set_variable = { which = current_owner_dev value = -1 }
+			}
+			multiply_variable = { which = current_owner_dev which = calculated_warscore_cost }
+			change_variable = { which = calculated_warscore_cost which = current_owner_dev }
+			# Cap Total at 100%
+			cap_calculated_war_score = yes
+			# New Owner Administrative Efficiency
+			export_to_variable = {
+				which = new_owner_admin_eff
+				value = modifier:administrative_efficiency
+				who = PREV
+			}
+			PREV = {
+				calculate_admin_eff_from_tech = yes
+				PREV = {
+					set_variable = { which = admin_eff_from_tech which = PREV }
+				}
+				set_variable = { which = admin_eff_from_tech value = 0 }
+			}
+			change_variable = { which = new_owner_admin_eff which = admin_eff_from_tech }
+			multiply_variable = { which = new_owner_admin_eff value = -1 }
+			change_variable = { which = new_owner_admin_eff value = 1 }
+			multiply_variable = { which = calculated_warscore_cost which = new_owner_admin_eff }
+			# War Score Cost Modifiers
+			export_to_variable = {
+				which = current_ws_cost_modifier
+				value = modifier:local_warscore_cost_modifier
+			}
+			export_to_variable = {
+				which = current_ws_cost_modifier_global
+				value = modifier:province_warscore_cost
+				who = PREV
+			}
+			export_to_variable = {
+				which = current_ws_cost_vs_other_religions
+				value = modifier:warscore_cost_vs_other_religion
+				who = PREV
+			}
+			if = {
+				limit = {
+					NOT = { religion = PREV }
+				}
+				change_variable = { which = current_ws_cost_modifier which = current_ws_cost_vs_other_religions }
+			}
+			change_variable = { which = current_ws_cost_modifier which = current_ws_cost_modifier_global }
+			change_variable = { which = current_ws_cost_modifier value = 1 }
+			if = {
+				limit = {
+					NOT = { check_variable = { which = current_ws_cost_modifier value = 0 } }
+				}
+				set_variable = { which = current_ws_cost_modifier value = 0 }
+			}
+			multiply_variable = { which = calculated_warscore_cost which = current_ws_cost_modifier }
+			# CB Multiplier
+			if = {
+				limit = {
+					always = yes
+					[[multiplier_trigger]
+						$multiplier_trigger$
+					]
+				}
+				set_variable = { which = cb_type_multiplier value = $multiplier$ }
+				multiply_variable = { which = calculated_warscore_cost which = cb_type_multiplier }
+			}
+			# Cap Total at 100%
+			cap_calculated_war_score = yes
+			# Add to Total Sum
+			PREV = {
+				change_variable = { which = calculated_warscore_cost which = PREV }
+			}
+			# Clear Variables
+			set_variable = { which = calculated_warscore_cost value = 0 }
+			set_variable = { which = current_dev value = 0 }
+			set_variable = { which = current_capital_cost value = 0 }
+			set_variable = { which = current_trade_power value = 0 }
+			set_variable = { which = current_cost_from_great_projects value = 0 }
+			set_variable = { which = current_num_great_projects value = 0 }
+			set_variable = { which = current_autonomy value = 0 }
+			set_variable = { which = current_owner_dev value = 0 }
+			set_variable = { which = new_owner_admin_eff value = 0 }
+			set_variable = { which = current_ws_cost_modifier value = 0 }
+			set_variable = { which = current_ws_cost_modifier_global value = 0 }
+			set_variable = { which = current_ws_cost_vs_other_religions value = 0 }
+			set_variable = { which = cb_type_multiplier value = 0 }
+		}
+		[[round]
+			if = {
+				limit = {
+					NOT = { is_variable_equal = { which = cb_type_multiplier value = 1 } }
+				}
+				change_variable = { which = calculated_warscore_cost value = 0.5 } # to round up
+			}
+			set_variable = { which = round_var value = $round$ }
+			if = {
+				limit = {
+					is_variable_equal = { which = round_var value = 0 }
+				}
+				divide_variable = { which = calculated_warscore_cost value = 1000 }
+				multiply_variable = { which = calculated_warscore_cost value = 1000 }
+			}
+			else_if = {
+				limit = {
+					is_variable_equal = { which = round_var value = 1 }
+				}
+				divide_variable = { which = calculated_warscore_cost value = 100 }
+				multiply_variable = { which = calculated_warscore_cost value = 100 }
+			}
+			else_if = {
+				limit = {
+					is_variable_equal = { which = round_var value = 2 }
+				}
+				divide_variable = { which = calculated_warscore_cost value = 10 }
+				multiply_variable = { which = calculated_warscore_cost value = 10 }
+			}
+			set_variable = { which = round_var value = 0 }
+		]
+		set_country_flag = scope_is_$variable_scope$
+		if = {
+			limit = {
+				OR = {
+					has_country_flag = scope_is_THIS
+					has_country_flag = scope_is_this
+				}
+			}
+			set_variable = { which = $variable$ which = calculated_warscore_cost }
+		}
+		else = {
+			$variable_scope$ = {
+				set_variable = { which = calculated_warscore_cost which = PREV }
+				set_variable = { which = $variable$ which = calculated_warscore_cost }
+				set_variable = { which = calculated_warscore_cost value = 0 }
+			}
+		}
+		set_variable = { which = calculated_warscore_cost value = 0 }
+		clr_country_flag = scope_is_$variable_scope$
+	}
+}
+
+calculate_admin_eff_from_tech = {
+	hidden_effect = {
+		set_variable = { which = admin_eff_from_tech value = 0 }
+		# Extended Timeline
+		if = {
+			limit = {
+				has_global_flag = extended_timeline_mod
+			}
+			if = {
+				limit = {
+					adm_tech = 62
+				}
+				change_variable = { which = admin_eff_from_tech value = 0.1 }
+				if = {
+					limit = {
+						adm_tech = 68
+					}
+					change_variable = { which = admin_eff_from_tech value = 0.1 }
+					if = {
+						limit = {
+							adm_tech = 72
+						}
+						change_variable = { which = admin_eff_from_tech value = 0.1 }
+						if = {
+							limit = {
+								adm_tech = 76
+							}
+							change_variable = { which = admin_eff_from_tech value = 0.1 }
+							if = {
+								limit = {
+									adm_tech = 81
+								}
+								change_variable = { which = admin_eff_from_tech value = 0.1 }
+								if = {
+									limit = {
+										adm_tech = 84
+									}
+									change_variable = { which = admin_eff_from_tech value = 0.1 }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		# Vanilla
+		else = {
+			if = {
+				limit = {
+					adm_tech = 17
+				}
+				change_variable = { which = admin_eff_from_tech value = 0.1 }
+				if = {
+					limit = {
+						adm_tech = 23
+					}
+					change_variable = { which = admin_eff_from_tech value = 0.1 }
+					if = {
+						limit = {
+							adm_tech = 27
+						}
+						change_variable = { which = admin_eff_from_tech value = 0.1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+cap_calculated_war_score = {
+	if = {
+		limit = {
+			check_variable = { which = calculated_warscore_cost value = 100 }
+		}
+		set_variable = { which = calculated_warscore_cost value = 100 }
+	}
+	else_if = {
+		limit = {
+			NOT = { check_variable = { which = calculated_warscore_cost value = 1 } }
+		}
+		set_variable = { which = calculated_warscore_cost value = 1 }
+	}
+}

@@ -1,0 +1,392 @@
+namespace = besseres_hrr_anti_king_events
+
+country_event = {
+	id = besseres_hrr_anti_king_events.1
+	title = besseres_hrr_anti_king_events.EVTNAME1
+	desc = besseres_hrr_anti_king_events.EVTDESC1
+	picture = HRE_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	major_trigger = {
+		OR = {
+			is_part_of_hre = yes
+			any_owned_province = {
+				is_part_of_hre = yes
+			}
+			any_neighbor_country = {
+				is_part_of_hre = yes
+			}
+			any_subject_country = {
+				is_part_of_hre = yes
+			}
+			has_country_flag = debug_gets_major_hre_events
+		}
+	}
+
+	trigger = {
+		NOT = { has_country_flag = anti_king_event_1_fired }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = anti_king_event_1_fired
+			emperor = {
+				save_event_target_as = previous_emperor
+				if = {
+					limit = {
+						has_heir = yes
+					}
+					set_country_flag = previous_emperor_heir
+					exile_heir_as = previous_emperor_heir
+				}
+				define_heir = {
+					dynasty = THIS
+					age = 15
+					claim = 100
+					male = yes
+				}
+				exile_ruler_as = previous_emperor_ruler
+				set_ruler = previous_emperor_ruler
+				if = {
+					limit = {
+						has_country_flag = previous_emperor_heir
+					}
+					clr_country_flag = previous_emperor_heir
+					set_heir = previous_emperor_heir
+				}
+				add_stability = 1
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_anti_king_events1.EVTOPT1
+
+		custom_tooltip = PREVIOUS_EMPEROR_RULER_DIES
+
+		every_elector = {
+			limit = {
+				NOT = { tag = ROOT }
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = anti_king_negative_opinion
+			}
+		}
+
+		hidden_effect = {
+			clr_country_flag = anti_king_event_1_fired
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_anti_king_events.2
+	title = besseres_hrr_anti_king_events.EVTNAME2
+	desc = besseres_hrr_anti_king_events.EVTDESC2
+	picture = HRE_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	major_trigger = {
+		OR = {
+			is_part_of_hre = yes
+			any_owned_province = {
+				is_part_of_hre = yes
+			}
+			any_neighbor_country = {
+				is_part_of_hre = yes
+			}
+			any_subject_country = {
+				is_part_of_hre = yes
+			}
+			has_country_flag = debug_gets_major_hre_events
+		}
+	}
+
+	trigger = {
+		NOT = { has_country_flag = anti_king_event_2_fired }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = anti_king_event_2_fired
+			export_to_variable = {
+				which = ruler_imprisoned_date
+				value = trigger_value:is_year
+			}
+			change_variable = { which = ruler_imprisoned_date value = -1 }
+			export_to_variable = {
+				which = ruler_imprisoned_age
+				value = trigger_value:ruler_age
+			}
+			every_country = {
+				limit = {
+					ROOT = {
+						has_casus_belli = {
+							type = cb_free_imprisoned_ruler
+							target = PREV
+						}
+					}
+				}
+				ROOT = {
+					remove_opinion = {
+						who = PREV
+						modifier = imprisoned_ruler_opinion
+					}
+					remove_casus_belli = {
+						target = PREV
+						type = cb_free_imprisoned_ruler
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_anti_king_events2.EVTOPT1
+
+		custom_tooltip = EMPEROR_IMPRISIONED_ROOT_RULER
+		hidden_effect = {
+			exile_ruler_as = emperor_imprisoned_ruler_of_@ROOT
+		}
+
+		add_opinion = {
+			who = FROM
+			modifier = imprisoned_ruler_opinion
+		}
+
+		add_casus_belli = {
+			target = FROM
+			type = cb_free_imprisoned_ruler
+		}
+
+		every_country = {
+			limit = {
+				is_part_of_hre = yes
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = anti_king_small_negative_opinion
+			}
+		}
+
+		hidden_effect = {
+			clr_country_flag = anti_king_event_2_fired
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_anti_king_events.3
+	title = besseres_hrr_anti_king_events.EVTNAME3
+	desc = besseres_hrr_anti_king_events.EVTDESC3
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	trigger = {
+		any_country = {
+			ROOT = {
+				has_casus_belli = {
+					type = cb_free_imprisoned_ruler
+					target = PREV
+				}
+			}
+		}
+		variable_arithmetic_trigger = {
+			custom_tooltip = RULER_AGE_OVER_50_AND_AT_LEAST_10_YEARS_IN_PRISON
+			export_to_variable = {
+				which = current_imprisoned_ruler_age
+				value = trigger_value:is_year
+			}
+			variable_arithmetic_trigger = {
+				change_variable = { which = current_imprisoned_ruler_age value = -1 }
+			}
+			export_to_variable = {
+				which = ruler_imprisoned_date_temp
+				value = 0
+			}
+			variable_arithmetic_trigger = {
+				change_variable = { which = ruler_imprisoned_date_temp which = ruler_imprisoned_date }
+			}
+			multiply_variable = { which = ruler_imprisoned_date_temp value = -1 }
+			variable_arithmetic_trigger = {
+				change_variable = { which = current_imprisoned_ruler_age which = ruler_imprisoned_date_temp }
+			}
+			variable_arithmetic_trigger = {
+				change_variable = { which = current_imprisoned_ruler_age which = ruler_imprisoned_age }
+			}
+
+			export_to_variable = {
+				which = current_imprisoned_duration
+				value = trigger_value:is_year
+			}
+			variable_arithmetic_trigger = {
+				change_variable = { which = current_imprisoned_duration value = -1 }
+			}
+			export_to_variable = {
+				which = ruler_imprisoned_date_temp_var
+				value = 0
+			}
+			variable_arithmetic_trigger = {
+				change_variable = { which = ruler_imprisoned_date_temp_var which = ruler_imprisoned_date }
+			}
+			multiply_variable = { which = ruler_imprisoned_date_temp_var value = -1 }
+			variable_arithmetic_trigger = {
+				change_variable = { which = current_imprisoned_duration which = ruler_imprisoned_date_temp_var }
+			}
+
+			check_variable = { which = current_imprisoned_ruler_age value = 50 }
+			check_variable = { which = current_imprisoned_duration value = 10 }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					ROOT = {
+						has_casus_belli = {
+							type = cb_free_imprisoned_ruler
+							target = PREV
+						}
+					}
+				}
+				save_event_target_as = country_that_imprisoned_our_ruler
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_anti_king_events3.EVTOPT1
+
+		custom_tooltip = RULER_DIED_IN_PRISION
+
+		add_stability = -1
+
+		remove_opinion = {
+			who = event_target:country_that_imprisoned_our_ruler
+			modifier = imprisoned_ruler_opinion
+		}
+
+		add_opinion = {
+			who = event_target:country_that_imprisoned_our_ruler
+			modifier = imprisoned_ruler_died_opinion
+		}
+
+		remove_casus_belli = {
+			target = event_target:country_that_imprisoned_our_ruler
+			type = cb_free_imprisoned_ruler
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_anti_king_events.4
+	title = besseres_hrr_anti_king_events.EVTNAME4
+	desc = besseres_hrr_anti_king_events.EVTDESC4
+	picture = HRE_eventPicture
+
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_country_flag = anti_king_event_4_fired }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = anti_king_event_4_fired
+			FROM = { country_event = { id = besseres_hrr_anti_king_events.5 } }
+		}
+	}
+
+	option = {
+		name = besseres_hrr_anti_king_events4.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		clr_country_flag = anti_king_event_4_fired
+	}
+}
+
+country_event = {
+	id = besseres_hrr_anti_king_events.5
+	title = besseres_hrr_anti_king_events.EVTNAME5
+	desc = besseres_hrr_anti_king_events.EVTDESC5
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = besseres_hrr_anti_king_events5.EVTOPT1
+
+		add_stability = 1
+
+		hidden_effect = {
+			if = {
+				limit = {
+					has_heir = yes
+					has_regency = no
+				}
+				exile_heir_as = heir_comes_back_after_exiled_ruler_came_back_@ROOT
+				set_country_flag = heir_exiled_for_short_time
+			}
+		}
+		set_ruler = emperor_imprisoned_ruler_of_@ROOT
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_flag = heir_exiled_for_short_time
+				}
+				set_heir = heir_comes_back_after_exiled_ruler_came_back_@ROOT
+				clr_country_flag = heir_exiled_for_short_time
+			}
+		}
+
+		remove_opinion = {
+			who = FROM
+			modifier = imprisoned_ruler_opinion
+		}
+
+		remove_casus_belli = {
+			target = FROM
+			type = cb_free_imprisoned_ruler
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_anti_king_events.6
+	title = besseres_hrr_anti_king_events.EVTNAME6
+	desc = besseres_hrr_anti_king_events.EVTDESC6
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = besseres_hrr_anti_king_events6.EVTOPT1
+
+		custom_tooltip = RELEASED_RULER_BECOMES_CURRENT_RULER
+
+		remove_opinion = {
+			who = FROM
+			modifier = imprisoned_ruler_opinion
+		}
+		add_opinion = {
+			who = FROM
+			modifier = imprisoned_ruler_let_free_opinion
+		}
+		remove_casus_belli = {
+			target = FROM
+			type = cb_free_imprisoned_ruler
+		}
+	}
+}

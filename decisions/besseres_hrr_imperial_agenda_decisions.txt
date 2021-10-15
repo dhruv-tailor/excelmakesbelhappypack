@@ -1,0 +1,144 @@
+country_decisions = {
+	imperial_agenda_decision = {
+		major = yes
+		potential = {
+			is_emperor = yes
+			has_active_imperial_agenda = yes
+			NOT = { has_country_flag = enacted_imperial_agenda_decision }
+		}
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = add_province_x_to_hre }
+					}
+					province_id = event_target:add_province_x_to_hre_province
+					is_part_of_hre = no
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = convert_imperial_province }
+					}
+					province_id = event_target:convert_imperial_province_province
+					OR = {
+						is_part_of_hre = no
+						NOT = { owned_by = ROOT }
+						has_owner_religion = no
+					}
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = destroy_hostile_reform_center }
+					}
+					province_id = event_target:destroy_hostile_reform_center_province
+					OR = {
+						is_part_of_hre = no
+						NOT = { religion = ROOT }
+						is_reformation_center = yes
+					}
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = return_hre_core_internal }
+					}
+					province_id = event_target:return_hre_core_internal_province
+					OR = {
+						is_part_of_hre = no
+						NOT = { owned_by = event_target:return_hre_core_internal_country }
+					}
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = return_hre_core_external }
+					}
+					province_id = event_target:return_hre_core_external_province
+					NOT = { owned_by = event_target:return_hre_core_external_country }
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = release_hre_country }
+					}
+					province_id = event_target:release_hre_country_province
+					NOT = { owned_by = event_target:release_hre_country_country }
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = develop_the_imperial_capital }
+					}
+					province_id = event_target:develop_the_imperial_capital_province
+					OR = {
+						NOT = { owned_by = ROOT }
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								which = current_dev
+								value = development
+							}
+							NOT = { check_variable = { which = current_dev which = develop_the_imperial_capital_value } }
+						}
+					}
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = fortify_the_imperial_border }
+					}
+					province_id = event_target:fortify_the_imperial_border_province
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { fort_level = 2 }
+					}
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = reconquest_of_rome }
+					}
+					province_id = event_target:reconquest_of_rome_province
+					NOT = { owned_by = PAP }
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = conquest_of_rome }
+					}
+					province_id = event_target:conquest_of_rome_province
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					ROOT = {
+						has_imperial_agenda_selected = { agenda = make_x_a_free_city }
+					}
+					province_id = event_target:make_x_a_free_city_province
+					event_target:make_x_a_free_city_country = {
+						NOT = { has_country_flag = is_a_free_city }
+					}
+				}
+			}
+		}
+		allow = {
+			if = {
+				limit = {
+					has_global_flag = cheat_imperial_agenda_flag
+				}
+				always = yes
+			}
+			else = {
+				imperial_agenda_trigger = yes
+			}
+		}
+		effect = {
+			clr_global_flag = cheat_imperial_agenda_flag
+			set_country_flag = enacted_imperial_agenda_decision
+			tooltip = {
+				complete_imperial_agenda = { active_agenda = yes tooltip = yes }
+			}
+			custom_tooltip = " "
+			tooltip = {
+				fail_imperial_agenda = { active_agenda = yes tooltip = yes }
+			}
+			hidden_effect = {
+				country_event = { id = besseres_hrr_imperial_agenda_events.3 }
+			}
+		}
+		ai_will_do = {
+			factor = 100
+		}
+	}
+}

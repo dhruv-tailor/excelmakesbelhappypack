@@ -1,0 +1,271 @@
+#(Nearly) all scopes are country scope
+#All parameters are optional (but it will not be much of an agenda without some of them...)
+
+# estate_agenda = {
+# 	max_days_active = 100 						#Lets you override the default of 20 years for an agenda
+# 	can_select = { triggers } 					#Conditions for whether the agenda can be offered to you
+# 	provinces_to_highlight = { triggers }		#Conditions for provinces to be highlighted by the agenda. Root = country, this = province.
+# 	selection_weight = {						#Determines how likely (compared to the estate's other agendas) this agenda is to be selected.
+# 		factor = 1.0 									#initial factor will ignore numbers below 1, use a modifier for that!
+# 		modifier = { factor = 10 triggers = yes }
+# 	}
+# 	pre_effect = { effects }					#Effects executed to set up the task (set flags and targets), before it is shown to the player.
+# 	immediate_effect = { effects } 				#Effects executed when the agenda is accepted by the country
+# 	task_requirements = { triggers } 			#Conditions for completing the task successfully
+# 	task_completed_effect = { effects } 		#Effects executed when the agenda is successfully completed
+# 	failing_effect = { effects } 				#Effects executed when the agenda is failed (i.e. when fail_if is true or time runs out)
+# 	fail_if = { triggers } 						#Conditions for when the agenda should be auto-failed
+# 	on_invalid = { effects } 					#Effects executed when the country no longer has that estate or the invalid_trigger is true. Useful for clearing flags, modifiers etc.
+# 	invalid_trigger = { triggers } 				#Conditions for when the agenda should end without it counting as a fail (executing on_invalid rather than failing_effect). Happens by default it the estate giving the agenda is removed.
+# 	modifier = { modifier } 					#Country modifier granted while the agenda is active
+# }
+
+
+estate_nobles_farmers_wife = {
+	selection_weight = {
+		factor = 0
+		modifier = {
+			factor = 1
+			NOT = {
+				total_development = 100
+			}
+		}
+	}
+	can_select = {
+		NOT = {
+			total_development = 100
+		}
+	}
+	immediate_effect = {
+		country_event = {
+			id = GE_incidents.1
+		}
+	}
+	provinces_to_highlight = {
+	}
+	fail_if = {
+		always = no
+	}
+    task_requirements = {
+		OR = {
+			has_country_flag = GE_incidents_1_stole_wife
+			has_country_flag = GE_incidents_1_returned_wife
+			has_country_flag = GE_incidents_1_killed_wife
+		}
+    }
+    task_completed_effect = {
+		custom_tooltip = GE_incidents.1.TT
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_1_stole_wife
+			}
+			define_consort = {
+				country_of_origin = ROOT
+				religion = ROOT
+				culture = ROOT
+				female = yes
+			}
+			clr_country_flag = GE_incidents_1_stole_wife
+		}
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_1_returned_wife
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+			clr_country_flag = GE_incidents_1_returned_wife
+		}
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_1_killed_wife
+			}
+			add_stability = -1
+			clr_country_flag = GE_incidents_1_killed_wife
+		}
+    }
+    failing_effect = {
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+    }
+}
+
+estate_nobles_noble_inheritance = {
+	selection_weight = {
+		factor = 0
+		modifier = {
+			factor = 1000
+			NOT = {
+				total_development = 100
+			}
+		}
+	}
+	can_select = {
+		NOT = {
+			total_development = 100
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					NOT = {
+						owned_by = ROOT
+					}
+				}
+			}
+			random_neighbor_province  = {
+				limit = {
+					NOT = {
+						owned_by = ROOT
+					}
+				}
+				save_event_target_as = agenda_province
+				owner = {
+					save_event_target_as = agenda_province_owner
+				}
+			}
+		}
+	}
+	immediate_effect = {
+		country_event = {
+			id = GE_incidents.3
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		has_country_flag = GE_incidents_3_ignored
+	}
+    task_requirements = {
+		OR = {
+			has_country_flag = GE_incidents_3_resolved_peacefully
+			has_country_flag = GE_incidents_3_resolved_wrathfully
+			event_target:agenda_province = {
+				owned_by = ROOT
+			}
+		}
+    }
+    task_completed_effect = {
+		custom_tooltip = GE_incidents.1.TT
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_3_resolved_peacefully
+			}
+			add_opinion = {
+				who = event_target:agenda_province_owner
+				modifier = GE_peacefull_resolution
+			}
+			clr_country_flag = GE_incidents_3_resolved_peacefully
+		}
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_3_resolved_wrathfully
+			}
+			add_army_tradition = 15
+			clr_country_flag = GE_incidents_3_resolved_wrathfully
+		}
+		if = {
+			limit = {
+				event_target:agenda_province = {
+					owned_by = ROOT
+				}
+			}
+			event_target:agenda_province = {
+				add_base_tax = 1
+			}
+		}
+    }
+    failing_effect = {
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+		clr_country_flag = GE_incidents_3_ignored
+    }
+}
+
+estate_burghers_workshops_investments = {
+	selection_weight = {
+		factor = 0
+		modifier = {
+			factor = 1000
+			NOT = {
+				total_development = 100
+			}
+		}
+	}
+	can_select = {
+		NOT = {
+			total_development = 100
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+			}
+			save_event_target_as = agenda_province
+		}
+
+	}
+	immediate_effect = {
+		country_event = {
+			id = GE_incidents.2
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		always = no
+	}
+    task_requirements = {
+		OR = {
+			has_country_flag = GE_incidents_2_invested_big
+			has_country_flag = GE_incidents_2_invested_small
+			has_country_flag = GE_incidents_2_invested_not
+		}
+    }
+    task_completed_effect = {
+		custom_tooltip = GE_incidents.2.TT
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_2_invested_big
+			}
+			event_target:agenda_province = {
+				add_base_production = 2
+			}
+			clr_country_flag = GE_incidents_2_invested_big
+		}
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_2_invested_small
+			}
+			event_target:agenda_province = {
+				add_base_production = 2
+			}
+			clr_country_flag = GE_incidents_2_invested_small
+		}
+		if = {
+			limit = {
+				has_country_flag = GE_incidents_2_invested_not
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = -10
+			}
+			clr_country_flag = GE_incidents_2_invested_not
+		}
+    }
+    failing_effect = {
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+    }
+}

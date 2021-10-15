@@ -1,0 +1,395 @@
+namespace = GE_incidents
+
+#Farmers Wife
+country_event = {
+	id = GE_incidents.1
+	title = GE_incidents.1.t
+	desc = GE_incidents.1.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.1.a
+		set_country_flag = GE_incidents_1_stole_wife
+	}
+	option = {
+		name = GE_incidents.1.b
+		set_country_flag = GE_incidents_1_returned_wife
+	}
+	option = {
+		name = GE_incidents.1.c
+		set_country_flag = GE_incidents_1_killed_wife
+	}
+}
+
+#county investment
+country_event = {
+	id = GE_incidents.2
+	title = GE_incidents.2.t
+	desc = GE_incidents.2.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.2.a
+		add_years_of_income = -1
+		set_country_flag = GE_incidents_2_invested_big
+	}
+	option = {
+		name = GE_incidents.2.b
+		add_years_of_income = -0.5
+		set_country_flag = GE_incidents_2_invested_small
+	}
+	option = {
+		name = GE_incidents.2.c
+		set_country_flag = GE_incidents_2_invested_not
+	}
+}
+
+#Noble house of X died out
+country_event = {
+	id = GE_incidents.3
+	title = GE_incidents.3.t
+	desc = GE_incidents.3.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.3.a #occupy it
+		event_target:agenda_province_owner = {
+			country_event = {
+				id = GE_incidents.4
+			}
+		}
+		add_manpower = -2.5
+	}
+	option = {
+		name = GE_incidents.3.b #request it
+		event_target:agenda_province_owner = {
+			country_event = {
+				id = GE_incidents.6
+			}
+		}
+	}
+	option = {
+		name = GE_incidents.3.c #ignore it
+		set_country_flag = GE_incidents_3_ignored
+	}
+}
+
+#Military Demands
+country_event = {
+	id = GE_incidents.4
+	title = GE_incidents.4.t
+	desc = GE_incidents.4.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.4.a #mobilize the troops
+		FROM = {
+			country_event = {
+				id = GE_incidents.5
+			}
+		}
+		add_years_of_manpower = 1
+		add_army_tradition = 10
+		ai_chance = {
+			factor = 1 
+			modifier = {
+				factor = 0.5
+				FROM = {
+					army_size = ROOT
+				}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {
+					army_size = FROM
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = GE_incidents.4.b #cede it
+		event_target:agenda_province = {
+			cede_province = FROM
+		}
+		FROM = {
+			every_neighbour_country = {
+				add_opinion = {
+					who = FROM
+					modifier = GE_seized_unlawful_land
+				}
+			}
+			set_country_flag = GE_incidents_3_resolved_wrathfully
+		}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				FROM = {
+					army_size = ROOT
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					army_size = FROM
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+}
+
+#Y mobilizes
+country_event = {
+	id = GE_incidents.5
+	title = GE_incidents.5.t
+	desc = GE_incidents.5.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.5.a #to war!
+		event_target:agenda_province = {
+			add_claim = ROOT
+		}
+		declare_war_with_cb = {
+			who = event_target:agenda_province_owner
+			casus_belli = cb_conquest
+			war_goal_province = event_target:agenda_province
+		}
+		ai_chance = {
+			factor = 1 
+			modifier = {
+				factor = 0.5
+				FROM = {
+					army_size = ROOT
+				}
+			}
+			modifier = {
+				factor = 2
+				ROOT = {
+					army_size = FROM
+				}
+			}
+			modifier = {
+				factor = 0
+				ROOT = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = GE_incidents.5.b #drop it
+		set_country_flag = GE_incidents_3_ignored
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 2
+				FROM = {
+					army_size = ROOT
+				}
+			}
+			modifier = {
+				factor = 0.5
+				ROOT = {
+					army_size = FROM
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+}
+
+#Z requests province
+country_event = {
+	id = GE_incidents.6
+	title = GE_incidents.6.t
+	desc = GE_incidents.6.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.6.a #Sell the province
+		FROM = {
+			country_event = {
+				id = GE_incidents.7
+			}
+		}
+		custom_tooltip = GE_incidents.6.TT
+		tooltip = {
+			ROOT = {
+				add_treasury = 100
+				event_target:agenda_province = {
+					cede_province = ROOT
+				}
+			}
+			FROM = {
+				add_treasury = -100
+			}
+		}
+		ai_chance = {
+			factor = 0
+		}
+	}
+	option = {
+		name = GE_incidents.6.b #Sell the fiefs
+		FROM = {
+			country_event = {
+				id = GE_incidents.8
+			}
+		}
+		custom_tooltip = GE_incidents.6.TT
+		tooltip = {
+			ROOT = {
+				add_treasury = 50
+				event_target:agenda_province = {
+					add_base_tax = -1
+					add_base_production = -1
+				}
+			}
+			FROM = {
+				add_treasury = -50
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							id = event_target:agenda_province
+						}
+					}
+					add_base_tax = 1
+					add_base_production = 1
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+}
+
+#Z sale of province
+country_event = {
+	id = GE_incidents.7
+	title = GE_incidents.7.t
+	desc = GE_incidents.7.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.7.a #Sell the province
+		FROM = {
+			add_treasury = 100
+			event_target:agenda_province = {
+				cede_province = FROM
+			}
+		}
+		ROOT = {
+			add_treasury = -100
+			set_country_flag = GE_incidents_3_resolved_peacefully
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = GE_incidents.7.b #cancel the sale
+		set_country_flag = GE_incidents_3_ignored
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Purchase Fiefs
+country_event = {
+	id = GE_incidents.8
+	title = GE_incidents.8.t
+	desc = GE_incidents.8.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+	}
+	
+	option = {
+		name = GE_incidents.8.a #Sell the fief
+		FROM = {
+			add_treasury = 50
+			event_target:agenda_province = {
+				add_base_tax = -1
+				add_base_production = -1
+			}
+		}
+		ROOT = {
+			add_treasury = -50
+			random_owned_province = {
+				limit = {
+					any_neighbor_province = {
+						id = event_target:agenda_province
+					}
+				}
+				add_base_tax = 1
+				add_base_production = 1
+			}
+		}
+		ai_chance = {
+			factor = 1
+		}
+	}
+	option = {
+		name = GE_incidents.8.b #cancel the sale
+		set_country_flag = GE_incidents_3_ignored
+		ai_chance = {
+			factor = 0
+		}
+	}
+}

@@ -2,40 +2,566 @@
 
 # ROOT = province, FROM = country
 on_trade_good_changed = {
+	on_trade_good_changed_estate_privileges_effect = yes
+	if = {
+		limit = {
+			OR = {
+				has_province_modifier = wine_bonus_prod
+				has_province_modifier = grain_bonus_prod
+			}
+			FROM = { has_reform = monastic_breweries_reform }
+			NOT = { owner = { has_reform = monastic_breweries_reform } }
+		}
+		remove_province_modifier = wine_bonus_prod
+		remove_province_modifier = grain_bonus_prod
+	}
 	hidden_effect = {
 		if = {
 			limit = {
-				ROOT = { trade_goods = silver }
+				trade_goods = wine
 			}
+			remove_province_modifier = grain_bonus_prod
+			add_province_modifier = { 
+				name = wine_bonus_prod
+				duration = -1
+				hidden = yes
+			}
+		}
+		if = {
+			limit = {
+				trade_goods = grain
+			}
+			remove_province_modifier = wine_bonus_prod
+			add_province_modifier = { 
+				name = grain_bonus_prod
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	if = {
+		limit = {
+			ROOT = { trade_goods = silver }
+			NOT = { has_province_modifier = silver_debuff }
+		}
+		ROOT = {
+			add_province_modifier = { 
+				name = silver_debuff
+				duration = -1
+				hidden = yes	
+			}
+		}
+	}
+	if = {
+		limit = { 
+			ROOT = { 
+				AND = {
+					NOT = { trade_goods = silver }
+					has_province_modifier = silver_debuff
+				}
+			}
+		}
+		remove_province_modifier = silver_debuff
+	}
+	
+	if = {
+		limit = {
+			ROOT = { 
+				trade_goods = indigo 
+				continent = europe
+			}
+			NOT = { has_province_modifier = woad_type }
+		}
+		ROOT = {
+			add_permanent_province_modifier = { 
+				name = woad_type
+				duration = -1  
+				desc = woad_type_tooltip
+			}
+		}
+	}
+	if = {
+		limit = { 
+			ROOT = { 
+				AND = {
+					NOT = { trade_goods = indigo }
+					OR = {
+						has_province_modifier = woad_type
+						has_province_modifier = woad_type_bad
+					}
+				}
+			}
+		}
+		remove_province_modifier = woad_type
+		remove_province_modifier = woad_type_bad
+	}
+	
+	if = {
+		limit = {
+			ROOT = { trade_goods = metalworking }
+			NOT = { has_global_flag = metalworking_start }
+		}
+		ROOT = { province_event = { id = prices_marcin.15 days = 1 } }
+		set_global_flag = metalworking_start
+	}
+	if = {
+		limit = {
 			ROOT = {
-				add_permanent_province_modifier = { 
-					name = silver_debuff
+				has_province_flag = has_cannon
+			}
+		}
+		ROOT = {
+			goods_save = yes
+			change_trade_goods = cannon
+		}
+	}
+	
+	if = {
+		limit = {
+			ROOT = {
+				has_province_flag = has_metalworking
+			}
+		}
+		ROOT = {
+			goods_save = yes
+			change_trade_goods = metalworking
+		}
+	}
+	
+	if = {
+		limit = {
+			ROOT = {
+				has_province_flag = has_steam_engine
+			}
+		}
+		ROOT = {
+			goods_save = yes
+			change_trade_goods = steam_engine
+		}
+	}
+	
+	if = {
+		limit = {
+			ROOT = {
+				has_province_flag = has_optics
+			}
+		}
+		ROOT = {
+			goods_save = yes
+			change_trade_goods = optics
+		}
+	}
+	
+	if = {
+		limit = {
+			ROOT = {
+				has_province_flag = has_munitions
+			}
+		}
+		ROOT = {
+			goods_save = yes
+			change_trade_goods = munitions
+		}
+	}
+}
+
+on_province_owner_change = {
+	events = {
+		japan.1
+	}
+	
+	if = {
+		limit = {
+			OR = {
+				has_province_modifier = wine_bonus_prod
+				has_province_modifier = grain_bonus_prod
+			}
+			FROM = { has_reform = monastic_breweries_reform }
+			NOT = { owner = { has_reform = monastic_breweries_reform } }
+		}
+		remove_province_modifier = wine_bonus_prod
+		remove_province_modifier = grain_bonus_prod
+	}
+	
+	if = {
+		limit = {
+			NOT = {
+				OR = {
+					has_province_modifier = wine_bonus_prod
+					has_province_modifier = grain_bonus_prod
+				}
+			}
+			owner = { has_reform = monastic_breweries_reform }
+			NOT = { FROM = { has_reform = monastic_breweries_reform } }
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					trade_goods = wine
+				}
+				add_province_modifier = { 
+					name = wine_bonus_prod
+					duration = -1
+					hidden = yes
+				}
+			}
+			if = {
+				limit = {
+					trade_goods = grain
+				}
+				add_province_modifier = { 
+					name = grain_bonus_prod
 					duration = -1
 					hidden = yes
 				}
 			}
 		}
-		if = {
-			limit = { 
-				ROOT = { 
-					AND = {
-						NOT = { trade_goods = silver }
-						has_province_modifier = silver_debuff
+	}
+
+	if = {
+		limit = {
+			owned_by = SRU
+			exists = ARA
+		}
+		ARA = {
+			set_country_flag = ARA_defeat_saruhan
+		}
+	}
+	if = {
+		limit = {
+			NOT = { owner = { religion_group = muslim } }
+			has_province_modifier = sufi_shrine
+		}
+		remove_province_modifier = sufi_shrine
+	}
+	on_province_owner_change_estate_privileges_effect = yes
+	
+	if = {
+		limit = {
+			region = indo_china_region
+			has_building = farm_estate
+			trade_goods = grain
+			owner = {
+				has_mission = mnd_khm_irrigation 
+				NOT = {
+					OR = {
+						has_estate = estate_vaisyas
+						has_estate = estate_burghers
 					}
 				}
 			}
-			remove_province_modifier = silver_debuff
 		}
-		
-		if = {
-			limit = {
-				ROOT = { trade_goods = metalworking }
-				NOT = { has_global_flag = metalworking_start }
-			}
-			ROOT = { province_event = { id = prices_marcin.15 days = 1 } }
-			set_global_flag = metalworking_start
+		add_province_modifier = {
+			name = grain_production_improved
+			duration = 7300
 		}
+	}
+	
+	if = {
+		limit = {
+			ROOT = { trade_goods = silver }
+			NOT = { has_province_modifier = silver_debuff }
+		}
+		add_province_modifier = { 
+			name = silver_debuff
+			duration = -1
+			hidden = yes	
+		}
+	}
 
+	###cannon_foundry
+	if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = cannon_foundry NOT = { has_building = off } }
+				owner = { check_variable = { which = copper value = 0.4 } check_variable = { which = tin value = 0.3 } }	
+			}
+		}
+		owner = {
+			subtract_variable = { which = copper value = 0.4 }      
+			subtract_variable = { which = tin value = 0.3 }        
+			change_variable = { which = copper_used value = 0.4 }        
+			change_variable = { which = tin_used value = 0.3 }         		
+			change_variable = { which = cannon_foundry_amount value = 1 }         
+		}
+		FROM = {
+			change_variable = { which = copper value = 0.4 }      
+			change_variable = { which = tin value = 0.3 }        
+			subtract_variable = { which = copper_used value = 0.4 }        
+			subtract_variable = { which = tin_used value = 0.3 } 
+			subtract_variable = { which = cannon_foundry_amount value = 1 }         			
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = cannon_foundry NOT = { has_building = off } }	
+				owner = { NOT = { check_variable = { which = copper value = 0.4 } check_variable = { which = tin value = 0.3 } } }
+			}
+		}
+		owner = {
+			change_variable = { which = copper_used value = 0.4 }        
+			change_variable = { which = tin_used value = 0.3 }
+			change_variable = { which = cannon_foundry_amount value = 1 }
+		}
+		FROM = {
+			subtract_variable = { which = copper_used value = 0.4 }        
+			subtract_variable = { which = tin_used value = 0.3 }
+			subtract_variable = { which = cannon_foundry_amount value = 1 } 
+		}
+	}
+	if = {
+		limit = { AND = { has_building = cannon_foundry has_building = off } }
+		owner = {
+			change_variable = {            
+				which = cannon_foundry_amount
+				value = 1
+			}
+		}
+		FROM = {
+			subtract_variable = {            
+				which = cannon_foundry_amount
+				value = 1
+			}
+		}
+	}
+	###metalworking_workshop
+	if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = metalworking_workshop NOT = { has_building = off_2 } }
+				owner = { check_variable = { which = iron value = 1.0 } }	
+			}
+		}
+		owner = {
+			subtract_variable = { which = iron value = 1.0 }             
+			change_variable = { which = iron_used value = 1.0 }              		
+			change_variable = { which = metalworking_workshop_amount value = 1 }         
+		}
+		FROM = {
+			change_variable = { which = iron value = 1.0 }           
+			subtract_variable = { which = iron_used value = 1.0 }        
+			subtract_variable = { which = metalworking_workshop_amount value = 1 }         			
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = metalworking_workshop NOT = { has_building = off_2 } }	
+				owner = { NOT = { check_variable = { which = iron value = 1.0 } } }
+			}
+		}
+		owner = {
+			change_variable = { which = iron_used value = 1.0 }        
+			change_variable = { which = metalworking_workshop_amount value = 1 }
+		}
+		FROM = {
+			subtract_variable = { which = iron_used value = 1.0 }        
+			subtract_variable = { which = metalworking_workshop_amount value = 1 } 
+		}
+	}
+	if = {
+		limit = { AND = { has_building = metalworking_workshop has_building = off_2 } }
+		owner = {
+			change_variable = {            
+				which = metalworking_workshop_amount
+				value = 1
+			}
+		}
+		FROM = {
+			subtract_variable = {            
+				which = metalworking_workshop_amount
+				value = 1
+			}
+		}
+	}
+	###munition_factory
+	if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = munition_factory NOT = { has_building = off_3 } }
+				owner = { check_variable = { which = lead value = 1.0 } }	
+			}
+		}
+		owner = {
+			subtract_variable = { which = lead value = 1.0 }             
+			change_variable = { which = lead_used value = 1.0 }              		
+			change_variable = { which = munition_factory_amount value = 1 }         
+		}
+		FROM = {
+			change_variable = { which = lead value = 1.0 }           
+			subtract_variable = { which = lead_used value = 1.0 }        
+			subtract_variable = { which = munition_factory_amount value = 1 }         			
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = munition_factory NOT = { has_building = off_3 } }	
+				owner = { NOT = { check_variable = { which = lead value = 1.0 } } }
+			}
+		}
+		owner = {
+			change_variable = { which = lead_used value = 1.0 }        
+			change_variable = { which = munition_factory_amount value = 1 }
+		}
+		FROM = {
+			subtract_variable = { which = lead_used value = 1.0 }        
+			subtract_variable = { which = munition_factory_amount value = 1 } 
+		}
+	}
+	if = {
+		limit = { AND = { has_building = munition_factory has_building = off_3 } }
+		owner = {
+			change_variable = {            
+				which = munition_factory_amount
+				value = 1
+			}
+		}
+		FROM = {
+			subtract_variable = {            
+				which = munition_factory_amount
+				value = 1
+			}
+		}
+	}
+	###spectacle_factory
+	if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = spectacle_factory NOT = { has_building = off_5 } }
+				owner = { check_variable = { which = glass value = 0.6 } }	
+			}
+		}
+		owner = {
+			subtract_variable = { which = glass value = 0.6 }             
+			change_variable = { which = glass_used value = 0.6 }              		
+			change_variable = { which = spectacle_factory_amount value = 1 }         
+		}
+		FROM = {
+			change_variable = { which = glass value = 0.6 }           
+			subtract_variable = { which = glass_used value = 0.6 }        
+			subtract_variable = { which = spectacle_factory_amount value = 1 }         			
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = spectacle_factory NOT = { has_building = off_5 } }	
+				owner = { NOT = { check_variable = { which = glass value = 0.6 } } }
+			}
+		}
+		owner = {
+			change_variable = { which = glass_used value = 0.6 }        
+			change_variable = { which = spectacle_factory_amount value = 1 }
+		}
+		FROM = {
+			subtract_variable = { which = glass_used value = 0.6 }        
+			subtract_variable = { which = spectacle_factory_amount value = 1 } 
+		}
+	}
+	if = {
+		limit = { AND = { has_building = spectacle_factory has_building = off_5 } }
+		owner = {
+			change_variable = {            
+				which = spectacle_factory_amount
+				value = 1
+			}
+		}
+		FROM = {
+			subtract_variable = {            
+				which = spectacle_factory_amount
+				value = 1
+			}
+		}
+	}
+	###steam_engine_manu
+	if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = steam_engine_manu NOT = { has_building = off_4 } }
+				owner = { check_variable = { which = copper value = 0.4 } check_variable = { which = zinc value = 0.3 } }	
+			}
+		}
+		owner = {
+			subtract_variable = { which = copper value = 0.4 }      
+			subtract_variable = { which = zinc value = 0.3 }        
+			change_variable = { which = copper_used value = 0.4 }        
+			change_variable = { which = zinc_used value = 0.3 }         		
+			change_variable = { which = steam_engine_manu_amount value = 1 }         
+		}
+		FROM = {
+			change_variable = { which = copper value = 0.4 }      
+			change_variable = { which = zinc value = 0.3 }        
+			subtract_variable = { which = copper_used value = 0.4 }        
+			subtract_variable = { which = zinc_used value = 0.3 } 
+			subtract_variable = { which = steam_engine_manu_amount value = 1 }         			
+		}
+	}
+	else_if = {
+		limit = {
+			AND = {
+				ROOT = { has_building = steam_engine_manu NOT = { has_building = off_4 } }	
+				owner = { NOT = { check_variable = { which = copper value = 0.4 } check_variable = { which = zinc value = 0.3 } } }
+			}
+		}
+		owner = {
+			change_variable = { which = copper_used value = 0.4 }        
+			change_variable = { which = zinc_used value = 0.3 }
+			change_variable = { which = steam_engine_manu_amount value = 1 }
+		}
+		FROM = {
+			subtract_variable = { which = copper_used value = 0.4 }        
+			subtract_variable = { which = zinc_used value = 0.3 }
+			subtract_variable = { which = steam_engine_manu_amount value = 1 } 
+		}
+	}
+	if = {
+		limit = { AND = { has_building = steam_engine_manu has_building = off_4 } }
+		owner = {
+			change_variable = {            
+				which = steam_engine_manu_amount
+				value = 1
+			}
+		}
+		FROM = {
+			subtract_variable = {            
+				which = steam_engine_manu_amount
+				value = 1
+			}
+		}
+	}
+	
+	
+	
+	
+	FROM = { 
+		country_event = { id = New_TradeGood_Events.2 days = 1 }
+	}
+	owner = {
+		country_event = { id = New_TradeGood_Events.2 days = 1 }
+	}
+}
+
+
+on_dip_development = {
+	
+	if = {
+		limit = {
+			OR = {
+				trade_goods = copper
+				trade_goods = tin
+				trade_goods = iron
+				trade_goods = zinc
+				trade_goods = lead
+				trade_goods = glass
+			}
+		}
+		owner = {
+			country_event = { 
+				id = New_TradeGood_Events.2
+			}
+		}
 	}
 }
 

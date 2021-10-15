@@ -1,0 +1,198 @@
+ROT_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = ROT
+			AND = {
+				was_tag = ROT
+				tag = FKN
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	ROT_question_of_religion = {
+		icon = spread_piety
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_owner_religion = no
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = FKN_protestant_enabled
+				had_global_flag = {
+					flag = reformation_started
+					days = 9125
+				}
+			}
+			religious_unity = 0.5
+		}
+		effect = {
+			country_event = { id = ME_Rothenburg_Events.1 }
+		}
+	}
+	
+	ROT_meisertrunk = {
+		icon = sway_cologne
+		required_missions = { ROT_question_of_religion }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 4715
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				4715 = {
+					owned_by = ROOT
+					development = 20
+					has_manufactory_trigger = yes
+				}
+			}
+			else = {
+				4715 = {
+					owned_by = ROOT
+					development = 25
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Rothenburg_Events.2 }
+		}
+	}
+	
+	ROT_league_wars  = {
+		icon = league_of_the_public_weal
+		required_missions = { ROT_meisertrunk }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 4715
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
+		trigger = {
+			4715 = {
+				owned_by = ROOT
+				fort_level = 2
+			}
+		}
+		effect = {
+			4715 = {
+				add_province_modifier = {
+					name = ROT_resistance_in_franconia
+					duration = -1
+				}
+			}
+			add_country_modifier = {
+				name = ROT_against_the_heretics
+				duration = 5475
+			}
+		}
+	}
+}
+
+ROT_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = ROT
+			AND = {
+				was_tag = ROT
+				tag = FKN
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	ROT_terziarenkloster = {
+		icon = catholic_volunteers
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 4715
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			4715 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			4715 = {
+				add_province_modifier = {
+					name = ROT_terziarenkloster_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	ROT_heilig_geist_spital = {
+		icon = pontifical_universities
+		required_missions = { ROT_terziarenkloster }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 4715
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 5 }
+			}
+		}
+		trigger = {
+			4715 = {
+				num_of_times_improved = 5
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = emp_ven_plague_doctor_training_tt
+			set_country_flag = has_competent_doctors
+			4715 = {
+				add_province_modifier = {
+					name = ROT_heilig_geist_spital_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	ROT_resist_subjugation = {
+		icon = army_reforms
+		required_missions = { ROT_heilig_geist_spital }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size = 10
+			num_of_cities = 2
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = ROT_resisting_foreign_powers
+				duration = 9125
+			}
+		}
+	}
+}

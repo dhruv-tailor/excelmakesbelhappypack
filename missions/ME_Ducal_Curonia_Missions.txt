@@ -1,0 +1,205 @@
+Ducal_KUR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = KUR
+		has_country_flag = KUR_ducal
+	}
+	has_country_shield = yes
+	
+	Ducal_KUR_embrace_new_thoughts = {
+		icon = mission_iberian_conquistador
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			has_institution = new_world_i
+		}
+		effect = {
+			add_country_modifier = {
+				name = Ducal_KUR_ambitions
+				duration = -1
+			}
+			add_dip_power = 100
+		}
+	}
+	
+	Ducal_KUR_acquire_charts = {
+		icon = overseas_empire
+		required_missions = { Ducal_KUR_embrace_new_thoughts }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					continent = north_america
+					NOT = {
+						north_america = { has_discovered = ROOT }
+					}
+				}
+				AND = {
+					continent = south_america
+					NOT = {
+						south_america = { has_discovered = ROOT }
+					}
+				}
+				AND = {
+					OR = {
+						#province_id = 1177
+						province_id = 1114
+						province_id = 502
+					}
+					NOT = { has_discovered = ROOT }
+				}
+			}
+		}
+		trigger = {
+			north_america = { has_discovered = ROOT }
+			south_america = { has_discovered = ROOT }
+			#1177 = { has_discovered = ROOT }
+			1114 = { has_discovered = ROOT }
+			502 = { has_discovered = ROOT }
+		}
+		effect = {
+			if = {
+				limit = {
+					502 = { is_empty = yes }
+				}
+				502 = { add_siberian_construction = 200 }
+			}
+			else_if = {
+				limit = {
+					colonial_the_carribean  = {
+						is_empty = yes
+					}
+				}
+				random_province = { 
+					limit = {
+						colonial_region = colonial_the_carribean 
+						is_empty = yes
+					}
+					add_siberian_construction = 200
+				}
+			}
+			else = {
+				random_province = {
+					limit = {
+						continent = north_america
+						is_empty = yes
+					}
+					add_siberian_construction = 200
+				}
+			}			
+		}
+	}
+	
+	Ducal_KUR_charter_gambia = {
+		icon = mission_west_african_ports
+		required_missions = { Ducal_KUR_acquire_charts }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 39
+					OR = {
+						NOT = { has_shipyard_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					province_id = 1114
+					OR = {
+						NOT = { has_discovered = ROOT }
+						NOT = { range = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {
+			39 = {
+				has_shipyard_building_trigger = yes
+				owned_by = ROOT
+			}
+			1114 = { has_discovered = ROOT }
+			1114 = { range = ROOT }
+		}
+		effect = {
+			country_event = { id = ME_Ducal_Prussia_Events.3 }
+		}
+	}
+	
+	Ducal_KUR_colonial_power = {
+		icon = mission_restore_faith_in_the_throne
+		required_missions = { Ducal_KUR_charter_gambia Ducal_KUR_establish_colony_in_tobago }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 39
+			OR = {
+				NOT = { has_shipyard_building_trigger = yes }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			total_development = 50
+			39 = {
+				has_shipyard_building_trigger = yes
+				has_dock_building_trigger = yes
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = Ducal_KUR_funds
+				duration = -1
+			}
+			overlord = {
+				add_country_modifier = {
+					name = Ducal_KUR_exotic_citizens
+					duration = 10950
+				}
+			}
+		}
+	}
+}
+
+Ducal_KUR_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = KUR
+		has_country_flag = KUR_ducal
+	}
+	has_country_shield = yes
+
+	Ducal_KUR_establish_colony_in_tobago = {
+		icon = mission_portuguese_malacca
+		required_missions = { Ducal_KUR_acquire_charts }
+		position = 3
+		provinces_to_highlight = {
+			continent = north_america
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			north_america = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			define_advisor = {
+				type = colonial_governor
+				name = "Cornelius Caroon"
+				skill = 1
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.25
+			}
+			add_years_of_income = 1
+			overlord = {
+				custom_tooltip = POL_poland
+				add_mercantilism = 2
+				add_years_of_income = 0.5
+			}
+		}
+	}
+}

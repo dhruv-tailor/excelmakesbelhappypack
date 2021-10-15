@@ -1,0 +1,120 @@
+pte_demand_manpower_mam = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0
+	prestige_base = 0.5
+	ae_base = 0.152
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 10.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = no
+	is_make_subject = no
+	requires_is_allowed = no
+
+	is_visible = {
+		OR = {
+			has_reform = mamluk_government
+			has_reform = ottoman_government
+		}
+		FROM = {
+			max_manpower = 1
+		}
+	}
+	is_allowed = {
+		army_tradition = 5
+		FROM = {
+			manpower_percentage = 0.1
+		}
+	}
+	effect = {
+		add_army_tradition = -5
+		export_to_variable = {
+			which = enemy_max_manpower
+			value = max_manpower
+			who = FROM
+		}
+		divide_variable = { which = enemy_max_manpower value = 10 }
+		divide_variable = { which = enemy_max_manpower value = 100 }
+		multiply_variable = { which = enemy_max_manpower value = 100 }
+		while = {
+			limit = {
+				check_variable = { which = enemy_max_manpower value = 1000 }
+			}
+			change_variable = { which = enemy_max_manpower value = -1000 }
+			add_manpower = 1000
+			FROM = {
+				add_manpower = -1000
+			}
+		}
+		while = {
+			limit = {
+				check_variable = { which = enemy_max_manpower value = 100 }
+			}
+			change_variable = { which = enemy_max_manpower value = -100 }
+			add_manpower = 100
+			FROM = {
+				add_manpower = -100
+			}
+		}
+		while = {
+			limit = {
+				check_variable = { which = enemy_max_manpower value = 10 }
+			}
+			change_variable = { which = enemy_max_manpower value = -10 }
+			add_manpower = 10
+			FROM = {
+				add_manpower = -10
+			}
+		}
+		while = {
+			limit = {
+				check_variable = { which = enemy_max_manpower value = 1 }
+			}
+			change_variable = { which = enemy_max_manpower value = -1 }
+			add_manpower = 1
+			FROM = {
+				add_manpower = -1
+			}
+		}
+		while = {
+			limit = {
+				check_variable = { which = enemy_max_manpower value = 0.1 }
+			}
+			change_variable = { which = enemy_max_manpower value = -0.1 }
+			add_manpower = 0.1
+			FROM = {
+				add_manpower = -0.1
+			}
+		}
+		set_variable = { which = enemy_max_manpower value = 0 }
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			NOT = { manpower_percentage = 0.2 }
+			FROM = {
+				max_manpower = 30
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						OR = {
+							is_claim = ROOT
+							is_core = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+}

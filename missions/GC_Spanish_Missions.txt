@@ -168,11 +168,21 @@ gc_spain_1_b = {
 		}
 
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
 				484 = {
 					country_or_non_sovereign_subject_holds = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-					province_has_building_of_group = { group = production all = yes }
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+			}
+			else = {
+				484 = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -317,8 +327,24 @@ gc_spain_2 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					210 = {
+						NOT = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+					}
+				}
+				210 = {
+					add_building = fort_15th
+				}
+			}
 			210 = {
-				add_fort_line = yes
 				add_province_modifier = {
 					name = "fortified_navarra"
 					duration = 7300
@@ -405,11 +431,22 @@ gc_spain_2_b = {
 		}
 
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
 				490 = {
 					country_or_non_sovereign_subject_holds = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+				
+				}
+			}
+			else = {
+				490 = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -1070,9 +1107,9 @@ gc_spain_3_b = {
 			}
 			else = {
 				809 = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_trade_depot
-						province_has_building_of_group = { group = trade equal_or_more_advanced_than = trade_depot }
+					OR = {
+						has_building = trade_depot
+						has_building = stock_exchange
 					}
 				}
 			}
@@ -1278,9 +1315,25 @@ gc_spain_4 = {
 			}
 			if = {
 				limit = {
-					NOT = { NAP = { is_subject_of = ROOT } }
+					exists = NAP
+					valid_for_personal_unions_trigger = yes
+					NAP = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = NAP
 				}
 				sicily_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				western_sicily_area = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { is_permanent_claim = ROOT }
@@ -1307,6 +1360,15 @@ gc_spain_4 = {
 						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
+				}
+				120 = {
+					if = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+					add_permanent_claim = ROOT
+					}
 				}
 			}
 			else = {
@@ -1316,6 +1378,12 @@ gc_spain_4 = {
 					}
 					add_permanent_claim = NAP
 				}
+				western_sicily_area = {
+					limit = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					add_permanent_claim = NAP
+				}
 				calabria_area = {
 					limit = {
 						NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -1333,6 +1401,14 @@ gc_spain_4 = {
 						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					}
 					add_permanent_claim = NAP
+				}
+				120 = {
+					if = {
+						limit = {
+							NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						}
+					add_permanent_claim = NAP
+					}
 				}
 			}
 		}
@@ -1345,29 +1421,45 @@ gc_spain_4 = {
 		provinces_to_highlight = {
 			OR = {
 				area = sicily_area
+				area = western_sicily_area
 				area = calabria_area
 				area = apulia_area
 				area = naples_area
+				province_id = 120
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 
 		trigger = {
-			sicily_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			calabria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			apulia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			naples_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NAP = {
+					junior_union_with = ROOT
+				}
+				AND = {
+					sicily_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					western_sicily_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					calabria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					apulia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					naples_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					120 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
 			}
 		}
 
@@ -1417,6 +1509,12 @@ gc_spain_4 = {
 					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
+			}
+			hidden_effect = {
+				remove_casus_belli = {
+					type = cb_restore_personal_union
+					target = NAP
+				}
 			}
 		}
 	}
@@ -2097,7 +2195,15 @@ gc_spain_5_b = {
 			OR = {
 				ROOT = {
 					is_emperor = yes
-					hre_reform_passed = erbkaisertum
+					if = {
+						limit = {
+							has_dlc = "Emperor"
+						}
+						hre_reform_passed = emperor_erbkaisertum
+					}
+					else = {
+						hre_reform_passed = erbkaisertum
+					}
 				}
 				AND = {
 					NOT = { hre_size = 1 }

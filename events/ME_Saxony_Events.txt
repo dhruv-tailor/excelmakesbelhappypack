@@ -1,0 +1,290 @@
+namespace = ME_Saxony_Events
+
+country_event = {
+	id = ME_Saxony_Events.1
+	title = ME_Saxony_Events.EVTNAME1
+	desc = ME_Saxony_Events.EVTDESC1
+	picture = CITY_VIEW_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Saxony_Events1.EVTOPT1
+
+		goto = 62
+
+		ai_chance = { factor = 100 }
+
+		62 = {
+			change_trade_goods = paper
+			if = {
+				limit = {
+					has_building = textile
+				}
+				remove_building = textile
+			}
+			if = {
+				limit = {
+					NOT = { has_building = mills }
+				}
+				add_building = mills
+			}
+		}
+	}
+
+	option = {
+		name = ME_Saxony_Events1.EVTOPT2
+
+		ai_chance = { factor = 0 }
+
+		add_years_of_income = 1
+	}
+}
+
+country_event = {
+	id = ME_Saxony_Events.2
+	title = ME_Saxony_Events.EVTNAME2
+	desc = ME_Saxony_Events.EVTDESC2
+	picture = CITY_VIEW_eventPicture
+
+	fire_only_once = yes
+
+	goto = 4742
+
+	trigger = {
+		tag = SAX
+		owns = 4742
+		4742 = {
+			has_owner_religion = yes
+			has_owner_culture = yes
+			has_manufactory_trigger = yes
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	option = {
+		name = ME_Saxony_Events2.EVTOPT1
+
+		add_years_of_income = 1
+		4742 = {
+			add_base_production = 3
+			add_permanent_province_modifier = {
+				name = saxony_rammelsberg_province_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Saxony_Events.3
+	title = ME_Saxony_Events.EVTNAME3
+	desc = ME_Saxony_Events.EVTDESC3
+	picture = DIPLOMACY_eventPicture
+
+	major = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_country_flag = saxony_claim_east_frankish_heritage_completed
+		OR = {
+			AND = {
+				exists = FRX
+				FRX = {
+					is_subject = no
+				}
+			}
+			AND = {
+				exists = FRA
+				FRA = {
+					is_subject = no
+					has_country_flag = restored_the_frankish_realm
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = {
+		name = ME_Saxony_Events3.EVTOPT1
+
+		ai_chance = {
+			factor = 0.25
+
+			modifier = {
+				factor = 0.1
+				OR = {
+					AND = {
+						exists = FRA
+						FRA = {
+							is_subject = no
+							has_country_flag = restored_the_frankish_realm
+						}
+						OR = {
+							alliance_with = FRA
+							dynasty = FRA
+							marriage_with = FRA
+							historical_friend_with = FRA
+						}
+					}
+					AND = {
+						NOT = {
+							exists = FRA
+							FRA = {
+								is_subject = no
+								has_country_flag = restored_the_frankish_realm
+							}
+						}
+						OR = {
+							alliance_with = FRX
+							dynasty = FRX
+							marriage_with = FRX
+							historical_friend_with = FRX
+						}
+					}
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				calc_true_if = {
+					all_country = {
+						is_enemy = ROOT
+					}
+					amount = 3
+				}
+				any_rival_country = {
+					NOT = {
+						any_country = {
+							NOT = { tag = PREV }
+							is_enemy = ROOT
+							NOT = { total_development = PREV }
+						}
+					}
+				}
+			}
+			random_rival_country = {
+				limit = {
+					NOT = {
+						any_country = {
+							NOT = { tag = PREV }
+							is_enemy = ROOT
+							NOT = { total_development = PREV }
+						}
+					}
+				}
+				ROOT = {
+					remove_rival = PREV
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = FRA
+				FRA = {
+					is_subject = no
+					has_country_flag = restored_the_frankish_realm
+				}
+			}
+			add_rival = FRA
+			if = {
+				limit = {
+					OR = {
+						historical_friend_with = FRA
+						FRA = {
+							historical_friend_with = ROOT
+						}
+					}
+				}
+				remove_historical_friend = FRA
+				FRA = {
+					remove_historical_friend = ROOT
+				}
+			}
+		}
+		else = {
+			add_rival = FRX
+			if = {
+				limit = {
+					OR = {
+						historical_friend_with = FRX
+						FRX = {
+							historical_friend_with = ROOT
+						}
+					}
+				}
+				remove_historical_friend = FRX
+				FRX = {
+					remove_historical_friend = ROOT
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Saxony_Events3.EVTOPT2
+
+		highlight = yes
+
+		trigger = {
+			if = {
+				limit = {
+					exists = FRA
+					FRA = {
+						is_subject = no
+						has_country_flag = restored_the_frankish_realm
+					}
+				}
+				OR = {
+					alliance_with = FRA
+					dynasty = FRA
+					marriage_with = FRA
+				}
+			}
+			else = {
+				OR = {
+					alliance_with = FRX
+					dynasty = FRX
+					marriage_with = FRX
+				}
+			}
+		}
+
+		ai_chance = { factor = 0.5 }
+
+		if = {
+			limit = {
+				exists = FRA
+				FRA = {
+					is_subject = no
+					has_country_flag = restored_the_frankish_realm
+				}
+			}
+			add_casus_belli = {
+				target = FRA
+				type = cb_restore_personal_union
+			}
+		}
+		else = {
+			add_casus_belli = {
+				target = FRX
+				type = cb_restore_personal_union
+			}
+		}
+	}
+
+	option = {
+		name = ME_Saxony_Events3.EVTOPT3
+
+		ai_chance = { factor = 0.25 }
+
+		add_prestige = -10
+	}
+}

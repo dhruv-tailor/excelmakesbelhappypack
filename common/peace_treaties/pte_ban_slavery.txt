@@ -1,0 +1,144 @@
+pte_ban_slavery = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0
+	prestige_base = 0.7
+	ae_base = 0
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 50.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = yes
+	is_make_subject = no
+	requires_is_allowed = yes
+
+	is_visible = {
+		has_country_modifier = the_abolish_slavery_act
+		NOT = { has_country_flag = was_forced_to_abolish_slavery }
+		FROM = {
+			NOT = { has_country_modifier = the_abolish_slavery_act }
+			is_free_or_tributary_trigger = yes
+			OR = {
+				slaves = 1
+				any_subject_country = {
+					is_colonial_nation = yes
+					is_subject_other_than_tributary_trigger = yes
+					NOT = { has_country_modifier = the_abolish_slavery_act }
+					slaves = 1
+				}
+			}
+		}
+	}
+	is_allowed = {
+		custom_trigger_tooltip = {
+			tooltip = PTE_BAN_SLAVERY_TT
+			FROM = {
+				OR = {
+					any_owned_province = {
+						trade_goods = slaves
+						controller = {
+							is_in_war = {
+								casus_belli = cb_pte_ban_slavery
+								attackers = THIS
+							}
+						}
+					}
+					any_subject_country = {
+						is_colonial_nation = yes
+						is_subject_other_than_tributary_trigger = yes
+						NOT = { has_country_modifier = the_abolish_slavery_act }
+						slaves = 1
+						any_owned_province = {
+							trade_goods = slaves
+							controller = {
+								is_in_war = {
+									casus_belli = cb_pte_ban_slavery
+									attackers = THIS
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		FROM = {
+			set_country_flag = was_forced_to_abolish_slavery
+			add_country_modifier = {
+				name = innovative_modifier
+				duration = 3650
+			}
+			add_country_modifier = {
+				name = the_abolish_slavery_act
+				duration = -1
+			}
+			every_owned_province = {
+				limit = {
+					trade_goods = slaves
+				}
+				change_trade_goods = unknown
+				remove_building = tradecompany
+				if = {
+					limit = { has_province_modifier = slave_entrepot }
+					remove_province_modifier = slave_entrepot
+				}
+				ROOT = {
+					add_adm_power = 10
+					add_dip_power = 10
+					add_mil_power = 10
+				}
+			}
+
+			every_subject_country = {
+				limit = {
+					is_colonial_nation = yes
+					is_subject_other_than_tributary_trigger = yes
+					NOT = { has_country_modifier = the_abolish_slavery_act }
+					slaves = 1
+				}
+				set_country_flag = was_forced_to_abolish_slavery
+				add_country_modifier = {
+					name = innovative_modifier
+					duration = 3650
+				}
+				add_country_modifier = {
+					name = the_abolish_slavery_act
+					duration = -1
+				}
+				every_owned_province = {
+					limit = {
+						trade_goods = slaves
+					}
+					change_trade_goods = unknown
+					remove_building = tradecompany
+					if = {
+						limit = { has_province_modifier = slave_entrepot }
+						remove_province_modifier = slave_entrepot
+					}
+					ROOT = {
+						add_adm_power = 10
+						add_dip_power = 10
+						add_mil_power = 10
+					}
+				}
+			}
+		}
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 100
+		}
+		limit = {
+			always = yes
+		}
+	}
+}

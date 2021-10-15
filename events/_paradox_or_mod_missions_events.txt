@@ -4,7 +4,7 @@ country_event = {
 	id = paradox_or_mod_missions_events.1
 	title = paradox_or_mod_missions_events.EVTNAME1
 	desc = paradox_or_mod_missions_events.EVTDESC1
-	picture = BIG_BOOK_eventPicture_cute
+	picture = DIPLOMACY_eventPicture
 
 	hidden = yes
 	fire_only_once = yes
@@ -15,17 +15,23 @@ country_event = {
 
 	immediate = {
 		hidden_effect = {
+			country_event = { id = missions_expanded_events.1 } # global flag
+			country_event = { id = golden_bull_events.1 } # global flag
 			set_global_flag = paradox_or_mod_missions_events_flag
 			every_country = {
 				if = {
 					limit = {
+						OR = {
 							country_has_both_paradox_and_me_missions = yes
+							country_has_both_paradox_and_golden_bull_missions = yes
+						}
 					}
-					country_event = { id = paradox_or_mod_missions_events.2}
+					country_event = { id = paradox_or_mod_missions_events.2 days = 1 }
 				}
 				else = {
 					set_country_flag = use_paradox_missions
 					clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+					clr_country_flag = use_golden_bull_missions_instead_of_paradox
 					swap_non_generic_missions = yes
 				}
 			}
@@ -49,14 +55,17 @@ country_event = {
 	trigger = {
 		has_global_flag = paradox_or_mod_missions_events_flag
 		NOT = { has_country_flag = has_selected_missions_@ROOT }
-		country_has_both_paradox_and_me_missions = yes
-
+		OR = {
+			country_has_both_paradox_and_me_missions = yes
+			country_has_both_paradox_and_golden_bull_missions = yes
+		}
 	}
 
 	immediate = {
 		hidden_effect = {
 			set_country_flag = use_paradox_missions
 			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
 		}
 	}
 
@@ -64,7 +73,7 @@ country_event = {
 		name = paradox_or_mod_missions_events2.EVTOPT1
 
 		trigger = {
-			country_has_both_paradox_and_me_missions = yes
+			has_global_flag = missions_expanded_mod_active
 		}
 
 		ai_chance = {
@@ -74,12 +83,31 @@ country_event = {
 		custom_tooltip = CHOOSE_ME_MISSIONS
 		hidden_effect = {
 			clr_country_flag = use_paradox_missions
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
 			set_country_flag = use_missions_expanded_missions_instead_of_paradox
 			swap_non_generic_missions = yes
 		}
 	}
 
+	option = { # Choose Golden Bull missions
+		name = paradox_or_mod_missions_events2.EVTOPT2
 
+		trigger = {
+			has_global_flag = golden_bull_mod_active
+		}
+
+		ai_chance = {
+			factor = 0.5
+		}
+
+		custom_tooltip = CHOOSE_GOLDEN_BULL_MISSIONS
+		hidden_effect = {
+			clr_country_flag = use_paradox_missions
+			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			set_country_flag = use_golden_bull_missions_instead_of_paradox
+			swap_non_generic_missions = yes
+		}
+	}
 
 	option = { # Choose paradox' missions
 		name = paradox_or_mod_missions_events2.EVTOPT3
@@ -91,6 +119,7 @@ country_event = {
 		custom_tooltip = CHOOSE_PARADOX_MISSIONS
 		hidden_effect = {
 			clr_country_flag = use_missions_expanded_missions_instead_of_paradox
+			clr_country_flag = use_golden_bull_missions_instead_of_paradox
 			set_country_flag = use_paradox_missions
 			swap_non_generic_missions = yes
 		}

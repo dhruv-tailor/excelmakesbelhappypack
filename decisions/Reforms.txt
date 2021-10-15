@@ -6,21 +6,21 @@ country_decisions = {
 		}
 		allow = {
 			OR = {
-				has_reform_level = 5
+				has_reform = weak_burghers_reform
 				AND = {
 					monthly_income = 40
 					land_forcelimit = 60
-					NOT = {
-						estate_influence = {
-							estate = estate_nobles
-							influence = 60
-						}
-					}
-					estate_loyalty = {
-						estate = estate_nobles
-						loyalty = 40
-					}
 				}
+			}
+			NOT = {
+				estate_influence = {
+					estate = estate_nobles
+					influence = 60
+				}
+			}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 40
 			}
 		}
 		effect = {
@@ -31,7 +31,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_me_french_absolutism = {
 		major = yes
 		potential = {
@@ -48,7 +48,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_me_empire_of_serbia = {
 		major = yes
 		potential = {
@@ -64,7 +64,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_GE_great_russian_republic = {
 		major = yes
 		potential = {
@@ -83,7 +83,7 @@ country_decisions = {
 			factor = 0
 		}
 	}
-
+	
 	reforms_me_habsburg_monarchy = {
 		major = yes
 		potential ={
@@ -109,7 +109,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_me_austrian_empire = {
 		major = yes
 		potential ={
@@ -128,8 +128,8 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
-
+	
+	
 	reforms_GE_hesse_modernization = {
 		major = yes
 		potential = {
@@ -152,7 +152,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_GE_lithuanian_kingdom = {
 		major = yes
 		potential = {
@@ -210,13 +210,14 @@ country_decisions = {
 			factor = 0
 		}
 	}
-
+	
 	reforms_GE_papal_curia_reform = {
 		major = yes
 		potential = {
 			tag = PAP
 			custom_trigger_tooltip = {
-				has_reform = kingdom_of_god_reform
+				tooltip = "kingdom_of_god_tooltip"
+				has_country_modifier = kingdom_of_god
 			}
 			NOT = { has_reform = papal_curia_reform }
 		}
@@ -229,7 +230,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_GE_consulate_of_the_sea = {
 		potential = {
 			government = monarchy
@@ -281,7 +282,7 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
+	
 	reforms_GE_consulate_of_the_malay = {
 		potential = {
 			government = monarchy
@@ -335,7 +336,7 @@ country_decisions = {
 				1357 = { # Moluccas
 					is_strongest_trade_power = ROOT
 				}
-				4358 = { # Philiphines
+				1397 = { # Philiphines
 					is_strongest_trade_power = ROOT
 				}
 				amount = 2
@@ -349,8 +350,8 @@ country_decisions = {
 			factor = 100
 		}
 	}
-
-	reforming_mandala_system_decision = {
+	
+	reforming_mandala_system_decision = { 
 		major = yes
 
 		potential = {
@@ -369,11 +370,11 @@ country_decisions = {
 				}
 			}
 		}
-
+	
 		effect = {
 			add_stability = -2
 			add_prestige = 25
-			add_government_reform = basic_reformed_mandala_reform
+			add_government_reform = basic_reformed_mandala_reform	
 			add_legitimacy = 25
 		}
 
@@ -384,39 +385,34 @@ country_decisions = {
 
     reforms_GE_solar_kingdom_reform = {
 		potential = {
-			government = monarchy
-			OR = {
-                culture_group = burman
-                culture_group = southeastasian_group
-			}
-			NOT = { has_reform = solar_kingdom_reform }
+			has_reform = basic_reformed_mandala_reform
 		}
-
+		
 		allow = {
             stability = 3
             total_development = 500
             is_at_war = no
             num_of_subjects = 10 #Could include Tributaries... this is not unreasonable
         }
-
+        
 		effect = {
 			add_stability = -3
             add_government_reform = solar_kingdom_reform
             add_legitimacy = 25
             add_prestige = 25
         }
-
+        
 		ai_will_do = {
 			factor = 100
 		}
 	}
-
+	
 	# reforms_GE_solar_kingdom_reform = {
 		# potential = {
 			# government = monarchy
 			# OR = {
 				# culture_group = burman
-				# culture_group = southeastasian_group
+				# culture_group = southeastasian_group 
 			# }
 			# NOT = { has_reform = solar_kingdom_reform }
 		# }
@@ -473,7 +469,7 @@ country_decisions = {
 			# factor = 100
 		# }
 	# }
-
+	
 	GE_blood_sacrifice = {
 		major = yes
 		potential = {
@@ -515,10 +511,11 @@ country_decisions = {
 			factor = 0
 		}
 	}
-
+	
 	check_empowered_requirements_again = {
+		major = no
 		potential = {
-			was_player = yes
+			always = yes
 		}
 		allow = {
 		}
@@ -541,6 +538,46 @@ country_decisions = {
 		effect = {
 			add_mil_power = -100
 			add_devotion = 10
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	GE_emergency_powers = {
+		major = no
+		potential = {
+			has_government_attribute = enables_emergency_power
+		}
+		allow = {
+			republican_tradition = 20
+			NOT = {
+				has_ruler_modifier = GE_emergency_powers_modifier
+			}
+		}
+		effect = {
+			add_republican_tradition = -20
+			add_ruler_modifier = {
+				name = GE_emergency_powers_modifier
+				duration = 3650
+			}
+			add_absolutism = 20
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	GE_become_confederacy = {
+		major = yes
+		potential = {
+			has_reform = crown_of_aragon
+			#always = no
+		}
+		allow = {
+			always = yes
+		}
+		effect = {
+			change_government = confederacy
+			change_government_reform_progress = 10000
 		}
 		ai_will_do = {
 			factor = 0

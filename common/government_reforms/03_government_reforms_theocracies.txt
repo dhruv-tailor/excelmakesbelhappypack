@@ -15,12 +15,6 @@ theocracy_mechanic = {
 		church_loyalty_modifier = 0.1
 		church_influence_modifier = 0.05
 	}
-	custom_attributes = {
-		enables_monarchie_idea_group = no
-		enables_republik_idea_group = no
-		enables_theokratie_idea_group = yes
-		enables_horde_idea_group = no
-	}
 }
 
 #Leadership
@@ -173,7 +167,7 @@ kingdom_of_god_reform = {
 		global_manpower_modifier = 0.1
 		prestige = 1
 		devotion = 1
-		appoint_cardinal_cost = -0.5
+		appoint_cardinal_cost = -0.3
 		papal_influence_from_cardinals = 1.0
 	}
 	allow_normal_conversion = yes
@@ -204,6 +198,7 @@ pious_merchants_reform = {
 	allow_normal_conversion = yes
 	modifiers = {
 		global_trade_power = 0.05
+		trade_deals_slots = 0.01
 		maratha_muslim_influence_modifier = 0.1
 		rajput_muslim_influence_modifier = 0.1
 		burghers_influence_modifier = 0.1
@@ -216,7 +211,7 @@ loyal_nobility_reform = {
 	icon = "nobleman"
 	allow_normal_conversion = yes
 	modifiers = {
-		army_tradition = 1
+		army_tradition = 0.25
 		nobles_influence_modifier = 0.1
 		maratha_exclusive_influence_modifier = 0.1
 		rajput_exclusive_influence_modifier = 0.1
@@ -260,7 +255,7 @@ monastic_breweries_reform = {
 					limit = {
 						trade_goods = wine
 					}
-					add_province_modifier = {
+					add_province_modifier = { 
 						name = wine_bonus_prod
 						duration = -1
 						hidden = yes
@@ -270,7 +265,7 @@ monastic_breweries_reform = {
 					limit = {
 						trade_goods = grain
 					}
-					add_province_modifier = {
+					add_province_modifier = { 
 						name = grain_bonus_prod
 						duration = -1
 						hidden = yes
@@ -315,7 +310,7 @@ warrior_monks_reform = {
 	allow_normal_conversion = yes
 	modifiers = {
 		discipline = 0.05
-		infantry_power = 0.1
+		infantry_power = 0.05
 		mercenary_manpower = 0.1
 	}
 }
@@ -379,7 +374,7 @@ conciliarism_reform = {
 		tag = PAP
 	}
 	modifiers = {
-		appoint_cardinal_cost = -0.5
+		appoint_cardinal_cost = -0.3
 	}
 	ai = {
 		factor = 3
@@ -441,22 +436,22 @@ clerical_commission_reform = {
 	allow_normal_conversion = yes
 	modifiers = {
 		global_unrest = -1
-		diplomatic_upkeep = 1
+		diplomatic_upkeep = 1	
 	}
-
+	
 	potential = {
-		NOT = {
+		NOT = { 
 			OR = {
 				has_reform = monastic_order_reform
 				tag = KOJ
 			}
 		}
 	}
-
+	
 	trigger = {
 		NOT = { has_reform = monastic_order_reform }
 	}
-
+	
 	ai = {
 		factor = 1
 	}
@@ -468,15 +463,15 @@ divine_guidance_reform = {
 	modifiers = {
 		max_absolutism = 20
 	}
-
+	
 	potential = {
 		NOT = { has_reform = monastic_order_reform }
 	}
-
+	
 	trigger = {
 		NOT = { has_reform = monastic_order_reform }
 	}
-
+	
 	ai = {
 		factor = 1
 	}
@@ -487,21 +482,24 @@ theocratic_democracy_reform = {
 	modifiers = {
 		global_unrest = -1
 	}
-
+	
 	potential = {
-		NOT = {
+		NOT = { 
 			OR = {
 				has_reform = monastic_order_reform
 				tag = KOJ
 			}
 		}
 	}
-
+	
 	trigger = {
 		NOT = { has_reform = monastic_order_reform }
-		OR = {
-			NOT = { has_estate = estate_nobles }
-			crown_stronger_than_estate = { estate = estate_nobles }
+		if = {
+			limit = { has_dlc = "Common Sense" }
+			OR = {
+				NOT = { has_estate = estate_nobles }
+				crown_stronger_than_estate = { estate = estate_nobles }
+			}
 		}
 	}
 
@@ -545,22 +543,25 @@ regionally_elected_commanders = {
 	modifiers = {
 		global_unrest = -1
 	}
-
+	
 	potential = {
 		OR = {
 			has_reform = monastic_order_reform
 			tag = KOJ
 		}
 	}
-
+	
 	trigger = {
 		OR = {
 			has_reform = monastic_order_reform
 			tag = KOJ
 		}
-		OR = {
-			NOT = { has_estate = estate_nobles }
-			crown_stronger_than_estate = { estate = estate_nobles }
+		if = {
+			limit = { has_dlc = "Common Sense" }
+			OR = {
+				NOT = { has_estate = estate_nobles }
+				crown_stronger_than_estate = { estate = estate_nobles }
+			}
 		}
 	}
 
@@ -605,21 +606,21 @@ monastic_elections_reform = {
 		stability_cost_modifier = -0.1
 		max_absolutism = 20
 	}
-
+	
 	potential = {
 		OR = {
 			has_reform = monastic_order_reform
 			tag = KOJ
 		}
 	}
-
+	
 	trigger = {
 		OR = {
 			has_reform = monastic_order_reform
 			tag = KOJ
 		}
 	}
-
+	
 	conditional = {
 		allow = { has_dlc = "Res Publica" }
 		heir = no
@@ -638,7 +639,7 @@ monastic_elections_reform = {
 			}
 		}
 	}
-
+	
 	ai = {
 		factor = 1
 	}
@@ -659,10 +660,7 @@ commander_king_reform = {
 			has_reform = monastic_order_reform
 			tag = KOJ
 		}
-		OR = {
-			full_idea_group = monarchie0
-			full_idea_group = aristo0 
-		}
+		full_idea_group = aristocracy_ideas
 	}
 	modifiers = {
 		devotion = 0.1
@@ -702,7 +700,7 @@ admiral_king_reform = {
 		has_reform = mission_to_kill_pirates_reform
 		OR = {
 			full_idea_group = maritime_ideas
-			full_idea_group = flottenbasis0
+			full_idea_group = naval_ideas
 		}
 	}
 	modifiers = {
@@ -714,6 +712,8 @@ admiral_king_reform = {
 		admirals_become_rulers = yes
 	}
 	has_term_election = no
+	queen = yes
+	royal_marriage = yes
 	heir = no
 	ai = {
 		factor = 0.1
@@ -781,7 +781,7 @@ organising_our_religion_reform = {
 	trigger = {
 		religion_group = pagan
 	}
-
+	
 	modifiers = {
 		yearly_absolutism = 1
 		devotion = 1
@@ -817,6 +817,7 @@ religion_in_one_country_reform = {
 religious_permanent_revolution_reform = {
 	icon = "religious_permanent_revolution_reform"
 	allow_normal_conversion = yes
+	force_conversion_gives_global_holy_war_released_modifier = yes
 	potential = {
 		NOT = {
 			religion = confucianism
@@ -833,7 +834,7 @@ religious_permanent_revolution_reform = {
 		custom_tooltip = world_crusade_tt
 	}
 	modifiers = {
-		enforce_religion_cost = -0.4
+		enforce_religion_cost = -0.25
 	}
 	ai = {
 		factor = 3
@@ -847,7 +848,7 @@ many_fingers_of_god_reform = {
 		has_idea_group = humanist_ideas
 	}
 	modifiers = {
-		tolerance_heretic = 2
+		tolerance_heretic = 2	
 		tolerance_heathen = 2
 	}
 	ai = {
@@ -864,7 +865,7 @@ priestly_autonomy_reform = {
 	trigger = {
 		religion_group = pagan
 	}
-
+	
 	modifiers = {
 		governing_capacity = 250
 	}

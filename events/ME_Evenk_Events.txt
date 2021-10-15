@@ -1,0 +1,1060 @@
+namespace = ME_Evenk_Events
+
+#Map the Taiga
+country_event = {
+	id = ME_Evenk_Events.1
+	title = ME_Evenk_Events.1.T
+	desc = ME_Evenk_Events.1.D
+	picture = COLONIZATION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #map the area
+		name = ME_Evenk_Events.1.OPT1
+		buryatia_area = {
+			discover_country = ROOT
+		}
+		okhotsk_area = {
+			discover_country = ROOT
+		}
+		every_owned_province = {
+			limit = {
+				OR = {
+					region = west_siberia_region
+					region = east_siberia_region
+					region = manchuria_region
+				}
+			}
+			add_province_modifier = {
+				name = evenk_sledge_paths
+				duration = -1
+			}
+		}
+		custom_tooltip = evenk_sledge_paths.TT
+	}
+}
+
+#Traditions of the [Root.Culture.GetName]
+country_event = {
+	id = ME_Evenk_Events.2
+	title = ME_Evenk_Events.2.T
+	desc = ME_Evenk_Events.2.D
+	picture = COLONIZATION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #shamnism
+		name = ME_Evenk_Events.2.OPT1
+		ai_chance = { factor = 33 }
+	
+		change_religion = animism
+		if = {
+			limit = {
+				religion = animism
+			}
+			add_prestige = 10
+		}
+		capital_scope = {
+			change_religion = animism
+		}
+
+		add_country_modifier = {
+			name = evenk_shamanism
+			duration = -1
+		}
+	}
+
+	option = { #maintain tengrism
+		name = ME_Evenk_Events.2.OPT2
+		ai_chance = { factor = 33 }
+
+		change_religion = tengri_pagan_reformed
+		if = {
+			limit = {
+				religion = tengri_pagan_reformed
+			}
+			add_prestige = 10
+		}
+		capital_scope = {
+			change_religion = tengri_pagan_reformed
+		}
+	}
+
+	option = { #vajrayana bhuddism
+		name = ME_Evenk_Events.2.OPT3
+		ai_chance = { factor = 33 }
+		trigger = {
+			OR = {
+				primary_culture = evenk
+				primary_culture = buryat
+			}
+		}
+
+		change_religion = vajrayana
+		capital_scope = {
+			change_religion = vajrayana
+		}
+
+		add_country_modifier = {
+			name = evenk_bhuddist
+			duration = 9125
+		}
+	}
+	option = { #monotheistic paganism
+		name = ME_Evenk_Events.2.OPT4
+		trigger = {
+			OR = {
+				primary_culture = yukagyr 
+				primary_culture = kamchatkan
+			}
+		}
+		change_religion = animism
+		add_country_modifier = {
+			name = kamchatka_kamchatkan_faith
+			duration = -1
+		}
+		capital_scope = {
+			change_religion = animism
+		}
+		ai_chance = { factor = 33 }
+	}
+}
+
+#land survey (hidden updater)
+country_event = {
+	id = ME_Evenk_Events.3
+	title = ME_Evenk_Events.3.T
+	desc = ME_Evenk_Events.3.D
+	picture = COLONIZATION_eventPicture
+	
+	hidden = yes
+	mean_time_to_happen = {
+		days = 30
+	}
+	
+	trigger = {
+		OR = {
+			is_evenki_minor = yes
+			is_kamchatkan_minor = yes
+		}
+		OR = {
+			mission_completed = evenk_siberian_land_survey
+			mission_completed = kamchatka_siberian_land_survey
+		}
+		any_owned_province = {
+			OR = {
+				region = west_siberia_region
+				region = east_siberia_region
+				region = manchuria_region
+			}
+			NOT = { has_province_modifier = evenk_sledge_paths }
+		}
+	}
+	
+	option = { #map the area
+		name = ME_Evenk_Events.1.OPT1
+		every_owned_province = {
+			limit = {
+				OR = {
+					region = west_siberia_region
+					region = east_siberia_region
+					region = manchuria_region
+				}
+			}
+			add_province_modifier = {
+				name = evenk_sledge_paths
+				duration = -1
+			}
+		}
+	}
+}
+
+#Assimilate the Tribes of [me_evk_colonized_province.GetName]
+country_event = {
+	id = ME_Evenk_Events.4
+	title = ME_Evenk_Events.4.T
+	desc = ME_Evenk_Events.4.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			mission_completed = evenk_expand_federation
+			mission_completed = kamchatka_assimilate_tribes
+		}
+		#num of active possible siberian frontiers is
+		#equal to 1 for every 100 dev over 100, up to 4
+		#i.e.
+		#dev = 0-199 = 1
+		#dev = 200-299 = 2
+		#dev = 300-399 = 3
+		#dev = 400+ = 4
+		NOT = { tag = MCH }
+		NOT = { tag = QNG }
+		OR = {
+			AND = {
+				NOT = { total_development = 200 }
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 1
+						has_province_flag = evk_active_siberian_colonization
+					}
+				}
+			}
+			AND = {
+				total_development = 200
+				NOT = { total_development = 300 }
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 2
+						has_province_flag = evk_active_siberian_colonization
+					}
+				}
+			}
+			AND = {
+				total_development = 300
+				NOT = { total_development = 400 }
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_province_flag = evk_active_siberian_colonization
+					}
+				}
+			}
+			AND = {
+				total_development = 400
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 4
+						has_province_flag = evk_active_siberian_colonization
+					}
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					OR = {
+						region = west_siberia_region
+						region = east_siberia_region
+						region = manchuria_region
+					}
+					is_empty = yes
+					any_neighbor_province = {
+						owner = {
+							tag = ROOT
+							OR = {
+								mission_completed = evenk_expand_federation
+								mission_completed = kamchatka_assimilate_tribes
+							}
+						}
+					}
+				}
+				save_event_target_as = me_evk_colonized_province
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	option = { #begin reaching out ot the tribes
+		name = ME_Evenk_Events.4.OPT1
+		custom_tooltip = colonizing_event_warning.TT
+		event_target:me_evk_colonized_province = {
+			add_siberian_construction = 10
+			add_province_modifier = {
+				name = evenk_colonize_base
+				duration = 3650
+			}
+			set_province_flag = evk_active_siberian_colonization
+		}
+	}
+}
+
+#A New Holy Site
+country_event = {
+	id = ME_Evenk_Events.5
+	title = ME_Evenk_Events.5.T
+	desc = ME_Evenk_Events.5.D
+	picture = COLONIZATION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = { #animist holy site
+		name = ME_Evenk_Events.5.OPT1
+		trigger = {
+			religion = animism
+		}
+		
+		capital_scope = {
+			add_province_modifier = {
+				name = evenk_shamanist_holy_site
+				duration = -1
+			}
+		}
+	}
+	
+	option = { #non holy site
+		name = ME_Evenk_Events.5.OPT2
+		trigger = {
+			NOT = { religion = animism }
+		}
+		
+		capital_scope = {
+			add_province_modifier = {
+				name = evenk_shamanist_holy_site_not_animist
+				duration = -1
+			}
+		}
+	}
+}
+
+#Uncontacted Tribes of [Root.GetName]
+province_event = {
+	id = ME_Evenk_Events.6
+	title = ME_Evenk_Events.6.T
+	desc = ME_Evenk_Events.6.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			region = west_siberia_region
+			region = east_siberia_region
+			region = manchuria_region
+		}
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = { #invite to the federation
+		name = ME_Evenk_Events.6.OPT1
+		add_base_manpower = 1
+		add_colonysize = 50
+	}
+}
+
+#A Yakut Village
+province_event = {
+	id = ME_Evenk_Events.7
+	title = ME_Evenk_Events.7.T
+	desc = ME_Evenk_Events.7.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		province_id = 1042
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = yakut }
+		}
+		NOT = { culture = yakut }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #let them retain autonomy
+		name = ME_Evenk_Events.7.OPT1
+		add_base_tax = 1
+		add_base_production = 1
+		add_base_manpower = 1
+		add_colonysize = 150
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							culture = yakut
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { change_culture = yakut }
+				50 = { }
+			}
+		}
+	}
+	
+	option = { #invite to the federation
+		name = ME_Evenk_Events.7.OPT2
+		add_colonysize = 25
+	}
+}
+
+#Ynnakh Mountain
+province_event = {
+	id = ME_Evenk_Events.8
+	title = ME_Evenk_Events.8.T
+	desc = ME_Evenk_Events.8.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		province_id = 1042
+		culture = yakut
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #a holy mountain
+		name = ME_Evenk_Events.8.OPT1
+		add_province_modifier = {
+			name = evenk_yakut_mountain
+			duration = -1
+		}
+		if = {
+			limit = {
+				religion = animism
+			}
+			owner = {
+				add_country_modifier = {
+					name = evenk_shamanist_toleration
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+#Yakutian Cattle
+province_event = {
+	id = ME_Evenk_Events.9
+	title = ME_Evenk_Events.9.T
+	desc = ME_Evenk_Events.9.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			any_neighbor_province = {
+				province_id = 1042
+			}
+			province_id = 1042 #sakha
+		}
+		owner = {
+			any_owned_province = {
+				culture = yakut
+			}
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.1
+			owner = {
+				accepted_culture = yakut
+			}
+		}
+	}
+	
+	option = { #adopt yakut cattle
+		name = ME_Evenk_Events.9.OPT1
+		random_list = {
+			50 = { change_culture = yakut }
+			50 = { }
+		}
+		change_trade_goods = livestock
+		add_base_production = 6
+		add_province_modifier = {
+			name = evenk_yakut_cow
+			duration = -1
+		}
+	}
+	
+	option = { #adopt yakut cattle
+		name = ME_Evenk_Events.9.OPT2
+		random_list = {
+			50 = { change_culture = yakut }
+			50 = { }
+		}
+		add_base_production = 6
+		add_province_modifier = {
+			name = evenk_yakut_cow
+			duration = -1
+		}
+	}
+}
+
+#A Buryat Village
+province_event = {
+	id = ME_Evenk_Events.10
+	title = ME_Evenk_Events.10.T
+	desc = ME_Evenk_Events.10.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		province_id = 1057
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = buryat }
+		}
+		NOT = { culture = buryat }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #let them retain autonomy
+		name = ME_Evenk_Events.10.OPT1
+		add_base_manpower = 2
+		add_colonysize = 200
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							culture = buryat
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { change_culture = buryat }
+				50 = { }
+			}
+		}
+	}
+	
+	option = { #invite to the federation
+		name = ME_Evenk_Events.10.OPT2
+		add_colonysize = 30
+	}
+}
+
+#Buryat Herding
+country_event = {
+	id = ME_Evenk_Events.11
+	title = ME_Evenk_Events.11.T
+	desc = ME_Evenk_Events.11.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			mission_completed = evenk_expand_federation
+			mission_completed = kamchatka_assimilate_tribes
+		}
+		any_owned_province = {
+			culture = buryat
+		}
+		NOT = { has_country_modifier = evenk_buryat_herding }
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+		
+		modifier = {
+			factor = 0.2
+			accepted_culture = buryat
+		}
+	}
+	
+	option = { #learn from them
+		name = ME_Evenk_Events.11.OPT1
+		add_country_modifier = {
+			name = evenk_buryat_herding
+			duration = -1
+		}
+	}
+}
+
+#The Evenks of the Far West
+province_event = {
+	id = ME_Evenk_Events.12
+	title = ME_Evenk_Events.12.T
+	desc = ME_Evenk_Events.12.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			area = yakutia_area
+			area = tunguska_area
+		}
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = tungus }
+		}
+		NOT = {
+			has_province_modifier = evenk_tungus_grow
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	option = { #spread out
+		name = ME_Evenk_Events.12.OPT1
+		add_colonysize = 15
+		random_list = {
+			50 = { change_culture = tungus }
+			50 = { }
+		}
+		add_province_modifier = {
+			name = evenk_tungus_grow
+			duration = 5475
+		}
+	}
+}
+
+#The Yukaghir
+province_event = {
+	id = ME_Evenk_Events.13
+	title = ME_Evenk_Events.13.T
+	desc = ME_Evenk_Events.13.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		area = kolyma_area
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = yukagyr }
+			NOT = {
+				any_owned_province = {
+					culture = yukagyr
+				}
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #invite back
+		name = ME_Evenk_Events.13.OPT1
+		add_colonysize = 10
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							culture = yukagyr
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { change_culture = yukagyr }
+				50 = {  }
+			}
+		}
+	}
+}
+
+#Yukaghir Script
+country_event = {
+	id = ME_Evenk_Events.14
+	title = ME_Evenk_Events.14.T
+	desc = ME_Evenk_Events.14.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			mission_completed = evenk_expand_federation
+			mission_completed = kamchatka_assimilate_tribes
+		}
+		any_owned_province = {
+			culture = yukagyr
+		}
+		NOT = { has_country_modifier = evenk_writing }
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.5
+			stability = 1
+		}
+		modifier = {
+			factor = 0.1
+			has_idea_group = innovativeness_ideas
+		}
+	}
+	
+	option = { #adopt
+		name = ME_Evenk_Events.14.OPT1
+		add_adm_power = -100
+		add_country_modifier = {
+			name = evenk_writing
+			duration = -1
+		}
+	}
+}
+
+#The Nemelan and Chaucu
+province_event = {
+	id = ME_Evenk_Events.15
+	title = ME_Evenk_Events.15.T
+	desc = ME_Evenk_Events.15.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		area = kamchatka_area
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = kamchatkan }
+		}
+		NOT = { culture = kamchatkan }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #invite
+		name = ME_Evenk_Events.15.OPT1
+		add_colonysize = 20
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							culture = kamchatkan
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { change_culture = kamchatkan }
+				50 = { }
+			}
+		}
+	}
+}
+
+#The Legacy of Big Raven
+country_event = {
+	id = ME_Evenk_Events.16
+	title = ME_Evenk_Events.16.T
+	desc = ME_Evenk_Events.16.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			mission_completed = evenk_expand_federation
+			mission_completed = kamchatka_assimilate_tribes
+		}
+		any_owned_province = {
+			culture = kamchatkan
+		}
+		NOT = { has_country_modifier = evenk_big_raven }
+		NOT = { has_idea_group = religious_ideas }
+	}
+	
+	mean_time_to_happen = {
+		months = 300
+		
+		modifier = {
+			factor = 0.9
+			stability = 1
+		}
+		
+		modifier = {
+			factor = 0.1
+			accepted_culture = kamchatkan
+		}
+	}
+	
+	option = { #spread out
+		name = ME_Evenk_Events.16.OPT1
+		random_owned_province = {
+			limit = {
+				culture = kamchatkan
+			}
+			add_province_modifier = {
+				name = evenk_big_raven_home
+				duration = 9125
+			}
+		}
+		add_country_modifier = {
+			name = evenk_big_raven
+			duration = -1
+		}
+	}
+}
+
+#The Ainu of [Root.GetName]
+province_event = {
+	id = ME_Evenk_Events.17
+	title = ME_Evenk_Events.17.T
+	desc = ME_Evenk_Events.17.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			area = sakhalin_area
+			area = hokkaido_area
+		}
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+			NOT = { primary_culture = ainu }
+		}
+		NOT = { culture = ainu }
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	option = { #invite
+		name = ME_Evenk_Events.17.OPT1
+		add_colonysize = 20
+		if = {
+			limit = {
+				owner = {
+					NOT = {
+						any_owned_province = {
+							culture = ainu
+						}
+					}
+				}
+			}
+			random_list = {
+				50 = { change_culture = ainu }
+				50 = { }
+			}
+		}
+	}
+}
+
+#Pointing the Way
+country_event = {
+	id = ME_Evenk_Events.18
+	title = ME_Evenk_Events.18.T
+	desc = ME_Evenk_Events.18.D
+	picture = COLONIZATION_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			mission_completed = evenk_expand_federation
+			mission_completed = kamchatka_assimilate_tribes
+		}
+		any_owned_province = {
+			culture = ainu
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 30
+	}
+	
+	option = { #claims on ainu lands
+		name = ME_Evenk_Events.18.OPT1
+		sakhalin_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = {  is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		hokkaido_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = {  is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+
+#Harsh Winter Forces Cooperation
+province_event = {
+	id = ME_Evenk_Events.19
+	title = ME_Evenk_Events.19.T
+	desc = ME_Evenk_Events.19.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			region = west_siberia_region
+			region = east_siberia_region
+			region = manchuria_region
+		}
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = { #invite to the federation
+		name = ME_Evenk_Events.19.OPT1
+		add_colonysize = 50
+	}
+}
+
+#Migratory Tribes
+province_event = {
+	id = ME_Evenk_Events.20
+	title = ME_Evenk_Events.20.T
+	desc = ME_Evenk_Events.20.D
+	picture = COLONIZATION_eventPicture
+	
+	trigger = {
+		OR = {
+			region = west_siberia_region
+			region = east_siberia_region
+			region = manchuria_region
+		}
+		is_colony = yes
+		owner = {
+			OR = {
+				mission_completed = evenk_expand_federation
+				mission_completed = kamchatka_assimilate_tribes
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 180
+	}
+	
+	immediate = {
+		hidden_effect = {
+			random_list = {
+				20 = { set_province_flag = evenk_migratory_evenks }
+				20 = { set_province_flag = evenk_migratory_yakut }
+				20 = { set_province_flag = evenk_migratory_buryat }
+				20 = { set_province_flag = evenk_migratory_tungus }
+				20 = { set_province_flag = evenk_migratory_yukagyr }
+			}
+		}
+	}
+	
+	option = { #invite to the federation
+		name = ME_Evenk_Events.20.OPT1
+		if = {
+			limit = { has_province_flag = evenk_migratory_evenks }
+			random_list = {
+				50 = { change_culture = evenk }
+				50 = { }
+			}
+		}
+		else_if = {
+			limit = { has_province_flag = evenk_migratory_yakut }
+			random_list = {
+				50 = { change_culture = yakut }
+				50 = { }
+			}
+		}
+		else_if = {
+			limit = { has_province_flag = evenk_migratory_buryat }
+			random_list = {
+				50 = { change_culture = buryat }
+				50 = { }
+			}
+		}
+		else_if = {
+			limit = { has_province_flag = evenk_migratory_tungus }
+			random_list = {
+				50 = { change_culture = tungus }
+				50 = { }
+			}
+		}
+		else_if = {
+			limit = { has_province_flag = evenk_migratory_yukagyr }
+			random_list = {
+				50 = { change_culture = yukagyr }
+				50 = { }
+			}
+		}
+		add_colonysize = 35
+	}
+}
+
+
+province_event = { #event to clear province flag from finished colonies
+	id = ME_Evenk_Events.400
+	title = ME_Evenk_Events.400.T
+	desc = ME_Evenk_Events.400.D
+	picture = COLONIZATION_eventPicture
+	
+	hidden = yes
+
+	trigger = {
+		has_province_flag = evk_active_siberian_colonization
+		is_colony = no
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clr_province_flag = evk_active_siberian_colonization
+	}
+	
+	option = {
+		
+	}
+}

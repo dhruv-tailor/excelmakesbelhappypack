@@ -1,0 +1,385 @@
+namespace = besseres_hrr_incident_investiture_controversy_events
+
+province_event = {
+	id = besseres_hrr_incident_investiture_controversy_events.1
+	title = besseres_hrr_incident_investiture_controversy_events.EVTNAME1
+	desc = besseres_hrr_incident_investiture_controversy_events.EVTDESC1
+	picture = COUNCIL_TRENT_eventPicture
+
+	goto = ROOT
+
+	trigger = {
+		has_dlc = "Emperor"
+		NOT = { has_global_flag = hre_incident_investiture_controversy_happened }
+		NOT = { has_global_flag = besseres_hrr_incident_investiture_controversy_active }
+		OR = {
+			current_age = feudal_age
+			current_age = high_middle_ages
+			current_age = late_middle_ages
+			# 1356
+			current_age = age_of_feudalism
+		}
+		exists = PAP
+		religion = catholic
+		has_cardinal = yes
+		NOT = { has_province_modifier = besseres_hrr_appointed_bishop_by_emperor }
+		NOT = { has_province_modifier = besseres_hrr_appointed_bishop_by_pope }
+		owner = {
+			NOT = { tag = JMN }
+			is_emperor = yes
+			NOT = { tag = PAP }
+			religion = catholic
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 360
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events1.EVTOPT1
+
+		ai_chance = {
+			factor = 0.75
+			modifier = {
+				factor = 0.01
+				NOT = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 25
+					}
+				}
+			}
+		}
+
+		add_province_modifier = {
+			name = besseres_hrr_appointed_bishop_by_emperor
+			duration = 5475
+		}
+		owner = {
+			add_papal_influence = -5
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 5
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -5
+			}
+			reverse_add_opinion = {
+				who = PAP
+				modifier = besseres_hrr_appointed_bishop_by_emperor_opinion
+			}
+		}
+		custom_tooltip = BESSERES_HRR_APPOINTING_BISHOP_MIGHT_ANGER_POPE
+		hidden_effect = {
+			PAP = {
+				change_variable = { num_of_appointed_bishops_by_emperor = 1 }
+			}
+			owner = {
+				if = {
+					limit = {
+						NOT = { active_imperial_incident = any }
+						is_papal_controller = no
+						NOT = { alliance_with = PAP }
+					}
+					random_list = {
+						80 = {
+							# No Effects
+						}
+						20 = {
+							country_event = { id = besseres_hrr_incident_investiture_controversy_events.3 }
+						}
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events1.EVTOPT2
+
+		ai_chance = {
+			factor = 0.25
+			modifier = {
+				factor = 0.01
+				NOT = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 25
+					}
+				}
+			}
+		}
+
+		add_province_modifier = {
+			name = besseres_hrr_appointed_bishop_by_pope
+			duration = 5475
+		}
+		owner = {
+			add_papal_influence = 5
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = -5
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 5
+			}
+			reverse_add_opinion = {
+				who = PAP
+				modifier = besseres_hrr_appointed_bishop_by_pope_opinion
+			}
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_incident_investiture_controversy_events.2
+	title = besseres_hrr_incident_investiture_controversy_events.EVTNAME2
+	desc = besseres_hrr_incident_investiture_controversy_events.EVTDESC2
+	picture = HRE_eventPicture
+
+	hidden = yes
+	fire_only_once = yes
+
+	trigger = {
+		has_dlc = "Emperor"
+		NOT = { has_global_flag = hre_incident_investiture_controversy_happened }
+		NOT = { active_imperial_incident = any }
+		OR = {
+			current_age = feudal_age
+			current_age = high_middle_ages
+			current_age = late_middle_ages
+			# 1356
+			current_age = age_of_feudalism
+		}
+		exists = PAP
+		NOT = { tag = PAP }
+		is_emperor = yes
+		religion = catholic
+		is_papal_controller = no
+		PAP = {
+			check_variable = { num_of_appointed_bishops_by_emperor = 5 }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.5
+			is_excommunicated = yes
+		}
+		modifier = {
+			factor = 0.5
+			PAP = {
+				check_variable = { num_of_appointed_bishops_by_emperor = 10 }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			PAP = {
+				check_variable = { num_of_appointed_bishops_by_emperor = 15 }
+			}
+		}
+		modifier = {
+			factor = 0.5
+			PAP = {
+				check_variable = { num_of_appointed_bishops_by_emperor = 20 }
+			}
+		}
+		modifier = {
+			factor = 2
+			alliance_with = PAP
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			country_event = { id = besseres_hrr_incident_investiture_controversy_events.3 }
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events2.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = besseres_hrr_incident_investiture_controversy_events.3
+	title = besseres_hrr_incident_investiture_controversy_events.EVTNAME3
+	desc = besseres_hrr_incident_investiture_controversy_events.EVTDESC3
+	picture = HRE_eventPicture
+
+	major = yes
+	major_trigger = {
+		is_emperor = no
+		is_part_of_hre = no
+	}
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_global_flag = hre_incident_investiture_controversy_happened
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events3.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		set_global_flag = besseres_hrr_incident_investiture_controversy_active
+		if = {
+			limit = {
+				is_excommunicated = no
+			}
+			excommunicate = ROOT
+		}
+		add_opinion = {
+			who = PAP
+			modifier = besseres_hrr_incident_investiture_controversy_opinion
+		}
+		reverse_add_opinion = {
+			who = PAP
+			modifier = besseres_hrr_incident_investiture_controversy_opinion
+		}
+		set_imperial_incident = besseres_hrr_incident_investiture_controversy
+	}
+}
+
+country_event = {
+	id = besseres_hrr_incident_investiture_controversy_events.4
+	title = besseres_hrr_incident_investiture_controversy_events.EVTNAME4
+	desc = besseres_hrr_incident_investiture_controversy_events.EVTDESC4
+	picture = HRE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events4.EVTOPT1
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 1.5
+				ruler_has_personality = free_thinker_personality
+			}
+			modifier = {
+				factor = 3
+				ruler_has_personality = lawgiver_personality
+			}
+			modifier = {
+				factor = 2
+				ruler_has_personality = silver_tongue_personality
+			}
+			modifier = {
+				factor = 2
+				ruler_has_personality = fierce_negotiator_personality
+			}
+			modifier = {
+				factor = 5
+				ruler_has_personality = naive_personality
+			}
+			modifier = {
+				factor = 100
+				ruler_has_personality = immortal_personality
+			}
+		}
+
+		set_global_flag = hre_incident_investiture_controversy_emperor
+		custom_tooltip = BESSERES_HRR_INVESTITURE_CONTROVERSY_EMPEROR_TT
+		tooltip = {
+			add_country_modifier = {
+				name = hre_incident_investiture_controversy_emperor_tooltip_modifier
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events4.EVTOPT2
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				ruler_has_personality = just_personality
+			}
+			modifier = {
+				factor = 2
+				ruler_has_personality = righteous_personality
+			}
+			modifier = {
+				factor = 1.5
+				ruler_has_personality = careful_personality
+			}
+			modifier = {
+				factor = 3
+				ruler_has_personality = benevolent_personality
+			}
+			modifier = {
+				factor = 5
+				ruler_has_personality = charismatic_negotiator_personality
+			}
+		}
+
+		if = {
+			limit = {
+				is_excommunicated = yes
+			}
+			excommunicate = ROOT
+		}
+		random = {
+			chance = 25
+			kill_ruler = yes
+		}
+		set_global_flag = hre_incident_investiture_controversy_neutral
+		custom_tooltip = BESSERES_HRR_INVESTITURE_CONTROVERSY_NEUTRAL_TT
+		tooltip = {
+			add_country_modifier = {
+				name = hre_incident_investiture_controversy_neutral_tooltip_modifier
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_incident_investiture_controversy_events4.EVTOPT3
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 3
+				ruler_has_personality = pious_personality
+			}
+			modifier = {
+				factor = 5
+				ruler_has_personality = zealot_personality
+			}
+		}
+
+		if = {
+			limit = {
+				is_excommunicated = yes
+			}
+			excommunicate = ROOT
+		}
+		set_global_flag = hre_incident_investiture_controversy_pope
+		custom_tooltip = BESSERES_HRR_INVESTITURE_CONTROVERSY_POPE_TT
+		tooltip = {
+			add_country_modifier = {
+				name = hre_incident_investiture_controversy_pope_tooltip_modifier
+				duration = -1
+			}
+		}
+	}
+
+	after = {
+		clr_global_flag = besseres_hrr_incident_investiture_controversy_active
+	}
+}

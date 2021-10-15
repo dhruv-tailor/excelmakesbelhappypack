@@ -273,15 +273,22 @@ ODA_missions_2 = {
 			province_id = 1030
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = defense all = yes } }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
 		}
 		trigger = {
 			owns = 1030
 			1030 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
-					province_has_building_of_group = { group = defense all = yes }
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
 			}
 		}
@@ -651,23 +658,52 @@ ODA_missions_4 = {
 			province_id = 1021
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { base_production = 12 }
+				NOT = { base_production = 10 }
 				devastation = 1
 			}
 		}
 		trigger = {
-			treasury = 200
 			1021 = {
 				owned_by = ROOT
-				base_production = 12
+				base_production = 10
 				NOT = { devastation = 1 }
 			}
 		}
 		effect = {
-			add_treasury = -200
 			add_mercantilism = 3
 			1021 = {
-				add_marketplace_line = yes
+				create_or_add_center_of_trade_level = { level = 1 }
+				if = {
+					limit = {
+						NOT = { has_building = trade_depot }
+						NOT = { has_building = stock_exchange }
+					}
+					if = {
+						limit = {
+							has_building = marketplace
+						}
+						remove_building = marketplace
+					}
+					add_building_construction = {
+						building = trade_depot
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = trade_depot
+					}
+					remove_building = trade_depot
+					add_building_construction = {
+						building = stock_exchange
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_production = 2
+				}
 			}
 		}
 	}
@@ -730,7 +766,27 @@ ODA_missions_5 = {
 					33 = { add_base_production = 1 }
 					33 = { add_base_tax = 1 }
 				}
-				add_temple_line = yes
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building_construction = {
+						building = cathedral
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building_construction = {
+						building = temple
+						speed = 1
+						cost = 0
+					}
+				}
 				if = {
 					limit = {
 						has_dlc = "Mandate of Heaven"
@@ -847,11 +903,9 @@ ODA_missions_5 = {
 		}
 		effect = {
 			add_dip_power = 100
-			every_owned_province = {
-				add_province_modifier = {
-					name = oda_crossroad
-					duration = 7300
-				}
+			add_country_modifier = {
+				name = oda_crossroad
+				duration = 7300
 			}
 		}
 	}

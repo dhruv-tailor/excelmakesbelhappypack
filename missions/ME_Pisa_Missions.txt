@@ -1,144 +1,911 @@
-PIS_missions_1 = {
+pisa_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		tag = PIS
+		OR = {
+			tag = PIS
+			AND = {
+				was_tag = PIS
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = {
+							calc_true_if = {
+								amount = 2
+								was_tag = TUS
+								was_tag = TTS
+								was_tag = SPI
+								was_tag = LVN
+							}
+						}
+					}
+				}
+			}
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
-	Pisa_Defense = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 5
+
+	pis_great_maritime_republic = {
+		icon = mission_raid_christian_trade
+		required_missions = {
+		}
+		position = 1
 		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.9
+			stability = 1
+			OR = {
+				army_size_percentage = 0.5
+				manpower_percentage = 0.5
+			}
 		}
 		effect = {
-			117 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			add_yearly_manpower = 1
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-			}
-			2980 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	Pisa_Fort = {
-		icon = mission_conquer_50_development
-		required_missions = { Pisa_Defense }
-		position = 6
+
+	pis_siena = {
+		icon = sources_of_trade
+		position = 2
+		required_missions = {
+			pis_great_maritime_republic
+			pis_florentine_relations
+		}
+		provinces_to_highlight = {
+			province_id = 117
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 117
+		}
+		effect = {
+			add_dip_power = 100
+		}
+	}
+
+	pis_appease_pope = {
+		icon = control_the_church
+		required_missions = {}
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				OR = {
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					theologian = 1
+				}
+			}
+			else = {
+				theologian = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pis_ancient_crusader_state
+				duration = 7300
+			}
+		}
+	}
+
+	pis_santo_stefano_cavalieri = {
+		icon = mission_land_of_churches
+		required_missions = {
+			pis_appease_pope
+			pis_renaissance
+		}
+		position = 5
 		provinces_to_highlight = {
 			province_id = 115
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { fort_level = 2 }
+				NOT = { has_tax_building_trigger = yes }
 			}
 		}
 		trigger = {
 			115 = {
 				owned_by = ROOT
-				fort_level = 2
+				has_tax_building_trigger = yes
+				if = {
+					limit = { religion = catholic }
+					has_cardinal = yes
+				}
+			}
+			if = {
+				limit = {
+					NOT = { religion = catholic }
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 65
+				}
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = pis_pisan_devotion
+				duration = 7300
+			}
+		}
+	}
+}
+
+pisa_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PIS
+			AND = {
+				was_tag = PIS
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = {
+							calc_true_if = {
+								amount = 2
+								was_tag = TUS
+								was_tag = TTS
+								was_tag = SPI
+								was_tag = LVN
+							}
+						}
+					}
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pis_florentine_relations = {
+		icon = immaculate_government
+		required_missions = {
+		}
+		position = 1
+		trigger = {
+			OR = {
+				is_rival = LAN
+				is_enemy = LAN
+				NOT = { exists = LAN }
+				alliance_with = LAN
+				is_in_trade_league_with = LAN
+				LAN = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				add_liberty_desire = 50
+			}
+			add_country_modifier = {
+				name = pis_republican_army
+				duration = 3650
+			}
+		}
+	}
+
+	pis_reconquer_lucca = {
+		icon = reclaim_the_aegean
+		required_missions = {
+			pis_great_maritime_republic
+			pis_florentine_relations
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2980
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2980
+		}
+		effect = {
+			add_mil_power = 100
+		}
+	}
+
+	pis_integrated_cores = {
+		icon = tuscan_birthright
+		position = 3
+		required_missions = {
+			pis_reconquer_lucca
+			pis_siena
+			pis_fall_medici
+		}
+		provinces_to_highlight = {
+			area = tuscany_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 1
+			}
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 1 }
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			tuscany_area = {
+				if = {
+					limit = {
+						owner = {
+							has_dlc = "Mandate of Heaven"
+						}
+					}
+					add_devastation = -10
+					add_prosperity = 25
+				}
+				else = {
+					add_devastation = -10
+				}
+			}
+		}
+	}
+
+	pis_renaissance = {
+		icon = florentine_renaissance
+		position = 4
+		required_missions = {
+			pis_integrated_cores
+		}
+		trigger = {
+			has_institution = renaissance
+		}
+		effect = {
+			add_country_modifier = {
+				name = pis_pisan_art_school
+				duration = 7300
+			}
 			115 = {
+				add_base_tax = 2
+			}
+		}
+	}
+
+	pis_republic_reunited = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = {
+			pis_renaissance
+		}
+		position = 6
+		provinces_to_highlight = {
+			area = tuscany_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 10
+				unrest = 0
+			}
+		}
+		trigger = {
+			republican_tradition = 60
+			tuscany_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 10 }
+				NOT = { unrest = 0 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pis_glory_pisa
+				duration = 9125
+			}
+			hidden_effect = { complete_mission = lan_granducato }
+		}
+	}
+}
+
+pisa_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PIS
+			AND = {
+				was_tag = PIS
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = {
+							calc_true_if = {
+								amount = 2
+								was_tag = TUS
+								was_tag = TTS
+								was_tag = SPI
+								was_tag = LVN
+							}
+						}
+					}
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pis_fall_medici = {
+		icon = make_haste_slowly
+		required_missions = {
+			pis_florentine_relations
+		}
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 116
+				province_id = 2978
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 116
+			owns = 2978
+		}
+		effect = {
+			add_prestige = 30
+			add_republican_tradition = 10
+		}
+	}
+
+	pis_baleares = {
+		icon = mission_mediterranean_islands
+		required_missions = { }
+		position = 3
+		provinces_to_highlight = {
+			area = baleares_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			baleares_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			333 = {
 				add_province_modifier = {
-					name = me_pisan_fort
+					name = gen_pine_timber
 					duration = -1
 				}
 			}
 		}
 	}
-	
-	Pisa_Tuscan_coastline = {
-		icon = mission_establish_high_seas_navy
-		required_missions = { Pisa_Fort }
-		position = 7
+
+	pis_control_ligurian_trade = {
+		icon = mission_dominate_genoa
+		required_missions = {
+			pis_baleares
+			pis_tyrrenean_islands
+		}
+		position = 4
+		trigger = {
+			1298 = { is_strongest_trade_power = ROOT }
+			all_country = {
+				OR = {
+					1298 = {
+						NOT = {
+							trade_share = {
+								share = 1
+								country = PREV
+							}
+						}
+					}
+					NOT = {
+						naval_strength = {
+							who = ROOT
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_dip_power = 100
+			115 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	pis_land_sultan = {
+		icon = mission_colonize_the_west
+		required_missions = {
+			pis_restore_pisan_fleet
+		}
+		position = 5
 		provinces_to_highlight = {
 			OR = {
-				province_id = 117
-				province_id = 2980
+				area = delta_area
+				province_id = 4316
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_port = yes
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			117 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2980 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			116 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			delta_area = {
+				OR = {
+					NOT = { has_port = yes }
+					owned_by = ROOT
 				}
 			}
-			2978 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			owns = 4316
+		}
+		effect = {
+			add_yearly_manpower = 1
+			add_yearly_sailors = 1
+			delta_area = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = pis_sultan_deceived
+					duration = 7300
+				}
+			}
+			bahari_area = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = pis_sultan_deceived
+					duration = 7300
 				}
 			}
 		}
 	}
-	
-	Pisa_Tuscany = {
-		icon = mission_unite_home_region
-		required_missions = { Pisa_Tuscan_coastline }
-		position = 8
+}
+
+pisa_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PIS
+			AND = {
+				was_tag = PIS
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = {
+							calc_true_if = {
+								amount = 2
+								was_tag = TUS
+								was_tag = TTS
+								was_tag = SPI
+								was_tag = LVN
+							}
+						}
+					}
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pis_pisan_fleet = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 1
+		trigger = {
+			navy_size_percentage = 1
+			owns_core_province = 115
+		}
+		effect = {
+			add_yearly_sailors = 1
+			115 = {
+				if = {
+					limit = { has_building = grand_shipyard }
+					add_base_production = 4
+				}
+				else_if = {
+					limit = { has_building = shipyard }
+					remove_building = shipyard
+					add_building_construction = {
+						building = grand_shipyard
+						speed = 1.5
+						cost = 0
+					}
+				}
+				else = {
+					add_building_construction = {
+						building = shipyard
+						speed = 1.5
+						cost = 0
+					}
+				}
+			}
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pis_tyrrenean_islands = {
+		icon = seize_sardinia
+		required_missions = {
+			pis_pisan_fleet
+			pis_consolidate_corsica
+		}
+		position = 3
 		provinces_to_highlight = {
-			area = tuscany_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			area = corsica_sardinia_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			tuscany_area = {
+			corsica_sardinia_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
 			}
 		}
 		effect = {
-			add_prestige = 25
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
+			corsica_sardinia_area = {
+				add_devastation = -10
+				add_province_modifier = {
+					name = pis_pisan_ruling
+					duration = -1
+				}
+			}
+			127 = {
+				add_province_modifier = {
+					name = gen_nuraghe
+					duration = -1
+				}
+			}
 		}
 	}
-	
-	Pisa_Stability = {
-		icon = mission_asian_trader
-		required_missions = { Pisa_Tuscany }
-		position = 9
+
+	pis_restore_pisan_fleet = {
+		icon = mission_galleys_in_port
+		required_missions = {
+			pis_tyrrenean_islands
+			pis_dominate_genoa
+		}
+		position = 4
 		trigger = {
-			stability = 3
+			variable_arithmetic_trigger = {
+				custom_tooltip = PIS_RESTORE_FLEET
+				export_to_variable = {
+					which = pisan_galley
+					value = trigger_value:num_of_galley
+				}
+				export_to_variable = {
+					which = pisan_lightship
+					value = trigger_value:num_of_light_ship
+				}
+				change_variable = {
+					which = pisan_galley
+					which = pisan_lightship
+				}
+				check_variable = {
+					which = pisan_galley
+					value = 50
+				}
+			}
 		}
 		effect = {
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
+			add_country_modifier = {
+				name = pis_maritime_expansion
+				duration = -1
+			}
+			4736 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			125 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			124 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2983 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			tunisia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			delta_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			bahari_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pis_berber_raiding = {
+		icon = mission_combat_barbary_piracy
+		required_missions = {
+			pis_restore_pisan_fleet
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = tunisia_area
+			has_port = yes
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tunisia_area = {
+				has_port = yes
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_navy_tradition = 10
+			341 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = pis_berber_subjugation
+				}
+			}
+		}
+	}
+
+	pis_pisan_mercantilism = {
+		icon = purely_for_commerce
+		required_missions = {
+			pis_land_sultan
+			pis_berber_raiding
+			pis_south_italian_emporii
+		}
+		position = 6
+		trigger = {
+			mercantilism = 33
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = pis_mercantilism_restored
+				duration = 10950
+			}
+		}
+	}
+}
+
+pisa_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PIS
+			AND = {
+				was_tag = PIS
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = {
+							calc_true_if = {
+								amount = 2
+								was_tag = TUS
+								was_tag = TTS
+								was_tag = SPI
+								was_tag = LVN
+							}
+						}
+					}
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pis_consolidate_corsica = {
+		icon = rule_corsica
+		required_missions = {
+			pis_pisan_fleet
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1247
+			NOT = { is_core = ROOT }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns_core_province = 1247
+		}
+		effect = {
+			add_years_of_income = 1
+			corsica_sardinia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1298 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = pis_corsican_corsair
+				}
+			}
+		}
+	}
+
+	pis_dominate_genoa = {
+		icon = adriatic_access
+		required_missions = {
+			pis_consolidate_corsica
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 101
+		}
+		trigger = {
+			OR = {
+				AND = {
+					101 = {
+						owner = {
+							war_with = ROOT
+						}
+					}
+					controls = 101
+				}
+				owns = 101
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { owns = 101 }
+				}
+				101 = {
+					add_base_tax = -2
+					add_base_production = -2
+					add_base_manpower = -2
+				}
+				115 = {
+					add_base_tax = 2
+					add_base_production = 2
+					add_base_manpower = 2
+				}
+				101 = {
+					add_core = ROOT
+				}
+			}
+			else = {
+				add_mercantilism = 5
+				add_navy_tradition = 10
+				GEN = {
+					add_mercantilism = -5
+					add_navy_tradition = -10
+				}
+			}
+		}
+	}
+
+	pis_south_italian_emporii = {
+		icon = renaissance_city
+		required_missions = {
+			pis_restore_pisan_fleet
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4736
+				province_id = 125
+				province_id = 124
+				province_id = 2983
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 4736
+			owns = 125
+			owns = 124
+			owns = 2983
+		}
+		effect = {
+			4736 = {
+				add_province_modifier = {
+					name = pis_pisan_emporium
+					duration = -1
+				}
+			}
+			125 = {
+				add_province_modifier = {
+					name = pis_pisan_emporium
+					duration = -1
+				}
+			}
+			124 = {
+				add_province_modifier = {
+					name = pis_pisan_emporium
+					duration = -1
+				}
+			}
+			2983 = {
+				add_province_modifier = {
+					name = pis_pisan_emporium
+					duration = -1
+				}
+			}
 		}
 	}
 }

@@ -15,20 +15,18 @@ SWE_missions_1 = {
 		trigger = {
 			is_at_war = no
 			manpower = 1
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_FORCELIMIT_ALL
-						province_has_building_of_group = { group = forcelimit all = yes }
-					}
-				}
-				amount = 15
+			OR = {
+				regimental_camp = 15
+				conscription_center = 15
 			}
 		}
 		effect = {
 			every_owned_province = {
 				limit = {
-					province_has_building_of_group = { group = forcelimit all = yes }
+					OR = {
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
 				}
 				add_province_modifier = {
 					name = sweden_organizing_our_provinces_province_modifier
@@ -319,15 +317,20 @@ SWE_missions_2 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
 		trigger = {
 			owns_core_province = 45
 			45 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
 		}
@@ -761,16 +764,19 @@ SWE_missions_4 = {
 			province_id = 1982
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
 				has_province_modifier = sweden_snapphanarna_separatists
 			}
 		}
 		trigger = {
 			owns = 1982
 			1982 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 				NOT = { has_province_modifier = sweden_snapphanarna_separatists }
 			}
@@ -810,8 +816,15 @@ SWE_missions_5 = {
 				AND = {
 					NOT = { has_dlc = "Mandate of Heaven" }
 					OR = {
-						NOT = { province_has_building_of_group = { group = taxation all = yes } }
-						NOT = { province_has_building_of_group = { group = trade all = yes } }
+						AND = {
+							NOT = { has_building = temple }
+							NOT = { has_building = cathedral }
+						}
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
+						}
 					}
 				}
 			}
@@ -834,13 +847,14 @@ SWE_missions_5 = {
 			}
 			else = {
 				4163 = {
-					custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+					OR = {
+						has_building = temple
+						has_building = cathedral
 					}
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-						province_has_building_of_group = { group = trade all = yes }
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
 					}
 				}
 			}
@@ -1083,7 +1097,7 @@ SWE_missions_5_catholic_2 = {
 				is_papal_controller = yes
 			}
 			OR = {
-				full_all_reli_idea_groups = yes
+				full_idea_group = religious_ideas
 				AND = {
 					has_country_modifier = the_blasphemy_act
 					has_country_modifier = the_advancement_of_true_religion_act
@@ -1283,7 +1297,18 @@ SWE_missions_5_protestant = {
 				duration = -1
 			}
 			capital_scope = {
-				add_temple_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					if = {
+						limit = {
+							has_building = temple
+						}
+						remove_building = temple
+					}
+					add_building = cathedral
+				}
 				add_permanent_province_modifier = {
 					name = sweden_church_of_sweden_province_modifier
 					duration = -1

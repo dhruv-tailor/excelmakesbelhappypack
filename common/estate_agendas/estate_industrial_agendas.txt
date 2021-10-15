@@ -1,0 +1,894 @@
+estate_industrial_conquer_good = {
+	can_select = {
+		any_owned_province = {
+			any_neighbor_province = {
+				NOT = { owned_by = ROOT }
+				area_for_scope_province = {
+					NOT = { owned_by = ROOT }
+					if = { 
+						limit = {
+							is_expanded_mod_active = { mod = trade_goods }
+						}
+						OR = {
+							trade_goods = gold
+							trade_goods = glass
+							trade_goods = silver
+							trade_goods = copper
+							trade_goods = iron
+							trade_goods = lead
+							trade_goods = bronze
+							trade_goods = brass
+							trade_goods = tin
+							trade_goods = zinc
+						}
+					}
+					else = {
+						OR = {
+							trade_goods = gold
+							trade_goods = glass
+							trade_goods = copper
+							trade_goods = iron
+						}
+					}
+				}
+			}
+		}				
+	}
+	selection_weight = {
+		factor = 1
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+					area_for_scope_province = {
+						NOT = { owned_by = ROOT }
+						if = { 
+							limit = {
+								is_expanded_mod_active = { mod = trade_goods }
+							}
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = silver
+								trade_goods = copper
+								trade_goods = iron
+								trade_goods = lead
+								trade_goods = bronze
+								trade_goods = brass
+								trade_goods = tin
+								trade_goods = zinc
+							}
+						}
+						else = {
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = copper
+								trade_goods = iron
+							}
+						}
+					}
+				}
+			}
+			random_neighbor_province = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					area_for_scope_province = {
+						NOT = { owned_by = ROOT }
+						if = { 
+							limit = {
+								is_expanded_mod_active = { mod = trade_goods }
+							}
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = silver
+								trade_goods = copper
+								trade_goods = iron
+								trade_goods = lead
+								trade_goods = bronze
+								trade_goods = brass
+								trade_goods = tin
+								trade_goods = zinc
+							}
+						}
+						else = {
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = copper
+								trade_goods = iron
+							}
+						}
+					}
+				}
+				random_province = {
+					limit = {
+						area = PREV
+						NOT = { owned_by = ROOT }
+						if = { 
+							limit = {
+								is_expanded_mod_active = { mod = trade_goods }
+							}
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = silver
+								trade_goods = copper
+								trade_goods = iron
+								trade_goods = lead
+								trade_goods = bronze
+								trade_goods = brass
+								trade_goods = tin
+								trade_goods = zinc
+							}
+						}
+						else = {
+							OR = {
+								trade_goods = gold
+								trade_goods = glass
+								trade_goods = copper
+								trade_goods = iron
+							}
+						}
+					}
+					save_event_target_as = agenda_province
+				}
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	task_requirements = {
+		event_target:agenda_province = {
+			owned_by = ROOT
+		}
+	}
+	immediate_effect = {
+		if = {
+			limit = {
+				event_target:agenda_province = {
+					NOT = { is_core = root }
+					NOT = { is_claim = root }
+				}
+			}
+			event_target:agenda_province = {
+				area = {
+					add_claim = ROOT
+				}
+			}
+		}
+	}
+	on_invalid = {
+		event_target:agenda_province = {
+			area = {
+				if = {
+					limit = {
+						is_claim = root
+						NOT = { is_permanent_claim = root }
+					}
+					remove_claim = root
+				}
+			}
+		}
+	}
+	task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_industrial
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+		event_target:agenda_province = {
+			area = {
+				if = {
+					limit = {
+						is_claim = root
+						NOT = { is_permanent_claim = root }
+					}
+					remove_claim = root
+				}
+			}
+		}
+    }
+}
+
+estate_industrial_workshop = {
+	can_select = {
+		adm_tech = 6
+		any_owned_province = {
+			is_state_core = root
+			NOT = { has_building = counting_house }
+			OR = {
+				AND = {
+					NOT = { has_building = workshop }
+					num_free_building_slots = 1
+				}
+				AND = {
+					ROOT = { adm_tech = 24 }
+					OR = {
+						has_building = workshop
+						num_free_building_slots = 1
+					}
+				}
+			}
+			NOT = {
+				OR = {
+					trade_goods = gold
+					trade_goods = silver
+				}
+			}
+		}
+	}
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 0.65
+			NOT = {
+				any_owned_province = {
+					is_state_core = root
+					base_production = 4
+					NOT = { has_building = counting_house }
+					OR = {
+						AND = {
+							NOT = { has_building = workshop }
+							num_free_building_slots = 1
+						}
+						AND = {
+							ROOT = { adm_tech = 24 }
+							OR = {
+								has_building = workshop
+								num_free_building_slots = 1
+							}
+						}
+					}
+					NOT = {
+						OR = {
+							trade_goods = gold
+							trade_goods = silver
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 1.2
+			any_owned_province = {
+				is_state_core = root
+				OR = {
+					base_production = 7
+					has_building = wharf
+					has_building = weapons
+					has_building = textile
+					has_building = tradecompany
+					has_building = farm_estate
+					has_building = mills
+					has_building = plantations
+					has_building = furnace
+				}
+				NOT = { has_building = counting_house }
+				OR = {
+					AND = {
+						NOT = { has_building = workshop }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 24 }
+						OR = {
+							has_building = workshop
+							num_free_building_slots = 1
+						}
+					}
+				}
+				NOT = {
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			NOT = {
+				crown_land_share = 15
+			}
+		}
+	}
+	pre_effect = {
+		set_variable = {
+			which = estate_burghers_build_production_building_in_y_var
+			value = 0
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				NOT = { has_building = counting_house }
+				OR = {
+					AND = {
+						NOT = { has_building = workshop }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 24 }
+						OR = {
+							has_building = workshop
+							num_free_building_slots = 1
+						}
+					}
+				}
+				NOT = {
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				base_production = 4
+				NOT = { has_building = counting_house }
+				OR = {
+					AND = {
+						NOT = { has_building = workshop }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 24 }
+						OR = {
+							has_building = workshop
+							num_free_building_slots = 1
+						}
+					}
+				}
+				NOT = {
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				OR = {
+					base_production = 7
+					has_building = wharf
+					has_building = weapons
+					has_building = textile
+					has_building = tradecompany
+					has_building = farm_estate
+					has_building = mills
+					has_building = plantations
+					has_building = furnace
+				}
+				NOT = { has_building = counting_house }
+				OR = {
+					AND = {
+						NOT = { has_building = workshop }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 24 }
+						OR = {
+							has_building = workshop
+							num_free_building_slots = 1
+						}
+					}
+				}
+				NOT = {
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					has_building = workshop
+				}
+				ROOT = {
+					set_variable = {
+						which = estate_burghers_build_production_building_in_y_var
+						value = 2
+					}
+				}
+			}
+			else = {
+				ROOT = {
+					set_variable = {
+						which = estate_burghers_build_production_building_in_y_var
+						value = 1
+					}
+				}
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		if = {
+			limit = {
+				check_variable = {
+					which = estate_burghers_build_production_building_in_y_var
+					value = 2
+				}
+			}
+			event_target:agenda_province = {
+				has_building = counting_house
+			}
+		}
+		else = {
+			event_target:agenda_province = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+		else = {
+			event_target:agenda_province = {
+				add_base_production = 1
+			}
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_industrial
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_industrial_manufactory = {
+	can_select = {
+		any_owned_province = {
+			is_state_core = root
+			root_can_build_manufactory_here_trigger = yes
+		}
+		monthly_income = 30
+	}
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 0.75
+			always = yes
+		}
+		modifier = {
+			factor = 0.5
+			OR = {
+				current_age = age_of_discovery
+				current_age = age_of_reformation
+			}
+		}
+		modifier = {
+			factor = 0.5
+			NOT = { monthly_income = 40 }
+		}
+		modifier = {
+			factor = 2
+			monthly_income = 60
+		}
+		modifier = {
+			factor = 2
+			is_institution_enabled = manufactories
+			NOT = { has_institution = manufactories }
+		}
+	}
+	pre_effect = {
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				root_can_build_manufactory_here_trigger = yes
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				base_production = 5
+				root_can_build_manufactory_here_trigger = yes
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				base_production = 10
+				root_can_build_manufactory_here_trigger = yes
+			}
+			save_event_target_as = agenda_province
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			custom_trigger_tooltip = {
+				tooltip = has_manufactory_trigger_tooltip
+				has_manufactory_trigger = yes
+			}
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			add_base_tax = 1
+			add_province_modifier = {
+				name = prospering_production
+				duration = 5475
+			}
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_industrial
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_industrial_production_dev = {
+	selection_weight = {
+		factor = 1
+	}
+	can_select = {
+		capital_scope = {
+			is_state_core = root
+		}
+	}
+	pre_effect = {
+		random_list = {
+			1 = {
+				random_owned_province = {
+					limit = {
+						is_state_core = root
+						area_for_scope_province = {
+							is_capital_of = root
+						}
+					}
+					save_event_target_as = agenda_province
+				}
+			}
+			2 = {
+				trigger = {
+					any_owned_province = {
+						is_state_core = root
+						OR = {
+							AND = {
+								religion = root
+								OR = {
+									culture = root
+									has_owner_accepted_culture = yes
+								}
+							}
+						}
+						region_for_scope_province = {
+							is_capital_of = root
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						is_state_core = root
+						OR = {
+							AND = {
+								religion = root
+								OR = {
+									culture = root
+									has_owner_accepted_culture = yes
+								}
+							}
+						}
+						region_for_scope_province = {
+							is_capital_of = root
+						}
+					}
+					save_event_target_as = agenda_province
+				}
+			}
+			1 = {
+				random_owned_province = {
+					limit = {
+						is_state_core = root
+					}
+					save_event_target_as = agenda_province
+				}
+			}
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					check_variable = {
+						which = province_dip_var
+						value = 1
+					}
+				}
+				set_variable = {
+					which = province_dip_var
+					value = 0
+				}
+			}
+			export_to_variable = {
+				which = province_dip_var
+				value = trigger_value:base_production
+			}
+			change_variable = {
+				which = province_dip_var
+				value = 2
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			base_production = "province_dip_var"
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+		add_years_of_income = 0.5
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_industrial
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_industrial_blast_furnaces = {
+	selection_weight = {
+		factor = 5 #always select if possible
+		modifier = {
+			factor = 1 #but not too often
+		}
+	}
+	can_select = {
+		has_country_flag = RHN_Blast_furnaces
+		NOT = {
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 15
+			}
+		}
+		any_owned_province = {
+			OR = {
+				area = hesse_area
+				area = north_rhine_area
+				area = lower_rhineland_area
+				area = palatinate_area
+				AND = {
+					ROOT = {
+						has_country_flag = RHN_westphalia
+					}
+					area = westphalia_area
+					area = north_westphalia_area
+				}
+			}
+			NOT = {	has_building = blast_furnace }
+		}
+	}
+	pre_effect = {
+		set_variable = {
+			which = estate_industrial_amount_of_furnaces
+			value = 0
+		}
+		if = {
+			limit = {
+				always = yes
+			}
+			set_variable = {
+				which = estate_industrial_amount_of_furnaces
+				value = 3
+			}
+			if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						has_building = blast_furnace
+						value = 3
+					}
+				}
+				set_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 6
+				}
+				if = {
+					limit = {
+						num_of_owned_provinces_with = {
+							has_building = blast_furnace
+							value = 6
+						}
+					}
+					set_variable = {
+						which = estate_industrial_amount_of_furnaces
+						value = 9
+					}
+					if = {
+						limit = {
+							num_of_owned_provinces_with = {
+								has_building = blast_furnace
+								value = 9
+							}
+						}
+						set_variable = {
+							which = estate_industrial_amount_of_furnaces
+							value = 12
+						}
+						if = {
+							limit = {
+								num_of_owned_provinces_with = {
+									has_building = blast_furnace
+									value = 12
+								}
+							}
+							set_variable = {
+								which = estate_industrial_amount_of_furnaces
+								value = 15
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	provinces_to_highlight = {
+		OR = {
+			area = hesse_area
+			area = north_rhine_area
+			area = lower_rhineland_area
+			area = palatinate_area
+			AND = {
+				ROOT = {
+					has_country_flag = RHN_westphalia
+				}
+				area = westphalia_area
+				area = north_westphalia_area
+			}
+		}
+		OR = {
+			NOT = {	has_building = blast_furnace }
+			NOT = { owned_by = ROOT }
+		}
+	}
+	fail_if = {
+		NOT = { has_country_flag = RHN_Blast_furnaces }
+	}
+    task_requirements = {
+		if = {
+			limit = {
+				check_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 15
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 15
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 12
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 12
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 9
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 9
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 6
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 6
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_industrial_amount_of_furnaces
+					value = 3
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_building = blast_furnace
+				value = 3
+			}
+		}
+		else = {
+			always = yes
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 15
+		}
+		add_country_modifier = {
+			name = RHN_blast_furnace_cost
+			duration = 1825
+		}
+    }
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_industrial
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}

@@ -15,15 +15,46 @@ country_decisions = {
 				palatinate_area = {
 					NOT = { has_building = blast_furnace }
 				}
+				AND = {
+					has_country_flag = RHN_westphalia
+					OR = {
+						westphalia_area = {
+							NOT = { has_building = blast_furnace }
+						}
+						north_westphalia_area = {
+							NOT = { has_building = blast_furnace }
+						}
+					}
+				}
 			}
 		}
 		allow = {
+			hidden_trigger = {
+				NOT = { has_country_flag = RHN_Blast_furnaces_decision }
+			}
 			any_owned_province = {
-				OR = {
-					area = hesse_area
-					area = north_rhine_area
-					area = lower_rhineland_area
-					area = palatinate_area
+				if = {
+					limit = {
+						ROOT = { has_country_flag = RHN_westphalia }
+					}
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						area = westphalia_area
+						area = north_westphalia_area
+					}
+				}
+				else = {
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						#area = westphalia_area
+						#area = north_westphalia_area
+					}
 				}
 				NOT = {	has_building = blast_furnace }
 				custom_trigger_tooltip = {
@@ -36,9 +67,14 @@ country_decisions = {
 					NOT = { has_construction = culture }
 					NOT = { has_construction = missionary }
 				}
-				num_free_building_slots = 1
 			}
-			treasury = 500
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				treasury = 1500
+			}
+			else = { treasury = 2000 }
 		}
 		provinces_to_highlight = {
 			owned_by = ROOT
@@ -47,15 +83,33 @@ country_decisions = {
 				area = north_rhine_area
 				area = lower_rhineland_area
 				area = palatinate_area
+				AND = {
+					ROOT = { has_country_flag = RHN_westphalia }
+					OR = {
+						area = westphalia_area
+						area = north_westphalia_area
+					}
+				}
 			}
 			NOT = {	has_building = blast_furnace }
+			NOT = { has_construction = blast_furnace }
 		}
 		effect = {
-			custom_tooltip = RHN_Blast_furnaces_decision_tt
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				custom_tooltip = RHN_Blast_furnaces_decision_tt2
+			}
+			else = { custom_tooltip = RHN_Blast_furnaces_decision_tt1 }
 			
 			hidden_effect = {
+				set_country_flag = RHN_Blast_furnaces_decision
+				set_variable = {
+					current_page = 1
+				}
 				country_event = {
-					id = ME_Rhenish_Events.4
+					id = ME_Rhenish_Events.16
 					days = 0
 				}
 			}
@@ -65,8 +119,511 @@ country_decisions = {
 			
 			modifier = {
 				factor = 0
-				NOT = { treasury = 1000 }
+				NOT = { treasury = 1500 }
 			}
+		}
+	}
+	
+	RHN_serfdom = {
+		potential = {
+			tag = RHN
+			NOT = { has_country_modifier = RHN_abolished_serfdom }
+		}
+		allow = {
+			has_adm_advisor = yes
+			NOT = { average_unrest = 2 }
+			NOT = { average_autonomy_above_min = 25 }
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = RHN_abolished_serfdom
+					duration = -1
+				}
+			}
+			custom_tooltip = RHN_transfer_10_percent_dev
+			hidden_effect = {
+				set_variable = {
+					which = RHN_dev
+					value = 0
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = grain
+							trade_goods = wine
+							trade_goods = livestock
+							trade_goods = wool
+						}
+					}
+					export_to_variable = {
+						which = RHN_dev
+						value = trigger_value:development
+					}
+					PREV = {
+						change_variable = {
+							which = RHN_dev
+							which = PREV
+						}
+					}
+					set_variable = {
+						which = RHN_dev
+						value = 0
+					}
+				}
+				multiply_variable = {
+					which = RHN_dev
+					value = 0.1
+				}
+				while = {
+					limit = {
+						check_variable = {
+							which = RHN_dev
+							value = 1
+						}
+					}
+					random_owned_province = {
+						limit = {
+							OR = {
+								trade_goods = grain
+								trade_goods = wine
+								trade_goods = livestock
+								trade_goods = wool
+							}
+							OR = {
+								base_tax = 2
+								base_production = 2
+								base_manpower = 2
+							}
+						}
+						if = {
+							limit = {
+								base_production = 2
+								base_manpower = 2
+								base_tax = 2
+							}
+							random_list = {
+								33 = { add_base_tax = -1 }
+								33 = { add_base_production = -1 }
+								33 = { add_base_manpower = -1 }
+							}
+						}
+						else_if = {
+							limit = {
+								base_production = 2
+								base_manpower = 2
+								NOT = { base_tax = 2 }
+							}
+							random_list = {
+								50 = { add_base_production = -1 }
+								50 = { add_base_manpower = -1 }
+							}
+						}
+						else_if = {
+							limit = {
+								base_production = 2
+								NOT = { base_manpower = 2 }
+								NOT = { base_tax = 2 }
+							}
+							add_base_production = -1
+						}
+						else_if = {
+							limit = {
+								base_production = 2
+								NOT = { base_manpower = 2 }
+								base_tax = 2
+							}
+							random_list = {
+								50 = { add_base_tax = -1 }
+								50 = { add_base_manpower = -1 }
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { base_production = 2 }
+								NOT = { base_manpower = 2 }
+								base_tax = 2
+							}
+							add_base_tax = -1
+						}
+						else_if = {
+							limit = {
+								base_production = 2
+								NOT = { base_manpower = 2 }
+								base_tax = 2
+							}
+							random_list = {
+								50 = { add_base_tax = -1 }
+								50 = { add_base_manpower = -1 }
+							}
+						}
+						else_if = {
+							limit = {
+								NOT = { base_production = 2 }
+								base_manpower = 2
+								NOT = { base_tax = 2 }
+							}
+							add_base_manpower = -1
+						}
+					}
+					subtract_variable = {
+						which = RHN_dev
+						value = 1
+					}
+					random_owned_province = {
+						limit = {
+							NOT = {
+								OR = {
+									trade_goods = grain
+									trade_goods = wine
+									trade_goods = livestock
+									trade_goods = wool
+								}
+							}
+						}
+						random_list = {
+							33 = { add_base_tax = 1 }
+							33 = { add_base_production = 1 }
+							33 = { add_base_manpower = 1 }
+						}
+					}
+				}
+				set_variable = {
+					which = RHN_dev
+					value = 1
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1 #A good idea for Rhineland
+		}
+	}
+	
+	# RHN_bonds = {
+		# potential = {
+			# tag = RHN
+		# }
+		# allow = {
+			# custom_trigger_tooltip = {
+				# tooltip = RHN_hasnt_sold_in_10_years
+				# OR = {
+					# NOT = { has_country_flag = RHN_sold_bonds }
+					# had_country_flag = {
+						# flag = RHN_sold_bonds
+						# days = 9125
+					# }
+				# }
+			# }
+		# }
+		# effect = {
+			# custom_tooltip = RHN_gain_trust_with_allies
+			# custom_tooltip = RHN_lose_3_years_of_production_income
+		# }
+		# ai_will_do = {
+			# factor = 1
+		# }
+	# }
+	
+	RHN_optics_decision = {
+		potential = {
+			has_country_flag = RHN_unlock_optic_event
+		}
+		allow = {
+			is_at_war = no
+			custom_trigger_tooltip = {
+				tooltip = RHN_hasnt_sold_in_25_years
+				OR = {
+					NOT = { has_country_flag = RHN_sold_optics }
+					had_country_flag = {
+						flag = RHN_sold_optics
+						days = 9125
+					}
+				}
+			}
+		}
+		effect = {
+			clr_country_flag = RHN_sold_optics
+			set_country_flag = RHN_sold_optics
+			country_event = {
+				id = ME_Rhenish_Events.4
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	RHN_bell = {
+		potential = {
+			has_country_flag = RHN_may_have_buildings
+			NOT = { has_country_modifier = RHN_bell_3 }
+			#OR = {
+			#	NOT = { has_country_flag = RHN_building_flag }
+			#	had_country_flag = {
+			#		flag = RHN_building_flag
+			#		days = 1825
+			#	}
+			#}
+		}
+		allow = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_bell_1
+				}
+				treasury = 10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_bell_2
+				}
+				treasury = 50000
+			}
+			else = {
+				treasury = 2000
+			}
+			capital_scope = {
+				NOT = { has_construction = missionary }
+				NOT = { has_construction = culture }
+				NOT = { has_construction = core }
+				NOT = { has_construction = building }
+			}
+			custom_trigger_tooltip = {
+				tooltip = RHN_no_province_is_constructing_an_upgrade
+				NOT = {
+					any_owned_province = {
+						OR = {
+							has_construction = rhineland_building_upgrade_bell
+							has_construction = rhineland_building_upgrade_landtag
+							has_construction = rhineland_building_upgrade_palace
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_bell_1
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_bell_benefits_one
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_bell_benefits_two
+				add_treasury = -10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_bell_2
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_bell_benefits_two
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_bell_benefits_three
+				add_treasury = -50000
+			}
+			else = {
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_bell_benefits_none
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_bell_benefits_one
+				add_treasury = -2000
+			}
+			#clr_country_flag = RHN_building_flag
+			#set_country_flag = RHN_building_flag
+			capital_scope = {
+				add_building_construction = {
+					building = rhineland_building_upgrade_bell
+					speed = 1
+					cost = 0
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+		}
+	}
+	RHN_palace = {
+		potential = {
+			has_country_flag = RHN_may_have_buildings
+			NOT = { has_country_modifier = RHN_palace_3 }
+			#OR = {
+			#	NOT = { has_country_flag = RHN_building_flag }
+			#	had_country_flag = {
+			#		flag = RHN_building_flag
+			#		days = 1825
+			#	}
+			#}
+		}
+		allow = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_palace_1
+				}
+				treasury = 10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_palace_2
+				}
+				treasury = 50000
+			}
+			else = {
+				treasury = 2000
+			}
+			capital_scope = {
+				NOT = { has_construction = missionary }
+				NOT = { has_construction = culture }
+				NOT = { has_construction = core }
+				NOT = { has_construction = building }
+			}
+			custom_trigger_tooltip = {
+				tooltip = RHN_no_province_is_constructing_an_upgrade
+				NOT = {
+					any_owned_province = {
+						OR = {
+							has_construction = rhineland_building_upgrade_bell
+							has_construction = rhineland_building_upgrade_landtag
+							has_construction = rhineland_building_upgrade_palace
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_palace_1
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_palace_benefits_one
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_palace_benefits_two
+				add_treasury = -10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_palace_2
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_palace_benefits_two
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_palace_benefits_three
+				add_treasury = -50000
+			}
+			else = {
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_palace_benefits_none
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_palace_benefits_one
+				add_treasury = -2000
+			}
+			#clr_country_flag = RHN_building_flag
+			#set_country_flag = RHN_building_flag
+			capital_scope = {
+				add_building_construction = {
+					building = rhineland_building_upgrade_palace
+					speed = 1
+					cost = 0
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+		}
+	}
+	RHN_landtag = {
+		potential = {
+			has_country_flag = RHN_may_have_buildings
+			NOT = { has_country_modifier = RHN_landtag_3 }
+			#OR = {
+			#	NOT = { has_country_flag = RHN_building_flag }
+			#	had_country_flag = {
+			#		flag = RHN_building_flag
+			#		days = 1825
+			#	}
+			#}
+		}
+		allow = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_landtag_1
+				}
+				treasury = 10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_landtag_2
+				}
+				treasury = 50000
+			}
+			else = {
+				treasury = 2000
+			}
+			capital_scope = {
+				NOT = { has_construction = missionary }
+				NOT = { has_construction = culture }
+				NOT = { has_construction = core }
+				NOT = { has_construction = building }
+			}
+			custom_trigger_tooltip = {
+				tooltip = RHN_no_province_is_constructing_an_upgrade
+				NOT = {
+					any_owned_province = {
+						OR = {
+							has_construction = rhineland_building_upgrade_bell
+							has_construction = rhineland_building_upgrade_landtag
+							has_construction = rhineland_building_upgrade_palace
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_landtag_1
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_landtag_benefits_one
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_landtag_benefits_two
+				add_treasury = -10000
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = RHN_landtag_2
+				}
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_landtag_benefits_two
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_landtag_benefits_three
+				add_treasury = -50000
+			}
+			else = {
+				custom_tooltip = RHN_current_benefits
+				custom_tooltip = RHN_landtag_benefits_none
+				custom_tooltip = RHN_next_benefits
+				custom_tooltip = RHN_landtag_benefits_one
+				add_treasury = -2000
+			}
+			#clr_country_flag = RHN_building_flag
+			#set_country_flag = RHN_building_flag
+			capital_scope = {
+				add_building_construction = {
+					building = rhineland_building_upgrade_landtag
+					speed = 1
+					cost = 0
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
 		}
 	}
 }

@@ -1,0 +1,66 @@
+hre_shadow_kingdom_give_up_italy_effect = {
+	add_prestige = -10
+	add_imperial_influence = -20
+	custom_tooltip = shadow_kingdom_emperor_gives_up_tt
+	set_global_flag = italians_leave_hre
+	hidden_effect = {
+		every_country = {
+			limit = {
+				is_shadow_kingdom_eligible_trigger = yes
+				OR = {
+					is_subject = no
+					AND = {
+						is_subject = yes
+						overlord = { # overlord chooses for their vassals if eligible to leave themselves
+							NOT = {
+								is_part_of_hre = yes
+								capital_scope = { region = italy_region }
+							}
+						}
+					}
+				}
+			}
+			country_event = { id = shadow_kingdom.4 }
+		}
+	}
+	every_province = {
+		limit = {
+			is_part_of_hre = yes
+			region = italy_region
+			owner = {
+				is_part_of_hre = no
+			}
+		}
+		set_in_empire = no
+	}
+}
+
+hre_shadow_kingdom_leave_hre_effect = {
+	set_in_empire = no
+	set_country_flag = permanently_left_hre_flag
+	emperor = {
+		add_opinion = {
+			who = PREV
+			modifier = hre_country_left
+		}
+	}
+	if = {
+		limit = {
+			any_subject_country = {
+				capital_scope = {
+					region = italy_region
+				}
+				is_part_of_hre = yes
+			}
+		}
+		every_subject_country = {
+			limit = {
+				capital_scope = {
+					region = italy_region
+				}
+				is_part_of_hre = yes
+			}
+			set_in_empire = no
+		}
+	}
+}

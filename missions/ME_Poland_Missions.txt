@@ -1,991 +1,1019 @@
-me_POL_PLC_missions_1 = {
+POL_Missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	reach_the_sea = {
-		icon = mission_galleys_in_port
+	}  
+	has_country_shield  = yes
+	
+	POL_mission_to_pope = {
+		icon = catholic_confraternity
 		position = 1
 		required_missions = { }
-		trigger = {
-			num_of_ports = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = "naval_enthusiasm_mission"
-				duration = 9125 #25 years
-			}
-			add_dip_power = 50
-		}
-	}
-
-	expand_trade = {
-		icon = mission_trade_company_region_abroad
-		position = 2
-		required_missions = { reach_the_sea }
-		trigger = {
-			navy_size_percentage = 1
-		}
-		effect = {
-			add_dip_power = 100
-			add_mercantilism = 5
-		}
-	}
-
-	baltic_domination = {
-		icon = mission_high_income
-		position = 3
-		required_missions = { expand_trade }
-		trigger = {
-			1926 = {
-				is_strongest_trade_power = ROOT
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				owned_by = PAP
 			}
 		}
-		effect = {
-			add_country_modifier = {
-				name = "growing_economy"
-				duration = 9125 #25 years
-			}
-			add_years_of_income = 2
-		}
-	}
-
-	thriving_coastal_economy = {
-		icon = mission_high_income
-		position = 4
-		required_missions = { baltic_domination }
-		trigger = {
-			sailors = 500
-		}
-		effect = {
-			add_country_modifier = {
-				name = "coastal_economy_pol"
-				duration = 9125 #25 years
-			}
-			add_adm_power = 50
-		}
-	}
-
-	northern_rivals = {
-		icon = mission_alliances
-		position = 6
-		required_missions = { thriving_coastal_economy }
 		trigger = {
 			if = {
 				limit = {
-					OR = {
-						exists = SWE
-						exists = DAN
-						exists = NOV
-						exists = MOS
-						exists = RUS
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						is_papal_controller = yes
 					}
 				}
 				OR = {
-					is_rival = SWE
-					is_rival = DAN
-					is_rival = NOV
-					is_rival = MOS
-					is_rival = RUS
+					is_papal_controller = yes
+					any_country = {
+						is_papal_controller = yes
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					religion = catholic
+				}
+				num_of_cardinals = 3
+			}
+			else = {
+				theologian = 1 #really?
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_papal_favour
+				duration = 7300
+			}
+			if = {
+				limit = {
+					any_country = {
+						culture_group = latin
+						marriage_with = ROOT
+					}
+				}	
+				custom_tooltip = POL_if_we_have_rm_yes
+				hidden_effect =	{
+					capital_scope = {
+						add_institution_embracement = {
+							which = renaissance
+							value = 30
+						}
+					}
 				}
 			}
 			else = {
-				any_rival_country = {
-					NOT = { total_development = ROOT }
-					NOT = { army_size = ROOT }
-				}
+				custom_tooltip = POL_if_we_have_rm_no
 			}
-		}
-		effect = {
-			curonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			livonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			estonia_ingria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			PAP = {
+				country_event = { id = ME_Poland_Events.3 }
 			}
 		}
 	}
-
-	northern_security = {
-		icon = mission_cannons_firing
-		position = 7
-		required_missions = { northern_rivals }
+	
+	POL_embrace_renaissance = {
+		icon = me_mission_poland_copernicus
+		position = 2
+		required_missions = { POL_mission_to_pope }
 		provinces_to_highlight = {
-			OR = {
-				area = curonia_area
-				area = livonia_area
-				area = estonia_ingria_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			curonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			livonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			estonia_ingria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			stability = 2
+			has_institution = renaissance
 		}
 		effect = {
-			add_country_modifier = {
-				name = "baltic_hegemony"
-				duration = 9125 #25 years
-			}
-			add_army_tradition = 15
+			country_event = { id = flavor_pol.5100 }
+			set_country_flag = POL_polish_renaissance
 		}
 	}
-
-	rise_of_industry = {
-		icon = mission_have_manufactories
-		position = 8
-		required_missions = { }
+	
+	POL_zamosc = {
+		icon = me_mission_poland_renaissance
+		position = 3
+		required_missions = { POL_embrace_renaissance }
+		provinces_to_highlight = {
+			province_id = 4538
+			OR = {
+				NOT = { owned_by = ROOT } 
+				NOT = { num_of_buildings_in_province = 3 }
+			}
+		}
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = mills
-						has_building = farm_estate
-						has_building = tradecompany
-						has_building = plantations
-						has_building = textile
-						has_building = weapons
-						has_building = wharf
-						has_building = furnace
-					}
-				}
-				amount = 30
+			4538 = {
+				owned_by = ROOT
+				num_of_buildings_in_province = 3
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "pol_rural_development"
+			country_event = { id = ME_Poland_Events.2 } #Zamość
+		}
+	}
+	
+	POL_support_cities = {
+		icon = connect_further_austria
+		position = 4
+		required_missions = { POL_expand_krakow }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				NOT = { development = 24 }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				development = 24
+				has_production_building_trigger = yes
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = { 
+				name = POL_leave_brick
 				duration = 7300
 			}
-			add_years_of_income = 3
-		}
-	}
-
-	expansion_of_cities = {
-		icon = mission_early_game_buildings
-		position = 9
-		required_missions = { rise_of_industry }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_EOMAT_town_hall
-						province_has_building_of_group = { group = government equal_or_more_advanced_than = town_hall }
+			if = {
+				limit = {
+					num_of_estate_privileges = {
+						estate = estate_burghers
+						value = 4
 					}
 				}
-				amount = 10
+				custom_tooltip = POL_extra_5_dev_yes
+				hidden_effect = {
+					remove_country_modifier = POL_leave_brick
+					add_country_modifier = {
+						name = POL_leave_brick_2
+						duration = 7300
+					}
+				}
+			}
+			else = {
+				custom_tooltip = POL_extra_5_dev_no
+			}
+			custom_tooltip = POL_every_province_with_church
+			tooltip = {
+				add_province_modifier = {
+					name = POL_faithful_adherence
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						development = 25
+						has_production_building_trigger = yes
+						has_tax_building_trigger = yes 
+					}
+					add_province_modifier = {
+						name = POL_faithful_adherence
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+	
+	POL_prospering_poland = {
+		icon = prosper_in_piedmont
+		position = 6
+		required_missions = { POL_expand_gdansk POL_support_cities }
+		provinces_to_highlight = {
+			culture = polish
+		}
+		trigger = {
+			development_in_provinces = {
+				culture = polish
+				value = 400
+			}
+		}
+		effect = {
+			custom_tooltip = POL_get_ducats_per_province
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_owned_provinces_with = {
+							development = 30
+							value = 10
+						}
+					}
+					add_years_of_income = 1
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							development = 30
+						}
+						ROOT = { add_years_of_income = 0.1 }
+					}
+				}
+			}
+			country_event = { id = ME_Poland_Events.11 }
+		}
+	}
+	
+	POL_revenge_for_varna = {
+		icon = mission_crusade_for_varna
+		position = 7
+		required_missions = { POL_moldavia }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				has_won_war_against = {
+					who = TUR
+				}
+			}
+			else = {
+				any_country = {
+					religion_group = muslim
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+						}
+					}
+				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "basic_representation"
-				duration = 3650
+				name = POL_athelta_christi
+				duration = 10950
+			}
+			add_prestige_or_monarch_power = { amount = 20 }
+			custom_tooltip = POL_if_before_1500
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { is_year = 1500 }
+					}
+					add_power_projection = {
+						type = mission_rewards_power_projection
+						amount = 25
+					}
+				}
 			}
 		}
 	}
-
-	coal_powerhouse = {
-		icon = mission_have_manufactories
-		position = 10
-		required_missions = { expansion_of_cities }
+	
+	POL_establish_autoramenty = {
+		icon = army_reforms
+		position = 8
+		required_missions = { }
+		provinces_to_highlight = {
+		}
 		trigger = {
-			num_of_owned_manufactory_trigger = { amount = 3 }
+			OR = {
+				num_of_mercenaries = 20
+				army_size = 60
+			}
+		}
+		effect = {
+			add_mil_power = 25
+			custom_tooltip = POL_if_completed_by_mercenaries
+			tooltip = {
+				add_country_modifier = {
+					name = POL_autorament_cudzoziemski
+					duration = 10950
+				}
+				#event to get 10 mercenary infantry in capital???
+			}
+			custom_tooltip = POL_if_completed_by_army_size
+			tooltip = {
+				add_country_modifier = {
+					name = POL_autorament_narodowy
+					duration = 10950
+				}
+			}
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_mercenaries = 20
+					}
+					add_country_modifier = {
+						name = POL_autorament_cudzoziemski
+						duration = 10950
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_autorament_narodowy
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+	
+	POL_wojsko_komputowe = { #changed to kwarciane
+		icon = mission_noble_council
+		position = 9
+		required_missions = { POL_establish_autoramenty }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manpower_building_trigger = yes }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_manpower_building_trigger = yes
+				value = 10
+			}
+			OR = {
+				recruitmaster = 1
+				has_mil_advisor_2 = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns = 4525
+				}
+				4525 = {
+					tooltip = {
+						add_province_modifier = {
+							name = POL_skarb_rawski
+							duration = -1
+						}
+					}
+					province_event = { id = ME_Poland_Events.19 } #Skarb Rawski
+				}
+			}
+			else = {
+				capital_scope = {
+					tooltip = {
+						add_province_modifier = {
+							name = POL_skarb_rawski
+							duration = -1
+						}
+					}
+					province_event = { id = ME_Poland_Events.19 } #Skarb Rawski
+				}
+			}
+		}
+	}
+	
+	POL_order_of_the_white_eagle = {
+		icon = me_mission_poland_order
+		position = 11
+		required_missions = { POL_wojsko_komputowe }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_tradition = 80
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
+		}
+		effect = {
+			country_event = { id = ME_Poland_Events.20 } #order orla bialego
+		}
+	}
+	
+	POL_jagiellonian_university = {
+		icon = interest_of_holland
+		position = 12
+		required_missions = { POL_warszawa }
+		provinces_to_highlight = {
+			province_id = 262
+			OR = { 
+				NOT = { development = 30 }
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			262 = {
+				owned_by = ROOT
+				development = 30
+			}
 		}
 		effect = {
 			262 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
+				add_province_modifier = {
+					name = POL_jagiellonian_university_modifier
+					duration = -1
 				}
+				add_or_upgrade_university_building = yes
 			}
-			260 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
-				}
-			}
-			2961 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
-				}
-			}
-			291 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
-				}
-			}
-			263 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
-				}
-			}
-			4237 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_base_tax = 2
-					add_base_production = 3
-				}
+			add_country_modifier = {
+				name = POL_leading_jagiellonian_university
+				duration = 10950
 			}
 		}
 	}
-
-	sign_constitution = {
-		icon = mission_high_income
-		position = 11
-		required_missions = { coal_powerhouse }
+	
+	POL_szkola_rycerska = {
+		icon = me_mission_poland_corps_of_cadets
+		position = 13
+		required_missions = { POL_collegium_nobili }
+		provinces_to_highlight = {
+			province_id = 262
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_forcelimit_building_trigger = yes }
+				NOT = { has_manpower_building_trigger = yes }
+			}
+		}
 		trigger = {
-			has_institution = enlightenment
 			if = {
 				limit = {
-					has_dlc = "Common Sense"
+					has_dlc = "Cradle of Civilization"
 				}
-				government_rank = 3
+				army_professionalism = 0.25
 			}
 			else = {
-				total_development = 1000
+				army_tradition = 60
+			}
+			has_mil_advisor_3 = yes
+			262 = {
+				owned_by = ROOT
+				has_forcelimit_building_trigger = yes
+				has_manpower_building_trigger = yes
 			}
 		}
 		effect = {
-			capital_scope = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
+			262 = {
+				add_province_modifier = {
+					name = POL_corps_of_cadets
+					duration = -1
+				}
 			}
-			add_country_modifier = {
-				name = "centralized_state_pol"
-				duration = 7300
+			country_event = { id = ME_Poland_Events.28 }
+		}
+	}
+	
+	POL_new_amber_coast = {
+		icon = develop_konigsberg
+		position = 14
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_expanded_mod_active = { mod = trade_goods }
+					trade_goods = amber
+				}
+				AND = {
+					NOT = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						province_id = 43
+						province_id = 39
+						province_id = 41
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					calc_true_if = {
+						owns = 43
+						owns = 39
+						owns = 41
+						amount = 2
+					}
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					development_in_provinces = {
+						trade_goods = amber
+						value = 50
+					}
+				}
+				else = {
+					development_in_provinces = {
+						OR = {
+							province_id = 43
+							province_id = 39
+							province_id = 41
+						}
+						value = 50
+					}
+				}
+			}
+			else = {
+				43 = { 
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				41 = { 
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				39 = { 
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = POL_50_dev
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = area_var
+							value = development
+							who = 43
+						}
+						export_to_variable = {
+							which = province_41
+							value = development
+							who = 41
+						}
+						change_variable = { which = area_var which = province_41 }
+						export_to_variable = {
+							which = province_39
+							value = development
+							who = 39
+						}
+						change_variable = { which = area_var which = province_39 }
+						check_variable = { which = area_var value = 50 }
+					}
+				}	
+			}
+			262 = {
+				trade_share ={
+					country = ROOT
+					share = 40
+				}
+			}
+		}
+		effect = {
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = POL_goods_flow_north
+				}
+			}
+			add_years_of_income = 0.5
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods } 
+				}
+				custom_tooltip = POL_every_province_with_amber
+				tooltip = {
+					add_province_modifier = {
+						name = POL_demand_for_amber
+						duration = 9125
+					}
+				}
+				hidden_effect = {
+					every_province = {
+						limit = {
+							trade_goods = amber
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+			}
+			else = {
+				43 = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+				41 = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+				39 = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+			}
+			custom_tooltip = POL_if_we_have_wroclaw
+			hidden_effect = {
+				if = {
+					limit = {
+						264 = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					264 = {
+						create_or_add_center_of_trade_level = { level = 1 }
+					}
+				}
 			}
 		}
 	}
-
-	end_feudalism = {
-		icon = mission_alliances
-		position = 12
-		required_missions = { sign_constitution }
+	
+	POL_exquisite_exports = {
+		icon = mission_high_income
+		position = 16
+		required_missions = { POL_new_amber_coast }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 4545
+					OR = {
+						NOT = { has_production_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+						NOT = { has_manufactory_trigger = yes }
+					}
+				}
+				AND = {
+					owned_by = ROOT
+					NOT = { province_id = 4545}
+					OR = {
+						trade_goods = jewellery
+						trade_goods = gems
+						trade_goods = amber
+						trade_goods = cloth
+						trade_goods = dyes
+					}
+					OR = {
+						NOT = { has_production_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+						NOT = { has_manufactory_trigger = yes }
+						NOT = { development = 20 }
+					}
+				}
+			}
+		}
 		trigger = {
-			has_parliament = yes
-			current_size_of_parliament = 20
+			num_of_owned_provinces_with = {
+				development = 20
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						trade_goods = jewellery
+						trade_goods = gems
+						trade_goods = amber
+						trade_goods = cloth
+						trade_goods = dyes
+					}
+				}
+				else = {
+					OR = {
+						trade_goods = gems
+						trade_goods = cloth
+						trade_goods = dyes
+					}
+				}
+				value = 3
+			}
+			4545 = {
+				has_production_building_trigger = yes
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "expanded_state_pol"
+				name = POL_sluck_sashes
+				duration = 10950
+			}
+			
+			add_country_modifier = {
+				name = POL_world_renowned
+				duration = 5475
+			}
+			
+			add_years_of_income = 0.5
+		}
+	}
+	
+	POL_konstytucja = {
+		icon = me_mission_poland_may_constitution
+		required_missions = { POL_deal_with_the_liberum  }
+		position = 17
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_institution = enlightenment }
+		}
+		trigger = {
+			if = {
+				limit = {
+					government = monarchy
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = governments }
+					}
+					has_reform_on_level = 9
+				}
+				else = { has_reform_on_level = 7 }
+			}
+			else_if = {
+				limit = {
+					government = republic
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = governments }
+					}
+					has_reform_on_level = 11
+				}
+				else = { has_reform_on_level = 10 }
+			}
+			else_if = {
+				limit = {
+					government = theocracy
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = governments }
+					}
+					has_reform_on_level = 12
+				}
+				else = { has_reform_on_level = 8 }
+			}
+			else = { has_reform_on_level = 5 }
+			has_adm_advisor_3 = yes
+			OR = {
+				current_age = age_of_revolutions
+				all_owned_province = { has_institution = enlightenment }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_third_may_constitution
 				duration = -1
 			}
 		}
 	}
 }
 
-me_POL_PLC_missions_2 = {
+POL_Missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
-		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	knights_defeated = {
-		icon = mission_monarch_in_throne_room
-		position = 3
-		required_missions = { retake_corridor }
-		provinces_to_highlight = {
-			OR = {
-				area = west_prussia_area
-				area = east_prussia_area
-				area = hinter_pommern_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			west_prussia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			east_prussia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			hinter_pommern_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			AND = {
+				tag = PLC
+				was_tag = POL
 			}
 		}
-		effect = {
-			add_country_modifier = {
-				name = "peace_of_torun"
-				duration = 14600
-			}
-			hinter_pommern_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			vorpommern_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = POM
-					NOT = { overlord_of = POM }
-				}
-				add_casus_belli = {
-					target = POM
-					type = cb_vassalize_mission
-					months = 12
-				}
-			}
-		}
-	}
-
-	mazovia_return = {
-		icon = mission_have_two_subjects
-		position = 4
-		required_missions = { knights_defeated }
-		provinces_to_highlight = {
-			province_id = 257
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 257
-			MAZ = {
-				exists = no
-			}
-		}
-		effect = {
-			257 = {
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 1
-			}
-		}
-	}
-
-	consolidate_red_ruthenia = {
-		icon = mission_conquer_50_development
-		position = 5
-		required_missions = { mazovia_return }
-		provinces_to_highlight = {
-			area = red_ruthenia_area
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { religion = ROOT }
-			}
-		}
-		trigger = {
-			OR = {
-				full_all_reli_idea_groups = yes
-				humanist_ideas = 7
-			}
-			red_ruthenia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				religion = ROOT
-			}
-		}
-		effect = {
-			set_country_flag = grecocatholicism
-			red_ruthenia_area = {
-				change_culture = polish
-				add_base_manpower = 1
-			}
-		}
-	}
-
-	unite_poland = {
-		icon = mission_empire
-		position = 6
-		required_missions = { consolidate_red_ruthenia }
+	} 
+	has_country_shield  = yes
+	
+	POL_ruthenia = {
+		icon = mission_conquer_novgorod
+		position = 2
+		required_missions = { POL_mission_to_pope POL_sejm_mission }
 		provinces_to_highlight = {
 			OR = {
 				area = red_ruthenia_area
-				area = malopolska_area
-				area = wielkopolska_area
-				area = mazovia_area
-				area = west_prussia_area
+				province_id = 4538
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { religion = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
 		}
 		trigger = {
-			legitimacy_equivalent = 100
-			west_prussia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			mazovia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			wielkopolska_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			malopolska_area = {
-				type = all
+			4538 = {
+				religion = ROOT
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			red_ruthenia_area = {
 				type = all
+				religion = ROOT
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "hegemonic_ambition"
-				duration = 7300
-			}
-			add_prestige = 50
-		}
-	}
-
-	bohemian_friendship = {
-		icon = mission_alliances
-		position = 8
-		required_missions = { }
-		trigger = {
-			alliance_with = BOH
-			reverse_has_opinion = {
-				who = BOH
-				value = 200
-			}
-		}
-		effect = {
-			add_historical_friend = BOH
-			add_trust = {
-				who = BOH
-				value = 10
-			}
-		}
-	}
-
-	shipping_lanes = {
-		icon = mission_galleys_in_port
-		position = 9
-		required_missions = { rise_of_industry }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_grand_shipyard
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = grand_shipyard }
-					}
+			red_ruthenia_area = {
+				add_province_modifier = {
+					name = POL_influx_of_polish_settlers
+					duration = 10950
 				}
-				amount = 1
+				set_province_flag = POL_can_convert
 			}
-		}
-		effect = {
-			add_dip_power = 75
-			add_adm_power = 75
-		}
-	}
-
-	amber_trade = {
-		icon = mission_dominate_home_trade_node
-		position = 10
-		required_missions = { shipping_lanes }
-		provinces_to_highlight = {
-			province_id = 43
-			OR = {
-				NOT = { owned_by = ROOT }
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { development = 30 }
+			4538 = {
+				add_province_modifier = {
+					name = POL_influx_of_polish_settlers
+					duration = 10950
 				}
-				AND = {
-					NOT = { has_dlc = "Common Sense" }
-					NOT = { num_of_buildings_in_province = 3  }
-				}
+				set_province_flag = POL_can_convert
 			}
-		}
-		trigger = {
-			43 = {
-				owned_by = ROOT
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
-					development = 30
-				}
-				else = {
-					num_of_buildings_in_province = 3 
-				}
-			}
-		}
-		effect = {
-			43 = {
-				change_trade_goods = gems
-			}
-		}
-	}
-
-	polish_stockmarket = {
-		icon = mission_trade_company_region_abroad
-		position = 11
-		required_missions = { amber_trade }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_EOMAT_stock_exchange
-						province_has_building_of_group = { group = trade equal_or_more_advanced_than = stock_exchange }
-					}
-				}
-				amount = 5
-			}
-		}
-		effect = {
-			add_years_of_income = 4
-		}
-	}
-
-	westernization = {
-		icon = mission_non-western_soldiers
-		position = 12
-		required_missions = { polish_stockmarket }
-		trigger = {
-			NOT = { technology_group = western }
-			DIP = 5
-		}
-		effect = {
-			change_technology_group = western
-			change_unit_type = western
-		}
-	}
-}
-
-me_POL_PLC_missions_3 = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = POL
-			tag = PLC
-		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	# a mission before this. alliance/pu with LIT OR Lit is dead
-	drive_out_teutons = {
-		icon = me_mission_poland_drive_out_teutons
-		position = 1
-		required_missions = { }
-		completed_by = 1466.10.19
-		provinces_to_highlight = {
-			NOT = { exists = LIT }
-			area = samogitia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
+			set_country_flag = POL_mission
 			if = {
 				limit = {
-					exists = LIT
-					NOT = { is_rival = LIT }
+					primary_culture = polish
 				}
-				OR = {
-					alliance_with = LIT
-					overlord_of = LIT
-				}
-			}
-			else = {
-				samogitia_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-			}
-		}
-		effect = {
-			west_prussia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+				custom_tooltip = POL_ruthenia_will_convert
 			}
 		}
 	}
-
-	retake_corridor = { #Conquer Western Prussia
-		icon = mission_conquer_5_states
-		required_missions = { drive_out_teutons }
-		completed_by = 1466.10.19
-		position = 2
-		provinces_to_highlight = {
-			area = west_prussia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				west_prussia_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				AND = {
-					custom_trigger_tooltip = {
-						tooltip = support_confederation_tooltip
-						has_country_flag = supported_prussian_confederation_flag
-					}
-					exists = DNZ
-					DNZ = {
-						is_at_war = no
-						is_subject = no
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					has_country_flag = supported_prussian_confederation_flag
-					exists = DNZ
-					DNZ = {
-						is_subject = no
-						is_at_war = no
-						NOT = { total_development = 100 }
-					}
-				}
-				country_event = { id = flavor_teu.3 }
-				custom_tooltip = vassalize_danzig_tooltip
-			}
-			else_if = {
-				limit = {
-					exists = TEU
-					NOT = { overlord_of = TEU }
-				}
-				add_casus_belli = {
-					target = TEU
-					type = cb_vassalize_mission
-					months = 12
-				}
-			}
-			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 7300
-			}
-			define_general = {
-				shock = 5
-				fire = 2
-				manuever = 3
-				siege = 2
-			}
-		}
-	}
-
-	reintegrate_gdansk = {
-		icon = mission_conquer_50_development
-		required_missions = { retake_corridor }
+	
+	POL_expand_krakow = {
+		icon = mission_eastern_european_city
 		position = 3
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 262
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 5 }
+				NOT = { num_of_buildings_in_province = 2 }
+			}
+		}
+		trigger = {
+			262 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+				num_of_buildings_in_province = 2
+			}
+		}
+		effect = {
+			262 = {
+				add_province_modifier = {
+					name = POL_expansion_of_krakow
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	POL_fortify_podole = {
+		icon = sway_cologne
+		position = 4
+		required_missions = { POL_expand_krakow }
+		provinces_to_highlight = {
+			province_id = 281
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { base_manpower = 5 }
+					NOT = { has_manpower_building_trigger = yes }
+				}
+			}
+		}
+		trigger = {
+			281 = {
+				owned_by = ROOT
+				OR = {
+					base_manpower = 5
+					has_manpower_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			281 = {
+				add_province_modifier = {
+					name = POL_unconquered_fortress
+					duration = -1
+				}
+			}
+			add_army_tradition_or_mil_power = { amount = 15 }
+		}
+	}
+	
+	POL_expand_gdansk = {
+		icon = mission_danzig_or_war
+		position = 5
+		required_missions = { POL_end_knights POL_fortify_podole }
 		provinces_to_highlight = {
 			province_id = 43
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				NOT = { province_has_center_of_trade_of_level = 2 }
+				NOT = { has_trade_building_trigger = yes }
 			}
 		}
 		trigger = {
-			owns_core_province = 43
-		}
-		effect = {
-			2997 = {
-				change_culture = polish
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_burghers
+					value = 2
+				}
 			}
-			43 = {
-				change_culture = polish
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-		}
-	}
-
-	liberate_pomerania = {
-		icon = mission_empire
-		required_missions = { reintegrate_gdansk }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = hinter_pommern_area
-				area = vorpommern_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			hinter_pommern_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			vorpommern_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			43  = {
+				owned_by = ROOT
+				province_has_center_of_trade_of_level = 2
+				has_trade_building_trigger = yes
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "boh_premysl_mod"
-				duration = 7300
-			}
-			neumark_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			lusatia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			south_saxony_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	liberate_sorbia = {
-		icon = mission_cossack_cavalry
-		required_missions = { liberate_pomerania }
-		position = 5
-		provinces_to_highlight = {
-			OR = {
-				area = neumark_area
-				area = south_saxony_area
-				area = lusatia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			neumark_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			south_saxony_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lusatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			mittelmark_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			mecklenburg_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			northern_saxony_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	restore_wendish_borders = {
-		icon = mission_cannons_firing
-		required_missions = { liberate_sorbia }
-		position = 6
-		provinces_to_highlight = {
-			OR = {
-				area = mittelmark_area
-				area = northern_saxony_area
-				area = mecklenburg_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			mittelmark_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			northern_saxony_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			mecklenburg_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			1858 = {
-				add_base_manpower = 1
-				add_base_tax = 1
-				add_base_production = 1
-				if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 1 }
-					}
-					center_of_trade = 2
-				}
-				else_if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 2 }
-					}
-					add_center_of_trade_level = 1
-				}
-			}
-		}
-	}
-
-	west_slavic_integration = {
-		icon = mission_empire
-		required_missions = {
-			restore_wendish_borders
-			unite_poland
-			liberate_bohemia
-		}
-		position = 7
-		provinces_to_highlight = {
-			OR = {
-				province_id = 43
-				province_id = 1772
-				province_id = 266
-				province_id = 264
-				province_id = 50
-				province_id = 1858
-				province_id = 262
-				province_id = 257
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 1772
-			owns_core_province = 266
-			owns_core_province = 264
-			owns_core_province = 50
-			owns_core_province = 43
-			owns_core_province = 1858
-			owns_core_province = 262
-			owns_core_province = 257
-		}
-		effect = {
-			add_country_modifier = {
-				name = "enforced_unity_pol"
+				name = POL_foreign_merchants_in_gdansk
 				duration = -1
 			}
+			custom_tooltip = POL_every_owned_province_producing_grain
+			tooltip = {
+				add_province_modifier = {
+					name = POL_grain
+					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						trade_goods = grain
+					}
+					add_province_modifier = {
+						name = POL_grain
+						duration = 10950
+					}
+				}
+			}
 		}
 	}
-
-	romans_in_romania = {
-		icon = mission_monarch_in_throne_room
-		position = 8
+	
+	POL_moldavia = {
+		icon = jageillonian_union
+		position = 6
 		required_missions = { }
 		provinces_to_highlight = {
-			province_id = 1756
+			area = moldavia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			1756 = {
+			moldavia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_prestige = 10
-			1756 = {
-				add_base_manpower = 1
+			country_event = { id = ME_Poland_Events.6 }
+			if = {
+				limit = {
+					exists = WAL
+				}
+				add_casus_belli = {
+					target = WAL
+					type = cb_vassalize_mission
+					months = 1200
+				}
 			}
 			wallachia_area = {
 				limit = {
-					NOT = { owned_by = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
+			add_casus_belli = {
+				target = TUR
+				type = cb_revenge_for_varna
+				months = 1200
+			}
 		}
 	}
-
-	black_sea_route = {
-		icon = mission_invade_island
-		position = 9
-		required_missions = { romans_in_romania }
+	
+	POL_wallachia = {
+		icon = mission_impaled_soldies
+		position = 7
+		required_missions = { POL_moldavia }
 		provinces_to_highlight = {
 			area = wallachia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -995,152 +1023,956 @@ me_POL_PLC_missions_3 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			MOL = {
-				is_march = no
-				OR = {
-					exists = no
-					is_subject_of = ROOT
-				}
-			}
 		}
 		effect = {
-			1756 = {
-				add_permanent_province_modifier = {
-					name = "intermarium"
-					duration = 7300
+			4531 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 30
+					key = POL_danube
 				}
 			}
-		}
-	}
-
-	mediterranian_link = {
-		icon = mission_sea_battles
-		position = 10
-		required_missions = { black_sea_route }
-		provinces_to_highlight = {
-			province_id = 268
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 268
-		}
-		effect = {
-			add_years_of_income = 1
-			bulgaria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+			custom_tooltip = POL_if_two_subjects
+			tooltip = {
+				add_country_modifier = {
+					name = POL_double_trouble
+					duration = 14600
 				}
-				add_permanent_claim = ROOT
 			}
-		}
-	}
-
-	restore_hungary = { #Decline of Hungary
-		icon = mission_monarch_in_throne_room
-		required_missions = { mediterranian_link }
-		position = 11
-		trigger = {
-			has_regency = no
-			OR = {
-				HUN = {
-					dynasty = ROOT
-				}
-				AND = {
-					HUN = {
-						NOT = { total_development = 400 }
-					}
-					total_development = 750
-				}
-				NOT = { exists = HUN }
-			}
-		}
-		effect = {
 			if = {
 				limit = {
-					exists = HUN
-					is_subject = no
-					HUN = {
-						is_subject = no
-					}
+					WAL = { is_subject_of = ROOT }
+					MOL = { is_subject_of = ROOT }
 				}
-				add_casus_belli = {
-					target = HUN
-					type = cb_restore_personal_union
-					months = 300
+				hidden_effect = {
+					add_country_modifier = {
+						name = POL_double_trouble
+						duration = 14600
+					}
 				}
 			}
-			else = {
-				slovakia_area = {
-					limit = {
-						NOT = { is_core = ROOT }
-						NOT = { owned_by = ROOT }
-					}
-					add_permanent_claim = ROOT
+		}
+	}
+	
+	POL_inflanty = {
+		icon = mission_conquer_riga
+		position = 8
+		required_missions = { POL_union_of_lublin }
+		provinces_to_highlight = {
+			OR = {
+				area = estonia_ingria_area
+				area = curonia_area
+				area = livonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = estonia_ingria_area
+					area = curonia_area
+					area = livonia_area
 				}
-				transdanubia_area = {
-					limit = {
-						NOT = { is_core = ROOT }
-						NOT = { owned_by = ROOT }
+				value = 6
+			}
+		}
+		effect = {
+			define_general = {
+				shock = 3
+				fire = 5
+				manuever = 4
+				siege = 1
+				name = "Jan Karol Chodkiewicz"
+			}
+			
+			add_army_tradition_or_mil_power = { amount = 10 }
+		}
+	}
+	
+	POL_sea_commission = {
+		icon = mission_heart_of_the_hansa
+		position = 9
+		required_missions = { POL_establish_autoramenty POL_inflanty }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				num_of_heavy_ship = 3
+				num_of_galley = 10
+			}
+			num_of_light_ship = 10
+		}
+		effect = {
+			define_admiral = {
+				shock = 3
+				fire = 4
+				manuever = 3
+				name = "Arend Dickmann"
+			}
+			
+			add_navy_tradition = 10
+			set_country_flag = POL_is_POL
+			custom_tooltip = POL_special_cb_on_sweden
+			
+			1 = {
+				owner = {
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_poland_deluge
+						months = 1200
 					}
-					add_permanent_claim = ROOT
 				}
-				alfold_area = {
-					limit = {
-						NOT = { is_core = ROOT }
+			}
+		}
+	}
+	
+	POL_swedish_deluge = {
+		icon = mission_scandinavian_port_authority
+		position = 10
+		required_missions = { POL_sea_commission }
+		provinces_to_highlight = {
+			owned_by = SWE
+		}
+		trigger = {
+			OR = {
+				has_won_war_against = {
+					who = SWE
+					max_years_since = 10
+				}
+				AND = {
+					NOT = { exists = SWE }
+					owns = 1
+				}
+			}
+		}
+		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
+			
+			add_country_modifier = {
+				name = POL_dominium_maris_baltici
+				duration = -1
+			}
+		}
+	}
+	
+	POL_warszawa = {
+		icon = versailles_palace
+		position = 11
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 257
+					OR = {
+						NOT = { development = 40 }
 						NOT = { owned_by = ROOT }
 					}
-					add_permanent_claim = ROOT
+				}
+				AND = {
+					OR = {
+						province_id = 295
+						province_id = 257
+					}
+					NOT = {
+						257 = { higher_development_than = 295 }
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 266
+						province_id = 257
+					}
+					NOT = {
+						257 = { higher_development_than = 266 }
+					}
+				}
+			}
+		}
+		trigger = {
+			257 = {
+				owned_by = ROOT
+				development = 40
+				higher_development_than = 295
+				higher_development_than = 266
+			}
+		}
+		effect = {
+			257 = {
+				add_province_modifier = {
+					name = POL_splendor_of_the_capital
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	POL_collegium_nobili = {
+		icon = me_mission_protect_throne
+		position = 12
+		required_missions = { POL_warszawa }
+		provinces_to_highlight = {
+			province_id = 257
+			NOT = { has_building = university }
+		}
+		trigger = {
+			257 = {
+				owned_by = ROOT
+				has_building = university
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_nobles
+					value = 4
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_magnate_education
+				duration = 7300
+			}
+		}
+	}
+	
+	POL_zaluski = {
+		icon = bibliotheca_corviana
+		position = 14
+		required_missions = { POL_collegium_nobili }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			is_ahead_of_time_in_tech = { type = all }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 25
+			}
+		}
+		effect = {
+			257 = {
+				add_province_modifier = {
+					name = POL_zaluski_library
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	POL_industrial_cities = {
+		icon = fund_the_monasteries
+		position = 15
+		required_missions = { POL_industrialization POL_new_amber_coast }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 269
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 10 }
+					}
+				}
+				AND = {
+					OR = {
+						area = podolia_volhynia_area
+						area = sandomierz_area
+					}
+					NOT = {
+						area_for_scope_province = {
+							num_of_times_improved = 10
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			269 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			podolia_volhynia_area = {
+				num_of_times_improved = 10
+				owned_by = ROOT
+			}
+			sandomierz_area = {
+				num_of_times_improved = 10
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			
+			add_country_modifier = {
+				name = POL_crown_investments
+				duration = 7300
+			}
+		}
+	}
+	
+	POL_deal_with_the_liberum = {
+		icon = me_mission_poland_piotr_skarga
+		required_missions = { }
+		position = 16
+		provinces_to_highlight = {
+		}
+		trigger = {
+			mission_completed = POL_union_of_lublin
+			NOT = { has_estate_privilege = estate_nobles_nieszawa_privileges }
+			custom_trigger_tooltip = {
+				tooltip = POL_dealt_with_the_liberum_veto
+				NOT = { has_country_flag = librium_veto }
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			add_country_modifier = {
+				name = POL_mending_the_government
+				duration = 7300
+			}
+		}
+	}
+	
+	POL_strengthen_royal_power = {
+		icon = letat_cest_moi
+		required_missions = { POL_deal_with_the_liberum  }
+		position = 17
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = -2
+		}
+		trigger = {
+			absolutism = 50
+			NOT = { average_unrest = -2 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_control_over_the_army_and_state
+				duration = 10950
+			}
+			
+			custom_tooltip = POL_the_noble_privileges
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 4
+							}
+						}
+					}
+					if = {
+						limit = {
+							NOT = {
+								num_of_estate_privileges = {
+									estate = estate_nobles
+									value = 3
+								}
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									num_of_estate_privileges = {
+										estate = estate_nobles
+										value = 2
+									}
+								}
+							}
+							if = {
+								limit = {
+									NOT = {
+										num_of_estate_privileges = {
+											estate = estate_nobles
+											value = 1
+										}
+									}
+								}
+								add_mil_power = 100
+							}
+							else = { add_mil_power = 75 }
+						}
+						else = { add_mil_power = 50 }
+					}
+					else = { add_mil_power = 25 }
+				}	
+			}
+		}
+	}
+}
+
+POL_Missions_3_1 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_sejm_mission = {
+		icon = subiaco_press
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				has_reform = elective_monarchy
+				has_regency = no
+			}
+		}
+		effect = {
+			custom_tooltip = POL_reward_if_jagiellon
+			tooltip = {
+				add_opinion = {
+					who = LIT
+					modifier = POL_jagiellonian_ties
+				}
+				add_country_modifier = {
+					name = POL_return
+					duration = 9125
+				}
+			}
+			custom_tooltip = POL_reward_if_piast
+			custom_tooltip = POL_mission_tree_will_alter
+			tooltip = {
+				silesia_area = { add_permanent_claim = ROOT }
+				slovakia_area = { add_permanent_claim = ROOT }
+				moravia_area = { add_permanent_claim = ROOT }
+				lusatia_area = { add_permanent_claim = ROOT }
+				bohemia_area = { add_permanent_claim = ROOT }
+				neumark_area = { add_permanent_claim = ROOT }
+				hinter_pommern_area = { add_permanent_claim = ROOT }
+				add_ruler_modifier = {
+					name = POL_a_piast_ruler
+					duration = -1
+				}
+			}
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							has_reform = elective_monarchy
+							dynasty = "Jagiellon"
+							senior_union_with = LIT
+						}
+					}
+					add_opinion = {
+						who = LIT
+						modifier = POL_jagiellonian_ties
+					}
+					add_country_modifier = {
+						name = POL_return
+						duration = 9125
+					}
+				}
+				else = {
+					add_ruler_modifier = {
+						name = POL_a_piast_ruler
+						duration = -1
+					}
+					silesia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					slovakia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					moravia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					lusatia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					bohemia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					neumark_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					hinter_pommern_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					set_country_flag = POL_piast
+					swap_non_generic_missions = yes
 				}
 			}
 		}
 	}
 }
 
-me_POL_PLC_missions_4 = {
+POL_Missions_3_Piast = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_nitra = {
+		icon = fight_bosnian_heresies
+		required_missions = { POL_sejm_mission }
+		position = 2
+		provinces_to_highlight = {
+			area = slovakia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				area = slovakia_area
+				value = 4
+			}
+		}
+		effect = {
+			1772 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 15
+					key = POL_slovakia
+				}
+			}
+			add_accepted_culture_or_dip_power = { culture = slovak }
+		}
+	}
+	
+	POL_morawy = {
+		icon = moravian_arms
+		required_missions = { POL_nitra POL_reconquer_silesia }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = moravia_area
+				area = bohemia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			moravia_area = { country_or_non_sovereign_subject_holds = ROOT }
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = moravia_area
+					area = bohemia_area
+				}
+				value = 3
+			}
+		}
+		effect = {
+			country_event = { id = ME_Poland_Events.37 } #Crown yourself as King of Bohemia?
+			add_accepted_culture_or_dip_power = { culture = czech }
+		}
+	}
+}
+
+POL_Missions_3_2 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_end_knights = {
+		icon = mission_teutonic_knights
+		position = 4
+		required_missions = { POL_zwiazek_pruski }
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = west_prussia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_prussia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
+			west_prussia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
+			NOT = { exists = PRU }
+		}
+		effect = {
+			country_event = { id = ME_Ducal_Prussia_Events.1 }
+			add_country_modifier = {
+				name = POL_reputation
+				duration = 9125
+			}
+			curonia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			livonia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			estonia_ingria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	POL_union_of_lublin = {
+		icon = me_mission_poland_lublin
+		position = 7
+		required_missions = { POL_end_knights }
+		provinces_to_highlight = {
+			OR = {
+				owned_by = LIT
+				AND = {
+					OR = {
+						province_id = 272
+						province_id = 280
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
+		trigger = {
+			owns = 272
+			owns = 280
+			NOT = { exists = LIT }
+		}
+		effect = {
+			add_casus_belli = {
+				target = LIV
+				type = cb_livonian_wars 
+				months = 1200
+			}
+			add_country_modifier = {
+				name = POL_golden_age_of_a_power
+				duration = -1
+			}
+			add_stability_or_adm_power = yes
+		}
+	}
+	
+	POL_culture_mission = {
+		icon = mission_russian_patriarchatee
+		position = 9
+		required_missions = { POL_union_of_lublin }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					culture = lithuanian
+					NOT = {
+						ROOT = {
+							accepted_culture = lithuanian
+						}
+					}
+				}
+				AND = {
+					culture = russian
+					culture = novgorodian
+					culture = byelorussian
+					culture = ryazanian
+					culture = ruthenian
+					culture = karelian
+					NOT = {
+						ROOT = {
+							OR = {
+								accepted_culture = russian
+								accepted_culture = novgorodian
+								accepted_culture = byelorussian
+								accepted_culture = ryazanian
+								accepted_culture = ruthenian
+								accepted_culture = karelian
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			accepted_culture = lithuanian
+			num_of_different_cultures_in_court = 2
+			NOT = { average_autonomy_above_min = 40 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_state_of_many_cultures
+				duration = -1
+			}
+		}
+	}
+	
+	POL_vilnius_university = {
+		icon = pontifical_universities
+		position = 11
+		required_missions = { POL_culture_mission }
+		provinces_to_highlight = {
+			province_id = 272
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			272 = {
+				owned_by = ROOT
+				development = 30
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_church
+					value = 2
+				}
+			}
+		}
+		effect = {
+			272 = {
+				add_province_modifier = {
+					name = POL_university_of_vilnius
+					duration = -1
+				}
+				add_or_upgrade_university_building = yes
+			}
+		}
+	}
+	
+	POL_folwark = {
+		icon = austria_prospers
+		position = 12
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				trade_goods = livestock
+				trade_goods = grain
+			}
+			OR = {
+				NOT = { development = 8 }
+				NOT = { has_building = farm_estate }
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+				}
+				development = 8
+				has_building = farm_estate
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_the_folwarks
+				duration = 7300
+			}
+			
+			custom_tooltip = 10_base_tax_distributed_among_farm_estates
+			hidden_effect = {
+				for = {
+					amount = 10
+					effect = "
+						random_owned_province = {
+							limit = {
+								has_building = farm_estate
+							}
+							add_base_tax = 1
+						}
+					"
+				}
+			}
+		}
+	}
+	
+	POL_industrialization = {
+		icon = mission_have_manufactories
+		position = 14
+		required_missions = { POL_folwark }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manufactory_trigger = yes }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_manufactory_trigger = yes
+				value = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "proto_industrialization"
+				duration = 9125
+			}
+			add_years_of_income = 1.5
+		}
+	}
+	
+	POL_coal = {
+		icon = industrialized_rhineland
+		position = 16
+		required_missions = { POL_industrialization }
+		provinces_to_highlight = {
+			OR = {
+				trade_goods = coal
+				has_latent_trade_goods = coal
+			}
+			owned_by = ROOT
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				trade_goods = coal
+				has_building = furnace
+				value = 2
+			}
+		}
+		effect = {
+			add_estate_loyalty = {	
+				estate = estate_burghers
+				loyalty = 15
+			}
+			add_country_modifier = {
+				name = POL_industrial_exploitation
+				duration = 5475
+			}
+		}
+	}
+}
+
+POL_Missions_4_Jagiellon = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	polish_renaissance = {
-		icon = me_mission_poland_renaissance
-		position = 3
-		required_missions = { retake_corridor }
+	}  
+	has_country_shield  = yes
+	
+	POL_reinforce_jagiellons = {
+		icon = polish_diplomacy
+		position = 2
+		required_missions = { POL_sejm_mission POL_rada_krolewska }
+		provinces_to_highlight = {
+		}
 		trigger = {
-			grown_by_development = 100
+			army_size_percentage = 0.9
+			legitimacy_equivalent = 80
+			stability = 1
 		}
 		effect = {
 			add_country_modifier = {
-				name = "polish_renaissance_mod"
-				duration = 7300
+				name = POL_country_stabilized
+				duration = 9125
 			}
-			add_stability_or_adm_power = yes
 			silesia_area = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-
 		}
 	}
+}
 
-	liberate_silesia = {
-		icon = mission_conquer_5_states
-		required_missions = { polish_renaissance }
-		position = 4
+POL_Missions_4_Piast = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_reconquer_silesia = {
+		icon = take_silesia
+		required_missions = { POL_rada_krolewska POL_sejm_mission }
+		position = 2
 		provinces_to_highlight = {
 			area = silesia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -1153,663 +1985,1982 @@ me_POL_PLC_missions_4 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = "piasts_reunited"
-				duration = 7300
+				name = POL_unity_with_silesia
+				duration = -1
 			}
-			slovakia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
+			silesia_area = { add_nationalism = -10 }
 		}
 	}
 
-	liberate_moravia = {
-		icon = mission_conquer_50_development
-		required_missions = { liberate_silesia }
-		position = 5
-		provinces_to_highlight = {
-			area = slovakia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			slovakia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "new_polish_mints"
-				duration = 7300
-			}
-			erzgebirge_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			bohemia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			moravia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
+}
 
-	liberate_bohemia = {
-		icon = mission_assemble_an_army
-		required_missions = { liberate_moravia }
-		position = 6
+POL_Missions_4_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_zwiazek_pruski = {
+		icon = return_visby_to_the_league
+		position = 3
+		required_missions = { }
 		provinces_to_highlight = {
 			OR = {
-				area = bohemia_area
-				area = erzgebirge_area
-				area = moravia_area
+				owned_by = TEU
+				owned_by = DNZ
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			bohemia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			erzgebirge_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			moravia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "west_slavic_union"
-				duration = 7300
-			}
-		}
-	}
-
-	settle_lithuania = {
-		icon = mission_conquer_50_development
-		position = 9
-		required_missions = { integrate_the_east }
-		provinces_to_highlight = {
-			province_id = 272
 			OR = {
-				NOT = { owned_by = ROOT }
-				has_owner_culture = no
-				has_owner_religion = no
-			}
-		}
-		trigger = {
-			272 = {
-				owned_by = ROOT
-				has_owner_culture = yes
-				has_owner_religion = yes
-			}
-		}
-		effect = {
-			lithuania_area = {
-				add_province_modifier = {
-					name = "polish_influx"
-					duration = 10950
+				war_with = TEU
+				alliance_with = DNZ
+				DNZ = { is_subject_of = ROOT }
+				west_prussia_area = {
+					country_or_non_sovereign_subject_holds = ROOT
+					type = all
 				}
 			}
 		}
-	}
-
-	winter_crops = {
-		icon = mission_early_game_buildings
-		position = 10
-		required_missions = { settle_lithuania }
-		trigger = {
-			OR = {
-				has_institution = global_trade
-				mercantilism = 80
-			}
-		}
 		effect = {
-			add_adm_power = 100
-			add_country_modifier = {
-				name = "polish_potato"
-				duration = 9125
+			define_general = {
+				shock = 3
+				fire = 0
+				manuever = 3
+				siege = 1
+				name = "Piotr Dunin"
 			}
-			1752 = {
+			east_prussia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_prussia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = POL_flota_kaperska
+			set_country_flag = POL_flota_kaperska_flag
+			
+			1859 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
+				add_province_modifier = {
+					name = POL_polish_land
+					duration = 3650
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = DNZ
+						OR = {
+							alliance_with = DNZ
+							DNZ = { is_subject_of = ROOT }
+							DNZ = { ai = no }
+						}
+					}
+					vassalize = DNZ
+				}
 			}
 		}
 	}
-
-	russia_1 = {
-		icon = me_mission_snowy_cannons
-		position = 11
-		required_missions = { winter_crops }
-		trigger = {
-			if = {
-				limit = {
-					exists = RUS
-				}
-				num_of_infantry = RUS
-			}
-			else_if = {
-				limit = {
-					exists = MOS
-				}
-				num_of_infantry = MOS
-			}
-			else = {
-				num_of_infantry = 30
+}
+	
+POL_Missions_4_Jagiellon_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
 			}
 		}
-		effect = {
-			tver_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			pskov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			moscow_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			oka_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			sloboda_ukraine_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	russia_2 = {
-		icon = mission_empire
-		position = 12
-		required_missions = { russia_1 }
+	}  
+	has_country_shield  = yes
+	
+	POL_bohemian_PU = {
+		icon = hussite_regency
+		position = 4
+		required_missions = { POL_bohemian_diplomacy }
 		provinces_to_highlight = {
 			OR = {
-				province_id = 293
-				province_id = 280
+				area = bohemia_area
+				area = moravia_area
+				area = silesia_area
+				area = lusatia_area
+				area = erzgebirge_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			legitimacy_equivalent = 100
-			prestige = 35
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				government_rank = 3
-			}
-			else = {
-				total_development = 1000
-			}
-			293 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			280 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 			OR = {
-				MOS = {
-					OR = {
-						has_disaster = time_of_troubles
-						NOT = { legitimacy_equivalent = 10 }
-						AND = {
-							NOT = { heir_claim = 50 }
-							has_regency = yes
-						}
-					}
+				NOT = { exists = BOH }
+				BOH = { is_subject_of = ROOT }
+			}	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = bohemia_area
+					area = moravia_area
+					area = silesia_area
+					area = lusatia_area
+					area = erzgebirge_area
 				}
-				RUS = {
-					OR = {
-						has_disaster = time_of_troubles
-						NOT = { legitimacy_equivalent = 10 }
-						AND = {
-							NOT = { heir_claim = 50 }
-							has_regency = yes
-						}
-					}
-				}
-				AND = {
-					OR = {
-						has_spy_network_in = {
-							who = MOS
-							value = 75
-						}
-						has_spy_network_in = {
-							who = RUS
-							value = 75
-						}
-					}
-					OR = {
-						army_size = MOS
-						army_size = RUS
-					}
-					OR = {
-						is_rival = MOS
-						is_rival = RUS
-					}
-				}
+				value = 15
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					exists = MOS
-					is_subject = no
-					MOS = {
-						is_subject = no
-					}
-				}
-				add_casus_belli = {
-					target = MOS
-					type = cb_restore_personal_union
-					months = 300
-				}
+			add_country_modifier = {
+				name = POL_king_of_bohemia
+				duration = 9125
 			}
 			if = {
 				limit = {
-					exists = RUS
-					is_subject = no
-					RUS = {
-						is_subject = no
-					}
+					has_country_flag = POL_extra_reward
 				}
-				add_casus_belli = {
-					target = RUS
-					type = cb_restore_personal_union
-					months = 300
-				}
+				BOH = { add_liberty_desire = -25 }
 			}
-			if = {
-				limit = {
-					OR = {
-						is_subject = yes
-						NOT = { exists = MOS }
-						MOS = {
-							is_subject = yes
-						}
-						NOT = { exists = RUS }
-						RUS = {
-							is_subject = yes
+			custom_tooltip = POL_rewards_if_pu
+			tooltip = {
+				if = {
+					limit = {
+						NOT = {
+							silesia_area = {
+								type = all
+								owned_by = ROOT
+							}
 						}
 					}
+					country_event = { id = ME_Poland_Events.9 }
 				}
-				add_prestige = 20
-				add_legitimacy_equivalent = { value = 10 }
+				add_dip_power = 50
+			}
+			custom_tooltip = POL_rewards_if_conquest
+			custom_tooltip = POL_every_czech
+			tooltip = {
+				add_adm_power = 100
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						senior_union_with = BOH
+						NOT = {
+							silesia_area = {
+								type = all
+								owned_by = ROOT
+							}
+						}
+					}
+					country_event = { id = ME_Poland_Events.9 }
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							OR = {
+								culture = czech
+								culture = silesian
+							}
+						}
+						add_nationalism = -10
+					}
+					add_adm_power = 100
+				}
 			}
 		}
 	}
 }
 
-me_POL_PLC_missions_5 = {
-	slot = 5
+POL_Missions_4_Piast_2 = {
+	slot = 4
 	generic = no
 	ai = yes
 	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	holy_ties = {
-		icon = mission_hands_praying
-		required_missions = { }
-		position = 1
-		trigger = {
+	}  
+	has_country_shield  = yes
+	
+	POL_beyond_the_oder = {
+		icon = mission_advance_to_the_dnieper
+		required_missions = { POL_morze }
+		position = 4
+		provinces_to_highlight = {
 			OR = {
-				NOT = { current_age = age_of_discovery }
-				reverse_has_opinion = {
-					who = PAP
-					value = 100
+				area = mittelmark_area
+				area = vorpommern_area
+				area = mecklenburg_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = mittelmark_area
+					area = vorpommern_area
+					area = mecklenburg_area
 				}
+				value = 10
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "papal_sanction_poland"
-				duration = 7300
+				name = POL_recovering_the_grody_of_the_march
+				duration = 10950
 			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
+}
 
-	patronage_mission = {
-		icon = mission_european_church
-		position = 2
-		required_missions = { holy_ties }
+POL_Missions_4_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_curonia = {
+		icon = overseas_empire
+		position = 5
+		required_missions = { POL_end_knights }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 39
+				province_id = 1935
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-						province_has_building_of_group = { group = taxation all = yes }
-					}
-				}
+			39 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			1935 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ducal_Prussia_Events.2 }
+			add_power_projection = {
+				type = mission_rewards_power_projection
 				amount = 10
 			}
 		}
-		effect = {
-			capital_scope = {
-				add_temple_line = yes
+	}
+	
+	POL_relations_mazovia = {
+		icon = mission_alliances
+		position = 6
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				AND = {
+					owns = 257
+					owns = 1938
+					owns = 256
+				}
+				AND = {
+					reverse_has_opinion = {
+						who = MAZ
+						value = 190
+					}
+					MAZ = { is_subject_of = ROOT }
+				}
 			}
-			add_country_modifier = {
-				name = "building_spree"
-				duration = 9125
+		}
+		effect = {
+			custom_tooltip = POL_reward_if_MAZ_opinion
+			tooltip = {
+				if = {
+					limit = {
+						MAZ = { ai = yes }
+					}
+					country_event = { id = ME_Poland_Events.1 }
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_cost_reduction
+						duration = 9125
+					}
+				}
+			}
+			custom_tooltip = POL_reward_if_MAZ_ownership
+			tooltip = {
+				257 = { add_core = ROOT }
+				256 = { add_core = ROOT }
+				1938 = { add_core = ROOT }
+				add_dip_power = 50
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						reverse_has_opinion = {
+							who = MAZ
+							value = 190
+						}
+						MAZ = { is_subject_of = ROOT }
+					}
+					if = {
+						limit = {
+							MAZ = { ai = yes }
+						}
+						country_event = { id = ME_Poland_Events.1 }
+					}
+					else = {
+						add_country_modifier = {
+							name = POL_cost_reduction
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					257 = { add_core = ROOT }
+					256 = { add_core = ROOT }
+					1938 = { add_core = ROOT }
+					add_dip_power = 50
+				}
 			}
 		}
 	}
-
-	defense_of_europe = {
-		icon = mission_religious
-		position = 3
-		required_missions = { patronage_mission }
+	
+	POL_integrate_mazovia = {
+		icon = mission_unite_home_region
+		position = 7
+		required_missions = { POL_relations_mazovia }
+		provinces_to_highlight = {
+			OR = {
+				owned_by = MAZ
+				AND = {
+					province_id = 257
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
 		trigger = {
-			is_defender_of_faith = yes
-			religion_group = christian
+			owns = 257
+			NOT = { exists = MAZ }
 		}
 		effect = {
+			country_event = { id = flavor_pol.3473 }
 			add_country_modifier = {
-				name = "defender_of_europe"
-				duration = 9125
+				name = "polish_ambition"
+				duration = 5475
+			}
+			custom_tooltip = POL_remove_annexed_subjects
+			hidden_effect = {
+				remove_country_modifier = annexers_legacy
 			}
 		}
 	}
-
-	learning_center = {
-		icon = mission_early_game_buildings
-		position = 5
-		required_missions = { defense_of_europe }
+	
+	POL_cossacks = {
+		icon = mission_recruit_the_cossacks
+		position = 8
+		required_missions = { POL_union_of_lublin }
+		provinces_to_highlight = {
+			has_terrain = steppe
+		}
 		trigger = {
-			university = 5
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				num_of_estate_agendas_completed = {
+					value = 2
+					estate = estate_cossacks
+				}
+				num_of_cossacks = 10
+			}
+			else = {
+				OR = {
+					num_of_cavalry = 10
+					cavalry_fraction = 0.2
+				}
+				has_global_modifier_value = {
+					which = cavalry_power
+					value = 0.15
+				}
+			}
 		}
 		effect = {
-			capital_scope = {
-				add_permanent_province_modifier = {
-					name = "center_of_learning"
+			country_event = { id = ME_Poland_Events.18 }
+			add_country_modifier = {
+				name = POL_cossack_host
+				duration = -1
+			}
+		}
+	}
+	
+	
+	POL_secure_ukraina = {
+		icon = mission_cathedral_cities
+		required_missions = { POL_muscovy POL_cossacks }
+		position = 9
+		provinces_to_highlight = {
+			province_id = 280
+			OR = {
+				NOT = { fort_level = 4 }
+				NOT = { base_manpower = 7 }
+			}
+		}
+		trigger = {
+			280 = {
+				fort_level = 4
+				base_manpower = 7
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_mil_power = 50
+			280 = {
+				add_province_modifier = {
+					name = POL_protecting_the_flank
 					duration = -1
 				}
 			}
 		}
 	}
-
-	religious_acceptance = {
-		icon = mission_european_church
-		position = 6
-		required_missions = { learning_center }
-		trigger = {
-			NOT = { current_age = age_of_discovery }
-			NOT = { current_age = age_of_reformation }
-			religious_unity = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = jewish_minorities_poland
-				duration = -1
-			}
-			if = {
-				limit = {
-					has_dlc = "Rule Britannia"
-				}
-				add_innovativeness_big_effect = yes
-			}
-			else = {
-				add_adm_power = 50
-			}
-		}
-	}
-
-	secular_empire = {
-		icon = mission_empire
-		position = 7
-		required_missions = { religious_acceptance }
-		trigger = {
-			stability = 3
-		}
-		effect = {
-			add_country_modifier = {
-				name = "secular_empire"
-				duration = -1
-			}
-		}
-	}
-
-	integrate_the_east = {
-		icon = mission_unite_home_region
-		position = 8
-		required_missions = { }
+	
+	POL_frontier_ruthenia = {
+		icon = mission_land_of_churches
+		position = 10
+		required_missions = { POL_culture_mission }
 		provinces_to_highlight = {
-			OR = {
-				area = pripyat_area
-				area = podolia_volhynia_area
-				area = mazovia_area
-				area = lithuania_area
-				area = west_dniepr_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			culture_group = east_slavic
+			owned_by = ROOT
+			NOT = { development = 15 }
 		}
 		trigger = {
-			NOT = { exists = LIT }
-			pripyat_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			podolia_volhynia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			mazovia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lithuania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			west_dniepr_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_owned_provinces_with = {
+				culture_group = east_slavic
+				development = 15
+				value = 5
 			}
 		}
 		effect = {
-			269 = {
-				change_culture = polish
+			add_country_modifier = {
+				name = POL_settle_the_east
+				duration = 9125
 			}
-			pripyat_area = {
-				change_culture = polish
+			custom_tooltip = POL_every_province_with_east_slavic_dev
+			tooltip = {
+				add_province_modifier = {
+					name = POL_growing_aglomeration
+					duration = 10950
+				}
 			}
-			podolia_volhynia_area = {
-				change_culture = polish
-			}
-			1937 = {
-				change_culture = polish
-			}
-			1942 = {
-				change_culture = polish
-			}
-			4247 = {
-				change_culture = polish
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						culture_group = east_slavic
+						development = 20
+					}
+					add_province_modifier = {
+						name = POL_growing_aglomeration
+						duration = 10950
+					}
+				}
 			}
 		}
 	}
-
-	settle_ruthenia = {
-		icon = mission_assemble_an_army
-		position = 9
-		required_missions = { integrate_the_east }
+	
+	POL_restore_kiev = {
+		icon = mission_restore_kiev
+		position = 11
+		required_missions = { POL_frontier_ruthenia }
 		provinces_to_highlight = {
 			province_id = 280
 			OR = {
-				NOT = { owned_by = ROOT }
-				has_owner_culture = no
-				has_owner_religion = no
+				NOT = { development = 30 }
+				NOT = { num_of_buildings_in_province = 4 }
 			}
 		}
 		trigger = {
 			280 = {
-				owned_by = ROOT
-				has_owner_culture = yes
-				has_owner_religion = yes
+				development = 30
+				num_of_buildings_in_province = 4
 			}
 		}
 		effect = {
-			west_dniepr_area = {
+			280 = {
 				add_province_modifier = {
-					name = "polish_influx"
-					duration = 10950
+					name = LIT_kiev_modifier
+					duration = -1
 				}
-			}
-			yedisan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			zaporizhia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			azov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			lower_don_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			astrakhan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
-
-	sarmatianism = {
-		icon = me_mission_get_pu
-		position = 10
-		required_missions = { settle_ruthenia }
+	
+	POL_bulwark = {
+		icon = me_mission_poland_sobieski
+		position = 12
+		required_missions = { }
 		provinces_to_highlight = {
-			OR = {
-				area = yedisan_area
-				area = zaporizhia_area
-				area = azov_area
-				area = lower_don_area
-				area = astrakhan_area
+			continent = europe
+			owner = {
+				religion_group = muslim
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			yedisan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			is_defender_of_faith = yes
+			if = {
+				limit = {
+					exists = TUR
+				}
+				has_won_war_against = {
+					who = TUR
+					max_years_since = 5
+				}
 			}
-			zaporizhia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			azov_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lower_don_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			astrakhan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mil_power = 200
-			151 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+			else = {
+				any_country = {
+					religion_group = muslim
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+							max_years_since = 5
+						}
 					}
-					add_permanent_claim = ROOT
 				}
 			}
-		}
-	}
-
-	ensure_constantinople = {
-		icon = mission_conquer_5_states
-		position = 11
-		required_missions = { sarmatianism }
-		provinces_to_highlight = {
-			province_id = 151
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-				NOT = { religion_group = christian }
+			custom_trigger_tooltip = {
+				tooltip = POL_occupied_ankara
+				OR = {
+					owns = 326
+					controls = 326
+					has_global_flag = POL_occupied_ankara_flag
+				}
 			}
-		}
-		trigger = {
-			owns_core_province = 151
-			151 = {
-				religion_group = christian
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 5
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "constantinople_restored"
+				name = POL_fidei_defensor
+				duration = 9125
+			}
+			add_mil_power = 50
+			
+			set_country_flag = POL_Custom_Cb_flag
+			custom_tooltip = POL_gain_cb_on_ottos
+		}
+	}
+	
+	POL_free_the_balkans = {
+		icon = protectors_of_christendom
+		position = 14
+		required_missions = { POL_bulwark }
+		provinces_to_highlight = {
+			region = balkan_region
+			owner = {
+				religion_group = muslim
+			}
+		}
+		trigger = {
+			balkan_region = {
+				type = all
+				NOT = {
+					owner = {
+						religion_group = muslim
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_defeated_the_ottoman_empire
+				duration = 10950
+			}
+			
+			add_papal_influence = 50
+			add_army_tradition_or_mil_power = { amount = 30 }
+		}
+	}
+	
+	POL_ruthenian_breadbasket = {
+		icon = prosperity_for_all
+		position = 15
+		required_missions = { POL_expanding_our_influences POL_industrialization }
+		provinces_to_highlight = {
+			OR = {
+				trade_goods = grain
+				trade_goods = livestock
+			}
+			OR = {
+				region = ruthenia_region
+				area = zaporizhia_area
+				area = yedisan_area
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 200
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_growing_population
+				duration = 10950
+			}
+			custom_tooltip = POL_distribute_10_manpower
+			
+			hidden_effect = {
+				for = {
+					amount = 10
+					effect = "
+						random_owned_province = {
+							add_base_manpower = 1
+						}
+					"
+				}
+			}
+		}
+	}
+	
+	POL_printing_press = {
+		icon = victor_for_the_true_faith
+		required_missions = { }
+		position = 16
+		provinces_to_highlight = {
+			province_id = 43
+			OR = {
+				NOT = { province_has_center_of_trade_of_level = 2 }
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { has_shipyard_building_trigger = yes }
+			}
+		}
+		trigger = {
+			43 = {
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					province_has_center_of_trade_of_level = 2
+				}
+				has_trade_building_trigger = yes
+				has_shipyard_building_trigger = yes
+			}
+			
+			OR = {
+				has_institution = new_world_i
+				custom_trigger_tooltip = {
+					tooltip = POL_duchy_of_prussia_flag
+					has_global_flag = POL_eye_to_the_world_flag
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_spread_of_ideas
+				duration = 18250
+			}
+			
+			add_dip_power = 100
+		}
+	}
+	
+	POL_support_barok = {
+		icon = me_mission_poland_noble
+		required_missions = { POL_printing_press }
+		position = 17
+		provinces_to_highlight = {
+			has_dlc = "Mandate of Heaven"
+			owned_by = ROOT
+			area_for_scope_province = {
+				NOT = { is_prosperous = yes }
+			}
+		}
+		trigger = {
+			stability = 2
+			OR = {
+				artist = 1
+				has_adm_advisor_2 = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					has_had_golden_age = yes 
+					num_of_owned_states_with = {
+						custom_trigger_tooltip = {
+							tooltip = POL_prospers
+							is_prosperous = yes
+						}
+						value = 10
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_sarmatism
+				duration = 10950
+			}
+			
+			define_foreign_advisor = {
+				type = muscovy_architect
+				name = "Giovanni Battista Gisleni"
+				skill = 3
+				culture = 118
+				religion = 118
+				cost_multiplier = 0.5
+			}
+		}
+	}
+}
+
+POL_Missions_5_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
+	
+	POL_rada_krolewska = {
+		icon = mission_noble_council
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+		}
+		effect = {
+			custom_tooltip = POL_scale_with_advisor_level
+			hidden_effect = {
+				if = {
+					limit = {
+						has_adm_advisor_2 = yes
+					}
+					if = {
+						limit  ={
+							has_adm_advisor_3 = yes
+						}
+						add_country_modifier = {
+							name = POL_adm_adv_3
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = POL_adm_adv_2
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_adm_adv_1
+						duration = 9125
+					}
+				}
+				if = {
+					limit = {
+						has_dip_advisor_2 = yes
+					}
+					if = {
+						limit  ={
+							has_dip_advisor_3 = yes
+						}
+						add_country_modifier = {
+							name = POL_dip_adv_3
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = POL_dip_adv_2
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_dip_adv_1
+						duration = 9125
+					}
+				}
+				if = {
+					limit = {
+						has_mil_advisor_2 = yes
+					}
+					if = {
+						limit  ={
+							has_mil_advisor_3 = yes
+						}
+						add_country_modifier = {
+							name = POL_mil_adv_3
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = POL_mil_adv_2
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_mil_adv_1
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+	
+	POL_estates_of_poland = {
+		icon = appease_the_estates
+		position = 2
+		required_missions = { POL_rada_krolewska }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				crown_land_share = 50
+				estate_loyalty = {
+					estate = all
+					loyalty = 55
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Poland_Events.10 }
+		}
+	}
+}
+
+POL_Missions_5_Jagiellon = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
+	
+	POL_bohemian_diplomacy = {
+		icon = hungarian_union
+		position = 3
+		required_missions = { POL_reinforce_jagiellons }
+		provinces_to_highlight = {
+			owned_by = BOH
+		}
+		trigger = {
+			OR = {
+				silesia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				AND  = {
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_larger_army_than_BOH
+						export_to_variable = {
+							variable_name = BRA_BOH_Army
+							value = army_size
+							who = BOH
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Army
+							value = army_size
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_BOH_Army
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Army
+							which = BRA_BOH_Army
+						}
+					}
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_greater_development_than_BOH
+						export_to_variable = {
+							variable_name = BRA_BOH_Development
+							value = total_development
+							who = BOH
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Development
+							value = total_development
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_BOH_Development
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Development
+							which = BRA_BOH_Development
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_contesting_bohemia
+				duration = 9125
+			}
+			if = {
+				limit = {
+					BOH = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				custom_tooltip = POL_reward_if_bohemia_valid_yes
+				hidden_effect = {
+					add_casus_belli = {
+						target = BOH
+						type = cb_restore_personal_union 
+					}
+					country_event = { id = ME_Poland_Events.8 }
+				}
+			}
+			else = {
+				custom_tooltip = POL_reward_if_bohemia_valid_no
+				hidden_effect = {
+					bohemia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					moravia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					erzgebirge_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					silesia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					lusatia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			tooltip = {
+				add_casus_belli = {
+					target = BOH
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+				country_event = { id = ME_Poland_Events.8 }
+			}
+			custom_tooltip = POL_reward_if_bohemia_invalid
+			tooltip = {
+				bohemia_area = { add_permanent_claim = ROOT }
+				moravia_area = { add_permanent_claim = ROOT }
+				erzgebirge_area = { add_permanent_claim = ROOT }
+				silesia_area = { add_permanent_claim = ROOT }
+				lusatia_area = { add_permanent_claim = ROOT }
+			}
+		}
+	}
+	
+	POL_hungarian_diplomacy = {
+		icon = the_hungarian_succession
+		position = 4
+		required_missions = { POL_bohemian_diplomacy }
+		provinces_to_highlight = {
+			owned_by = HUN
+		}
+		trigger = {
+			variable_arithmetic_trigger = {
+				custom_tooltip = POL_larger_army_than_HUN
+				export_to_variable = {
+					variable_name = BRA_HUN_Army
+					value = army_size
+					who = HUN
+				}
+				export_to_variable = {
+					variable_name = BRA_POL_Army
+					value = army_size
+					who = ROOT
+				}
+				multiply_variable = {
+					which = BRA_HUN_Army
+					value = 3
+				}
+				check_variable = {
+					which = BRA_POL_Army
+					which = BRA_HUN_Army
+				}
+			}
+			variable_arithmetic_trigger = {
+				custom_tooltip = POL_greater_development_than_HUN
+				export_to_variable = {
+					variable_name = BRA_HUN_Development
+					value = total_development
+					who = HUN
+				}
+				export_to_variable = {
+					variable_name = BRA_POL_Development
+					value = total_development
+					who = ROOT
+				}
+				multiply_variable = {
+					which = BRA_HUN_Development
+					value = 3
+				}
+				check_variable = {
+					which = BRA_POL_Development
+					which = BRA_HUN_Development
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					HUN = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				custom_tooltip = POL_reward_if_hungary_valid_yes
+				hidden_effect = {
+					add_casus_belli = {
+						target = HUN
+						type = cb_restore_personal_union 
+					}
+					set_country_flag = POL_hun_decisions
+				}
+			}
+			else = {
+				custom_tooltip = POL_reward_if_hungary_valid_no
+				hidden_effect = {
+					alfold_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					transdanubia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					transylvania_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					southern_transylvania_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					slovakia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			tooltip = {
+				add_casus_belli = {
+					target = HUN
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+				#custom_tooltip = POL_extra_decisions
+			}
+			custom_tooltip = POL_reward_if_hungary_invalid
+			tooltip = {
+				alfold_area = { add_permanent_claim = ROOT }
+				transdanubia_area = { add_permanent_claim = ROOT }
+				transylvania_area = { add_permanent_claim = ROOT }
+				southern_transylvania_area = { add_permanent_claim = ROOT }
+				slovakia_area = { add_permanent_claim = ROOT }
+			}
+		}
+	}
+	
+	POL_hungarian_PU = {
+		icon = king_of_hungary
+		position = 6
+		required_missions = { POL_hungarian_diplomacy }
+		provinces_to_highlight = {
+			OR = {
+				area = alfold_area
+				area = transdanubia_area
+				area = transylvania_area
+				area = southern_transylvania_area
+				area = slovakia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = HUN }
+				HUN = { is_subject_of = ROOT }
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = alfold_area
+					area = transdanubia_area
+					area = transylvania_area
+					area = southern_transylvania_area
+					area = slovakia_area
+				}
+				value = 20
+			}
+		}
+		effect = {
+			country_event = { id = ME_Poland_Events.12 }
+			add_country_modifier = {
+				name = POL_knowledge_of_bibliotheca
+				duration = 7300
+			}
+			add_prestige_or_monarch_power = { amount = 20 }
+		}
+	}
+	
+	POL_unite_jagiellon_states = {
+		icon = unite_the_wittelsbachs
+		position = 7
+		required_missions = { POL_hungarian_PU }
+		provinces_to_highlight = {
+			OR = {
+				owned_by = HUN
+				owned_by = BOH
+			}
+			NOT = {
+				owner = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+		}			
+		trigger = {
+			if = {
+				limit = {
+					exists = HUN
+				}
+				HUN = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				owns = 153
+			}
+			if = {
+				limit = {
+					exists = BOH
+				}
+				BOH = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				owns = 266
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_cost
+				duration = -1
+			}
+		}
+	}
+}
+
+POL_Missions_5_Piast = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
+	
+	POL_morze = {
+		icon = mission_look_west
+		required_missions = { POL_reconquer_silesia }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 43
+						province_id = 2997
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					OR = {
+						area = neumark_area
+						area = hinter_pommern_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
+		}
+		trigger = {
+			43 = { owned_by = ROOT }
+			2997 = { owned_by = ROOT }
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = neumark_area
+					area = hinter_pommern_area
+				}
+				value = 4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_access_to_sea_regained
+				duration = 10950
+			}
+			
+			add_country_modifier = {
+				name = POL_west
+				duration = 9125
+			}
+			
+			custom_tooltip = POL_tuchola_and_gdansk
+			43 = { set_province_flag = POL_tuchola_and_gdansk }
+			2997 = { set_province_flag = POL_tuchola_and_gdansk }
+			
+			
+			mecklenburg_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mittelmark_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	POL_lusatia = {
+		icon = claim_the_borderlands
+		required_missions = { POL_morze }
+		position = 5
+		provinces_to_highlight = {
+			area = lusatia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lusatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_reconquests_in_the_west
+				duration = 9125
+			}
+			add_accepted_culture_or_dip_power = { culture = sorbian }
+		}
+	}
+	
+	POL_a_show_of_strength = {
+		icon = lead_the_empire
+		required_missions = { POL_lusatia }
+		position = 7
+		provinces_to_highlight = {
+			is_part_of_hre = yes
+		}
+		trigger = {
+			OR = {
+				NOT = { hre_size = 1 }
+				has_won_war_against = {
+					who = emperor
+					max_years_since = 5
+				}
+				is_emperor = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_dominance_over_hre
+				duration = -1
+			}
+		}
+	}
+}
+	
+POL_Missions_5_2 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
+	
+	POL_muscovy = {
+		icon = me_mission_poland_bathory
+		required_missions = { POL_union_of_lublin }
+		position = 8
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				owned_by = RUS
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+					MOS = {
+						army_size = NOV
+					}
+				}
+				owned_by = MOS
+			}
+			else_if = {
+				limit = {
+					exists = NOV
+				}
+				owned_by = NOV
+			}
+			else = {
+				owner = {
+					culture_group = east_slavic
+					army_size = ROOT
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = POL_occupied_moscow
+				OR = {
+					owns = 295
+					controls = 295
+					has_global_flag = POL_occupied_moscow_flag
+				}
+			}	
+			if = {
+				limit = {
+					exists = RUS
+				}
+				army_size = RUS
+				has_won_war_against = {
+					who = RUS
+					max_years_since = 15
+				}
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+					MOS = {
+						army_size = NOV
+					}
+				}
+				army_size = MOS
+				has_won_war_against = {
+					who = MOS
+					max_years_since = 15
+				}
+			}
+			else_if = {
+				limit = {
+					exists = NOV
+				}
+				army_size = NOV
+				has_won_war_against = {
+					who = NOV
+					max_years_since = 15
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = POL_no_country_east_slavic
+					NOT = {
+						any_country = {
+							culture_group = east_slavic
+							army_size = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				custom_tooltip = POL_pu_cb_on_russia
+				tooltip = {
+					add_casus_belli = {
+						target = RUS
+						type = cb_restore_personal_union
+						months = -1
+					}
+				}
+				if = {
+					limit = {
+						valid_for_personal_unions_trigger = yes
+						RUS = { valid_for_personal_unions_trigger = yes }
+					}
+					hidden_effect = {
+						add_casus_belli = {
+							target = RUS
+							type = cb_restore_personal_union
+							months = -1
+						}
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						valid_for_personal_unions_trigger = yes
+						MOS = { valid_for_personal_unions_trigger = yes }
+					}
+					hidden_effect = {
+						add_casus_belli = {
+							target = MOS
+							type = cb_restore_personal_union
+							months = -1
+						}
+					}
+				}
+				custom_tooltip = POL_pu_cb_on_muscovy
+				tooltip = {
+					add_casus_belli = {
+						target = MOS
+						type = cb_restore_personal_union
+						months = -1
+					}
+				}
+			}
+			add_country_modifier = {
+				name = POL_victory_in_russia
+				duration = 10950
+			}
+		}
+	}
+	
+	POL_russia = {
+		icon = mission_dethrone_the_rurikovichs
+		required_missions = { POL_muscovy }
+		position = 9
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				OR = {
+					senior_union_with = RUS
+					AND = {
+						NOT = { 
+							exists = MOS
+							exists = RUS
+						}
+						owns = 295
+					}
+				}
+			}
+			else = {
+				OR = {
+					senior_union_with = MOS
+					AND = {
+						NOT = { 
+							exists = MOS
+							exists = RUS
+						}
+						owns = 295
+					}
+				}
+			}
+		}
+		effect = {
+			russia_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_war_exhaustion = -2
+			custom_tooltip = POL_rewards_if_pu
+			tooltip = {
+				country_event = { id = ME_Poland_Events.31 }
+			}
+			custom_tooltip = POL_rewards_if_conquest
+			tooltip = {
+				add_country_modifier = {
+					name = POL_kremlin
+					duration = 9125
+				}
+				add_accepted_culture_or_dip_power = { culture = russian }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							senior_union_with = MOS
+							senior_union_with = RUS
+						}
+					}
+					country_event = { id = ME_Poland_Events.31 }
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_kremlin
+						duration = 9125
+					}
+					add_accepted_culture_or_dip_power = { culture = russian }
+				}
+			}
+		}
+	}
+	
+	POL_warsaw_confederation = {
+		icon = peace_in_europe
+		position = 11
+		required_missions = { }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			is_religion_enabled = reformed
+			custom_trigger_tooltip = {
+				tooltip = POL_1_tolerance_heretic
+				has_global_modifier_value = {
+					which = tolerance_heretic
+					value = 1
+				}
+			}
+			religious_unity = 0.75
+		}
+		effect = {
+			country_event = { id = ME_Poland_Events.21 } #Konfederacja Warszawska
+		}
+	}
+	
+	
+	POL_unitary_church = {
+		icon = eastern_catholicization
+		position = 12
+		required_missions = { POL_warsaw_confederation }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = ROOT
+					religion = orthodox
+					unrest = 1
+				}
+				AND = {
+					province_id = 280
+					OR = {
+						NOT = { has_tax_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+					}
+				}
+			}
+			
+		}
+		trigger = {
+			280 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = LIT_employs_east_slavic
+				OR = {
+					employed_advisor = {
+						culture = russian 
+					}
+					employed_advisor = {
+						culture = novgorodian 
+					}
+					employed_advisor = {
+						culture = ryazanian 
+					}
+					employed_advisor = {
+						culture = byelorussian 
+					}
+					employed_advisor = {
+						culture = ruthenian
+					}
+					employed_advisor = {
+						culture = karelian 
+					}
+				}
+			}
+			NOT = {
+				any_owned_province = {
+					religion = orthodox
+					unrest = 1
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				country_event = { id = ME_Poland_Events.26 } #Union of brest
+				custom_tooltip = POL_east_slavic_provinces
+				set_country_flag = POL_unitary_church_flag
+			}
+			else = {
+				add_stability_or_adm_power = yes
+				add_church_power = 25
+				add_patriarch_authority = 0.05
+				add_fervor = 25
+			}
+		}
+	}
+	
+	POL_gaude_mater_polonia = {
+		icon = spread_piety
+		position = 13
+		required_missions = { POL_bulwark POL_unitary_church }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					ROOT = {
+						NOT = { cathedral = 20 }
+					}
+					owned_by = ROOT
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					ROOT = {
+						NOT = { religious_unity = 0.75 }
+						owned_by = ROOT
+						NOT = { religion = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {
+			cathedral = 20
+			custom_trigger_tooltip = {
+				tooltip = POL_5_tolerance_own
+				has_global_modifier_value = {
+					which = tolerance_own
+					value = 5
+				}
+			}
+			religious_unity = 0.75
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_rejoice_mother_poland
+				duration = 10950
+			}
+		}
+	}
+	
+	POL_expanding_our_influences = {
+		icon = mission_develop_nevas_port
+		position = 14
+		required_missions = { }
+		provinces_to_highlight = {
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { owned_by = ROOT }
+			}
+			OR = {
+				area = lithuania_area
+				area = podlasie_area
+				area = volhynia_area
+				area = pripyat_area
+				area = minsk_area
+				area = white_ruthenia_area
+				area = smolensk_area
+				area = chernigov_area
+				area = west_dniepr_area
+				area = east_dniepr_area
+				area = oka_area
+				area = sloboda_ukraine_area
+				area = podolia_volhynia_area
+			}
+		}
+		trigger = {
+			280 = {
+				trade_share = {
+					country = ROOT
+					share = 75
+				}
+			}
+			num_of_owned_provinces_with = {
+				province_has_center_of_trade_of_level = 1
+				has_trade_building_trigger = yes
+				custom_trigger_tooltip = {
+					tooltip = POL_is_in_kiev_node
+					OR = {
+						area = lithuania_area
+						area = podlasie_area
+						area = volhynia_area
+						area = pripyat_area
+						area = minsk_area
+						area = white_ruthenia_area
+						area = smolensk_area
+						area = chernigov_area
+						area = west_dniepr_area
+						area = east_dniepr_area
+						area = oka_area
+						area = sloboda_ukraine_area
+						area = podolia_volhynia_area
+					}
+				}		
+				value = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_reaching_new_markets
+				duration = 9125
+			}
+			add_mercantilism = 2
+			
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = POL_goods_flow_west
+				}
+			}
+		}
+	}
+	
+	POL_connections_to_the_east = {
+		icon = mission_reconquer_vologda
+		position = 16
+		required_missions = { POL_expanding_our_influences }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2410
+				province_id = 33
+			}
+			NOT = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+		}
+		trigger = {
+			any_owned_province = {
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			2410 = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+			33 = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_in_eastern_markets
+				duration = 7300
+			}
+			add_years_of_income = 0.5
+		}
+	}
+
+	POL_enlightenment = {
+		icon = me_mission_poland_augustus
+		required_missions = { POL_printing_press }
+		position = 17
+		provinces_to_highlight = {
+		}
+		trigger = {
+			has_institution = enlightenment
+			prestige = 80
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_enlightened_thought
 				duration = 7300
 			}
 		}

@@ -1,0 +1,1612 @@
+namespace = besseres_hrr_imperial_diet_events
+
+# trigger an imperial diet
+country_event = {
+	id = besseres_hrr_imperial_diet_events.1000
+	title = besseres_hrr_imperial_diet_events.EVTNAME1000
+	desc = besseres_hrr_imperial_diet_events.EVTDESC1000
+	picture = HRE_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		NOT = { tag = JMN }
+		is_emperor = yes
+		NOT = { has_global_flag = imperial_diet_active }
+		hre_size = 5
+		OR = {
+			NOT = { has_global_flag = recently_had_imperial_diet }
+			had_global_flag = { flag = recently_had_imperial_diet days = 365 }
+		}
+		any_country = {
+			is_part_of_hre = yes
+			is_emperor = no
+			is_free_or_tributary_trigger = yes
+			capital_scope = {
+				controlled_by = PREV
+				has_siege = no
+			}
+			OR = {
+				NOT = { has_country_flag = hosted_imperial_diet }
+				had_country_flag = { flag = hosted_imperial_diet days = 730 }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 36
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					is_part_of_hre = yes
+					is_emperor = no
+					is_free_or_tributary_trigger = yes
+					capital_scope = {
+						controlled_by = PREV
+						has_siege = no
+					}
+					OR = {
+						NOT = { has_country_flag = hosted_imperial_diet }
+						had_country_flag = { flag = hosted_imperial_diet days = 730 }
+					}
+				}
+				country_event = { id = besseres_hrr_imperial_diet_events.1 }
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1000.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.1
+	title = besseres_hrr_imperial_diet_events.EVTNAME1
+	desc = {
+		trigger = {
+			has_dlc = "Emperor"
+			hre_reform_passed = emperor_perpetual_diet
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC1.1
+	}
+	desc = {
+		trigger = {
+			OR = {
+				NOT = { has_dlc = "Emperor" }
+				NOT = { hre_reform_passed = emperor_perpetual_diet }
+			}
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC1.2
+	}
+	picture = HRE_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		NOT = { has_global_flag = imperial_diet_active }
+		is_part_of_hre = yes
+		is_emperor = no
+	}
+
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = hosted_imperial_diet
+			set_country_flag = hosted_imperial_diet
+			set_global_flag = imperial_diet_active
+			save_global_event_target_as = imperial_diet_organiser
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+					hre_reform_passed = emperor_perpetual_diet
+				}
+				random_province = {
+					limit = {
+						has_province_modifier = perpetual_diet
+					}
+					save_global_event_target_as = imperial_diet_place
+				}
+			}
+			else = {
+				capital_scope = {
+					save_global_event_target_as = imperial_diet_place
+				}
+			}
+			clear_possible_imperial_diet_subjects = yes
+			set_up_random_available_imperial_diet_subject = yes
+			set_up_random_available_imperial_diet_subject = yes
+			set_up_random_available_imperial_diet_subject = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT1
+
+		ai_chance = { factor = 0.01 }
+
+		add_prestige = -5
+		clear_possible_imperial_diet_subjects = yes
+		clear_up_imperial_diet_effect = yes
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT2
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = support_free_cities }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				has_reform = free_city
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = support_free_cities
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT3
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = support_margraviates }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				total_development = 50
+				OR = {
+					is_subject = no
+					overlord = {
+						is_part_of_hre = yes
+					}
+				}
+				OR = {
+					is_subject_of_type = march
+					has_reform = imperial_march_reform # Extended Timeline
+					has_reform = margrave_reform # Governments Expanded
+					any_neighbor_country = {
+						is_subject = no
+						is_part_of_hre = no
+						army_size = PREV
+						total_development = PREV
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = support_margraviates
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT4
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = support_electors }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				is_elector = yes
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = support_electors
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT5
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = increased_tariffs }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = increased_tariffs
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT6
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = reduced_tariffs }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = reduced_tariffs
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT7
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = legitimation_of_expansion }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = legitimation_of_expansion
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT8
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = cut_down_noble_power }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_nobles }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 40
+						}
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = cut_down_noble_power
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT9
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = cut_down_clergy_power }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_church }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 40
+						}
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = cut_down_clergy_power
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT10
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = cut_down_burghers_power }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_burghers }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 40
+						}
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = cut_down_burghers_power
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT11
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = concessions_to_nobles }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_nobles }
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = concessions_to_nobles
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT12
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = concessions_to_clergy }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_church }
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_church
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = concessions_to_clergy
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT13
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = concessions_to_burghers }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					NOT = { has_estate = estate_burghers }
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_church
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = concessions_to_burghers
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT14
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = large_scale_investments }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = large_scale_investments
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT15
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_loans }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				num_of_loans = 1
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_loans
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT16
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = promote_prosperity }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				capital_scope = {
+					is_prosperous = no
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = promote_prosperity
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT17
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = seize_land_for_the_crown }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				OR = {
+					crown_land_share = 100
+					NOT = {
+						estate_loyalty = {
+							estate = all
+							loyalty = 40
+						}
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = seize_land_for_the_crown
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT18
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_trade_leagues_rights }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				is_in_trade_league = yes
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_trade_leagues_rights
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT19
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_religion_act }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				OR = {
+					NOT = { religion = emperor }
+					any_owned_province = {
+						has_owner_religion = no
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_religion_act
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT20
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_anti_heresy_act }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 10
+				religion = catholic
+				NOT = { has_idea_group = humanist_ideas }
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_anti_heresy_act
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT21
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_humanist_act }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 10
+				OR = {
+					has_idea_group = humanist_ideas
+					NOT = { religion = catholic }
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_humanist_act
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT22
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_war_taxes }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				any_country = {
+					is_part_of_hre = no
+					OR = {
+						is_in_war = {
+							attacker_leader = THIS
+							defenders = PREV
+						}
+						is_in_war = {
+							defender_leader = THIS
+							attackers = PREV
+						}
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_war_taxes
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT23
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_diplomacy }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				num_of_free_diplomatic_relations = 1
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_diplomacy
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT24
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = imperial_marriages }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				is_emperor = no
+				government = monarchy
+				has_heir = no
+				has_regency = no
+				is_lesser_in_union = no
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = imperial_marriages
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT25
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = militarisation_regulations }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = militarisation_regulations
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT26
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = demilitarisation_regulations }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = demilitarisation_regulations
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT27
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = enforced_cultural_isolation }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				any_owned_province = {
+					has_owner_culture = yes
+				}
+				NOT = {
+					any_owned_province = {
+						NOT = { is_core = PREV }
+					}
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = enforced_cultural_isolation
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT28
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = invest_into_civil_infrastructure }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 0.5
+				num_of_owned_provinces_with = {
+					value = 10
+					fort_level = 2
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = invest_into_civil_infrastructure
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT29
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = invest_into_military_infrastructure }
+		}
+
+		ai_chance = {
+			factor = 0.33
+			modifier = {
+				factor = 2
+				num_of_owned_provinces_with = {
+					value = 10
+					fort_level = 2
+				}
+			}
+		}
+
+		select_imperial_diet_subject = {
+			subject = invest_into_military_infrastructure
+			tooltip = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events1.EVTOPT30
+
+		highlight = yes
+
+		trigger = {
+			has_imperial_diet_subject_available = { subject = centralise_bureaucracy }
+		}
+
+		ai_chance = {
+			factor = 0.33
+		}
+
+		select_imperial_diet_subject = {
+			subject = centralise_bureaucracy
+			tooltip = yes
+		}
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.2
+	title = besseres_hrr_imperial_diet_events.EVTNAME2
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = support_free_cities }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.1
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = support_margraviates }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.2
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = support_electors }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.3
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = increased_tariffs }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.4
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = reduced_tariffs }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.5
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = legitimation_of_expansion }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.6
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = cut_down_noble_power }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.7
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = cut_down_clergy_power }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.8
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = cut_down_burghers_power }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.9
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = concessions_to_nobles }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.10
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = concessions_to_clergy }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.11
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = concessions_to_burghers }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.12
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = large_scale_investments }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.13
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_loans }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.14
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = promote_prosperity }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.15
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = seize_land_for_the_crown }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.16
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_trade_leagues_rights }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.17
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_religion_act }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.18
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_anti_heresy_act }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.19
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_humanist_act }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.20
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_war_taxes }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.21
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_diplomacy }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.22
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = imperial_marriages }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.23
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = militarisation_regulations }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.24
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = demilitarisation_regulations }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.25
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = enforced_cultural_isolation }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.26
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = invest_into_civil_infrastructure }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.27
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = invest_into_military_infrastructure }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.28
+	}
+	desc = {
+		trigger = {
+			has_imperial_diet_subject_selected = { subject = centralise_bureaucracy }
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC2.29
+	}
+	picture = HRE_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		OR = {
+			is_part_of_hre = yes
+			is_elector = yes
+			is_emperor = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events2.EVTOPT1
+
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = support_free_cities }
+				has_reform = free_city
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = support_margraviates }
+				total_development = 50
+				OR = {
+					is_subject = no
+					overlord = {
+						is_part_of_hre = yes
+					}
+				}
+				OR = {
+					is_subject_of_type = march
+					has_reform = imperial_march_reform # Extended Timeline
+					has_reform = margrave_reform # Governments Expanded
+					any_neighbor_country = {
+						is_subject = no
+						is_part_of_hre = no
+						army_size = PREV
+						total_development = PREV
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = support_electors }
+				is_elector = yes
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_loans }
+				num_of_loans = 1
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = promote_prosperity }
+				capital_scope = {
+					is_prosperous = no
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_trade_leagues_rights }
+				is_in_trade_league = yes
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_religion_act }
+				OR = {
+					NOT = { religion = emperor }
+					any_owned_province = {
+						has_owner_religion = no
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_anti_heresy_act }
+				religion = catholic
+				NOT = { has_idea_group = humanist_ideas }
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_war_taxes }
+				any_country = {
+					is_part_of_hre = no
+					OR = {
+						is_in_war = {
+							attacker_leader = THIS
+							defenders = PREV
+						}
+						is_in_war = {
+							defender_leader = THIS
+							attackers = PREV
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_diplomacy }
+				num_of_free_diplomatic_relations = 1
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_marriages }
+				is_emperor = no
+				government = monarchy
+				has_heir = no
+				has_regency = no
+				is_lesser_in_union = no
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = enforced_cultural_isolation }
+				any_owned_province = {
+					has_owner_culture = yes
+				}
+				NOT = {
+					any_owned_province = {
+						NOT = { is_core = PREV }
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = invest_into_military_infrastructure }
+				num_of_owned_provinces_with = {
+					value = 10
+					fort_level = 2
+				}
+			}
+		}
+
+		custom_tooltip = IMPERIAL_DIET_CURRENT_VOTE_STANDING_TT
+		vote_in_imperial_diet = { vote = yes }
+
+		custom_tooltip = IMPERIAL_DIET_VOTE_TT
+		tooltip = {
+			enact_effects_of_imperial_diet = yes
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events2.EVTOPT2
+
+		ai_chance = {
+			factor = 0.5
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = cut_down_noble_power }
+				OR = {
+					NOT = { has_estate = estate_nobles }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 40
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = cut_down_clergy_power }
+				OR = {
+					NOT = { has_estate = estate_church }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 40
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = cut_down_burghers_power }
+				OR = {
+					NOT = { has_estate = estate_burghers }
+					NOT = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 40
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = concessions_to_nobles }
+				OR = {
+					NOT = { has_estate = estate_nobles }
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = concessions_to_clergy }
+				OR = {
+					NOT = { has_estate = estate_church }
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_church
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = concessions_to_burghers }
+				OR = {
+					NOT = { has_estate = estate_burghers }
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_burghers
+						influence = 75
+					}
+					NOT = { crown_land_share = 40 }
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = seize_land_for_the_crown }
+				OR = {
+					crown_land_share = 100
+					NOT = {
+						estate_loyalty = {
+							estate = all
+							loyalty = 40
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = imperial_humanist_act }
+				OR = {
+					has_idea_group = humanist_ideas
+					NOT = { religion = catholic }
+				}
+			}
+			modifier = {
+				factor = 2
+				has_imperial_diet_subject_selected = { subject = invest_into_civil_infrastructure }
+				num_of_owned_provinces_with = {
+					value = 10
+					fort_level = 2
+				}
+			}
+		}
+
+		custom_tooltip = IMPERIAL_DIET_CURRENT_VOTE_STANDING_TT
+		vote_in_imperial_diet = { vote = no }
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.3
+	title = besseres_hrr_imperial_diet_events.EVTNAME3
+	desc = {
+		trigger = {
+			REB = {
+				check_variable = { which = imperial_diet_yes_votes which = imperial_diet_no_votes }
+			}
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC3.1
+	}
+	desc = {
+		trigger = {
+			REB = {
+				NOT = { check_variable = { which = imperial_diet_yes_votes which = imperial_diet_no_votes } }
+			}
+		}
+		desc = besseres_hrr_imperial_diet_events.EVTDESC3.2
+	}
+	picture = HRE_eventPicture
+
+	major = yes
+	major_trigger = {
+		OR = {
+			is_part_of_hre = yes
+			is_elector = yes
+			is_emperor = yes
+			has_country_flag = debug_gets_major_hre_events
+		}
+	}
+
+	trigger = {
+		has_global_flag = imperial_diet_active
+		is_emperor = yes
+		all_countries_including_self = {
+			OR = {
+				has_country_flag = imperial_diet_voted
+				AND = {
+					is_part_of_hre = no
+					is_elector = no
+					is_emperor = no
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events3.EVTOPT1
+
+		if = {
+			limit = {
+				REB = {
+					check_variable = { which = imperial_diet_yes_votes which = imperial_diet_no_votes }
+				}
+			}
+			custom_tooltip = IMPERIAL_DIET_SUCCESSFUL_TT
+			event_target:imperial_diet_organiser = {
+				add_prestige = 5
+			}
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+					hre_reform_passed = emperor_perpetual_diet
+				}
+				event_target:imperial_diet_place = {
+					owner = {
+						add_prestige = 5
+					}
+				}
+			}
+			add_imperial_influence = 1
+			enact_effects_of_imperial_diet = yes
+		}
+		else = {
+			custom_tooltip = IMPERIAL_DIET_NOT_SUCCESSFUL_TT
+			event_target:imperial_diet_organiser = {
+				add_prestige = -10
+			}
+		}
+		clear_up_imperial_diet_effect = yes
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.4
+	title = besseres_hrr_imperial_diet_events.EVTNAME4
+	desc = besseres_hrr_imperial_diet_events.EVTDESC4
+	picture = HRE_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		has_global_flag = imperial_diet_approved_imperial_anti_heresy_act
+		OR = {
+			AND = {
+				is_part_of_hre = yes
+				NOT = { has_country_modifier = imperial_diet_modifier_imperial_anti_heresy_act }
+			}
+			AND = {
+				is_part_of_hre = no
+				has_country_modifier = imperial_diet_modifier_imperial_anti_heresy_act
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_part_of_hre = yes
+					NOT = { has_country_modifier = imperial_diet_modifier_imperial_anti_heresy_act }
+				}
+				add_country_modifier = {
+					name = imperial_diet_modifier_imperial_anti_heresy_act
+					duration = -1
+				}
+			}
+			else = {
+				remove_country_modifier = imperial_diet_modifier_imperial_anti_heresy_act
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events4.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.5
+	title = besseres_hrr_imperial_diet_events.EVTNAME5
+	desc = besseres_hrr_imperial_diet_events.EVTDESC5
+	picture = HRE_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		has_global_flag = imperial_diet_approved_imperial_humanist_act
+		OR = {
+			AND = {
+				is_part_of_hre = yes
+				NOT = { has_country_modifier = imperial_diet_modifier_imperial_humanist_act }
+			}
+			AND = {
+				is_part_of_hre = no
+				has_country_modifier = imperial_diet_modifier_imperial_humanist_act
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_part_of_hre = yes
+					NOT = { has_country_modifier = imperial_diet_modifier_imperial_humanist_act }
+				}
+				add_country_modifier = {
+					name = imperial_diet_modifier_imperial_humanist_act
+					duration = -1
+				}
+			}
+			else = {
+				remove_country_modifier = imperial_diet_modifier_imperial_humanist_act
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events5.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = besseres_hrr_imperial_diet_events.6
+	title = besseres_hrr_imperial_diet_events.EVTNAME6
+	desc = besseres_hrr_imperial_diet_events.EVTDESC6
+	picture = HRE_eventPicture
+
+	hidden = yes
+	is_triggered_only = yes
+
+	trigger = {
+		is_emperor = no
+		is_part_of_hre = yes
+		government = monarchy
+		has_heir = no
+		has_regency = no
+		is_lesser_in_union = no
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+					has_consort = no
+				}
+				random_list = {
+					33 = {
+						define_heir = {
+							dynasty = emperor
+							culture = emperor
+							religion = emperor
+							claim = 30
+							age = 15
+							block_disinherit = yes
+						}
+					}
+					33 = {
+						define_consort = {
+							dynasty = emperor
+							culture = emperor
+							religion = emperor
+							country_of_origin = emperor
+							age = 15
+						}
+					}
+					33 = {
+						# No Effect
+					}
+				}
+			}
+			else = {
+				random_list = {
+					50 = {
+						define_heir = {
+							dynasty = emperor
+							culture = emperor
+							religion = emperor
+							claim = 30
+							age = 15
+							block_disinherit = yes
+						}
+					}
+					50 = {
+						# No Effect
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = besseres_hrr_imperial_diet_events5.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}

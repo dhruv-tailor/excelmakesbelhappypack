@@ -1,4 +1,5 @@
 namespace = ME_Rhenish_Events
+namespace = estate_industrial_events
 
 country_event = {
 	id = ME_Rhenish_Events.1
@@ -13,12 +14,16 @@ country_event = {
 		
 		ai_chance = { factor = 33 }
 		
+		trigger = {
+			NOT = { tag = PAL } #Gets Conrad Celtis from missions
+		}
+		
 		define_advisor = {
 			type = artist
 			skill = 1
 			culture = ROOT
 			religion = ROOT
-			cost_multiplier = 0.25
+			cost_multiplier = 0.35
 		}
 	}
 	
@@ -38,14 +43,20 @@ country_event = {
 		
 		trigger = {
 			capital_scope = {
-				NOT = { province_has_building_of_group = { group = government equal_or_more_advanced_than = town_hall } }
+				NOT = { has_building = town_hall }
 			}
 		}
 		
 		ai_chance = { factor = 33 }
 		
 		capital_scope = {
-			add_courthouse_line = yes
+			if = {
+				limit = {
+					has_building = courthouse
+				}
+				remove_building = courthouse
+			}
+			add_building = town_hall
 		}
 	}
 }
@@ -119,6 +130,2506 @@ country_event = {
 		add_country_modifier = {
 			name = RHN_promote_tolerance
 			duration = 1825
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.4 #Sell Optics outside
+	title = ME_Rhenish_Events.4.t
+	desc = ME_Rhenish_Events.4.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		pick_best_tags = {
+			scale = "navy_size"
+			3 = yes
+			global_trigger = "capital_scope = { continent = europe }"
+			event_target_name = "Rhineland_target"
+		}
+		hidden_effect = {
+			event_target:Rhineland_target_1 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
+			event_target:Rhineland_target_2 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
+			event_target:Rhineland_target_3 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.4.a" #Offer it to first fc
+		
+		ai_chance = { factor = 50 }
+		
+		custom_tooltip = RHN_offer_to_sell_optics_1
+		tooltip = {
+			event_target:Rhineland_target_1 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_1 = {
+			country_event = { id = ME_Rhenish_Events.5 }
+		}
+		custom_tooltip = RHN_if_they_deny
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.4.b" #Offer it to second fc
+		
+		ai_chance = { factor = 50 }
+		
+		custom_tooltip = RHN_offer_to_sell_optics_2
+		tooltip = {
+			event_target:Rhineland_target_2 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_2 = {
+			country_event = { id = ME_Rhenish_Events.5 }
+		}
+		custom_tooltip = RHN_if_they_deny
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.4.c" #Offer it to third fc
+		
+		ai_chance = { factor = 50 }
+		
+		custom_tooltip = RHN_offer_to_sell_optics_3
+		tooltip = {
+			event_target:Rhineland_target_3 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_3 = {
+			country_event = { id = ME_Rhenish_Events.5 }
+		}
+		custom_tooltip = RHN_if_they_deny
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.5 #Event to buy
+	title = ME_Rhenish_Events.5.t
+	desc = ME_Rhenish_Events.5.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			export_to_variable = {
+				which = Rhineland_years_of_income
+				value = years_of_income
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.5.a" #Offer it to first fc
+		
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_rival
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_outraged
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = -150
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_hostile
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = -50
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = -100
+					}
+				}
+			}
+		}
+		
+		custom_tooltip = RHN_pay_ducats
+		add_country_modifier = {
+			name = RHN_hessian_optics
+			duration = 9125
+		}
+		hidden_effect = {
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 10
+					}
+				}
+				FROM = {
+					add_treasury = 10
+				}
+				ROOT = {
+					add_treasury = -10
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -10
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 1
+					}
+				}
+				FROM = {
+					add_treasury = 1
+				}
+				ROOT = {
+					add_treasury = -1
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 0.1
+					}
+				}
+				FROM = {
+					add_treasury = 0.1
+				}
+				ROOT = {
+					add_treasury = -0.1
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -0.1
+				}
+			}
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.5.b" #Offer it to second fc
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_friendly
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_ally
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				has_opinion = {
+					who = FROM
+					value = 200
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					value = 150
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					value = 100
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+		add_prestige_or_monarch_power = { amount = 10 }
+	}
+	after = {
+		every_country = {
+			limit = {
+				check_variable = {
+					which = Rhineland_years_of_income
+					value = 1
+				}
+			}
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.6 #Zinc
+	title = ME_Rhenish_Events.6.t
+	desc = ME_Rhenish_Events.6.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.6.a" #Embrace the zinc
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			81 = { change_trade_goods = zinc }
+		}
+		else = {
+			81 = { change_trade_goods = copper }
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.6.b" #Screw coal!
+		
+		ai_chance = { factor = 0 } #AI likes zinc. 
+		
+		add_years_of_owned_provinces_production_income = {
+			years = 10
+			trigger = {
+				province_id = 81
+			}
+			custom_tooltip = RHN_81_income
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.7 #Leather
+	title = ME_Rhenish_Events.7.t
+	desc = ME_Rhenish_Events.7.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = leather
+					has_manufactory_trigger = yes
+				}
+				save_event_target_as = leather_province
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					trade_goods = livestock
+					has_manufactory_trigger = yes
+				}
+				save_event_target_as = leather_province
+			}
+		}
+	}
+	option = {
+		name = "ME_Rhenish_Events.7.a" #Leather
+		
+		ai_chance = { factor = 1 }
+		
+		event_target:leather_province = {
+			add_permanent_province_modifier = {
+				name = RHN_livestock
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			custom_tooltip = RHN_every_livestock_and_leather
+		}
+		else = {
+			custom_tooltip = RHN_every_livestock
+		}
+		tooltip = {
+			add_province_modifier = {
+				name = RHN_livestock_in_demand
+				duration = 10950
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				europe = {
+					limit = {
+						OR = {
+							trade_goods = leather
+							trade_goods = livestock
+						}
+					}
+					add_province_modifier = {
+						name = RHN_livestock_in_demand
+						duration = 10950
+					}
+				}
+			}
+			else = {
+				europe = {
+					limit = {
+						trade_goods = livestock
+					}
+					add_province_modifier = {
+						name = RHN_livestock_in_demand
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.8 #Early Coal
+	title = ME_Rhenish_Events.8.t
+	desc = ME_Rhenish_Events.8.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.8.a" #Embrace the coal
+		
+		ai_chance = { factor = 1 }
+		
+		82 = {
+			set_province_flag = RHN_coal_debuff
+			change_trade_goods = coal
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff_tge #-20% trade value 5 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
+				}
+			}
+			else = {
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff #-60% trade value 10 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
+				}
+			}
+		}
+		1878 = {
+			set_province_flag = RHN_coal_debuff
+			change_trade_goods = coal
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff_tge #-20% trade value 5 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
+				}
+			}
+			else = {
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff #-60% trade value 10 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
+				}
+			}
+		}
+		set_country_flag = RHN_cant_get_coal
+		custom_tooltip = RHN_no_trading_in_bonus
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.8.b" #Screw coal!
+		
+		ai_chance = { factor = 0 } #AI likes coal. 
+		
+		82 = {
+			add_country_modifier = {
+				name = RHN_coal_industry_coexisting
+				duration = 36500
+			}
+		}
+		1878 = {
+			add_country_modifier = {
+				name = RHN_coal_industry_coexisting
+				duration = 36500
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.9 #Advanced Faceting
+	title = ME_Rhenish_Events.9.t
+	desc = ME_Rhenish_Events.9.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				random_owned_province = {
+					limit = {
+						trade_goods = jewellery
+					}
+					save_event_target_as = diamond_province
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						trade_goods = gold
+						development = 30
+					}
+					save_event_target_as = diamond_province
+				}
+			}
+			random_province = {
+				limit = {
+					has_province_modifier = diamond_district
+				}
+				save_event_target_as = old_diamond_province
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.9.a" #Advanced Faceting
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			is_expanded_mod_active = { mod = trade_goods }
+		}
+		
+		event_target:diamond_province = {
+			add_permanent_province_modifier = {
+                name = diamond_district
+                duration = -1
+            }
+		}
+		add_prestige_or_monarch_power = { amount = 50 }
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.9.a" #Advanced Faceting
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			NOT = {
+				is_expanded_mod_active = { mod = trade_goods } 
+			}
+		}
+		
+		event_target:diamond_province = {
+			change_trade_goods = gems
+			add_permanent_province_modifier = {
+                name = diamond_district
+                duration = -1
+            }
+		}
+		add_prestige_or_monarch_power = { amount = 50 }
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.9.b" #Advanced Faceting
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			NOT = {
+				is_expanded_mod_active = { mod = trade_goods } 
+			}
+		}
+		add_years_of_income = 0.5		
+		add_prestige_or_monarch_power = { amount = 50 }
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.10 #Flavor Event for Cleves. 
+	title = ME_Rhenish_Events.10.t
+	desc = ME_Rhenish_Events.10.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		culture_group = germanic
+	}
+	
+	trigger = {
+		tag = KLE
+		government = monarchy
+		exists = BRG
+		BRG = {
+			ai = yes
+			is_at_war = no
+			government = monarchy
+			is_subject = no
+			NOT = { num_of_cities = 5 }
+		}
+		is_year = 1500
+	}
+	option = {
+		name = "ME_Rhenish_Events.10.a" #
+		
+		ai_chance = { factor = 1 }
+		
+		inherit = BRG
+		override_country_name = BRGKLE
+		add_legitimacy = 10
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.11 #Repurposing Moselle Valley
+	title = ME_Rhenish_Events.11.t
+	desc = ME_Rhenish_Events.11.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.11.a" #Embrace woodworking
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			1760 = {
+				change_trade_goods = woodworking
+			}
+			80 = {
+				change_trade_goods = woodworking
+			}
+		}
+		custom_tooltip = RHN_every_forest
+		tooltip = {
+			add_province_modifier = {
+				name = RHN_supplying_the_industry
+				duration = 10950
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_terrain = forest
+						has_terrain = woods
+					}
+				}
+				add_province_modifier = {
+					name = RHN_supplying_the_industry
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.11.b" #Increase Agricultural Production
+		
+		ai_chance = { factor = 0.1 } #AI likes coal. 
+		
+		1760 = {
+			build_possible_manufactory_in_province = yes
+		}
+		80 = {
+			build_possible_manufactory_in_province = yes
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.12 #Site for a Bronze Bell
+	title = ME_Rhenish_Events.12.t
+	desc = ME_Rhenish_Events.12.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.12.a" #Embrace woodworking
+		
+		ai_chance = { factor = 1 }
+		
+		capital_scope = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.12.b" #Frankfurt
+		
+		ai_chance = { factor = 2 } #
+		
+		trigger = {
+			1876 = {
+				owned_by = ROOT
+			}
+		}
+		
+		1876 = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.12.c" #Aachen
+		
+		ai_chance = { factor = 2 } #
+		
+		trigger = {
+			1878 = {
+				owned_by = ROOT
+			}
+		}
+		
+		
+		1878 = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	after = {
+		set_country_flag = RHN_bell
+	}
+}
+
+province_event = {
+	id = ME_Rhenish_Events.13 #Speed up bell
+	title = ME_Rhenish_Events.13.t
+	desc = ME_Rhenish_Events.13.d
+	picture = RELIGION_eventPicture
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	hidden = yes
+	
+	trigger = {
+		has_province_flag = RHN_coal_debuff
+		trade_goods = coal
+		has_institution = enlightenment
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.13.a" #Ye go ahead
+		
+		ai_chance = { factor = 5 }
+		
+		clr_province_flag = RHN_coal_debuff
+		remove_province_modifier = RHN_coal_debuff
+		remove_province_modifier = RHN_coal_debuff_tge
+	}
+	
+}
+
+country_event = {
+	id = estate_industrial_events.1 #reapply give governmental loans
+	title = estate_industrial_events.1.t
+	desc = estate_industrial_events.1.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.1.a" 
+		
+		ai_chance = { factor = 0 }
+		
+		reapply_estate_privilege = { privilege = estate_industrial_give_governmental_loans }
+	}
+	
+	option = {
+		name = "estate_industrial_events.1.b"
+		
+		ai_chance = { factor = 1 }
+		
+		remove_estate_privilege = estate_industrial_give_governmental_loans
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.2 #reapply give governmental loans
+	title = estate_industrial_events.2.t
+	desc = estate_industrial_events.2.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.2.a" 
+		
+		ai_chance = { factor = 0 }
+		
+		reapply_estate_privilege = { privilege = estate_industrial_land_appropriation }
+	}
+	
+	option = {
+		name = "estate_industrial_events.2.b"
+		
+		ai_chance = { factor = 1 }
+		
+		remove_estate_privilege = estate_industrial_land_appropriation
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.3
+	title = estate_industrial_events.3.t
+	desc = estate_industrial_events.3.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		has_estate = estate_industrial
+		OR = {
+			NOT = { has_country_flag = estate_industrial_agenda_flag }
+			had_country_flag = {
+				flag = estate_industrial_agenda_flag
+				days = 1925
+			}
+		}
+		ai = no
+		NOT = { has_any_active_estate_agenda = yes }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clear_estate_agenda_cache = ROOT
+			generate_estate_agenda = estate_industrial
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.3.a" #Advisor
+		
+		ai_chance = { factor = 33 }
+		
+		start_estate_agenda = estate_industrial
+	}
+	
+	option = {
+		name = "estate_industrial_events.3.b" #I don't wanna
+		
+		ai_chance = { factor = 33 }
+		
+		clr_country_flag = estate_industrial_agenda_flag
+		set_country_flag = estate_industrial_agenda_flag
+	}
+	
+	after = {
+		clr_country_flag = estate_industrial_agenda_flag
+		set_country_flag = estate_industrial_agenda_flag
+		clear_estate_agenda_cache = ROOT
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.4
+	title = estate_industrial_events.4.t
+	desc = estate_industrial_events.4.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		random_owned_province = {
+			limit = {
+				NOT = { has_manufactory_trigger = yes }
+			}
+			build_possible_manufactory_in_province = yes
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.4.a" #Advisor
+		
+		ai_chance = { factor = 33 }
+		
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.5
+	title = estate_industrial_events.5.t #controller event
+	desc = estate_industrial_events.5.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	hidden = yes
+	mean_time_to_happen = {
+		months = 60
+	}
+	trigger = {
+		has_estate = estate_industrial
+	}
+	
+	option = {
+		name = "estate_industrial_events.5.a" 
+		
+		ai_chance = { factor = 1 }
+		
+		random_list = { #church
+			1 = {
+				trigger = {
+					has_estate = estate_church
+					estate_territory = {
+						estate = estate_church
+						territory = 1
+					}
+				}
+				random_owned_province = {
+					save_event_target_as = estate_industrial_event_target
+				}
+				random_owned_province = {
+					limit = {
+						has_tax_building_trigger = yes
+						NOT = { has_production_building_trigger = yes }
+					}
+					save_event_target_as = estate_industrial_event_target
+				}
+				event_target:estate_industrial_event_target = {
+					province_event = { id = estate_industrial_events.6 }
+				}
+			}
+			1 = {
+				trigger = {
+					has_estate = estate_nobles
+				}
+				country_event = { id = estate_industrial_events.7 }
+			}
+			1 = {
+				trigger = {
+					has_estate = estate_burghers
+				}
+				country_event = { id = estate_industrial_events.8 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.9 }
+			}
+			1 = {
+				trigger = {
+					any_owned_province = {
+						NOT = { has_manufactory_trigger = yes }
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = {
+							has_manufactory_trigger = yes
+						}
+					}
+					province_event = { id = estate_industrial_events.10 }
+				}
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.11 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.12 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.13 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.14 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.15 }
+			}
+		}
+	}
+}
+
+province_event = {
+	id = estate_industrial_events.6
+	title = estate_industrial_events.6.t #Clergy vs Industrial
+	desc = estate_industrial_events.6.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	goto = ROOT
+	
+	is_triggered_only = yes #triggers in the controller event
+	
+	option = {
+		name = "estate_industrial_events.6.a" 
+		
+		ai_chance = { factor = 1 }
+		
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_industrial
+				loyalty = 10
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -20
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = -1
+			}
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 1
+			}
+		}
+		if = {
+			limit = {
+				has_tax_building_trigger = yes
+				NOT = { has_production_building_trigger = yes }
+			}
+			custom_tooltip = estate_industrial_remove_church_add_workshop
+			hidden_effect = {
+				if = {
+					limit = {
+						has_building = cathedral
+					}
+					remove_building = cathedral
+					add_building = counting_house
+				}
+				else_if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building = workshop
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.6.b" 
+		
+		ai_chance = { factor = 1 }
+		
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = {
+				religion = owner
+			}
+			add_province_modifier = {
+				name = RHN_churches_own
+				duration = 7300
+			}
+		}
+		else = {
+			add_province_modifier = {
+				name = RHN_churches_not_own
+				duration = 7300
+			}
+		}
+	}
+	
+	#option = {
+	#	name = "estate_industrial_events.6.c" 
+	#	
+	#	ai_chance = { factor = 1 }
+	#	
+	#	owner = {
+	#		add_estate_loyalty = {
+	#			estate = estate_church
+	#			loyalty = -10
+	#		}
+	#		add_estate_loyalty = {
+	#			estate = estate_industrial
+	#			loyalty = -10
+	#		}
+	#	}
+	#}
+}
+
+country_event = {
+	id = estate_industrial_events.7
+	title = estate_industrial_events.7.t
+	desc = estate_industrial_events.7.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.7.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = RHN_curbed_the_nobles
+			influence = -5
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.7.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = RHN_oppression_of_industrialists
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.8
+	title = estate_industrial_events.8.t
+	desc = estate_industrial_events.8.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				save_event_target_as = estate_industrial_event_target
+			}
+			random_owned_province = {
+				limit = {
+					development = 10
+				}
+				save_event_target_as = estate_industrial_event_target
+			}
+			random_owned_province = {
+				limit = {
+					development = 20
+				}
+				save_event_target_as = estate_industrial_event_target
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.8.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = RHN_burgher
+			influence = -10
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.8.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_favored_burghers
+			influence = -10
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.8.c"
+		
+		trigger = {
+			has_estate_privilege = estate_industrial_establish_industrial_parks
+			hidden_trigger = {
+				estate_territory = {
+					estate = estate_burghers
+					territory = 3
+				}
+			}
+		}
+		highlight = yes
+		
+		ai_chance = { factor = 33 }
+		
+		event_target:estate_industrial_event_target = {
+			add_province_modifier = {
+				name = RHN_industrial_park
+				duration = 5475
+			}
+		}
+		change_estate_land_share = {
+			estate = estate_burghers
+			share = -3
+		}
+		change_estate_land_share = {
+			estate = estate_industrial
+			share = 3
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.9
+	title = estate_industrial_events.9.t
+	desc = estate_industrial_events.9.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.9.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_years_of_income = -1
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 15
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.9.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_ruined_company
+			influence = -15
+			duration = 5475
+		}
+		add_country_modifier = {
+			name = RHN_company_in_ruin
+			duration = 730
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.9.c"
+		
+		ai_chance = { factor = 33 }
+		
+		trigger = {
+			has_estate_privilege = estate_industrial_give_governmental_loans
+		}
+		
+		highlight = yes
+
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+	}
+}
+
+province_event = {
+	id = estate_industrial_events.10
+	title = estate_industrial_events.10.t
+	desc = estate_industrial_events.10.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	goto = ROOT
+
+	option = {
+		name = "estate_industrial_events.10.a"
+		
+		ai_chance = { factor = 33 }
+		
+		build_possible_manufactory_in_province = yes
+		owner = {
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 3
+			}
+			add_estate_influence_modifier = {
+				estate = estate_industrial
+				desc = RHN_investments
+				influence = 10
+				duration = 5475
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.10.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_province_modifier = {
+			name = RHN_own_plans
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.10.c"
+		
+		ai_chance = { factor = 33 }
+		
+		trigger = {
+			owner = {
+				has_estate_privilege = estate_industrial_facilitate_industrial_growth
+			}
+		}
+		
+		build_possible_manufactory_in_province = yes
+		owner = {
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 3
+			}
+			add_estate_influence_modifier = {
+				estate = estate_industrial
+				desc = RHN_investments
+				influence = 10
+				duration = 5475
+			}
+		}
+		add_or_upgrade_production_building = yes
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.11
+	title = estate_industrial_events.11.t
+	desc = estate_industrial_events.11.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.11.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = -10
+		}
+		add_country_modifier = {
+			name = RHN_show_of_central_power
+			duration = 3650
+		}
+		add_absolutism = 2
+	}
+	
+	option = {
+		name = "estate_industrial_events.11.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_legal_arms_production
+			influence = 20
+			duration = 9125
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.12
+	title = estate_industrial_events.12.t
+	desc = estate_industrial_events.12.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.12.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 15
+		}
+		add_country_modifier = {
+			name = RHN_administering
+			duration = 1925
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.12.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = -5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_self_administration_of_lands
+			influence = 10
+			duration = 9125
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.12.c"
+		
+		ai_chance = { factor = 33 }
+		
+		trigger = {
+			has_estate_privilege = estate_industrial_industrial_bureaucracy
+		}
+		highlight = yes
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_self_administration_of_lands
+			influence = 10
+			duration = 9125
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.13
+	title = estate_industrial_events.13.t
+	desc = estate_industrial_events.13.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.13.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_rising_influence
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.14
+	title = estate_industrial_events.14.t
+	desc = estate_industrial_events.14.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.14.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_diminishing_influence
+			influence = -10
+			duration = 5475
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.15
+	title = estate_industrial_events.15.t
+	desc = estate_industrial_events.15.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.15.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = -10
+		}
+		add_adm_power = -50
+	}
+	
+	option = {
+		name = "estate_industrial_events.15.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_meddling
+			influence = 15
+			duration = 5475
+		}
+		add_corruption = 2
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.16
+	title = RHN_Blast_furnaces_decision_title
+	desc = {
+	   trigger = { owner = { has_country_modifier = RHN_blast_furnace_cost } }
+	   desc = RHN_Blast_furnaces_decision_tt2
+	}
+	desc = {
+	   trigger = { NOT = { owner = { has_country_modifier = RHN_blast_furnace_cost } } }
+	   desc = RHN_Blast_furnaces_decision_tt1
+	}
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				counter = 0
+			}
+			
+			clr_country_flag = target1
+			clr_country_flag = target2
+			clr_country_flag = target3
+			clr_country_flag = target4
+			clr_country_flag = target5
+			clr_country_flag = target6
+			clr_country_flag = target7
+			clr_country_flag = target8
+			clr_country_flag = target9
+			
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						AND = {
+							ROOT = { has_country_flag = RHN_westphalia }
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+							}
+						}
+					}
+					NOT = {	has_building = blast_furnace }
+					NOT = { has_construction = core }
+					NOT = { has_construction = building }
+					NOT = { has_construction = great_project }
+					NOT = { has_construction = canal }
+					NOT = { has_construction = culture }
+					NOT = { has_construction = missionary }
+				}
+				
+				ROOT = {
+					change_variable = {
+						counter = 1
+					}
+					set_variable = {
+						which = page
+						which = counter
+					}
+					change_variable = {
+						page = 8
+					}
+					divide_variable = {
+						page = 9000
+					}
+					multiply_variable = {
+						page = 1000
+					}
+				}
+				set_variable = {
+					which = page
+					which = PREV
+				}
+				ROOT = {
+					set_variable = {
+						which = max_page
+						which = page
+					}
+					set_variable = {
+						which = page
+						which = current_page
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = page
+							which = PREV
+						}
+					}
+					ROOT = {
+							 if = { limit = { NOT = { has_country_flag = target1 } } set_country_flag = target1 PREV = { save_event_target_as = target1 } }
+						else_if = { limit = { NOT = { has_country_flag = target2 } } set_country_flag = target2 PREV = { save_event_target_as = target2 } }
+						else_if = { limit = { NOT = { has_country_flag = target3 } } set_country_flag = target3 PREV = { save_event_target_as = target3 } }
+						else_if = { limit = { NOT = { has_country_flag = target4 } } set_country_flag = target4 PREV = { save_event_target_as = target4 } }
+						else_if = { limit = { NOT = { has_country_flag = target5 } } set_country_flag = target5 PREV = { save_event_target_as = target5 } }
+						else_if = { limit = { NOT = { has_country_flag = target6 } } set_country_flag = target6 PREV = { save_event_target_as = target6 } }
+						else_if = { limit = { NOT = { has_country_flag = target7 } } set_country_flag = target7 PREV = { save_event_target_as = target7 } }
+						else_if = { limit = { NOT = { has_country_flag = target8 } } set_country_flag = target8 PREV = { save_event_target_as = target8 } }
+						else_if = { limit = { NOT = { has_country_flag = target9 } } set_country_flag = target9 PREV = { save_event_target_as = target9 } }
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		if = {
+			limit = {
+				has_country_flag = RHN_Blast_furnaces_decision
+			}
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+		else = {
+			set_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.back
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 3
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						value = 1
+					}
+				}
+				set_variable = {
+					which = current_page
+					which = max_page
+				}
+			}
+			else = {
+				subtract_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.17
+				days = 0
+			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.next
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 2
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = max_page
+					}
+				}
+				set_variable = {
+					current_page = 1
+				}
+			}
+			else = {
+				change_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.17
+				days = 0
+			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target1
+		goto = target1
+		
+		trigger = {
+			has_country_flag = target1
+		}
+		
+		event_target:target1 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target2
+		goto = target2
+		
+		trigger = {
+			has_country_flag = target2
+		}
+		
+		event_target:target2 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target3
+		goto = target3
+		
+		trigger = {
+			has_country_flag = target3
+		}
+		
+		event_target:target3 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target4
+		goto = target4
+		
+		trigger = {
+			has_country_flag = target4
+		}
+		
+		event_target:target4 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target5
+		goto = target5
+		
+		trigger = {
+			has_country_flag = target5
+		}
+		
+		event_target:target5 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target6
+		goto = target6
+		
+		trigger = {
+			has_country_flag = target6
+		}
+		
+		event_target:target6 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target7
+		goto = target7
+		
+		trigger = {
+			has_country_flag = target7
+		}
+		
+		event_target:target7 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target8
+		goto = target8
+		
+		trigger = {
+			has_country_flag = target8
+		}
+		
+		event_target:target8 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target9
+		goto = target9
+		
+		trigger = {
+			has_country_flag = target9
+		}
+		
+		event_target:target9 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.17
+	title = RHN_Blast_furnaces_decision_title
+	desc = {
+	   trigger = { has_country_modifier = RHN_blast_furnace_cost }
+	   desc = RHN_Blast_furnaces_decision_tt2
+	}
+	desc = {
+	   trigger = { NOT = { has_country_modifier = RHN_blast_furnace_cost } }
+	   desc = RHN_Blast_furnaces_decision_tt1
+	}
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				counter = 0
+			}
+			
+			clr_country_flag = target1
+			clr_country_flag = target2
+			clr_country_flag = target3
+			clr_country_flag = target4
+			clr_country_flag = target5
+			clr_country_flag = target6
+			clr_country_flag = target7
+			clr_country_flag = target8
+			clr_country_flag = target9
+			
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						AND = {
+							ROOT = { has_country_flag = RHN_westphalia }
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+							}
+						}
+					}
+					NOT = {	has_building = blast_furnace }
+					NOT = { has_construction = core }
+					NOT = { has_construction = building }
+					NOT = { has_construction = great_project }
+					NOT = { has_construction = canal }
+					NOT = { has_construction = culture }
+					NOT = { has_construction = missionary }
+				}
+				
+				ROOT = {
+					change_variable = {
+						counter = 1
+					}
+					set_variable = {
+						which = page
+						which = counter
+					}
+					change_variable = {
+						page = 8
+					}
+					divide_variable = {
+						page = 9000
+					}
+					multiply_variable = {
+						page = 1000
+					}
+				}
+				set_variable = {
+					which = page
+					which = PREV
+				}
+				ROOT = {
+					set_variable = {
+						which = max_page
+						which = page
+					}
+					set_variable = {
+						which = page
+						which = current_page
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = page
+							which = PREV
+						}
+					}
+					ROOT = {
+							 if = { limit = { NOT = { has_country_flag = target1 } } set_country_flag = target1 PREV = { save_event_target_as = target1 } }
+						else_if = { limit = { NOT = { has_country_flag = target2 } } set_country_flag = target2 PREV = { save_event_target_as = target2 } }
+						else_if = { limit = { NOT = { has_country_flag = target3 } } set_country_flag = target3 PREV = { save_event_target_as = target3 } }
+						else_if = { limit = { NOT = { has_country_flag = target4 } } set_country_flag = target4 PREV = { save_event_target_as = target4 } }
+						else_if = { limit = { NOT = { has_country_flag = target5 } } set_country_flag = target5 PREV = { save_event_target_as = target5 } }
+						else_if = { limit = { NOT = { has_country_flag = target6 } } set_country_flag = target6 PREV = { save_event_target_as = target6 } }
+						else_if = { limit = { NOT = { has_country_flag = target7 } } set_country_flag = target7 PREV = { save_event_target_as = target7 } }
+						else_if = { limit = { NOT = { has_country_flag = target8 } } set_country_flag = target8 PREV = { save_event_target_as = target8 } }
+						else_if = { limit = { NOT = { has_country_flag = target9 } } set_country_flag = target9 PREV = { save_event_target_as = target9 } }
+					}
+				}
+			}
+		}
+	}
+	
+	after = {
+		if = {
+			limit = {
+				has_country_flag = RHN_Blast_furnaces_decision
+			}
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+		else = {
+			set_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.back
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 3
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						value = 1
+					}
+				}
+				set_variable = {
+					which = current_page
+					which = max_page
+				}
+			}
+			else = {
+				subtract_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.16
+				days = 0
+			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.next
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 2
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = max_page
+					}
+				}
+				set_variable = {
+					current_page = 1
+				}
+			}
+			else = {
+				change_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.16
+				days = 0
+			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target1
+		goto = target1
+		
+		trigger = {
+			has_country_flag = target1
+		}
+		
+		event_target:target1 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target2
+		goto = target2
+		
+		trigger = {
+			has_country_flag = target2
+		}
+		
+		event_target:target2 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target3
+		goto = target3
+		
+		trigger = {
+			has_country_flag = target3
+		}
+		
+		event_target:target3 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target4
+		goto = target4
+		
+		trigger = {
+			has_country_flag = target4
+		}
+		
+		event_target:target4 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target5
+		goto = target5
+		
+		trigger = {
+			has_country_flag = target5
+		}
+		
+		event_target:target5 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target6
+		goto = target6
+		
+		trigger = {
+			has_country_flag = target6
+		}
+		
+		event_target:target6 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target7
+		goto = target7
+		
+		trigger = {
+			has_country_flag = target7
+		}
+		
+		event_target:target7 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target8
+		goto = target8
+		
+		trigger = {
+			has_country_flag = target8
+		}
+		
+		event_target:target8 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target9
+		goto = target9
+		
+		trigger = {
+			has_country_flag = target9
+		}
+		
+		event_target:target9 = {
+			if = {
+				limit = {
+					owner = { has_country_modifier = RHN_blast_furnace_cost }
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
 		}
 	}
 }

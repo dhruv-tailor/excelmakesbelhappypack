@@ -1,0 +1,573 @@
+PAL_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = PAL
+			AND = {
+				was_tag = PAL
+				tag = RHN
+			}
+		}
+	}
+	has_country_shield = yes
+
+	PAL_humiliate_margraves = {
+		icon = protect_against_austria
+		required_missions = { rhn_generic_fc }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				if = {
+					limit = {
+						exists = WUR
+					}
+					owned_by = WUR
+				}
+				else = {
+					province_id = 74
+				}
+				if = {
+					limit = {
+						exists = BAD
+					}
+					owned_by = BAD
+				}
+				else = {
+					province_id = 70
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					has_won_war_against = {
+						who = WUR
+						max_years_since = 100
+					}
+					has_won_war_against = {
+						who = BAD
+						max_years_since = 100
+					}
+				}
+				AND = {
+					owns_core_province = 74
+					owns_core_province = 70
+				}
+			}
+		}
+		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 20
+			}
+			add_mil_power = 50
+		}
+	}
+	
+	PAL_wine_industry = {
+		icon = mission_wine_monopolies
+		required_missions = { }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = wine
+		}
+		trigger = {
+			development_in_provinces = {
+				trade_goods = wine
+				value = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAL_wine
+				duration = 10950
+			}
+			add_years_of_owned_provinces_production_income = {
+				years = 5
+				custom_tooltip = PAL_from_wine_income
+				trigger = {
+					trade_goods = wine
+				}
+			}
+			add_prestige_or_monarch_power = { amount = 20 }
+		}
+	}
+	
+	PAL_oberpfalzer_mines = {
+		icon = dominant_economy
+		required_missions = { PAL_wine_industry }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 1757
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 7 }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
+		trigger = {
+			1757 = {
+				owned_by = ROOT
+				num_of_times_improved = 7
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			1757 = {
+				add_province_modifier = {
+					name = PAL_mine
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+PAL_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = PAL
+			AND = {
+				was_tag = PAL
+				tag = RHN
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	PAL_connect_the_territories = {
+		icon = sway_cologne
+		required_missions = { PAL_reinforce_wittelbachs rhn_generic_fc }
+		position = 2
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					1757 = { owned_by = ROOT }
+					77 = { owned_by = ROOT }
+				}
+				OR = {
+					area = franconia_area
+					area = upper_franconia_area
+				}
+			}
+			else = {
+				OR = {
+					province_id = 1757
+					province_id = 77
+				}
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			1757 = {
+				owned_by = ROOT
+				is_in_capital_area = yes
+			}
+			77 = {
+				owned_by = ROOT
+				is_in_capital_area = yes
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_army_tradition_or_mil_power = { amount = 10 }
+			add_country_modifier = {
+				name = PAL_territories_reconnected
+				duration = 5475
+			}
+			upper_bavaria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_bavaria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_bavaria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = PAL_get_pu_cb
+			if = {
+				limit = {
+					valid_for_personal_unions_trigger = yes
+				}
+				every_country = {
+					limit = {
+						primary_culture = bavarian
+						dynasty = ROOT
+						valid_for_personal_unions_trigger = yes
+					}
+					ROOT = {
+						add_casus_belli = {
+							target = PREV
+							type = cb_restore_personal_union
+							months = -1
+						}
+					}
+				}
+			}	
+		}
+	}
+	
+	PAL_bavarian_wittelbachs = {
+		icon = unite_the_wittelsbachs
+		required_missions = { PAL_connect_the_territories }
+		position = 3
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = upper_bavaria_area
+					area = lower_bavaria_area
+					area = east_bavaria_area
+				}
+				value = 8
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAL_united_the_house_of_wittelsbachs
+				duration = 10950
+			}
+		}
+	}
+	
+	PAL_soliditas = {
+		icon = catholic_confraternity
+		required_missions = { PAL_renaissancehof }
+		position = 4
+		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+		}
+		effect = {
+			77 = {
+				add_or_upgrade_university_building = yes
+				add_province_modifier = {
+					name = PAL_university_of_heidelberg
+					duration = -1
+				}
+			}
+			change_innovativeness = 5
+		}
+	}
+}
+
+PAL_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = PAL
+			AND = {
+				was_tag = PAL
+				tag = RHN
+			}
+		}
+	}
+	has_country_shield = yes
+
+	PAL_reinforce_wittelbachs = {
+		icon = spread_the_von_wettins
+		required_missions = { }
+		position = 1
+		trigger = {
+			stability = 1
+			legitimacy_equivalent = 90
+			prestige = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAL_unifying_the_lines_of_palatinate
+				duration = 9125
+			}
+			franconia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_franconia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	PAL_renaissancehof = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { renaissance = 100 }
+		}
+		trigger = {
+			has_institution = renaissance
+			all_owned_province = {
+				renaissance = 100
+			}
+			OR = {
+				has_adm_advisor = yes
+				has_dip_advisor = yes
+				has_mil_advisor = yes
+			}
+		}
+		effect = {
+			country_event = { id = ME_Rhenish_Events.1 }
+			79 = {
+				ROOT = {
+					define_advisor = {
+						type = artist
+						name = "Konrad Celtes"
+						skill = 1
+						culture = PREV
+						religion = PREV
+						cost_multiplier = 0.25
+					}
+				}
+			}
+		}
+	}
+	
+	PAL_leader_of_the_faithful = {
+		icon = victor_for_the_true_faith
+		required_missions = { PAL_a_new_religion }
+		position = 5
+		provinces_to_highlight = {
+			owner = {
+				NOT = {
+					religion = ROOT
+				}
+				NOT = {
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+							max_years_since = 100
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_country = {
+					NOT = { religion = ROOT }
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+							max_years_since = 100
+						}
+					}
+				}	
+				amount = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAL_victor_for_the_true_faith
+				duration = -1
+			}
+		}
+	}
+}
+
+PAL_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = PAL
+			AND = {
+				was_tag = PAL
+				tag = RHN
+			}
+		}
+	}
+	has_country_shield = yes
+
+	PAL_electoral_palatinate = {
+		icon = mission_empire
+		required_missions = { PAL_reinforce_wittelbachs }
+		position = 2
+		trigger = {
+			is_elector = yes
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			prestige = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAL_electoral_palatinate
+				duration = -1
+			}
+		}
+	}
+	
+	PAL_a_new_religion = {
+		icon = join_the_reformation
+		required_missions = { PAL_renaissancehof }
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					AND = {
+						religion = catholic
+						is_all_concessions_in_council_taken = yes
+					}
+				}
+			}
+			else = {
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					AND = {
+						religion = catholic
+						is_papal_controller = yes
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = PAL_reward_if_catholic
+			tooltip = {
+				add_papal_influence = 20
+				define_advisor = {
+					type = inquisitor
+					skill = 1
+					culture = ROOT
+					religion = catholic
+					cost_multiplier = 0.4
+				}
+			}
+			custom_tooltip = PAL_reward_if_protestant
+			tooltip = {
+				add_country_modifier = {
+					name = PAL_heidelberg_catechism
+					duration = 9125
+				}
+				if = {
+					limit = {
+						religion = catholic # don't show up a catholic guy eww
+					}
+					define_advisor = {
+						type = theologian
+						name = "Zacharias Ursinus"
+						skill = 1
+						culture = hessian
+						religion = reformed
+						cost_multiplier = 0.25
+					}
+				}
+				else = {
+					define_advisor = {
+						type = theologian
+						name = "Zacharias Ursinus"
+						skill = 1
+						culture = hessian
+						religion = ROOT
+						cost_multiplier = 0.25
+					}
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						religion = catholic
+					}
+					add_papal_influence = 20
+					define_advisor = {
+						type = inquisitor
+						skill = 1
+						culture = ROOT
+						religion = catholic
+						cost_multiplier = 0.4
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = PAL_heidelberg_catechism
+						duration = 9125
+					}
+					define_advisor = {
+						type = theologian
+						name = "Zacharias Ursinus"
+						skill = 1
+						culture = hessian
+						religion = ROOT
+						cost_multiplier = 0.25
+					}
+				}
+			}
+		}
+	}
+	
+	PAL_bibliotheca = {
+		icon = bibliotheca_corviana
+		required_missions = { PAL_a_new_religion }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 77
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_courthouse_building_trigger = yes }
+			}
+		}
+		trigger = {
+			77 = {
+				has_courthouse_building_trigger = yes
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Palatinate_Events.1 } #Bibliotheca Palatina
+			77 = {
+				add_province_modifier = {
+					name = PAL_palatina
+					duration = -1
+				}
+			}
+		}
+	}
+}

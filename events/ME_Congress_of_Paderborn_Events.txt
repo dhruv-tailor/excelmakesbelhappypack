@@ -1,0 +1,333 @@
+namespace = ME_Congress_of_Paderborn_Events
+# Congress of Paderborn
+country_event = {
+	id = ME_Congress_of_Paderborn_Events.1
+	title = ME_Congress_of_Paderborn_Events.EVTNAME1
+	desc = ME_Congress_of_Paderborn_Events.EVTDESC1
+	picture = COURT_eventPicture
+
+	fire_only_once = yes
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.1.a
+		
+		ai_chance = { factor = 100 }
+		
+		every_country = {
+			limit = {
+				NOT = { tag = ROOT }
+				capital_scope = {
+					region = north_german_region
+				}
+				OR = {
+					is_subject = no
+					is_subject_of = ROOT
+				}
+			}
+			set_country_flag = pru_send_invite_to_congress_of_paderborn
+			country_event = { id = ME_Congress_of_Paderborn_Events.2 }
+		}
+		set_country_flag = pru_has_attended_the_congress_of_paderborn
+	}
+	
+	#option = {
+	#	name = ME_Congress_of_Paderborn_Events1.b
+	#	
+	#	ai_chance = { factor = 0 }
+	#	
+	#	add_prestige = -1
+	#	clr_country_flag = pru_congress_of_paderborn_can_happen
+	#}
+}
+
+# Invited to the Congress of Paderborn
+country_event = {
+	id = ME_Congress_of_Paderborn_Events.2
+	title = ME_Congress_of_Paderborn_Events.EVTNAME2
+	desc = ME_Congress_of_Paderborn_Events.EVTDESC2
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.2.a
+		
+		ai_chance = {
+			factor = 0.4
+			
+			modifier = {
+				factor = 1000
+				is_subject_of = FROM
+			}
+			modifier = {
+				factor = 1.5
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 1.5
+				marriage_with = FROM
+			}
+			modifier = {
+				factor = 0
+				is_subject = yes
+				NOT = { is_subject_of = FROM }
+			}
+		}
+		
+		set_country_flag = accepted_invitation_to_congress_of_paderborn
+		reverse_add_opinion = {
+			who = FROM
+			modifier = accepted_invitation_to_congress_of_paderborn_opinion
+		}
+	}
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.2.b
+		
+		ai_chance = {
+			factor = 0.6
+			
+			modifier = {
+				factor = 0
+				is_subject_of = FROM
+			}
+			modifier = {
+				factor = 5
+				is_rival = FROM
+			}
+			modifier = {
+				factor = 5
+				is_enemy = FROM
+			}
+			modifier = {
+				factor = 1000
+				is_subject = yes
+				NOT = { is_subject_of = FROM }
+			}
+		}
+		
+		set_country_flag = declined_invitation_to_congress_of_paderborn
+		reverse_add_opinion = {
+			who = FROM
+			modifier = declined_invitation_to_congress_of_paderborn_opinion
+		}
+	}
+}
+
+# Congress of Paderborn - Conclusion
+country_event = {
+	id = ME_Congress_of_Paderborn_Events.3
+	title = ME_Congress_of_Paderborn_Events.EVTNAME3
+	desc = ME_Congress_of_Paderborn_Events.EVTDESC3
+	picture = COURT_eventPicture
+
+	fire_only_once = yes
+	major = yes
+	
+	trigger = {
+		has_country_flag = pru_has_attended_the_congress_of_paderborn
+		any_country = {
+			has_country_flag = pru_send_invite_to_congress_of_paderborn
+		}
+		NOT = {
+			any_country = {
+				has_country_flag = pru_send_invite_to_congress_of_paderborn
+				NOT = { has_country_flag = accepted_invitation_to_congress_of_paderborn }
+				NOT = { has_country_flag = declined_invitation_to_congress_of_paderborn }
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.3.a
+		
+		ai_chance = { factor = 100 }
+		
+		every_country = {
+			limit = {
+				has_country_flag = accepted_invitation_to_congress_of_paderborn
+			}
+			country_event = { id = ME_Congress_of_Paderborn_Events.4 tooltip = COUNTRIES_MAY_BE_ANNEXED_OR_BECOME_VASSAL_OF_PRU }
+		}
+		clr_country_flag = pru_congress_of_paderborn_can_happen
+	}
+}
+
+# Congress of Paderborn - Answer to Prussias Demands
+country_event = {
+	id = ME_Congress_of_Paderborn_Events.4
+	title = ME_Congress_of_Paderborn_Events.EVTNAME4
+	desc = ME_Congress_of_Paderborn_Events.EVTDESC4
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.4.a
+		
+		ai_chance = {
+			factor = 0.1
+			
+			modifier = {
+				factor = 0
+				total_development = 300
+			}
+			modifier = {
+				factor = 0.5
+				total_development = FROM
+			}
+			modifier = {
+				factor = 3
+				NOT = { num_of_cities = 2 }
+				NOT = { army_size = FROM }
+			}
+			modifier = {
+				factor = 2
+				is_subject_of = FROM
+			}
+			modifier = {
+				factor = 0
+				is_subject = yes
+				NOT = { is_subject_of = FROM }
+			}
+		}
+		
+		FROM = {
+			inherit = ROOT
+		}
+	}
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.4.b
+		
+		ai_chance = {
+			factor = 0.05
+			
+			modifier = {
+				factor = 0
+				total_development = 300
+			}
+			modifier = {
+				factor = 0.5
+				total_development = FROM
+			}
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { which = their_cities which = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { which = their_army which = our_army }
+				}
+			}
+			modifier = {
+				factor = 0
+				is_subject_of = FROM
+				is_vassal = no
+			}
+		}
+		
+		FROM = {
+			create_subject = {
+				subject = ROOT
+				subject_type = prussian_congress_vassal
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Congress_of_Paderborn_Events.4.c
+		
+		ai_chance = {
+			factor = 0.85
+			
+			modifier = {
+				factor = 3
+				total_development = 300
+			}
+			modifier = {
+				factor = 10
+				total_development = FROM
+			}
+			modifier = {
+				factor = 0.76
+				NOT = { num_of_cities = 2 }
+				NOT = { army_size = FROM }
+			}
+			modifier = {
+				factor = 0.76
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { which = their_cities which = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { which = their_army which = our_army }
+				}
+			}
+		}
+		
+		add_prestige = -1
+		if = {
+			limit = {
+				is_subject_of = FROM
+			}
+			reverse_add_casus_belli = {
+				target = FROM
+				type = cb_insult
+				months = 12
+			}
+		}
+		else = {
+			reverse_add_casus_belli = {
+				target = FROM
+				type = cb_vassalize_mission
+				months = 36
+			}
+		}
+	}
+}

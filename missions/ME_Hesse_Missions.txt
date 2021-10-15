@@ -1,0 +1,557 @@
+HES_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = HES
+			AND = {
+				tag = RHN
+				was_tag = HES
+			}
+		}
+	}
+	has_country_shield = yes
+
+	HES_mainz_feud = {
+		icon = expand_the_confederacy
+		required_missions = { rhn_generic_fc }
+		position = 2
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = MAI
+				}
+				owned_by = MAI
+			}
+			else = {
+				province_id = 78
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				has_won_war_against = {
+					who = MAI
+				}
+				AND = {
+					NOT = { exists = MAI }
+					owns = 78
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_peace_of_frankfurt
+				duration = 7300
+			}
+			thuringia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = THU
+					valid_for_personal_unions_trigger = yes
+				}
+				custom_tooltip = HES_thu_valid_yes
+				hidden_effect = {
+					add_casus_belli = {
+						target = THU
+						type = cb_restore_personal_union
+						months = -1
+					}
+				}
+			}
+			else = {
+				custom_tooltip = HES_thu_valid_no
+			}
+			tooltip = {
+				add_casus_belli = {
+					target = THU
+					type = cb_restore_personal_union
+					months = -1
+				}
+			}
+		}
+	}
+	
+	HES_thuringia = {
+		icon = become_king
+		required_missions = { rhn_generic_expand HES_mainz_feud }
+		position = 4
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = THU
+				}
+				owned_by = THU
+			}
+			else = {
+				area = thuringia_area
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				senior_union_with = THU
+				thuringia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_henry_ruspe
+				duration = -1
+			}
+			add_prestige_or_monarch_power = { amount = 30 }
+		}
+	}
+}
+
+HES_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = HES
+			AND = {
+				tag = RHN
+				was_tag = HES
+			}
+		}
+	}
+	has_country_shield = yes
+
+	HES_hitzkirche = {
+		icon = standardize_relazioni
+		required_missions = { rhn_generic_fc HES_allies }
+		position = 2
+		provinces_to_highlight = {
+			if = {
+				limit = { exists = MAI }
+				owned_by = MAI
+			}
+			else = {
+				always = no
+			}
+		}
+		trigger = {
+			grown_by_development = 50
+			if = {
+				limit = {
+					exists = MAI
+				}
+				total_development = MAI
+				army_size = MAI
+				prestige = MAI
+			}
+			
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_mainzian_control_denied
+				duration = 10950
+			}
+			add_dip_power = 50
+		}
+	}
+	
+	HES_militarization = {
+		icon = army_reforms
+		required_missions = { }
+		position = 3 
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size = 10
+			is_at_war = yes
+			any_owned_province = {
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_militarization_modifier
+				duration = 9125
+			}
+			add_mil_power = 50
+		}
+	}
+	
+	HES_finest_forces = {
+		icon = establish_a_standing_army
+		required_missions = { HES_militarization }
+		position = 5 
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					has_global_modifier_value = {
+						which = discipline
+						value = 0.15
+					}
+					army_professionalism = 0.5
+					army_tradition = 80
+				}
+			}
+			else = {
+				OR = {
+					has_global_modifier_value = {
+						which = discipline
+						value = 0.15
+					}
+					army_tradition = 80
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_mercs
+				duration = -1
+			}
+			add_country_modifier = {
+				name = HES_training_elsewhere
+				duration = 10950
+			}
+		}
+	}
+}
+
+HES_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = HES
+			AND = {
+				tag = RHN
+				was_tag = HES
+			}
+		}
+	}
+	has_country_shield = yes
+
+	HES_allies = {
+		icon = catholic_confraternity
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owner = {
+				alliance_with = ROOT
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+				amount = 2
+			}
+			custom_trigger_tooltip = {
+				tooltip = HES_has_3_rivals
+				OR = {
+					calc_true_if = {
+						all_rival_country = {}
+						amount = 3
+					}
+					power_projection = 50
+				}
+			}	
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_political_manuevers
+				duration = 9125
+			}
+		}
+	}
+	
+	HES_schmalkaldic_league = {
+		icon = protect_against_austria
+		required_missions = { HES_allies HES_protestant }
+		position = 2
+		provinces_to_highlight = {
+			owner = {
+				NOT = { is_rival = ROOT }
+				NOT = { is_enemy = ROOT }
+				NOT = { alliance_with = ROOT }
+				religion = ROOT
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_ally = {
+					religion = ROOT
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			custom_tooltip = HES_guaranteed
+			set_country_flag = HES_guaranteed
+		}
+	}
+	
+	HES_fortify = {
+		icon = take_the_bishoprics
+		required_missions = { HES_militarization }
+		position = 4 
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { fort_level = 2 }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				fort_level = 2
+				value = 3
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_army_tradition_or_mil_power = { amount = 15 }
+			custom_tooltip = HES_every_fort_province
+			tooltip = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 25
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						fort_level = 2
+					}
+					add_institution_embracement = {
+						which = renaissance
+						value = 25
+					}
+				}
+			}
+		}
+	}
+	
+	HES_let_hesse_prosper = {
+		icon = prosperity_for_all
+		required_missions = { HES_unite_the_realms }
+		position = 5 
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = hessian
+			is_core = ROOT
+		}
+		trigger = {
+			development_in_provinces = {
+				culture = hessian
+				is_core = ROOT
+				value = 100
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_prosperity
+				duration = 10950
+			}
+		}
+	}
+}
+
+HES_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = HES
+			AND = {
+				tag = RHN
+				was_tag = HES
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	HES_protestant = {
+		icon = victor_for_the_true_faith
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				religion = protestant
+				religion = reformed
+			}
+		}
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				custom_trigger_tooltip = {
+					tooltip = obj_force_converted_tooltip
+					has_country_flag = force_converted
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { religion = catholic }
+				}
+				custom_tooltip = HES_reward_if_we_are_not_catholic_yes
+				hidden_effect = {
+					country_event = { id = ME_Hesse_Events.10 }
+				}
+			}
+			else = {
+				custom_tooltip = HES_reward_if_we_are_not_catholic
+			}
+			tooltip = {
+				country_event = { id = ME_Hesse_Events.10 }
+			}
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_tooltip = HES_reward_if_we_are_catholic_yes
+				hidden_effect = {
+					add_country_modifier = {
+						name = HES_catholic_unity
+						duration = 7300
+					}
+				}
+			}
+			else = {
+				custom_tooltip = HES_reward_if_we_are_catholic
+			}
+			tooltip = {
+				add_country_modifier = {
+					name = HES_catholic_unity
+					duration = 7300
+				}
+			}
+			
+		}
+	}
+	
+	HES_marburg = {
+		icon = join_the_reformation
+		required_missions = { HES_protestant }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 81
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			81 = {
+				owned_by = ROOT
+				development = 30
+			}
+		}
+		effect = {
+			81 = {
+				add_province_modifier = {
+					name = HES_philipps_university
+					duration = -1
+				}
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+				}
+			}
+		}
+	}
+	
+	HES_unite_the_realms = {
+		icon = avoid_fragmentation
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+			owned_by = ROOT
+			local_autonomy_above_min = 15
+		}
+		trigger = {
+			stability = 2
+			NOT = { average_autonomy_above_min = 15 }
+			legitimacy_equivalent = 90
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_united_the_realms
+				duration = -1
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				custom_tooltip = HES_every_province_under_15_autonomy_dlc
+			}
+			else = {
+				custom_tooltip = HES_every_province_under_15_autonomy
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						NOT = { local_autonomy_above_min = 15 }
+					}
+					add_devastation = -25
+					add_prosperity = 25
+				}
+			}
+		}
+	}
+	
+	HES_candidacy = {
+		icon = interfere_in_germany
+		required_missions = { HES_unite_the_realms }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			calc_true_if = {
+				all_elector = {
+					preferred_emperor = ROOT
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HES_emperorship_candidacy
+				duration = 9125
+			}
+		}
+	}
+}

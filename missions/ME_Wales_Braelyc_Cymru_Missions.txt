@@ -554,12 +554,16 @@ WLS_CYR_BRL_missions_4 = {
 					name = wls_capital
 					duration = -1
 				}
-				add_courthouse_line = yes
+				add_building_construction = {
+					building = courthouse
+					speed = 1.0
+					cost = 0.0
+				}
 			}
 		}
 	}
 	
-	WLS_parliment = { #found Welsh parliment; plans of Owain Glyndwr
+	WLS_parliment = { #found Welsh parliment; plans of Owain Glyndŵr
 		icon = me_mission_wales_parliament
 		required_missions = { 
 			WLS_capital
@@ -582,7 +586,23 @@ WLS_CYR_BRL_missions_4 = {
 		}
 		effect = {
 			capital_scope = {
-				add_courthouse_line = yes
+				custom_tooltip = wls_build_parliment_tooltip
+				hidden_effect = {
+					if = {
+						limit = {
+							NOT = { has_building = town_hall }
+							NOT = { has_construction = core }
+							NOT = { has_construction = building }
+							NOT = { has_construction = culture }
+							NOT = { has_construction = missionary }
+						}
+						add_building_construction = {
+							building = town_hall
+							speed = 10.0
+							cost = 0.0
+						}
+					}
+				}
 			}
 			hidden_effect = {
 				if = {
@@ -608,8 +628,7 @@ WLS_CYR_BRL_missions_4 = {
 				NOT = { culture = english }
 				AND = {
 					is_capital_of = ROOT
-					NOT = { has_building = government_lvl_3 }
-					NOT = { has_building = government_lvl_4 }
+					NOT = { has_building = town_hall }
 				}
 			}
 		}
@@ -619,10 +638,7 @@ WLS_CYR_BRL_missions_4 = {
 				culture = english
 			}
 			capital_scope = {
-				OR = {
-					has_building = government_lvl_3
-					has_building = government_lvl_4
-				}
+				has_building = town_hall
 			}
 			if = {
 				limit = {
@@ -632,7 +648,7 @@ WLS_CYR_BRL_missions_4 = {
 			}
 			else = {
 				OR = {
-					republik0 = 3
+					plutocracy_ideas = 3
 					has_reform = administrative_monarchy
 					has_reform = administrative_republic
 				}
@@ -698,14 +714,9 @@ WLS_CYR_BRL_missions_5 = {
 		required_missions = { WLS_pope }
 		position = 3
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-						province_has_building_of_group = { group = taxation all = yes }
-					}
-				}
-				amount = 4
+			OR = {
+				temple = 4
+				cathedral = 4
 			}
 		}
 		effect = {
@@ -1234,7 +1245,11 @@ WLS_missions_4 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { base_production = 15 }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
 		position = 7
@@ -1242,11 +1257,13 @@ WLS_missions_4 = {
 			236 = {
 				owned_by = ROOT
 				base_production = 15
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
+			
 		}
 		effect = {
 			236 = {

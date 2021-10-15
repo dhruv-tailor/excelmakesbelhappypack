@@ -1,0 +1,730 @@
+namespace = ME_HOL_events
+
+# Expedition to Danzig
+country_event = {
+	id = ME_HOL_events.1
+	title = ME_HOL_events.EVTNAME1
+	desc = ME_HOL_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.EVTOPT1 #Send expedition to Danzig
+		
+		if = {
+			limit = {
+				ai = no
+			}
+			add_sailors = -250
+			add_treasury = -50
+		}
+		43 = {
+			owner = {
+				country_event = {
+					id = ME_HOL_events.2
+					days = 30
+				}
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.EVTOPT2 #Don't Send expedition to Danzig
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Dutch Expedition
+country_event = {
+	id = ME_HOL_events.2
+	title = ME_HOL_events_2.t
+	desc = ME_HOL_events_2.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events_2.a #Accept Expedition
+		
+		FROM = {
+			country_event = {
+				id = ME_HOL_events.3
+			}
+		}
+		add_country_modifier = {
+			name = ME_HOL_Danzig_Amsterdam_Connection_1 #10%TE
+			duration = 3650
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = ME_HOL_Danzig_Amsterdam_Connection_3
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events_2.b #Don't Accept Expedition
+
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Dutch Expedition Returns
+country_event = {
+	id = ME_HOL_events.3
+	title = ME_HOL_events_3.t
+	desc = ME_HOL_events_3.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events_3.a 
+		
+		add_country_modifier = {
+			name = ME_HOL_Danzig_Amsterdam_Connection_2 #-10%Diptech
+			duration = 3650
+		}
+		reverse_add_opinion = {	who = FROM modifier = ME_HOL_Danzig_Amsterdam_Connection_3 }
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+#Copenhagen Treaty #Lubeck
+country_event = {
+	id = ME_HOL_events.4
+	title = ME_HOL_events.4.t
+	desc = ME_HOL_events.4.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.4.a
+		
+		HOL = {
+			country_event = {
+				id = ME_HOL_events.5
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.4.b
+		
+		45 = {
+			add_claim = FROM
+		}
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Copenhagen Treaty #Holland
+country_event = {
+	id = ME_HOL_events.5
+	title = ME_HOL_events.5.t
+	desc = ME_HOL_events.5.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.5.a 
+		
+		ROOT = {
+			add_country_modifier = {
+				name = ME_HOL_Treaty_Of_Copenhagen
+				duration = 3650
+			}
+			45 = { #Lubeck
+				add_trade_modifier = {
+					who = ROOT
+					duration = 3650
+					power = 25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+			1926 = { #Baltic
+				add_trade_modifier = {
+					who = ROOT
+					duration = 3650
+					power = 25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+		}
+		FROM = {
+			add_country_modifier = {
+				name = ME_HOL_Treaty_Of_Copenhagen
+				duration = 3650
+			}
+			45 = { #Lubeck
+				add_trade_modifier = {
+					who = FROM
+					duration = 3650
+					power = -25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+			1926 = { #Baltic
+				add_trade_modifier = {
+					who = FROM
+					duration = 3650
+					power = -25
+					key = ME_HOL_Treaty_Of_Copenhagen
+				}
+			}
+		}
+		every_country = {
+			limit = {
+				45 = { #Lubeck
+					trade_share = {
+						country = PREV
+						share = 5
+					}
+				}
+			}
+			ROOT = { add_treasury = -10	}
+			country_event = {
+				id = ME_HOL_events.6
+			}
+		}
+
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.5.b 
+		
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Copenhagen Treaty #Randoms
+country_event = {
+	id = ME_HOL_events.6
+	title = ME_HOL_events.6.t
+	desc = ME_HOL_events.6.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.6.a 
+		add_treasury = 10
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ME_HOL_events.6.b
+		random_owned_province = {
+			limit = { has_port = yes }
+			light_ship = ROOT
+			light_ship = ROOT
+		}
+		ai_chance = { factor = 50 }
+	}
+}
+
+#Cod Appeal
+country_event = {
+	id = ME_HOL_events.7
+	title = ME_HOL_events.7.t
+	desc = ME_HOL_events.7.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.7.a 
+		country_event = {
+			id = ME_HOL_events.10
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.7.b
+		add_adm_power = 50
+		add_dip_power = 50
+		add_mil_power = 50
+		ai_chance = { factor = 50 }
+	}
+}
+
+#Hook Preparations
+country_event = {
+	id = ME_HOL_events.8
+	title = ME_HOL_events.8.t
+	desc = ME_HOL_events.8.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.8.a 
+		add_country_modifier = {
+			name = ME_HOL_hook_preparations
+			duration = 9125
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ME_HOL_events.8.b
+		add_stability = 1
+		ai_chance = { factor = 50 }
+	}
+}
+
+#Pick Your Hook or Cod
+country_event = {
+	id = ME_HOL_events.9
+	title = ME_HOL_events.9.t
+	desc = ME_HOL_events.9.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.9.a 
+		country_event = {
+			id = ME_HOL_events.7
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = ME_HOL_events.9.b
+		country_event = {
+			id = ME_HOL_events.8
+		}
+		ai_chance = { factor = 50 }
+	}
+}
+
+country_event = {
+	id = ME_HOL_events.10
+	title = ME_HOL_events.10.t
+	desc = ME_HOL_events.10.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.10.a 
+		if = {
+			limit = {
+				91 = {
+					owned_by = BUR
+				}
+			}
+			91 = {
+				add_core = HOL
+				cede_province = HOL
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.10.b
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Bribe the Legate
+country_event = {
+	id = ME_HOL_events.11
+	title = ME_HOL_events.11.t
+	desc = ME_HOL_events.11.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.11.a 
+		UTR = {
+			country_event = {
+				id = ME_HOL_events.12
+			}
+		}
+		add_papal_influence = -50
+		add_treasury = -100
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.11.b
+		random_list = {
+			75 = {
+				UTR = {
+					country_event = {
+						id = ME_HOL_events.12
+					}
+				}
+			}
+			25 = {
+				add_papal_influence = 10
+				add_stability = 1
+			}
+		}
+		ai_chance = { factor = 0 }
+	}
+}
+
+#UTR- Bribed the Legate
+country_event = {
+	id = ME_HOL_events.12
+	title = ME_HOL_events.12.t
+	desc = ME_HOL_events.12.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.12.a 
+		define_heir = {
+			dynasty = FROM
+			culture = FROM
+			religion = FROM
+			adm = 1
+			dip = 1
+			mil = 1
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.12.b
+		add_stability = -1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Subjugation of Utrecht
+country_event = {
+	id = ME_HOL_events.13
+	title = ME_HOL_events.13.t
+	desc = ME_HOL_events.13.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.13.a 
+		UTR = {
+			country_event = {
+				id = ME_HOL_events.14
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.13.b
+		add_stability = 1
+		add_papal_influence = 10
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Hollander Influence
+country_event = {
+	id = ME_HOL_events.14
+	title = ME_HOL_events.14.t
+	desc = ME_HOL_events.14.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.14.a 
+		FROM = {
+			vassalize = ROOT
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.14.b
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Letter to the Klauwaerts
+country_event = {
+	id = ME_HOL_events.15
+	title = ME_HOL_events.15.t
+	desc = ME_HOL_events.15.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.15.a 
+		FLA = {
+			country_event = {
+				id = ME_HOL_events.16
+			}
+			custom_tooltip = ME_HOL_County_Of_Flanders_Modifier_TT_1
+			tooltip = {
+				add_country_modifier = {
+					name = ME_HOL_County_Of_Flanders_Modifier
+					duration = 3650
+				}
+				add_liberty_desire = 25
+			}
+			set_country_flag = ME_HOL_dutch_weapons
+		}
+		add_treasury = -100
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.15.b
+		FLA = {
+			country_event = {
+				id = ME_HOL_events.16
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.15.c
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Letter from Holland
+country_event = {
+	id = ME_HOL_events.16
+	title = ME_HOL_events.16.t
+	desc = ME_HOL_events.16.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.16.a
+		if = {
+			limit = {
+				has_country_flag = ME_HOL_dutch_weapons
+			}
+			custom_tooltip = ME_HOL_County_Of_Flanders_Modifier_TT_2
+			add_country_modifier = {
+				name = ME_HOL_County_Of_Flanders_Modifier
+				duration = 3650
+			}
+			clr_country_flag = ME_HOL_dutch_weapons
+			add_liberty_desire = 25
+		}
+		set_country_flag = ME_HOL_Flanders_Prepares
+		add_liberty_desire = 25
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.16.b
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Letter to Breda
+country_event = {
+	id = ME_HOL_events.17
+	title = ME_HOL_events.17.t
+	desc = ME_HOL_events.17.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.17.a 
+		BRB = {
+			country_event = {
+				id = ME_HOL_events.18
+			}
+			custom_tooltip = ME_HOL_Duchy_Of_Brabant_Modifier_TT_1
+			tooltip = {
+				add_country_modifier = {
+					name = ME_HOL_Duchy_Of_Brabant_Modifier
+					duration = 3650
+				}
+				add_liberty_desire = 25
+			}
+			set_country_flag = ME_HOL_dutch_weapons
+		}
+		add_treasury = -100
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.17.b
+		BRB = {
+			country_event = {
+				id = ME_HOL_events.18
+			}
+		}
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.15.c
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Letter from Holland
+country_event = {
+	id = ME_HOL_events.18
+	title = ME_HOL_events.18.t
+	desc = ME_HOL_events.18.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.18.a
+		if = {
+			limit = {
+				has_country_flag = ME_HOL_dutch_weapons
+			}
+			custom_tooltip = ME_HOL_Duchy_Of_Brabant_Modifier_TT_2
+			add_country_modifier = {
+				name = ME_HOL_Duchy_Of_Brabant_Modifier
+				duration = 3650
+			}
+			clr_country_flag = ME_HOL_dutch_weapons
+			add_liberty_desire = 25
+		}
+		set_country_flag = ME_HOL_Brabant_Prepares
+		add_liberty_desire = 25
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = ME_HOL_events.18.b
+		add_stability = 1
+		ai_chance = { factor = 0 }
+	}
+	option = {
+		name = ME_HOL_events.18.b
+		if = {
+			limit = {
+				has_country_flag = ME_HOL_dutch_weapons
+			}
+			custom_tooltip = ME_HOL_Duchy_Of_Brabant_Modifier_TT_2
+			add_country_modifier = {
+				name = ME_HOL_Duchy_Of_Brabant_Modifier
+				duration = 3650
+			}
+			clr_country_flag = ME_HOL_dutch_weapons
+			add_liberty_desire = 25
+		}
+		set_country_flag = ME_HOL_Brabant_Betrays
+		ai_chance = { factor = 0 }
+	}
+}
+
+#Low Countries Revolt
+country_event = {
+	id = ME_HOL_events.19
+	title = ME_HOL_events.19.t
+	desc = ME_HOL_events.19.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.19.a
+		add_treasury = -50
+		add_manpower = -3
+		add_mil_power = -25
+		HOL = {
+			country_event = {
+				id = ME_HOL_events.20
+				days = 120
+				random = 60
+			}
+		}
+		ai_chance = { 
+			factor = 10
+			modifier = {
+				factor = 0
+				NOT = {
+					is_at_war = yes
+				}
+			}
+			modifier = {
+				factor = 0.5
+				num_of_loans = 1
+			}
+			modifier = {
+				factor = 0.1
+				num_of_loans = 5
+			}
+		}
+	}
+	option = {
+		name = ME_HOL_events.19.b
+		add_stability = 1
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 1
+				NOT = {
+					is_at_war = yes
+				}
+			}
+		}
+	}
+}
+
+#Low Countries recieve help
+country_event = {
+	id = ME_HOL_events.20
+	title = ME_HOL_events.20.t
+	desc = ME_HOL_events.20.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.20.a
+		add_treasury = 50
+		add_manpower = 1
+		capital_scope = {
+			ROOT = {
+				infantry = PREV
+			}
+		}
+		capital_scope = {
+			ROOT = {
+				infantry = PREV
+			}
+		}
+		add_army_tradition = 5
+		ai_chance = { factor = 100 }
+	}
+}
+
+#Philips of Cleves
+country_event = {
+	id = ME_HOL_events.21
+	title = ME_HOL_events.21.t
+	desc = ME_HOL_events.21.d
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_HOL_events.21.a
+		add_army_tradition = 15
+		define_general = {
+			name = "Phillip of Cleves"
+			shock = 2
+			fire = 3
+			manuever = 3
+			siege = 2
+		}
+		ai_chance = { factor = 100 }
+	}
+}

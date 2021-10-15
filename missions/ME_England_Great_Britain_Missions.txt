@@ -471,7 +471,10 @@ ENG_missions_1_3 = {
 			OR = {
 				current_debate = quartering_of_troops 
 				current_debate = expand_officer_lists 
-				current_debate = expand_the_army
+				current_debate = expand_the_army 
+				has_country_modifier = quartering_of_troops
+				has_country_modifier = expand_officer_lists
+				has_country_modifier = expand_the_army
 			}			
 		}
         effect = {
@@ -491,17 +494,14 @@ ENG_missions_1_3 = {
 			navy_size_percentage = 0.9
 			OR = {
 				current_debate = appoint_a_grand_admiral  
-				current_debate = expand_navy
+				current_debate = expand_navy  
+				has_country_modifier = appoint_a_grand_admiral 
+				has_country_modifier = expand_navy 
 			}
 			naval_reformer = 1
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
-					}
-				}
-				amount = 1
+			OR = {
+				drydock = 1
+				dock = 1
 			}
 		}
         effect = {
@@ -529,23 +529,13 @@ GBR_missions_1_3 = {
         required_missions = { ENG_Royal_Navy }
         position = 24
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
-					}
-				}
-				amount = 10
+			OR = {
+				drydock = 10
+				dock = 10
 			}
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
-					}
-			}
-				amount = 10
+			OR = {
+				shipyard = 10
+				grand_shipyard = 10
 			}
 			num_of_heavy_ship = 20
 		}
@@ -564,16 +554,19 @@ GBR_missions_1_3 = {
 		provinces_to_highlight = {
 			province_id = 4373
 			OR = {
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
 				NOT = { development = 10 }
 				NOT = { owned_by = ROOT }
 			}
 		}
         trigger = {
 			4373 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 				development = 10
 				owned_by = ROOT
@@ -1131,16 +1124,25 @@ ENG_missions_2_2 = {
 			}
 		}
         effect = {
-			colonial_the_carribean = {
-				limit = {
-					country_or_non_sovereign_subject_holds = ROOT
-				}
+			custom_tooltip = ENG_every_province_in_caribbean
+			tooltip = {
 				add_province_modifier = {
 					name = ENG_crown_support
 					duration = -1
 				}
 			}
-			custom_tooltip = ENG_Tooltip.11
+			hidden_effect = {
+				colonial_the_carribean = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_province_modifier = {
+						name = ENG_crown_support
+						duration = -1
+					}
+				}
+			}
+			#custom_tooltip = ENG_Tooltip.11
         }
     }
 }
@@ -1319,23 +1321,13 @@ ENG_missions_2_3 = {
 			}
 		}
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
-					}
-				}
-				amount = 5
+			OR = {
+				drydock = 5
+				dock = 5
 			}
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-						province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
-					}
-			}
-				amount = 5
+			OR = {
+				shipyard = 5
+				grand_shipyard = 5
 			}
 			239 = {
 				owned_by = ROOT
@@ -1374,16 +1366,19 @@ GBR_missions_2_3 = {
 		provinces_to_highlight = {
 			province_id = 234
 			OR = {
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock } }
+				AND = {
+					NOT = { has_building = drydock }
+					NOT = { has_building = dock }
+				}
 				NOT = { development = 10 }
 				NOT = { owned_by = ROOT }
 			}
 		}
         trigger = {
 			234 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+				OR = {
+					has_building = drydock
+					has_building = dock
 				}
 				development = 10
 				owned_by = ROOT
@@ -1873,13 +1868,11 @@ ENG_missions_3_2 = {
 				area = yorkshire_area
 			}
 			province_has_center_of_trade_of_level = 1
-			NOT = { province_has_building_of_group = { group = trade all = yes } }
+			NOT = { has_building = marketplace }
+			NOT = { has_building = trade_depot }
+			NOT = { has_building = stock_exchange }
 		}
-        # This mission is calling for a Marketplace+ in the provinces in England that have Centers of Trade
-		# A custom tooltip was needed as the double negative made this unreadable
         trigger = {
-			custom_trigger_tooltip = {
-				tooltip = mission_market_place_with_asian_traders.t
 			NOT = {
 				any_province = {
 					OR = {
@@ -1892,8 +1885,9 @@ ENG_missions_3_2 = {
 						area = yorkshire_area
 					}
 					province_has_center_of_trade_of_level = 1
-						NOT = {	province_has_building_of_group = { group = trade all = yes } }
-					}	
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
 				}
 			}
 		}
@@ -1931,7 +1925,7 @@ ENG_missions_3_2 = {
 				name = ENG_Exploration
 				duration = 9125
 			}
-			custom_tooltip = ENG_Tooltip.15
+			#custom_tooltip = ENG_Tooltip.15 bb estate :sadhappythonk:
         }
     }
 }
@@ -2291,14 +2285,9 @@ ENG_missions_3_5 = {
         required_missions = { }
         position = 24
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_PRODUCTION_ALL
-						province_has_building_of_group = { group = production all = yes }
-					}
-				}
-				amount = 10
+			OR = {
+				workshop = 10
+				counting_house = 10
 			}
 		}
         effect = {
@@ -3080,7 +3069,8 @@ GBR_missions_4_2 = {
 		provinces_to_highlight = {
 			OR = {
 				area = te_waipounamu_area
-				area = te_ika_a_maui_area
+				area = te_ika_a_maui_hauauru_area 
+				area = te_ika_a_maui_waho_area 
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -3088,8 +3078,8 @@ GBR_missions_4_2 = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 5
 				OR = {
-					area = te_waipounamu_area
-					area = te_ika_a_maui_area
+					area = te_ika_a_maui_hauauru_area 
+					area = te_ika_a_maui_waho_area 
 				}
 			}
 		}
@@ -3107,14 +3097,10 @@ GBR_missions_4_2 = {
 			OR = {
 				AND = {
 					OR = {
-						area = murray_river_area
-						area = western_australia_area
-						area = top_end_area
-						area = southern_australia_area
-						area = eastern_australia_area
-						area = northern_australia_area
+						region = australia_region
 						area = te_waipounamu_area
-						area = te_ika_a_maui_area
+						area = te_ika_a_maui_hauauru_area
+						area = te_ika_a_maui_waho_area
 					}
 				}
 				AND = {
@@ -3147,31 +3133,15 @@ GBR_missions_4_2 = {
 			}
 		}
         trigger = {
-			murray_river_area = { 
+			australia_region = { 
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			western_australia_area = { 
+			te_ika_a_maui_waho_area = { 
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			eastern_australia_area = { 
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			southern_australia_area = { 
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			northern_australia_area = { 
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			top_end_area = { 
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			te_ika_a_maui_area = { 
+			te_ika_a_maui_hauauru_area = { 
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -3217,7 +3187,9 @@ GBR_missions_4_2 = {
 			}
 		}
         effect = {
-			custom_tooltip = ENG_Tooltip.12
+			add_mercantilism = 3
+			add_years_of_income = 1
+			#custom_tooltip = ENG_Tooltip.12
 			if = {
 				limit = {
 					mission_completed = GBR_coromandel
@@ -4128,7 +4100,14 @@ ENG_missions_5_2 = {
 			}
 		}
         effect = {
-			custom_tooltip = ENG_Tooltip.8
+			define_advisor = {
+				type = trader
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.4
+			}
+			#custom_tooltip = ENG_Tooltip.8
         }
     }
 	
@@ -4150,7 +4129,7 @@ ENG_missions_5_2 = {
 				name = ENG_to_east_indies
 				duration = 9125
 			}
-			custom_tooltip = ENG_Tooltip.10
+			#custom_tooltip = ENG_Tooltip.10
         }
     }
 }
@@ -4309,7 +4288,8 @@ GBR_missions_5_2 = {
 			}
 		}
         effect = {
-			custom_tooltip = ENG_Tooltip.9
+			#custom_tooltip = ENG_Tooltip.9
+			add_mil_power = 100
 			if = {
 				limit = {
 					mission_completed = GBR_conquer_tamils

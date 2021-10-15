@@ -1,0 +1,428 @@
+generic_rhenish_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = HES
+			tag = NSA
+			tag = PAL
+			tag = KLE
+			tag = BRG
+			tag = RHN
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield = no
+	
+	rhn_generic_fc = {
+		icon = mission_build_up_to_force_limit
+		required_missions = {  }
+		position = 1
+		trigger = {
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					ai = no
+				}
+				num_of_generals = 1
+			}
+		}
+		effect = {
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	rhn_generic_expand = {
+		icon = mission_cannons_firing
+		required_missions = { rhn_generic_fc }
+		position = 3
+		trigger = {
+			grown_by_development = 25
+			NOT = { average_autonomy_above_min = 25 }
+		}
+		effect = {
+			custom_tooltip = RHN_perma_Claims
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = rhn_generic_centralization
+				duration = 9125
+			}
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+	
+	rhn_generic_unite_rhineland = {
+		icon = mission_unite_home_region
+		required_missions = { rhn_generic_expand }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = lower_rhineland_area
+				area = palatinate_area
+				area = north_rhine_area
+				area = hesse_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = lower_rhineland_area
+					area = palatinate_area
+					area = north_rhine_area
+					area = hesse_area
+				}
+				value = 12
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			custom_tooltip = RHN_remove_nationalism
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						culture = hessian
+					}
+					add_nationalism = -20
+				}
+			}
+			upper_franconia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			franconia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			westphalia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_westphalia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			alsace_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_swabia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_swabia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_rhineland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+generic_rhenish_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = NSA
+			tag = KLE
+			tag = BRG
+			AND = {
+				tag = RHN
+				NOT = {
+					OR = {
+						was_tag = PAL
+						was_tag = HES
+					}
+				}
+			}
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield = no
+	
+	
+	rhn_generic_allies = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 2
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = building_alliances.tooltip
+				num_of_allies = 2
+				calc_true_if = {
+					all_ally = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+					amount = 2
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = "influential_diplomacy"
+				duration = 9125
+			}
+		}
+	}
+	
+	rhn_generic_approval = {
+		icon = me_mission_crown_hre
+		required_missions = { rhn_generic_allies rhn_generic_expand }
+		position = 4
+		trigger = {
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "rhn_imperial_approval"
+				duration = 9125
+			}
+		}
+	}
+	
+}
+
+generic_rhenish_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = NSA
+			tag = KLE
+			tag = BRG
+			AND = {
+				tag = RHN
+				NOT = {
+					OR = {
+						was_tag = PAL
+						was_tag = HES
+					}
+				}
+			}
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield  = no
+
+	rhn_generic_embrace_renaissance = {
+		icon = me_mission_renaissance
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			renaissance = 100
+		}
+		trigger = {
+			has_institution = renaissance
+		}
+		effect = {
+			country_event = { id = ME_Rhenish_Events.1 }
+		}
+	}
+	rhn_generic_splendid = {
+		icon = florentine_renaissance
+		required_missions = { rhn_generic_embrace_renaissance }
+		position = 2
+		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = rhn_a_renaissance_court
+				duration = 9125
+			}
+			if = {
+				limit = {
+					NOT = { has_global_flag = RHN_reward_claimed }
+				}
+				custom_tooltip = RHN_yes
+				4730 = {
+					ROOT = {
+						define_advisor = {
+							type = muscovy_architect
+							name = "Alessandro Pasqualini"
+							skill = 1
+							culture = romagnol
+							religion = catholic
+							location = 4730
+							culture = PREV
+							religion = PREV
+							cost_multiplier = 0.4
+							location = PREV
+						}
+					}
+				}
+			}
+			else = {
+				custom_tooltip = RHN_no
+				tooltip = {
+					4730 = {
+						ROOT = {
+							define_advisor = {
+								type = muscovy_architect
+								name = "Alessandro Pasqualini"
+								skill = 1
+								culture = romagnol
+								religion = catholic
+								location = 4730
+								culture = PREV
+								religion = PREV
+								cost_multiplier = 0.4
+								location = PREV
+							}
+						}
+					}
+				}
+			}
+			set_global_flag = RHN_reward_claimed
+		}
+	}
+}
+
+generic_rhenish_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = NSA
+			tag = KLE
+			tag = BRG
+			AND = {
+				tag = RHN
+				NOT = {
+					OR = {
+						was_tag = PAL
+						was_tag = HES
+					}
+				}
+			}
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield  = no
+	
+	rhn_generic_reformation = {
+		icon = mission_luther_theses
+		required_missions = { rhn_generic_embrace_renaissance }
+		position = 2
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				AND = {
+					religion = catholic
+					check_variable = { which = num_converted_religion value = 1 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RHN_generic_faith
+				duration = 9125
+			}
+		}
+	}
+}

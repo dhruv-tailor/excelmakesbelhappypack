@@ -5,14 +5,12 @@ ENG_UKS_missions_1 = {
 	potential = {
 		OR = {
 			AND = {
-				OR = {
 				tag = ENG
-					tag = GBR
-				}
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 				has_country_flag = ENG_Angevin_Missions
 			}
 			tag = UKS
+			tag = ANV
 		}
 	}
 	has_country_shield  = yes
@@ -35,10 +33,12 @@ ENG_UKS_missions_1 = {
 			poitou_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_core = ROOT
 			}
 			pyrenees_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_core = ROOT
 			}
 		}
         effect = {
@@ -76,11 +76,13 @@ ENG_UKS_missions_1 = {
 			poitou_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_core = ROOT
 				NOT = {	nationalism = 1 }
 			}
 			pyrenees_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_core = ROOT
 				NOT = {	nationalism = 1 }
 			}
 		}
@@ -203,14 +205,12 @@ ENG_UKS_missions_2 = {
 	potential = {
 		OR = {
 			AND = {
-			OR = {
 				tag = ENG
-				tag = GBR
-			}
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 				has_country_flag = ENG_Angevin_Missions
 			}
 			tag = UKS
+			tag = ANV
 		}
 	}
 	has_country_shield  = yes
@@ -397,7 +397,7 @@ ENG_UKS_missions_2 = {
 				name = UKS_monopolized_the_channel
 				duration = 9125
 			}
-			holland_area = {
+			north_brabant_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
@@ -422,14 +422,12 @@ ENG_UKS_missions_3 = {
 	potential = {
 		OR = {
 			AND = {
-			OR = {
 				tag = ENG
-				tag = GBR
-			}
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 				has_country_flag = ENG_Angevin_Missions
 			}
 			tag = UKS
+			tag = ANV
 		}
 	}
 	has_country_shield  = yes
@@ -545,8 +543,19 @@ ENG_UKS_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			201 = {
-				add_shipyard_line = yes
+			4696 = {
+				if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					if = {
+						limit = {
+							has_building = shipyard
+						}
+						remove_building = shipyard
+					}
+					add_building = grand_shipyard
+				}
 			}
         }
     }
@@ -643,6 +652,7 @@ ENG_UKS_missions_3 = {
 				who = FRA
 				value = 190
 			}
+			mission_completed = UKS_Burgundy
 		}
         effect = {
 			custom_tooltip = England_tooltip.17
@@ -664,14 +674,12 @@ ENG_UKS_missions_4 = {
 	potential = {
 		OR = {
 			AND = {
-			OR = {
 				tag = ENG
-				tag = GBR
-			}
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 				has_country_flag = ENG_Angevin_Missions
 			}
 			tag = UKS
+			tag = ANV
 		}
 	}
 	has_country_shield  = yes
@@ -753,8 +761,20 @@ ENG_UKS_missions_4 = {
 					}
 					set_in_empire = no
 				}
+				if = {
+					limit = {
+						NOT = {
+							ROOT = {
+								has_country_flag = UKS_moving
+							}
+						}
+					}
 					change_culture = occitain
 				}
+				else = {
+					change_culture = occitain_UKS
+				}
+			}
 			add_prestige = 10
         }
     }
@@ -767,14 +787,12 @@ ENG_UKS_missions_5 = {
 	potential = {
 		OR = {
 			AND = {
-			OR = {
 				tag = ENG
-				tag = GBR
-			}
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 				has_country_flag = ENG_Angevin_Missions
 			}
 			tag = UKS
+			tag = ANV
 		}
 	}
 	has_country_shield  = yes
@@ -989,7 +1007,10 @@ UKS_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = UKS
+		OR = {
+			tag = UKS
+			tag = ANV
+		}
 	}
 	has_country_shield  = yes
 	
@@ -1019,15 +1040,18 @@ UKS_missions_1 = {
 			province_id = 170
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock } }
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
 			}
 		}
         trigger = {
 			170 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+				OR = {
+					has_building = dock
+					has_building = drydock
 				}
 			}
 		}
@@ -1138,7 +1162,11 @@ UKS_missions_1 = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				is_city = no
 				NOT = { development = 12 }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
         trigger = {
@@ -1146,9 +1174,10 @@ UKS_missions_1 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				is_city = yes
 				development = 12
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
 		}
@@ -1157,7 +1186,19 @@ UKS_missions_1 = {
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = {
+							ROOT = {
+								has_country_flag = UKS_moving
+							}
+						}
+					}
 					change_culture = cosmopolitan_french
+				}
+				else = {
+					change_culture = cosmopolitan_french_UKS
+				}
 				add_province_modifier = {
 					name = UKS_local
 					duration = -1
@@ -1177,7 +1218,10 @@ UKS_missions_1 = {
 				is_city = no
 				NOT = { development = 12 }
 				NOT = { religion = ROOT }
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 			}
 		}
         trigger = {
@@ -1186,9 +1230,9 @@ UKS_missions_1 = {
 				is_city = yes
 				development = 12
 				religion = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+				OR = {
+					has_building = temple
+					has_building = cathedral
 				}
 			}
 		}
@@ -1257,7 +1301,10 @@ UKS_missions_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = UKS
+		OR = {
+			tag = UKS
+			tag = ANV
+		}
 	}
 	has_country_shield  = yes
 	
@@ -1272,22 +1319,25 @@ UKS_missions_2 = {
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
 			}
 		}
         trigger = {
 			4373 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 			}
 			234 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 			}
 		}
@@ -1327,8 +1377,20 @@ UKS_missions_2 = {
 		}
         effect = {
 			4385 = {
-				add_shipyard_line = yes
-				add_dock_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
+				}
+				if = {
+					limit = {
+						NOT = { has_building = dock }
+						NOT = { has_building = drydock }
+					}
+					add_building = dock
+				}
 				add_province_modifier = {
 					name = UKS_naval_port
 					duration = -1
@@ -1500,7 +1562,11 @@ UKS_missions_2 = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				is_city = no
 				NOT = { development = 12 }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
         trigger = {
@@ -1508,9 +1574,10 @@ UKS_missions_2 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				is_city = yes
 				development = 12
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
 		}
@@ -1537,7 +1604,10 @@ UKS_missions_2 = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				is_city = no
 				NOT = { development = 12 }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
 			}
 		}
         trigger = {
@@ -1545,9 +1615,9 @@ UKS_missions_2 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				is_city = yes
 				development = 12
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 			}
 		}
@@ -1574,7 +1644,10 @@ UKS_missions_2 = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				is_city = no
 				NOT = { development = 12 }
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 			}
 		}
         trigger = {
@@ -1582,9 +1655,9 @@ UKS_missions_2 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				is_city = yes
 				development = 12
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+				OR = {
+					has_building = temple
+					has_building = cathedral
 				}
 			}
 		}
@@ -1593,7 +1666,19 @@ UKS_missions_2 = {
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = {
+							ROOT = {
+								has_country_flag = UKS_moving
+							}
+						}
+					}
 					change_culture = cosmopolitan_french
+				}
+				else = {
+					change_culture = cosmopolitan_french_UKS
+				}
 				add_province_modifier = {
 					name = UKS_local
 					duration = -1
@@ -1638,7 +1723,10 @@ UKS_missions_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = UKS
+		OR = {
+			tag = UKS
+			tag = ANV
+		}
 	}
 	has_country_shield  = yes
 	
@@ -1801,14 +1889,30 @@ UKS_missions_3 = {
         effect = {
 			country_event = { id = ME_United_Kingdoms_Events.13 }
 			4370 = {
-				add_university_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_province_modifier = {
 					name = fra_university
 					duration = -1
 				}
 			}
 			237 = {
-				add_university_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_province_modifier = {
 					name = fra_university
 					duration = -1
@@ -2221,7 +2325,10 @@ UKS_missions_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = UKS
+		OR = {
+			tag = UKS
+			tag = ANV
+		}
 	}
 	has_country_shield  = yes
 	
@@ -3088,7 +3195,11 @@ UKS_missions_4 = {
 			province_id = 201
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
         trigger = {
@@ -3111,9 +3222,10 @@ UKS_missions_4 = {
 			light_ship_fraction = 0.25
 			201 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
 		}
@@ -3310,7 +3422,10 @@ UKS_missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = UKS
+		OR = {
+			tag = UKS
+			tag = ANV
+		}
 	}
 	has_country_shield  = yes
 	
@@ -3347,7 +3462,11 @@ UKS_missions_5 = {
 								NOT = { province_has_center_of_trade_of_level = 1 }
 								AND = {
 									owned_by = ROOT
-									province_has_building_of_group = { group = trade all = yes }
+									OR = {
+										has_building = marketplace
+										has_building = trade_depot
+										has_building = stock_exchange
+									}
 								}
 							}
 						}
@@ -3722,21 +3841,27 @@ UKS_missions_5 = {
 			province_id = 4696
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard } }
-				NOT = { province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock } }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
 			}
 		}
         trigger = {
 			galley_fraction = 0.1
 			4696 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_dock
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = dock }
+				OR = {
+					has_building = dock
+					has_building = drydock
 				}
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_NAVY_EOMAT_shipyard
-					province_has_building_of_group = { group = navy equal_or_more_advanced_than = shipyard }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
 				}
 			}
 		}

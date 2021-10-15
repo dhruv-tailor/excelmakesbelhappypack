@@ -1,0 +1,88 @@
+namespace = ME_Ansbach_Events
+
+country_event = { #Margrave War
+	id = ME_Ansbach_Events.1
+	title = ME_Ansbach_Events.1.t
+	desc = ME_Ansbach_Events.1.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	
+	immediate = {
+		#if = {
+		#	limit = {
+		#		exists = WBG
+		#	}
+		#	WBG = {
+		#		save_event_target_as = ANS_target_1
+		#	}
+		#}
+		#else = {
+			pick_best_tags = {
+				1 = yes
+				global_trigger = " primary_culture = franconian
+				NOT = { tag = ROOT }"
+				event_target_name = "ANS_target"
+				scale = "total_development"
+			}
+		#}
+	}
+	major = yes
+	major_trigger = {
+		culture_group = germanic
+	}
+	
+	option = { #dec war
+		name = ME_Ansbach_Events.1.a
+		
+		trigger = {
+			NOT = { 
+				is_subject = yes
+			}
+		}
+		ai_chance = { factor = 100 }
+		
+		if = {
+			limit = {
+				NOT = { 
+					is_subject = yes
+				}
+			}
+			declare_war_with_cb = {	
+				who = event_target:ANS_target_1
+				casus_belli = cb_margrave_war
+			}
+			if = {
+				limit = {
+					ai = yes
+				}
+				every_ally = {
+					limit = {
+						ai = yes
+					}
+					join_all_offensive_wars_of = ROOT
+				}
+			}
+		}
+		else = {
+			add_casus_belli = {
+				target = event_target:ANS_target_1
+				type = cb_margrave_war
+				months = 120
+			}
+		}
+	}
+	
+	option = { #Spend it elsewhere
+		name = ME_Ansbach_Events.1.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_casus_belli = {
+			target = event_target:ANS_target_1
+			type = cb_margrave_war
+			months = 120
+		}
+	}
+}

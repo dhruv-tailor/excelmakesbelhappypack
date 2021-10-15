@@ -1,0 +1,101 @@
+pte_spawn_reformation_center_in_capital = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0.325
+	prestige_base = 0.25
+	ae_base = 0
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 0.0
+		owner_keeps = 0.5
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = 100
+	requires_demand_independence = no
+	is_make_subject = no
+	requires_is_allowed = no
+
+	is_visible = {
+		current_age = age_of_reformation
+		OR = {
+			religion = protestant
+			religion = reformed
+			religion = anglican
+			religion = hussite
+		}
+		NOT = { religion = FROM }
+		FROM = {
+			num_of_cities = 2
+			capital_scope = {
+				continent = europe
+				NOT = { province_id = 118 }
+				is_reformation_center = no
+				is_island = no
+				expelling_minorities = no
+				development = 10
+				NOT = {
+					any_neighbor_province = {
+						is_reformation_center = yes
+					}
+				}
+				NOT = {
+					area_for_scope_province = {
+						is_reformation_center = yes
+						religion = ROOT
+					}
+				}
+			}
+		}
+		NOT = {
+			calc_true_if = {
+				all_province = {
+					religion = ROOT
+					is_reformation_center = yes
+				}
+				amount = 5
+			}
+		}
+	}
+	is_allowed = {
+		has_idea = deus_vult
+	}
+	effect = {
+		FROM = {
+			capital_scope = {
+				change_religion = ROOT
+				add_reform_center = ROOT
+				if = {
+					limit = {
+						has_province_modifier = religious_zeal_at_conv
+					}
+					extend_province_modifier = { name = religious_zeal_at_conv duration = 1825 }
+				}
+				else = {
+					add_province_modifier = { name = religious_zeal_at_conv duration = 1825 }
+				}
+			}
+		}
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			is_neighbor_of = FROM
+			NOT = {
+				calc_true_if = {
+					all_province = {
+						religion = ROOT
+						is_reformation_center = yes
+					}
+					amount = 3
+				}
+			}
+		}
+	}
+}

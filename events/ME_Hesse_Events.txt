@@ -1,0 +1,420 @@
+namespace = ME_Hesse_Events
+
+country_event = {
+	id = ME_Hesse_Events.1
+	title = ME_Hesse_Events.1.t
+	desc = ME_Hesse_Events.1.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		hre_religion = catholic
+		is_subject = no
+		is_part_of_hre = yes
+		religion = protestant
+		OR = {
+			AND = {
+				had_global_flag = {
+					flag = reformation_started
+					days = 5475
+				}
+				if = {
+					limit = {
+						exists = HES
+						HES = {
+							has_country_flag = HES_guaranteed
+							religion = protestant
+						}
+					}
+					tag = HES
+				}
+				calc_true_if = {
+					all_country = {
+						is_part_of_hre = yes
+						religion = protestant
+					}
+					amount = 5
+				}
+			}
+			has_country_flag = HES_proposed_leader #for "second attempt" tags
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	option = {
+		name = "ME_Hesse_Events.1.a"
+		
+		ai_chance = { factor = 100 }
+		
+		set_country_flag = HES_leader
+		set_country_flag = HES_member
+		clr_country_flag = HES_proposed_leader
+		every_country = {
+			limit = {
+				is_part_of_hre = yes
+				religion = protestant
+				NOT = { is_subject = yes }
+				NOT = { has_country_flag = HES_member }
+			}
+			set_country_flag = HES_invited
+			country_event = { id = ME_Hesse_Events.2 days = 30 random = 330 }
+		}
+		emperor = {
+			country_event = { id = ME_Hesse_Events.3 days = 730 }
+		}
+		set_ai_attitude = {
+			attitude = attitude_hostile
+			who = emperor
+			locked = no
+		}
+		break_alliance_with = { who = emperor }
+		HES_league_tooltip = yes
+	}
+	option = {
+		name = "ME_Hesse_Events.1.b"
+	
+		ai_chance = { factor = 0 }
+		
+		set_country_flag = HES_refused
+		hidden_effect = {
+			pick_best_tags = {
+				1 = yes
+				global_trigger = " is_part_of_hre = yes religion = protestant NOT = { has_country_flag = HES_refused } NOT = { is_subject = yes }"
+				event_target_name = "HES_target"
+				scale = "total_development"
+			}
+			event_target:HES_target_1 = {
+				set_country_flag = HES_proposed_leader
+				country_event = { id = ME_Hesse_Events.1 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.2
+	title = ME_Hesse_Events.2.t
+	desc = ME_Hesse_Events.2.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	option = {
+		name = "ME_Hesse_Events.2.a"
+		
+		ai_chance = { factor = 100 }
+		
+		every_country = {
+			limit = {
+				has_country_flag = HES_invited
+			}
+			custom_tooltip = HES_has_been_invited
+		}
+		every_country = {
+			limit = {
+				has_country_flag = HES_member
+			}
+			custom_tooltip = HES_is_part
+		}
+		set_ai_attitude = {
+			attitude = attitude_hostile
+			who = emperor
+			locked = no
+		}
+		set_country_flag = HES_member
+		HES_league_tooltip = yes
+		break_alliance_with = { who = emperor }
+	}
+	option = {
+		name = "ME_Hesse_Events.2.b"
+	
+		ai_chance = { factor = 0 }
+		
+		set_country_flag = HES_refused
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.3
+	title = ME_Hesse_Events.3.t
+	desc = ME_Hesse_Events.3.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	trigger = {
+		any_country = {
+			has_country_flag = HES_member
+		}
+		is_emperor = yes
+	}
+	
+	immediate = {
+		set_country_flag = HES_emperor
+	}
+	option = {
+		name = "ME_Hesse_Events.3.a"
+		
+		ai_chance = { factor = 100 }
+		
+		set_global_flag = HES_war
+		every_country = {
+			limit = {
+				has_country_flag = HES_member
+			}
+			custom_tooltip = HES_is_part
+		}
+		if = {
+			limit = {
+				any_country = {
+					has_country_flag = HES_leader
+				}
+			}
+			random_country = {
+				limit = {
+					has_country_flag = HES_leader
+				}
+				ROOT = {
+					declare_war_with_cb = {
+						who = PREV
+						casus_belli = cb_hesse_schmalkaldic_war
+					}
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							has_country_flag = HES_member
+						}
+						join_all_defensive_wars_of = PREV
+					}
+				}
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					has_country_flag = HES_member
+				}
+				set_country_flag = HES_leader #the leader stopped existing, get a new one for PO
+				ROOT = {
+					declare_war_with_cb = {
+						who = PREV
+						casus_belli = cb_hesse_schmalkaldic_war
+					} #Emp declare war
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							has_country_flag = HES_member
+						}
+						join_all_defensive_wars_of = PREV
+					} #force all nations that declared to be side of the schmalkaldic war to join the war
+				}
+			}
+		}
+		custom_tooltip = HES_if_we_win #tooltips
+		tooltip = {
+			HES_loss_effect = yes
+		}
+		custom_tooltip = HES_if_we_do_not_enforce
+		tooltip = {
+			HES_victory_effect = yes
+		}
+	}
+	option = {
+		name = "ME_Hesse_Events.3.b"
+	
+		ai_chance = { factor = 0 }
+		
+		HES_victory_effect = yes
+		HES_disband_league = yes
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.4
+	title = ME_Hesse_Events.4.t #Empire loss
+	desc = ME_Hesse_Events.4.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		has_global_flag = HES_war
+		is_at_war = no
+		has_country_flag = HES_emperor
+	}
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	option = {
+		name = "ME_Hesse_Events.4.a"
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HES_we_have_not_enforced_peace
+		HES_victory_effect = yes
+		HES_disband_league = yes
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.5
+	title = ME_Hesse_Events.5.t #Empire win
+	desc = ME_Hesse_Events.5.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	fire_only_once = yes
+	
+	option = {
+		name = "ME_Hesse_Events.5.a"
+		
+		ai_chance = { factor = 1 }
+		
+		HES_loss_effect = yes
+		HES_disband_league = yes
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.6
+	title = ME_Hesse_Events.6.t #Emperor Stops Existing event
+	desc = ME_Hesse_Events.6.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		always = no
+	}
+	
+	
+	option = {
+		name = "ME_Hesse_Events.6.a"
+		
+		ai_chance = { factor = 1 }
+		
+		HES_disband_league = yes
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.10
+	title = ME_Hesse_Events.10.t
+	desc = ME_Hesse_Events.10.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	option = {
+		name = "ME_Hesse_Events.10.a"
+		
+		ai_chance = { factor = 0.7 }
+		
+		custom_tooltip = HES_every_province_loyalty
+		hidden_effect = {
+			every_province = {
+				limit = {
+					is_part_of_hre = yes
+					religion = protestant
+					owner = {
+						religion = reformed 
+					}
+				}
+				add_unrest = -5
+			}
+			every_province = {
+				limit = {
+					is_part_of_hre = yes
+					religion = reformed
+					owner = {
+						religion = protestant 
+					}
+				}
+				add_unrest = -5
+			}
+			every_country = {
+				limit = {
+					is_part_of_hre = yes
+					religion = protestant
+				}
+				every_country = {
+					limit = {
+						is_part_of_hre = yes
+						religion = reformed
+					}
+					add_opinion = {
+						who = PREV
+						modifier = HES_marburg_colloquy_successful
+					}
+					reverse_add_opinion = {
+						who = PREV
+						modifier = HES_marburg_colloquy_successful
+					}
+				}
+			}
+		}
+	}
+	option = {
+		name = "ME_Hesse_Events.10.b"
+	
+		ai_chance = { factor = 0.3 }
+		
+		custom_tooltip = HES_every_protestant
+		tooltip = {
+			add_church_power = 75
+			add_fervor = 75
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_part_of_hre = yes
+					religion = protestant
+				}
+				add_church_power = 75
+			}
+			every_country = {
+				limit = {
+					is_part_of_hre = yes
+					religion = reformed
+				}
+				add_fervor = 75
+			}
+		}
+	}
+}

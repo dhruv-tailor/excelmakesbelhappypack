@@ -1,0 +1,1256 @@
+BRA_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	BRA_duchy_of_prussia = {
+		icon = the_balance_of_power
+		required_missions = { BRA_neumark }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				senior_union_with = PRU
+				41 = { owned_by = ROOT }
+			}
+			has_dip_advisor = yes
+			diplomatic_reputation = 2
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						senior_union_with = PRU
+					}
+					country_event = { id = ME_Prussia_Events.31 } #Fate of the Prussian Duchy
+				}
+				else = {
+					add_country_modifier = {
+						name = BRA_prussian_legacy
+						duration = 7300
+					}
+				}
+			}
+			custom_tooltip = PRU_if_we_have_secured
+			tooltip = {
+				country_event = { id = ME_Prussia_Events.31 }
+			}
+			custom_tooltip = PRU_else_we_get_prussian_legacy
+			tooltip = {
+				add_country_modifier = {
+					name = BRA_prussian_legacy
+					duration = 7300
+				}
+			}		
+		}
+	}
+	BRA_renaissance = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 3
+		trigger = {
+			OR = {
+				has_institution = renaissance
+				artist = 2
+				philosopher = 2
+			}
+		}
+		effect = {
+			country_event = { id = ME_Prussia_Events.21 } #Kammergericht
+			#set_country_flag = BRA_constitutio
+			if = {
+				limit = {
+					capital_scope = {
+						NOT = { renaissance = 100 }
+					}
+				}
+				capital_scope = { 
+					add_institution_embracement = {
+						which = renaissance
+						value = 40
+					}
+				}
+			}
+		}
+	}
+
+	BRA_privy_council = {
+		icon = Control_Junkers
+		required_missions = { BRA_renaissance }
+		position = 4
+		trigger = {
+			OR = {
+				has_idea = margrave_council
+				AND = {
+					has_adm_advisor = yes
+					has_dip_advisor = yes
+					has_mil_advisor = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_geheimer_rat
+				duration = 10950
+			}
+		}
+	}
+}
+BRA_missions_1_franconia = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		dynasty = "von Hohenzollern"
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	BRA_hohenzollerns_in_franconia = {
+		icon = ansbach_succession
+		required_missions = { }
+		position = 5
+		trigger = {
+			treasury = 100
+			if = {
+				limit = {
+					FKN = {
+						dynasty = "von Hohenzollern"
+					}
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = FKN
+						value = 100
+					}
+					marriage_with = FKN
+					alliance_with = FKN
+					senior_union_with = FKN
+				}
+			}
+			else_if = {
+				limit = {
+					ANS = {
+						dynasty = "von Hohenzollern"
+					}
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = ANS
+						value = 100
+					}
+					marriage_with = ANS
+					alliance_with = ANS
+					senior_union_with = ANS
+				}
+			}
+			else_if = {
+				limit = {
+					BYT = {
+						dynasty = "von Hohenzollern"
+					}
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = BYT
+						value = 100
+					}
+					marriage_with = BYT
+					alliance_with = BYT
+					senior_union_with = BYT
+				}
+			}
+			else = {
+				OR = {
+					franconia_area = {
+						owner = { 
+							dynasty = "von Hohenzollern"
+							OR = {
+								tag = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+					upper_franconia_area = {
+						owner = { 
+							dynasty = "von Hohenzollern"
+							OR = {
+								tag = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					any_country = {  #performance sry!
+						dynasty = "von Hohenzollern"
+						capital_scope = {
+							OR = {
+								area = franconia_area
+								area = upper_franconia_area
+							}
+						}
+					}
+				}
+				country_event = { id = ME_Prussia_Events.8 } #Promoting Franconia
+			}
+			add_country_modifier = {
+				name = BRA_nurturing_kinsmen
+				duration = 7300
+			}
+		}
+	}
+	BRA_hohenzollern_domination = {
+		icon = mission_eastern_european_city
+		required_missions = { BRA_hohenzollerns_in_franconia }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = franconia_area
+				area = upper_franconia_area
+			}
+			NOT = {
+				owner = { dynasty = "von Hohenzollern" }
+			}
+		}
+		trigger = {
+			upper_franconia_area = {
+				type = all
+				owner = { dynasty = "von Hohenzollern" }
+			}
+			franconia_area = {
+				type = all
+				owner = { dynasty = "von Hohenzollern" }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_hohenzollern_hegemony
+				duration = 9125
+			}
+			every_country = {
+				limit = {
+					is_subject = no
+					has_country_flag = BRA_supported_the_hohenzollern_state
+				}
+				country_event = { id = ME_Prussia_Events.9 }
+			}
+		}
+	}
+}
+
+BRA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	BRA_neumark = {
+		icon = catholic_confraternity
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			area = neumark_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				grown_by_development = 15
+				neumark_area = { 
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			4747 = {
+				add_province_modifier = {
+					name = BRA_neumark_province
+					duration = 7300
+				}
+			}
+			49 = {
+				add_province_modifier = {
+					name = BRA_neumark_province
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {					
+						NOT = { country_or_non_sovereign_subject_holds = 4747 }
+					}
+					4747 = {
+						remove_province_modifier = BRA_neumark_province
+						if = {
+							limit = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+				}
+				if = {
+					limit = {					
+						NOT = { country_or_non_sovereign_subject_holds = 49 }
+					}
+					49 = {
+						remove_province_modifier = BRA_neumark_province
+						if = {
+							limit = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+				}
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hinter_pommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	BRA_pomerania = {
+		icon = return_visby_to_the_league
+		required_missions = { BRA_neumark }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = hinter_pommern_area
+				area = vorpommern_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = hinter_pommern_area
+					area = vorpommern_area
+				}
+				value = 4
+			}
+		}
+		effect = {
+			custom_tooltip = BRA_prenzlau
+			tooltip = {
+				country_event = { id = ME_Prussia_Events.7 }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						WOL = { is_subject_of = ROOT }
+						STE = { is_subject_of = ROOT }
+						NOT = {
+							STE = { ai = no }
+							WOL = { ai = no }
+						}
+					}
+					country_event = { id = ME_Prussia_Events.7 } #Treaty of Prenzlau
+				}
+			}
+			add_prestige_or_monarch_power = { amount = 20 }
+			mecklenburg_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_prussia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	BRA_mecklenburg = {
+		icon = unite_the_league
+		required_missions = { BRA_pomerania }
+		position = 3
+		provinces_to_highlight = {
+			area = mecklenburg_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			mecklenburg_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			45 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 20
+					key = BRA_successor_to_league
+				}
+			}
+			45 = {
+				add_or_upgrade_trade_building = yes
+			}
+		}
+	}
+	BRA_winds_of_reformation = {
+		icon = victor_for_the_true_faith
+		required_missions = { BRA_renaissance }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = { #we usually add catholicism, but, really? Catholicism as Brandenburg?
+				religion = protestant
+				religion = reformed
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_kirchenordnung
+				duration = 9125
+			}
+			custom_tooltip = POM_FOR_EVERY_STAB
+			hidden_effect = {
+				trigger_switch = {
+					on_trigger = stability
+					3 = {
+						add_church_power = 75
+						add_fervor = 75
+					}
+					2 = {
+						add_church_power = 50
+						add_fervor = 50
+					}
+					1 = {
+						add_church_power = 25
+						add_fervor = 25
+					}
+				}
+			}
+		}
+	}
+	BRA_religious_unity = {
+		icon = spread_piety
+		required_missions = { BRA_winds_of_reformation }
+		position = 5
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			OR = {
+				religious_unity = 0.85
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = PRU_OUR_TOLERANCE_OF_REF
+						reformed = 2
+					}
+					custom_trigger_tooltip = {
+						tooltip = PRU_OUR_TOLERANCE_OF_PROT
+						protestant = 2
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_protestant_power
+				duration = 9125
+			}
+		}
+	}
+	BRA_army_reform = {
+		icon = army_reforms
+		required_missions = { BRA_prussian_ascendance }
+		position = 6
+		trigger = {
+			has_mil_advisor = yes
+			OR = {
+				has_leader_with = {
+					fire = 3
+				}
+				has_leader_with = {
+					shock = 3
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = brapru_army_reforms_1 }
+				}
+				set_country_flag = brapru_army_reforms_1
+				country_event = { id = flavor_brapru.2 }
+			}
+			else = {
+				add_mil_power = 100
+				add_army_tradition_or_mil_power = { amount = 10 }
+				add_yearly_manpower = 0.5
+			}
+		}
+	}
+}
+
+BRA_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+
+	BRA_project_power = {
+		icon = electorate_of_brandenburg
+		required_missions = { BRA_dominance_in_the_circle BRA_neumark }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				num_of_war_reparations = 3
+				custom_trigger_tooltip = {
+					tooltip = obj_humiliate_rival_tooltip
+					has_country_flag = humiliated_rival
+				}
+				power_projection = 75
+			}
+		}
+		effect = {
+			custom_tooltip = BRA_for_every_war_reparations_15_dip
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_war_reparations = 5
+					}
+					add_dip_power = 75
+				}
+				else_if = {
+					limit = {
+						num_of_war_reparations = 1
+					}
+					export_to_variable = {
+						which = BRA_dip_amount
+						value = trigger_value:num_of_war_reparations
+					}
+					while = {
+						limit = {
+							check_variable = {
+								which = BRA_dip_amount
+								value = 1
+							}
+						}
+						subtract_variable = {
+							which = BRA_dip_amount
+							value = 1
+						}
+						add_dip_power = 15
+					}
+				}
+				if = {
+					limit = {
+						has_country_flag = humiliated_rival
+					}
+					add_mil_power = 50
+				}
+			}
+			add_country_modifier = {
+				name = BRA_hegemon
+				duration = 14600
+			}
+		}
+	}
+	BRA_prussia = {
+		icon = mission_unite_home_region
+		required_missions = { BRA_pomerania }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = west_prussia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				tag = PRU
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with  = {
+					OR = {
+						area = east_prussia_area
+						area = west_prussia_area
+					}
+					value = 4
+				}
+			}
+		}
+		effect = {
+			east_prussia_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_local_autonomy = -25
+			}
+			west_prussia_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_local_autonomy = -25
+			}
+			add_accepted_culture_or_dip_power = { culture = prussian }
+			if = {
+				limit = {
+					tag = BRA
+				}
+				override_country_name = BRAPRU
+			}
+		}
+	}
+	BRA_prussian_ascendance = {
+		icon = an_army_with_a_state
+		required_missions = { BRA_prussia }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = west_prussia_area
+			}
+			OR = {
+				local_autonomy_above_min = 10
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				tag = PRU
+				AND = {
+					east_prussia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+						NOT = { local_autonomy_above_min = 10 }
+					}
+					west_prussia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+						NOT = { local_autonomy_above_min = 10 }
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { tag = PRU }
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = BRA_prussian_ambition
+						duration = -1
+					}
+				}
+			}
+			else = {
+				hidden_effect = {
+					add_country_modifier = {
+						name = BRA_prussian_ambition_2
+						duration = 5475
+					}
+				}
+			}
+			custom_tooltip = BRA_Prussian_modifier
+			complete_prussian_ascendance_missions = yes
+		}
+	}
+}
+
+BRA_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+	BRA_dominance_in_the_circle = {
+		icon = mission_unite_home_region
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			has_dip_advisor = yes
+			variable_arithmetic_trigger = {
+				custom_tooltip = BRA_larger_army
+				export_to_variable = {
+					variable_name = BRA_SAX_Army
+					value = army_size
+					who = SAX
+				}
+				export_to_variable = {
+					variable_name = BRA_THU_Army
+					value = army_size
+					who = THU
+				}
+				export_to_variable = {
+					variable_name = BRA_BRA_Army
+					value = army_size
+					who = BRA
+				}
+				change_variable = {            
+					which = BRA_SAX_Army
+					which = BRA_THU_Army
+				}
+				multiply_variable = {
+					which = BRA_SAX_Army
+					value = 1.5
+				}
+				check_variable = {
+					which = BRA_BRA_Army
+					which = BRA_SAX_Army
+				}
+			}
+		}
+		effect = {
+			thuringia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			silesia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lusatia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = BRA_controlling_the_circle
+				duration = 7300
+			}
+		}
+	}
+	BRA_fate_of_saxony = {
+		icon = avoid_fragmentation
+		required_missions = { BRA_dominance_in_the_circle }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				owned_by = SAX
+				owned_by = THU
+			}
+			NOT = {
+				ROOT = { mission_completed = BRA_fate_of_saxony }
+			}
+		}
+		trigger = {
+			OR = {
+				alliance_with = SAX
+				alliance_with = THU
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					OR = {
+						area = thuringia_area
+						area = south_saxony_area
+					}
+					value = 4
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						alliance_with = SAX
+					}
+					add_dip_power = 50
+					if = {
+						limit = {
+							any_owned_province = {
+								any_neighbor_province = {
+									owned_by = SAX
+								}
+							}
+						}
+						random_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = SAX
+								}
+							}
+							add_province_modifier = {
+								name = BRA_saxon_trading_company
+								duration = 10950
+							}
+							random_neighbor_province = {
+								limit = {
+									owned_by = SAX
+								}
+								add_province_modifier = {
+									name = BRA_saxon_trading_company
+									duration = 10950
+								}
+							}
+						}
+					}
+					else = {
+						add_mercantilism = 5
+					}
+				}
+				else_if = {
+					limit = {
+						alliance_with = THU
+					}
+					add_dip_power = 50
+					if = {
+						limit = {
+							any_owned_province = {
+								any_neighbor_province = {
+									owned_by = THU
+								}
+							}
+						}
+						random_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = THU
+								}
+							}
+							add_province_modifier = {
+								name = BRA_saxon_trading_company
+								duration = 10950
+							}
+							random_neighbor_province = {
+								limit = {
+									owned_by = THU
+								}
+								add_province_modifier = {
+									name = BRA_saxon_trading_company
+									duration = 10950
+								}
+							}
+						}
+					}
+					else = {
+						add_mercantilism = 5
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = BRA_absolute_upper_saxon_leader
+						duration = 7300
+					}
+					add_adm_power = 50
+				}	
+			}
+			custom_tooltip = BRA_rewards_when_alliance
+			custom_tooltip = BRA_higher_chance_to_inherit_saxony
+			tooltip = {
+				add_dip_power = 50
+			}
+			custom_tooltip = BRA_random_province_on_border_with_saxony
+			tooltip = {
+				add_province_modifier = {
+					name = BRA_saxon_trading_company
+					duration = 10950
+				}
+			}
+			custom_tooltip = BRA_saxon_extra_comments
+			custom_tooltip = BRA_rewards_when_conquest
+			tooltip = {
+				add_mil_power = 50
+				add_country_modifier = {
+					name = BRA_absolute_upper_saxon_leader
+					duration = 7300
+				}
+			}
+		}
+	}
+	BRA_burghers_in_check = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 50
+			NOT = {
+				OR = {
+					num_of_times_improved = 3
+					owned_by = ROOT
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+				50 = {
+					owned_by = ROOT
+					num_of_times_improved = 3
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_firm_control
+				duration = 10950
+			}
+		}
+	}
+	BRA_universita_viadrina = {
+		icon = wittenberg_university
+		required_missions = { BRA_concluding_the_transition }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2969
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = university }
+					NOT = { num_of_times_improved = 13 }
+				}
+			}
+		}
+		trigger = {
+			2969 = {
+				owned_by = ROOT
+				OR = {
+					has_building = university
+					num_of_times_improved = 13
+				}
+			}
+		}
+		effect = {
+			2969 = {
+				add_or_upgrade_university_building = yes
+				add_province_modifier = {
+					name = BRA_universita_viadrina_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+BRA_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = BRA
+			AND = {
+				was_tag = BRA
+				tag = PRU
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	BRA_political_dynasty = {
+		icon = spread_the_von_wettins
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owner = {
+				NOT = { tag = BRA }
+				OR = {
+					NOT = { alliance_with = ROOT }
+					NOT = { marriage_with = ROOT }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_royal_marriages = 4
+				num_of_allies = 4
+			}
+		}
+		effect = {
+			set_country_flag = BRA_extra_dip_slot
+			custom_tooltip = BRA_extra_dip_slot_tt			
+		}
+	}
+	BRA_magdeburg = {
+		icon = mission_have_two_subjects
+		required_missions = { BRA_political_dynasty BRA_dominance_in_the_circle }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				52 = { owned_by = ROOT }
+				AND = { 
+					alliance_with = MAG
+					reverse_has_opinion = {
+						who = MAG
+						value = 150
+					}
+					if = {
+						limit = {
+							ai = no #booohoo ai stupid
+						}
+						has_guaranteed = MAG
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = BRA_if_completed_by_conquest
+			tooltip = {
+				add_prestige_or_monarch_power = { amount = 15 }
+				add_papal_influence = 40
+			}
+			custom_tooltip = BRA_rewards_when_alliance
+			tooltip = { 
+				country_event = { id = ME_Prussia_Events.1 }
+			}
+			custom_tooltip = BRA_MAGDEBURG_VASSALIZATION
+			hidden_effect = {
+				if = {
+					limit = {
+						52 = { owned_by = ROOT }
+					}
+					add_prestige_or_monarch_power = { amount = 15 }
+					add_papal_influence = 40
+				}
+				else = {
+					country_event = { id = ME_Prussia_Events.1 }
+					set_country_flag = BRA_recipient
+				}
+			}
+			
+			#Tooltip for the event allowing for vassalization
+			custom_tooltip = BRA_ROOT
+			custom_tooltip = BRA_von_Hohenzollern_ROOT
+			custom_tooltip = BRA_religion_ROOT
+			custom_tooltip = BRA_MAG
+			custom_tooltip = BRA_von_Hohenzollern_MAG
+			custom_tooltip = BRA_religion_MAG
+		}
+	}
+	BRA_irontooth = {
+		icon = me_mission_brandenburg_irontooth
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active  = { mod = governments }
+				}
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					custom_trigger_tooltip = {
+						tooltip = BRA_dealt_with_robber_barons
+						AND = {
+							has_country_flag = BRA_dealing_with_robber_barons
+							NOT = { num_of_rebel_armies = 1 }
+						}
+					}
+					has_reform = order_of_the_swan_reform
+				}
+			}
+			else = {
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					custom_trigger_tooltip = {
+						tooltip = BRA_dealt_with_robber_barons
+						AND = {
+							has_country_flag = BRA_dealing_with_robber_barons
+							NOT = { num_of_rebel_armies = 1 }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					current_age = age_of_discovery
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = BRA_schwanenorden
+						duration = -1 #removed in age of reformation
+					}
+				}
+				custom_tooltip = BRA_schwanenorden_modifier
+			}
+			else = {
+				add_country_modifier = {
+					name = BRA_tamed_the_nobility
+					duration = 9125
+				}
+			}
+		}
+	}
+	BRA_concluding_the_transition = {
+		icon = public_works
+		required_missions = { BRA_burghers_in_check BRA_irontooth }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 50
+			NOT = {
+				AND = {
+					owned_by = ROOT
+					OR = {
+						num_of_buildings_in_province = 3
+						num_of_times_improved = 8
+					}
+				}
+			}
+		}
+		trigger = {
+			50 = {
+				owned_by = ROOT
+				OR = {
+					num_of_buildings_in_province = 3
+					num_of_times_improved = 9
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = BRA_new_lords_of_brandenburg
+				duration = 9125
+			}
+			add_stability_or_adm_power = yes
+			country_event = { id = ME_Prussia_Events.18 } 
+		}
+	}
+	BRA_kreditwerk = {
+		icon = dominant_economy
+		required_missions = { BRA_concluding_the_transition }
+		position = 6
+		trigger = {
+			NOT = { num_of_loans = 1 }
+			OR = {
+				master_of_mint = 1
+				treasurer = 1
+			}
+			calc_true_if = {
+				amount = 2
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Prussia_Events.30 } #Kreditwerk
+		}
+	}
+}

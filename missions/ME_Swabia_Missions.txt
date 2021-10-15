@@ -1272,7 +1272,31 @@ SWA_CON_missions_1 = {
 		}
         effect = {
 			1872 = {
-				add_fort_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+						NOT = { has_construction = missionary }
+						NOT = { has_construction = culture }
+						NOT = { has_construction = core }
+						NOT = { has_construction = building }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else = {
+					add_base_manpower = 2
+				}
 			}
 		}
     }
@@ -1286,22 +1310,47 @@ SWA_CON_missions_1 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { development = 21 }
-				NOT = { province_has_building_of_group = { group = trade all = yes } }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
 		trigger = {
 			1868 = {
 				owned_by = ROOT
 				development = 21
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TRADE_ALL
-					province_has_building_of_group = { group = trade all = yes }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
 			}
 		}
         effect = {
 			1868 = {
-				add_marketplace_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = stock_exchange }
+					}
+					if = {
+						limit = {
+							has_building = marketplace
+						}
+						remove_building = marketplace
+					}
+					if = {
+						limit = {
+							has_building = trade_depot
+						}
+						remove_building = trade_depot
+					}
+					add_building = stock_exchange
+				}
+				else = {
+					add_base_production = 1
+				}
 			}
 			add_prestige = 25
 		}
@@ -1343,16 +1392,23 @@ SWA_CON_missions_1 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { base_manpower = 6 }
-				NOT = { province_has_building_of_group = { group = defense all = yes } }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
 		}
 		trigger = {
 			75 = {
 				owned_by = ROOT
 				base_manpower = 6
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
-					province_has_building_of_group = { group = defense all = yes }
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
 			}
 		}
@@ -1397,7 +1453,15 @@ SWA_CON_missions_2 = {
 		}
         effect = {
 			72 = {
-				add_university_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_province_modifier = {
 					name = fra_university
 					duration = -1
@@ -1442,16 +1506,23 @@ SWA_CON_missions_2 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { base_manpower = 6 }
-				NOT = { province_has_building_of_group = { group = defense all = yes } }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
 		}
 		trigger = {
 			1872 = {
 				owned_by = ROOT
 				base_manpower = 6
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
-					province_has_building_of_group = { group = defense all = yes }
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
 			}
 		}
@@ -1472,9 +1543,11 @@ SWA_CON_missions_2 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
-						province_has_building_of_group = { group = defense all = yes }
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
 					}
 				}
 				amount = 3
@@ -1507,13 +1580,13 @@ SWA_CON_missions_3 = {
 		provinces_to_highlight = {
 			owned_by = ROOT
 			OR = {
-				devastation = 0.1
+				devastation = 1
 				local_autonomy_above_min = 0.1
 			}
 		}
 		trigger = {
 			all_owned_province = {
-				NOT = { devastation = 0.1 }
+				NOT = { devastation = 1 }
 				NOT = { local_autonomy_above_min = 0.1 }
 			}
 		}
@@ -1721,16 +1794,15 @@ SWA_CON_missions_5 = {
         position = 4
 		provinces_to_highlight = {
 			owned_by = ROOT
-			NOT = { province_has_building_of_group = { group = government all = yes } }
+			NOT = { has_building = courthouse }
+			NOT = { has_building = town_hall }
 			NOT = { development = 18 }
 		}
 		trigger = {
 			all_owned_province = {
 				OR = {
-					custom_trigger_tooltip = {
-						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_GOVERNMENT_ALL
-						province_has_building_of_group = { group = government all = yes }
-					}
+					has_building = courthouse
+					has_building = town_hall
 					development = 18
 				}
 			}
@@ -1741,9 +1813,10 @@ SWA_CON_missions_5 = {
 			add_mil_power = 50
 			every_owned_province = {
 				limit = {
-					can_courthouse_line = yes
+					has_building = courthouse
 				}
-				add_courthouse_line = yes
+				remove_building = courthouse
+				add_building = town_hall
 			}
 		}
     }

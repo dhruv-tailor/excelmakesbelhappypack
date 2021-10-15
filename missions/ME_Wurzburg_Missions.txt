@@ -3,12 +3,18 @@ WBG_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = WBG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = WBG
+			AND = {
+				was_tag = WBG
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
 	
-	wbg_papal = {
+	WBG_papal = {
 		icon = mission_religious
 		trigger = {
 			if = {
@@ -21,7 +27,7 @@ WBG_missions_1 = {
 				}
 			}
 			else = {
-				is_papal_controller = yes
+				papal_influence = 50
 			}
 		}
 		effect = {
@@ -30,56 +36,72 @@ WBG_missions_1 = {
 		}
 	}
 	
-	wbg_bishoprics = {
-		icon = mission_alliances
-		required_missions = { wbg_papal }
+	WBG_bishoprics = {
+		icon = catholic_confraternity
+		required_missions = { WBG_papal }
 		position = 3
 		trigger = {
-			OR = {
-				reverse_has_opinion = {
-					who = KOL
-					value = 100
+			if = {
+				limit = {
+					ai = yes
 				}
-				reverse_has_opinion = {
-					who = TRI
-					value = 100
-				}
-				AND = {
+				any_ally = {
 					government = theocracy
-					all_country = {
-						OR = {
-							NOT = { is_part_of_hre = yes }
-							NOT = { government = theocracy }
-							hidden_trigger = { tag = ROOT }
-						}
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_ally = {
+						government = theocracy
 					}
+					amount = 2
 				}
 			}
 		}
 		effect = {
 			add_dip_power = 50
 			add_country_modifier = {
-				name = wbg_diplomacy
+				name = WBG_diplomacy
 				duration = 10950
 			}
 		}
 	}
 	
-	wbg_witch_trials = {
-		icon = mission_religious
-		required_missions = { wbg_bishoprics }
+	WBG_wurzburg_residenz = {
+		icon = take_the_bishoprics
+		required_missions = { WBG_bishoprics }
 		position = 5
+		provinces_to_highlight = {
+			province_id = 79
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
 		trigger = {
-			adm_power = 100
-			religion = catholic
-			papal_influence = 50
+			if = {
+				limit = {
+					ai = yes
+				}
+				79 = {
+					owned_by = ROOT
+					development = 25
+				}
+			}
+			else = {
+				79 = {
+					owned_by = ROOT
+					development = 30
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = wbg_burn_witches
-				duration = 9125
+			79 = {
+				add_province_modifier = {
+					name = WBG_wurzburg_residenz_modifier
+					duration = -1
+				}
 			}
-			add_prestige = 10
 		}
 	}
 }
@@ -89,63 +111,126 @@ WBG_missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = WBG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = WBG
+			AND = {
+				was_tag = WBG
+				tag = FKN
+			}
+		}
 	}
 	has_country_shield = yes
 	
-	wbg_munster = {
+	WBG_munster = {
 		icon = mission_european_church
 		position = 1
 		provinces_to_highlight = {
 			province_id = 79
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				NOT = { has_tax_building_trigger = yes }
 			}
 		}
 		trigger = {
 			79 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			79 = {
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 2
+				}
+			}
+		}
+	}
+	
+	WBG_kilianimesse = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { WBG_munster }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 79
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			79 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			papal_influence = 25
+		}
+		effect = {
+			79 = {
+				add_province_modifier = {
+					name = WBG_annual_kilianimesse
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	WBG_university = {
+		icon = pontifical_universities
+		required_missions = { WBG_kilianimesse }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 79
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 20 }
+				NOT = { num_of_buildings_in_province = 4 }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					ai = yes
+				}
+				79 = {
+					owned_by = ROOT
+					num_of_times_improved = 10
+					num_of_buildings_in_province = 4
+				}
+			}
+			else = {
+				79 = {
+					owned_by = ROOT
+					num_of_times_improved = 20
+					num_of_buildings_in_province = 4
 				}
 			}
 		}
 		effect = {
 			79 = {
-				add_temple_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+				}
 			}
-		}
-	}
-	
-	wbg_primas_germaniae = {
-		icon = mission_religious
-		required_missions = { wbg_munster }
-		position = 3
-		trigger = {
-			has_country_modifier = primas_germaniae
-		}
-		effect = {
-			add_prestige = 25
-			add_devotion = 25
-			add_stability_or_adm_power = yes
-		}
-	}
-	
-	wbg_legatus_natus = {
-		icon = mission_hands_praying
-		required_missions = { wbg_primas_germaniae }
-		position = 5
-		trigger = {
-			has_country_modifier = legatus_natus
-		}
-		effect = {
-			add_papal_influence = 50
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
 		}
 	}
 }

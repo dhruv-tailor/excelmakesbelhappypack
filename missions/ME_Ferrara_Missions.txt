@@ -1,386 +1,262 @@
-FER_missions_1 = {
+ferrara_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		tag = FER
+		OR = {
+			tag = FER
+			AND = {
+				was_tag = FER
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	fer_mantua = {
-		icon = mission_build_up_to_force_limit
+	fer_estensi_ferrara = {
+		icon = reform_bergordnung
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-			province_id = 109
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			109 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			army_size_percentage = 1
 		}
 		effect = {
-			add_army_tradition = 5
+			add_stability_or_adm_power = yes
+			capital_scope = {
+				area = {
+					add_prosperity = 25
+				}
+			}
 			if = {
 				limit = {
-					has_dlc = "Cradle of Civilization"
+					exists = MLO
 				}
-				add_army_professionalism = 0.05
-			}
-			lombardy_area = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+					months = 300
 				}
 			}
-			105 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			if = {
+				limit = {
+					exists = VEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = VEN
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = MAN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MAN
+					months = 300
 				}
 			}
 		}
 	}
 
-	fer_milan = {
-		icon = mission_conquer_50_development
-		required_missions = { fer_mantua }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 104
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	fer_imperial_fiefdom = {
+		icon = join_the_empire
+		required_missions = { fer_estensi_ferrara }
+		position = 3
 		trigger = {
-			104 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			emperor = {
+				OR = {
+					alliance_with = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			calc_true_if = {
+				amount = 2
+				all_elector = {
+					OR = {
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_prestige = 15
+			add_country_modifier = {
+				name = man_imperial_consecration
+				duration = 7300
+			}
+			every_country = {
+				limit = {
+					is_part_of_hre = yes
+					OR = {
+						capital_scope = {
+							region = italy_region
+						}
+						is_elector = yes
+						is_emperor = yes
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = man_imperial_consecration_opinion
+				}
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = man_imperial_consecration_opinion
+				}
+			}
 		}
 	}
-	
 
-	fer_lucca = {
-		icon = mission_assemble_an_army
+	fer_military_campaign = {
+		icon = mercenary_companies
 		required_missions = { }
-		position = 2
-		provinces_to_highlight = {
-			province_id = 2980
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+		position = 5
 		trigger = {
-			2980 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_mercenaries = 1
+			OR = {
+				MIL = 3
+				has_mil_advisor_2 = yes
+				monthly_mil = 7
 			}
 		}
 		effect = {
-			add_army_tradition = 5
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				add_army_professionalism = 0.05
-			}
-			liguria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			tuscany_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = man_military_conducts
+				duration = 18250
 			}
 		}
 	}
 
-	fer_firenze = {
-		icon = mission_have_two_subjects
-		required_missions = { fer_lucca }
-		position = 4
+	fer_conquest_venetia = {
+		icon = control_the_means_of_transaction
+		required_missions = { fer_po_valley }
+		position = 7
 		provinces_to_highlight = {
-			province_id = 116
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			116 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 10
-			add_adm_power = 50
-			114 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			118 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2977 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			119 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2976 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	fer_roma = {
-		icon = mission_monarch_in_throne_room
-		required_missions = { fer_firenze }
-		position = 5
-		provinces_to_highlight = {
-			province_id = 118
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			118 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 15
-			add_adm_power = 75
-		}
-	}
-	
-	fer_italy = {
-		icon = mission_unite_home_region
-		required_missions = { fer_roma }
-		position = 6
-		provinces_to_highlight = {
-			OR = {
-				province_id = 101
-				province_id = 104
-				province_id = 106
-				province_id = 108
-				province_id = 109
-				province_id = 116
-				province_id = 117
-				province_id = 118
-				province_id = 119
-			}
+			area = venetia_area
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			101 = {
-				owned_by = ROOT
-			}
-			104 = {
-				owned_by = ROOT
-			}
-			106 = {
-				owned_by = ROOT
-			}
-			108 = {
-				owned_by = ROOT
-			}
-			109 = {
-				owned_by = ROOT
-			}
-			116 = {
-				owned_by = ROOT
-			}
-			117 = {
-				owned_by = ROOT
-			}
-			118 = {
-				owned_by = ROOT
-			}
-			119 = {
-				owned_by = ROOT
+			venetia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_prestige = 25
-			add_country_modifier = {
-				name = "fer_italy_mod"
-				duration = 9125
+			add_legitimacy_equivalent = { value = 10 }
+			add_dip_power = 25
+		}
+	}
+
+	fer_trading_venice = {
+		icon = nuova_promissione_ducale
+		required_missions = { fer_conquest_venetia }
+		position = 9
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			italy_region = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			OR = {
+				NOT = { exists = VEN }
+				overlord_of = VEN
+				VEN = {
+					NOT = {
+						any_province = { region = italy_region }
+					}
 				}
-				add_permanent_claim = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_venetian_trading_secret
+				duration = 9125
 			}
 		}
 	}
 }
 
-FER_missions_2 = {
+ferrara_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
-		tag = FER
+		OR = {
+			tag = FER
+			AND = {
+				was_tag = FER
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	fer_army = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 1
-		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.8
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				army_professionalism = 0.1
-			}
-			else = {
-				army_tradition = 20
-			}
+	fer_ward_save = {
+		icon = friends_in_high_places
+		required_missions = {
+			fer_estensi_ferrara
 		}
-		effect = {
-			create_general = {
-				tradition = 40
-			}
-			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 5475
-			}
-			109 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2980 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			114 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2977 = {
- 				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			119 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	fer_coast = {
-		icon = mission_unite_home_region
-		required_missions = { fer_army }
 		position = 2
-		provinces_to_highlight = {
-			OR = {
-				province_id = 114
-				province_id = 2977
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			114 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2977 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			calc_true_if = {
+				amount = 2
+				all_country = {
+					OR = {
+						army_strength = {
+							who = ROOT
+							value = 1.5
+						}
+						total_development = ROOT
+					}
+					OR = {
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_adm_power = 100
-		}
-	}
-
-	fer_genoa = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { fer_lucca }
-		position = 4
-		provinces_to_highlight = {
-			province_id = 101
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			101 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_dip_power = 100
 			add_country_modifier = {
-				name = "fer_trade"
+				name = man_supreme_diplomacy
 				duration = 9125
 			}
-			corsica_sardinia_area = {
+			define_advisor = {
+				type = diplomat
+				skill = 2
+				name = "Niccolò III"
+				cost_multiplier = 0.25
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			po_valley_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
@@ -389,56 +265,48 @@ FER_missions_2 = {
 			}
 		}
 	}
-	
-	fer_corsica = {
-		icon = mission_invade_island
-		required_missions = { fer_genoa }
-		position = 5
-		provinces_to_highlight = {
-			area = corsica_sardinia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+
+	fer_plains_emilia = {
+		icon = jageillonian_union
+		required_missions = { fer_ward_save }
+		position = 4
 		trigger = {
-			OR = {
-				AND = {
-					127 = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					2986 = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-				}
-				1247 = {
-					country_or_non_sovereign_subject_holds = ROOT
-				}
+			num_of_owned_provinces_with = {
+				value = 4
+				area = emilia_romagna_area
 			}
 		}
 		effect = {
-			add_dip_power = 50
-			add_mil_power = 50
+			emilia_romagna_area = {
+				add_province_modifier = {
+					name = fer_grazing_fields
+					duration = 7300
+				}
+			}
 		}
 	}
-	
-	fer_verona = {
-		icon = mission_cannons_firing
-		required_missions = { }
-		position = 6
-		provinces_to_highlight = {
-			province_id = 4729
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+
+	fer_po_valley = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			fer_military_campaign
+			fer_plains_emilia
 		}
+		position = 6
 		trigger = {
-			4729 = {
+			po_valley_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_army_tradition = 10
-			if = {
+			add_yearly_manpower = 1
+			lombardy_area = {
 				limit = {
-					has_dlc = "Cradle of Civilization"
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				add_army_professionalism = 0.05
+				add_permanent_claim = ROOT
 			}
 			venetia_area = {
 				limit = {
@@ -449,38 +317,773 @@ FER_missions_2 = {
 			}
 		}
 	}
-	
-	fer_fleet = {
-		icon = mission_galleys_in_port
-		required_missions = { fer_verona }
-		position = 7
+
+	fer_gonzaga_ruling = {
+		icon = confront_the_lombards
+		required_missions = { fer_po_valley }
+		position = 8
 		trigger = {
-			naval_forcelimit = 20
-			navy_size_percentage = 0.9
+			109 = {
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { unrest = 1 }
+			}
 		}
 		effect = {
-			add_navy_tradition = 20
+			add_country_modifier = {
+				name = fer_berberi_mantovani
+				duration = 7300
+			}
 		}
 	}
-	
-	fer_venice = {
-		icon = mission_market_place_with_asian_traders
-		required_missions = { fer_fleet }
-		position = 8
+
+	fer_lombardo_veneto = {
+		icon = expand_the_terraferma
+		required_missions = {
+			fer_trading_venice
+			fer_gonzaga_ruling
+			fer_fall_visconti
+		}
+		position = 10
 		provinces_to_highlight = {
-			province_id = 112
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				area = lombardy_area
+				area = po_valley_area
+				area = emilia_romagna_area
+				area = venetia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { unrest = 1 }
+			}
 		}
 		trigger = {
-			112 = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			po_valley_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_reign_northern_italy
+				duration = 7300
+			}
+		}
+	}
+}
+
+ferrara_mission_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = FER
+			AND = {
+				was_tag = FER
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	fer_papal_state = {
+		icon = catholic_volunteers
+		required_missions = { }
+		position = 1
+		trigger = {
+			PAP = {
+				OR = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+					is_rival = ROOT
+					NOT = {
+						has_opinion = {
+							who = ROOT
+							value = -50
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_papal_influence = 15
+			define_advisor = {
+				type = theologian
+				name = "Ippolito II d'Este"
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	fer_santa_maria_porto = {
+		icon = connect_further_austria
+		required_missions = {
+			fer_plains_emilia
+			fer_papal_state
+			fer_addizione_erculea
+		}
+		position = 5
+		trigger = {
+			114 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				if = {
+					limit = {
+						114 = {
+							has_cardinal = no
+						}
+					}
+					114 = {
+						add_cardinal = yes
+					}
+				}
+				else = {
+					random_owned_province = {
+						limit = {
+							has_cardinal = no
+						}
+						add_cardinal = yes
+					}
+				}
+			}
+			114 = {
+				add_permanent_province_modifier = {
+					name = fer_basilica_santa_maria
+					duration = -1
+				}
+			}
+		}
+	}
+
+	fer_war_lombardy = {
+		icon = all_roads_lead_to_milan
+		required_missions = { fer_po_valley }
+		position = 7
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_dip_power = 100
+			add_prestige = 10
+			add_mil_power = 25
+		}
+	}
+
+	fer_fall_visconti = {
+		icon = italian_riches
+		required_missions = { fer_war_lombardy }
+		position = 9
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = MLO }
+				overlord_of = MLO
+				MLO = {
+					NOT = {
+						any_province = {
+							region = italy_region
+						}
+					}
+				}
+			}
+		}
+		effect = {
 			add_country_modifier = {
-				name = "fer_trade"
+				name = man_milanese_knowledge
 				duration = 9125
+			}
+		}
+	}
+
+	fer_curunir_lan = {
+		icon = king_of_poland
+		required_missions = {
+			fer_lombardo_veneto
+		}
+		position = 11
+		trigger = {
+			NOT = { average_autonomy = 30 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_blasting_fire
+				duration = -1
+			}
+		}
+	}
+
+	fer_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = {
+			fer_curunir_lan
+		}
+		position = 13
+		trigger = {
+			NOT = {
+				any_country = {
+					culture_group = latin
+					capital_scope = {
+						region = italy_region
+					}
+					army_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+			complete_conquest_of_rome_missions = yes
+		}
+	}
+}
+
+ferrara_mission_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = FER
+			AND = {
+				was_tag = FER
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	fer_urbanizzazione_ferrarese = {
+		icon = fixed_garrison_system
+		required_missions = {
+			fer_great_patrons
+		}
+		position = 2
+		trigger = {
+			years_of_income = 1
+			owns_core_province = 113
+			owns_core_province = 106
+		}
+		effect = {
+			113 = {
+				add_province_modifier = {
+					name = fer_tempi_arte
+					duration = -1
+				}
+			}
+			106 = {
+				add_province_modifier = {
+					name = fer_tempi_arte
+					duration = -1
+				}
+			}
+		}
+	}
+
+	fer_addizione_erculea = {
+		icon = develop_our_capital
+		required_missions = {
+			fer_urbanizzazione_ferrarese
+		}
+		position = 4
+		trigger = {
+			fortification_expert = 2
+		}
+		effect = {
+			113 = {
+				add_province_modifier = {
+					name = fer_fortificazione_moderna
+					duration = -1
+				}
+			}
+			add_mil_power = 100
+		}
+	}
+
+	fer_unife = {
+		icon = sway_cologne
+		required_missions = {
+			fer_addizione_erculea
+		}
+		position = 6
+		trigger = {
+			113 = {
+				has_building = university
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_splendor = 50
+			add_country_modifier = {
+				name = fer_universita_ferrara
+				duration = -1
+			}
+		}
+	}
+
+	fer_welfen = {
+		icon = unite_the_wittelsbachs
+		required_missions = {
+			fer_game_of_thrones
+		}
+		position = 10
+		trigger = {
+			legitimacy = 75
+			if = {
+				limit = {
+					exists = BAV
+				}
+				BAV = {
+					marriage_with = ROOT
+				}
+			}
+			else = {
+				65 = {
+					owner = {
+						NOT = { total_development = ROOT }
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = SAX
+				}
+				SAX = {
+					marriage_with = ROOT
+				}
+			}
+			else = {
+				61 = {
+					owner = {
+						NOT = { total_development = ROOT }
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = BAV
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					target = BAV
+				}
+			}
+			else = {
+				lower_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				upper_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				east_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = SAX
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					target = SAX
+				}
+			}
+			else = {
+				south_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				thuringia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				northern_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	fer_bavaria = {
+		icon = regal_splendour
+		required_missions = {
+			fer_welfen
+		}
+		position = 12
+		trigger = {
+			OR = {
+				overlord_of = ROOT
+				AND = {
+					lower_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					upper_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					east_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_munich_unifaction
+				duration = 7300
+			}
+		}
+	}
+}
+
+ferrara_mission_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = FER
+			AND = {
+				was_tag = FER
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	fer_great_patrons = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 1
+		trigger = {
+			has_institution = renaissance
+			OR = {
+				artist = 2
+				ADM = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_scuola_ferrarese
+				duration = 9125
+			}
+			define_advisor = {
+				type = artist
+				name = "Pisanello"
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	fer_duca_artigliere = {
+		icon = take_the_littoral
+		required_missions = {
+			fer_great_patrons
+		}
+		position = 3
+		trigger = {
+			OR = {
+				MIL = 4
+				has_mil_advisor_2 = yes
+				monthly_mil = 8
+			}
+			113 = {
+				OR = {
+					has_building = coastal_defence
+					has_building = naval_battery
+					has_building = ramparts
+				}
+			}
+		}
+		effect = {
+			113 = {
+				add_province_modifier = {
+					name = fer_metallurgista
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				country_event = {
+					id = ME_Ferrara_Events.1
+				}
+			}
+		}
+	}
+
+	fer_granata = {
+		icon = saxon_manufacturing
+		required_missions = {
+			fer_duca_artigliere
+		}
+		position = 5
+		trigger = {
+			OR = {
+				MIL = 6
+				has_mil_advisor_3 = yes
+			}
+			artillery_fraction = 0.5
+			army_size = 20			
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_fonditore_cannoni
+				duration = -1
+			}
+		}
+	}
+
+	fer_game_of_thrones = {
+		icon = king_of_kings
+		position = 9
+		required_missions = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				if = {
+					limit = {
+						emperor = {
+							NOT = { tag = HAB }
+						}
+					}
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						HAB = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+				}
+				else = {
+					HAB = {
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+			}
+			PAP = {
+				OR = {
+					alliance_with = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			any_country = {
+				NOT = { is_emperor = yes }
+				NOT = { tag = HAB }
+				NOT = { tag = PAP }
+				total_development = ROOT
+				army_strength = {
+					who = ROOT
+					value = 2
+				}
+				OR = {
+					alliance_with = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_court_intrigue
+				duration = 9125
+			}
+			if = {
+				limit = {
+					exists = MFA
+				}
+				add_casus_belli = {
+					target = MFA
+					type = cb_restore_personal_union
+				}
+			}
+			if = {
+				limit = {
+					exists = NEV
+				}
+				add_casus_belli = {
+					target = NEV
+					type = cb_restore_personal_union
+				}
+			}
+			2981 = { 
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			western_sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}				
+				add_permanent_claim = ROOT
+			}
+			sicily_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}				
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	fer_saxony = {
+		icon = become_king
+		required_missions = {
+			fer_welfen
+		}
+		position = 11
+		trigger = {
+			OR = {
+				overlord_of = SAX
+				AND = {
+					south_saxony_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					thuringia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					northern_saxony_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_saxon_von
+				duration = 7300
 			}
 		}
 	}

@@ -518,19 +518,27 @@ HSA_HNS_missions_3 = {
 		provinces_to_highlight = {
 			is_capital_of = ROOT
 			OR = {
-				NOT = { province_has_building_of_group = { group = government all = yes } }
+				NOT = { has_building = courthouse }
 				NOT = { development = 25 }
 			}
 		}
 		trigger = {
 			capital_scope = {
-				can_courthouse_line = yes
+				has_building = courthouse
 				development = 25
 			}
 		}
 		effect = {
 			capital_scope = {
-				add_courthouse_line = yes
+				if = {
+					limit = {
+						NOT = { has_building = town_hall }
+					}
+					add_building = town_hall
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_province_modifier = {
 					name = lbk_hansehall
 					duration = -1
@@ -593,7 +601,12 @@ HSA_HNS_missions_4 = {
 			province_id = 45
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = defense all = yes } }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 				NOT = { base_manpower = 6 }
 			}
 		}
@@ -602,9 +615,11 @@ HSA_HNS_missions_4 = {
 			treasury = 500
 			45 = {
 				owned_by = ROOT
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_DEFENSE_ALL
-					province_has_building_of_group = { group = defense all = yes }
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
 				base_manpower = 6
 			}
@@ -990,73 +1005,37 @@ HNS_missions_1_WoN_Dharma = {
 			}
 		}
 		effect = {
-			if = {
+			random_owned_province = {
 				limit = {
-					any_owned_province = {
-						is_node_in_trade_company_region = yes
-						OR = {
-							area = jolof_area
-							area = futa_jallon_area
-							area = guinea_coast_area
-							area = west_africa_coast_area
-							area = benin_area
-							area = gulf_of_guinea_area
-							area = coastal_kongo
-							area = angola_namibia_area
-						}
+					is_node_in_trade_company_region = yes
+					OR = {
+						area = jolof_area
+						area = futa_jallon_area
+						area = guinea_coast_area
+						area = west_africa_coast_area
+						area = benin_area
+						area = gulf_of_guinea_area
+						area = coastal_kongo
+						area = angola_namibia_area
 					}
 				}
-				random_owned_province = {
-					limit = {
-						is_node_in_trade_company_region = yes
-						OR = {
-							area = jolof_area
-							area = futa_jallon_area
-							area = guinea_coast_area
-							area = west_africa_coast_area
-							area = benin_area
-							area = gulf_of_guinea_area
-							area = coastal_kongo
-							area = angola_namibia_area
-						}
-					}
-					change_trade_goods = gold
-					add_province_modifier = {
-						name = lbk_african_gold
-						duration = -1
-					}
+				change_trade_goods = gold
+				add_province_modifier = {
+					name = lbk_african_gold
+					duration = -1
 				}
 			}
-			else = {
-				custom_tooltip = lbk_west_africa_tta
-			}
-			if = {
+			random_owned_province = {
 				limit = {
-					any_owned_province = {
-						is_node_in_trade_company_region = yes
-						OR = {
-							area = cape_of_good_hope_area
-							area = south_african_plateau_area
-							area = limpopo_area
-						}
-						NOT = { province_has_center_of_trade_of_level = 1 }
+					is_node_in_trade_company_region = yes
+					OR = {
+						area = cape_of_good_hope_area
+						area = south_african_plateau_area
+						area = limpopo_area
 					}
+					NOT = { province_has_center_of_trade_of_level = 1 }
 				}
-				random_owned_province = {
-					limit = {
-						is_node_in_trade_company_region = yes
-						OR = {
-							area = cape_of_good_hope_area
-							area = south_african_plateau_area
-							area = limpopo_area
-						}
-						NOT = { province_has_center_of_trade_of_level = 1 }
-					}
-					center_of_trade = 1
-				}
-			}
-			else = {
-				custom_tooltip = lbk_west_africa_ttb
+				center_of_trade = 1
 			}
 		}
 	}
@@ -1879,7 +1858,6 @@ HNS_missions_5 = {
 		}
 		position = 10
 		trigger = {
-			colony = 1
 			custom_trigger_tooltip = {
 				tooltip = lbk_colonize_canada
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -1893,25 +1871,15 @@ HNS_missions_5 = {
 			}
 		}
 		effect = {
-			if = {
+			every_subject_country = {
 				limit = {
-					any_subject_country = {
-						is_colonial_nation = yes
-					}
+					is_colonial_nation = yes
 				}
-				every_subject_country = {
-					limit = {
-						is_colonial_nation = yes
-					}
-					add_tariff_value = 0.20
-					add_country_modifier = {
-						name = lbk_mercantile
-						duration = -1
-					}
+				add_tariff_value = 0.20
+				add_country_modifier = {
+					name = lbk_mercantile
+					duration = -1
 				}
-			}
-			else = {
-				custom_tooltip = lbk_colonize_north_america_tt
 			}
 		}
 	}

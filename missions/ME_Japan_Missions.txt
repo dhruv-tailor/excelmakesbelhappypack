@@ -1,0 +1,2502 @@
+Japan_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	jap_permit_ryogaesho = {
+		icon = mission_high_income
+		required_missions = { jap_rokudo_no_tsuji }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_courthouse_building_trigger = yes }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_courthouse_building_trigger = yes
+				value = 10
+			}
+			monthly_income = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_ryogaesho
+				duration = 5475
+			}
+		}
+	}
+
+	jap_rice_broker = {
+		icon = mission_asian_trader
+		required_missions = {
+			jap_permit_ryogaesho
+			jap_rice_fields
+		}
+		position = 4
+		trigger = {
+			OR = {
+				mercantilism = 30
+				full_idea_group = trade_ideas
+				AND = {
+					has_estate = estate_burghers
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 15
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					mercantilism = 30
+				}
+				add_years_of_income = 1
+			}
+			else = {
+				add_years_of_income = 0.4
+			}
+			if = {
+				limit = {
+					full_idea_group = trade_ideas
+				}
+				add_mercantilism = 5
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				add_dip_power = 100
+			}
+			add_country_modifier = {
+				name = jap_fudashi
+				duration = 9125
+			}
+		}
+	}
+
+	jap_gaichou = {
+		icon = mission_asian_city
+		required_missions = {
+			jap_rice_broker
+			jap_financial_cliques
+		}
+		position = 5
+		trigger = {
+			monthly_income = 300
+			development_in_provinces = {
+				value = 800
+				region = japan_region
+			}
+			num_of_owned_provinces_with = {
+				value = 15
+				region = japan_region
+				development = 30
+			}
+			num_of_owned_provinces_with = {
+				value = 4
+				region = japan_region
+				province_has_center_of_trade_of_level = 1
+				development = 20
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = ages_and_splendor }
+				}
+				add_country_modifier = {
+					name = jap_development_program_ase
+					duration = 18250
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = jap_development_program
+					duration = 18250
+				}
+			}
+			custom_tooltip = JAP_URBANIZATION_TT
+			tooltip = {
+				add_province_modifier = {
+					name = jap_urbanization
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				japan_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						development = 30
+					}
+					add_province_modifier = {
+						name = jap_urbanization
+						duration = 7300
+					}
+				}
+			}
+			custom_tooltip = JAP_MARKET_FREEDOM_TT
+			tooltip = {
+				add_province_modifier = {
+					name = jap_market_freedom
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				japan_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						province_has_center_of_trade_of_level = 2
+					}
+					add_province_modifier = {
+						name = jap_market_freedom
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	jap_sankin_kotai = {
+		icon = me_mission_japan_court
+		required_missions = { jap_united_island }
+		position = 2
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { development = 30 }
+				AND = {
+					NOT = { has_building = courthouse }
+					NOT = { has_building = town_hall }
+				}
+			}
+		}
+		trigger = {
+			stability = 1
+			legitimacy_equivalent = 80
+			capital_scope = {
+				development = 30
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_country_modifier = {
+				name = jap_sankin_kotai_palace
+				duration = -1
+			}
+		}
+	}
+
+	jap_korean_invasion = {
+		icon = mission_asian_cannon
+		required_missions = { jap_imperial_army }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				region = korea_region
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			add_country_modifier = {
+				name = jap_wanto_giri
+				duration = 3650
+			}
+		}
+	}
+
+	jap_korean_unification = {
+		icon = mission_unite_home_region
+		required_missions = { jap_korean_invasion }
+		position = 8
+		provinces_to_highlight = {
+			region = korea_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			korea_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_war_exhaustion = -2
+			korea_region = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				add_local_autonomy = -10
+				add_unrest = -2
+			}
+			north_china_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_tatsu_maki = {
+		icon = mission_japanese_samurai
+		required_missions = { jap_korean_unification }
+		position = 9
+		trigger = {
+			prestige = 50
+			num_of_owned_provinces_with = {
+				value = 15
+				OR = {
+					area = shanxi_area
+					area = north_henan_area
+					area = henan_area
+					area = anhui_area
+					area = hebei_area
+					area = south_hebei_area
+					area = shandong_area
+					area = jiangsu_area
+				}
+			}
+		}
+		effect = {
+			add_war_exhaustion = -2
+			north_china_region = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = jap_kokujo
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	jap_heavenly_throne = {
+		icon = mission_trade_with_cathay
+		required_missions = { jap_tatsu_maki }
+		position = 10
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					is_emperor_of_china = yes
+					any_country = {
+						is_emperor_of_china = yes
+						war_with = ROOT
+					}
+					AND = {
+						all_countries_including_self = {
+							is_emperor_of_china = no
+						}
+						num_of_owned_provinces_with = {
+							value = 20
+							region = north_china_region
+						}
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						exists = MNG
+					}
+					MNG = {
+						NOT = { total_development = ROOT }
+					}
+				}
+				else = {
+					num_of_owned_provinces_with = {
+						value = 20
+						region = north_china_region
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_togen_daikon
+				duration = -1
+			}
+		}
+	}
+
+	jap_far_east_empire = {
+		icon = mission_noble_council
+		required_missions = {
+			jap_heavenly_throne
+			jap_delicate_coexistance
+		}
+		position = 12
+		trigger = {
+			total_development = 1250
+			all_country = {
+				OR = {
+					NOT = {
+						capital_scope = { continent = asia }
+					}
+					NOT = {
+						army_strength = {
+							who = ROOT
+							value = 0.75
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 200
+			}
+			if = {
+				limit = {
+					current_age = age_of_absolutism
+				}
+				add_absolutism = 25
+			}
+			burma_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			indo_china_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_burma_campaign = {
+		icon = mission_indian_soldier_elephant
+		required_missions = { jap_far_east_empire }
+		position = 13
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = burma_region
+			}
+		}
+		effect = {
+			burma_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = jap_daibutsu_giri
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+Japan_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	jap_gokaido = {
+		icon = me_mission_japan_bridge
+		required_missions = { jap_rokudo_no_tsuji }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1020
+				province_id = 1030
+				province_id = 1835
+				province_id = 4360
+				province_id = 1839
+				province_id = 4189
+				province_id = 1028
+				province_id = 1843
+				province_id = 4188
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 10 }
+				local_autonomy = 30
+			}
+		}
+		trigger = {
+			1020 = { #Kyoto
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			1030 = { #Owari
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			1835 = { #Mino
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			4360 = { #Mikawa
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			1839 = { #Suruga
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			4189 = { #Sagami
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			1028 = { #Musashi
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			1843 = { #Kozuke
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+			4188 = { #Shinano
+				owned_by = ROOT
+				development = 10
+				NOT = { local_autonomy = 30 }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { ADM = 6 }
+				}
+				change_adm = 1
+			}
+			else = {
+				add_adm_power = 50
+			}
+			1020 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			1030 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			1835 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			4360 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			1839 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			4189 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			1028 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			1843 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+			4188 = {
+				add_province_modifier = {
+					name = jap_renge
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	jap_rice_fields = {
+		icon = mission_rice_field
+		required_missions = { jap_gokaido }
+		position = 3
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				trade_goods = grain
+				trade_goods = livestock
+				trade_goods = rice
+				has_terrain = farmlands
+				has_terrain = grasslands
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					OR = {
+						NOT = { development = 15 }
+						NOT = { has_production_building_trigger = yes }
+					}
+					has_no_manufactory_trigger = yes
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = JAPAN_RICE_FIELD_TT
+				japan_region = {
+					type = all
+					OR = {
+						AND = {
+							NOT = { trade_goods = grain }
+							NOT = { trade_goods = rice }
+							NOT = { trade_goods = livestock }
+							NOT = { has_terrain = farmlands }
+							NOT = { has_terrain = grasslands }
+						}
+						AND = {
+							owned_by = ROOT
+							OR = {
+								AND = {
+									development = 15
+									has_production_building_trigger = yes
+								}
+								has_manufactory_trigger = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_klesha
+				duration = 18250
+			}
+			every_owned_province = {
+				limit = {
+					region = japan_region
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+						trade_goods = rice
+						has_terrain = farmlands
+						has_terrain = grasslands
+					}
+					OR = {
+						AND = {
+							development = 15
+							has_production_building_trigger = yes
+						}
+						has_building = farm_estate
+					}
+				}
+				add_province_modifier = {
+					name = jap_senhachiju_pound_ho
+					duration = 9125
+				}
+			}
+		}
+	}
+
+	jap_financial_cliques = {
+		icon = mission_have_manufactories
+		required_missions = { jap_rice_fields }
+		position = 4
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = {
+					area_for_scope_province = {
+						has_manufactory_trigger = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			japan_region = {
+				type = all
+				owned_by = ROOT
+				area_for_scope_province = {
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_years_of_income = 0.25
+			japan_region = {
+				add_province_modifier = {
+					name = jap_zaibatsu
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_imperial_army = {
+		icon = me_mission_japan_samurai_warrior2
+		required_missions = { jap_united_island }
+		position = 6
+		trigger = {
+			army_size_percentage = 0.75
+			army_size = 50
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					army_professionalism = 0.25
+					army_tradition = 50
+				}
+			}
+			else = {
+				army_tradition = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_tatsu_maki_modifier
+				duration = 7300
+			}
+			korea_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			manchuria_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_subduing_horsemaster = {
+		icon = mission_non-western_cavalry_raid
+		required_missions = { jap_imperial_army }
+		position = 7
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 20
+				region = manchuria_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_ugui
+				duration = 5475
+			}
+		}
+	}
+
+	jap_ryu_no_kagizume = {
+		icon = mission_manchu_warrior
+		required_missions = {
+			jap_korean_invasion
+			jap_subduing_horsemaster
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				region = manchuria_region
+				region = korea_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			manchuria_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			korea_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = MCH }
+				manchuria_region = {
+					type = all
+					NOT = { owned_by = MCH }
+				}
+			}
+			OR = {
+				NOT = { exists = KOR }
+				korea_region = {
+					type = all
+					NOT = { owned_by = KOR }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_horde_integration
+				duration = 5475
+			}
+			korea_region = {
+				add_province_modifier = {
+					name = jap_rodan
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	jap_oni_giri = {
+		icon = mission_great_wall
+		required_missions = {
+			jap_korean_unification
+		}
+		position = 9
+		provinces_to_highlight = {
+			region = south_china_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = south_china_region
+					}
+					war_with = ROOT
+				}
+			}
+		}
+		trigger = {
+			has_mil_advisor_2 = yes
+			num_of_generals = 4
+			OR = {
+				army_size_percentage = 0.90
+				navy_size_percentage = 0.90
+			}
+			OR = {
+				any_country = {
+					capital_scope = {
+						region = south_china_region
+					}
+					war_with = ROOT
+				}
+				south_china_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					army_size_percentage = 0.90
+				}
+				add_country_modifier = {
+					name = jap_rengoku_oni_giri
+					duration = 1825
+				}
+			}
+			if = {
+				limit = {
+					navy_size_percentage = 0.90
+				}
+				add_country_modifier = {
+					name = jap_yasha_garasu
+					duration = 1825
+				}
+			}
+		}
+	}
+
+	jap_chinese_trade_secrets = {
+		icon = mission_dominate_persian_gulf
+		required_missions = { jap_oni_giri }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = hunan_area
+				area = guangdong_area
+				area = west_guangdong_area
+				area = guangxi_area
+				area = yun_gui_area
+				area = red_river_delta_area
+				area = vietnam_area
+			}
+			province_has_center_of_trade_of_level = 1
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				OR = {
+					area = hunan_area
+					area = guangdong_area
+					area = west_guangdong_area
+					area = guangxi_area
+					area = yun_gui_area
+					area = red_river_delta_area
+					area = vietnam_area
+				}
+				province_has_center_of_trade_of_level = 1
+			}
+			OR = {
+				1371 = {
+					trade_share = {
+						country = ROOT
+						share = 51
+					}
+				}
+				mercantilism = 25
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_chinese_tea
+				duration = 7300
+			}
+			1371 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = jap_chinese_tea
+				}
+			}
+			684 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = jap_chinese_tea
+				}
+			}
+			4233 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = jap_chinese_tea
+				}
+			}
+		}
+	}
+
+	jap_delicate_coexistance = {
+		icon = mission_modernize_production
+		required_missions = { jap_heavenly_throne }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = shanxi_area
+				area = north_henan_area
+				area = henan_area
+				area = anhui_area
+				area = hebei_area
+				area = south_hebei_area
+				area = shandong_area
+				area = jiangsu_area
+				region = south_china_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy_above_min = 15
+				unrest = 1
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = JAP_DELICATE_COEXISTANCE_TRIGGER_TT
+				shanxi_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				north_henan_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				henan_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				anhui_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				hebei_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				south_hebei_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				shandong_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				jiangsu_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+				south_china_region = {
+					type = all
+					owned_by = ROOT
+					NOT = { local_autonomy_above_min = 15 }
+					NOT = { unrest = 1 }
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Japan_Events.3 }
+		}
+	}
+
+	jap_suvarnabhumi = {
+		icon = mission_indian_stateman
+		required_missions = { jap_far_east_empire }
+		position = 13
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = indo_china_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_indochinese_red_seal_ship
+				duration = 7300
+			}
+		}
+	}
+
+	jap_tora_gari = {
+		icon = mission_defy_the_dragon
+		required_missions = {
+			jap_burma_campaign
+			jap_suvarnabhumi
+		}
+		position = 14
+		trigger = {
+			NOT = { war_exhaustion = 0.1 }
+			stability = 1
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = bengal_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_ul_tora_gari
+				duration = 7300
+			}
+		}
+	}
+}
+
+Japan_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	jap_rokudo_no_tsuji = {
+		icon = me_mission_japan_united
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				all_country = {
+					OR = {
+						capital_scope = {
+							NOT = { region = japan_region }
+						}
+						AND = {
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+							NOT = { total_development = ROOT }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			stability = 1
+			OR = {
+				japan_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				all_country = {
+					OR = {
+						capital_scope = {
+							NOT = { region = japan_region }
+						}
+						AND = {
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+							NOT = { total_development = ROOT }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_reform_progress_medium_effect = yes
+			add_prestige = 10
+		}
+	}
+
+	jap_spoils_war = {
+		icon = mission_conquer_arakan
+		required_missions = { jap_rokudo_no_tsuji }
+		position = 3
+		trigger = {
+			is_at_war = no
+		}
+		effect = {
+			add_yearly_manpower = 1
+			add_war_exhaustion = -1
+		}
+	}
+
+	jap_age_prosperity = {
+		icon = medici_bank_ledgers
+		required_missions = { jap_spoils_war }
+		position = 4
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 7
+				region = japan_region
+				num_of_times_improved_by_owner = 3
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 100
+			}
+			else = {
+				add_prestige = 5
+			}
+			add_country_modifier = {
+				name = jap_yamato
+				duration = 3650
+			}
+		}
+	}
+
+	jap_united_island = {
+		icon = me_mission_japan_samurai_warrior_closeup
+		required_missions = {
+			jap_age_prosperity
+			jap_great_harmony
+		}
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { owned_by = ROOT }
+		}
+		position = 3
+		trigger = {
+			japan_region = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					province_id = 1015
+					province_id = 1032
+				}
+			}
+		}
+		effect = {
+			japan_region = {
+				add_devastation = -10
+				add_prosperity = 10
+				add_province_modifier = {
+					name = jap_seimei_kikan
+					duration = 7300
+				}
+			}
+			country_event = { id = ME_Japan_Events.1 }
+		}
+	}
+
+	jap_miraju_tenpo = {
+		icon = me_mission_japan_turtle_ship
+		required_missions = { jap_united_island }
+		position = 5
+		trigger = {
+			navy_size_percentage = 0.75
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_to_the_sea
+				duration = -1
+			}
+			southern_luzon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			luzon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_gatway_port = {
+		icon = mission_early_game_buildings
+		required_missions = { jap_miraju_tenpo }
+		position = 6
+		trigger = {
+			taiwan_area = {
+				owned_by = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				OR = {
+					area = southern_luzon_area
+					area = luzon_area
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_gasuto_sodo
+				duration = 3650
+			}
+			taiwan_area = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 50
+				}
+				else_if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			palawan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_mindanao_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mindanao_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			visayas_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_southern_trading_post = {
+		icon = mission_open_up_china
+		required_missions = { jap_gatway_port }
+		position = 8
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					area = palawan_area
+					area = west_mindanao_area
+					area = mindanao_area
+					area = visayas_area
+					area = southern_luzon_area
+					area = luzon_area
+				}
+			}
+		}
+		effect = {
+			moluccas_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	jap_controllers_trade = {
+		icon = mission_zambezi_gold
+		required_missions = { jap_southern_trading_post }
+		position = 9
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				region = moluccas_region
+			}
+		}
+		effect = {
+			custom_tooltip = JAP_CONTROLLERS_TRADE_TT
+			hidden_effect = {
+				malaya_region = {
+					limit = {
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				indonesia_region = {
+					limit = {
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	jap_malaccan_hegemony = {
+		icon = mission_sea_battles
+		required_missions = {
+			jap_controllers_trade
+		}
+		position = 8
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					region = malaya_region
+					area = banjar_area
+					area = brunei_area
+					area = kutai_area
+					area = sabah_area
+					area = kalimantan_area
+				}
+				OR = {
+					province_has_center_of_trade_of_level = 1
+					base_production = 10
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 10
+			add_years_of_income = 0.5
+			add_mercantilism = 5
+		}
+	}
+
+	jap_age_exploration = {
+		icon = mission_trade_with_japan
+		required_missions = {  }
+		position = 11
+		trigger = {
+			num_of_light_ship = 50
+			num_of_explorers = 1
+		}
+		effect = {
+			add_dip_power = 100
+			add_navy_tradition = 10
+			add_prestige = 20
+		}
+	}
+
+	jap_gosenmaigawara = {
+		icon = mission_launch_a_flagship
+		required_missions = { jap_age_exploration }
+		position = 13
+		trigger = {
+			navy_tradition = 80
+			heavy_ship_fraction = 0.25
+			navy_size = 200
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_yarinami
+				duration = 7300
+			}
+		}
+	}
+
+	jap_ichidai_sanzen_daisen_sekai = {
+		icon = mission_kowtow
+		required_missions = {
+			jap_tora_gari
+			jap_uzushio_ipponzeoi
+		}
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						region = japan_region
+						region = manchuria_region
+						region = korea_region
+						region = south_china_region
+						region = indo_china_region
+						region = burma_region
+						area = shanxi_area
+						area = north_henan_area
+						area = henan_area
+						area = anhui_area
+						area = hebei_area
+						area = south_hebei_area
+						area = shandong_area
+						area = jiangsu_area
+						area = north_tenasserim_area
+						area = tenasserim_area
+						area = malaya_area
+						area = malacca_area
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					OR = {
+						region = bengal_region
+						area = palawan_area
+						area = west_mindanao_area
+						area = mindanao_area
+						area = visayas_area
+						area = southern_luzon_area
+						area = luzon_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					OR = {
+						province_id = 1397 #philippines
+						province_id = 1357 #the_moluccas
+						province_id = 1361 #malacca
+						any_trade_node_member_province = {
+							OR = {
+								province_id = 1397 #philippines
+								province_id = 1357 #the_moluccas
+								province_id = 1361 #malacca
+							}
+						}
+					}
+					province_has_center_of_trade_of_level = 1
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
+		}
+		trigger = {
+			total_development = 2000
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				is_great_power = yes
+				NOT = { great_power_rank = 2 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = JAP_OWNS_DIRECTLY_TT
+				japan_region = {
+					type = all
+					owned_by = ROOT
+				}
+				manchuria_region = {
+					type = all
+					owned_by = ROOT
+				}
+				south_china_region = {
+					type = all
+					owned_by = ROOT
+				}
+				korea_region = {
+					type = all
+					owned_by = ROOT
+				}
+				indo_china_region = {
+					type = all
+					owned_by = ROOT
+				}
+				burma_region = {
+					type = all
+					owned_by = ROOT
+				}
+				shanxi_area = {
+					type = all
+					owned_by = ROOT
+				}
+				north_henan_area = {
+					type = all
+					owned_by = ROOT
+				}
+				henan_area = {
+					type = all
+					owned_by = ROOT
+				}
+				anhui_area = {
+					type = all
+					owned_by = ROOT
+				}
+				hebei_area = {
+					type = all
+					owned_by = ROOT
+				}
+				south_hebei_area = {
+					type = all
+					owned_by = ROOT
+				}
+				shandong_area = {
+					type = all
+					owned_by = ROOT
+				}
+				jiangsu_area = {
+					type = all
+					owned_by = ROOT
+				}
+				north_tenasserim_area = {
+					type = all
+					owned_by = ROOT
+				}
+				tenasserim_area = {
+					type = all
+					owned_by = ROOT
+				}
+				malaya_area = {
+					type = all
+					owned_by = ROOT
+				}
+				malacca_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = JAP_OWNS_VASSALS_TT
+				bengal_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				palawan_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				west_mindanao_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				mindanao_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				visayas_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				southern_luzon_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				luzon_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = JAP_OWNS_VASSAL_TRADE_CENTERS_TT
+				1397 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				1357 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				1361 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_kaen_ryuo
+				duration = -1
+			}
+		}
+	}
+
+}
+
+Japan_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	jap_daibutsu = {
+		icon = mission_buddhist_monk_praying
+		required_missions = { jap_rokudo_no_tsuji }
+		position = 2
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				OR = {
+					is_great_power = yes
+					total_development = 500
+				}
+			}
+			else = {
+				total_development = 500
+			}
+			NOT = { is_lacking_institutions = yes }
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_sanzen_sekai
+				duration = 5475
+			}
+		}
+	}
+
+	jap_shimi_daikon = {
+		icon = me_mission_japan_teathre
+		required_missions = { jap_daibutsu }
+		position = 3
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					is_state = yes
+					NOT = { has_building = university }
+					NOT = {
+						any_province_in_state = {
+							has_building = university
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+			japan_region = {
+				type = all
+				owned_by = ROOT
+				OR = {
+					is_state = no
+					has_building = university
+					any_province_in_state = {
+						has_building = university
+					}
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_country_modifier = {
+				name = jap_togen_shimi
+				duration = -1
+			}
+		}
+	}
+
+	jap_great_harmony = {
+		icon = personal_diplomacy
+		required_missions = { jap_spoils_war }
+		position = 4
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { owned_by = ROOT }
+			NOT = {
+				all_country = {
+					OR = {
+						is_subject_of = ROOT
+						capital_scope = {
+							NOT = { region = japan_region }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				japan_region = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						province_id = 1015
+						province_id = 1032
+					}
+				}
+				all_country = {
+					OR = {
+						tag = RYU
+						is_subject_of = ROOT
+						capital_scope = {
+							NOT = { region = japan_region }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_reform_progress_medium_effect = yes
+		}
+	}
+
+	jap_togen_shirataki = {
+		icon = mission_konkani_pirates
+		required_missions = { jap_united_island }
+		position = 6
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = {
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+						area_for_scope_province = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+								has_building = coastal_defence
+								has_building = naval_battery
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = JAP_TOGEN_SHIRATAKI_TRIGGER_TT
+				japan_region = {
+					type = all
+					owned_by = ROOT
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+						area_for_scope_province = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+								has_building = coastal_defence
+								has_building = naval_battery
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			define_advisor = {
+				type = naval_reformer
+				religion = ROOT
+				culture = ROOT
+				skill = 3
+				cost_multiplier = 0.75
+			}
+		}
+	}
+
+	jap_murasame = {
+		icon = mission_invade_island
+		required_missions = { jap_togen_shirataki }
+		position = 7
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = {
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+						has_building = dock
+						has_building = drydock
+						area_for_scope_province = {
+							OR = {
+								has_building = shipyard
+								has_building = grand_shipyard
+								has_building = dock
+								has_building = drydock
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			japan_region = {
+				type = all
+				owned_by = ROOT
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+					has_building = dock
+					has_building = drydock
+					area_for_scope_province = {
+						OR = {
+							has_building = shipyard
+							has_building = grand_shipyard
+							has_building = dock
+							has_building = drydock
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_kaimen_wari
+				duration = 7300
+			}
+			1240 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1994 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	jap_pacific_base = {
+		icon = mission_portuguese_malabar
+		required_missions = {
+			jap_murasame
+			jap_northern_islands
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1240
+				province_id = 1997
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_shipyard_building_trigger = yes }
+					NOT = { has_dock_building_trigger = yes }
+				}
+			}
+		}
+		trigger = {
+			1240 = {
+				owned_by = ROOT
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+			1997 = {
+				owned_by = ROOT
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			1240 = {
+				add_province_modifier = {
+					name = jap_samehada_shotei
+					duration = -1
+				}
+			}
+			1997 = {
+				add_province_modifier = {
+					name = jap_samehada_shotei
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_spices_must_flow = {
+		icon = mission_entrepot_of_india
+		required_missions = {
+			jap_southern_trading_post
+		}
+		position = 9
+		trigger = {
+			spices = 1
+			OR = {
+				development_in_provinces = {
+					value = 50
+					trade_goods = spices
+				}
+				trading_bonus = {
+					trade_goods = spices
+					value = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = JAP_SPICE_EFFECT_TT
+			tooltip = {
+				add_province_modifier = {
+					name = jap_new_markets
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { trade_goods = spices }
+					add_province_modifier = {
+						name = jap_new_markets
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+
+	jap_master_east_indies = {
+		icon = mission_coromandel_expansion
+		required_missions = {
+			jap_malaccan_hegemony
+			jap_spices_must_flow
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1361
+				province_id = 1357
+				province_id = 1397
+				any_trade_node_member_province = {
+					OR = {
+						province_id = 1361
+						province_id = 1357
+						province_id = 1397
+					}
+				}
+			}
+			province_has_center_of_trade_of_level = 1
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			mercantilism = 33
+			navy_tradition = 50
+			custom_trigger_tooltip = {
+				tooltip = JAP_OWNS_VASSAL_TRADE_INDIES_TT
+				1361 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				1357 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				1397 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = JAP_EAST_INDIES_EFFECT_TT
+			tooltip = {
+				add_province_modifier = {
+					name = jap_master_east_indies_modifiers
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				1361 = {
+					every_trade_node_member_province = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							province_has_center_of_trade_of_level = 1
+						}
+						add_province_modifier = {
+							name = jap_master_east_indies_modifiers
+							duration = -1
+						}
+					}
+				}
+				1357 = {
+					every_trade_node_member_province = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							province_has_center_of_trade_of_level = 1
+						}
+						add_province_modifier = {
+							name = jap_master_east_indies_modifiers
+							duration = -1
+						}
+					}
+				}
+				1397 = {
+					every_trade_node_member_province = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							province_has_center_of_trade_of_level = 1
+						}
+						add_province_modifier = {
+							name = jap_master_east_indies_modifiers
+							duration = -1
+						}
+					}
+				}
+			}
+		}
+	}
+
+	jap_uzushio_ipponzeoi = {
+		icon = mission_malayan_viceroyalty
+		required_missions = {
+			jap_gosenmaigawara
+			jap_master_east_indies
+			jap_shizurase
+		}
+		position = 14
+		trigger = {
+			navy_size = 300
+			all_country = {
+				NOT = {
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+			calc_true_if = {
+				amount = 5
+				all_trade_node = {
+					trade_share = {
+						country = ROOT
+						share = 75
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_gyojin_karate_ogi_buraikan
+				duration = -1
+			}
+		}
+	}
+}
+
+Japan_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	jap_kiki_kyutoryu = {
+		icon = me_mission_ming_imperial_forces
+		required_missions = { jap_rokudo_no_tsuji }
+		position = 2
+		trigger = {
+			years_of_income = 1
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_mil = 8
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_dip = 8
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_adm = 9
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			japan_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = jap_ichibugin
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_yakkodori = {
+		icon = mission_sea_battles
+		required_missions = {
+			jap_kiki_kyutoryu
+		}
+		position = 3
+		trigger = {
+			1376 = {
+				trade_share = {
+					country = ROOT
+					share = 80
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 75
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			japan_region = {
+				add_province_modifier = {
+					name = jap_closed_ports
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_renew_zaibatsu = {
+		icon = mission_scholar_officials
+		required_missions = {
+			jap_shimi_daikon
+			jap_yakkodori
+		}
+		position = 4
+		provinces_to_highlight = {
+			region = japan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 1
+				is_state = no
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { prosperity = 50 }
+				}
+			}
+		}
+		trigger = {
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
+			has_mil_advisor_3 = yes
+			japan_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { devastation = 1 }
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					is_state = yes
+					prosperity = 50
+				}
+				else = {
+					is_state = yes
+				}
+			}
+		}
+		effect = {
+			japan_region = {
+				add_province_modifier = {
+					name = jap_hyakuhachi_zaibatsu
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_klabautermann = {
+		icon = mission_bengal_entrepot
+		required_missions = {
+		}
+		position = 6
+		trigger = {
+			num_of_heavy_ship = 5
+			num_of_light_ship = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_takitate
+				duration = 7300
+			}
+			1032 = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 50
+				}
+				else_if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	jap_northern_islands = {
+		icon = mission_open_up_china
+		required_missions = { jap_klabautermann }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 1032
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 1032
+		}
+		effect = {
+			1032 = {
+				add_base_production = 3
+				add_province_modifier = {
+					name = jap_ryusui
+					duration = -1
+				}
+			}
+		}
+	}
+
+	jap_new_continent = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { jap_northern_islands }
+		position = 8
+		trigger = {
+			num_of_explorers = 1
+			OR = {
+				north_america = {
+					has_discovered = ROOT
+				}
+				south_america = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			create_conquistador = {
+				tradition = 50
+			}
+		}
+	}
+
+	jap_colonial_ventures = {
+		icon = mission_settlers_north_america
+		required_missions = {
+			jap_new_continent
+			jap_pacific_base
+		}
+		position = 9
+		trigger = {
+			num_of_explorers = 1
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_venturing
+				duration = 7300
+			}
+		}
+	}
+
+	jap_samegawara_seiken = {
+		icon = mission_patronize_local_gods
+		required_missions = { jap_colonial_ventures }
+		position = 10
+		trigger = {
+			navy_size = 200
+			navy_tradition = 75
+			num_of_admirals = 3
+			calc_true_if = {
+				amount = 2
+				all_subject_country	= {
+					is_colonial_nation = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = JAP_SAMEGAWARA_EFFECT_TT
+			tooltip = {
+				add_country_modifier = {
+					name = jap_japanese_knowledge
+					duration = 5475
+				}
+			}
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						is_colonial_nation = yes
+					}
+					add_country_modifier = {
+						name = jap_japanese_knowledge
+						duration = 5475
+					}
+				}
+			}
+		}
+	}
+
+	jap_muzugokoro = {
+		icon = mission_dominate_gujarati_trade
+		required_missions = {  }
+		position = 11
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				OR = {
+					has_flagship = yes
+					navy_tradition = 75
+				}
+			}
+			else = {
+				navy_tradition = 75
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jap_kairyu_ipponzeoi
+				duration = 5475
+			}
+		}
+	}
+
+	jap_shizurase = {
+		icon = mission_invade_gujarat
+		required_missions = { jap_muzugokoro }
+		position = 13
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				NOT = { region = japan_region }
+				OR = {
+					has_building = coastal_defence
+					has_building = naval_battery
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = JAP_SHIZURASE_EFFECT_TT
+			tooltip = {
+				add_province_modifier = {
+					name = jap_naval_defense
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						NOT = { region = japan_region }
+						OR = {
+							has_building = coastal_defence
+							has_building = naval_battery
+							has_shipyard_building_trigger = yes
+							has_dock_building_trigger = yes
+						}
+					}
+					add_province_modifier = {
+						name = jap_naval_defense
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}

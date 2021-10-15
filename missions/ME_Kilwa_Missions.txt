@@ -23,7 +23,6 @@ ZAN_missions_1 = {
 			}
 		}
 		effect = {
-			hidden_effect = { REB = { change_variable = { slaves_price = 0.2 } } }
 			change_price = {
 				trade_goods = slaves
 				key = kilwa_slave_trade
@@ -114,7 +113,10 @@ ZAN_missions_1 = {
 			province_id = 1196
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { province_has_building_of_group = { group = taxation all = yes } }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 				NOT = { development = 19 }
 			}
 		}
@@ -122,9 +124,9 @@ ZAN_missions_1 = {
 			is_at_war = no
 			owns = 1196
 			1196 = {
-				custom_trigger_tooltip = {
-					tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_TAXATION_ALL
-					province_has_building_of_group = { group = taxation all = yes }
+				OR = {
+					has_building = temple
+					has_building = cathedral
 				}
 				development = 19
 			}
@@ -132,7 +134,13 @@ ZAN_missions_1 = {
 		effect = {
 			1196 = {
 				add_base_tax = 2
-				add_temple_line = yes
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building = cathedral
+				}
 			}
 			add_country_modifier = {
 				name = kilwa_the_great_mosque_of_kilwa_modifier
@@ -193,6 +201,7 @@ ZAN_missions_1 = {
 			}
 		}
 		trigger = {
+			owns = 1196
 			ADM = 4
 			central_swahili_coast_area = {
 				type = all
@@ -246,8 +255,14 @@ ZAN_missions_1 = {
 			}
 		}
 		effect = {
-			custom_tooltip = ENABLES_DECISION_TO_BUILD_HUSUNI_KUBWA
-			set_country_flag = zan_husuni_kubwa_enabled
+			#custom_tooltip = ENABLES_DECISION_TO_BUILD_HUSUNI_KUBWA #REMOVED
+			#set_country_flag = zan_husuni_kubwa_enabled
+			1196 = {
+				add_province_modifier = {
+					name = kilwa_husuni_kubwa_modifier
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -367,7 +382,6 @@ ZAN_missions_2 = {
 			}
 		}
 		effect = {
-			hidden_effect = { REB = { change_variable = { ivory_price = 0.1 } } }
 			change_price = {
 				trade_goods = ivory
 				key = kilwa_ivory_trade
@@ -965,7 +979,6 @@ ZAN_missions_4 = {
 		required_missions = { kilwa_a_land_down_under }
 		position = 6
 		trigger = {
-			colony = 1
 			any_subject_country = {
 				is_colonial_nation = yes
 				capital_scope = {
@@ -1187,7 +1200,6 @@ ZAN_missions_5 = {
 				name = kilwa_the_spice_trade_modifier
 				duration = -1
 			}
-			hidden_effect = { REB = { change_variable = { spices_price = 0.1 } } }
 			change_price = {
 				trade_goods = spices
 				key = kilwa_spice_trade
