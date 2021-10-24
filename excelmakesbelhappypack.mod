@@ -1,6 +1,4 @@
 name="excelmakesbelhappypack"
-replace_path="gfx/loadingscreens"
-replace_path="missions"
 tags={
 	"Historical"
 	"Missions And Decisions"

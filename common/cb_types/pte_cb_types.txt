@@ -150,3 +150,39 @@ cb_pte_liberation = {
 
 	war_goal = pte_liberation_war_goal
 }
+
+cb_pte_cultural_hegemony = {
+	valid_for_subject = no
+
+	prerequisites = {
+		is_subject = no
+		NOT = { truce_with = FROM }
+		NOT = { has_country_modifier = pte_culture_group_hegemony_cooldown_modifier }
+		FROM = {
+			has_country_modifier = pte_culture_group_hegemony_modifier
+			NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+		}
+		culture_group = variable:From:pte_culture_group_hegemony_var
+		any_owned_province = {
+			culture_group = ROOT
+		}
+		OR = {
+			total_development = 50
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = our_dev
+					value = trigger_value:total_development
+				}
+				export_to_variable = {
+					which = their_dev
+					value = trigger_value:total_development
+					who = FROM
+				}
+				divide_variable = { which = their_dev value = 4 }
+				check_variable = { which = our_dev which = their_dev }
+			}
+		}
+	}
+
+	war_goal = pte_cultural_hegemony_war_goal
+}

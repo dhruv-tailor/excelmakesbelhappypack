@@ -1,0 +1,163 @@
+country_decisions = {
+	pte_claim_culture_group_hegemony = {
+		major = yes
+		potential = {
+			is_subject = no
+			NOT = { has_country_modifier = pte_culture_group_hegemony_modifier }
+			is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 }
+			OR = {
+				development_in_provinces = {
+					value = 50
+					culture_group = ROOT
+				}
+				any_country = {
+					has_country_modifier = pte_culture_group_hegemony_modifier
+					NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+					ROOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+				}
+			}
+		}
+		allow = {
+			stability = 2
+			prestige = 50
+			power_projection = 50
+			is_at_war = no
+			dominant_culture = new_variable:Root:primary_culture
+			custom_trigger_tooltip = {
+				tooltip = PTE_CLAIM_CULTURE_GROUP_HEGEMONY_NO_COOLDOWN_TT
+				NOT = { has_country_modifier = pte_culture_group_hegemony_cooldown_modifier }
+			}
+			custom_trigger_tooltip = {
+				tooltip = PTE_CLAIM_CULTURE_GROUP_HEGEMONY_NOT_CLAIMED_BY_ANYONE_TT
+				NOT = {
+					any_country = {
+						has_country_modifier = pte_culture_group_hegemony_modifier
+						NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+						ROOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = PTE_CLAIM_CULTURE_GROUP_HEGEMONY_NOT_5_HEGEMONIES_YET_TT
+				NOT = {
+					calc_true_if = {
+						all_country = {
+							has_country_modifier = pte_culture_group_hegemony_modifier
+							NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+						}
+						amount = 5
+					}
+				}
+			}
+			development_in_provinces = {
+				value = 200
+				culture_group = ROOT
+			}
+			custom_trigger_tooltip = {
+				tooltip = PTE_CLAIM_CULTURE_GROUP_HEGEMONY_NO_COUNTRY_STRONGER_THAN_US
+				NOT = {
+					any_country = {
+						culture_group = ROOT
+						is_subject = no
+						OR = {
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									which = their_dev
+									value = trigger_value:total_development
+								}
+								export_to_variable = {
+									which = our_dev
+									value = trigger_value:total_development
+									who = ROOT
+								}
+								multiply_variable = { which = their_dev value = 1.5 }
+								check_variable = { which = their_dev which = our_dev }
+							}
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									which = their_army_size
+									value = trigger_value:army_size
+								}
+								export_to_variable = {
+									which = our_army_size
+									value = trigger_value:army_size
+									who = ROOT
+								}
+								multiply_variable = { which = their_army_size value = 1.5 }
+								check_variable = { which = their_army_size which = our_army_size }
+							}
+						}
+					}
+				}
+			}
+			treasury = 3000
+		}
+		effect = {
+			if = {
+				limit = {
+					any_country = {
+						has_country_modifier = pte_culture_group_hegemony_modifier
+						NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+						ROOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+					}
+				}
+				random_province = {
+					limit = {
+						is_capital = yes
+						owner = {
+							has_country_modifier = pte_culture_group_hegemony_modifier
+							NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+							ROOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+						}
+					}
+					custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_CURRENT_HEGEMON_TT
+				}
+			}
+			hidden_effect = {
+				export_to_variable = {
+					which = pte_culture_group_hegemony_var
+					value = trigger_value:primary_culture
+				}
+			}
+			add_treasury = -3000
+			add_country_modifier = {
+				name = pte_culture_group_hegemony_modifier
+				duration = -1
+			}
+			custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_TT
+			hidden_effect = {
+				country_event = { id = pte_events.5 }
+			}
+			if = {
+				limit = {
+					any_country = {
+						has_country_modifier = pte_culture_group_hegemony_modifier
+						NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+						ROOT = {
+							NOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+						}
+					}
+				}
+				custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_OTHERS_TT
+				every_province = {
+					limit = {
+						is_capital = yes
+						owner = {
+							has_country_modifier = pte_culture_group_hegemony_modifier
+							NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+							ROOT = {
+								NOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+							}
+						}
+					}
+					custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_OTHERS_LIST_TT
+				}
+				custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_OTHERS_EXPLANATION_TT
+			}
+		}
+		ai_will_do = {
+			factor = 10
+		}
+		ai_importance = 300
+	}
+}

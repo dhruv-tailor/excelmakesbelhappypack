@@ -1,0 +1,108 @@
+pte_give_up_cultural_hegemony = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0.32
+	prestige_base = 0.5
+	ae_base = 0
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 50.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = yes
+	is_make_subject = no
+	requires_is_allowed = no
+
+	is_visible = {
+		FROM = {
+			has_country_modifier = pte_culture_group_hegemony_modifier
+			NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+		}
+		NOT = { culture_group = variable:From:pte_culture_group_hegemony_var }
+	}
+	is_allowed = {
+		FROM = {
+			any_owned_province = {
+				culture_group = variable:Prev:pte_culture_group_hegemony_var
+				custom_trigger_tooltip = {
+					tooltip = PTE_PROVINCE_CONTROLLED_BY_OUR_SIDE
+					controller = {
+						OR = {
+							is_in_war = {
+								attacker_leader = ROOT
+								defender_leader = FROM
+								attackers = THIS
+							}
+							is_in_war = {
+								attacker_leader = FROM
+								defender_leader = ROOT
+								defenders = THIS
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		FROM = {
+			remove_country_modifier = pte_culture_group_hegemony_modifier
+			set_variable = { which = pte_culture_group_hegemony_var value = 0 }
+			add_country_modifier = {
+				name = pte_culture_group_hegemony_cooldown_modifier
+				duration = 7300
+				hidden = yes
+			}
+		}
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			FROM = {
+				OR = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 5
+							OR = {
+								is_claim = ROOT
+								is_core = ROOT
+							}
+						}
+					}
+					is_in_war = {
+						participants = ROOT
+						participants = FROM
+						casus_belli = cb_humiliate_rotw
+					}
+				}
+				OR = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_owner_accepted_culture = no
+						culture = ROOT
+					}
+					AND = {
+						has_dlc = "Emperor"
+						is_hegemon = yes
+						NOT = {
+							is_in_war = {
+								attacker_leader = ROOT
+								defender_leader = FROM
+								casus_belli = cb_hegemon
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

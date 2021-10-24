@@ -10,6 +10,11 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 
+	trigger = {
+		exists = yes
+		exists = FROM
+	}
+
 	immediate = {
 		hidden_effect = {
 			FROM = {
@@ -164,6 +169,11 @@ country_event = {
 	hidden = yes
 	is_triggered_only = yes
 
+	trigger = {
+		exists = yes
+		exists = FROM
+	}
+
 	immediate = {
 		hidden_effect = {
 			create_marriage = FROM
@@ -174,5 +184,119 @@ country_event = {
 		name = pte_events2.EVTOPT1
 
 		ai_chance = { factor = 100 }
+	}
+}
+
+# Remove Culture Group Hegemony
+country_event = {
+	id = pte_events.3
+	title = pte_events.EVTNAME3
+	desc = pte_events.EVTDESC3
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		OR = {
+			AND = {
+				has_country_modifier = pte_culture_group_hegemony_modifier
+				OR = {
+					is_subject = yes
+					is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 }
+					NOT = { culture_group = variable:Root:pte_culture_group_hegemony_var }
+					NOT = {
+						any_owned_province = {
+							culture_group = variable:Root:pte_culture_group_hegemony_var
+						}
+					}
+				}
+			}
+			AND = {
+				NOT = { has_country_modifier = pte_culture_group_hegemony_modifier }
+				NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_country_modifier = pte_culture_group_hegemony_modifier
+				}
+				remove_country_modifier = pte_culture_group_hegemony_modifier
+				country_event = { id = pte_events.4 }
+			}
+			add_country_modifier = {
+				name = pte_culture_group_hegemony_cooldown_modifier
+				duration = 7300
+				hidden = yes
+			}
+			set_variable = { which = pte_culture_group_hegemony_var value = 0 }
+		}
+	}
+
+	option = {
+		name = pte_events3.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Remove Culture Group Hegemony Notification
+country_event = {
+	id = pte_events.4
+	title = pte_events.EVTNAME4
+	desc = {
+		trigger = {
+			is_subject = yes
+		}
+		desc = pte_events.EVTDESC4.1
+	}
+	desc = {
+		trigger = {
+			is_subject = no
+		}
+		desc = pte_events.EVTDESC4.2
+	}
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = pte_events4.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_LOST_TT
+	}
+}
+
+# Claimed Culture Group Hegemony Notification
+country_event = {
+	id = pte_events.5
+	title = pte_events.EVTNAME5
+	desc = pte_events.EVTDESC5
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = pte_events5.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		tooltip = {
+			add_country_modifier = {
+				name = pte_culture_group_hegemony_modifier
+				duration = -1
+			}
+		}
+		custom_tooltip = PTE_CULTURE_GROUP_HEGEMONY_TT
 	}
 }
