@@ -1,1 +1,173 @@
-NDefines.NDiplomacy.GREAT_PROJECT_WARSCORE_COST_MODIFIER = 0.0
+--Country
+
+	--Culture
+NDefines.NCountry.MONTHS_TO_CHANGE_CULTURE = 3
+
+	--Dictatorship
+NDefines.NCountry.DICTATORSHIP_TRADITION_FOR_MONARCHY = 20
+NDefines.NCountry.DICTATORSHIP_TRADITION_FOR_REPUBLIC = 60
+
+	--Estate
+NDefines.NCountry.ESTATE_MIN_DISTRIBUTED_CROWNLAND = 33.0
+NDefines.NCountry.ESTATE_PRIVILEGES_MAX_CONCURRENT = 20
+NDefines.NCountry.ESTATE_AGENDA_ABOUT_TO_EXPIRE_WARNING = 425
+NDefines.NCountry.ESTATE_LOYALTY_DECAY_BASE_MIN = 6.0
+NDefines.NCountry.ESTATE_LOYALTY_DECAY_BASE_MAX = 9.0
+
+	--Idea
+NDefines.NCountry.FREE_IDEA_GROUP_COST = 5
+NDefines.NCountry.IDEA_TO_TECH = -0.01
+NDefines.NCountry.MAX_IDEA_GROUPS_FROM_SAME_CATEGORY = 0.35
+NDefines.NCountry.PS_BUY_IDEA = 300
+
+	--Merchant Republuic
+NDefines.NCountry.MERCHANT_REPUBLIC_SIZE_LIMIT = 9999
+
+	--Policies
+NDefines.NCountry.BASE_POSSIBLE_POLICIES = 4
+NDefines.NCountry.MAX_ACTIVE_POLICIES = 12
+NDefines.NCountry.MINIMUM_POLICY_TIME = 3
+
+	--Professionalism
+NDefines.NCountry.HIGH_ARMY_PROFESSIONALISM_MIN_RANGE = 0
+NDefines.NCountry.HIGH_ARMY_PROFESSIONALISM_MAX_RANGE = 1
+NDefines.NCountry.LOW_ARMY_PROFESSIONALISM_MIN_RANGE = 0
+NDefines.NCountry.LOW_ARMY_PROFESSIONALISM_MAX_RANGE = 1
+NDefines.NCountry.MAX_ARMY_PROFESSIONALISM = 1
+
+	--Scripted Advisor
+NDefines.NCountry.SCRIPTED_ADVISOR_DISCOUNT = 0.33
+
+	--State Maintenance
+NDefines.NCountry.STATE_MAINTENANCE_CONTINENT_FACTOR = -0.5
+NDefines.NCountry.STATE_MAINTENANCE_CULTURE_FACTOR = 0.15
+NDefines.NCountry.STATE_MAINTENANCE_DEV_FACTOR = 0.012
+NDefines.NCountry.STATE_MAINTENANCE_DISTANCE_FACTOR = 0.002
+
+	--State Privilege
+NDefines.NCountry.STATE_PRIVILEGE_ADMIN_COST = 1	
+
+	--Tariffs
+NDefines.NCountry.PS_LOWER_TARIFFS = 5
+NDefines.NCountry.PS_RAISE_TARIFFS = 10
+
+--Diplomacy
+	
+	--Condottieri
+NDefines.NDiplomacy.CONDOTTIERI_MIN_DURATION = 12
+
+	--Great Projects
+NDefines.NDiplomacy.GREAT_PROJECT_WARSCORE_COST_MODIFIER = 0
+
+	--Infiltrate Administration
+NDefines.NDiplomacy.INFILTRATE_ADMINISTRATION_COST = 50
+NDefines.NDiplomacy.INFILTRATE_ADMINISTRATION_DURATION = 8
+
+	--Justify Trade Conflict
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_ACTOR_LIMIT = 0.01
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_COST = 2
+NDefines.NDiplomacy.JUSTIFY_TRADE_CONFLICT_LIMIT = 0.02
+
+	--Spy Network
+NDefines.NDiplomacy.SPY_NETWORK_SIEGE_EFFECT = 0.5
+
+	--Support Rebels
+NDefines.NDiplomacy.SUPPORT_REBELS_COST = 40
+NDefines.NDiplomacy.SUPPORT_REBELS_DURATION = 3
+NDefines.NDiplomacy.SUPPORT_REBELS_EFFECT = 20
+NDefines.NDiplomacy.SUPPORT_REBELS_MONEY_FACTOR = 0.5
+
+NDefines.NDiplomacy.VASSALIZE_BASE_DEVELOPMENT_CAP = 150
+
+--Economy
+
+	--Bankruptcy
+NDefines.NEconomy.BANKRUPTCY_PROVINCE_DEVASTATION_GAIN = 10
+
+	--Building Slots
+NDefines.NEconomy.MAX_BUILDING_SLOTS = 18
+
+	--Caravan
+NDefines.NEconomy.CARAVAN_FACTOR = 20.0
+NDefines.NEconomy.CARAVAN_POWER_MAX = 10
+
+	--Editcts
+NDefines.NEconomy.EDICTS_COST_INCREASE = 0
+NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3
+
+	--Interest
+NDefines.NEconomy.BASE_INTERESTS = 5
+
+	--Land Tech Maintenance
+NDefines.NEconomy.LAND_TECH_MAINTENANCE_IMPACT = 0.04
+
+	--Open Sea
+NDefines.NEconomy.OPEN_SEA_MODIFIER = 1
+
+--Government
+
+	--Mamluk
+NDefines.NGovernment.MAMLUK_ABILITY_POOL_SIZE = 150
+NDefines.NGovernment.MAMLUK_ABILITY_COST = 25
+NDefines.NGovernment.MAMLUK_RECRUIT_MANPOWER_MULTIPLIER = 42
+NDefines.NGovernment.MAMLUK_SELL_SLAVES_DUCATS_MULTIPLIER = 2.5
+NDefines.NGovernment.PROMOTE_MAMLUK_CULTURE_DURATION_YEARS = 4
+
+	--Reform
+NDefines.NGovernment.GOVERNMENT_REFORM_CHANGE_CORRUPTION = 5.0
+NDefines.NGovernment.GOVERNMENT_REFORM_COST_INCREASE = 25
+NDefines.NGovernment.GOVERNMENT_REFORM_YEARLY_BASE_PROGRESS	= 8.0
+
+--Military(Land)
+
+	--Fort
+NDefines.NMilitary.FORT_DEVASTATION_IMPACT = -10
+NDefines.NMilitary.FORT_FLIPPING_TIME = 60	
+
+	--Loot
+NDefines.NMilitary.LOOT_DEVASTATION_IMPACT = 10
+NDefines.NMilitary.LOOTED_MAX = 10
+
+	--Mercenary
+NDefines.NMilitary.MERCENARY_SUPPORT_LIMIT_FRACTION = 0.1
+
+	--Supply
+NDefines.NMilitary.SUPPLY_DEPOT_MIL_COST = 5	
+NDefines.NMilitary.SUPPLYLIMIT_BASE_MULTIPLIER = 8
+
+	--Wargoal
+NDefines.NMilitary.DEFAULT_WARGOAL_TICKINGWARSCORE_BONUS = 0.5	
+NDefines.NMilitary.WARGOAL_MAX_BONUS = 25
+
+--Military(Sea)
+
+	--Blockade
+NDefines.NMilitary.PARTICIPATION_SCORE_BLOCKADE = 0.002
+
+	--Galley
+NDefines.NMilitary.GALLEY_BONUS_INLAND_SEA = 0
+NDefines.NMilitary.GALLEY_DICE_MALLUS_HIGH_SEA = -1
+
+	--Marine
+NDefines.NMilitary.MARINE_SHOCK_DAMAGE_TAKEN = -0.25
+NDefines.NMilitary.MARINE_DISEMBARK_SPEED_BONUS = 5
+
+	--Naval
+NDefines.NMilitary.NAVAL_BASE_ENGAGEMENT_WIDTH = 60 	
+NDefines.NMilitary.NAVAL_CASUALTY_MIN_MORALE_DAMAGE = 0
+
+	--Repair
+NDefines.NMilitary.MONTHLY_REPAIR = 0.19
+
+	--Time
+NDefines.NMilitary.HEAVY_SHIP_TIME = 430
+NDefines.NMilitary.LIGHT_SHIP_TIME = 265
+
+--Religion
+	
+	--Papal
+NDefines.NReligion.APPOINT_CARDINAL_INFLUENCE = 5
+NDefines.NReligion.APPOINT_CARDINAL_CORRUPTION = 1
+NDefines.NReligion.YEARLY_POPE_INVESTED_INFLUENCE_PER_CARDINAL = 0.01
+NDefines.NReligion.CALL_ECUMENICAL_COUNCIL_COST = 1.5
+NDefines.NReligion.CALL_ECUMENICAL_COUNCIL_TREASURY_CONTRIBUTION = 0.1
