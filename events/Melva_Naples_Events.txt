@@ -1,0 +1,1515 @@
+namespace = Melva_Naples_Events
+
+#The Court of Alfonso il Magnanimo
+country_event = {
+	id = Melva_Naples_Events.1
+	title = Melva_Naples_Events.1.T
+	desc = Melva_Naples_Events.1.D
+	picture = ADVISOR_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_ruler = "Alfons V"
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	immediate = {
+		add_ruler_modifier = {
+			name = nap_magnanimo
+			duration = -1
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.1.OPT1
+		ai_chance = {
+			factor = 33
+		}
+
+		define_advisor = {
+			type = philosopher
+			name = "Lorenzo Valla"
+			skill = 2
+			culture = umbrian
+			religion = catholic
+			cost_multiplier = 0.33
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.1.OPT2
+		ai_chance = {
+			factor = 33
+		}
+
+		define_advisor = {
+			type = master_of_mint
+			name = "Antonio Beccadelli"
+			skill = 2
+			culture = sicilian
+			religion = catholic
+			cost_multiplier = 0.33
+		}
+		custom_tooltip = Accademia_NAP_TT
+		set_country_flag = nap_antonio_beccadelli
+	}
+
+	option = {
+		name = Melva_Naples_Events.1.OPT3
+		ai_chance = {
+			factor = 33
+		}
+
+		define_advisor = {
+			type = diplomat
+			name = "Manuele Crisolora"
+			skill = 2
+			culture = greek
+			religion = catholic
+			cost_multiplier = 0.33
+		}
+
+		add_opinion = {
+			who = BYZ
+			modifier = melva_naples_recoinciliation
+		}
+		add_opinion = {
+			who = PAP
+			modifier = melva_naples_recoinciliation
+		}
+		BYZ = {
+			add_opinion = {
+				who = ROOT
+				modifier = melva_naples_recoinciliation
+			}
+		}
+		PAP = {
+			add_opinion = {
+				who = ROOT
+				modifier = melva_naples_recoinciliation
+			}
+		}
+	}
+}
+
+#Regia dogana della mena delle pecore di Puglia
+country_event = {
+	id = Melva_Naples_Events.2
+	title = Melva_Naples_Events.2.T
+	desc = Melva_Naples_Events.2.D
+	picture = FARMING_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		is_year = 1447
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		OR = {
+			development_in_provinces = {
+				value = 50
+				OR = {
+					trade_goods = livestock
+					trade_goods = olive_oil
+					trade_goods = cheese
+				}
+			}
+			any_owned_province = {
+				area = central_italy_area
+				OR = {
+					num_of_times_improved = 3
+					base_production = 5
+				}
+			}
+			any_owned_province = {
+				area = apulia_area
+				OR = {
+					num_of_times_improved = 3
+					base_production = 5
+				}
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.2.OPT1
+
+		add_years_of_income = 0.25
+		every_owned_province = {
+			limit = {
+				OR = {
+					trade_goods = livestock
+					trade_goods = olive_oil
+					trade_goods = cheese
+				}
+			}
+			add_permanent_province_modifier = {
+				name = nap_transumanza
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = governments }
+			}
+			add_country_modifier = {
+				name = nap_transumanza_ge
+				duration = -1
+			}
+		}
+	}
+}
+
+#Gjergj Kastrioti Skënderbeu 
+country_event = {
+	id = Melva_Naples_Events.3
+	title = Melva_Naples_Events.3.T
+	desc = Melva_Naples_Events.3.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			AND = {
+				OR = {
+					tag = NAP
+					tag = TTS
+					was_tag = NAP
+				}
+				is_subject = no
+			}
+			AND = {
+				tag = ARA
+				overlord_of = NAP
+			}
+		}
+		exists = ALB
+		is_year = 1451
+	}
+
+	option = {
+		name = Melva_Naples_Events.3.OPT1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				is_at_war = no
+			}
+		}
+
+		create_guarantee = ALB
+		ALB = {
+			country_event = {
+				id = Melva_Naples_Events.4
+				days = 30
+			}
+		}
+		add_opinion = {
+			who = TUR
+			modifier = nap_helps_skanderberg
+		}
+		custom_tooltip = ALB_HELP_TT
+		hidden_effect = {
+			country_event = {
+				id = Melva_Naples_Events.12
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.3.OPT2
+		ai_chance = {
+			factor = 50
+		}
+
+		add_stability_or_adm_power = yes
+		ALB = {
+			add_yearly_manpower = 2
+			add_years_of_income = 3
+		}
+	}
+}
+
+#Aragorn Helps Skanderberg
+country_event = {
+	id = Melva_Naples_Events.4
+	title = Melva_Naples_Events.4.T
+	desc = Melva_Naples_Events.4.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = Melva_Naples_Events.4.OPT1
+
+		add_yearly_manpower = 2
+		add_years_of_income = 3
+		if = {
+			limit = {
+				NOT = { war_exhaustion = 1 }
+			}
+			add_war_exhaustion = -2.5
+		}
+		FROM = {
+			create_subject = {
+				subject_type = march
+				subject = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.4.OPT2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				is_at_war = yes
+			}
+		}
+		
+		add_yearly_manpower = 2
+		add_years_of_income = 3
+		if = {
+			limit = {
+				war_exhaustion = 1
+			}
+			add_war_exhaustion = -2.5
+		}
+	}
+}
+
+#Accademia Pontaniana
+country_event = {
+	id = Melva_Naples_Events.5
+	title = Melva_Naples_Events.5.T
+	desc = Melva_Naples_Events.5.D
+	picture = UNIVERSITY_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		is_year = 1458
+		owns_core_province = 121
+		121 = { num_of_times_improved = 2 }
+		OR = {
+			theologian = 2
+			diplomat = 2
+			statesman = 2
+			philosopher = 2
+			artist = 2
+			master_of_mint = 2 
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.5
+			OR = {
+				master_of_mint = 2
+				has_country_flag = nap_antonio_beccadelli
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.5.OPT1
+		add_adm_power = 25
+		add_innovativeness_small_effect = yes
+		121 = {
+			add_institution_embracement = {
+				which = renaissance
+				value = 24
+			}
+		}
+	}
+}
+
+#Porta Capuana
+country_event = {
+	id = Melva_Naples_Events.6
+	title = Melva_Naples_Events.6.T
+	desc = Melva_Naples_Events.6.D
+	picture = FORTIFIED_CITY_WITH_CARAVAN_OUTSIDE_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		is_year = 1484
+		owns_core_province = 121
+		121 = {
+			base_manpower = 10
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.5
+			OR = {
+				fortification_expert = 2
+				has_country_flag = nap_antonio_beccadelli
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.6.OPT1
+
+		121 = {
+			add_permanent_province_modifier = {
+				name = nap_porta_capuana
+				duration = -1
+			}
+		}
+	}
+}
+
+#Isabella di Chiaromonte
+country_event = {
+	id = Melva_Naples_Events.7
+	title = Melva_Naples_Events.7.T
+	desc = Melva_Naples_Events.7.D
+	picture = QUEEN_AT_COUNCIL_TABLE_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		NOT = { has_ruler = "Alfons V" }
+		has_ruler = yes
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = Melva_Naples_Events.7.OPT1
+		ai_chance = {
+			factor = 50
+		}
+		trigger = {
+			hidden_trigger = {
+				has_consort = yes
+			}
+		}
+
+		add_stability_or_adm_power = yes
+	}
+
+	option = {
+		name = Melva_Naples_Events.7.OPT2
+		ai_chance = {
+			factor = 50
+		}
+
+		if = {
+			limit = {
+				has_consort = yes
+			}
+			remove_consort = yes
+		}
+		define_consort = {
+			name = "Isabella Chiaromonte"
+			culture = neapolitan
+			religion = catholic
+			age = 20
+			adm = 3
+			dip = 4
+			mil = 2
+		}
+		apulia_area = {
+			add_unrest = -3
+		}
+	}
+}
+
+#Pre-Conjury
+country_event = {
+	id = Melva_Naples_Events.8
+	title = Melva_Naples_Events.8.T
+	desc = Melva_Naples_Events.8.D
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		NOT = { has_ruler = "Alfons V" }
+		NOT = { is_year = 1459 }
+		has_estate = estate_nobles
+	}
+
+	option = {
+		name = Melva_Naples_Events.8.OPT1
+
+		custom_tooltip = nap_pre_conjury_tt
+	}
+}
+
+#Barony Conjury 1
+country_event = {
+	id = Melva_Naples_Events.9
+	title = Melva_Naples_Events.9.T
+	desc = Melva_Naples_Events.9.D
+	picture = NOBLE_ESTATE_DEMANDS_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_estate = estate_nobles
+		NOT = {
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 65
+			}
+		}
+		is_year = 1459
+		NOT = { is_year = 1464 }
+		apulia_area = {
+			owned_by = ROOT
+		}
+		calabria_area = {
+			owned_by = ROOT
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	immediate = {
+		set_country_flag = nap_barony_first_risen
+	}
+
+	option = {
+		name = Melva_Naples_Events.9.OPT1
+
+		add_stability = -1
+		if = {
+			limit = {
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 65
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					area = apulia_area
+				}
+				spawn_rebels = {
+					size = 1
+					type = noble_rebels
+				}
+			}	
+			random_owned_province = {
+				limit = {
+					area = calabria_area
+				}
+				spawn_rebels = {
+					size = 1
+					type = noble_rebels
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 75
+					}
+				}
+				estate_influence = {
+					estate = estate_nobles
+					influence = 65
+				}
+			}
+			random_owned_province = {
+				limit = {
+					area = apulia_area
+				}
+				spawn_rebels = {
+					size = 2
+					type = noble_rebels
+				}
+			}	
+			random_owned_province = {
+				limit = {
+					area = calabria_area
+				}
+				spawn_rebels = {
+					size = 1
+					type = noble_rebels
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 85
+					}
+				}
+				estate_influence = {
+					estate = estate_nobles
+					influence = 75
+				}
+			}
+			random_owned_province = {
+				limit = {
+					area = apulia_area
+				}
+				spawn_rebels = {
+					size = 2
+					type = noble_rebels
+				}
+			}	
+			random_owned_province = {
+				limit = {
+					area = calabria_area
+				}
+				spawn_rebels = {
+					size = 2
+					type = noble_rebels
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 95
+					}
+				}
+				estate_influence = {
+					estate = estate_nobles
+					influence = 85
+				}
+			}
+			random_owned_province = {
+				limit = {
+					area = apulia_area
+				}
+				spawn_rebels = {
+					size = 3
+					type = noble_rebels
+				}
+			}	
+			random_owned_province = {
+				limit = {
+					area = calabria_area
+				}
+				spawn_rebels = {
+					size = 2
+					type = noble_rebels
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					area = apulia_area
+				}
+				spawn_rebels = {
+					size = 3
+					type = noble_rebels
+				}
+			}	
+			random_owned_province = {
+				limit = {
+					area = calabria_area
+				}
+				spawn_rebels = {
+					size = 3
+					type = noble_rebels
+				}
+			}
+		}
+	}
+}
+
+#Congiura dei baroni sedata
+country_event = {
+	id = Melva_Naples_Events.10
+	title = Melva_Naples_Events.10.T
+	desc = Melva_Naples_Events.10.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_country_flag = nap_barony_first_risen
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+		NOT = { num_of_rebel_armies = 1 }
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.10.OPT1
+
+		add_stability_or_adm_power = yes
+		add_country_modifier = {
+			name = nap_twenty_years_prosperity
+			duration = 7300
+		}
+		add_estate_loyalty_modifier = {
+			estate = estate_nobles
+			loyalty = -30
+			desc = nap_nobles_restrained
+			duration = 7300
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = nap_nobles_restrained
+			influence = -50
+			duration = 7300
+		}
+		change_estate_land_share = {
+			estate = estate_nobles
+			share = -33
+		}
+		custom_tooltip = NAPLES_TWENTY_YEARS_PROSPERITY
+		hidden_effect = {
+			every_owned_province = {
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_devastation = -50
+					add_prosperity = 15
+				}
+				else = {
+					add_devastation = -50
+				}
+			}
+		}
+	}
+}
+
+#First Revolt sventata
+country_event = {
+	id = Melva_Naples_Events.11
+	title = Melva_Naples_Events.11.T
+	desc = Melva_Naples_Events.11.D
+	picture = NOBLE_ESTATE_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		is_year = 1465
+		NOT = { has_country_flag = nap_barony_first_risen }
+	}
+
+	option = {
+		name = Melva_Naples_Events.11.OPT1
+
+		add_stability_or_adm_power = yes
+		add_country_modifier = {
+			name = nap_twenty_years_prosperity
+			duration = 7300
+		}
+		add_estate_loyalty_modifier = {
+			estate = estate_nobles
+			desc = nap_nobles_happy
+			loyalty = 20
+			duration = 7300
+		}
+		custom_tooltip = NAPLES_TWENTY_YEARS_PROSPERITY
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					devastation = 1
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_devastation = -50
+					add_prosperity = 15
+				}
+				else = {
+					add_devastation = -50
+				}
+			}
+		}
+	}
+}
+
+#The arrival of Kastrioty
+country_event = {
+	id = Melva_Naples_Events.12
+	title = Melva_Naples_Events.12.T
+	desc = Melva_Naples_Events.12.D
+	picture = MILITARY_CAMP_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_country_flag = nap_barony_first_risen
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.12.OPT1
+		random_owned_province = {
+			limit = {
+				controlled_by = ROOT
+				has_siege = no
+			}
+			infantry = ROOT
+			infantry = ROOT
+			cavalry = ROOT
+		}
+		define_general = {
+			fire = 3
+			shock = 2
+			manuever = 4
+			siege = 1
+			name = "Giorgio Castriota Scanderbeg"
+			trait = goal_oriented_personality
+		}
+	}
+}
+
+#Second Barony Conjury, before
+country_event = {
+	id = Melva_Naples_Events.13
+	title = Melva_Naples_Events.13.T
+	desc = Melva_Naples_Events.13.D
+	picture = BAD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		is_year = 1466
+		NOT = { is_year = 1486 }
+		has_estate = estate_nobles
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.13.OPT1
+
+		custom_tooltip = nap_pre_conjury_2_tt
+		#hidden_effect = {
+		#	country_event = {
+		#		id = Melva_Naples_Events.14
+		#	}
+		#	country_event = {
+		#		id = Melva_Naples_Events.15
+		#	}
+		#	country_event = {
+		#		id = Melva_Naples_Events.16
+		#	}
+		#}
+	}
+}
+
+#Second Barony Conjury
+country_event = {
+	id = Melva_Naples_Events.14
+	title = Melva_Naples_Events.14.T
+	desc = Melva_Naples_Events.14.D
+	picture = NOBLE_ESTATE_DEMANDS_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_estate = estate_nobles
+		NOT = {
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 60
+			}
+		}
+		is_year = 1485
+		NOT = { is_year = 1486 }
+	}
+
+	immediate = {
+		set_country_flag = nap_barony_second_risen
+	}
+
+	option = {
+		name = Melva_Naples_Events.14.OPT1
+
+		add_stability = -1
+		if = {
+			limit = {
+				owns = 2983
+			}
+			2983 = {
+				if = {
+					limit = {
+						owner = {
+							NOT = {
+								estate_influence = {
+									estate = estate_nobles
+									influence = 65
+								}
+							}
+						}
+					}
+					spawn_rebels = {
+						size = 1
+						type = noble_rebels
+					}
+					owner = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									area = calabria_area
+									area = naples_area
+									area = apulia_area
+								}
+							}
+							spawn_rebels = {
+								size = 1
+								type = noble_rebels
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owner = {
+							NOT = {
+								estate_influence = {
+									estate = estate_nobles
+									influence = 75
+								}
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 65
+							}
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+					owner = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									area = calabria_area
+									area = naples_area
+									area = apulia_area
+								}
+							}
+							spawn_rebels = {
+								size = 1
+								type = noble_rebels
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owner = {
+							NOT = {
+								estate_influence = {
+									estate = estate_nobles
+									influence = 85
+								}
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 75
+							}
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+					owner = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									area = calabria_area
+									area = naples_area
+									area = apulia_area
+								}
+							}
+							spawn_rebels = {
+								size = 2
+								type = noble_rebels
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						owner = {
+							NOT = {
+								estate_influence = {
+									estate = estate_nobles
+									influence = 95
+								}
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 85
+							}
+						}
+					}
+					spawn_rebels = {
+						size = 3
+						type = noble_rebels
+					}
+					owner = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									area = calabria_area
+									area = naples_area
+									area = apulia_area
+								}
+							}
+							spawn_rebels = {
+								size = 2
+								type = noble_rebels
+							}
+						}
+					}
+				}
+				else = {
+					spawn_rebels = {
+						size = 3
+						type = noble_rebels
+					}
+					owner = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									area = calabria_area
+									area = naples_area
+									area = apulia_area
+								}
+							}
+							spawn_rebels = {
+								size = 3
+								type = noble_rebels
+							}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_nobles
+							influence = 65
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 1
+						type = noble_rebels
+					}
+				}	
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 1
+						type = noble_rebels
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_nobles
+							influence = 75
+						}
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 65
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+				}	
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 1
+						type = noble_rebels
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_nobles
+							influence = 85
+						}
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 75
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+				}	
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						estate_influence = {
+							estate = estate_nobles
+							influence = 95
+						}
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 85
+					}
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 3
+						type = noble_rebels
+					}
+				}	
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 2
+						type = noble_rebels
+					}
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 3
+						type = noble_rebels
+					}
+				}	
+				random_owned_province = {
+					limit = {
+						OR = {
+							area = calabria_area
+							area = naples_area
+							area = apulia_area
+						}
+					}
+					spawn_rebels = {
+						size = 3
+						type = noble_rebels
+					}
+				}
+			}
+		}
+	}
+}
+
+#The Barons have been defeated
+country_event = {
+	id = Melva_Naples_Events.15
+	title = Melva_Naples_Events.15.T
+	desc = Melva_Naples_Events.15.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		has_country_flag = nap_barony_second_risen
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+		NOT = { num_of_rebel_armies = 1 }
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.15.OPT1
+		ai_chance = {
+			factor = 1
+		}
+
+		add_stability_or_adm_power = yes
+		add_splendor = 50
+		add_adm_power = 50
+		change_estate_land_share = {
+			estate = estate_nobles
+			share = -100
+		}
+	}
+}
+
+#Second Conjury evaded
+country_event = {
+	id = Melva_Naples_Events.16
+	title = Melva_Naples_Events.16.T
+	desc = Melva_Naples_Events.16.D
+	picture = NOBLE_ESTATE_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		is_year = 1487
+		NOT = { has_country_flag = nap_barony_second_risen }
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.16.OPT1
+
+		add_stability_or_adm_power = yes
+		custom_tooltip = NAPLES_TWENTY_YEARS_PROSPERITY
+		add_estate_loyalty_modifier = {
+			estate = estate_nobles
+			desc = nap_nobles_happy
+			loyalty = 20
+			duration = 7300
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					devastation = 25
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_devastation = -50
+					add_prosperity = 15
+				}
+				else = {
+					add_devastation = 50
+				}
+			}
+		}
+	}
+}
+
+#The Dream of Ladislao I
+country_event = {
+	id = Melva_Naples_Events.17
+	title = Melva_Naples_Events.17.T
+	desc = Melva_Naples_Events.17.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		always = no
+		OR = {
+			tag = NAP
+			tag = TTS
+			was_tag = NAP
+		}
+		is_subject = no
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.17.OPT1
+		ai_chance = {
+			factor = 50
+		}
+
+		tuscany_area = {
+			limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			add_permanent_claim = ROOT
+		}
+		lazio_area = {
+			limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			add_permanent_claim = ROOT
+		}
+	}
+
+	option = {
+		name = Melva_Naples_Events.17.OPT2
+		ai_chance = {
+			factor = 50
+		}
+
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		add_stability = 1
+	}
+}
+
+#Legacy of Ladislao I
+country_event = {
+	id = Melva_Naples_Events.18
+	title = Melva_Naples_Events.18.T
+	desc = Melva_Naples_Events.18.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	trigger = {
+		is_year = 1492
+		OR = {
+			tag = NAP
+			tag = SIC
+			tag = TTS
+		}
+		NOT = { has_country_flag = formed_italy_flag }
+		adm_tech = 7
+		tuscany_area = {
+			type = all
+			owned_by = ROOT
+		}
+		lazio_area = {
+			type = all
+			owned_by = ROOT
+		}
+		naples_area = {
+			type = all
+			owned_by = ROOT
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 60
+	}
+
+	option = {
+		name = Melva_Naples_Events.18.OPT1
+		ai_chance = {
+			factor = 50
+		}
+
+		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = missions }
+					has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				}
+				set_country_flag = TTS_without_tts
+			}
+			if = {
+				limit = {
+					is_part_of_hre = yes
+					is_elector = no
+					is_emperor = no
+				}
+				emperor = {
+					add_opinion = {
+						who = root
+						modifier = opinion_left_empire
+					}
+				}
+				set_in_empire = no
+				emperor = {
+					country_event = { id = hre_event.5 }
+				}
+			}
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_in_empire = no
+				set_government_rank = 2
+			}
+			set_country_flag = formed_italy_flag
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			swap_non_generic_missions = yes
+		}
+		change_tag = ITA
+		swap_non_generic_missions = yes
+	}
+
+	option = {
+		name = Melva_Naples_Events.18.OPT2
+		ai_chance = {
+			factor = 50
+		}
+
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		add_stability = 1
+	}
+}
+
+#
+#country_event = {
+#	id = Melva_Naples_Events.
+#	title = Melva_Naples_Events..T
+#	desc = Melva_Naples_Events..D
+#	picture = FARMING_eventPicture
+#
+#	fire_only_once = yes
+#	trigger = {
+#		tag = NAP
+#	}
+#
+#	mean_time_to_happen = {
+#		days = 60
+#	}
+#
+#	option = {
+#		name = Melva_Naples_Events..OPT1
+#
+#	}
+#}

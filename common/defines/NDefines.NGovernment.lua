@@ -1,0 +1,13 @@
+-- Only Changes to NDefines.NGovernment should be here.
+
+	--Mamluk
+NDefines.NGovernment.MAMLUK_ABILITY_POOL_SIZE = 150
+NDefines.NGovernment.MAMLUK_ABILITY_COST = 25
+NDefines.NGovernment.MAMLUK_RECRUIT_MANPOWER_MULTIPLIER = 42
+NDefines.NGovernment.MAMLUK_SELL_SLAVES_DUCATS_MULTIPLIER = 2.5
+NDefines.NGovernment.PROMOTE_MAMLUK_CULTURE_DURATION_YEARS = 4
+
+	--Reform
+NDefines.NGovernment.GOVERNMENT_REFORM_CHANGE_CORRUPTION = 5.0
+NDefines.NGovernment.GOVERNMENT_REFORM_COST_INCREASE = 25
+NDefines.NGovernment.GOVERNMENT_REFORM_YEARLY_BASE_PROGRESS	= 8.0

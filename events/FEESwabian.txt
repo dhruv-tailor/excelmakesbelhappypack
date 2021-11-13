@@ -1,0 +1,1119 @@
+# Events for the formation, support and conflicts of the Swabian League
+
+
+namespace = fee_swabian_events
+
+# Establish a Defensive Swabian League
+
+country_event = {
+	id = fee_swabian_events.1
+	title = fee_swabian_events.1.t
+	desc = fee_swabian_events.1.d
+	picture = LIBERUM_VETO_eventPicture
+
+	trigger = {
+		NOT = { has_global_flag = fee_swabian_league_established }
+		OR = {
+			capital_scope = { area = lower_swabia_area }
+			capital_scope = { area = upper_swabia_area }
+		}
+		is_year = 1460
+		NOT = { is_year = 1520 }
+		NOT = { has_global_flag = fee_swabian_league_disbanded }
+		NOT = { is_at_war = yes }
+		NOT = { tag = BAV }
+		is_part_of_hre = yes
+		is_subject = no
+		NOT = {
+			num_of_owned_provinces_with = {
+				value = 4
+				NOT = { 
+					OR = {
+						area = lower_swabia_area
+						area = upper_swabia_area
+					} 
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.8
+			has_truce = yes
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.1.a		# Establish a league for all of Swabia!
+		add_country_modifier = {
+			name = fee_joined_swabian_league
+			duration = -1
+		}
+		set_global_flag = fee_swabian_league_established
+		add_prestige = 10
+	}
+	
+	option = {
+		name = fee_swabian_events.1.b		# We fight on our own.
+		add_mil_power = 10
+		add_prestige = 5
+	}
+}
+
+# Asked if country wants to join
+
+country_event = {
+	id = fee_swabian_events.2
+	title = fee_swabian_events.2.t
+	desc = fee_swabian_events.2.d
+	picture = DIPLOMACY_eventPicture
+
+
+	trigger = {
+		OR = {
+			OR = {
+				capital_scope = { area = lower_swabia_area }
+				capital_scope = { area = upper_swabia_area }
+			}
+			AND = {
+				any_neighbor_country = {
+					OR = {
+						capital_scope = { area = lower_swabia_area }
+						capital_scope = { area = upper_swabia_area }
+					}
+				}
+				NOT = { tag = BAV }
+				NOT = { tag = SWI }
+				is_emperor = no
+			}
+		}
+		has_global_flag = fee_swabian_league_established
+		NOT = {
+			has_country_modifier = fee_joined_swabian_league
+		}
+		NOT = {
+			has_country_modifier = fee_rejected_swabian_league
+		}
+		NOT = {
+			has_global_flag = fee_swabian_league_disbanded
+		}
+		is_at_war = no
+		is_part_of_hre = yes
+		NOT = {
+			num_of_cities = 6
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 3
+	}
+	
+	option = {
+		name = fee_swabian_events.2.a		# We will join this defensive league.
+		ai_chance = {
+			factor = 75
+		}
+		add_country_modifier = {
+			name = fee_joined_swabian_league
+			duration = -1
+		}
+		every_country = {
+			limit = {
+				is_part_of_hre = yes
+			}
+			country_event = { id = fee_swabian_events.5 days = 30 }
+		}
+	}
+	option = {
+		name = fee_swabian_events.2.b		# We stand alone.
+		ai_chance = { factor = 25 }
+		add_prestige = 5
+		add_country_modifier = {
+			name = fee_rejected_swabian_league
+			duration = -1
+			hidden = yes
+		}
+	}
+}
+
+#If country has joined, this fires, giving them positive relations with everyone else.
+# Now given by different event, only here for reference
+
+# country_event = {
+	# id = fee_swabian_events.3
+	# title = fee_swabian_events.3.t
+	# desc = fee_swabian_events.3.d
+	# picture = LIBERUM_VETO_eventPicture
+
+	# triggered_only = yes
+
+	# trigger = {
+		# has_country_modifier = fee_joined_swabian_league
+		# NOT = { has_country_flag = fee_thrown_out_swabian_league }
+		# is_subject = no
+	# }
+
+	# option = {
+	# name = fee_swabian_events.3.a
+		# every_country = {
+			# limit = {
+				# NOT = ROOT
+				# has_country_modifier = fee_joined_swabian_league
+			# }
+			# add_opinion = {
+				# who = ROOT
+				# modifier = fee_swabian_league_member
+			# }
+		# }
+	# }
+# }
+
+# An HRE-state outside of Swabia can join if they neighbor a member with capital in Swabia
+
+# country_event = {
+	# id = fee_swabian_events.4
+	# title = fee_swabian_events.4.t
+	# desc = fee_swabian_events.4.d
+	# picture = DEBATE_REPUBLICAN_eventPicture
+
+	# trigger = {
+		# any_neighbor_country = {
+			# capital_scope = { region = swabia }
+		# }
+		# has_global_flag = fee_swabian_league_established
+		# NOT = { has_country_modifier = fee_joined_swabian_league }
+		# NOT = { has_country_modifier = fee_rejected_swabian_league }
+		# NOT = { has_global_flag = fee_swabian_league_disbanded }
+		# NOT = { is_at_war = yes }
+		# is_subject = no
+		# is_part_of_hre = yes
+		# is_emperor = no
+		# NOT = { tag = BAV }
+		# NOT = { tag = SWI }
+		# NOT = {
+			# num_of_cities = 6
+		# }
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 150
+		# modifier = {
+			# factor = 0.8
+			# any_country = {
+				# has_country_modifier = fee_joined_swabian_league
+				# capital_scope = { region = swabia }
+				# has_opinion = {
+					# who = ROOT
+					# value = 100
+				# }
+			# }
+		# }
+		# modifier = {
+			# factor = 0.8
+			# any_country = {
+				# has_country_modifier = fee_joined_swabian_league
+				# capital_scope = { region = swabia }
+				# alliance_with = ROOT
+			# }
+		# }
+	# }
+
+	# option = {					#Join the Swabian League
+		# name = fee_swabian_events.4.a
+		# ai_chance = {
+			# factor = 80
+		# }
+		# add_country_modifier = {
+			# name = fee_joined_swabian_league
+			# duration = -1
+		# }
+		# every_country = {
+			# limit = {
+				# has_country_modifier = fee_joined_swabian_league
+				# NOT = ROOT
+			# }
+			# country_event = { id = fee_swabian_events.5 days = 10 }
+		# }
+	# }
+	# option = {									#Reject the Swabian League
+		# name = fee_swabian_events.4.b
+		# ai_chance = {
+			# factor = 20
+		# }
+		# add_country_modifier = {
+			# name = fee_rejected_swabian_league
+			# duration = -1
+			# hidden = yes
+		# }
+		# add_mil_power = 10
+	# }
+# }
+
+# NEW MEMBER HAS JOINED
+
+country_event = {
+	id = fee_swabian_events.5
+	title = fee_swabian_events.5.t
+	desc = fee_swabian_events.5.d
+	picture = CONQUEST_eventPicture
+
+	is_triggered_only = yes
+	
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+	}
+
+	option = {
+		name = fee_swabian_events.5.a
+		add_adm_power = 10
+		add_mil_power = 10
+		add_dip_power = 10
+		add_opinion = {
+			who = FROM
+			modifier = fee_swabian_league_member
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = fee_swabian_league_member
+		}
+	}
+}
+
+# A Member Turned Away
+
+country_event = {
+	id = fee_swabian_events.6
+	title = fee_swabian_events.6.t
+	desc = fee_swabian_events.6.d
+	picture = ACCUSATION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_swabian_events.6.a
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			remove_opinion = {
+				who = FROM
+				modifier = fee_swabian_league_member
+			}
+			reverse_remove_opinion = {
+				who = FROM
+				modifier = fee_swabian_league_member
+			}
+		}
+	}
+}
+
+# Thrown out
+# THIS IS INTENTIONALLY RANDOM, AND REDUCES LIKELIHOOD THE MORE MEMBERS LIKE YOU
+# INCREASES THE MORE MEMBERS DISLIKE YOU
+
+country_event = {
+	id = fee_swabian_events.7
+	title = fee_swabian_events.7.t
+	desc = fee_swabian_events.7.d
+	picture = ACCUSATION_eventPicture
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+		any_country = {
+			has_country_modifier = fee_joined_swabian_league
+			defensive_war_with = ROOT
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 600
+		modifier = {
+			factor = 1.5
+			any_country = {
+				has_country_modifier = fee_joined_swabian_league
+				has_opinion = {
+					who = ROOT
+					value = 150
+				}
+			}
+		}
+		modifier = {
+			factor = 0.6
+			any_country = {
+				has_country_modifier = fee_joined_swabian_league
+				NOT = { 	
+					has_opinion = {
+						who = ROOT
+						value = 0
+					}
+				}
+			}
+		}
+	}
+
+	immediate = {
+		remove_country_modifier = fee_joined_swabian_league
+		add_country_modifier = { 
+			name = fee_rejected_swabian_league
+			duration = -1
+			hidden = yes
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.7.a
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			reverse_remove_opinion = {
+				who = ROOT
+				modifier = fee_swabian_league_member
+			}
+		}
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			country_event = { id = fee_swabian_events.6 days = 3 }
+		}
+	}
+}
+
+# Swabian League disbanded because of lack of membership
+
+country_event = {
+	id = fee_swabian_events.8
+	title = fee_swabian_events.8.t
+	desc = fee_swabian_events.8.d
+	picture = CIVIL_WAR_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		is_year = 1510
+		has_global_flag = fee_swabian_league_established
+		NOT = { has_global_flag = fee_swabian_league_disbanded }
+		NOT = {
+			calc_true_if = {
+				all_country = {
+					has_country_modifier = fee_joined_swabian_league
+				}
+				amount = 3
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = {
+	name = fee_swabian_events.8.a
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			country_event = { id = fee_swabian_events.9 days = 1 }
+		}
+		every_country = {
+			limit = {
+				any_neighbor_country = { has_country_modifier = fee_joined_swabian_league }
+				NOT = { has_country_modifier = fee_joined_swabian_league }
+			}
+			country_event = { id = fee_swabian_events.22 days = 7 }
+		set_global_flag = fee_swabian_league_disbanded
+		}
+	}
+}
+
+
+# Member message about disbanding
+
+country_event = {
+	id = fee_swabian_events.9
+	title = fee_swabian_events.9.t
+	desc = fee_swabian_events.9.d
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_modifier = fee_joined_swabian_league
+				}
+				reverse_remove_opinion = {
+					who = ROOT
+					modifier = fee_swabian_league_member
+				}
+			}
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.9.a
+		remove_country_modifier = fee_joined_swabian_league 
+	}
+}
+
+# League Disbanding because of religious conflict
+
+country_event = {
+	id = fee_swabian_events.10
+	title = fee_swabian_events.10.t
+	desc = fee_swabian_events.10.d
+	picture = RELIGIOUS_TURMOIL_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		has_global_flag = fee_swabian_league_established
+		NOT = { has_global_flag = fee_swabian_league_disbanded }
+		OR = {
+			AND = {
+				any_country = {
+						has_country_modifier = fee_joined_swabian_league
+						religion = catholic
+				}
+				OR = {		
+					any_country = {
+							has_country_modifier = fee_joined_swabian_league
+							religion = protestant
+					}
+					any_country = {
+							has_country_modifier = fee_joined_swabian_league
+							religion = reformed
+					}
+				}
+			}
+			AND = {
+				any_country = {
+					has_country_modifier = fee_joined_swabian_league
+					religion = protestant
+				}
+				any_country = {
+					has_country_modifier = fee_joined_swabian_league
+					religion = reformed
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 30
+	}
+
+	option = {
+		name = fee_swabian_events.10.a
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			country_event = { id = fee_swabian_events.11 days = 10 }  # Needs to be a separate event from 9, because of different event text. Otherwise identical.
+		}
+		set_global_flag = fee_swabian_league_disbanded
+	}
+}
+
+# Member message when disbanding because of religion
+
+country_event = {
+	id = fee_swabian_events.11
+	title = fee_swabian_events.11.t
+	desc = fee_swabian_events.11.d
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+	}
+
+	immediate = {
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_modifier = fee_joined_swabian_league
+				}
+				reverse_remove_opinion = {
+					who = ROOT
+					modifier = fee_swabian_league_member
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = fee_swabian_events.11.a
+		remove_country_modifier = fee_joined_swabian_league 
+		set_global_flag = fee_swabian_league_disbanded
+	}
+}
+
+
+# Request League Support
+# Event if a member is fighting a defensive war against a foreign country
+
+country_event = {
+	id = fee_swabian_events.12
+	title = fee_swabian_events.12.t
+	desc = fee_swabian_events.12.d
+	picture = BATTLE_eventPicture
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+		NOT = { 
+			has_global_flag = fee_swabian_league_disbanded 
+		}
+		any_country = {
+			NOT = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			offensive_war_with = ROOT
+		}	
+		NOT = { has_country_modifier = fee_league_aid }
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.75
+				any_country = {
+					war_score_against = {
+						who = ROOT
+						value = 10
+					}
+				}
+			}
+		}
+
+	immediate = {
+		hidden_effect = {
+			add_country_modifier = {
+				name = fee_league_aid
+				duration = 3650
+			}
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.12.a
+		every_country = {
+			limit = { 
+				has_country_modifier = fee_joined_swabian_league 
+			}
+			country_event = { id = fee_swabian_events.13 days = 3 }
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.12.b
+		add_years_of_income = 0.25
+		add_manpower = 0.5
+		add_prestige = 1
+	}
+}
+
+# §FROM§ Needs Our Aid!
+
+country_event = {
+	id = fee_swabian_events.13
+	title = fee_swabian_events.13.t
+	desc = fee_swabian_events.13.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+		NOT = {
+			is_at_war = yes
+		}
+	}
+
+	option = {						# Send military aid
+		name = fee_swabian_events.13.a
+		ai_chance = {
+			factor = 35
+			modifier = {
+				factor = 0
+				NOT = { manpower = 1000 }
+			}
+		}
+		add_manpower = -1
+		FROM = {
+			country_event = { id = fee_swabian_events.14 days = 1 random = 45 }
+		}
+	}
+	option = {				# Send financial aid
+		name = fee_swabian_events.13.b
+		ai_chance = {
+			factor = 35
+			modifier = {
+				factor = 0
+				not = { treasury = 20 }
+			}
+		}
+		add_treasury = -25
+		FROM = {
+			country_event = { id = fee_swabian_events.15 days = 1 random = 45 }
+		}
+	}
+	option = {				# All aid we can muster
+		name = fee_swabian_events.13.c
+		ai_chance = { factor = 20 }
+		add_treasury = -25
+		add_manpower = -1
+		FROM = {
+			country_event = { id = fee_swabian_events.16 days = 1 random = 45 }
+		}
+	}
+	option = {				# No aid
+		name = fee_swabian_events.13.d
+		ai_chance = {
+			factor = 10
+			modifier = {
+				factor = 100
+				NOT = { manpower = 1000 }
+				NOT = { treasury = 20 }
+			}
+			modifier = {
+				factor = 75
+				any_country = {
+					alliance_with = ROOT
+					offensive_war_with = FROM
+				}
+			}
+			modifier = {
+				factor = 60
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = 0
+					}
+				}
+			}
+		}
+		add_prestige = -10
+		FROM = {
+			country_event = { id = fee_swabian_events.17 days = 1 random = 45 }
+		}
+	}
+}
+
+# §FROM§ sends military aid!
+
+country_event = {
+	id = fee_swabian_events.14
+	title = fee_swabian_events.14.t
+	desc = fee_swabian_events.14.d
+	picture = LAND_MILITARY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_swabian_events.14.a
+		add_manpower = 2
+	}
+}
+
+# §FROM§ sends financial aid!
+
+country_event = {
+	id = fee_swabian_events.15
+	title = fee_swabian_events.15.t
+	desc = fee_swabian_events.15.d
+	picture = ECONOMY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_swabian_events.15.a
+		add_treasury = 30
+	}
+}
+
+# §FROM§ aids us every way they can!
+
+country_event = {
+	id = fee_swabian_events.16
+	title = fee_swabian_events.16.t
+	desc = fee_swabian_events.16.d
+	picture = MILITARY_CAMP_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_swabian_events.16.a
+		add_manpower = 2
+		add_treasury = 30
+	}
+}
+
+# §FROM§ refuses us aid!
+
+country_event = {
+	id = fee_swabian_events.17
+	title = fee_swabian_events.17.t
+	desc = fee_swabian_events.17.d
+	picture = LIBERUM_VETO_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_swabian_events.17.a
+		add_opinion = {
+			who = FROM
+			modifier = fee_refused_league_aid
+		}
+	}
+
+}
+
+
+# League Aids Stability in the Region
+
+country_event = {
+	id = fee_swabian_events.18
+	title = fee_swabian_events.18.t
+	desc = fee_swabian_events.18.d
+	picture = LAND_MILITARY_eventPicture
+
+	trigger = {
+		has_country_modifier = fee_joined_swabian_league
+		is_at_war = no
+		calc_true_if = {
+			all_country = {
+				has_country_modifier = fee_joined_swabian_league
+				NOT = {
+					had_recent_war = 10
+				}
+			}
+			amount = 3
+		}
+		NOT = {
+			has_global_flag = fee_swabian_league_disbanded
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 160
+		modifier = {
+			factor = 0.75
+			any_country = {
+				alliance_with = ROOT
+				has_country_modifier = fee_joined_swabian_league
+			}
+		}
+		modifier = {
+			factor = 0.75
+			calc_true_if = {
+				all_country = {
+					alliance_with = ROOT
+					has_country_modifier = fee_joined_swabian_league
+				}
+				amount = 2
+			}
+		}
+		modifier = {
+			factor = 0.75
+			calc_true_if = {
+				all_country = {
+					alliance_with = ROOT
+					has_country_modifier = fee_joined_swabian_league
+				}
+				amount = 3
+			}
+		}
+		modifier = {
+			factor = 1.25
+			any_country = {
+					has_country_modifier = fee_joined_swabian_league
+					is_rival = ROOT
+			}
+		}
+	}
+
+	option = {		# And with the league, our country is safe
+		name = fee_swabian_events.18.a
+		add_stability_or_adm_power = yes
+	}
+
+	option = {		# This is a golden age for Swabia!
+		name = fee_swabian_events.18.b
+		add_adm_power = 25
+		add_dip_power = 25
+		add_mil_power = 25
+	}
+
+	option = {		# Let's make sure we collect our League taxes.
+		name = fee_swabian_events.18.c
+		add_treasury = 25
+	}
+}
+
+
+# The Swabian League is a Threat to the Confederation!
+
+country_event = {
+		id = fee_swabian_events.19
+		title = fee_swabian_events.19.t
+		desc = fee_swabian_events.19.d
+		picture = DEBATE_REPUBLICAN_eventPicture
+
+		fire_only_once = yes
+		
+		trigger = {
+			tag = SWI
+			has_global_flag = fee_swabian_league_established
+			NOT = { has_global_flag = fee_swabian_league_established }
+			NOT = { has_country_modifier = fee_joined_swabian_league }
+			NOT = { is_at_war = yes }
+		}
+
+		mean_time_to_happen = {
+			months = 160
+			modifier = {
+				factor = 0.8
+				any_country = {
+					has_country_modifier = fee_joined_swabian_league
+					truce_with = SWI
+				}
+			}
+		}
+
+		option = {		# Develop a strategic defense plan
+			name = fee_swabian_events.19.a
+			ai_chance = { 
+				factor = 50 
+				modifier = {
+					factor = 80
+					calc_true_if = {
+						NOT = {
+							any_country = {
+								has_country_modifier = fee_joined_swabian_league
+								reverse_has_opinion = {
+									who = ROOT
+									value = 25
+								}
+							}
+						}
+						amount = 2
+					}
+				}
+			}
+			add_mil_power = 50
+		}
+
+		option = {		# There is safety in reconciliation
+			name = fee_swabian_events.19.b
+			ai_chance = { factor = 50 }
+			every_country = {
+				limit = {
+					has_country_modifier = fee_joined_swabian_league
+				}
+				add_opinion = {
+					who = SWI
+					modifier = fee_swabian_reconciliation
+				}
+			}
+			add_dip_power = 10
+		}
+}
+
+
+# Event to let nations that don't immediately fufill the requirements join later.
+
+country_event = {
+	id = fee_swabian_events.20
+	title = fee_swabian_events.20.t
+	desc = fee_swabian_events.20.d
+	picture = CONQUEST_eventPicture
+	
+	trigger = {
+		NOT = { has_country_modifier = fee_joined_swabian_league}
+		NOT = { has_country_flag = fee_rejected_swabian_league }
+		is_part_of_hre = yes
+		has_global_flag = fee_swabian_league_established
+		OR = {
+			capital_scope = { area = lower_swabia_area }
+			capital_scope = { area = upper_swabia_area }
+		}
+		is_at_war = no
+		NOT = { has_country_flag = fee_thrown_out_swabian_league }
+		is_subject = no
+		NOT = { has_global_flag = fee_swabian_league_disbanded}
+	}
+	
+	mean_time_to_happen = {
+		months = 20
+		modifier = {
+			factor = 0.6
+			calc_true_if = {
+				all_country = {
+					has_country_modifier = fee_joined_swabian_league
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 2
+			}
+		}
+	}
+	
+	option = {
+		name = fee_swabian_events.20.a		# We will join this defensive league.
+		ai_chance = { 
+			factor = 90
+		}
+		add_country_modifier = {
+			name = fee_joined_swabian_league
+			duration = -1
+		}
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+		country_event = { id = fee_swabian_events.5 }
+		}
+	}
+
+	option = {
+		name = fee_swabian_events.20.b		# We stand alone.
+		ai_chance = { factor = 10}
+		set_country_flag = fee_rejected_swabian_league
+	}
+}
+
+# A Shadow in the West
+
+country_event = {
+	id = fee_swabian_events.21
+	title = fee_swabian_events.21.t
+	desc = fee_swabian_events.21.d
+	picture = MILITARY_CAMP_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = BAV
+		any_neighbor_country = {
+			has_country_modifier = fee_joined_swabian_league
+			NOT = {
+				has_opinion = {
+					who = ROOT
+					value = 0
+				}
+			}
+		}
+		NOT = { has_global_flag = fee_swabian_league_disbanded }
+		has_global_flag = fee_swabian_league_established
+		NOT = { has_country_modifier = fee_joined_swabian_league }
+	}
+	
+	mean_time_to_happen = {
+		months = 160
+		modifier = {
+			factor = 0.8
+			any_neighbor_country = { has_country_modifier = fee_joined_swabian_league }
+			any_owned_province = { is_claim = PREV }
+		}
+		modifier = {
+			factor = 0.8
+			any_country = {
+				has_country_modifier = fee_joined_swabian_league
+				truce_with = ROOT			
+			}
+		}
+	}
+	
+	option = {
+		name = fee_swabian_events.21.a	# I don't care. We will crush them!
+		ai_chance = { factor = 75 }
+		add_mil_power = 50
+	}
+	
+	option = {
+		name = fee_swabian_events.21.b	# Maybe it is time for a more... diplomatic solution.
+		ai_chance = { factor = 25 }
+		every_country = {
+			limit = {
+				has_country_modifier = fee_joined_swabian_league
+			}
+			add_opinion = {
+				who = BAV
+				modifier = fee_swabian_reconciliation
+			}
+		}
+		set_country_flag = fee_swabian_reconciliation
+	}
+}
+
+# Event telling of the League disbanding
+country_event = {
+	id = fee_swabian_events.22
+	title = fee_swabian_events.22.t
+	desc = fee_swabian_events.22.d
+	picture = CIVIL_WAR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = fee_swabian_events.22.a
+	}
+}
+
+# Event telling of the formation of the League
+# country_event = {
+	# id = fee_swabian_events.23
+	# title = fee_swabian_events.23.t
+	# desc = fee_swabian_events.23.d
+	# picture = HRE_eventPicture
+	
+	# is_triggered_only = yes
+	
+	# trigger = {
+		# is_part_of_hre = yes
+	# }
+	
+	# option = {
+		# name = fee_swabian_league.23.a
+	# }
+# }
+
+
+#Bavaria may join the League
+# country_event = {
+	# id = fee_swabian_events.24
+	# title = fee_swabian_events.24.t
+	# desc = fee_swabian_events.24.d
+	# picture = CONQUEST_eventPicture
+	
+	# trigger = {
+		# tag = BAV
+		# has_country_flag = fee_swabian_reconciliation
+		# is_at_war = no
+	# }
+	
+	# mean_time_to_happen = {
+		# months = 120
+		# modifier = {
+			# factor = 1.5
+			# had_recent_war = 5
+		# }
+	# }
+	
+	# option = {
+		# add_country_modifier
+	
+	# }
+# }

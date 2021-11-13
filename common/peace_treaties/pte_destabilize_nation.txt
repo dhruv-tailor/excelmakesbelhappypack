@@ -1,7 +1,7 @@
 pte_destabilize_nation = {
 	category = 6
 	power_projection = no
-	power_cost_base = 0.525
+	power_cost_base = 0.5
 	prestige_base = 0.534
 	ae_base = 0.1
 	warscore_cost = {
@@ -32,7 +32,7 @@ pte_destabilize_nation = {
 			add_mil_power = -100
 		}
 		add_power_projection = {
-			type = mission_rewards_power_projection
+			type = pte_destabilize_nation_power_projection
 			amount = 15
 		}
 	}
@@ -42,10 +42,49 @@ pte_destabilize_nation = {
 			value = 1
 		}
 		limit = {
-			is_in_war = {
-				participants = ROOT
-				participants = FROM
-				casus_belli = cb_humiliate_rotw
+			OR = {
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_humiliate_rotw
+				}
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_pte_defend_rival_subject
+				}
+				is_in_war = {
+					participants = FROM
+					participants = ROOT
+					casus_belli = cb_pte_military_hegemon
+				}
+			}
+			OR = {
+				power_projection = 50
+				AND = {
+					adm_power = 200
+					dip_power = 200
+					mil_power = 200
+				}
+				NOT = {
+					is_in_war = {
+						participants = ROOT
+						participants = FROM
+						casus_belli = cb_humiliate_rotw
+						war_score = 90
+					}
+				}
+				FROM = {
+					NOT = { stability = 2 }
+				}
+				FROM = {
+					has_any_disaster = yes
+				}
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_pte_defend_rival_subject
+				}
 			}
 		}
 	}

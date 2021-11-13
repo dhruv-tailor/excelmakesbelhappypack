@@ -1,0 +1,2454 @@
+#Designed by Chu
+#Codded by ScorpenenZeronen
+namespace = FEE_Scotland_Events
+#The Renaissance in Scotland
+country_event = {
+	id = FEE_Scotland_Events.1
+	title = FEE_Scotland_Events.1.t
+	desc = FEE_Scotland_Events.1.d
+	picture = PAINTER_ARTIST_eventPicture
+	trigger = {
+		tag = SCO
+		is_year = 1450
+		is_institution_enabled = renaissance
+	}
+	mean_time_to_happen = {
+		months = 12
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.1.a
+		ai_chance = {
+			factor = 1
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_compulsory_education
+			duration = -1
+		}
+		change_innovativeness = 5
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -15
+		}
+		if = {
+			limit = {
+				owns_core_province = 251
+			}
+			251 = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 100
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 100
+				}
+			}
+		}
+		add_years_of_income = -0.5
+	}
+	option = {
+		name = FEE_Scotland_Events.1.b
+		change_innovativeness = 3
+		if = {
+			limit = {
+				owns_core_province = 251
+			}
+			251 = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 50
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 50
+				}
+			}
+		}
+		add_years_of_income = -0.25
+	}
+	option = {
+		name = FEE_Scotland_Events.1.c
+		add_country_modifier = {
+			name = FEE_Scotland_education_stifled
+			duration = 7300
+		}
+		add_stability_or_adm_power = yes
+		change_innovativeness = -5
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 10
+		}
+	}
+}
+
+#A Strategic Marriage
+country_event = {
+	id = FEE_Scotland_Events.2
+	title = FEE_Scotland_Events.2.t
+	desc = FEE_Scotland_Events.2.d
+	picture = TOURNAMENT_eventPicture
+	trigger = {
+		tag = SCO
+		has_regency = no
+		ENG = {
+			NOT = {
+				calc_true_if = {
+					france_region = {
+						country_or_non_sovereign_subject_holds = ENG
+					}
+					amount = 3
+				}
+			}
+			OR = {
+				has_country_flag = war_of_the_roses_ended
+				mission_completed = eng_rb_war_of_roses
+			}
+		}
+		is_year = 1450
+		NOT = {
+			is_year = 1550
+		}
+	}
+	mean_time_to_happen = {
+		months = 60
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.2.a
+		save_event_target_as = FEE_Scotland_choose_to_marry_france
+		if = {
+			limit = {
+				NOT = {
+					marriage_with = FRA
+				}
+			}
+			create_marriage = FRA
+		}
+		FRA = {
+			define_consort = {
+				name = "Mary"
+				country_of_origin = PREV
+				dynasty = PREV
+				religion = PREV
+				culture = PREV
+				adm = 3
+				dip = 0
+				mil = 3
+				female = yes
+			}
+			add_opinion = {
+				who = PREV
+				modifier = FEE_Scotland_strategic_marriage
+			}
+			ROOT = {
+				define_consort = {
+					name = "Marie"
+					country_of_origin = PREV
+					dynasty = PREV
+					religion = PREV
+					culture = PREV
+					age = 23
+					adm = 6
+					dip = 6
+					mil = 3
+					female = yes
+				}
+			}
+		}
+		add_prestige = 20
+		ENG = {
+			add_opinion = {
+				who = PREV
+				modifier = FEE_Scotland_marriage_offer_spurned
+			}
+			add_casus_belli = {
+				type = cb_restore_personal_union
+				target = PREV
+			}
+			country_event = {
+				id = FEE_Scotland_Events.3
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.2.b
+		save_event_target_as = FEE_Scotland_choose_to_marry_england
+		if = {
+			limit = {
+				NOT = {
+					marriage_with = ENG
+				}
+			}
+			create_marriage = ENG
+		}
+		ENG = {
+			set_ai_attitude = {
+				attitude = attitude_friendly
+				who = PREV
+			}
+			add_opinion = {
+				who = PREV
+				modifier = FEE_Scotland_strategic_marriage
+			}
+			add_historical_friend = PREV
+			ROOT = {
+				define_consort = {
+					name = "Margaret"
+					country_of_origin = PREV
+					dynasty = PREV
+					religion = PREV
+					culture = PREV
+					adm = 3
+					dip = 3
+					mil = 3
+					female = yes
+				}
+			}
+			country_event = {
+				id = FEE_Scotland_Events.4
+			}
+		}
+		custom_tooltip = FEE_Scotland_Events.2.b.tooltip1
+		hidden_effect = {
+			every_owned_province = {
+				remove_claim = ENG
+			}
+		}
+	}
+}
+
+#Marriage Offer Spurned
+country_event = {
+	id = FEE_Scotland_Events.3
+	title = FEE_Scotland_Events.3.t
+	desc = FEE_Scotland_Events.3.d
+	picture = BAD_WITH_MONARCH_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.3.a
+		tooltip = {
+			add_opinion = {
+				who = event_target:FEE_Scotland_choose_to_marry_france
+				modifier = FEE_Scotland_marriage_offer_spurned
+			}
+			add_casus_belli = {
+				type = cb_restore_personal_union
+				target = event_target:FEE_Scotland_choose_to_marry_france
+			}
+		}
+	}
+}
+
+#Treaty of Perpetual Peace
+country_event = {
+	id = FEE_Scotland_Events.4
+	title = FEE_Scotland_Events.4.t
+	desc = FEE_Scotland_Events.4.d
+	picture = CORRUPTION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.4.a
+		tooltip = {
+			add_opinion = {
+				who = event_target:FEE_Scotland_choose_to_marry_england
+				modifier = FEE_Scotland_strategic_marriage
+			}
+			add_historical_friend = event_target:FEE_Scotland_choose_to_marry_england
+			SCO = {
+				define_consort = {
+					name = "Margaret"
+					country_of_origin = PREV
+					dynasty = PREV
+					religion = PREV
+					culture = PREV
+					adm = 3
+					dip = 3
+					mil = 3
+					female = yes
+				}
+			}
+			custom_tooltip = FEE_Scotland_Events.2.b.tooltip1
+		}
+	}
+}
+
+#~RULER~ Visits the Highlands
+country_event = {
+	id = FEE_Scotland_Events.5
+	title = FEE_Scotland_Events.5.t
+	desc = FEE_Scotland_Events.5.d
+	picture = CULTURE_eventPicture
+	trigger = {
+		tag = SCO
+		is_year = 1450
+		NOT = {
+			is_year = 1525
+		}
+		NOT = {
+			is_at_war = yes
+		}
+		adm = 3
+		has_idea = break_the_black_douglas
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.5.a
+		add_stability = -1
+		highlands_area = {
+			add_province_modifier = {
+				name = FEE_Scotland_forced_order
+				duration = 7300
+			}
+		}
+		every_owned_province = {
+			limit = {
+				culture = highland_scottish
+			}
+			add_base_production = 1
+			add_base_manpower = 1
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_building = shipyard
+							has_building = grand_shipyard
+						}
+					}
+					num_free_building_slots = 1
+				}
+				add_building = shipyard
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.5.b
+		ai_chance = {
+			factor = 1
+		}
+		add_stability = 2
+		highlands_area = {
+			add_province_modifier = {
+				name = FEE_Scotland_chieftans_pleased
+				duration = 7300
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 10
+		}
+	}
+}
+
+#Naval Expansion and the Great Michael
+country_event = {
+	id = FEE_Scotland_Events.6
+	title = FEE_Scotland_Events.6.t
+	desc = FEE_Scotland_Events.6.d
+	picture = CORRUPTION_eventPicture
+	trigger = {
+		tag = SCO
+		NOT = {
+			is_at_war = yes
+		}
+		is_year = 1450
+		NOT = {
+			is_year = 1550
+		}
+		NOT = {
+			exists = BYZ
+		}
+		exists = TUR
+	}
+	mean_time_to_happen = {
+		months = 80
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.6.a
+		ai_chance = {
+			factor = 1
+		}
+		add_prestige = 50
+		add_years_of_income = -0.5
+		custom_tooltip = FEE_Scotland_Events.6.a.tooltip1
+		if = {
+			limit = {
+				owns_core_province = 248
+			}
+			248 = {
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 5
+					speed = 0.25
+					cost = 0
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					has_port = yes
+				}
+			}
+			capital_scope = {
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 5
+					speed = 0.25
+					cost = 0
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					has_port = yes
+				}
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 5
+					speed = 0.25
+					cost = 0
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_dlc = "Golden Century"
+				has_flagship = no
+			}
+			if = {
+				limit = {
+					owns_core_province = 248
+				}
+				248 = {
+					create_flagship = {
+						name = "Great Michael"
+						type = heavy_ship
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					capital_scope = {
+						has_port = yes
+					}
+				}
+				capital_scope = {
+					create_flagship = {
+						name = "Great Michael"
+						type = heavy_ship
+					}
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					create_flagship = {
+						name = "Great Michael"
+						type = heavy_ship
+					}
+				}
+			}
+		}
+		else = {
+			add_dip_power = 25
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_rival = TUR
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = FEE_Scotland_prepared_for_crusade_against_turks
+				}
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.6.b
+		add_country_modifier = {
+			name = FEE_Scotland_land_focus
+			duration = 9125
+		}
+		add_prestige = -10
+		add_years_of_income = 0.5
+	}
+}
+
+#Disaster at Flodden 
+country_event = {
+	id = FEE_Scotland_Events.7
+	title = FEE_Scotland_Events.7.t
+	desc = FEE_Scotland_Events.7.d
+	picture = BATTLE_eventPicture
+	trigger = {
+		tag = SCO
+		is_year = 1444
+		NOT = {
+			is_year = 1540
+		}
+		war_with = ENG
+		NOT = {
+			war_score = -25
+		}
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.7.a
+		custom_tooltip = FEE_Scotland_Events.7.a.TT
+		add_stability = -1
+		add_yearly_manpower = -2
+		kill_ruler = yes
+		hidden_effect = {
+			ENG = {
+				country_event = {
+					id = FEE_Scotland_Events.37
+				}
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.7.b
+		add_stability = -1
+		add_yearly_manpower = -2
+		kill_ruler = yes
+		add_country_modifier = {
+			name = FEE_Scotland_we_shall_never_surrender
+			duration = 1825
+		}
+		hidden_effect = {
+			ENG = {
+				country_event = {
+					id = FEE_Scotland_Events.38
+				}
+			}
+		}
+	}
+}
+
+#Disaster at Flodden for England, option 1
+country_event = {
+    id = FEE_Scotland_Events.37
+    title = FEE_Scotland_Events.37.t
+    desc = FEE_Scotland_Events.37.d
+    picture = BATTLE_eventPicture
+    is_triggered_only = yes
+    
+    option = {
+        name = FEE_Scotland_Events.37.a
+        add_prestige = 5
+        white_peace = SCO
+    }
+    option = {
+        name = FEE_Scotland_Events.37.b
+        add_stability = -1
+        add_country_modifier = {
+            name = FEE_INVADE_ANYWAYS
+            duration = 1460 
+        }
+        every_owned_province = {
+            limit = {
+                culture = scottish
+            }
+            add_province_modifier = {
+                name = FEE_Get_Fucked_English
+                duration = 10950
+            }
+        }
+        hidden_effect = {
+            SCO = {
+                country_event = {
+                    id = FEE_Scotland_Events.300
+                }            
+            }
+        }
+    }
+}
+
+#England Starts Second War
+country_event = {
+	id = FEE_Scotland_Events.300
+	title = FEE_Scotland_Events.300.t
+	desc = FEE_Scotland_Events.300.d
+	picture = BATTLE_eventPicture
+	is_triggered_only = yes
+
+	option = {
+		name = FEE_Scotland_Events.300.b
+	}
+}
+
+
+#Disaster at Flodden for England, option 2
+country_event = {
+	id = FEE_Scotland_Events.38
+	title = FEE_Scotland_Events.38.t
+	desc = FEE_Scotland_Events.38.d
+	picture = BATTLE_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.38.a
+		add_prestige = 5
+	}
+}
+
+#Corruption in the Church
+country_event = {
+	id = FEE_Scotland_Events.8
+	title = FEE_Scotland_Events.8.t
+	desc = FEE_Scotland_Events.8.d
+	picture = REFORM_eventPicture
+	trigger = {
+		is_year = 1480
+		religion = catholic
+	}
+	mean_time_to_happen = {
+		months = 60
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.8.a
+		add_country_modifier = {
+			name = FEE_Scotland_the_faithful_encouraged
+			duration = 7300
+		}
+		add_stability = -1
+		add_reform_desire = -0.01
+		if = {
+			limit = {
+				corruption = 1
+			}
+			add_corruption = -5
+		}
+		else = {
+			add_adm_power = 100
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -20
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = FEE_Scotland_the_faithful_encouraged
+			influence = -20
+			duration = 7300
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.8.b
+		ai_chance = {
+			factor = 1
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_the_faithful_disappointed
+			duration = 7300
+		}
+		add_years_of_income = 1
+		add_corruption = 5
+		add_stability_or_adm_power = yes
+		add_reform_desire = 0.03
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 20
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = FEE_Scotland_the_faithful_disappointed
+			influence = 20
+			duration = 7300
+		}
+	}
+}
+
+#Early Scottish Reformers
+country_event = {
+	id = FEE_Scotland_Events.9
+	title = FEE_Scotland_Events.9.t
+	desc = FEE_Scotland_Events.9.d
+	picture = REFORM_eventPicture
+	trigger = {
+		tag = SCO
+		current_age = age_of_reformation
+		religion = catholic
+	}
+	mean_time_to_happen = {
+		months = 24
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.9.a
+		ai_chance = {
+			factor = 1
+		}
+		hidden_effect = {
+			country_event = {
+				id = FEE_Scotland_Events.10
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_reformers_violently_suppressed
+			duration = 3650
+		}
+		if = {
+			limit = {
+				OR = {
+					any_country = {
+						religion = reformed
+					}
+					any_province = {
+						religion = reformed
+					}
+				}
+			}
+			if = {
+				limit = {
+					owns_core_province = 251
+				}
+				251 = {
+					reformed_rebels = 1
+				}
+			}
+			else = {
+				capital_scope = {
+					reformed_rebels = 1
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					owns_core_province = 251
+				}
+				251 = {
+					protestant_rebels = 1
+				}
+			}
+			else = {
+				capital_scope = {
+					protestant_rebels = 1
+				}
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 20
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = FEE_Scotland_reformers_violently_suppressed
+			influence = 20
+			duration = 3650
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.9.b
+		add_country_modifier = {
+			name = FEE_Scotland_reformers_stifled
+			duration = 3650
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = FEE_Scotland_reformers_stifled
+			influence = 5
+			duration = 3650
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.9.c
+		hidden_effect = {
+			set_country_flag = FEE_Scotland_disable_john_knox
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_new_ideas_heeded
+			duration = 7300
+		}
+		random_owned_province = {
+			change_religion = protestant
+		}
+		define_advisor = {
+			type = theologian
+			name = "Patrick Hamilton"
+			skill = 2
+			culture = scottish
+			religion = protestant
+			cost_multiplier = 0.25
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_church
+			desc = FEE_Scotland_new_ideas_heeded
+			influence = -10
+			duration = 7300
+		}
+	}
+}
+
+#Martyrdom of Patrick Hamilton
+country_event = {
+	id = FEE_Scotland_Events.10
+	title = FEE_Scotland_Events.10.t
+	desc = FEE_Scotland_Events.10.d
+	picture = POPE_PREACHING_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.10.a
+	}
+}
+
+#John Knox
+country_event = {
+	id = FEE_Scotland_Events.11
+	title = FEE_Scotland_Events.11.t
+	desc = FEE_Scotland_Events.11.d
+	picture = ADVISOR_eventPicture
+	trigger = {
+		tag = SCO
+		OR = {
+			any_country = {
+				religion = reformed
+			}
+			any_province = {
+				religion = reformed
+			}
+		}
+		is_year = 1525
+		NOT = {
+			has_country_flag = FEE_Scotland_disable_john_knox
+		}
+	}
+	mean_time_to_happen = {
+		months = 12
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.11.a
+		if = {
+			limit = {
+				NOT = {
+					religion = reformed
+				}
+			}
+			random_owned_province = {
+				limit = {
+					culture = scottish
+				}
+				add_province_modifier = {
+					name = FEE_Scotland_john_knox_local_missionary
+					duration = 10950
+				}
+				change_religion = reformed
+				add_reform_center = reformed
+			}
+			country_event = {
+				id = FEE_Scotland_Events.10
+				days = 900
+				random = 900
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = FEE_Scotland_john_knox_global_missionary
+				duration = 10950
+			}
+			add_stability = 2
+			define_advisor = {
+				type = theologian
+				name = "John Knox"
+				skill = 3
+				culture = scottish
+				religion = reformed
+				cost_multiplier = 0.25
+			}
+			random_owned_province = {
+				if = {
+					limit = {
+						NOT = {
+							OR = {
+								has_building = temple
+								has_building = cathedral
+							}
+						}
+						num_free_building_slots = 1
+					}
+					add_building = temple
+				}
+				else = {
+					PREV = {
+						add_years_of_income = 0.1
+					}
+				}
+				add_base_tax = 4
+			}
+		}
+	}
+}
+
+#The Lords of the Congregation
+country_event = {
+	id = FEE_Scotland_Events.12
+	title = FEE_Scotland_Events.12.t
+	desc = FEE_Scotland_Events.12.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.12.a
+		add_stability = -2
+		random_owned_province = {
+			limit = {
+				NOT = {
+					religion = reformed
+				}
+			}
+			reformed_rebels = 3
+			change_religion = reformed
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+		custom_tooltip = FEE_Scotland_Events.12.a.tooltip1
+		every_country = {
+			limit = {
+				religion = reformed
+				NOT = {
+					tag = ROOT
+				}
+			}
+			country_event = {
+				id = FEE_Scotland_Events.13
+				days = 1
+				random = 30
+			}
+		}
+	}
+}
+
+#Brothers in Arms?
+country_event = {
+	id = FEE_Scotland_Events.13
+	title = FEE_Scotland_Events.13.t
+	desc = FEE_Scotland_Events.13.d
+	picture = LAND_MILITARY_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.13.a
+		save_event_target_as = FEE_Scotland_choosed_to_support_rebels
+		ai_chance = {
+			factor = 50
+		}
+		add_yearly_manpower = -0.25
+		add_years_of_income = -0.25
+		SCO = {
+			random_owned_province = {
+				reformed_rebels = 1
+			}
+		}
+		add_prestige = 5
+		SCO = {
+			add_opinion = {
+				who = PREV
+				modifier = FEE_Scotland_infuriated_by_supporting_rebels
+			}
+			add_casus_belli = {
+				type = cb_insult
+				target = PREV
+			}
+			country_event = {
+				id = FEE_Scotland_Events.14
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.13.b
+		save_event_target_as = FEE_Scotland_choosed_not_to_support_rebels
+		ai_chance = {
+			factor = 50
+		}
+		add_prestige = -5
+		SCO = {
+			add_opinion = {
+				who = PREV
+				modifier = FEE_Scotland_thankful_for_not_supporting_rebels
+			}
+			add_trust = {
+				who = PREV
+				value = 5
+				mutual = yes
+			}
+			country_event = {
+				id = FEE_Scotland_Events.15
+			}
+		}
+	}
+}
+
+#Rebellious Zealots Supported
+country_event = {
+	id = FEE_Scotland_Events.14
+	title = FEE_Scotland_Events.14.t
+	desc = FEE_Scotland_Events.14.d
+	picture = ANGRY_MOB_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.14.a
+		tooltip = {
+			add_opinion = {
+				who = event_target:FEE_Scotland_choosed_to_support_rebels
+				modifier = FEE_Scotland_infuriated_by_supporting_rebels
+			}
+			add_casus_belli = {
+				type = cb_insult
+				target = event_target:FEE_Scotland_choosed_to_support_rebels
+			}
+		}
+	}
+}
+
+#Rebellious Zealots Supported
+country_event = {
+	id = FEE_Scotland_Events.15
+	title = FEE_Scotland_Events.15.t
+	desc = FEE_Scotland_Events.15.d
+	picture = ANGRY_MOB_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.15.a
+		tooltip = {
+			add_opinion = {
+				who = event_target:FEE_Scotland_choosed_not_to_support_rebels
+				modifier = FEE_Scotland_thankful_for_not_supporting_rebels
+			}
+			add_trust = {
+				who = event_target:FEE_Scotland_choosed_not_to_support_rebels
+				value = 5
+				mutual = yes
+			}
+		}
+	}
+}
+
+#Reimposition of Church Hierarchy
+country_event = {
+	id = FEE_Scotland_Events.16
+	title = FEE_Scotland_Events.16.t
+	desc = FEE_Scotland_Events.16.d
+	picture = CITY_VIEW_eventPicture
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		OR = {
+			religion = reformed
+			religion = anglican
+		}
+		estate_influence = {
+			estate = estate_church
+			influence = 40
+		}
+		is_year = 1590
+		OR = {
+			current_age = age_of_reformation
+			current_age = age_of_absolutism
+		}
+	}
+	mean_time_to_happen = {
+		months = 240
+	}
+	fire_only_once = yes
+	option = {
+		name = FEE_Scotland_Events.16.a
+		hidden_effect = {
+			country_event = {
+				id = FEE_Scotland_Events.17
+				days = 15
+				random = 15
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -20
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -20
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_reigning_in_the_presbyterians
+			duration = -1
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.16.b
+		ai_chance = {
+			factor = 1
+		}
+		add_stability = 3
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 20
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 20
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_presbyterian_freedoms_protected
+			duration = -1
+		}
+	}
+}
+
+#Jenny Geddes and the Prayer Book Riots
+country_event = {
+	id = FEE_Scotland_Events.17
+	title = FEE_Scotland_Events.17.t
+	desc = FEE_Scotland_Events.17.d
+	picture = STREET_SPEECH_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.17.a
+		add_stability = -1
+		remove_country_modifier = FEE_Scotland_reigning_in_the_presbyterians
+		add_country_modifier = {
+			name = FEE_Scotland_presbyterians_placated
+			duration = -1
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.17.b
+		add_stability = -2
+		random_owned_province = {
+			limit = {
+				NOT = {
+					area = highlands_area
+				}
+			}
+			reformed_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				NOT = {
+					area = highlands_area
+				}
+			}
+			reformed_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				NOT = {
+					area = highlands_area
+				}
+			}
+			reformed_rebels = 3
+		}
+		random_owned_province = {
+			limit = {
+				NOT = {
+					area = highlands_area
+				}
+			}
+			reformed_rebels = 2
+		}
+		random_owned_province = {
+			limit = {
+				NOT = {
+					area = highlands_area
+				}
+			}
+			reformed_rebels = 2
+		}
+		country_event = {
+			id = FEE_Scotland_Events.18
+		}
+	}
+}
+
+#Signing of the National Covenant
+country_event = {
+	id = FEE_Scotland_Events.18
+	title = FEE_Scotland_Events.18.t
+	desc = FEE_Scotland_Events.18.d
+	picture = COURT_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.18.a
+		add_stability = -1
+		remove_country_modifier = FEE_Scotland_reigning_in_the_presbyterians
+		add_country_modifier = {
+			name = FEE_Scotland_presbyterians_placated
+			duration = -1
+		}
+		disband_rebels = reformed_rebels
+		disband_rebels = particularist_rebels
+	}
+	option = {
+		name = FEE_Scotland_Events.18.b
+		add_stability_or_adm_power = yes
+		random_owned_province = {
+			limit = {
+				area = highlands_area
+			}
+			spawn_rebels = {
+				type = pretender_rebels
+				size = 2
+				leader = "Archibald Campbell"
+			}
+			pretender_rebels = 1
+		}
+		remove_country_modifier = FEE_Scotland_reigning_in_the_presbyterians
+		add_country_modifier = {
+			name = FEE_Scotland_presbyterian_compromise
+			duration = -1
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.18.c
+		save_event_target_as = FEE_Scotland_rival_target
+		country_event = {
+			id = FEE_Scotland_Events.19
+		}
+		custom_tooltip = FEE_Scotland_Events.18.c.tooltip1
+	}
+}
+
+#Scottish Civil War
+country_event = {
+	id = FEE_Scotland_Events.19
+	title = FEE_Scotland_Events.19.t
+	desc = FEE_Scotland_Events.19.d
+	picture = BATTLE_eventPicture
+	major = yes
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			set_country_flag = FEE_Scotland_scottish_civil_war
+			release = HSC
+			HSC = {
+				save_event_target_as = FEE_Scotland_HSC_target
+				every_country = {
+					limit = {
+						is_rival = event_target:FEE_Scotland_rival_target
+					}
+					country_event = {
+						id = FEE_Scotland_Events.20
+					}
+				}
+				capital_scope = {
+					build_to_forcelimit = {
+						infantry = 0.7
+						cavalry = 0.2
+						artillery = 0.1
+					}
+				}
+				define_general = {
+					name = "Archibald Campbell"
+					shock = 2
+					fire = 4
+					manuever = 5
+					siege = 1
+				}
+				define_general = {
+					name = "Alexander Leslie"
+					shock = 3
+					fire = 5
+					manuever = 1
+					siege = 5
+				}
+				override_country_name = FEE_Scotland_Covenanters
+				if = {
+					limit = {
+						NOT = {
+							religion = reformed
+						}
+					}
+					change_religion = reformed
+				}
+				every_owned_province = {
+					if = {
+						limit = {
+							NOT = {
+								religion = reformed
+							}
+						}
+						change_religion = reformed
+					}
+				}
+				declare_war_with_cb = {
+					casus_belli = cb_independence_war
+					who = PREV
+				}
+			}
+			every_province = {
+				limit = {
+					culture_group = gaelic
+				}
+				add_core = HSC
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.19.a
+		custom_tooltip = FEE_Scotland_Events.19.a.tooltip1
+	}
+	option = {
+		name = FEE_Scotland_Events.19.b
+		switch_tag = HSC
+		custom_tooltip = FEE_Scotland_Events.19.b.tooltip1
+		HSC = {
+			add_country_modifier = {
+				name = FEE_Scotland_presbyterian_freedoms_protected
+				duration = -1
+			}
+		}
+	}
+}
+
+#Covenanters Rise up Against Oppressors!
+country_event = {
+	id = FEE_Scotland_Events.20
+	title = FEE_Scotland_Events.20.t
+	desc = FEE_Scotland_Events.20.d
+	picture = BORDER_TENSION_eventPicture
+	is_triggered_only = yes
+	option = {
+		ai_chance = {
+			factor = 2
+		}
+		name = FEE_Scotland_Events.20.a
+		save_event_target_as = FEE_Scotland_supported_covenanters
+		create_alliance = event_target:FEE_Scotland_HSC_target
+		join_all_offensive_wars_of = event_target:FEE_Scotland_HSC_target
+		event_target:FEE_Scotland_rival_target = {
+			country_event = {
+				id = FEE_Scotland_Events.21
+			}
+		}
+		event_target:FEE_Scotland_HSC_target = {
+			country_event = {
+				id = FEE_Scotland_Events.23
+			}
+		}
+	}
+	option = {
+		ai_chance = {
+			factor = 1
+		}
+		name = FEE_Scotland_Events.20.b
+		save_event_target_as = FEE_Scotland_refused_to_support_covenanters
+		add_prestige = -5
+		event_target:FEE_Scotland_rival_target = {
+			country_event = {
+				id = FEE_Scotland_Events.22
+			}
+		}
+	}
+}
+
+#Scotland - response to rival supporting Covenanters
+country_event = {
+	id = FEE_Scotland_Events.21
+	title = FEE_Scotland_Events.21.t
+	desc = FEE_Scotland_Events.21.d
+	picture = BORDER_TENSION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.21.a
+		add_opinion = {
+			who = event_target:FEE_Scotland_supported_covenanters
+			modifier = FEE_Scotland_infuriated_by_supporting_rebels
+		}
+		add_casus_belli = {
+			type = cb_insult
+			target = event_target:FEE_Scotland_supported_covenanters
+		}
+	}
+}
+
+#Scotland - response to rival NOT supporting Covenanters
+country_event = {
+	id = FEE_Scotland_Events.22
+	title = FEE_Scotland_Events.22.t
+	desc = FEE_Scotland_Events.22.d
+	picture = RELIGIOUS_TURMOIL_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.22.a
+		add_opinion = {
+			who = event_target:FEE_Scotland_refused_to_support_covenanters
+			modifier = FEE_Scotland_thankful_for_not_supporting_rebels
+		}
+		add_trust = {
+			who = event_target:FEE_Scotland_refused_to_support_covenanters
+			value = 5
+			mutual = yes
+		}
+	}
+}
+
+#Covenanters - response to Scottish rival who supported them
+country_event = {
+	id = FEE_Scotland_Events.23
+	title = FEE_Scotland_Events.22.t
+	desc = FEE_Scotland_Events.22.d
+	picture = RELIGIOUS_TURMOIL_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.23.a
+		add_opinion = {
+			who = event_target:FEE_Scotland_supported_covenanters
+			modifier = FEE_Scotland_thankful_for_joining_war
+		}
+		add_trust = {
+			who = event_target:FEE_Scotland_supported_covenanters
+			value = 5
+			mutual = yes
+		}
+	}
+}
+
+#Scottish Civil War is Finished
+country_event = {
+	id = FEE_Scotland_Events.24
+	title = FEE_Scotland_Events.24.t
+	desc = FEE_Scotland_Events.24.d
+	picture = WOUNDED_SOLDIERS_eventPicture
+	major = yes
+	fire_only_once = yes
+	trigger = {
+		tag = SCO
+		has_country_flag = FEE_Scotland_scottish_civil_war
+		AND = {
+			SCO = {
+				NOT = {
+					war_with = HSC
+				}
+			}
+			HSC = {
+				NOT = {
+					war_with = SCO
+				}
+			}
+		}
+		OR = {
+			SCO = {
+				truce_with = HSC
+			}
+			HSC = {
+				exists = no
+			}
+		}
+	}
+	immediate = {
+		if = {
+			limit = {
+				HSC = {
+					exists = no
+				}
+			}
+			set_country_flag = FEE_Scotland_covenanter_lost
+		}
+		else = {
+			set_country_flag = FEE_Scotland_covenanter_won
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.24.a
+		add_stability = 2
+		if = {
+			limit = {
+				has_country_flag = FEE_Scotland_covenanter_won
+			}
+			custom_tooltip = FEE_Scotland_Events.24.a.tooltip1
+			add_prestige = -100
+		}
+		if = {
+			limit = {
+				has_country_flag = FEE_Scotland_covenanter_lost
+			}
+			custom_tooltip = FEE_Scotland_Events.24.a.tooltip2
+			add_prestige = 50
+		}
+	}
+}
+
+#Incident at Glencoe
+country_event = {
+	id = FEE_Scotland_Events.25
+	title = FEE_Scotland_Events.25.t
+	desc = FEE_Scotland_Events.25.d
+	picture = LAND_MILITARY_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		is_at_war = no
+		OR = {
+			has_country_flag = FEE_Scotland_covenanter_won
+			has_country_flag = FEE_Scotland_covenanter_lost
+		}
+	}
+	mean_time_to_happen = {
+		months = 60
+	}
+	option = {
+		name = FEE_Scotland_Events.25.a
+		add_absolutism = -2
+		kingdom_of_the_isles_area = {
+			add_local_autonomy = 25
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.25.b
+		add_stability = -1
+		add_absolutism = 5
+		every_country = {
+			limit = {
+				is_neighbor_of = ROOT
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = FEE_Scotland_innocent_clansmen_massacred
+			}
+		}
+	}
+}
+
+#The Darien Scheme
+country_event = {
+	id = FEE_Scotland_Events.26
+	title = FEE_Scotland_Events.26.t
+	desc = FEE_Scotland_Events.26.d
+	picture = COLONIZATION_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		is_year = 1600
+		NOT = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				colonial_region = colonial_mexico
+				is_city = yes
+			}
+		}
+		NOT = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				colonial_region = colonial_colombia
+				is_city = yes
+			}
+		}
+		NOT = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				colonial_region = colonial_brazil
+				is_city = yes
+			}
+		}
+		NOT = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				colonial_region = colonial_peru
+				is_city = yes
+			}
+		}
+		NOT = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				colonial_region = colonial_la_plata
+				is_city = yes
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.26.a
+		ai_chance = {
+			factor = 1
+		}
+		add_years_of_income = -1
+		random_list = {
+			60 = {
+				country_event = {
+					id = FEE_Scotland_Events.27
+				}
+			}
+			40 = {
+				country_event = {
+					id = FEE_Scotland_Events.28
+				}
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.26.b
+		add_prestige = -5
+		add_country_modifier = {
+			name = FEE_Scotland_colonial_ventures_ignored
+			duration = 7300
+		}
+	}
+}
+
+#Darien Success
+country_event = {
+	id = FEE_Scotland_Events.27
+	title = FEE_Scotland_Events.27.t
+	desc = FEE_Scotland_Events.27.d
+	picture = COLONIZATION_eventPicture
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			colombia_region = {
+				discover_country = ROOT
+			}
+			central_america_region = {
+				discover_country = ROOT
+			}
+			835 = {
+				if = {
+					limit = {
+						NOT = {
+							is_empty = yes
+						}
+					}
+					add_claim = ROOT
+					if = {
+						limit = {
+							any_province = {
+								colombia_region = {
+									is_empty = yes
+								}
+							}
+						}
+						random_province = {
+							limit = {
+								is_empty = yes
+								region = colombia_region
+							}
+							save_event_target_as = FEE_Scotland_first_colony
+							create_colony = 1000
+							cede_province = ROOT
+							add_core = ROOT
+							change_culture = ROOT
+							change_religion = ROOT
+							add_base_tax = 5
+							add_base_production = 5
+							add_base_manpower = 5
+						}
+					}
+				}
+				else = {
+					save_event_target_as = FEE_Scotland_first_colony
+					create_colony = 1000
+					cede_province = ROOT
+					add_core = ROOT
+					change_culture = ROOT
+					change_religion = ROOT
+					add_base_tax = 5
+					add_base_production = 5
+					add_base_manpower = 5
+				}
+			}
+			2819 = {
+				if = {
+					limit = {
+						NOT = {
+							is_empty = yes
+						}
+					}
+					add_claim = ROOT
+					if = {
+						limit = {
+							colombia_region = {
+								any_province = {
+									is_empty = yes
+								}
+							}
+						}
+						random_province = {
+							limit = {
+								is_empty = yes
+								region = colombia_region
+							}
+							save_event_target_as = FEE_Scotland_second_colony
+							create_colony = 1000
+							cede_province = ROOT
+							add_core = ROOT
+							change_culture = ROOT
+							change_religion = ROOT
+							add_building = fort_15th
+							add_base_tax = 4
+							add_base_production = 4
+							add_base_manpower = 4
+						}
+					}
+				}
+				else = {
+					save_event_target_as = FEE_Scotland_second_colony
+					create_colony = 1000
+					cede_province = ROOT
+					add_core = ROOT
+					change_culture = ROOT
+					change_religion = ROOT
+					add_building = fort_15th
+					add_base_tax = 4
+					add_base_production = 4
+					add_base_manpower = 4
+				}
+			}
+			828 = {
+				if = {
+					limit = {
+						NOT = {
+							is_empty = yes
+						}
+					}
+					add_claim = ROOT
+					if = {
+						limit = {
+							colombia_region = {
+								any_province = {
+									is_empty = yes
+								}
+							}
+						}
+						random_province = {
+							limit = {
+								is_empty = yes
+								region = colombia_region
+							}
+							save_event_target_as = FEE_Scotland_third_colony
+							create_colony = 1000
+							cede_province = ROOT
+							add_core = ROOT
+							change_culture = ROOT
+							change_religion = ROOT
+						}
+					}
+				}
+				else = {
+					save_event_target_as = FEE_Scotland_third_colony
+					create_colony = 1000
+					cede_province = ROOT
+					add_core = ROOT
+					change_culture = ROOT
+					change_religion = ROOT
+				}
+			}
+			827 = {
+				if = {
+					limit = {
+						NOT = {
+							is_empty = yes
+						}
+					}
+					add_claim = ROOT
+					if = {
+						limit = {
+							colombia_region = {
+								any_province = {
+									is_empty = yes
+								}
+							}
+						}
+						random_province = {
+							limit = {
+								is_empty = yes
+								region = colombia_region
+							}
+							save_event_target_as = FEE_Scotland_fourth_colony
+							create_colony = 1000
+							cede_province = ROOT
+							add_core = ROOT
+							change_culture = ROOT
+							change_religion = ROOT
+						}
+					}
+				}
+				else = {
+					save_event_target_as = FEE_Scotland_fourth_colony
+					create_colony = 1000
+					cede_province = ROOT
+					add_core = ROOT
+					change_culture = ROOT
+					change_religion = ROOT
+				}
+			}
+			840 = {
+				if = {
+					limit = {
+						NOT = {
+							is_empty = yes
+						}
+					}
+					add_claim = ROOT
+					if = {
+						limit = {
+							central_america_region = {
+								any_province = {
+									is_empty = yes
+								}
+							}
+						}
+						random_province = {
+							limit = {
+								is_empty = yes
+								region = central_america_region
+							}
+							save_event_target_as = FEE_Scotland_fifth_colony
+							create_colony = 1000
+							cede_province = ROOT
+							add_core = ROOT
+							change_culture = ROOT
+							change_religion = ROOT
+						}
+					}
+				}
+				else = {
+					save_event_target_as = FEE_Scotland_fifth_colony
+					create_colony = 1000
+					cede_province = ROOT
+					add_core = ROOT
+					change_culture = ROOT
+					change_religion = ROOT
+				}
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.27.a
+		tooltip = {
+			colombia_region = {
+				discover_country = ROOT
+			}
+			central_america_region = {
+				discover_country = ROOT
+			}
+			835 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+			event_target:FEE_Scotland_first_colony = {
+				custom_tooltip = FEE_Scotland_Events.27.a.tooltip1
+				add_base_tax = 5
+				add_base_production = 5
+				add_base_manpower = 5
+			}
+			2819 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+			event_target:FEE_Scotland_second_colony = {
+				custom_tooltip = FEE_Scotland_Events.27.a.tooltip1
+				add_building = fort_15th
+				add_base_tax = 4
+				add_base_production = 4
+				add_base_manpower = 4
+			}
+			828 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+			event_target:FEE_Scotland_third_colony = {
+				custom_tooltip = FEE_Scotland_Events.27.a.tooltip1
+			}
+			827 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+			event_target:FEE_Scotland_fourth_colony = {
+				custom_tooltip = FEE_Scotland_Events.27.a.tooltip1
+			}
+			840 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+						}
+					}
+					add_claim = ROOT
+				}
+			}
+			event_target:FEE_Scotland_fifth_colony = {
+				custom_tooltip = FEE_Scotland_Events.27.a.tooltip1
+			}
+		}
+	}
+}
+
+#Disaster at Darien
+country_event = {
+	id = FEE_Scotland_Events.28
+	title = FEE_Scotland_Events.28.t
+	desc = FEE_Scotland_Events.28.d
+	picture = COLONIZATION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = FEE_Scotland_Events.28.a
+		add_stability = -1
+		add_prestige = -20
+	}
+}
+
+#The Highland Clearances
+country_event = {
+	id = FEE_Scotland_Events.29
+	title = FEE_Scotland_Events.29.t
+	desc = FEE_Scotland_Events.29.d
+	picture = WESTERNISATION_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			tag = GBR
+		}
+		kingdom_of_the_isles_area = {
+			type = all
+			owned_by = ROOT
+		}
+		highlands_area = {
+			type = all
+			owned_by = ROOT
+		}
+		is_year = 1700
+	}
+	option = {
+		name = FEE_Scotland_Events.29.a
+		ai_chance = {
+			factor = 1
+		}
+		kingdom_of_the_isles_area = {
+			add_base_manpower = -1
+		}
+		highlands_area = {
+			add_base_manpower = -1
+		}
+		lowlands_area = {
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+		249 = {
+			if = {
+				limit = {
+					owned_by = ROOT
+				}
+				change_culture = highland_scottish
+				add_province_modifier = {
+					name = FEE_Scotland_rapid_population_growth
+					duration = 7300
+				}
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_crofters_displaced
+			duration = 7300
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.29.b
+		kingdom_of_the_isles_area = {
+			add_base_manpower = 1
+		}
+		highlands_area = {
+			add_base_manpower = 1
+		}
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_crofters_protected
+			duration = 7300
+		}
+	}
+}
+
+#Glasgow Tobacco Markets
+country_event = {
+	id = FEE_Scotland_Events.30
+	title = FEE_Scotland_Events.30.t
+	desc = FEE_Scotland_Events.30.d
+	picture = MERCHANTS_TALKING_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			tag = GBR
+		}
+		is_year = 1700
+		calc_true_if = {
+			any_province = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+				trade_goods = tobacco
+			}
+			amount = 2
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.30.a
+		ai_chance = {
+			factor = 1
+		}
+		add_estate_loyalty_modifier = {
+			estate = estate_burghers
+			desc = FEE_Scotland_tobacco_emporium
+			loyalty = 5
+			duration = 7300
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = FEE_Scotland_tobacco_emporium
+			influence = 10
+			duration = 7300
+		}
+		if = {
+			limit = {
+				249 = {
+					owned_by = ROOT
+				}
+			}
+			249 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_province_modifier = {
+					name = FEE_Scotland_tobacco_emporium
+					duration = -1
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_province_modifier = {
+					name = FEE_Scotland_tobacco_emporium
+					duration = -1
+				}
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.30.b
+		add_stability_or_adm_power = yes
+		add_prestige = 20
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -15
+		}
+	}
+}
+
+#Scottish Enlightenment
+country_event = {
+	id = FEE_Scotland_Events.31
+	title = FEE_Scotland_Events.31.t
+	desc = FEE_Scotland_Events.31.d
+	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		is_year = 1700
+		is_institution_enabled = enlightenment
+		lowlands_area = {
+			type = all
+			owned_by = ROOT
+		}
+		NOT = {
+			has_institution = enlightenment
+		}
+	}
+	mean_time_to_happen = {
+		months = 100
+		modifier = {
+			factor = 0.5
+			has_idea_group = innovativeness_ideas
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.31.a
+		ai_chance = {
+			factor = 1
+		}
+		add_years_of_income = -1
+		change_innovativeness = 10
+		lowlands_area = {
+			if = {
+				limit = {
+					NOT = {
+						has_building = university
+					}
+				}
+				add_building = university
+			}
+			add_institution_embracement = {
+				which = enlightenment
+				value = 100
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_scottish_enlightenment
+			duration = -1
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.31.b
+		add_years_of_income = -0.25
+		lowlands_area = {
+			add_institution_embracement = {
+				which = enlightenment
+				value = 50
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_assistance_to_the_existing_societies
+			duration = 18250
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.31.c
+		add_legitimacy = 20
+		add_republican_tradition = 20
+		add_devotion = 20
+		add_tribal_allegiance = 20
+	}
+}
+
+#Adam Smith and the Wealth of Nations
+country_event = {
+	id = FEE_Scotland_Events.32
+	title = FEE_Scotland_Events.32.t
+	desc = FEE_Scotland_Events.32.d
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		has_institution = global_trade
+		has_institution = enlightenment
+	}
+	mean_time_to_happen = {
+		months = 200
+		modifier = {
+			factor = 0.5
+			has_idea_group = innovativeness_ideas
+		}
+		modifier = {
+			factor = 0.5
+			has_idea_group = economic_ideas
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.32.a
+		ai_chance = {
+			factor = 1
+		}
+		add_stability_or_adm_power = yes
+		change_innovativeness = 10
+		add_adm_power = 100
+		add_dip_power = 100
+		add_prestige = -20
+		define_advisor = {
+			type = philosopher
+			name = "Adam Smith"
+			culture = scottish
+			religion = reformed
+			skill = 3
+			cost_multiplier = 0.25
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_invisible_hand
+			duration = -1
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.32.b
+		add_stability = -1
+		add_legitimacy = 20
+		add_republican_tradition = 20
+		add_devotion = 20
+		add_tribal_allegiance = 20
+		add_prestige = 20
+		add_country_modifier = {
+			name = FEE_Scotland_heavy_hand
+			duration = -1
+		}
+	}
+}
+
+#James Watt
+country_event = {
+	id = FEE_Scotland_Events.33
+	title = FEE_Scotland_Events.33.t
+	desc = FEE_Scotland_Events.33.d
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		is_year = 1700
+		any_owned_province = {
+			enlightenment = 100
+		}
+		any_owned_province = {
+			trade_goods = coal
+		}
+	}
+	mean_time_to_happen = {
+		months = 200
+	}
+	option = {
+		name = FEE_Scotland_Events.33.a
+		change_innovativeness = 10
+		add_country_modifier = {
+			name = FEE_Scotland_industrial_pioneer
+			duration = 27375
+		}
+		every_owned_province = {
+			limit = {
+				OR = {
+					trade_goods = coal
+					trade_goods = cloth
+				}
+			}
+			add_province_modifier = {
+				name = FEE_Scotland_watt_engines
+				duration = -1
+			}
+		}
+	}
+}
+
+#Encyclopedia Britannica
+country_event = {
+	id = FEE_Scotland_Events.34
+	title = FEE_Scotland_Events.34.t
+	desc = FEE_Scotland_Events.34.d
+	picture = BIG_BOOK_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		has_institution = enlightenment
+	}
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.5
+			has_idea_group = innovativeness_ideas
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.34.a
+		ai_chance = {
+			factor = 1
+		}
+		add_years_of_income = -0.25
+		add_prestige = 20
+		add_country_modifier = {
+			name = FEE_Scotland_encyclopedia_brittanica
+			duration = 36500
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.34.b
+		add_prestige = -10
+	}
+}
+
+#The Celtic Revival Movement
+country_event = {
+	id = FEE_Scotland_Events.35
+	title = FEE_Scotland_Events.35.t
+	desc = FEE_Scotland_Events.35.d
+	picture = COURT_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+			primary_culture = highland_scottish
+		}
+		is_year = 1721
+		has_institution = enlightenment
+	}
+	option = {
+		name = FEE_Scotland_Events.35.a
+		add_prestige = 50
+		add_years_of_income = -0.25
+		add_country_modifier = {
+			name = FEE_Scotland_pride_of_scotland
+			duration = -1
+		}
+		every_owned_province = {
+			limit = {
+				culture = scottish
+			}
+			every_neighbor_province = {
+				limit = {
+					NOT = {
+						culture = scottish
+					}
+					owned_by = ROOT
+				}
+				change_culture = scottish
+			}
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.35.b
+		add_prestige = 30
+	}
+	option = {
+		name = FEE_Scotland_Events.35.c
+		add_prestige = -10
+		add_years_of_income = 0.25
+	}
+}
+
+#Scotland and Modern Warfare
+country_event = {
+	id = FEE_Scotland_Events.36
+	title = FEE_Scotland_Events.36.t
+	desc = FEE_Scotland_Events.36.d
+	picture = SIEGE_eventPicture
+	fire_only_once = yes
+	trigger = {
+		OR = {
+			tag = SCO
+			primary_culture = scottish
+		}
+		is_year = 1750
+		is_at_war = yes
+	}
+	mean_time_to_happen = {
+		months = 3
+		modifier = {
+			factor = 0.5
+			has_idea_group = innovativeness_ideas
+		}
+		modifier = {
+			factor = 0.7
+			has_idea_group = quality_ideas
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.36.a
+		add_stability_or_adm_power = yes
+		add_estate_loyalty_modifier = {
+			estate = estate_nobles
+			desc = FEE_Scotland_traditional_warfare
+			loyalty = 10
+			duration = 7300
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_traditional_warfare
+			duration = 18250
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.36.b
+		add_country_modifier = {
+			name = FEE_Scotland_moderate_army_reforms
+			duration = 18250
+		}
+	}
+	option = {
+		name = FEE_Scotland_Events.36.c
+		add_mil_power = 100
+		add_yearly_manpower = -0.5
+		add_estate_loyalty_modifier = {
+			estate = estate_nobles
+			desc = FEE_Scotland_reformed_scots_army
+			loyalty = -10
+			duration = 7300
+		}
+		add_country_modifier = {
+			name = FEE_Scotland_reformed_scots_army
+			duration = 18250
+		}
+	}
+}

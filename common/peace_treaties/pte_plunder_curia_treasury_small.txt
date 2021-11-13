@@ -1,0 +1,101 @@
+pte_plunder_curia_treasury_small = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0
+	prestige_base = 0.25
+	ae_base = 0
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 20.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = no
+	is_make_subject = no
+	requires_is_allowed = no
+
+	is_visible = {
+		has_dlc = "Emperor"
+		FROM = {
+			papacy_active = yes
+		}
+		OR = {
+			NOT = { religion = catholic }
+			is_rival = FROM
+			is_excommunicated = yes
+		}
+		FROM = {
+			tag = PAP
+			religion = catholic
+			curia_treasury_size = 1000
+			NOT = { curia_treasury_size = 2000 }
+		}
+	}
+	is_allowed = {
+		custom_trigger_tooltip = {
+			tooltip = PTE_FROM_CAPITAL_CONTROLLED_BY_OUR_SIDE
+			FROM = {
+				capital_scope = {
+					controller = {
+						OR = {
+							is_in_war = {
+								attackers = THIS
+								attackers = ROOT
+								defenders = FROM
+							}
+							is_in_war = {
+								defenders = THIS
+								defenders = ROOT
+								attackers = FROM
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		FROM = {
+			add_curia_treasury = -750
+		}
+		add_treasury = 500
+		add_inflation = 0.1
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			NOT = { treasury = 10000 }
+			OR = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						OR = {
+							is_claim = ROOT
+							is_core = ROOT
+						}
+					}
+				}
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_humiliate_rotw
+				}
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_pte_defend_rival_subject
+				}
+				is_bankrupt = yes
+				num_of_loans = 5
+			}
+		}
+	}
+}

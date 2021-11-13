@@ -1,0 +1,126 @@
+pte_take_over_defender_of_faith = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0.4
+	prestige_base = 0.4
+	ae_base = 0
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 25.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = no
+	is_make_subject = no
+	requires_is_allowed = no
+
+	is_visible = {
+		is_subject = no
+		religion = FROM
+		is_defender_of_faith = no
+		FROM = {
+			is_defender_of_faith = yes
+		}
+	}
+	is_allowed = {
+		has_regency = no
+		if = {
+			limit = {
+				NOT = { religion = anglican }
+			}
+			is_female = no
+		}
+	}
+	effect = {
+		set_defender_of_the_faith = { who = ROOT religion = ROOT }
+		if = {
+			limit = {
+				religion = catholic
+				is_excommunicated = yes
+			}
+			if = {
+				limit = {
+					is_papal_controller = yes
+				}
+				excommunicate = ROOT
+			}
+			else = {
+				random_country = {
+					limit = {
+						is_papal_controller = yes
+					}
+					excommunicate = ROOT
+				}
+			}
+		}
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			OR = {
+				NOT = { has_dlc = "Emperor" }
+				FROM = {
+					is_defender_of_faith_of_tier = 4
+				}
+			}
+			num_of_cities = FROM
+			num_of_cities = 20
+			OR = {
+				NOT = { religious_unity = 0.75 }
+				is_rival = FROM
+				any_rival_country = {
+					NOT = { religion_group = ROOT }
+				}
+			}
+			OR = {
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_humiliate_rotw
+				}
+				is_in_war = {
+					participants = ROOT
+					participants = FROM
+					casus_belli = cb_pte_defend_rival_subject
+				}
+				AND = {
+					NOT = {
+						is_in_war = {
+							attacker_leader = ROOT
+							defender_leader = FROM
+						}
+					}
+					NOT = {
+						is_in_war = {
+							attacker_leader = FROM
+							defender_leader = ROOT
+						}
+					}
+				}
+				AND = {
+					religion = catholic
+					is_excommunicated = yes
+				}
+				FROM = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 3
+							OR = {
+								is_claim = ROOT
+								is_core = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

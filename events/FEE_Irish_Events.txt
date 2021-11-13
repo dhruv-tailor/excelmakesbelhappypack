@@ -1,0 +1,355 @@
+# Irish Events
+
+namespace = FEE_Irish_Events
+
+# Yorkists seek Irish support
+country_event = { 
+	id = FEE_Irish_Events.1
+	title = FEE_Irish_Events.1.T
+	desc = FEE_Irish_Events.1.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		primary_culture = irish
+		capital_scope = {
+			OR = {
+				area = munster_area
+				area = connacht_area
+				area = leinster_area
+				area = ulster_area
+			}
+		}
+		OR = {
+			owns = 4377 #Ormond
+			owns = 4120 #Kildare
+			owns = 4118 #Desmond
+			owns = 4121 #Ulster
+		}
+		if = {
+			limit = {
+				exists = ENG
+			}
+			ENG = {
+				has_disaster = war_of_the_roses
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = FEE_Irish_Events.1.OPT1
+		
+		ai_chance = {
+			factor = 33
+		}
+
+		add_manpower = -6 #every 1 is 1000
+		add_treasury = -40
+		set_country_flag = irish_supporter_yorkists_flag
+	}
+
+	option = {
+		name = FEE_Irish_Events.1.OPT2
+		
+		ai_chance = {
+			factor = 33
+		}
+
+		add_manpower = -3 #every 1 is 1000
+		add_treasury = -20
+
+		set_country_flag = irish_rejected_yorkists_flag
+	}
+
+	option = {
+		name = FEE_Irish_Events.1.OPT3
+		
+		ai_chance = {
+			factor = 33
+		}
+		add_prestige = 20
+	}
+}
+
+#Yorkists Grateful for Our Aid
+country_event = { 
+	id = FEE_Irish_Events.2
+	title = FEE_Irish_Events.2.T
+	desc = FEE_Irish_Events.2.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		primary_culture = irish
+		if = {
+			limit = {
+				exists = ENG
+			}
+			ENG = {
+				NOT = { has_disaster = war_of_the_roses }
+				dynasty = "York"
+			}
+		}
+		has_country_flag = irish_supporter_yorkists_flag
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = {
+		name = FEE_Irish_Events.2.OPT1
+		
+		ai_chance = {
+			factor = 100
+		}
+
+		capital_scope = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+		add_treasury = 50
+		ENG = {
+			add_opinion = {
+				who = ROOT
+				modifier = irish_supported_york
+			}
+		}
+		add_country_modifier = {
+			name = irish_yorkist_benefactor
+			duration = 7300
+		}
+	}
+}
+
+#English Angered by Irish Meddling
+country_event = {
+	id = FEE_Irish_Events.3
+	title = FEE_Irish_Events.3.T
+	desc = FEE_Irish_Events.3.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		primary_culture = irish
+		if = {
+			limit = {
+				exists = ENG
+			}
+			ENG = {
+				NOT = { has_disaster = war_of_the_roses }
+				NOT = { dynasty = "York" }
+			}
+		}
+		has_country_flag = irish_rejected_yorkists_flag
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = {
+		name = FEE_Irish_Events.3.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		add_country_modifier = {
+			name = irish_prepared_defenses
+			duration = 5475
+		}
+		reverse_add_casus_belli = {
+			type = cb_vassalize_mission
+			target = ENG
+			months = 120
+		}
+		ENG = {
+			add_opinion = {
+				who = ROOT
+				modifier = irish_angered_england
+			}
+		}
+	}
+}
+
+#Foreign Diplomats Arrive at Court
+country_event = {
+	id = FEE_Irish_Events.4
+	title = FEE_Irish_Events.4.T
+	desc = FEE_Irish_Events.4.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		primary_culture = irish
+		capital_scope = {
+			OR = {
+				area = munster_area
+				area = connacht_area
+				area = leinster_area
+				area = ulster_area
+			}
+		}
+		num_of_owned_provinces_with = {
+			value = 6
+			is_core = ROOT
+		}
+		if = {
+			limit = {
+				exists = ENG
+			}
+			ENG = {
+				num_of_owned_provinces_with = {
+					value = 20
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 24
+	}
+
+	option = {
+		name = FEE_Irish_Events.4.OPT1
+
+		ai_chance = {
+			factor = 25
+		}
+
+		add_country_modifier = {
+			name = irish_dutch_military_aid
+			duration = 9125
+		}
+		add_mil_power = -200
+		random_country = {
+			limit = {
+				capital_scope = {
+					region = low_countries_region
+				}
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = low_countries_region
+						}
+						army_size = PREV
+						total_development = PREV
+					}
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = irish_dutch_support
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = irish_dutch_support
+			}
+		}
+	}
+	option = {
+		name = FEE_Irish_Events.4.OPT2
+
+		ai_chance = {
+			factor = 25
+		}
+
+		add_manpower = -10
+		add_mil_power = -100
+
+		add_country_modifier = {
+			name = irish_spanish_ties
+			duration = 9125
+		}
+		random_country = {
+			limit = {
+				capital_scope = {
+					region = iberia_region
+				}
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = iberia_region
+						}
+						army_size = PREV
+					}
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = irish_iberian_support
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = irish_iberian_support
+			}
+		}
+	}
+	option = {
+		name = FEE_Irish_Events.4.OPT3
+
+		ai_chance = {
+			factor = 25
+		}
+
+		random_country = {
+			limit = {
+				capital_scope = {
+					region = france_region
+				}
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = france_region
+						}
+						army_size = PREV
+					}
+				}
+			}
+			create_march = ROOT
+		}
+		every_province = {
+			limit = {
+				OR = {
+					area = munster_area
+					area = connacht_area
+					area = leinster_area
+					area = ulster_area
+				}
+				NOT = {
+					country_or_non_sovereign_subject_holds = ROOT 
+				}
+			}
+			add_core = ROOT
+		}
+		add_treasury = 200
+
+		add_country_modifier = {
+			name = irish_french_overlordship
+			duration = 9125
+		}
+	}
+	option = {
+		name = FEE_Irish_Events.4.OPT4
+
+		ai_chance = {
+			factor = 25
+		}
+
+		add_country_modifier = {
+			name = irish_fierce_independence
+			duration = 9125
+		}
+		add_prestige = 15
+	}
+}

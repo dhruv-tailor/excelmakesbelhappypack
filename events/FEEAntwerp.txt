@@ -1,0 +1,167 @@
+namespace = fee_antwerp
+normal_or_historical_nations = yes
+
+#Checks for Siege
+country_event = {
+	id = fee_antwerp.1
+	title = fee_antwerp.1.tt
+	desc = fee_antwerp.1.dd
+	picture = CITY_eventPicture
+	hidden = yes
+
+	trigger = {
+		OR = {
+			tag = SPA
+			tag = CAS
+		}
+		num_of_mercenaries = 1
+		controls = 1744
+		NOT = {
+			owns = 1744
+		}
+		1744 = {
+			owner = {
+				war_with = ROOT
+			}
+		}
+		NOT = { has_country_flag = sacked_antwerp }
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				is_bankrupt = no
+			}
+			random_list = {
+				25 = {
+					country_event = { id = fee_antwerp.2 }
+					set_country_flag = sacked_antwerp
+				}
+				75 = { }
+			}
+		}
+		else_if = {
+			limit = {
+				is_bankrupt = yes
+			}
+			country_event = { id = fee_antwerp.2 }
+		}
+	}
+
+	option = {
+		name = fee_antwerp.1.a
+	}
+}
+
+#Sack of Antwerp (Spain)
+country_event = {
+	id = fee_antwerp.2
+	title = fee_antwerp.2.tt
+	desc = fee_antwerp.2.dd
+	picture = CITY_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = fee_antwerp.2.a
+		add_years_of_income = 0.35
+		add_army_professionalism = -0.025
+		add_prestige = -20
+		add_country_modifier = {
+			name = fee_spa_fury
+			duration = 14600
+		}
+		1744 = {
+			owner = {
+				add_opinion = {
+					who = ROOT
+					modifier = sacked_antwerp_opinion_modifier
+				}
+				country_event = { id = fee_antwerp.3 }
+			}
+		}
+	}
+	option = {
+		name = fee_antwerp.2.b
+		add_years_of_income = 0.1
+		add_army_professionalism = 0.05
+		add_prestige = 5
+		add_mil_power = -35
+		add_country_modifier = {
+			name = fee_spa_restored_discipline
+			duration = 14600
+		}
+		1744 = {
+			owner = {
+				add_opinion = {
+					who = ROOT
+					modifier = sacked_antwerp_reduced_opinion_modifier
+				}
+				country_event = { id = fee_antwerp.3 }
+			}
+		}
+	}
+}
+
+#Sack of Antwerp (Owner)
+country_event = {
+	id = fee_antwerp.3
+	title = fee_antwerp.3.tt
+	desc = fee_antwerp.3.dd
+	picture = CITY_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = fee_antwerp.3.a
+		1744 = {
+			add_base_tax = -2
+			add_base_production = -2
+			add_base_manpower = -2
+			add_devastation = 95
+			add_province_modifier = {
+				name = fee_spa_destroyed_infrastructure
+				duration = 7300
+			}
+			if = {
+				limit = {
+					has_building = marketplace
+				}
+				remove_building = marketplace
+			}
+			else_if = {
+				limit = {
+					has_building = trade_depot
+				}
+				remove_building = trade_depot
+			}
+			else_if = {
+				limit = {
+					has_building = stock_exchange
+				}
+				remove_building = stock_exchange
+			}
+			add_province_modifier = {
+				name = fee_spa_decline_cloth
+				duration = -1
+			}
+		}
+		97 = {
+			add_base_tax = 1
+			add_base_production = 2
+			add_base_manpower = 1
+			add_province_modifier = {
+				name = fee_spa_antwerp_refugees
+				duration = 7300
+			}
+			add_province_modifier = {
+				name = fee_spa_antwerp_legacy
+				duration = -1
+			}
+		}
+		add_country_modifier = {
+			name = fee_spa_black_legend
+			duration = -1
+		}
+	}
+}

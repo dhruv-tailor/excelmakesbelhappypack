@@ -1,0 +1,544 @@
+#Dutch events (Netherlands++)
+
+namespace = fee_NED
+
+#Generaliteitslanden
+province_event = {
+	id = fee_NED.1
+	title = fee_NED.1.t
+	desc = fee_NED.1.d
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	trigger = {
+		owner = {
+			tag = NED
+			OR = {
+				religion = protestant
+				religion = reformed
+			}
+			government = republic
+			NOT = {
+				has_idea_group = humanist_ideas
+			}
+			is_at_war = no
+		}
+		has_owner_religion = no
+		OR = {
+			culture = dutch
+			culture = wallonian
+			culture = flemish
+		}
+		is_capital = no
+		NOT = {
+			has_province_modifier = fee_generality_lands
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	option = {
+		name = fee_NED.1.a
+		add_province_modifier = {
+			name = fee_generality_lands
+			duration = -1
+		}
+	}
+}
+
+province_event = {
+	id = fee_NED.2
+	title = fee_NED.2.t
+	desc = fee_NED.2.d
+	picture = CITY_VIEW_eventPicture
+
+	trigger = {
+		owner = {
+			tag = NED
+			OR = {
+				religion = protestant
+				religion = reformed
+			}
+			is_at_war = no
+		}
+		has_province_modifier = fee_generality_lands
+		OR = {
+			has_owner_religion = yes
+			owner = {
+				full_idea_group = humanist_ideas
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 36
+	}
+
+	option = {
+		name = fee_NED.2.a
+		remove_province_modifier = fee_generality_lands
+	}
+}
+
+#The revolt of Adolf van Egmond
+country_event = {
+	id = fee_NED.3
+	title = fee_NED.3.t
+	desc = fee_NED.3.d
+	picture = BATTLE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = GEL
+		NOT = {
+			is_year = 1480
+		}
+		exists = BUR
+		NOT = {
+			num_of_cities = 4
+		}
+		owns = 99
+		is_year = 1450
+	}
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.8
+			NOT = {
+				legitimacy = 80
+			}
+		}
+	}
+
+	option = {
+		name = fee_NED.3.a
+		random_owned_province = {
+			spawn_rebels = {
+				type = noble_rebels
+				size = 2
+				leader = "Adolf van Egmond"
+			}
+		}
+		hidden_effect = {
+			add_country_modifier = {
+				name = fee_adolf_revolted
+				duration = 3650
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = fee_NED.3.b
+		add_dip_power = -150
+	}
+}
+
+#Compromising with Adolf
+country_event = {
+	id = fee_NED.4
+	title = fee_NED.4.t
+	desc = fee_NED.4.d
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		has_country_modifier = fee_adolf_revolted
+		is_subject = no
+		OR = {
+			any_country = {
+				junior_union_with = BUR
+			}
+			BUR = {
+				num_of_cities = 15
+			}
+		}
+		is_at_war = no
+		BUR = {
+			is_at_war = no
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 30
+	}
+
+	option = {
+		name = fee_NED.4.a
+		BUR = {
+			country_event = { id = fee_NED.5 days = 10 }
+		}
+		add_prestige = -10
+		custom_tooltip = fee_NED.4.tt
+	}
+
+	option = {
+		name = fee_NED.4.b
+		99 = {
+			add_province_modifier = {
+				name = fee_adolfs_unrest
+				duration = 3650
+			}
+		}
+		add_legitimacy = 5
+	}
+}
+
+#Burgundian answer
+country_event = {
+	id = fee_NED.5
+	title = fee_NED.5.t
+	desc = fee_NED.5.d
+	picture = CONQUEST_eventPicture
+
+	fire_only_once = yes
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_NED.5.a
+		ai_chance = {
+			factor = 95
+			modifier = {
+				factor = 0
+				num_of_loans = 13
+			}
+		}
+		add_years_of_income = -0.8
+
+		if = {
+			limit = {
+				valid_for_personal_unions_trigger = yes
+				GEL = { valid_for_personal_unions_trigger = yes }
+			}
+			create_union = GEL
+		}
+		hidden_effect = {
+			GEL = {
+				country_event = { id = fee_NED.6 }
+			}
+		}
+	}
+
+	option = {
+		name = fee_NED.5.b
+		ai_chance = {
+			factor = 5
+			modifier = {
+				factor = 100
+				num_of_loans = 13
+			}
+		}
+		add_dip_power = 25
+		hidden_effect = {
+			GEL = {
+				country_event = { id = fee_NED.7 }
+			}
+		}
+	}
+}
+
+#Burgundy Accepts the Compromise
+country_event = {
+	id = fee_NED.6
+	title = fee_NED.6.t
+	desc = fee_NED.6.d
+	picture = CONQUEST_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_NED.6.a
+		add_treasury = 300
+		add_legitimacy = -10
+		add_country_modifier = {
+			name = fee_adolf_compromise
+			duration = 7300
+		}
+	}
+}
+
+#Burgundy Declines the Compromise!
+country_event = {
+	id = fee_NED.7
+	title = fee_NED.7.t
+	desc = fee_NED.7.d
+	picture = LIBERUM_VETO_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_NED.7.a
+		add_prestige = -10
+		add_country_modifier = {
+			name = fee_adolf_compromise
+			duration = 7300
+		}
+		add_casus_belli = {
+			target = BUR
+			type = cb_insult
+		}
+	}
+}
+
+#Arrival in Indonesia
+country_event = {
+	id = fee_NED.8
+	title = fee_NED.8.t
+	desc = fee_NED.8.d
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NED
+		has_discovered = 624
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	option = {
+		name = fee_NED.8.a
+
+		ai_chance = { factor = 100 }
+
+		597 = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = -1
+				power = 50
+				key = EAST_INDIAN_TRADE_PORTS
+			}
+		}
+		630 = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = -1
+				power = 50
+				key = EAST_INDIAN_TRADE_PORTS
+			}
+		}
+		624 = {
+			add_province_modifier = {
+				name = fee_dutch_warehouses
+				duration = 9125
+			}
+		}
+		set_country_flag = fee_allow_for_founding_of_batavia
+	}
+	option = {
+		name = fee_NED.8.b
+
+		ai_chance = { factor = 0 }
+
+		add_prestige = -5
+	}
+}
+
+#Founding of Batavia
+country_event = {
+	id = fee_NED.9
+	title = fee_NED.9.t
+	desc = fee_NED.9.d
+	picture = LIBERUM_VETO_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NED
+		has_country_flag = fee_allow_for_founding_of_batavia
+		630 = {
+			owner = {
+				NOT = { war_with = ROOT }
+			}
+		}
+		west_java_area = {
+			has_discovered = ROOT
+		}
+		east_java_area = {
+			has_discovered = ROOT
+		}
+		central_java_area = {
+			has_discovered = ROOT
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = fee_allow_for_formusa
+		}
+	}
+
+	option = {
+		name = fee_NED.9.a
+
+		ai_chance = { factor = 100 }
+
+
+		add_years_of_income = -0.25
+		630 = {
+			owner = {
+				add_opinion = {
+					who = ROOT
+					modifier = fee_stole_our_province
+				}
+			}
+			cede_province = ROOT
+			add_core = ROOT
+			change_province_name = "Batavia"
+			rename_capital = "Batavia"
+			add_province_modifier = {
+				name = fee_structured_city
+				duration = -1
+			}
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 3
+		}
+	}
+	option = {
+		name = fee_NED.9.b
+
+		ai_chance = { factor = 0 }
+
+
+		add_prestige = 5
+		630 = {
+			owner = {
+				add_opinion = {
+					who = ROOT
+					modifier = fee_didnt_stole_our_province
+				}
+			}
+		}
+	}
+}
+
+#Formosa
+country_event = {
+	id = fee_NED.10
+	title = fee_NED.10.t
+	desc = fee_NED.10.d
+	picture = LIBERUM_VETO_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NED
+		has_country_flag = fee_allow_for_formusa
+		taiwan_area = {
+			has_discovered = ROOT
+		}
+		738 = {
+			is_city = no
+		}
+		exists = FRM
+	}
+
+	mean_time_to_happen = {
+		months = 240
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = fee_allow_tunging_event
+		}
+	}
+
+	option = {
+		name = fee_NED.10.a
+
+		ai_chance = { factor = 100 }
+
+
+		738 = {
+			cede_province = ROOT
+			add_core = ROOT
+			change_province_name = "Zeelandia"
+			rename_capital = "Fort Zeelandia"
+		}
+	}
+}
+
+#Koxinga and Tungning
+country_event = {
+	id = fee_NED.11
+	title = fee_NED.11.t
+	desc = fee_NED.11.d
+	picture = LIBERUM_VETO_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NED
+		exists = FRM
+		738 = {
+			owned_by = ROOT
+		}
+	}
+
+	option = {
+		name = fee_NED.11.a
+
+		ai_chance = { factor = 0 }
+
+
+		738 = {
+			cede_province = FRM
+			add_core = FRM
+			change_province_name = "Anping"
+			rename_capital = "Anping"
+		}
+	}
+	option = {
+		name = fee_NED.11.b
+
+		ai_chance = { factor = 100 }
+
+
+		738 = {
+			add_core = FRM
+		}
+		FRM = {
+			country_event = { id = fee_NED.12 }
+		}
+	}
+}
+
+#The Dutch impede us
+country_event = {
+	id = fee_NED.12
+	title = fee_NED.12.t
+	desc = fee_NED.12.d
+	picture = LIBERUM_VETO_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = fee_NED.12.a
+
+		ai_chance = { factor = 100 }
+
+		declare_war_with_cb = {
+			who = PREV
+			casus_belli = cb_core
+			war_goal_province = 738
+		}
+	}
+
+	option = {
+		name = fee_NED.12.b
+
+		ai_chance = { factor = 0 }
+	}
+}

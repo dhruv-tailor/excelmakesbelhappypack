@@ -1,0 +1,262 @@
+namespace = events_boh
+normal_or_historical_nations = yes
+
+#Lessons of the Hussite Wars
+country_event = {
+	id = events_boh.2
+	title = "events_boh.2.tt"
+	desc = "events_boh.2.dd"
+	picture = MILITARY_CAMP_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = BOH
+		NOT = { is_year = 1490 }
+ 	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	option = {
+		name = events_boh.2.a #Excellent
+		add_mil_power = 100
+		add_country_modifier = {
+			name = boh_hussite_ingenuity
+			duration = 5475
+		}
+	}
+}
+
+#A Message of Peace
+country_event = {
+	id = events_boh.3
+	title = "events_boh.3.tt"
+	desc = "events_boh.3.dd"
+	picture = REFORM_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = BOH
+		has_ruler = "Jirí"
+		dynasty = "z Podebrad"
+		OR = {
+			religion = hussite
+			ruler_religion = hussite
+		}
+ 	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = events_boh.3.a #Unfortunate, but we can make some good out of this.
+		if = {
+			limit = {
+				exists = TUR
+			}
+			every_country = {
+				limit = {
+					is_rival = TUR
+					religion_group = christian
+				}
+				add_opinion = {
+					who = BOH
+					modifier = boh_charter_turk_rivals
+				}
+			}
+			TUR = {
+				add_opinion = {
+					who = BOH
+					modifier = boh_charter_turks
+				}
+			}
+		}
+		if = {
+			limit = {
+				exists = FRA
+				NOT = {
+					FRA = {
+						is_rival = TUR
+					}
+				}
+			}
+			FRA = {
+				add_opinion = {
+					who = BOH
+					modifier = boh_charter_france
+				}
+			}
+		}
+		define_advisor = {
+			type = statesman
+			name = "Zdenek Lev of Rozmital"
+			skill = 2
+			culture = czech
+			religion = catholic
+			discount = yes
+		}
+		add_prestige = 15
+	}
+	option = {
+		name = events_boh.3.b #How naïve! Perhaps we should forget the whole thing.
+		add_prestige = -10
+		add_dip_power = 50
+	}
+}
+
+#Thaler Coinage
+country_event = {
+	id = events_boh.4
+	title = "events_boh.4.tt"
+	desc = "events_boh.4.dd"
+	picture = ECONOMY_eventPicture
+
+	major = yes
+	fire_only_once = yes
+
+	trigger = {
+		tag = BOH
+		is_part_of_hre = yes
+		owns_core_province = 2967
+		is_year = 1500
+		NOT = { is_year = 1550 }
+ 	}
+
+	mean_time_to_happen = {
+		months = 200
+	}
+
+	option = {
+		name = events_boh.4.a #Wonderful news!
+		2967 = {
+			add_base_production = 2
+		}
+		give_estate_land_share_large = { estate = estate_nobles }
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_innovativeness = 3
+		}
+		add_country_modifier = {
+			name = boh_coinage_pioneer
+			duration = 7300
+		}
+		custom_tooltip = boh_thaler_princes
+		hidden_effect = {
+			every_country = {
+				limit = {
+					is_part_of_hre = yes
+				}
+				add_country_modifier = {
+					name = boh_thaler_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	option = {
+		name = events_boh.4.b #Yes yes, very nice, but what's in it for me?
+		add_years_of_income = 1
+		add_prestige = -10
+		add_country_modifier = {
+			name = boh_greedy_rulership
+			duration = 7300
+		}
+	}
+}
+
+country_event = {
+	id = events_boh.5
+	title = "events_boh.5.tt"
+	desc = "events_boh.5.dd"
+	picture = ANGRY_MOB_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = BOH
+		is_subject_of = HAB
+		overlord = {
+			religion = catholic
+		}
+		OR = {
+			religion = protestant
+			religion = reformed
+			religion = hussite
+		}
+		is_year = 1540
+		NOT = { is_year = 1620 }
+ 	}
+
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.5
+			liberty_desire = 50
+		}
+	}
+
+	option = {
+		name = events_boh.5.a #Throw them out the window!
+		add_liberty_desire = 100
+		every_country = {
+			limit = {
+				is_rival = HAB
+			}
+			add_opinion = {
+				who = BOH
+				modifier = boh_prague_defenestration
+			}
+		}
+	}
+	option = {
+		name = events_boh.5.b #We have no choice but to submit.
+		add_stability = -2
+		change_religion = catholic
+		add_country_modifier = {
+			name = boh_religion_enforced
+			duration = 7300
+		}
+	}
+}
+
+#Sack of Prague
+country_event = {
+	id = events_boh.6
+	title = "events_boh.6.tt"
+	desc = "events_boh.6.dd"
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		owns_core_province = 266
+		any_country = {
+			OR = {
+				culture = saxon
+				culture = prussian
+			}
+			controls = 266
+		}
+		is_year = 1720
+ 	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	option = {
+		name = events_boh.6.a #Will we ever recover?
+		266 = {
+			add_base_tax = -2
+			add_base_production = -2
+			add_base_manpower = -2
+			add_devastation = 50
+		}
+	}
+}

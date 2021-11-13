@@ -210,6 +210,52 @@ on_five_year_pulse_4 = {
 		#100 = GE_reform_cycle_republic.401
 		#100 = GE_reform_cycle_republic.402
 	}
+	if = { #fail-safe for flavor_pap.7, making religious leagues happen at some point if there is no PAP
+		limit = {
+			is_year = 1610
+			NOT = { exists = PAP }
+			NOT = { has_global_flag = counter_reformation }
+		}
+		set_global_flag = counter_reformation
+	}
+	#fail-safe if for whatever reason these flags stay after being used in events
+	if = {
+		limit = {
+			had_country_flag = {
+				flag = advisor_events_adm
+				days = 720
+			}
+		}
+		clr_country_flag = advisor_events_adm
+	}
+	if = {
+		limit = {
+			had_country_flag = {
+				flag = advisor_events_dip
+				days = 720
+			}
+		}
+		clr_country_flag = advisor_events_dip
+	}
+	if = {
+		limit = {
+			had_country_flag = {
+				flag = advisor_events_mil
+				days = 720
+			}
+		}
+		clr_country_flag = advisor_events_mil
+	}
+	#Clearing of Jewish events flags
+	if = {
+		limit = {
+			had_country_flag = {
+				flag = shalosh_regalim
+				days = 365
+			}
+		}
+		clr_country_flag = shalosh_regalim
+	}
 }
 
 
@@ -240,10 +286,6 @@ on_death_election = {
 	if = {
 		limit = { has_reform = presidential_despot_reform }
 		remove_government_reform = presidential_despot_reform
-		if = {
-			limit = { NOT = { has_dlc = "Dharma" } }
-			set_legacy_government = oligarchic_republic
-		}
 	}
 	if = {
 		limit = {
@@ -256,6 +298,7 @@ on_death_election = {
 		701		# Election event
 		elections.721		# Dutch Republic
 		elections.800	# Lottery election
+		flavor_tus.16 #Savonarola Leaves This World
 		elections.7002 #GE
 		#GE_electoral_monarchy.1
 		GE_electoral_monarchy.2
@@ -272,7 +315,7 @@ on_monarch_death = {
 		}
 		BRA = {
 			clr_country_flag = albrecht_achilles_flag #Just to be sure
-			kill_heir = yes #If Albrecht Achilles dies in Ansbach he will also be dead in Brandenburg, will appear as normal death of heir to BRA.
+			kill_heir = {} #If Albrecht Achilles dies in Ansbach he will also be dead in Brandenburg, will appear as normal death of heir to BRA.
 		}
 	}
 	if = {
@@ -291,8 +334,45 @@ on_monarch_death = {
 		}
 		clr_country_flag = sax_thuringen_split_to_happen
 	}
+	if = {
+		limit = { tag = SAM }
+		country_event = { id = polynesian.35 }
+	}
+	if = {
+		limit = { tag = TOG }
+		country_event = { id = polynesian.36 }
+	}
+	if = {	# Ascension of Trailokanat	
+		limit = { tag = AYU }
+		country_event = { id = flavor_suk.1 }		 			
+	}
 	burgundian_inheritance_start_effect = yes
 	ladislaus_postumus_king_died_effect = yes
+	if = {
+		limit = {
+			OR = {
+				has_country_flag = no_stab_hit_on_ruler_death
+				has_a_primary_cult_selected = yes
+			}
+			OR = {
+				government = tribal
+				government = monarchy
+			}
+		}
+		add_stability = 1
+	}
+	events = {
+		flavor_wal.1 # Vlad the Impaler. So that he doesn't try to usurp his father.
+		flavor_nav.4 # Navarra succession event
+		flavor_sax.8 # Treaty of Leipzig
+		flavor_pap.16 # Borgia Pope
+		flavor_pap.19 # death of borgia pope
+		flavor_tus.22 # Medici Pope
+		flavor_tus.24 # death of the Medici Pope
+		majapahit.8 # Majapahit pretenders
+		flavor_mal.11 # Mali pretenders
+		flavor_mal.47 # Pilgrimage ends prematurely
+	}
 	if = {
 		limit = {
 			has_ruler_flag = Ulugh_beg_is_ruler

@@ -1,0 +1,502 @@
+namespace = CE_edict_of_potsdam_chain
+	#ScorpeoneLemonen/#Jay DoubleU
+
+#Edict de Fontainebleau (FRA)
+country_event = {
+	id = CE_edict_of_potsdam_chain.1
+	title = CE_edict_of_potsdam_chain.1.t
+	desc = CE_edict_of_potsdam_chain.1.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		is_year = 1685
+		tag = FRA
+		FRA = {
+			OR = {
+				has_country_modifier = edict_de_nantes
+				has_country_flag = revoked_the_edict_of_nantes
+			}
+		}
+		OR = {
+			exists = PRU
+			exists = BRA
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 30
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.1.a
+		if = {
+			limit = {
+				FRA = { has_country_modifier = edict_de_nantes }
+			}
+			remove_country_modifier = edict_de_nantes
+			set_country_flag = revoked_the_edict_of_nantes
+		}
+		custom_tooltip = CE_edict_of_potsdam_chain.1.a.tooltip
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = PRU
+				}
+				PRU = {
+					country_event = {
+						id = CE_edict_of_potsdam_chain.2
+						days = 1
+					}
+				}
+			}
+			else = {
+				BRA = {
+					country_event = {
+						id = CE_edict_of_potsdam_chain.2
+						days = 1
+					}
+				}
+			}
+		}
+		add_prestige = 10
+		ai_chance = {
+			factor = 1
+		}
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.1.b
+		add_stability = -2
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+#Edict de Fontainebleau (PRU/BRA)
+country_event = {
+	id = CE_edict_of_potsdam_chain.2
+	title = CE_edict_of_potsdam_chain.2.t
+	desc = CE_edict_of_potsdam_chain.2.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = {
+		name = CE_edict_of_potsdam_chain.2.a
+		add_years_of_income = -0.2
+		set_country_flag = huguenots_invited
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.2.b
+		add_prestige = -10
+	}
+}
+
+#French Exodus (FRA)
+country_event = {
+	id = CE_edict_of_potsdam_chain.3
+	title = CE_edict_of_potsdam_chain.3.t
+	desc = CE_edict_of_potsdam_chain.3.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = FRA
+		OR = {
+			PRU = {
+				has_country_flag = huguenots_invited
+			}
+			BRA = {
+				has_country_flag = huguenots_invited
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 365
+	}
+
+	immediate = {
+		hidden_effect = {
+			export_to_variable = {
+				which = 5_percent_of_development
+				value = total_development
+			}
+			multiply_variable = {
+				which = 5_percent_of_development
+				value = 0.05
+			}
+			set_variable = {
+				which = 5_percent_of_development_truncated
+				which = 5_percent_of_development
+			}
+			divide_variable = {
+				which = 5_percent_of_development_truncated
+				value = 1000
+			}
+			multiply_variable = {
+				which = 5_percent_of_development_truncated
+				value = 1000
+			}
+			if = {
+				limit = {
+					exists = PRU
+				}
+				PRU = {
+					set_variable = {
+						which = 5_percent_of_development_truncated
+						which = PREV
+					}
+				}
+			}
+			else = {
+				BRA = {
+					set_variable = {
+						which = 5_percent_of_development_truncated
+						which = PREV
+					}
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = 5_percent_of_development
+						value = 1
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = france_region
+						development = 4
+					}
+					if = {
+						limit = {
+							base_tax = 2
+						}
+						add_base_tax = -1
+					}
+					else_if = {
+						limit = {
+							base_production = 2
+						}
+						add_base_production = -1
+					}
+					else = {
+						add_base_manpower = -1
+					}
+				}
+				subtract_variable = {
+					which = 5_percent_of_development
+					value = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.3.a
+		custom_tooltip = CE_edict_of_potsdam_chain.3.a.tooltip
+		set_country_flag = huguenots_left
+	}
+}
+
+#The Edict of Potsdam (PRU/BRA)
+country_event = {
+	id = CE_edict_of_potsdam_chain.4
+	title = CE_edict_of_potsdam_chain.4.t
+	desc = CE_edict_of_potsdam_chain.4.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		if = {
+			limit = {
+				exists = PRU
+			}
+			tag = PRU
+		}
+		else = {
+			tag = BRA
+		}
+		FRA = {
+			has_country_flag = huguenots_left
+		}
+	}
+
+	mean_time_to_happen = {
+		days = 365
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				which = 5_percent_of_development_truncated
+			}
+			multiply_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				value = 0.5
+			}
+			divide_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				value = 1000
+			}
+			multiply_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				value = 1000
+			}
+			set_variable = {
+				which = huguenots_arrived_in_capital
+				which = 50_percent_of_huguenots_dissidents_first_half
+			}
+			set_variable = {
+				which = 50_percent_of_huguenots_dissidents_second_half
+				which = 50_percent_of_huguenots_dissidents_first_half
+			}
+			capital_scope = {
+				export_to_variable = {
+					variable_name = PRU_BRA_capital_tax
+					value = base_tax
+				}
+				export_to_variable = {
+					variable_name = PRU_BRA_capital_production
+					value = base_production
+				}
+				export_to_variable = {
+					variable_name = PRU_BRA_capital_manpower
+					value = base_manpower
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = 50_percent_of_huguenots_dissidents_second_half
+						value = 1
+					}
+				}
+				random_country = {
+					limit = {
+						is_part_of_hre = yes
+						OR = {
+							religion = protestant
+							religion = reformed
+						}
+						if = {
+							limit = {
+								exists = PRU
+							}
+							NOT = {
+								total_development = PRU
+							}
+						}
+						else = {
+							NOT = {
+								total_development = BRA
+							}
+						}
+					}
+					country_event = {
+						id = CE_edict_of_potsdam_chain.5
+						days = 30
+					}
+				}
+				subtract_variable = {
+					which = 50_percent_of_huguenots_dissidents_second_half
+					value = 1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.4.a
+		custom_tooltip = CE_edict_of_potsdam_chain.4.a.tooltip
+		while = {
+			limit = { 
+				check_variable = {
+					which = 50_percent_of_huguenots_dissidents_first_half
+					value = 1
+				}
+			}
+			capital_scope = {
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								check_variable = {
+									which = PRU_BRA_capital_tax
+									which = PRU_BRA_capital_production
+								}
+								check_variable = {
+									which = PRU_BRA_capital_tax
+									which = PRU_BRA_capital_production
+								}
+							}
+						}
+					}
+					add_base_tax = 1
+				}
+				else_if = {
+					limit = {
+						NOT = {
+							check_variable = {
+								which = PRU_BRA_capital_production
+								which = PRU_BRA_capital_manpower
+							}
+						}
+					}
+					add_base_production = 1
+				}
+				else = {
+					add_base_manpower = 1
+				}
+				export_to_variable = {
+					which = PRU_BRA_capital_tax
+					value = base_tax
+				}
+				export_to_variable = {
+					which = PRU_BRA_capital_production
+					value = base_production
+				}
+				export_to_variable = {
+					which = PRU_BRA_capital_manpower
+					value = base_manpower
+				}
+			}
+			subtract_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				value = 1
+			}
+		}
+		add_years_of_income = -1
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.4.b
+		add_prestige = -10
+		while = {
+			limit = {
+				check_variable = {
+					which = 50_percent_of_huguenots_dissidents_first_half
+					value = 1
+				}
+			}
+			random_country = {
+				limit = {
+					is_part_of_hre = yes
+					OR = {
+						religion = protestant
+						religion = reformed
+					}
+					if = {
+						limit = {
+							exists = PRU
+						}
+						NOT = {
+							total_development = PRU
+						}
+					}
+					else = {
+						NOT = {
+							total_development = BRA
+						}
+					}
+				}
+				country_event = {
+					id = CE_edict_of_potsdam_chain.5
+					days = 30
+				}
+			}
+			subtract_variable = {
+				which = 50_percent_of_huguenots_dissidents_first_half
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = CE_edict_of_potsdam_chain.5
+	title = CE_edict_of_potsdam_chain.5.t
+	desc = CE_edict_of_potsdam_chain.5.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+
+	fire_only_once = no
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			capital_scope = {
+				export_to_variable = {
+					variable_name = CURRENT_capital_tax
+					value = base_tax
+				}
+				export_to_variable = {
+					variable_name = CURRENT_capital_production
+					value = base_production
+				}
+				export_to_variable = {
+					variable_name = CURRENT_capital_manpower
+					value = base_manpower
+				}
+			}
+		}
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.5.a
+		ai_chance = {
+			factor = 75
+		}
+		add_prestige = 5
+		capital_scope = {
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							check_variable = {
+								which = CURRENT_capital_tax
+								which = CURRENT_capital_production
+							}
+							check_variable = {
+								which = CURRENT_capital_tax
+								which = CURRENT_capital_production
+							}
+						}
+					}
+				}
+				add_base_tax = 1
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						check_variable = {
+							which = CURRENT_capital_production
+							which = CURRENT_capital_manpower
+						}
+					}
+				}
+				add_base_production = 1
+			}
+			else = {
+				add_base_manpower = 1
+			}
+		}
+		add_years_of_income = -0.05
+	}
+
+	option = {
+		name = CE_edict_of_potsdam_chain.5.b
+		ai_chance = {
+			factor = 25
+		}
+		add_prestige = -1
+	}
+}

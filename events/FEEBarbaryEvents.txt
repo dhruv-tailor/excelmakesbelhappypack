@@ -1,0 +1,563 @@
+#Barbary Corsair Events
+
+namespace = fee_barbary
+
+#Privateer Contracts
+
+country_event = {
+	id = fee_barbary.1
+	title = fee_barbary.1.t
+	desc = fee_barbary.1.d
+	picture = SHIP_SAILING_eventPicture
+
+	trigger = {
+		capital_scope = {
+			region = maghreb_region
+		}
+		any_owned_province = {
+			region = maghreb_region
+			has_port = yes
+		}
+		religion_group = muslim
+		is_year = 1490
+		NOT = { 
+			is_year = 1520
+		}
+		NOT = {
+			has_country_modifier = fee_support_barbary
+		}
+		NOT = {
+			OR = {
+				tag = MAM
+				tag = EGY
+			}
+		}
+		OR = {
+			is_subject = no
+			overlord = {
+				OR = {
+					religion = sunni
+					religion = ibadi
+					religion = shiite
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.8
+			TUR = {
+				num_of_cities = 20
+			}
+		}
+	}
+
+	option = {
+		name = fee_barbary.1.a
+		ai_chance = {
+			factor = 80
+		}
+		add_country_modifier = {
+			name = fee_support_barbary
+			duration = -1
+		}
+		add_dip_power = -25
+		custom_tooltip = fee_barbary.1.tt
+	}
+
+	option = {
+		name = fee_barbary.1.b
+		ai_chance = {
+			factor = 20
+		}
+		add_stability_or_adm_power = yes
+	}
+}
+
+#Sponsor Barbary Raid
+country_event = {
+	id = fee_barbary.2
+	title = fee_barbary.2.t
+	desc = fee_barbary.2.d
+	picture = NAVAL_MILITARY_eventPicture
+
+	trigger = {
+		has_country_modifier = fee_support_barbary
+		any_owned_province = {
+			region = maghreb_region
+			has_port = yes
+		}
+		any_country = {
+			OR = {
+				religion = catholic
+				religion = protestant
+				religion = reformed
+			}
+			any_owned_province = {
+				OR = {
+					region = italy_region
+					area = languedoc_area
+					area = provence_area
+					area = catalonia_area
+					area = valencia_area
+					area = upper_andalucia_area
+					area = toledo_area
+					region = balkan_region
+				}
+				has_port = yes
+				NOT = {
+					has_province_modifier = fee_raided_barbary
+				}
+				is_capital = no
+			}
+			NOT = {
+				has_country_modifier = fee_barbary_retaliation
+			}
+			NOT = {
+				truce_with = ROOT
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 480
+	}
+
+	option = {
+		name = fee_barbary.2.a
+		ai_chance = {
+			factor = 80
+		}
+		add_treasury = -10
+		add_dip_power = -5
+		random_list = {
+			85 = {
+			random_country = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = protestant
+						religion = reformed
+					}
+					NOT = {
+						has_country_modifier = fee_barbary_retaliation
+					}
+					any_owned_province = {
+						has_port = yes
+						OR = {
+							region = italy_region
+							area = languedoc_area
+							area = provence_area
+							area = catalonia_area
+							area = valencia_area
+							area = upper_andalucia_area
+							area = toledo_area
+							region = balkan_region
+						}
+						is_capital = no
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_port = yes
+
+					OR = {
+						region = italy_region
+						area = languedoc_area
+						area = provence_area
+						area = catalonia_area
+						area = valencia_area
+						area = upper_andalucia_area
+						area = toledo_area
+						region = balkan_region
+					}
+					NOT = {
+						has_province_modifier = fee_raided_barbary
+					}
+					is_capital = no
+					}
+					province_event = {
+						id = fee_barbary.3 days = 30 random = 10
+					}
+				}
+			}
+			country_event = {
+				id = fee_barbary.5
+				days = 60
+			}
+			}
+		15 = {
+			random_country = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = protestant
+						religion = reformed
+					}
+					NOT = {
+						has_country_modifier = fee_barbary_retaliation
+					}
+					any_owned_province = {
+						has_port = yes
+						OR = {
+							region = italy_region
+							area = languedoc_area
+							area = provence_area
+							area = catalonia_area
+							area = valencia_area
+							area = upper_andalucia_area
+							area = toledo_area
+							region = balkan_region
+						}
+						is_capital = no
+					}
+				}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					owner = {
+						OR = {
+							religion = catholic
+							religion = protestant
+							religion = reformed
+						}
+						NOT = {
+							has_country_modifier = fee_barbary_retaliation
+						}
+					}
+					OR = {
+						region = italy_region
+						area = languedoc_area
+						area = provence_area
+						area = catalonia_area
+						area = valencia_area
+						area = upper_andalucia_area
+						area = toledo_area
+						region = balkan_region
+					}
+					NOT = {
+						has_province_modifier = fee_raided_barbary
+					}
+				}
+				province_event = {
+					id = fee_barbary.4 days = 30 random = 10
+				}
+			}
+			}
+			country_event = {
+				id = fee_barbary.6
+				days = 60
+			}
+		}
+		}
+		}
+	option = {
+		name = fee_barbary.2.b
+		ai_chance = {
+			factor = 20
+		}
+		add_dip_power = 50
+	}
+}
+
+#$PROVINCE$ Raided
+province_event = {
+	id = fee_barbary.3
+	title = fee_barbary.3.t
+	desc = fee_barbary.3.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			owner = {
+				add_country_modifier = {
+					name = fee_raided_barbary_country
+					duration = 3650
+					hidden = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = fee_barbary.3.a
+		add_province_modifier = {
+			name = fee_raided_barbary
+			duration = 3650
+		}
+		owner = {
+			add_prestige = -5
+		}
+	}
+	option = {
+		name = fee_barbary.3.b
+		add_province_modifier = {
+			name = fee_raided_barbary
+			duration = 1825
+		}
+		owner = {
+			add_adm_power = -25
+			add_treasury = -10
+		}
+	}
+}
+
+#Raid repelled
+province_event = {
+	id = fee_barbary.4
+	title = fee_barbary.4.t
+	desc = fee_barbary.4.d
+	picture = BATTLE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = fee_barbary.4.a
+		owner = {
+			add_prestige = 5
+			add_mil_power = 25
+		}
+	}
+}
+
+#Raid returns successful
+country_event = {
+	id = fee_barbary.5
+	title = fee_barbary.5.t
+	desc = fee_barbary.5.d
+	picture = FEAST_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = fee_barbary.5.a
+		add_years_of_income = 0.5
+		add_prestige = 5
+		add_mil_power = 20
+		add_navy_tradition = 5.0
+	}
+}
+
+#Raid returns in failure
+country_event = {
+	id = fee_barbary.6
+	title = fee_barbary.6.t
+	desc = fee_barbary.6.d
+	picture = OVEREXTENSION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = fee_barbary.6.a
+		add_mil_power = -15
+		add_dip_power = -15
+		add_prestige = -10
+		add_navy_tradition = 5.0
+	}
+}
+
+#Retaliation
+country_event = {
+	id = fee_barbary.7
+	title = fee_barbary.7.t
+	desc = fee_barbary.7.d
+	picture = NAVAL_MILITARY_eventPicture
+
+	trigger = {
+		has_country_modifier = fee_raided_barbary_country
+		NOT = {
+			has_country_modifier = fee_barbary_retaliation
+		}
+		calc_true_if = {
+			any_owned_province = {
+				has_province_modifier = fee_raided_barbary
+			}
+			amount = 2
+		}
+		is_at_war = no
+		any_country = {
+			has_country_modifier = fee_support_barbary
+			NOT = {
+				truce_with = ROOT
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 6
+	}
+	
+	option = {
+		name = fee_barbary.7.a
+		ai_chance = {
+			factor = 60
+		}
+		add_manpower = -1
+		add_treasury = -10
+		add_mil_power = 25
+		add_country_modifier = {
+			name = fee_barbary_retaliation
+			duration = 5475
+			hidden = yes
+		}
+		random_country = {
+			limit = {
+				has_country_modifier = fee_support_barbary
+				NOT = {
+					truce_with = ROOT
+				}
+			}
+			country_event = {
+				id = fee_barbary.8 days = 20
+			}
+		}
+	}
+	
+	option = {
+		name = fee_barbary.7.b
+		ai_chance = {
+			factor = 20
+		}
+		random_country = {
+			limit = {
+				has_country_modifier = fee_support_barbary
+			}
+			reverse_add_casus_belli = {
+				target = ROOT
+				type = cb_trade_conflict
+				months = 120
+			}
+		}
+	}
+	option = {
+		name = fee_barbary.7.b
+		ai_chance = {
+			factor = 20
+		}
+		add_dip_power = 15
+	}
+}
+
+#"Retaliation" for Barbary Raids
+country_event = {
+	id = fee_barbary.8
+	title = fee_barbary.8.t
+	desc = fee_barbary.8.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_province = {
+			limit = {
+				has_port = yes
+				NOT = {
+					has_province_modifier = fee_raided_barbary
+				}
+			}
+			add_province_modifier = {
+				name = fee_raided_barbary
+				duration = 3650
+			}
+		}
+	}
+	
+	option = {
+		name = fee_barbary.8.a
+		reverse_add_casus_belli = {
+			target = FROM
+			type = cb_trade_conflict
+			months = 120
+		}
+	}
+	option = {
+		name = fee_barbary.8.b
+		add_dip_power = 25
+	}
+}
+
+#Barbary Corsairs Plaguing Trade Route
+country_event = {
+	id = fee_barbary.9
+	title = fee_barbary.9.t
+	desc = fee_barbary.9.d
+	picture = SHIP_SAILING_eventPicture
+	
+	trigger = {
+		NOT = {
+			dip_tech = 23
+		}
+		any_country = {
+			has_country_modifier = fee_support_barbary
+		}
+		is_year = 1490
+		any_owned_province = {
+			OR = {
+				region = italy_region
+				area = languedoc_area
+				area = provence_area
+				area = catalonia_area
+				area = valencia_area
+				area = upper_andalucia_area
+				area = toledo_area
+				region = balkan_region
+			}
+			has_port = yes
+		}
+		NOT = {
+			any_country = {
+				has_country_modifier = fee_support_barbary
+				truce_with = ROOT
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 1100
+	}
+	
+	option = {
+		name = fee_barbary.9.a
+		add_dip_power = -25
+		add_treasury = -10
+	}
+	option = {
+		name = fee_barbary.9.b
+		add_country_modifier = {
+			name = fee_sea_lanes_terrorised
+			duration = 1095
+		}
+	}
+}
+
+#Decline of the Barbary Corsairs
+country_event = {
+	id = fee_barbary.10
+	title = fee_barbary.10.t
+	desc = fee_barbary.10.d
+	picture = SHIP_SAILING_eventPicture
+	
+	trigger = {
+		has_country_modifier = fee_support_barbary
+		any_country = {
+			dip_tech = 23
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.1
+			is_year = 1715
+		}
+	}
+	
+	option = {
+		name = fee_barbary.10.a
+		remove_country_modifier = fee_support_barbary
+	}
+}

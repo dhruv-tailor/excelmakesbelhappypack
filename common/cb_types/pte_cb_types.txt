@@ -117,7 +117,26 @@ cb_pte_liberation = {
 				}
 				OR = {
 					ai = no
-					is_neighbor_of = FROM
+					AND = {
+						is_neighbor_of = FROM
+						OR = {
+							is_rival = FROM
+							is_enemy = FROM
+							AND = {
+								has_opinion_modifier = {
+									who = FROM
+									modifier = aggressive_expansion
+								}
+								NOT = {
+									has_opinion_modifier = {
+										who = FROM
+										modifier = aggressive_expansion
+										value = -20
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 			AND = {
@@ -185,4 +204,169 @@ cb_pte_cultural_hegemony = {
 	}
 
 	war_goal = pte_cultural_hegemony_war_goal
+}
+
+cb_pte_defend_rival_subject = {
+	valid_for_subject = no
+
+	prerequisites = {
+		is_subject = no
+		is_rival = FROM
+		FROM = {
+			is_subject = no
+		}
+		any_country = {
+			offensive_war_with = FROM
+			NOT = { war_with = ROOT }
+			OR = {
+				is_in_war = {
+					attacker_leader = THIS
+					defender_leader = FROM
+					casus_belli = cb_independence_war
+				}
+				is_in_war = {
+					attacker_leader = THIS
+					defender_leader = FROM
+					casus_belli = cb_colonial_independance_war
+				}
+			}
+		}
+	}
+
+	attacker_disabled_po = {
+		po_demand_provinces
+		po_release_vassals
+		po_release_annexed
+		po_return_cores
+		po_become_vassal
+		po_subjugate_vassal
+		po_become_tributary_state
+		po_subjugate_tributary_state
+		po_form_personal_union
+		po_transfer_vassals
+	}
+
+	war_goal = pte_defend_rival_subject_war_goal
+}
+
+cb_pte_economic_hegemon = {
+	valid_for_subject = no
+
+	prerequisites = {
+		has_dlc = "Emperor"
+		pte_is_hegemon_of_type = { type = economic_hegemon }
+		hegemon_strength = 25
+		FROM = {
+			is_great_power = yes
+			monthly_income = 300
+			is_bankrupt = no
+		}
+	}
+
+	attacker_disabled_po = {
+		po_demand_provinces
+		po_release_vassals
+		po_release_annexed
+		po_return_cores
+		po_become_vassal
+		po_subjugate_vassal
+		po_become_tributary_state
+		po_subjugate_tributary_state
+		po_form_personal_union
+		po_transfer_vassals
+	}
+
+	war_goal = pte_economic_hegemon_war_goal
+}
+
+cb_pte_naval_hegemon = {
+	valid_for_subject = no
+
+	prerequisites = {
+		has_dlc = "Emperor"
+		pte_is_hegemon_of_type = { type = naval_hegemon }
+		hegemon_strength = 25
+		FROM = {
+			is_great_power = yes
+			navy_size = 1
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = their_num_of_heavy_ships
+					value = trigger_value:num_of_heavy_ship
+				}
+				export_to_variable = {
+					which = their_num_of_light_ships
+					value = trigger_value:num_of_light_ship
+				}
+				export_to_variable = {
+					which = their_num_of_galleys
+					value = trigger_value:num_of_galley
+				}
+				change_variable = { which = their_num_of_heavy_ships which = their_num_of_light_ships }
+				change_variable = { which = their_num_of_heavy_ships which = their_num_of_galleys }
+				check_variable = { which = their_num_of_heavy_ships value = 100 }
+			}
+		}
+	}
+
+	attacker_disabled_po = {
+		po_demand_provinces
+		po_release_vassals
+		po_release_annexed
+		po_return_cores
+		po_become_vassal
+		po_subjugate_vassal
+		po_become_tributary_state
+		po_subjugate_tributary_state
+		po_form_personal_union
+		po_transfer_vassals
+	}
+
+	war_goal = pte_naval_hegemon_war_goal
+}
+
+cb_pte_military_hegemon = {
+	valid_for_subject = no
+
+	prerequisites = {
+		has_dlc = "Emperor"
+		pte_is_hegemon_of_type = { type = military_hegemon }
+		hegemon_strength = 25
+		FROM = {
+			is_great_power = yes
+			army_size = 300
+		}
+	}
+
+	attacker_disabled_po = {
+		po_demand_provinces
+		po_release_vassals
+		po_release_annexed
+		po_return_cores
+		po_become_vassal
+		po_subjugate_vassal
+		po_become_tributary_state
+		po_subjugate_tributary_state
+		po_form_personal_union
+		po_transfer_vassals
+	}
+
+	war_goal = pte_military_hegemon_war_goal
+}
+
+cb_pte_anti_coalition = {
+	valid_for_subject = no
+
+	ai_peace_desire = -30
+
+	prerequisites = {
+		is_in_coalition_war = no
+		FROM = {
+			coalition_target = ROOT
+			num_of_coalition_members = 3
+			is_revolutionary = no
+		}
+	}
+
+	war_goal = pte_anti_coalition_war_goal
 }

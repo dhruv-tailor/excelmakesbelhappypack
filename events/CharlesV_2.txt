@@ -1,0 +1,493 @@
+namespace = charlesv
+
+#Charles V Abdicates
+country_event = { 
+	id = charlesv.3
+	title = charlesv_3_title
+	desc = charlesv_3_desc
+	fire_only_once = yes
+	major = yes
+	picture = COURT_eventPicture
+	
+	trigger = {
+		OR = {
+			tag = CAS
+			tag = SPA
+		}
+		NOT = { has_country_flag = abdicate_option }
+		has_country_flag = charlesv_born       #Charles V has been born (to prevent misfires)
+		has_country_flag = charlesv_ruler 	   #CharlesV is the ruler
+		HAB = {		                      #Austria must still be in the PU
+			junior_union_with = ROOT
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 600 #50 Years
+	}
+	
+	#Abdicate option
+	option = {
+		name = charlesv.3.a
+		custom_tooltip = charlesv.10.a.tt
+		break_union = HAB			#Breaks the PU with Austria
+		hidden_effect = {
+			ROOT = {
+				if = {
+					limit = {
+						has_subject_of_type = personal_union
+					}
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = personal_union
+							has_country_flag = austriaspersonalunions
+						}
+						HAB = {
+							create_union = PREV
+						}
+					}
+				}
+				create_alliance = HAB
+			}
+			HAB = {					#Cedes the Austian Netherlands to Spain/Castille
+				every_core_province = {
+					limit = {
+						OR = {
+							region = low_countries_region 
+							region = france_region
+						}
+					}
+					cede_province = ROOT
+					add_core = ROOT
+					remove_core = HAB
+				}
+				define_ruler = {
+					dynasty = "von Habsburg"
+					name = "Ferdinand I"
+				}
+			}
+			if = {
+				limit = {
+					exists = HAB 		#If Austria still exists, she gets any non-lowcountry provinces Spain might have eaten in the HRE.
+				}
+				every_core_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+						is_part_of_hre = yes
+					}
+					cede_province = HAB
+					add_core = HAB
+					remove_core = ROOT
+				}
+			}
+			every_core_province = {		#Any provinces outside of Germany owned by Spain will be removed from the Empire. This should take Spain out of the Empire for good.
+				limit = {
+					NOT = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+							region = low_countries_region
+							region = france_region
+						}
+					}
+					is_part_of_hre = yes 
+				}
+				set_in_empire = no
+			}
+			if = {					#Castille/Spain gets France Compte too.
+				limit = {
+					193 = {		#France Compte
+						owned_by = HAB
+					}
+				}
+				193 = {
+					cede_province = ROOT
+					add_core = ROOT
+				}
+			}
+		}
+
+		if = {
+			limit = {
+				has_ruler = "Charles V"
+			}
+			kill_ruler = yes
+		}
+		
+		#Makes Austria the Emperor
+		HAB = {
+			set_emperor = yes
+		}
+		
+		set_country_flag = abdicate_option
+		
+		#Europe is no longer afraid
+		every_country ={
+			limit = {
+				has_opinion_modifier = {
+					modifier = fear_of_empire
+					who = ROOT
+				}
+			}
+			remove_opinion = { who = ROOT modifier = fear_of_empire }
+		}
+		ROOT = {
+			set_government_rank = 2
+		}
+		ai_chance = {
+			factor = 100	#AI has a 100 to 1 chance of choosing the abdicate option
+		}
+	}
+	
+	#Don't Abdicate option (mostly just for the player). Will make things even harder for Charles.
+	option = {
+		name = charlesv.3.b
+		set_country_flag = abdicate_option
+		add_ruler_modifier = {
+			name = charles_is_weak
+		}
+		HAB = {
+			 add_ruler_modifier = {
+				name = charles_is_weak_c
+			}
+		}
+		add_stability = -2				#The nation will get testy
+		every_core_province = {			#The Lowcountries will be problematic
+			limit = {
+				region = low_countries_region
+			}
+			add_unrest = 7
+		}
+
+		HAB = {
+			capital_scope = {
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 1		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+		}
+
+		ROOT = {
+			if = {
+				limit = {
+					has_subject_of_type = personal_union
+				}
+				BOH = {
+					limit = {
+						is_subject_of_type = personal_union
+						has_country_flag = austriaspersonalunions
+					}
+					capital_scope = {
+						spawn_rebels = {
+							type = pretender_rebels
+							size = 2		#This is going to be one monster of a rebellion
+							leader = "Ferdinand von Habsburg"
+						}
+					}
+				}
+				HUN = {
+					limit = {
+						is_subject_of_type = personal_union
+						has_country_flag = austriaspersonalunions
+					}
+					capital_scope = {
+						spawn_rebels = {
+							type = pretender_rebels
+							size = 1		#This is going to be one monster of a rebellion
+							leader = "Ferdinand von Habsburg"
+						}
+					}
+				}
+			}
+		}
+
+		ai_chance = {
+			factor = 1	#AI has a 100 to 1 chance of choosing the abdicate option
+		}
+	}
+}
+#Charles V dies before Abdicating
+country_event = {
+	id = charlesv.10
+	title = charlesv_10_title
+	desc = charlesv_10_desc
+	fire_only_once = yes
+	picture = COURT_eventPicture
+	major = yes
+	is_triggered_only = yes	#Fires on monarch death
+	
+	trigger = {
+		OR = {
+			tag = CAS
+			tag = SPA
+		}
+		NOT = { has_country_flag = abdicate_option }
+		has_country_flag = charlesv_born       #Charles V has been born (to prevent misfires)
+		has_country_flag = charlesv_ruler 	   #CharlesV is the ruler
+		HAB = {		                      #Austria must still be in the PU
+			junior_union_with = ROOT
+		}
+	}
+	
+	#Abdicate option
+	option = {
+		name = charlesv.10.a
+		break_union = HAB			#Breaks the PU with Austria
+		
+		custom_tooltip = charlesv.10.a.tt
+		hidden_effect = {
+			ROOT = {
+				if = {
+					limit = {
+						has_subject_of_type = personal_union
+					}
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = personal_union
+							has_country_flag = austriaspersonalunions
+						}
+						HAB = {
+							create_union = PREV
+						}
+					}
+				}
+			}
+	
+			HAB = {					#Cedes the Austian Netherlands to Spain/Castille
+				every_core_province = {
+					limit = {
+						region = low_countries_region 
+					}
+					cede_province = ROOT
+					add_core = ROOT
+					remove_core = HAB
+				}
+				define_ruler = {
+					dynasty = "von Habsburg"
+					name = "Ferdinand I"
+				}
+			}
+			if = {					#Castille/Spain gets France Compte too.
+				limit = {
+					193 = {		#France Compte
+						owned_by = HAB
+					}
+				}
+				193 = {
+					cede_province = ROOT
+					add_core = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = HAB 		#If Austria still exists, she gets any non-lowcountry provinces Spain might have eaten in the HRE.
+				}
+				every_core_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+						is_part_of_hre = yes
+					}
+					cede_province = HAB
+					add_core = HAB
+					remove_core = ROOT
+				}
+			}
+			every_core_province = {		#Any provinces outside of Germany owned by Spain will be removed from the Empire. This should take Spain out of the Empire for good.
+				limit = {
+					NOT = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+							region = low_countries_region
+							region = france_region
+						}
+					}
+					is_part_of_hre = yes 
+				}
+				set_in_empire = no
+			}
+		}
+		
+		if = {
+			limit = {
+				has_ruler = "Charles V"
+			}
+			kill_ruler = yes
+		}
+		
+		#Makes Austria the Emperor
+		HAB = {
+			set_emperor = yes
+		}
+		
+		set_country_flag = abdicate_option
+		
+		#Europe is no longer afraid
+		every_country ={
+			limit = {
+				has_opinion_modifier = {
+					modifier = fear_of_empire
+					who = ROOT
+				}
+			}
+			remove_opinion = { who = ROOT modifier = fear_of_empire }
+		}
+		ROOT = {
+			set_government_rank = 2
+		}
+		ai_chance = {
+			factor = 100	#AI has a 100 to 1 chance of choosing the abdicate option
+		}
+	}
+	
+	#Don't Abdicate option (mostly just for the player)
+	option = {
+		name = charlesv.10.b
+		set_country_flag = abdicate_option
+		HAB = {
+			capital_scope = {
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			capital_scope = {
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 1		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 1		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 1		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+			random_core_province = {
+				limit = {
+					region = south_german_region
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 1		#This is going to be one monster of a rebellion
+					leader = "Ferdinand von Habsburg"
+				}
+			}
+
+			ROOT = {
+				if = {
+					limit = {
+						has_subject_of_type = personal_union
+					}
+					BOH = {
+						limit = {
+							is_subject_of_type = personal_union
+							has_country_flag = austriaspersonalunions
+						}
+						capital_scope = {
+							spawn_rebels = {
+								type = pretender_rebels
+								size = 2		#This is going to be one monster of a rebellion
+								leader = "Ferdinand von Habsburg"
+							}
+						}
+					}
+					HUN = {
+						limit = {
+							is_subject_of_type = personal_union
+							has_country_flag = austriaspersonalunions
+						}
+						capital_scope = {
+							spawn_rebels = {
+								type = pretender_rebels
+								size = 1		#This is going to be one monster of a rebellion
+								leader = "Ferdinand von Habsburg"
+							}
+						}
+					}
+				}
+			}
+		}
+		ai_chance = {
+			factor = 1	#AI has a 100 to 1 chance of choosing the abdicate option
+		}
+	}
+}
+#Hidden event that prevents chain from continuing if Charles V dies before ruling.
+country_event = {
+	id = charlesv.4
+	title = charlesv_4_title 
+	desc = charlesv_4_desc #charlesv_desc.1:0 
+	fire_only_once = yes
+	picture = NEW_HEIR_eventPicture
+	is_triggered_only = yes #Triggered by heir death
+	
+	trigger = {
+		OR = {		#Fires for Spain or Castille
+			tag = CAS
+			tag = SPA
+		}
+		has_country_flag = charlesv_born		#Charles has been born
+		NOT = {
+			has_country_flag = charlesv_ruler	#But he isn't King yet
+		}
+	}
+	option = {
+		name = charlesv.4.a
+		set_country_flag = charlesv_dead	#Prevents chain from continuing
+	}
+}

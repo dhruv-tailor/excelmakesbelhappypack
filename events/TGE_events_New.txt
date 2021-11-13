@@ -49,13 +49,31 @@ country_event = {
 		ai_chance = { factor = 100 }	
 	}
 	immediate = {
+		if = {
+			limit = {
+				num_of_subjects = 1
+			}
+			update_goods_subjects_monthly = { GOODS = copper }
+			update_goods_subjects_monthly = { GOODS = tin }
+			update_goods_subjects_monthly = { GOODS = iron }
+			update_goods_subjects_monthly = { GOODS = lead }
+			update_goods_subjects_monthly = { GOODS = zinc }
+			update_goods_subjects_monthly = { GOODS = glass }
+			update_goods_subjects_monthly = { GOODS = tobacco }
+			update_goods_subjects_monthly = { GOODS = cocoa }
+		}
+		
 		update_goods = { GOODS = copper }
 		update_goods = { GOODS = tin }
 		update_goods = { GOODS = iron }
 		update_goods = { GOODS = lead }
 		update_goods = { GOODS = zinc }
 		update_goods = { GOODS = glass }
-			
+		update_goods = { GOODS = tobacco }
+		update_goods = { GOODS = cocoa }
+		
+		
+		
 		if = {
 			limit = {
 				NOT = {
@@ -448,6 +466,150 @@ country_event = {
 				}	
 			}
 		}
+		
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						check_variable = {
+							which = tobacco_total 
+							which = tobacco_used
+						}	
+					}
+				}
+			}
+			set_variable = {
+				which = var6
+				value = 0
+			}
+			
+			while = {
+				limit = {
+					NOT = {
+						is_variable_equal = {
+							which = var6
+							which = cigars_factory_amount
+						}
+					}
+				}
+				random_owned_province = { 	
+					limit = { 
+						has_building = cigars_factory
+					}
+					add_building = off_6
+					owner = {
+						change_variable = {            
+							which = tobacco
+							value = 0.6
+						}
+						subtract_variable = {            
+							which = tobacco_used
+							value = 0.6
+						}
+					}
+					
+					if = {
+						limit = {
+							owner = { ai = yes }
+						}
+						remove_building = off_6
+						remove_building = cigars_factory
+						clr_province_flag = has_cigars
+						clr_province_flag = has_latent_good
+						clr_province_flag = back_to_off_6
+				        goods_back = yes	
+						
+						owner = {
+							subtract_variable = {            
+								which = cigars_factory_amount
+								value = 1
+							}
+					
+							country_event = { 
+								id = New_TradeGood_Events.9
+								days = 2
+							}
+						}
+					}
+				}
+				change_variable = {            
+					which = var6
+					value = 1 
+				}	
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						check_variable = {
+							which = cocoa_total 
+							which = cocoa_used
+						}	
+					}
+				}
+			}
+			set_variable = {
+				which = var7
+				value = 0
+			}
+			
+			while = {
+				limit = {
+					NOT = {
+						is_variable_equal = {
+							which = var7
+							which = chocolate_factory_amount
+						}
+					}
+				}
+				random_owned_province = { 	
+					limit = { 
+						has_building = chocolate_factory
+					}
+					add_building = off_7
+					owner = {
+						change_variable = {            
+							which = cocoa
+							value = 0.6
+						}
+						subtract_variable = {            
+							which = cocoa_used
+							value = 0.6
+						}
+					}
+					
+					if = {
+						limit = {
+							owner = { ai = yes }
+						}
+						remove_building = off_7
+						remove_building = chocolate_factory
+						clr_province_flag = has_chocolate
+						clr_province_flag = has_latent_good
+						clr_province_flag = back_to_off_7
+				        goods_back = yes	
+						
+						owner = {
+							subtract_variable = {            
+								which = chocolate_factory_amount
+								value = 1
+							}
+					
+							country_event = { 
+								id = New_TradeGood_Events.10
+								days = 2
+							}
+						}
+					}
+				}
+				change_variable = {            
+					which = var7
+					value = 1 
+				}	
+			}
+		}
 	}
 }
 
@@ -503,6 +665,16 @@ province_event = {
 				}
 				
 				set_variable = {
+					which = tobacco_used
+					value = 0
+				}
+				
+				set_variable = {
+					which = cocoa_used
+					value = 0
+				}
+				
+				set_variable = {
 					which = cannon_foundry_amount
 					value = 0
 				}
@@ -527,6 +699,58 @@ province_event = {
 					value = 0
 				}
 				
+				set_variable = {
+					which = cigars_factory_amount
+					value = 0
+				}
+				
+				set_variable = {
+					which = chocolate_factory_amount
+					value = 0
+				}
+				
+				## NEW TEST STUFF
+				set_variable = {
+					which = from_subjects_copper
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_tin
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_iron
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_lead
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_zinc
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_glass
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_tobacco
+					value = 0
+				}
+				
+				set_variable = {
+					which = from_subjects_cocoa
+					value = 0
+				}
+				##
+				
 				country_event = { id = New_TradeGood_Events.2 days = 1 }
 			}
 			set_global_flag = New_TradeGood_First
@@ -541,13 +765,21 @@ province_event = {
 					lead = 1 
 					zinc = 1
 					glass = 1
+					tobacco = 1
+					cocoa = 1
 				}
 			}
-			
-			country_event = { id = New_TradeGood_Events.2 days = 120 }
-			country_event = { id = New_TradeGood_Events.2 days = 240 }
-			country_event = { id = New_TradeGood_Events.2 days = 360 }
+			if = {
+				limit = { NOT = { ai = yes } }
+				country_event = { id = New_TradeGood_Events.2 days = 120 }
+				country_event = { id = New_TradeGood_Events.2 days = 240 }
+				country_event = { id = New_TradeGood_Events.2 days = 360 }
+			}
+			else = {
+				country_event = { id = New_TradeGood_Events.2 days = 360 }
+			}
 		}
+		
 
 	}
 }
@@ -713,3 +945,104 @@ country_event = {
 		}
 	}
 }
+
+
+country_event = {
+	id = New_TradeGood_Events.9
+	title = New_TradeGood_Events.9.t
+	desc = New_TradeGood_Events.9.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+
+	option = {
+		name = New_TradeGood_Events.9.a
+		ai_chance = { factor = 100 }	
+	}
+	immediate = {
+		update_goods = { GOODS = tobacco }
+		
+		if = {
+			limit = {
+				any_owned_province = { 
+					has_province_flag = back_to_off_6
+				}
+			}
+			every_owned_province = { 
+				limit = {
+					has_province_flag = back_to_off_6
+				}
+				add_building = off_6
+			}
+		}
+	}
+}
+
+country_event = {
+	id = New_TradeGood_Events.10
+	title = New_TradeGood_Events.10.t
+	desc = New_TradeGood_Events.10.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+
+	option = {
+		name = New_TradeGood_Events.10.a
+		ai_chance = { factor = 100 }	
+	}
+	immediate = {
+		update_goods = { GOODS = cocoa }
+		
+		if = {
+			limit = {
+				any_owned_province = { 
+					has_province_flag = back_to_off_7
+				}
+			}
+			every_owned_province = { 
+				limit = {
+					has_province_flag = back_to_off_7
+				}
+				add_building = off_7
+			}
+		}
+	}
+}
+
+
+
+
+country_event = {
+	id = New_TradeGood_Events.50
+	title = New_TradeGood_Events.50.t
+	desc = New_TradeGood_Events.50.d
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+	hidden = yes
+
+	option = {
+		name = New_TradeGood_Events.50.a
+		ai_chance = { factor = 100 }	
+	}
+	immediate = {
+		
+		if = {
+			limit = {
+				any_owned_province = { 
+					has_province_modifier = import_from_subjects_modifier
+				}
+			}
+			every_owned_province = { 
+				limit = {
+					has_province_modifier = import_from_subjects_modifier
+				}
+				remove_province_modifier = import_from_subjects_modifier
+			}
+		}
+	}
+}
+
+

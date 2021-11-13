@@ -199,7 +199,12 @@ gc_spain_1_b = {
 			if = {
 				limit = {
 					any_subject_country = {
-						is_subject_of_type = colony
+						OR = {
+							is_subject_of_type = colony
+							is_subject_of_type = crown_colony
+							is_subject_of_type = private_enterprise
+							is_subject_of_type = self_governing_colony
+						}
 						owns = 484
 					}
 				}
@@ -262,9 +267,20 @@ gc_spain_1_b = {
 		}
 
 		trigger = {
-			2021 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				has_holy_order_trigger = yes
+			if = {
+				limit = {
+					religion = catholic
+				}
+				2021 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_holy_order_trigger = yes
+				}
+			}
+			else = {
+				2021 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					religion = ROOT
+				}
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 5
@@ -556,12 +572,27 @@ gc_spain_2_b = {
 		}
 
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = mexico_holy_order_tooltip
-				num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
-					has_holy_order_trigger = yes
-					region = mexico_region
-					value = 5
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_trigger_tooltip = {
+					tooltip = mexico_holy_order_tooltip
+					num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
+						has_holy_order_trigger = yes
+						region = mexico_region
+						value = 5
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = mexico_holy_order_alternative_tooltip
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						religion = ROOT
+						region = mexico_region
+						value = 25
+					}
 				}
 			}
 			mexico_region = {
@@ -577,7 +608,12 @@ gc_spain_2_b = {
 			if = {
 				limit = {
 					any_subject_country = {
-						is_subject_of_type = colony
+						OR = {
+							is_subject_of_type = colony
+							is_subject_of_type = crown_colony
+							is_subject_of_type = private_enterprise
+							is_subject_of_type = self_governing_colony
+						}
 						owns = 852
 					}
 					852 = { is_capital = no }
@@ -1081,7 +1117,10 @@ gc_spain_3_b = {
 					province_id = 795
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
-				province_id = 809
+				AND = {
+					province_id = 809
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
 				AND = {
 					OR = {
 						province_id = 809
@@ -1094,6 +1133,8 @@ gc_spain_3_b = {
 		}
 
 		trigger = {
+			owns_or_non_sovereign_subject_of = 809
+			owns_or_non_sovereign_subject_of = 795
 			809 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -1122,31 +1163,48 @@ gc_spain_3_b = {
 			1516 = {
 				is_strongest_trade_power = ROOT
 			}
-			795 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		effect = {
-			if = {
-				limit = {
-					any_subject_country = {
-						is_subject_of_type = colony
-						owns = 809
-					}
-				}
-				every_subject_country = {
+			custom_tooltip = gc_cas_spa_potosi_tt
+			hidden_effect = {
+				if = {
 					limit = {
-						owns = 809
+						any_subject_country = {
+							OR = {
+								is_subject_of_type = colony
+								is_subject_of_type = crown_colony
+								is_subject_of_type = private_enterprise
+								is_subject_of_type = self_governing_colony
+							}
+							owns = 809
+						}
 					}
-					809 = {
-						prev_move_capital_effect = yes
+					every_subject_country = {
+						limit = {
+							owns = 809
+						}
+						809 = {
+							prev_move_capital_effect = yes
+						}
 					}
 				}
 			}
-			795 = {
-				add_province_modifier = {
-					name = "spa_rb_gold_rush"
-					duration = 5475
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				795 = {
+					set_great_project_tier_2 = {
+						type = potosi
+					}
+				}
+			}
+			else = {
+				795 = {
+					add_province_modifier = {
+						name = "spa_rb_gold_rush"
+						duration = 5475
+					}
 				}
 			}
 			2946 = {
@@ -1184,17 +1242,35 @@ gc_spain_3_b = {
 		}
 
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = native_reductions_tooltip
-				num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
-					has_holy_order_trigger = yes
-					OR = {
-						continent = north_america
-						continent = south_america
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_trigger_tooltip = {
+					tooltip = native_reductions_tooltip
+					num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
+						has_holy_order_trigger = yes
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+						value = 15
 					}
-					value = 15
 				}
 			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = native_reductions_alternative_tooltip
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						religion = ROOT
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+						value = 75
+					}
+				}
+			}			
 			216 = { # school of salamanca
 				has_building = university
 			}
@@ -1213,7 +1289,12 @@ gc_spain_3_b = {
 				limit = {
 					any_country = {
 						is_subject_of = ROOT
-						is_subject_of_type = colony
+						OR = {
+							is_subject_of_type = colony
+							is_subject_of_type = crown_colony
+							is_subject_of_type = private_enterprise
+							is_subject_of_type = self_governing_colony
+						}
 					}
 				}
 				every_country = {
@@ -2258,12 +2339,27 @@ gc_spain_5_c = {
 		}
 
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = colombia_holy_order_tooltip
-				num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
-					has_holy_order_trigger = yes
-					colonial_region = colonial_colombia
-					value = 5
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_trigger_tooltip = {
+					tooltip = colombia_holy_order_tooltip
+					num_of_states_owned_or_owned_by_non_sovereign_subjects_with = {
+						has_holy_order_trigger = yes
+						colonial_region = colonial_colombia
+						value = 5
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = colombia_holy_order_alternative_tooltip
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						religion = ROOT
+						colonial_region = colonial_colombia
+						value = 25
+					}
 				}
 			}
 			colonial_colombia = {
@@ -2286,7 +2382,12 @@ gc_spain_5_c = {
 			if = {
 				limit = {
 					any_subject_country = {
-						is_subject_of_type = colony
+						OR = {
+							is_subject_of_type = colony
+							is_subject_of_type = crown_colony
+							is_subject_of_type = private_enterprise
+							is_subject_of_type = self_governing_colony
+						}
 						owns = 825
 					}
 					825 = { is_capital = no }

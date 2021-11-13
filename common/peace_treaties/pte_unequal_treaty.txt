@@ -1,7 +1,7 @@
 pte_unequal_treaty = {
 	category = 6
 	power_projection = no
-	power_cost_base = 0.54
+	power_cost_base = 1.23
 	prestige_base = 0.5
 	ae_base = 0.08
 	warscore_cost = {
@@ -62,16 +62,53 @@ pte_unequal_treaty = {
 			value = 5
 		}
 		limit = {
-			capital_scope = {
-				continent = europe
-			}
-			FROM = {
-				capital_scope = {
-					continent = asia
-					is_node_in_trade_company_region = yes
+			OR = {
+				AND = {
+					capital_scope = {
+						continent = europe
+					}
+					FROM = {
+						capital_scope = {
+							continent = asia
+							is_node_in_trade_company_region = yes
+						}
+						home_trade_node = {
+							has_merchant = ROOT
+							calc_true_if = {
+								all_trade_node_member_province = {
+									owned_by = FROM
+									has_port = yes
+								}
+								amount = 3
+							}
+						}
+					}
 				}
-				home_trade_node = {
-					has_merchant = ROOT
+				AND = {
+					OR = {
+						is_in_war = {
+							attacker_leader = FROM
+							defender_leader = ROOT
+							casus_belli = cb_pte_economic_hegemon
+						}
+						is_in_war = {
+							attacker_leader = ROOT
+							defender_leader = FROM
+							casus_belli = cb_pte_economic_hegemon
+						}
+					}
+					FROM = {
+						home_trade_node = {
+							has_merchant = ROOT
+							calc_true_if = {
+								all_trade_node_member_province = {
+									owned_by = FROM
+									has_port = yes
+								}
+								amount = 3
+							}
+						}
+					}
 				}
 			}
 		}

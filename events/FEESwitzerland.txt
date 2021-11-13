@@ -1,0 +1,954 @@
+#Swiss flavor events
+namespace = fee_SWI
+#Swiss mercenaries succeed abroad
+country_event = {
+	id = fee_SWI.1
+	title = fee_SWI.1.t
+	desc = fee_SWI.1.d
+	picture = BATTLE_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		NOT = {
+			is_year = 1550
+		}
+		is_at_war = no
+	}
+	mean_time_to_happen = {
+		months = 120
+		modifier = {
+			factor = 0.75
+			has_idea_group = administrative_ideas
+		}
+	}
+	option = {
+		name = fee_SWI.1.a
+		add_army_tradition = 10
+		add_years_of_income = 0.25
+		add_prestige = 10
+	}
+	option = {
+		name = fee_SWI.1.b
+		add_army_tradition = 10
+		add_years_of_income = 0.5
+		add_mil_power = 25
+		add_yearly_manpower = -2
+		add_prestige = 10
+	}
+}
+
+#Swiss Mercenaries in Our Standing Army
+country_event = {
+	id = fee_SWI.2
+	title = fee_SWI.2.t
+	desc = fee_SWI.2.d
+	picture = LAND_MILITARY_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = FRA
+		has_opinion = {
+			who = SWI
+			value = 1
+		}
+		NOT = {
+			war_with = SWI
+		}
+	}
+	mean_time_to_happen = {
+		months = 240
+	}
+	option = {
+		name = fee_SWI.2.a
+		add_manpower = 3
+		add_mil_power = 25
+		SWI = {
+			country_event = {
+				id = fee_SWI.3
+				days = 10
+			}
+		}
+		custom_tooltip = fee_SWI.2.a.tt
+	}
+}
+
+#In Service of the French King
+country_event = {
+	id = fee_SWI.3
+	title = fee_SWI.3.t
+	desc = fee_SWI.3.d
+	picture = LAND_MILITARY_eventPicture
+	is_triggered_only = yes
+	trigger = {
+		exists = FRA
+	}
+	option = {
+		name = fee_SWI.3.a
+		ai_chance = {
+			factor = 95
+		}
+		add_years_of_income = 0.5
+		FRA = {
+			add_opinion = {
+				who = SWI
+				modifier = fee_swiss_soldiers_opinion
+			}
+		}
+		add_opinion = {
+			who = FRA
+			modifier = fee_swiss_soldiers_opinion
+		}
+	}
+	option = {
+		name = fee_SWI.3.b
+		ai_chance = {
+			factor = 5
+		}
+		add_manpower = 3
+		FRA = {
+			country_event = {
+				id = fee_SWI.4
+				days = 5
+				tooltip = fee_SWI.3.tt
+			}
+		}
+	}
+}
+
+# Mercenaries Condemned by Switzerland
+country_event = {
+	id = fee_SWI.4
+	title = fee_SWI.4.t
+	desc = fee_SWI.4.d
+	picture = BORDER_TENSION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = fee_SWI.4.a
+		add_opinion = {
+			who = SWI
+			modifier = fee_swiss_soldiers_denied
+		}
+	}
+}
+
+#Jörg Jenatsch
+country_event = {
+	id = fee_SWI.5
+	title = fee_SWI.5.t
+	desc = fee_SWI.5.d
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		is_year = 1600
+		NOT = {
+			is_year = 1651
+		}
+		OR = {
+			any_owned_province = {
+				religion = protestant
+			}
+			any_owned_province = {
+				religion = reformed
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 300
+		modifier = {
+			factor = 0.5
+			is_in_league_war = yes
+		}
+	}
+	option = {
+		name = fee_SWI.5.a
+		add_army_tradition = 5
+		define_advisor = {
+			type = army_reformer
+			name = "Jörg Jenatsch"
+			skill = 2
+			discount = yes
+		}
+	}
+	option = {
+		name = fee_SWI.5.b
+		add_army_tradition = 5
+		add_mil_power = 25
+	}
+}
+
+#Bündner Wirren
+country_event = {
+	id = fee_SWI.6
+	title = fee_SWI.6.t
+	desc = fee_SWI.6.d
+	picture = COUNTRY_COLLAPSE_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		is_year = 1550
+		NOT = {
+			is_year = 1680
+		}
+		owns_core_province = 1873
+		exists = FRA
+		exists = HAB
+	}
+	mean_time_to_happen = {
+		months = 900
+		modifier = {
+			factor = 0.8
+			is_neighbor_of = HAB
+		}
+		modifier = {
+			factor = 0.8
+			alliance_with = FRA
+		}
+		modifier = {
+			factor = 0.8
+			is_neighbor_of = VEN
+		}
+		modifier = {
+			factor = 0.2
+			is_in_league_war = yes
+		}
+	}
+	option = {
+		name = fee_SWI.6.a
+		1873 = {
+			add_unrest = 5
+		}
+		1873 = {
+			change_religion = protestant
+		}
+		reverse_add_opinion = {
+			who = FRA
+			modifier = fee_valtellina_issue
+		}
+		reverse_add_casus_belli = {
+			target = HAB
+			type = cb_insult
+			months = 12
+		}
+		1873 = {
+			add_claim = HAB
+		}
+	}
+	option = {
+		name = fee_SWI.6.b
+		1873 = {
+			add_unrest = 5
+		}
+		1873 = {
+			change_religion = catholic
+		}
+		reverse_add_opinion = {
+			who = HAB
+			modifier = fee_valtellina_issue
+		}
+		reverse_add_casus_belli = {
+			target = FRA
+			type = cb_insult
+			months = 12
+		}
+		1873 = {
+			add_claim = FRA
+		}
+	}
+}
+
+# Johann Rudolf Wettstein
+country_event = {
+	id = fee_SWI.7
+	title = fee_SWI.7.t
+	desc = fee_SWI.7.d
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		is_year = 1620
+		NOT = {
+			is_year = 1680
+		}
+	}
+	mean_time_to_happen = {
+		months = 400
+		modifier = {
+			factor = 0.75
+			NOT = {
+				emperor = {
+					reverse_has_opinion = {
+						who = ROOT
+						value = 0
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0.75
+			emperor = {
+				is_in_league_war = yes
+			}
+		}
+	}
+	option = {
+		name = fee_SWI.7.a
+		define_advisor = {
+			type = statesman
+			name = "Johann Rudolf Wettstein"
+			skill = 3
+			discount = yes
+		}
+		add_dip_power = 50
+	}
+	option = {
+		name = fee_SWI.7.b
+		add_country_modifier = {
+			name = fee_wettstein
+			duration = 7200
+		}
+		add_dip_power = 50
+	}
+	option = {
+		name = fee_SWI.7.c
+		add_dip_power = 100
+	}
+}
+
+# The Bernoulli Family
+country_event = {
+	id = fee_SWI.8
+	title = fee_SWI.8.t
+	desc = fee_SWI.8.d
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		owns_core_province = 165
+		is_year = 1670
+	}
+	mean_time_to_happen = {
+		months = 500
+		modifier = {
+			factor = 0.75
+			has_idea_group = innovativeness_ideas
+		}
+	}
+	option = {
+		name = fee_SWI.8.a
+		add_country_modifier = {
+			name = fee_bernoullis
+			duration = -1
+		}
+	}
+}
+
+# START CHUK SWISS EVENTS
+#Designed by Chu_Ko_Noob, coded by babysnake
+country_event = {
+	id = fee_SWI.9
+	title = fee_SWI.9.tt
+	desc = fee_SWI.9.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		owns_core_province = 1869
+		NOT = {
+			is_year = 1450
+		}
+		exists = HAB
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	option = {
+		name = fee_SWI.9.a
+		add_war_exhaustion = -5
+		1869 = {
+			add_local_autonomy = 50
+		}
+		add_dip_power = 100
+		ai_chance = {
+			factor = 50
+		}
+	}
+	option = {
+		name = fee_SWI.9.b
+		add_war_exhaustion = -5
+		1869 = {
+			add_local_autonomy = 25
+		}
+		add_adm_power = 50
+		ai_chance = {
+			factor = 50
+		}
+	}
+	option = {
+		name = fee_SWI.9.c
+		1869 = {
+			cede_province = HAB
+		}
+		add_mil_power = 150
+		ai_chance = {
+			factor = 0
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.10
+	title = fee_SWI.10.tt
+	desc = fee_SWI.10.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		current_age = age_of_discovery
+		any_owned_province = {
+			AND = {
+				culture_group = germanic
+				NOT = {
+					culture = swiss
+				}
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	option = {
+		name = fee_SWI.10.a
+		upper_swabia_area = {
+			limit = {
+				NOT = {
+					owned_by = ROOT
+				}
+				NOT = {
+					is_core = ROOT
+				}
+			}
+			add_permanent_claim = ROOT
+		}
+		lower_swabia_area = {
+			limit = {
+				NOT = {
+					owned_by = ROOT
+				}
+				NOT = {
+					is_core = ROOT
+				}
+			}
+			add_permanent_claim = ROOT
+		}
+		add_stability_or_adm_power = yes
+		add_country_modifier = {
+			name = FEE_Swiss_Expansionism
+			duration = -1
+		}
+	}
+	option = {
+		name = fee_SWI.10.b
+		set_in_empire = no
+		add_stability_or_adm_power = yes
+		add_country_modifier = {
+			name = FEE_Swiss_Neutrality
+			duration = -1
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.11
+	title = fee_SWI.11.tt
+	desc = fee_SWI.11.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		NOT = {
+			is_year = 1500
+		}
+		OR = {
+			is_in_war = {
+				attacker_leader = BUR
+			}
+			is_in_war = {
+				defender_leader = BUR
+			}
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	option = {
+		name = fee_SWI.11.a
+		add_mil_power = 100
+		add_country_modifier = {
+			name = FEE_Burgundian_Wars
+			duration = 1825
+		}
+		BUR = {
+			country_event = {
+				id = fee_SWI.12
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.12
+	title = fee_SWI.12.tt
+	desc = fee_SWI.12.dd
+	picture = ADVISOR_eventPicture
+	is_triggered_only = yes
+	fire_only_once = yes
+	option = {
+		name = fee_SWI.12.a
+		ai_chance = {
+			factor = 100
+		}
+		
+		convert_ruler_to_general = yes
+		set_ruler_flag = fee_Charles_in_command
+	}
+	option = {
+		name = fee_SWI.12.b
+		ai_chance = {
+			factor = 0
+		}
+		add_prestige = -10
+	}
+}
+
+# Removed due to simplification, please remind me to re-index these missions. - Babysnake
+# country_event = {
+# 	id = fee_SWI.13
+# 	title = fee_SWI.13.tt
+# 	desc = fee_SWI.13.dd
+# 	picture = ADVISOR_eventPicture
+# 	fire_only_once = yes
+# 	is_triggered_only = yes
+# 	hidden = yes
+# 	immediate = {
+# 		clr_country_flag = fee_Charles_in_commmand
+# 	}
+# }
+country_event = {
+	id = fee_SWI.14
+	title = fee_SWI.14.tt
+	desc = fee_SWI.14.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+	immediate = {
+		kill_ruler = yes
+		random = {
+			chance = 50
+			country_event = {
+				id = incidents_bur_inheritance.1
+				days = 0
+			}
+		}
+		193 = {
+			change_controller = SWI
+		}
+		SWI = {
+			country_event = {
+				id = fee_SWI.15
+				days = 0
+			}
+		}
+	}
+	option = {
+		name = fee_SWI.14.a
+		add_stability = -1
+		add_war_exhaustion = 5
+	}
+}
+
+country_event = {
+	id = fee_SWI.15
+	title = fee_SWI.15.tt
+	desc = fee_SWI.15.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = {
+		name = fee_SWI.15.a
+		add_country_modifier = {
+			name = FEE_Swiss_Onward_to_victory
+			duration = 1825
+		}
+		add_country_modifier = {
+			name = FEE_Burgundian_War_experience
+			duration = 10950
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.16
+	title = fee_SWI.16.tt
+	desc = fee_SWI.16.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		current_age = age_of_reformation
+		is_religion_enabled = reformed
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	immediate = {
+		set_country_flag = FEE_Reform_Entered_Switzerland
+	}
+	option = {
+		name = fee_SWI.16.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				has_idea_group = humanist_ideas
+			}
+			modifier = {
+				factor = 2
+				religion = reformed
+			}
+			modifier = {
+				factor = 0.5
+				religion = catholic
+			}
+		}
+		define_advisor = {
+			type = theologian
+			name = "Ulrich Zwingli"
+			skill = 2
+			cost_multiplier = 0.25
+			culture = swiss
+			religion = reformed
+		}
+		add_country_modifier = {
+			name = FEE_Swiss_Open_to_Teachings
+			duration = 7300
+		}
+	}
+	option = {
+		name = fee_SWI.16.b
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				has_idea_group = humanist_ideas
+			}
+			modifier = {
+				factor = 0
+				religion = reformed
+			}
+			modifier = {
+				factor = 1.5
+				religion = catholic
+			}
+		}
+		add_prestige = 5
+		add_country_modifier = {
+			name = FEE_Swiss_Countryside_Preaching
+			duration = 7300
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.17
+	title = fee_SWI.17.tt
+	desc = fee_SWI.17.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		current_age = age_of_reformation
+		is_religion_enabled = reformed
+		exists = PAP
+		has_country_flag = FEE_Reform_Entered_Switzerland
+	}
+	mean_time_to_happen = {
+		months = 60
+	}
+	immediate = {
+		set_country_flag = FEE_Sausage_Affair
+	}
+	option = {
+		name = fee_SWI.17.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				has_idea_group = humanist_ideas
+			}
+			modifier = {
+				factor = 2
+				religion = reformed
+			}
+			modifier = {
+				factor = 0
+				religion = catholic
+			}
+		}
+		every_neighbor_country = {
+			limit = {
+				religion = catholic
+				NOT = {
+					tag = PAP
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = FEE_Swiss_released_Ulrich
+			}
+		}
+		reverse_add_opinion = {
+			who = PAP
+			modifier = FEE_Swiss_released_Ulrich_PAP
+		}
+		add_reform_desire = 0.01
+		add_country_modifier = {
+			name = FEE_Swiss_Sausage_Disobedience
+			duration = 3650
+		}
+	}
+	option = {
+		name = fee_SWI.17.b
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				has_idea_group = humanist_ideas
+			}
+			modifier = {
+				factor = 0
+				religion = reformed
+			}
+			modifier = {
+				factor = 2
+				religion = catholic
+			}
+		}
+		add_stability = -1
+		1869 = {
+			spawn_rebels = {
+				type = reformed_rebels
+				size = 2
+			}
+		}
+		every_neighbor_country = {
+			limit = {
+				religion = catholic
+				NOT = {
+					tag = PAP
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = FEE_Swiss_jailed_Ulrich
+			}
+		}
+		reverse_add_opinion = {
+			who = PAP
+			modifier = FEE_Swiss_jailed_Ulrich_PAP
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.18
+	title = fee_SWI.18.tt
+	desc = fee_SWI.18.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = SWI
+		current_age = age_of_reformation
+		is_religion_enabled = reformed
+		has_country_flag = FEE_Sausage_Affair
+	}
+	mean_time_to_happen = {
+		months = 6
+	}
+	option = {
+		name = fee_SWI.18.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				not = {
+					religion = reformed
+				}
+			}
+			modifier = {
+				factor = 0
+				has_idea_group = humanist_ideas
+			}
+		}
+		country_event = {
+			id = fee_SWI.19
+			days = 1
+		}
+	}
+	option = {
+		name = fee_SWI.18.b
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				not = {
+					religion = catholic
+				}
+			}
+			modifier = {
+				factor = 0
+				has_idea_group = humanist_ideas
+			}
+		}
+		country_event = {
+			id = fee_SWI.20
+			days = 1
+		}
+	}
+	option = {
+		name = fee_SWI.18.c
+		trigger = {
+			not = {
+				OR = {
+					religion = catholic
+					religion = reformed
+				}
+			}
+		}
+		ai_chance = {
+			factor = 100
+		}
+		add_prestige = 10
+	}
+	option = {
+		name = fee_SWI.18.d
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				not = {
+					OR = {
+						religion = catholic
+						religion = reformed
+					}
+				}
+			}
+		}
+		random_list = {
+			50 = {
+				country_event = {
+					id = fee_SWI.19
+					days = 1
+				}
+			}
+			50 = {
+				country_event = {
+					id = fee_SWI.20
+					days = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.19
+	title = fee_SWI.19.tt
+	desc = fee_SWI.19.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = {
+		name = fee_SWI.19.a
+		if = {
+			limit = {
+				not = {
+					religion = reformed
+				}
+			}
+			change_religion = reformed
+		}
+		1869 = {
+			if = {
+				limit = {
+					not = {
+						religion = reformed
+					}
+				}
+				change_religion = reformed
+			}
+			if = {
+				limit = {
+					is_reformation_center = no
+				}
+				add_reform_center = reformed
+			}
+			add_province_modifier = {
+				name = FEE_Zurich_Reformation_Enshrined
+				duration = 18250
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Swiss_Zwinglian_Debate
+			duration = 9125
+		}
+		add_country_modifier = {
+			name = FEE_Swiss_Religious_Fervor
+			duration = 9125
+		}
+	}
+}
+
+country_event = {
+	id = fee_SWI.20
+	title = fee_SWI.20.tt
+	desc = fee_SWI.20.dd
+	picture = ADVISOR_eventPicture
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = {
+		name = fee_SWI.20.a
+		if = {
+			limit = {
+				not = {
+					religion = catholic
+				}
+			}
+			change_religion = catholic
+		}
+		1869 = {
+			if = {
+				limit = {
+					not = {
+						religion = catholic
+					}
+				}
+				change_religion = catholic
+			}
+			if = {
+				limit = {
+					is_reformation_center = yes
+				}
+				remove_reform_center = reformed
+				remove_reform_center = protestant
+			}
+			add_province_modifier = {
+				name = FEE_Zurich_Catholicism_Enshrined
+				duration = 18250
+			}
+		}
+		add_country_modifier = {
+			name = FEE_Swiss_Catholic_Debate_Win
+			duration = 9125
+		}
+	}
+}

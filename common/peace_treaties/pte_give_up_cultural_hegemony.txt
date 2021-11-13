@@ -1,7 +1,7 @@
 pte_give_up_cultural_hegemony = {
 	category = 6
 	power_projection = no
-	power_cost_base = 0.32
+	power_cost_base = 0.736
 	prestige_base = 0.5
 	ae_base = 0
 	warscore_cost = {
@@ -67,37 +67,115 @@ pte_give_up_cultural_hegemony = {
 			value = 1
 		}
 		limit = {
-			FROM = {
-				OR = {
-					NOT = {
-						num_of_owned_provinces_with = {
-							value = 5
-							OR = {
-								is_claim = ROOT
-								is_core = ROOT
+			OR = {
+				FROM = {
+					OR = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 5
+								OR = {
+									is_claim = ROOT
+									is_core = ROOT
+								}
+							}
+						}
+						is_in_war = {
+							participants = ROOT
+							participants = FROM
+							casus_belli = cb_humiliate_rotw
+						}
+						is_in_war = {
+							defenders = ROOT
+							attackers = FROM
+							casus_belli = cb_pte_defend_rival_subject
+						}
+					}
+					OR = {
+						AND = {
+							is_rival = FROM
+							FROM = {
+								has_cultural_union = yes
+							}
+						}
+						AND = {
+							FROM = {
+								has_cultural_union = no
+							}
+							num_of_owned_provinces_with = {
+								value = 5
+								has_owner_accepted_culture = no
+								culture = ROOT
+							}
+						}
+						AND = {
+							has_dlc = "Emperor"
+							is_hegemon = yes
+							NOT = {
+								is_in_war = {
+									attacker_leader = ROOT
+									defender_leader = FROM
+									casus_belli = cb_hegemon
+								}
 							}
 						}
 					}
-					is_in_war = {
-						participants = ROOT
-						participants = FROM
-						casus_belli = cb_humiliate_rotw
-					}
 				}
-				OR = {
-					num_of_owned_provinces_with = {
-						value = 5
-						has_owner_accepted_culture = no
-						culture = ROOT
+				AND = {
+					calc_true_if = {
+						all_country = {
+							has_country_modifier = pte_culture_group_hegemony_modifier
+							NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+						}
+						amount = 5
 					}
-					AND = {
-						has_dlc = "Emperor"
-						is_hegemon = yes
-						NOT = {
-							is_in_war = {
-								attacker_leader = ROOT
-								defender_leader = FROM
-								casus_belli = cb_hegemon
+					is_subject = no
+					NOT = { has_country_modifier = pte_culture_group_hegemony_modifier }
+					is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 }
+					stability = 2
+					dominant_culture = new_variable:Root:primary_culture
+					NOT = { has_country_modifier = pte_culture_group_hegemony_cooldown_modifier }
+					NOT = {
+						any_country = {
+							has_country_modifier = pte_culture_group_hegemony_modifier
+							NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+							ROOT = { culture_group = variable:Prev:pte_culture_group_hegemony_var }
+						}
+					}
+					development_in_provinces = {
+						value = 200
+						culture_group = ROOT
+					}
+					NOT = {
+						any_country = {
+							culture_group = ROOT
+							is_subject = no
+							OR = {
+								variable_arithmetic_trigger = {
+									export_to_variable = {
+										which = their_dev
+										value = trigger_value:total_development
+									}
+									export_to_variable = {
+										which = our_dev
+										value = trigger_value:total_development
+										who = ROOT
+									}
+									multiply_variable = { which = their_dev value = 1.5 }
+									check_variable = { which = their_dev which = our_dev }
+								}
+								variable_arithmetic_trigger = {
+									export_to_variable = {
+										which = their_army_size
+										value = trigger_value:army_size
+									}
+									export_to_variable = {
+										which = our_army_size
+										value = trigger_value:army_size
+										who = ROOT
+									}
+									multiply_variable = { which = their_army_size value = 1.5 }
+									check_variable = { which = their_army_size which = our_army_size }
+								}
 							}
 						}
 					}
