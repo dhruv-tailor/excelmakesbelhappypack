@@ -1,0 +1,621 @@
+## NOTE: All missions will be marked with "golconda_[insert name here]" so as to indicate that ##
+## these missions are for strictly Golconda only | Missions common to all Deccani Sultanates will ##
+## be marked with "deccani_[insert name here]" so as to indicate that these missions are for all ##
+## successor states of Bahmanis ##
+golconda_column_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = GOC
+	}
+	has_country_shield = yes
+
+	golconda_advised_where_to_go = {
+		icon = mission_the_tamil_trade_guilds
+		required_missions = { }
+		trigger = {
+			employed_advisor = {
+				category = ADM
+			}
+			employed_advisor = {
+				category = DIP
+			}
+			employed_advisor = {
+				category = MIL
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_tax = 1
+				add_base_manpower = 1
+				add_base_production = 1
+			}
+		}
+	}
+
+	golconda_the_capital_fort = {
+		icon = mission_conquer_mewar
+		required_missions = {
+			golconda_advised_where_to_go
+			golconda_starting_builds
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			542 = {
+				is_capital_of = ROOT
+				development = 12
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 25
+			542 = {
+				add_province_modifier = {
+					name = "golconda_fortified_capital"
+					duration = -1
+				}
+			}
+		}
+	}
+
+	golconda_prominent_capital = {
+		icon = mission_growth_of_ahmedabad
+		required_missions = {
+			golconda_the_capital_fort
+			golconda_starting_textile_production
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 20 }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			stability = 1
+			542 = {
+				is_capital_of = ROOT
+				development = 20
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.75
+			add_country_modifier = {
+				name = "golconda_rising_capital_wealth"
+				duration = 9125 #25 Years
+			}
+		}
+	}
+}
+
+golconda_column_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = GOC
+	}
+	has_country_shield = yes
+
+	golconda_starting_builds = {
+		icon = mission_conquer_malwa_bng
+		required_missions = { }
+		position = 2
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.50
+			define_advisor = {
+				type = artist
+				culture = telegu
+				religion = shiite
+				skill = 2
+				discount = yes
+			}
+		}
+	}
+	golconda_starting_textile_production = {
+		icon = mission_modernize_production
+		required_missions = { golconda_starting_builds }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			textile = 1
+			mills = 1
+			num_of_owned_provinces_with = {
+				value = 3
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			define_advisor = {
+				type = natural_scientist
+				culture = telegu
+				religion = shiite
+				skill = 3
+				discount = yes
+			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+		}
+	}
+
+	golconda_monuments = {
+		icon = mission_growth_of_golcond
+		required_missions = {
+			golconda_starting_textile_production
+			golconda_prominent_capital
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 30 }
+				NOT = { has_building = cathedral }
+			}
+		}
+		trigger = {
+			religious_unity = 1.0
+			piety = -0.50
+			542 = {
+				is_capital_of = ROOT
+				development = 30
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_piety = -0.50
+			add_country_modifier = {
+				name = "golconda_lasting_glory"
+				duration = -1
+			}
+		}
+	}
+}
+
+golconda_column_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = GOC
+	}
+	has_country_shield = yes
+	
+	golconda_five_cities_five_successors = {
+		icon = mission_the_battle_for_raichur
+		required_missions = {  }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 569
+				province_id = 542
+				province_id = 544
+				province_id = 548
+				province_id = 1948
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 569
+			owns_core_province = 542
+			owns_core_province = 544
+			owns_core_province = 548
+			owns_core_province = 1948
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.1 }
+			konkan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			raichur_doab_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			andhra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tapti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khandesh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	golconda_the_battle_of_talikota = {
+		icon = mission_control_the_ganges_delta
+		required_missions = { golconda_five_cities_five_successors }
+		position = 3
+		provinces_to_highlight = {
+			area = raichur_doab_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 30
+			}
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+				NOT = { local_autonomy = 30 }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.2 }
+			rayalaseema_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	golconda_khandesh_and_vijayangara = {
+		icon = mission_bengal_campaign
+		required_missions = { golconda_the_battle_of_talikota }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = rayalaseema_area
+				area = khandesh_area
+				area = berar_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			NOT = { exists = VIJ }
+			NOT = { exists = KHD }
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			khandesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.3 }
+			deccan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	golconda_unite_the_region = {
+		icon = mission_emperor_of_hindusthan
+		required_missions = { golconda_khandesh_and_vijayangara }
+		position = 5
+		provinces_to_highlight = {
+			region = deccan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = BAH }
+				BAH = {
+					NOT = { total_development = ROOT }
+				}
+				BAH = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = BAH
+					}
+				}
+			}
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.4 }
+			coromandel_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	golconda_chowmahalla_palace = {
+		icon = mission_metropolis_of_the_deccan
+		required_missions = { golconda_unite_the_region }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 542
+			NOT = { has_building = cathedral }
+		}
+		trigger = {
+			NOT = { average_unrest = 2 }
+			treasury = 500
+			legitimacy = 100
+			prestige = 75
+			stability = 3
+			542 = {
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_treasury = -500
+			542 = { #Golconda
+				change_province_name = "Hyderabad"
+			}
+			country_event = { id = ME_Deccani_Events.5 }
+		}
+	}
+}
+
+golconda_column_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = GOC
+	}
+	has_country_shield = yes
+
+	golconda_take_the_andhra_coast = {
+		icon = mission_rein_in_the_velamas
+		required_missions = { }
+		position = 2
+		provinces_to_highlight = {
+			area = andhra_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			andhra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			andhra_area = {
+				add_province_modifier = {
+					name = "golconda_shown_telegu_might"
+					duration = 7300 #20 Years
+				}
+			}
+			orissa_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_carnatic_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	golconda_all_telegu_lands = {
+		icon = mission_southern_frontier
+		required_missions = { golconda_take_the_andhra_coast }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = OWNS_ALL_TELUGU_PROVINCES_IN_ASIA
+				india_superregion = {
+					type = all
+					OR = {
+						NOT = { culture = telegu }
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "golconda_telegu_unification"
+				duration = 9125 #25 Years
+			}
+		}
+	}
+
+	golconda_patronize_telegu_culture = {
+		icon = mission_vedic_education
+		required_missions = {
+			golconda_all_telegu_lands
+			golconda_composite_state
+		}
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			stability = 3
+			prestige = 75
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
+			has_mil_advisor_3 = yes
+			NOT = { average_unrest = 2 }
+		}
+		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_country_modifier = {
+				name = "golconda_new_age_for_telegus"
+				duration = -1
+			}
+		}
+	}
+}
+
+golconda_column_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = GOC
+	}
+	has_country_shield = yes
+	
+	golconda_reserves_ready = {
+		icon = mission_bijapur_karnatak
+		required_missions = {  }
+		trigger = {
+			manpower_percentage = 0.90
+			army_size_percentage = 0.90
+			num_of_generals = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "golconda_ready_to_fight"
+				duration = 7300 #20 Years
+			}
+		}
+	}
+
+	golconda_centralize_further = {
+		icon = mission_rule_the_garjats
+		required_missions = {
+			golconda_reserves_ready
+			golconda_take_the_andhra_coast
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = andhra_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 30
+			}
+		}
+		trigger = {
+			stability = 1
+			legitimacy = 100
+			andhra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy = 30 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "golconda_tight_control"
+				duration = 7300 #20 Years
+			}
+		}
+	}
+
+	golconda_composite_state = {
+		icon = mission_prosperity_in_bengal
+		required_missions = {
+			golconda_all_telegu_lands
+			golconda_centralize_further
+		}
+		position = 5
+		trigger = {
+			stability = 2
+			religious_unity = 1.0
+			government_rank = 3
+			NOT = { average_unrest = 2 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = "golconda_composite_state"
+				duration = -1
+			}
+		}
+	}
+}

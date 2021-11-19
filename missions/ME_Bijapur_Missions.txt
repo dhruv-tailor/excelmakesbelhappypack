@@ -1,0 +1,762 @@
+## NOTE: All missions will be marked with "bijapur_[insert name here]" so as to indicate that ##
+## these missions are for strictly Bijapur only | Missions common to all Deccani Sultanates will ##
+## be marked with "deccani_[insert name here]" so as to indicate that these missions are for all ##
+## successor states of Bahmanis ##
+bijapur_column_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = BIJ
+	}
+	has_country_shield = yes
+
+	bijapur_shifting_markets = {
+		icon = mission_consume_the_baghels
+		required_missions = {  }
+		provinces_to_highlight = {
+			province_id = 569
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 15 }
+				NOT = { has_trade_building_trigger = yes }
+			}
+		}
+		trigger = {
+			capital = 569
+			569 = {
+				development = 15
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.50
+			add_mercantilism = 3
+		}
+	}
+	bijapur_a_protected_capital = {
+		icon = mission_fortify_rajputana
+		required_missions = { bijapur_solidify_the_economy }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 569
+			OR = {
+				NOT = { development = 20 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			NOT = { corruption = 0.02 }
+			capital = 569
+			569 = {
+				development = 20
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			569 = {
+				add_province_modifier = {
+					name = "bijapur_hardened_capital"
+					duration = -1
+				}
+			}
+		}
+	}
+
+	bijapur_gol_gumbaz_and_jama_masjid = {
+		icon = mission_the_sultanate_restored
+		required_missions = { bijapur_a_protected_capital }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 569
+			OR = {
+				NOT = { has_building = cathedral }
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			treasury = 200
+			legitimacy = 100
+			prestige = 25
+			569 = {
+				is_capital_of = ROOT
+				development = 30
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_treasury = -200
+			569 = {
+				add_province_modifier = {
+					name = "bijapur_venerated_ancestors"
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+bijapur_column_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BIJ
+	}
+	has_country_shield = yes
+
+	bijapur_solidify_the_economy = {
+		icon = mission_bankers_of_cambay
+		required_missions = { bijapur_shifting_markets }
+		position = 2
+		trigger = {
+			share_of_starting_income = 2.5
+			grown_by_development = 20
+		}
+		effect = {
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			define_advisor = {
+				type = treasurer
+				culture = kannada
+				religion = shiite
+				skill = 2
+				discount = yes
+			}
+		}
+	}
+
+	bijapur_prospects_in_golconda = {
+		icon = mission_riches_of_golconda
+		required_missions = { bijapur_five_cities_five_successors }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { development = 15 }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
+		trigger = {
+			share_of_starting_income = 3.5
+			NOT = { corruption = 0.02 }
+			542 = {
+				development = 15
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			542 = {
+				add_or_upgrade_trade_building = yes
+			}
+		}
+	}
+	bijapur_markets_and_workshops = {
+		icon = mission_dominate_persian_gulf
+		required_missions = { bijapur_a_protected_capital }
+		position = 4
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_production_building_trigger = yes }
+			NOT = { has_trade_building_trigger = yes }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_production_building_trigger = yes
+					}
+				}
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_trade_building_trigger = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			capital = 569
+			num_of_owned_provinces_with = {
+				value = 5
+				has_production_building_trigger = yes
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				has_trade_building_trigger = yes
+			}
+			569 = {
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+			capital_scope = {
+				add_base_production = 2
+			}
+			569 = {
+				add_province_modifier = {
+					name = "bijapur_market_profits"
+					duration = -1
+				}
+			}
+		}
+	}
+	bijapur_education_and_grandeur = {
+		icon = mission_gharbianss
+		required_missions = { bijapur_markets_and_workshops }
+		position = 5
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_building = university }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_building = university
+					}
+				}
+			}
+		}
+		trigger = {
+			capital = 569
+			legitimacy = 100
+			prestige = 75
+			employed_advisor = {
+				category = ADM
+			}
+			employed_advisor = {
+				category = DIP
+			}
+			employed_advisor = {
+				category = MIL
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				has_building = university
+			}
+			569 = {
+				has_building = university
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_base_tax = 1
+			}
+			569 = {
+				add_province_modifier = {
+					name = "bijapur_new_varanasi_baghdad"
+					duration = -1
+				}
+			}
+			add_country_modifier = {
+				name = "bijapur_blooming_of_education"
+				duration = 9125 #25 Years
+			}
+		}
+	}
+}
+
+bijapure_column_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = BIJ
+	}
+	has_country_shield = yes
+		
+	bijapur_five_cities_five_successors = {
+		icon = mission_the_battle_for_raichur
+		required_missions = {  }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 569
+				province_id = 542
+				province_id = 544
+				province_id = 548
+				province_id = 1948
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			owns_core_province = 569
+			owns_core_province = 542
+			owns_core_province = 544
+			owns_core_province = 548
+			owns_core_province = 1948
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.1 }
+			konkan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			raichur_doab_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			andhra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tapti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khandesh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	bijapur_the_battle_of_talikota = {
+		icon = mission_control_the_ganges_delta
+		required_missions = { bijapur_five_cities_five_successors }
+		position = 4
+		provinces_to_highlight = {
+			area = raichur_doab_area
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.2 }
+			rayalaseema_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	bijapur_khandesh_and_vijayangara = {
+		icon = mission_bengal_campaign
+		required_missions = { bijapur_the_battle_of_talikota }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = rayalaseema_area
+				area = khandesh_area
+				area = berar_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = KHD
+					}
+				}
+			}
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			khandesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.3 }
+			deccan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bijapur_unite_the_region = {
+		icon = mission_emperor_of_hindusthan
+		required_missions = { bijapur_khandesh_and_vijayangara }
+		position = 6
+		provinces_to_highlight = {
+			region = deccan_region
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = BAH }
+				BAH = {
+					NOT = { total_development = ROOT }
+				}
+				BAH = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = BAH
+					}
+				}
+			}
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.4 }
+			coromandel_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bijapur_chowmahalla_palace = {
+		icon = mission_metropolis_of_the_deccan
+		required_missions = { bijapur_unite_the_region }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = cathedral }
+			}
+		}
+		trigger = {
+			NOT = { average_unrest = 2 }
+			treasury = 500
+			legitimacy = 100
+			prestige = 75
+			stability = 3
+			542 = {
+				owned_by = ROOT
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_treasury = -500
+			542 = { #Golconda
+				change_province_name = "Hyderabad"
+			}
+			country_event = { id = ME_Deccani_Events.5 }
+		}
+	}
+}
+
+bijapur_column_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = BIJ
+	}
+	has_country_shield = yes
+
+	bijapur_sufi_connections = {
+		icon = mission_sufi_shrines
+		required_missions = { bijapur_seperate_but_allies }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_tax_building_trigger = yes }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_tax_building_trigger = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				has_tax_building_trigger = yes
+			}
+			religious_unity = 1.0
+			piety = -0.25
+		}
+		effect = {
+			add_piety = -0.25
+			add_country_modifier = {
+				name = "bijapur_religious_solidarity"
+				duration = 7300 #20 Years
+			}
+			define_advisor = {
+				type = theologian
+				culture = kannada
+				religion = shiite
+				skill = 2
+				discount = yes
+			}
+		}
+	}
+
+	bijapur_malik_i_maidan_cannon = {
+		icon = mission_fortify_mandu
+		required_missions = { bijapur_five_cities_five_successors }
+		position = 3
+		trigger = {
+			num_of_artillery = 6
+			army_size = 20
+			num_of_owned_provinces_with = {
+				value = 2
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 25
+			add_country_modifier = {
+				name = "bijapur_cannons_ready"
+				duration = 7300 #20 Years
+			}
+		}
+	}
+
+	bijapur_military_unison = {
+		icon = mission_integrate_the_purbias
+		required_missions = {
+			bijapur_malik_i_maidan_cannon
+			bijapur_worthy_subjects
+		}
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size = 50
+			num_of_non_tributary_subjects = 2
+			employed_advisor = {
+				category = MIL
+			}
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.10
+				extra_shortcut = yes
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = "bijapur_solidified_ranks"
+				duration = -1
+			}
+		}
+	}
+
+	bijapur_utilize_the_raichur_doab = {
+		icon = mission_gujarati_diaspora
+		required_missions = { bijapur_the_battle_of_talikota }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			is_at_war = no
+			532 = {
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
+			}
+			2033 = {
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
+			}
+			4428 = {
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			define_general = {
+				name = "Abu-ul-Hassan"
+				shock = 3
+				fire = 3
+				manuever = 2
+				siege = 2
+			}
+		}
+	}
+}
+
+bijapur_column_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = BIJ
+	}
+	has_country_shield = yes
+
+	bijapur_seperate_but_allies = {
+		icon = mission_interfaith_relations
+		required_missions = {  }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = building_alliances.tooltip
+				calc_true_if = {
+					amount = 2
+					all_ally = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "bijapur_making_connections"
+				duration = 7300 #20 Years
+			}
+		}
+	}
+
+	bijapur_worthy_subjects = {
+		icon = mission_the_tamil_trade_guilds
+		required_missions = {
+			bijapur_seperate_but_allies
+			bijapur_five_cities_five_successors
+		}
+		position = 3
+		trigger = {
+			num_of_royal_marriages = 4
+			num_of_non_tributary_subjects = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "bijapur_projecting_power"
+				duration = 9125 #25 Years
+			}
+		}
+	}
+
+	bijapur_quell_the_marathas = {
+		icon = mission_unite_the_deccan
+		required_missions = { bijapur_worthy_subjects }
+		position = 5
+		trigger = {
+			stability = 3
+			custom_trigger_tooltip = {
+				tooltip = MARATHI_LOYALTY
+				NOT = {
+					any_owned_province = {
+						culture = marathi
+						OR = {
+							local_autonomy = 30
+							unrest = 2
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_maratha
+				}
+				estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 70
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "bijapur_marathi_loyalty"
+				duration = -1
+			}
+		}
+	}
+}

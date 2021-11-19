@@ -1,0 +1,875 @@
+## NOTE: All missions will be marked with "ahmed_[insert name here]" so as to indicate that ##
+## these missions are for strictly Ahmednagar only | Missions common to all Deccani Sultanates will ##
+## be marked with "deccani_[insert name here]" so as to indicate that these missions are for all ##
+## successor states of Bahmanis ##
+ahmed_column_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = AHM
+	}
+	has_country_shield = yes
+
+	ahmed_not_done_fighting = {
+		icon = mission_conquer_sindh_mer
+		required_missions = { }
+		trigger = {
+			manpower_percentage = 0.80
+			num_of_generals = 2
+			army_tradition = 20
+		}
+		effect = {
+			define_advisor = {
+				type = commandant
+				culture = ROOT
+				religion = ROOT
+				skill = 2
+			}
+			define_general = {
+				name = "Hussain Nizam Shah"
+				shock = 3
+				fire = 3
+				manuever = 3
+				siege = 1
+				trait = ruthless_personality
+			}
+		}
+	}
+
+	ahmed_warriors_do_read_books = {
+		icon = mission_vedic_education
+		required_missions = { ahmed_not_done_fighting }
+		position = 3
+		trigger = {
+			has_institution = renaissance
+			employed_advisor = { category = MIL }
+			num_of_generals = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ahmed_military_treatises_circulating"
+				duration = 9125 #25 Years
+			}
+		}
+	}
+
+	ahmed_coastal_access = {
+		icon = mission_secure_hajj_ports
+		required_missions = { ahmed_warriors_do_read_books }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = konkan_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					area = malabar_area
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						local_autonomy = 25
+					}
+				}
+			}
+		}
+		trigger = {
+			konkan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malabar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy = 25 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ahmed_habshi_influx"
+				duration = 7300 #20 Years
+			}
+		}
+	}
+
+	ahmed_habshi_integration = {
+		icon = mission_african_trade_post
+		required_missions = { ahmed_coastal_access }
+		position = 6
+		trigger = {
+			stability = 3
+			has_mil_advisor_3 = yes
+			army_tradition = 50
+			num_of_generals = 3
+			num_accepted_cultures = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ahmed_habshi_confirmation"
+				duration = -1
+			}
+			define_general = {
+				name = "Malik Ambar"
+				shock = 5
+				fire = 3
+				manuever = 5
+				siege = 3
+				trait = ruthless_personality
+			}
+		}
+	}
+}
+
+ahmed_column_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = AHM
+	}
+	has_country_shield = yes
+
+	ahmed_army_compounds = {
+		icon = mission_across_the_vindhyas
+		required_missions = { }
+		trigger = {
+			manpower_percentage = 0.80
+			num_of_owned_provinces_with = {
+				value = 3
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_manpower = 2
+			}
+			define_advisor = {
+				type = recruitmaster
+				culture = ROOT
+				religion = ROOT
+				skill = 3
+				discount = yes
+			}
+		}
+	}
+
+	ahmed_ample_forces_ready = {
+		icon = mission_afghan_frontier
+		required_missions = { ahmed_army_compounds }
+		position = 2
+		trigger = {
+			army_size = 40
+			num_of_owned_provinces_with = {
+				value = 3
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_manpower = 2
+			}
+			add_army_tradition = 20
+		}
+	}
+
+	ahmed_exuding_power = {
+		icon = mission_integrate_the_purbias
+		required_missions = {
+			ahmed_ample_forces_ready
+			ahmed_warriors_do_read_books
+		}
+		position = 4
+		trigger = {
+			army_size = 60
+			manpower_percentage = 0.90
+			num_of_royal_marriages = 2
+			num_of_non_tributary_subjects = 2
+		}
+		effect = {
+			change_dip = 1
+			add_country_modifier = {
+				name = "ahmed_exude_power"
+				duration = 10950 #30 Years
+			}
+		}
+	}
+
+	ahmed_trade_leaning_west = {
+		icon = mission_conquer_gujarat_dlh
+		required_missions = {
+			ahmed_the_battle_of_talikota
+			ahmed_exuding_power
+			ahmed_coastal_access
+		}
+		position = 5
+		trigger = {
+			504 = {
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
+			}
+			1948 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			NOT = { exists = GUJ }
+		}
+		effect = {
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_production = 1
+			}
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			add_mercantilism = 3
+		}
+	}
+
+	ahmed_locked_and_loaded_westward = {
+		icon = mission_grand_bengali_shipyards
+		required_missions = {
+			ahmed_trade_leaning_west
+			ahmed_habshi_integration
+		}
+		position = 7
+		trigger = {
+			stability = 3
+			num_accepted_cultures = 3
+			NOT = { average_unrest = 2 }
+			504 = {
+				trade_share = {
+					country = ROOT
+					share = 35
+				}
+			}
+			1948 = {
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_years_of_income = 0.75
+			majarteen_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			somaliland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+ahmed_column_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = AHM
+	}
+	has_country_shield = yes
+	
+	ahmed_five_cities_five_successors = {
+		icon = mission_the_battle_for_raichur
+		required_missions = {  }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 569
+				province_id = 542
+				province_id = 544
+				province_id = 548
+				province_id = 1948
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 569
+			owns_core_province = 542
+			owns_core_province = 544
+			owns_core_province = 548
+			owns_core_province = 1948
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.1 }
+			konkan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			raichur_doab_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			andhra_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tapti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khandesh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ahmed_the_battle_of_talikota = {
+		icon = mission_control_the_ganges_delta
+		required_missions = { ahmed_five_cities_five_successors }
+		position = 4
+		provinces_to_highlight = {
+			area = raichur_doab_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.2 }
+			rayalaseema_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	ahmed_khandesh_and_vijayangara = {
+		icon = mission_bengal_campaign
+		required_missions = { ahmed_the_battle_of_talikota }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = rayalaseema_area
+				area = khandesh_area
+				area = berar_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = KHD
+					}
+				}
+			}
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			khandesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.3 }
+			deccan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ahmed_unite_the_region = {
+		icon = mission_emperor_of_hindusthan
+		required_missions = { ahmed_khandesh_and_vijayangara }
+		position = 6
+		provinces_to_highlight = {
+			region = deccan_region
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = BAH }
+				BAH = {
+					NOT = { total_development = ROOT }
+				}
+				BAH = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = BAH
+					}
+				}
+			}
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Deccani_Events.4 }
+			coromandel_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ahmed_chowmahalla_palace = {
+		icon = mission_metropolis_of_the_deccan
+		required_missions = { ahmed_unite_the_region }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { owned_by = ROOT }
+				has_building = cathedral
+			}
+		}
+		trigger = {
+			NOT = { average_unrest = 2 }
+			treasury = 500
+			legitimacy = 100
+			prestige = 75
+			stability = 3
+			542 = {
+				owned_by = ROOT
+				has_building = cathedral
+			}
+		}
+		effect = {
+			add_treasury = -500
+			542 = { #Golconda
+				change_province_name = "Hyderabad"
+			}
+			country_event = { id = ME_Deccani_Events.5 }
+		}
+	}
+}
+
+ahmed_column_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = AHM
+	}
+	has_country_shield = yes
+
+	ahmed_survey_the_land = {
+		icon = mission_a_million_rice_fields
+		required_missions = { }
+		trigger = {	
+			grown_by_development = 20
+			NOT = { average_unrest = 2 }
+			num_of_owned_provinces_with = {
+				value = 2
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			ahmednagar_area = {
+				add_province_modifier = {
+					name = "ahmed_land_reforms"
+					duration = 9125 #25 Years
+				}
+			}
+		}
+	}
+	ahmed_school_of_architecture = {
+		icon = mission_growth_of_ahmedabad
+		required_missions = { ahmed_survey_the_land }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			artist = 3
+			prestige = 50
+			num_of_owned_provinces_with = {
+				value = 5
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ahmed_school_of_architecture_blooming"
+				duration = 10950 #30 Years
+			}
+			ahmednagar_area = {
+				add_province_modifier = {
+					name = "ahmed_construction_efforts"
+					duration = -1
+				}
+			}
+		}
+	}
+	ahmed_tombs_of_the_giants = {
+		icon = mission_sindh_campaign
+		required_missions = {
+			ahmed_school_of_art
+			ahmed_school_of_architecture
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 544
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 20 }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			artist = 3
+			legitimacy = 100
+			544 = {
+				owned_by = ROOT
+				is_capital = yes
+				development = 20
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			add_prestige = 10
+			544 = {
+				add_province_modifier = {
+					name = "ahmed_capital_tombs"
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ahmed_revenue_refinement = {
+		icon = mission_gharbianss
+		required_missions = {
+			ahmed_the_battle_of_talikota
+			ahmed_tombs_of_the_giants
+			ahmed_school_of_engineering
+		}
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+			num_of_loans = 0
+			NOT = { corruption = 0.02 }
+			total_development = 500
+			if = {
+				limit = {
+					has_estate = estate_jains
+				}
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 70
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_jains
+				}
+				num_of_estate_privileges = {
+					estate = estate_jains
+					value = 2
+				}
+			}
+		}
+		effect = {
+			544 = {
+				if = {
+					limit = {
+						NOT = { has_building = plantations }
+						OR = {
+							trade_goods = coffee
+							trade_goods = cotton
+							trade_goods = sugar
+							trade_goods = tobacco
+							trade_goods = tea
+							trade_goods = cocoa
+						}
+					}
+					add_building_construction = {
+						building = plantations
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_production = 3
+				}
+			}
+			545 = {
+				if = {
+					limit = {
+						NOT = { has_building = mills }
+						OR = {
+							trade_goods = paper
+							trade_goods = gems
+							trade_goods = tropical_wood
+							trade_goods = glass
+							trade_goods = chinaware
+						}
+					}
+					add_building_construction = {
+						building = mills
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_production = 3
+				}
+			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_tax = 2
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+
+	ahmed_military_investments = {
+		icon = mission_prepare_an_invasion_force
+		required_missions = {
+			ahmed_revenue_refinement
+			ahmed_gem_of_a_capital_city
+		}
+		position = 7
+		trigger = {
+			army_tradition = 50
+			army_size_percentage = 0.9
+			mills = 3
+			plantations = 3
+			weapons = 1
+			num_of_owned_provinces_with = {
+				value = 10
+				has_forcelimit_building_trigger = yes
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_yearly_manpower = 1
+			add_country_modifier = {
+				name = "ahmed_proto_industrial_military_sector"
+				duration = -1
+			}
+		}
+	}
+}
+
+ahmed_column_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = AHM
+	}
+	has_country_shield = yes
+	
+	ahmed_stop_court_intrigue = {
+		icon = mission_restore_faith_in_the_throne
+		required_missions = {  }
+		trigger = {
+			legitimacy = 100
+			NOT = { average_unrest = 2 }
+			NOT = { corruption = 0.02 }
+		}
+		effect = {
+			change_adm = 1
+			add_years_of_income = 0.75
+		}
+	}
+	ahmed_school_of_art = {
+		icon = mission_deccanis
+		required_missions = { ahmed_stop_court_intrigue }
+		position = 3
+		provinces_to_highlight = {
+		}
+		trigger = {
+			artist = 3
+			capital = 544
+			544 = {
+				development = 18
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "ahmed_school_of_art_blooming"
+				duration = 10950 #30 Years
+			}
+			add_years_of_income = 1.0
+		}
+	}
+
+	ahmed_school_of_engineering = {
+		icon = mission_fortify_rajputana
+		required_missions = { ahmed_school_of_art }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 544
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				AND = {
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			fortification_expert = 3
+			capital = 544
+			544 = {
+				OR = {
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			add_country_modifier = {
+				name = "ahmed_school_of_fort_engineers"
+				duration = 10950 #30 Years
+			}
+		}
+	}
+
+	ahmed_gem_of_a_capital_city = {
+		icon = mission_conquer_central_deccan
+		required_missions = { ahmed_school_of_engineering }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 544
+					OR = {
+						NOT = { is_capital_of = ROOT }
+						NOT = { development = 30 }
+					}
+				}
+				AND = {
+					province_id = 545
+					OR = {
+						NOT = { development = 20 }
+						NOT = { owned_by = ROOT }
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+				}
+			}
+		}
+		trigger = {
+			stability = 3
+			544 = {
+				is_capital_of = ROOT
+				development = 30
+			}
+			545 = {
+				owned_by = ROOT
+				development = 20
+				province_has_center_of_trade_of_level = 3
+			}
+		}
+		effect = {
+			ahmednagar_area = {
+				add_province_modifier = {
+					name = "ahmed_spledid_growth"
+					duration = -1
+				}
+			}
+		}
+	}
+}
