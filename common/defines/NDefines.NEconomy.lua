@@ -11,8 +11,8 @@ NDefines.NEconomy.CARAVAN_FACTOR = 20.0
 NDefines.NEconomy.CARAVAN_POWER_MAX = 10
 
 	--Editcts
-NDefines.NEconomy.EDICTS_COST_INCREASE = 0
-NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3
+--NDefines.NEconomy.EDICTS_COST_INCREASE = 0
+--NDefines.NEconomy.EDICTS_DURATION_MONTHS = 3
 
 	--Interest
 NDefines.NEconomy.BASE_INTERESTS = 5

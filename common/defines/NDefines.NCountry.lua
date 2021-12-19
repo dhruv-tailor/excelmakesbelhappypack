@@ -18,7 +18,10 @@ NDefines.NCountry.ESTATE_LOYALTY_DECAY_BASE_MAX = 9.0
 NDefines.NCountry.FREE_IDEA_GROUP_COST = 5
 NDefines.NCountry.IDEA_TO_TECH = -0.01
 NDefines.NCountry.MAX_IDEA_GROUPS_FROM_SAME_CATEGORY = 0.35
-NDefines.NCountry.PS_BUY_IDEA = 300
+NDefines.NCountry.PS_BUY_IDEA = 350
+
+	--Innovativeness
+NDefines.NCountry.INNOVATIVENESS_MAX = 250.0
 
 	--Merchant Republuic
 NDefines.NCountry.MERCHANT_REPUBLIC_SIZE_LIMIT = 9999
