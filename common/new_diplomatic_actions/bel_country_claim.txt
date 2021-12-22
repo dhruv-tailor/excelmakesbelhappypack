@@ -1,0 +1,91 @@
+country_claim =
+{
+	category = covert
+	require_acceptance = no	
+	is_visible = 
+	{
+		has_idea = agent_training
+		NOT = 
+		{
+			has_country_modifier = country_remove_diplomat
+		}
+	}
+	
+	is_allowed = 
+	{
+		has_idea = agent_training
+		NOT = 
+		{
+			has_country_modifier = country_remove_diplomat			
+		}
+		
+		FROM = 
+		{
+			any_owned_province = 
+			{
+				NOT = { is_claim = ROOT }
+				any_neighbor_province = 
+				{
+					owned_by = ROOT
+				}
+			}
+		}
+	}
+	
+	on_accept = 
+	{
+		hidden_effect =
+		{
+			set_country_flag = claim_@FROM
+			add_country_modifier =
+			{
+				name = country_remove_diplomat
+				duration = -1
+			}
+			
+			FROM =
+			{			
+				country_event = 
+				{
+					id = auto_country_claim.1
+				}
+			}
+		}
+	}
+	
+	ai_will_do = 
+	{
+		factor = 0
+	}
+}
+
+country_claim_remove =
+{
+	category = covert
+	require_acceptance = no	
+	is_visible = 
+	{
+		has_country_modifier = country_remove_diplomat
+		has_country_flag = claim_@FROM
+	}
+	
+	is_allowed = 
+	{
+		has_country_modifier = country_remove_diplomat
+		has_country_flag = claim_@FROM
+	}
+	
+	on_accept = 
+	{			
+		hidden_effect = 
+		{
+			remove_country_modifier = country_remove_diplomat
+			clr_country_flag = claim_@FROM
+		}
+	}
+	
+	ai_will_do = 
+	{
+		factor = 0
+	}
+}
