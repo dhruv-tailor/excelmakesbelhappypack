@@ -33,6 +33,10 @@ NDefines.NAI.DIPLOMATIC_ACTION_OFFER_CONDOTTIERI_ONLY_NEIGHBORS = 0
 NDefines.NAI.DEVELOPMENT_CAP_BASE = 60 --set to 3 manually if using dev-click setting
 NDefines.NAI.DEVELOPMENT_CAP_MULT = 5  --set to 1 manually if using dev-click setting
 
+	--Forts
+NDefines.NAI.FORT_BUDGET_FRACTION = 0.6 -- AI will spend a maximum of this fraction of monthly income on forts
+NDefines.NAI.FORT_MAINTENANCE_CHEAT = 1 -- Set to 0 to disable AI fort maintenance cheating. Warning: Will make AI suck.
+
 	--Estates
 NDefines.NAI.ESTATE_PRIVILEGE_REVOKE_THRESHOLD = 5.1
 NDefines.NAI.ESTATE_PRIVILEGE_GRANT_THRESHOLD = 7.5
@@ -114,6 +118,7 @@ NDefines.NAI.PEACE_TERMS_INDEPENDENCE_BASE_MULT = 1000.0
 NDefines.NAI.PEACE_TERMS_MIL_ACCESS_BASE_MULT = 0
 NDefines.NAI.PEACE_TERMS_MIN_SCORE = 1
 NDefines.NAI.PEACE_TERMS_MIN_MONTHS_OF_GOLD = 5
+NDefines.NAI.PEACE_TERMS_PILLAGE_CAPITAL_MULT = 0.25
 NDefines.NAI.PEACE_TERMS_STRATEGY_MULT = 0.5
 NDefines.NAI.PEACE_TERMS_TAKE_MANDATE_BASE_MULT = 1000.0
 NDefines.NAI.PEACE_TERMS_TRIBUTARY_BASE_MULT = 5.0

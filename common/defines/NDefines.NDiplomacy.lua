@@ -1,8 +1,5 @@
 -- Only Changes to NDefines.NDiplomacy should be here.
 
-	--AE
-NDefines.NDiplomacy.PO_FORM_PU_AE = 0.5
-
 	--Condottieri
 NDefines.NDiplomacy.CONDOTTIERI_MIN_DURATION = 12
 
