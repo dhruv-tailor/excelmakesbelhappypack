@@ -18,8 +18,8 @@ berar_column_1 = {
 		provinces_to_highlight = {
 			province_id = 548
 			OR = {
+				NOT = { is_capital_of = ROOT }
 				NOT = { development = 15 }
-				NOT = { owned_by = ROOT }
 				NOT = { has_production_building_trigger = yes }
 			}
 		}
@@ -38,7 +38,7 @@ berar_column_1 = {
 				religion = ROOT
 				skill = 2
 			}
-			capital_scope = {
+			548 = {
 				add_base_tax = 1
 				add_base_production = 3
 				add_base_manpower = 1
@@ -137,16 +137,16 @@ berar_column_2 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "berar_jumping_in"
-				duration = 7300 #20 Years
-			}
 			define_general = {
 				name = "Fathullah Imad-ul-Mulk"
 				shock = 3
 				fire = 3
 				manuever = 1
 				siege = 3
+			}
+			add_country_modifier = {
+				name = "berar_jumping_in"
+				duration = 7300 #20 Years
 			}
 		}
 	}
@@ -247,7 +247,10 @@ berar_column_3 = {
 				province_id = 548
 				province_id = 1948
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
 		trigger = {
 			owns_core_province = 569
@@ -307,7 +310,7 @@ berar_column_3 = {
 		trigger = {
 			raichur_doab_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -335,6 +338,18 @@ berar_column_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			khandesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VIJ }
 				VIJ = {
@@ -343,10 +358,9 @@ berar_column_3 = {
 				VIJ = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
 				}
 			}
 			OR = {
@@ -357,23 +371,10 @@ berar_column_3 = {
 				KHD = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = KHD
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = KHD }
 				}
-			}
-			rayalaseema_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			khandesh_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			berar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}
 		effect = {
@@ -397,6 +398,12 @@ berar_column_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VIJ }
 				VIJ = {
@@ -405,10 +412,9 @@ berar_column_3 = {
 				VIJ = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
 				}
 			}
 			OR = {
@@ -419,17 +425,10 @@ berar_column_3 = {
 				BAH = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = BAH
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = BAH }
 				}
-			}
-			NOT = { average_unrest = 2 }
-			religious_unity = 1
-			deccan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}
 		effect = {
@@ -458,7 +457,7 @@ berar_column_3 = {
 		trigger = {
 			NOT = { average_unrest = 2 }
 			treasury = 500
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 75
 			stability = 3
 			542 = {
@@ -468,10 +467,10 @@ berar_column_3 = {
 		}
 		effect = {
 			add_treasury = -500
+			country_event = { id = ME_Deccani_Events.5 }
 			542 = { #Golconda
 				change_province_name = "Hyderabad"
 			}
-			country_event = { id = ME_Deccani_Events.5 }
 		}
 	}
 }
@@ -488,9 +487,7 @@ berar_column_4 = {
 	berar_the_loyalty_at_home = {
 		icon = mission_patronize_sufi_scholars
 		required_missions = { }
-		provinces_to_highlight = {
-		}
-		trigger = {	
+		trigger = {
 			NOT = { average_unrest = 2 }
 			if = {
 				limit = {
@@ -530,17 +527,13 @@ berar_column_4 = {
 			berar_learned_family
 			berar_the_loyalty_at_home
 		}
-		trigger = {	
+		trigger = {
 			num_of_cities = 30
 			NOT = { average_unrest = 2 }
 			stability = 3
 			legitimacy = 100
 		}
 		effect = {
-			random_owned_province = {
-				limit = { is_core = ROOT }
-				add_base_tax = 2
-			}
 			define_advisor = {
 				type = treasurer
 				name = "Aladdin Imad Shah"
@@ -549,6 +542,10 @@ berar_column_4 = {
 				skill = 3
 				discount = yes
 			}
+			random_owned_province = {
+				limit = { is_core = ROOT }
+				add_base_tax = 2
+			}
 		}
 	}
 
@@ -556,9 +553,7 @@ berar_column_4 = {
 		icon = mission_dominate_trade_in_bengal
 		position = 4
 		required_missions = { berar_large_and_in_charge }
-		provinces_to_highlight = {
-		}
-		trigger = {	
+		trigger = {
 			if = {
 				limit = {
 					has_estate = estate_brahmins
@@ -587,7 +582,7 @@ berar_column_4 = {
 					loyalty = 60
 				}
 			}
-			else = { monthly_dip= 10 }
+			else = { monthly_dip = 10 }
 			if = {
 				limit = {
 					has_estate = estate_jains
@@ -631,17 +626,17 @@ berar_column_4 = {
 		position = 5
 		required_missions = { berar_the_growing_estates }
 		provinces_to_highlight = {
+			province_id = 548
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { has_fort_building_trigger = yes }
+			}
 		}
-		trigger = {	
+		trigger = {
 			total_development = 500
 			548 = {
 				is_capital_of = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
+				has_fort_building_trigger = yes
 			}
 			num_of_owned_provinces_with = {
 				value = 10
@@ -672,7 +667,7 @@ berar_column_5 = {
 		tag = BRR
 	}
 	has_country_shield = yes
-	
+
 	berar_learned_family = {
 		icon = mission_court_education
 		position = 2
@@ -701,8 +696,6 @@ berar_column_5 = {
 		icon = mission_expand_textile_industry
 		position = 4
 		required_missions = { berar_learned_family }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = new_world_i
 			num_of_owned_provinces_with = {
@@ -722,8 +715,6 @@ berar_column_5 = {
 		icon = mission_dominate_persian_gulf
 		position = 6
 		required_missions = { berar_variety_of_production berar_secure_to_the_center }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = printing_press
 			num_of_owned_provinces_with = {

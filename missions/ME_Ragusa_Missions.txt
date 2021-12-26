@@ -3,117 +3,89 @@ ragusa_missions_slot_1 = {
 	generic = no
 	ai = yes
 	potential = {
+		OR = {
+			tag = RAG
+			tag = DAL
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = RAG
 	}
 	has_country_shield = yes
-	
-	ragusa_develop_mission = {
-		icon = mission_have_manufactories
+
+	ragusa_balkan_latin_republic = {
+		icon = fortify_malta
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-			province_id = 137
-			OR = {
-				NOT = { owned_by = ROOT }
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { development = 25 }
-				}
-				AND = {
-					NOT = { has_dlc = "Common Sense" }
-					NOT = { num_of_buildings_in_province = 2 }
-				}
-			}
-		}
 		trigger = {
-			137 = {
-				owned_by = ROOT
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
+			army_size_percentage = 1
+			if = {
+				limit = {
+					any_country = {
+						culture_group = latin
 					}
-					development = 25
 				}
-				else = {
-					num_of_buildings_in_province = 2
+				any_country = {
+					culture_group = latin
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						culture_group = south_slavic
+					}
+				}
+				any_country = {
+					culture_group = south_slavic
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
 				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ragusa_development
-				duration = 9125
+			add_adm_power = 50
+			add_dip_power = 50
+			east_adriatic_coast_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_core = ROOT
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	ragusa_light_ships = {
+
+	ragusa_shores_dalmatia = {
 		icon = mission_establish_high_seas_navy
-		required_missions = { ragusa_develop_mission }
+		required_missions = { ragusa_balkan_latin_republic }
 		position = 2
-		trigger = {
-			num_of_light_ship = 8
-		}
-		effect = {
-			add_country_modifier = {
-				name = ragusa_ships
-				duration = 9125
-			}
-		}
-	}
-	
-	ragusa_increase_trade = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { ragusa_light_ships }
-		position = 3
-		trigger = {
-			137 = {
-				has_most_province_trade_power = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ragusa_increased_trade
-				duration = 9125
-			}
-		}
-	}
-	
-	ragusa_build_marketplaces = {
-		icon = mission_early_game_buildings
-		required_missions = { ragusa_increase_trade }
-		position = 4
-		trigger = {
-			OR = {
-				marketplace = 4
-				trade_depot = 4
-				stock_exchange = 4
-			}
-		}
-		effect = {
-			add_treasury = 50
-			add_mercantilism = 2
-			add_country_modifier = {
-				name = ragusa_marketplaces
-				duration = 9125
-			}
-		}
-	}
-	
-	ragusa_dominate_adriatic_sea = {
-		icon = mission_sea_battles
-		required_missions = { ragusa_build_marketplaces }
-		position = 5
 		provinces_to_highlight = {
-			OR = {
-				area = east_adriatic_coast_area
-				area = carinthia_area
-				area = venetia_area
-				area = emilia_romagna_area
-				area = central_italy_area
-				area = apulia_area
-			}
+			area = east_adriatic_coast_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -121,79 +93,739 @@ ragusa_missions_slot_1 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			carinthia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			venetia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			emilia_romagna_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			central_italy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			apulia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		effect = {
-			catalonia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
+			custom_tooltip = RAGUSA_TRADE_NODE_TT
+			hidden_effect = {
+				137 = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
 				}
-				add_permanent_claim = ROOT
-			}
-			valencia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			toledo_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			upper_andalucia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	ragusa_american_goods = {
-		icon = mission_trade_company_region_abroad
-		required_missions = { ragusa_dominate_adriatic_sea }
+
+	ragusa_safe_adriatic_balkans = {
+		icon = adriatic_access
+		required_missions = { ragusa_shores_dalmatia }
+		position = 4
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 137
+			}
+			has_port = yes
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_port = yes
+						any_trade_node_member_province = {
+							province_id = 137
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = RAG_SAFE_ADRIATIC_BALKANS_TT
+				num_of_owned_provinces_with = {
+					value = 5
+					has_port = yes
+					any_trade_node_member_province = {
+						province_id = 137
+					}
+				}
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_mil_power = 100
+			add_adm_power = 100
+			add_mercantilism = 5
+			add_republican_tradition = 5
+		}
+	}
+
+	ragusa_northern_adriatic_coast = {
+		icon = mission_early_game_buildings
+		required_missions = { ragusa_new_republic }
 		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = east_adriatic_coast_area
+				area = croatia_area
+				area = carinthia_area
+			}
+			has_port = yes
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						OR = {
+							area = east_adriatic_coast_area
+							area = croatia_area
+							area = carinthia_area
+						}
+						has_port = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					area = east_adriatic_coast_area
+					area = croatia_area
+					area = carinthia_area
+				}
+				has_port = yes
+			}
+		}
+		effect = {
+			custom_tooltip = VEN_MARE_HADRIATICUM_CONQUEST_TT
+			hidden_effect = {
+				1308 = {
+					every_trade_node_member_province = {
+						limit = {
+							region = italy_region
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	ragusa_defying_doge = {
+		icon = mission_combat_barbary_piracy
+		required_missions = { ragusa_northern_adriatic_coast }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 112
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			112 = {
+				owner = {
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
 		trigger = {
 			OR = {
-				cocoa = 1
-				coffee = 1
-				cotton = 1
-				sugar = 1
-				tobacco = 1
+				owns_or_non_sovereign_subject_of = 112
+				112 = {
+					owner = {
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ragusa_america
-				duration = 9125
+				name = rag_doge_demisal
+				duration = 1825
 			}
 		}
 	}
+
+	ragusa_venetian_trade = {
+		icon = expand_the_doges_palace
+		required_missions = { ragusa_defying_doge }
+		position = 9
+		trigger = {
+			1308 = {
+				trade_share = {
+					country = ROOT
+					share = 15
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 2
+			add_country_modifier = {
+				name = italian_minor_venetian_secret
+				duration = 5475
+			}
+		}
+	}
+
+	ragusa_fleet_expansion = {
+		icon = nuova_promissione_ducale
+		required_missions = { ragusa_venetian_trade }
+		position = 10
+		trigger = {
+			num_of_light_ship = 15
+			share_of_starting_income = 10
+		}
+		effect = {
+			add_years_of_income = 0.33
+			add_navy_tradition = 10
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
+		}
+	}
+
+	ragusa_maritime_republics = {
+		icon = me_mission_venice_navy
+		required_missions = { ragusa_fleet_expansion }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id	= 112
+				province_id = 101
+				province_id = 2983
+				province_id = 115
+				province_id = 2977
+				province_id = 137
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 5 }
+			}
+		}
+		trigger = {
+			112 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			101 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			2983 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			115 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			2977 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+			137 = {
+				owned_by = ROOT
+				num_of_times_improved = 5
+			}
+		}
+		effect = {
+			112 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+			101 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+			2983 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+			115 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+			2977 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+			137 = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_shipyard_building = yes
+			}
+		}
+	}
+
+	ragusa_ragusan_commerce = {
+		icon = mission_trade_company_region_abroad
+		required_missions = {
+			ragusa_maritime_republics
+			ragusa_developing_trade
+		}
+		position = 12
+		trigger = {
+			OR = {
+				development_in_provinces = {
+					value = 100
+					has_terrain = farmlands
+				}
+				development_in_provinces = {
+					value = 100
+					has_terrain = grasslands
+				}
+			}
+			OR = {
+				development_in_provinces = {
+					value = 100
+					trade_goods = grain
+				}
+				development_in_provinces = {
+					value = 100
+					trade_goods = salt
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = RAGUSA_RAGUSAN_COMMERCE_TT
+			tooltip = {
+				add_base_production = 1
+				add_permanent_province_modifier = {
+					name = rag_ragusan_commerce
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = salt
+							trade_goods = grain
+						}
+					}
+					add_base_production = 1
+					add_permanent_province_modifier = {
+						name = rag_ragusan_commerce
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	ragusa_masters_of_commerce = {
+		icon = me_mission_venice_people_talking
+		required_missions = { ragusa_ragusan_commerce }
+		position = 13
+		trigger = {
+			OR = {
+				production_leader = {
+					trade_goods = salt
+				}
+				trading_bonus = {
+					trade_goods = salt
+					value = yes
+				}
+			}
+			OR = {
+				production_leader = {
+					trade_goods = grain
+				}
+				trading_bonus = {
+					trade_goods = grain
+					value = yes
+				}
+			}
+			OR = {
+				production_leader = {
+					trade_goods = spices
+				}
+				trading_bonus = {
+					trade_goods = spices
+					value = yes
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			add_country_modifier = {
+				name = rag_ragusan_mastery
+				duration = 3650
+			}
+		}
+	}
+
+}
+
+ragusa_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = RAG
+			tag = DAL
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ragusa_balkan_hinterland = {
+		icon = mission_cannons_firing
+		required_missions = { ragusa_balkan_latin_republic }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = bosnia_area
+				area = rascia_area
+				area = serbia_area
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						OR = {
+							area = bosnia_area
+							area = rascia_area
+							area = serbia_area
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					area = bosnia_area
+					area = rascia_area
+					area = serbia_area
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 100
+			add_yearly_manpower = 1.5
+		}
+	}
+
+	ragusa_secured_income = {
+		icon = dominant_economy
+		required_missions = { ragusa_balkan_hinterland }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 1766
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { base_production = 5 }
+			}
+		}
+		trigger = {
+			owns_core_province = 1766
+			1766 = {
+				base_production = 5
+			}
+		}
+		effect = {
+			1766 = {
+				add_province_modifier = {
+					name = rag_renewed_mine
+					duration = -1
+				}
+				add_devastation = -25
+				if = {
+					limit = {
+						is_state = yes
+					}
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						add_prosperity = 25
+					}
+					else = {
+						add_base_production = 1
+					}
+				}
+				else = {
+					add_base_production = 1
+				}
+			}
+		}
+	}
+
+	ragusa_new_republic = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = {
+			ragusa_safe_adriatic_balkans
+			ragusa_secured_income
+			ragusa_mighty_fleet
+		}
+		position = 5
+		trigger = {
+			NOT = { average_home_autonomy = 30 }
+			NOT = { unrest = -1 }
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			NOT = { num_of_rebel_armies = 1 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = rag_new_strength
+				duration = 5475
+			}
+		}
+	}
+
+	ragusa_apulian_shores = {
+		icon = me_mission_aragon_lighthouse_of_alexandria
+		required_missions = {
+			ragusa_new_republic
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 122
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			122 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			apulia_area = {
+				add_base_production = 1
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+						is_state = yes
+					}
+					add_prosperity = 50
+				}
+			}
+			122 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				add_permanent_province_modifier = {
+					name = nap_lighthouse_otranto
+					duration = -1
+				}
+			}
+			naples_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ragusa_city_ancona = {
+		icon = reclaim_the_aegean
+		required_missions = { ragusa_northern_adriatic_coast }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 119
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 119
+		}
+		effect = {
+			119 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	ragusa_superba = {
+		icon = mission_sea_battles
+		required_missions = { ragusa_republic_salerno }
+		position = 8
+		provinces_to_highlight = {
+			province_id = 101
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			101 = {
+				owner = {
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 101
+				101 = {
+					owner = {
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = rag_end_republic
+				duration = 3650
+			}
+		}
+	}
+
+	ragusa_rule_italian_trade = {
+		icon = mission_sea_battles
+		required_missions = {
+			ragusa_venetian_trade
+			ragusa_genoese_trade
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2983
+				province_id = 101
+				province_id = 115
+				province_id = 112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			mercantilism = 33
+			owns_core_province = 2983
+			owns_core_province = 101
+			owns_core_province = 115
+			owns_core_province = 112
+		}
+		effect = {
+			add_country_modifier = {
+				name = rag_four_maritime_republic
+				duration = -1
+			}
+		}
+	}
+
+	ragusa_developing_trade = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { ragusa_fleet_expansion }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 112
+				province_id = 101
+				province_id = 2983
+				province_id = 115
+				province_id = 2977
+				province_id = 137
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { num_of_times_improved = 10 }
+			}
+		}
+		trigger = {
+			112 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+			2983 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+			115 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+			2977 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+			137 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				num_of_times_improved = 10
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			add_mercantilism = 5
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				112 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+				101 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+				2983 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+				115 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+				2977 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+				137 = {
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
+				}
+			}
+		}
+	}
+
 }
 
 ragusa_missions_slot_3 = {
@@ -201,101 +833,273 @@ ragusa_missions_slot_3 = {
 	generic = no
 	ai = yes
 	potential = {
+		OR = {
+			tag = RAG
+			tag = DAL
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = RAG
 	}
 	has_country_shield = yes
-	
-	ragusa_attack_venice = {
-		icon = mission_cannons_firing
-		required_missions = { }
-		position = 1
-		trigger = {
-			OR = {
-				is_in_war = {
-					attacker_leader = ROOT
-					defender_leader = VEN
-				}
-				NOT = { exists = VEN }
-			}
-		}
-		effect = {
-			add_manpower = 3
-			add_country_modifier = {
-				name = ragusa_war_venice
-				duration = 3650
-			}
-		}
-	}
-	
-	ragusa_take_dalmatia = {
-		icon = mission_assemble_an_army
-		required_missions = { ragusa_attack_venice }
+
+	ragusa_saint_blaise = {
+		icon = connect_further_austria
+		required_missions = { ragusa_distant_renaissance }
 		position = 2
 		provinces_to_highlight = {
-			province_id = 136
-			NOT = { owned_by = ROOT }
+			province_id = 137
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { renaissance = 100 }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { num_of_times_improved = 5 }
+			}
 		}
 		trigger = {
-			owns = 136
+			137 = {
+				owned_by = ROOT
+				renaissance = 100
+				has_tax_building_trigger = yes
+				num_of_times_improved = 5
+			}
 		}
 		effect = {
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
-			136 = {
+			137 = {
 				if = {
 					limit = {
-						NOT = { is_core = ROOT }
+						religion = catholic
+						has_owner_religion = yes
 					}
-					add_core = ROOT
+					add_cardinal = yes
 				}
-			}
-			if = {
-				limit = {
-					exists = VEN
-					NOT = { overlord_of = VEN }
+				if = {
+					limit = {
+						ROOT = { religion = orthodox }
+					}
+					ROOT = { add_patriarch_authority = 0.05 }
 				}
-				add_casus_belli = {
-					target = VEN
-					type = cb_vassalize_mission
-					months = 120
+				add_permanent_province_modifier = {
+					name = rag_basilica_san_biagio
+					duration = -1
 				}
 			}
 		}
 	}
-	
-	ragusa_vassalize_venice = {
-		icon = mission_have_two_subjects
-		required_missions = { ragusa_take_dalmatia }
+
+	ragusa_secure_home_trade = {
+		icon = purely_for_commerce
+		required_missions = { }
 		position = 3
-		provinces_to_highlight = {
-			NOT = { exists = VEN }
-			area = venetia_area
-			NOT = { owned_by = ROOT }
-		}
 		trigger = {
-			if = {
-				limit = {
-					exists = VEN
-				}
-				overlord_of = VEN
-			}
-			else = {
-				venetia_area = {
-					type = all
-					owned_by = ROOT
+			capital_scope = {
+				num_of_times_improved = 2
+				custom_trigger_tooltip = {
+					tooltip = THIS_HAS_MORE_TRADE_POWER_THAN_AREA
+					area_for_scope_province = {
+						type = all
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								which = this_trade_power
+								value = trigger_value:province_trade_power
+							}
+							export_to_variable = {
+								which = prev_trade_power
+								value = trigger_value:province_trade_power
+								who = PREV
+							}
+							check_variable = { which = prev_trade_power which = this_trade_power }
+						}
+					}
 				}
 			}
 		}
 		effect = {
-			add_stability_or_adm_power = yes
-			add_army_tradition = 10
-			add_country_modifier = {
-				name = ragusa_venice_vassal
-				duration = 3650
+			add_years_of_income = 2
+			define_advisor = {
+				type = trader
+				skill = 1
+				religion = ROOT
+				culture = ROOT
+				cost_multiplier = 0.50
 			}
-		}	
+		}
+	}
+
+	ragusa_mighty_fleet = {
+		icon = renaissance_city
+		required_missions = {
+			ragusa_secure_home_trade
+			ragusa_safe_haven
+		}
+		position = 4
+		trigger = {
+			num_of_admirals = 1
+			OR = {
+				navy_size_percentage = 1
+				galley_fraction = 0.5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = italian_minor_naval_propaganda
+				duration = 5475
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ragusa_republic_salerno = {
+		icon = develop_naples
+		required_missions = { ragusa_apulian_shores }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 2983
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 2983
+		}
+		effect = {
+			2983 = {
+				add_base_production = 3
+				add_permanent_province_modifier = {
+					name = nap_restore_republic
+					duration = -1
+				}
+				if = {
+					limit = {
+						has_building = shipyard
+					}
+					remove_building = shipyard
+					add_building_construction = {
+						building = grand_shipyard
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building_construction = {
+						building = shipyard
+						speed = 0.5
+						cost = 0
+					}
+				}
+			}
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ragusa_leaning_tower = {
+		icon = mission_dominate_genoa
+		required_missions = { ragusa_republic_salerno }
+		position = 8
+		provinces_to_highlight = {
+			province_id = 115
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 115
+		}
+		effect = {
+			add_country_modifier = {
+				name = rag_tuscan_renaissance
+				duration = 5475
+			}
+		}
+	}
+
+	ragusa_genoese_trade = {
+		icon = secure_the_republic
+		required_missions = {
+			ragusa_superba
+			ragusa_leaning_tower
+		}
+		position = 9
+		trigger = {
+			1298 = {
+				trade_share = {
+					country = ROOT
+					share = 15
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = italian_minor_genoese_school
+				duration = 5475
+			}
+		}
+	}
+
+	ragusa_union_culture = {
+		icon = mission_noble_council
+		required_missions = {
+			ragusa_rule_italian_trade
+			ragusa_rule_balkan_trade
+		}
+		position = 11
+		trigger = {
+			development_in_provinces = {
+				value = 150
+				culture_group = latin
+			}
+			development_in_provinces = {
+				value = 150
+				culture_group = south_slavic
+			}
+		}
+		effect = {
+			custom_tooltip = UNION_CULTURE_TT
+			tooltip = {
+				add_province_modifier = {
+					name = rag_latin_slavic_union
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							culture_group = latin
+							culture_group = south_slavic
+						}
+					}
+					add_province_modifier = {
+						name = rag_latin_slavic_union
+						duration = -1
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -304,85 +1108,313 @@ ragusa_missions_slot_4 = {
 	generic = no
 	ai = yes
 	potential = {
+		OR = {
+			tag = RAG
+			tag = DAL
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = RAG
 	}
-	has_country_shield = yes		
-	
-	ragusa_annex_bosnia = {
-		icon = mission_unite_home_region
+	has_country_shield = yes
+
+	ragusa_distant_renaissance = {
+		icon = florentine_renaissance
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
-			OR = {
-				province_id = 1831
-				province_id = 3002
-				province_id = 140
-				province_id = 1828
-			}
-			NOT = { owned_by = ROOT }
+			is_capital_of = ROOT
+			NOT = { num_of_times_improved = 2 }
 		}
 		trigger = {
-			NOT = { exists = BOS }
-			owns = 1831
-			owns = 3002
-			owns = 140
-			owns = 1828
+			is_institution_enabled = renaissance
+			OR = {
+				ADM = 3
+				has_adm_advisor_2 = yes
+			}
+			capital_scope = {
+				num_of_times_improved = 2
+			}
 		}
 		effect = {
-			serbia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
+			capital_scope = {
+				add_province_modifier = {
+					name = rag_balkan_crossway
+					duration = 5475
 				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	ragusa_spanish_ports = {
-		icon = mission_galleys_in_port
-		required_missions = { }
+
+	ragusa_safer_entrepot = {
+		icon = capture_adriatic_ports
+		required_missions = { ragusa_distant_renaissance }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 137
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { development = 20 }
+					NOT = { base_manpower = 7 }
+				}
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			owns = 137
+			137 = {
+				OR = {
+					development = 20
+					base_manpower = 7
+				}
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			137 = {
+				add_permanent_province_modifier = {
+					name = rag_walls_ragusa
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ragusa_safe_haven = {
+		icon = invest_in_the_rich_trades
+		required_missions = { ragusa_safer_entrepot }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_port = yes
+			NOT = { num_of_times_improved = 2 }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_port = yes
+						num_of_times_improved = 2
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				has_port = yes
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			add_yearly_sailors = 1
+			custom_tooltip = RAGUSA_SHIP_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						num_of_times_improved = 2
+					}
+					if = {
+						limit = {
+							has_building = grand_shipyard
+						}
+						add_base_production = 4
+					}
+					else_if = {
+						limit = {
+							has_building = shipyard
+						}
+						remove_building = shipyard
+						add_building_construction = {
+							building = grand_shipyard
+							speed = 1
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = grand_shipyard }
+						}
+						add_building_construction = {
+							building = shipyard
+							speed = 1
+							cost = 0
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ragusa_aegean_sea = {
+		icon = mission_coromandel_expansion
+		required_missions = { ragusa_mighty_fleet }
 		position = 5
 		provinces_to_highlight = {
-			OR = {
-				province_id = 213
-				province_id = 220
-				province_id = 221
-				province_id = 223
-			}
+			area = macedonia_area
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			owns = 213
-			owns = 220
-			owns = 221
-			owns = 223
-		}
-		effect = {
-			add_country_modifier = {
-				name = ragusa_spanish_ports_modifier
-				duration = 9125
+			macedonia_area = {
+				type = all
+				owned_by = ROOT
 			}
 		}
-	}
-	
-	ragusa_colonization = {
-		icon = mission_colonial
-		required_missions = { ragusa_spanish_ports ragusa_foot_in_italy }
-		position = 6
-		trigger = {
-			calc_true_if = {
-				amount = 2
-				all_subject_country = {
-					is_colonial_nation = yes
+		effect = {
+			add_army_tradition = 10
+			151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			142 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			163 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			3003 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			164 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			320 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2348 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4700 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 		}
+	}
+
+	ragusa_trading_wonder = {
+		icon = take_constantinople
+		required_missions = { ragusa_aegean_sea }
+		position = 8
+		provinces_to_highlight = {
+			province_id = 151
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 151
+		}
+		effect = {
+			add_mercantilism = 5
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
+
+	ragusa_rule_balkan_trade = {
+		icon = mission_naval_dominance
+		required_missions = {
+			ragusa_trading_wonder
+			ragusa_eastern_dream
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 151
+				province_id = 4239
+				province_id = 358
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			mercantilism = 33
+			owns_core_province = 151
+			owns_core_province = 4239
+			owns_core_province = 358
+		}
 		effect = {
 			add_country_modifier = {
-				name = ragusa_colonization_modifier
-				duration = 9125
+				name = rag_fondachi_ragusei
+				duration = -1
+			}
+		}
+	}
+
+	ragusa_port_city_goa = {
+		icon = reclaim_the_ducal_lands
+		position = 12
+		required_missions = { ragusa_discover_india_routes }
+		provinces_to_highlight = {
+			province_id = 2030
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2030 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_republican_tradition = 5
+			2030 = {
+				add_base_production = 4
+				create_or_add_center_of_trade_level = { level = 1 }
 			}
 		}
 	}
@@ -393,98 +1425,320 @@ ragusa_missions_slot_5 = {
 	generic = no
 	ai = yes
 	potential = {
+		OR = {
+			tag = RAG
+			tag = DAL
+		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = RAG
 	}
 	has_country_shield = yes
-	
-	ragusa_ally_genoa = {
+
+	ragusa_delicate_cohexistance = {
 		icon = mission_alliances
-		required_missions = { }
-		position = 1
+		required_missions = {
+			ragusa_distant_renaissance
+		}
+		position = 2
 		trigger = {
-			alliance_with = GEN
+			development_in_provinces = {
+				value = 50
+				culture_group = latin
+			}
+			development_in_provinces = {
+				value = 50
+				culture_group = south_slavic
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ragusa_allied_genoa
+				name = ragusa_latin_slav_bridge
 				duration = 9125
 			}
 		}
 	}
-	
-	ragusa_ottoman_treaty = {
-		icon = mission_alliances
-		required_missions = { }
-		position = 2
-		trigger = {
-			guaranteed_by = TUR
-			TUR = {
-				has_opinion = {
-					who = ROOT
-					value = 150
-				}
-			}
+
+	ragusa_aegean_islands = {
+		icon = cross_the_pindus
+		required_missions = {
+			ragusa_aegean_sea
 		}
-		effect = {
-			# create_alliance = TUR
-			add_trust = {
-				who = TUR
-				value = 20
-				mutual = yes
-			}
-		}
-	}
-	
-	ragusa_ally_ferrara = {
-		icon = mission_alliances
-		required_missions = { }
-		position = 3
-		trigger = {
-			alliance_with = FER
-		}
-		effect = {
-			add_country_modifier = {
-				name = ragusa_allied_ferrara
-				duration = 3650
-			}
-		}
-	}
-	
-	ragusa_vassalize_ferrara = {
-		icon = mission_have_two_subjects
-		required_missions = { ragusa_ally_ferrara }
-		position = 4
-		trigger = {
-			FER = {
-				has_opinion = {
-					who = ROOT
-					value = 100
-				}
-			}
-		}
-		effect = {
-			add_casus_belli = {
-				target = FER
-				type = cb_vassalize_mission
-				months = 120
-			}
-		}
-	}
-	
-	ragusa_foot_in_italy = {
-		icon = mission_unite_home_region
-		required_missions = { ragusa_vassalize_ferrara }
-		position = 5
+		position = 6
 		provinces_to_highlight = {
-			province_id = 113
+			OR = {
+				province_id = 163
+				province_id = 2348
+				province_id = 320
+			}
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			owns = 113
+			owns = 163
+			owns = 2348
+			owns = 320
 		}
 		effect = {
-			add_dip_power = 50
+			add_yearly_sailors = 1
+			321 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			358 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	ragusa_eastern_dream = {
+		icon = kingdom_of_cyprus
+		required_missions = {
+			ragusa_aegean_islands
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 321
+				province_id = 358
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 321
+			owns = 358
+		}
+		effect = {
+			capital_scope = {
+				add_permanent_province_modifier = {
+					name = nap_controller_spice_trade
+					duration = -1
+				}
+			}
+			321 = {
+				add_development_half_monarch_skill = yes
+			}
+			358 = {
+				add_development_half_monarch_skill = yes
+			}
+			delta_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bahari_area = {
+				limit = {
+					has_port = yes
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			red_sea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ragusa_discover_india_routes = {
+		icon = control_the_means_of_transaction
+		position = 11
+		required_missions = { ragusa_eastern_dream }
+		provinces_to_highlight = { }
+		trigger = {
+			OR = {
+				1335 = { #gujurat
+					has_merchant = ROOT
+				}
+				4346 = { #coromandel
+					has_merchant = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = VEN_DISCOVER_INDIA_ROUTES_TT
+				NOT = {
+					any_country = {
+						1308 = {
+							trade_share = {
+								share = 5
+								country = PREV
+							}
+						}
+						navy_size = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			504 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = ven_discovered_trade_route
+				}
+			}
+			1340 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = ven_discovered_trade_route
+				}
+				custom_tooltip = RAGUSA_1340_TT
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							trade_goods = spices
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			1334 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = ven_discovered_trade_route
+				}
+			}
+		}
+	}
+
+	ragusa_spice_trade_investments = {
+		icon = sources_of_trade
+		position = 12
+		required_missions = { ragusa_discover_india_routes }
+		provinces_to_highlight = {
+			area = malabar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			NOT = {
+				malabar_area = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		trigger = {
+			malabar_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			malabar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = VEN_SPICE_TRADE_TRADERS
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								has_dlc = "Res Publica"
+								faction_in_power = mr_traders
+							}
+							AND = {
+								has_estate = estate_burghers
+								estate_loyalty = {
+									estate = estate_burghers
+									loyalty = 60
+								}
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							area = malabar_area
+							has_port = yes
+						}
+						light_ship = ROOT
+						light_ship = ROOT
+						light_ship = ROOT
+					}
+					random_owned_province = {
+						limit = {
+							area = malabar_area
+						}
+						add_base_production = 2
+						add_nationalism = -5
+					}
+				}
+			}
+		}
+	}
+
+	ragusa_dominate_spice_trade = {
+		icon = the_shape_of_trades_to_come
+		position = 13
+		required_missions = {
+			ragusa_port_city_goa
+			ragusa_spice_trade_investments
+		}
+		provinces_to_highlight = {
+			province_id = 2030
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 2030
+			OR = {
+				development_in_provinces = {
+					value = 100
+					trade_goods = spices
+				}
+				trading_bonus = {
+					trade_goods = spices
+					value = yes
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Maritime_Republics_Events.8 }
+			add_country_modifier = {
+				name = ven_spice_dominion
+				duration = -1
+			}
+			2030 = {
+				if = {
+					limit = {
+						has_dlc = "Res Publica"
+					}
+					add_permanent_province_modifier = {
+						name = ven_venesia_india_rp
+						duration = -1
+					}
+				}
+				else = {
+					add_permanent_province_modifier = {
+						name = ven_venesia_india
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 }

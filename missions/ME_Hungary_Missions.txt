@@ -1,0 +1,1579 @@
+ME_HUN_branch1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ME_HUN_regQuestion_mission = {
+		icon = the_hungarian_succession
+		required_missions = { }
+		position = 1
+		trigger = {
+			has_regency = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_HUN_regConsol_modifier
+				duration = 3650
+			}
+			custom_tooltip = ME_HUN_regQuestion_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						dynasty = "Hunyadi"
+						southern_transylvania_area = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+					southern_transylvania_area = {
+						add_local_autonomy = -20
+					}
+				}
+			}
+		}
+	}
+
+	ME_HUN_newAdmin_mission = {
+		icon = the_hungarian_question
+		required_missions = {
+			ME_HUN_regQuestion_mission
+		}
+		position = 2
+		trigger = {
+			has_regency = no
+			has_heir = yes
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				OR = {
+					AND = {
+						dynasty = "von Habsburg"
+						OR = {
+							alliance_with = HAB
+							HAB = {
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
+							}
+						}
+					}
+					AND = {
+						has_heir = yes
+						heir_claim = 80
+						crown_land_share = 30
+					}
+					AND = {
+						NOT = { government = monarchy }
+						legitimacy_equivalent = 100
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						dynasty = "von Habsburg"
+						OR = {
+							alliance_with = HAB
+							HAB = {
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
+							}
+						}
+					}
+					AND = {
+						legitimacy = 80
+						crown_land_share = 30
+					}
+					AND = {
+						NOT = { government = monarchy }
+						legitimacy_equivalent = 100
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_newAdmin_tt
+			if = {
+				limit = {
+					dynasty = "von Habsburg"
+				}
+				add_country_modifier = {
+					name = ME_HUN_habDiplo_modifier
+					duration = 10950
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_solidHungarianDynasty_modifier
+					duration = 10950
+				}
+				austria_proper_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	ME_HUN_austrianQuestion_mission = {
+		icon = imperial_ascendancy
+		required_missions = {
+			ME_HUN_newAdmin_mission
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 134
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			HAB = {
+				NOT = { is_subject_of = ROOT }
+				OR = {
+					is_emperor = yes
+					ROOT = { NOT = { army_size = PREV } }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				overlord_of = HAB
+				owns_core_province = 134
+				AND = {
+					exists = HAB
+					HAB = { is_emperor = no }
+					army_size = HAB
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					overlord_of = HAB
+				}
+				add_country_modifier = {
+					name = ME_HUN_brotherKingdoms_modifier
+					duration = 18250
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_warAgainstEmpire_modifier
+					duration = 18250
+				}
+				if = {
+					limit = {
+						exists = HAB
+						valid_for_personal_unions_trigger = yes
+						HAB = {
+							valid_for_personal_unions_trigger = yes
+						}
+					}
+					add_casus_belli = {
+						type = cb_restore_personal_union
+						months = 300
+						target = HAB
+					}
+				}
+				else_if = {
+					limit = {
+						exists = HAB
+					}
+					HAB = {
+						every_owned_province = {
+							limit = {
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ME_HUN_hreDom_mission = {
+		icon = claim_the_borderlands
+		required_missions = {
+			ME_HUN_austrianQuestion_mission
+			ME_HUN_safeBohemia_mission
+		}
+		position = 4
+		provinces_to_highlight = {
+			region = south_german_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 15
+						region = south_german_region
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				region = south_german_region
+			}
+			OR = {
+				is_emperor = yes
+				overlord_of = HAB
+				NOT = { hre_size = 1 }
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+			if = {
+				limit = {
+					overlord_of = HAB
+				}
+				add_country_modifier = {
+					name = ME_HUN_habDominance_modifier
+					duration = 21900
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_hreDominance_modifier
+					duration = 14600
+				}
+			}
+		}
+	}
+
+	ME_HUN_bibloCorvia_mission = {
+		icon = bibliotheca_corviana
+		required_missions = {
+			ME_HUN_supportMon_mission
+		}
+		position = 7
+		trigger = {
+			has_institution = renaissance
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 40
+			}
+			else = {
+				prestige = 50
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = ME_HUN_bibCorvia_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ME_HUN_nagyUniver_mission = {
+		icon = nagyszombat_university
+		required_missions = {
+			ME_HUN_bibloCorvia_mission
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 1772
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+				NOT = { development = 20 }
+			}
+		}
+		trigger = {
+			owns = 1772
+			1772 = {
+				has_building = university
+				development = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_HUN_nagyUniver_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+ME_HUN_branch2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ME_HUN_quellHussite_mission = {
+		icon = hussite_regency
+		required_missions = {
+			ME_HUN_transSchism_mission
+			ME_HUN_regQuestion_mission
+		}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 266
+			NOT = { owned_by = ROOT }
+			NOT = { exists = BOH }
+		}
+		trigger = {
+			OR = {
+				AND = {
+					NOT = { exists = BOH }
+					owns = 266
+				}
+				alliance_with = BOH
+				overlord_of = BOH
+				BOH = {
+					has_been_insulted_by_root = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+			if = {
+				limit = {
+					NOT = { overlord_of = BOH }
+					NOT = { alliance_with = BOH }
+					BOH = {
+						has_been_insulted_by_root = yes
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 24
+					target = BOH
+				}
+				BOH = {
+					country_event = {
+						id = ME_Hungary_Events.5
+						days = 1
+					}
+				}
+				custom_tooltip = ME_HUN_quellHussite_tt
+				hidden_effect = {
+					add_country_modifier = {
+						name = ME_HUN_hiddenModifier_v2
+						duration = 7300
+						hidden = yes
+					}
+					set_country_flag = ME_HUN_quellHussite_flag
+				}
+			}
+			else_if = {
+				limit = {
+					alliance_with = BOH
+				}
+				add_country_modifier = {
+					name = ME_HUN_pacifiedHussite_modifier
+					duration = 3650
+				}
+			}
+			moravia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bohemia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			erzgebirge_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			silesia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lusatia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ME_HUN_safeBohemia_mission = {
+		icon = hungarian_union
+		required_missions = {
+			ME_HUN_quellHussite_mission
+		}
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = moravia_area
+				area = bohemia_area
+				area = erzgebirge_area
+				area = lusatia_area
+				area = silesia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			moravia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bohemia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			erzgebirge_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lusatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			silesia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = BOH }
+				BOH = {
+					is_subject_of = ROOT
+					is_subject_other_than_tributary_trigger = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+			if = {
+				limit = {
+					NOT = { exists = BOH }
+				}
+				add_treasury = 200
+				266 = {
+					add_base_tax = -1
+					add_base_production = -1
+					add_base_manpower = -1
+				}
+				capital_scope = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_crownsUnitedBohemia_modifier
+					duration = 10950
+				}
+			}
+		}
+	}
+
+	ME_HUN_masterAxes_mission = {
+		icon = peace_in_europe
+		required_missions = {
+			ME_HUN_hreDom_mission
+		}
+		position = 5
+		trigger = {
+			NOT = { average_autonomy = 10 }
+			capital_scope = {
+				is_strongest_trade_power = ROOT
+			}
+			custom_trigger_tooltip = {
+				tooltip = ME_HUN_gold_tt
+				NOT = {
+					any_country = {
+						capital_scope = {
+							continent = europe
+						}
+						monthly_income = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 5
+			add_country_modifier = {
+				name = ME_HUN_allRoadsLeadToBuda_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	ME_HUN_supportMon_mission = {
+		icon = fund_the_monasteries
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 153
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			owns = 153
+			153 = {
+				has_tax_building_trigger = yes
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_HUN_custodianCathedral_modifier
+				duration = -1
+			}
+			153 = {
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building = cathedral
+				}
+				add_province_modifier = {
+					name = ME_HUN_estergormCathedral_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ME_HUN_grandBuda_mission = {
+		icon = the_great_city_of_buda
+		required_missions = {
+			ME_HUN_bibloCorvia_mission
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 153
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 8 }
+				NOT = { higher_development_than = 134 }
+				NOT = { higher_development_than = 266 }
+			}
+		}
+		trigger = {
+			owns = 153
+			153 = {
+				num_of_times_improved = 8
+				higher_development_than = 134
+				higher_development_than = 266
+			}
+		}
+		effect = {
+			153 = {
+				change_province_name = "Budapest"
+				rename_capital = "Budapest"
+				add_province_modifier = {
+					name = ME_HUN_buda_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+ME_HUN_branch3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ME_HUN_transSchism_mission = {
+        position = 1
+        icon = catholic_volunteers
+        required_missions = { }
+        trigger = {
+			OR = {
+				AND = {
+					religion = catholic
+					religious_unity = 0.90
+				}
+				AND = {
+					NOT = { religion = catholic }
+					religious_unity = 0.5
+				}
+			}
+        }
+        effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+            if = {
+                limit = {
+                    religion = catholic
+                }
+                add_prestige = 20
+                add_stability_or_adm_power = yes
+            }
+            else = {
+                add_country_modifier = {
+                    name = ME_Hungary_fierceConversion_modifier
+                    duration = 9125
+                }
+            }
+        }
+    }
+
+	ME_HUN_ruthIssue_mission = {
+        position = 2
+        icon = mission_sovereign_principality
+        required_missions = {
+            ME_HUN_transSchism_mission
+        }
+        provinces_to_highlight = {
+            province_id = 1952
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_owner_culture = no
+					has_owner_accepted_culture = no
+					OR = {
+						NOT = { culture_group = ROOT }
+						ROOT = {
+							NOT = {
+								OR = {
+									government_rank = 3
+									AND = {
+										NOT = { has_dlc = "Common Sense" }
+										total_development = 1000
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+        }
+        trigger = {
+            1952 = {
+                owned_by = ROOT
+                OR = {
+                    has_owner_culture = yes
+                    has_owner_accepted_culture = yes
+					hidden_trigger = {
+						culture_group = ROOT
+						ROOT = {
+							OR = {
+								government_rank = 3
+								AND = {
+									NOT = { has_dlc = "Common Sense" }
+									total_development = 1000
+								}
+							}
+						}
+					}
+                }
+            }
+        }
+        effect = {
+            1952 = {
+                add_province_modifier = {
+                    name = ME_HUN_carpathianSettlers_modifier
+                    duration = 18250
+                }
+            }
+        }
+    }
+
+	ME_HUN_carpatUnity_mission = {
+		icon = king_of_hungary
+		required_missions = {
+			ME_HUN_ruthIssue_mission
+		}
+		position = 3
+		provinces_to_highlight = {
+			region = carpathia_region
+			OR = {
+				AND = {
+					owned_by = ROOT
+					has_owner_religion = no
+				}
+				AND = {
+					NOT = { owned_by = ROOT }
+					OR = {
+						ROOT = {
+							NOT = { alliance_with = POL }
+							NOT = { alliance_with = PLC }
+						}
+						AND = {
+							NOT = { province_id = 268 }
+							NOT = { province_id = 1756 }
+							NOT = { province_id = 2405 }
+							NOT = { province_id = 4529 }
+							NOT = { province_id = 4530 }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = POL
+						alliance_with = PLC
+					}
+				}
+				carpathia_region = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						province_id = 268
+						province_id = 1756
+						province_id = 2405
+						province_id = 4529
+						province_id = 4530
+					}
+				}
+			}
+			else = {
+				carpathia_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ME_HUN_carpatUnity_ttt
+				carpathia_region = {
+					type = all
+					OR = {
+						NOT = { owned_by = ROOT }
+						has_owner_religion = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_HUN_carpatUnity_mission
+				duration = -1
+			}
+			if = {
+				limit = {
+					exists = PLC
+					valid_for_personal_unions_trigger = yes
+					PLC = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = PLC
+				}
+			}
+			if = {
+				limit = {
+					exists = POL
+					valid_for_personal_unions_trigger = yes
+					POL = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = POL
+				}
+			}
+			if = {
+				limit = {
+					accepted_culture = romanian
+				}
+				add_dip_power = 100
+			}
+			else = {
+				add_accepted_culture = romanian
+			}
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ME_HUN_jagUnion_mission = {
+		icon = jageillonian_union
+		required_missions = {
+			ME_HUN_carpatUnity_mission
+		}
+		position = 4
+		provinces_to_highlight = {
+			area = red_ruthenia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = { senior_union_with = PLC }
+				NOT = { senior_union_with = POL }
+			}
+		}
+		trigger = {
+			OR = {
+				senior_union_with = PLC
+				senior_union_with = POL
+				red_ruthenia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			poland_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = ME_HUN_jagUnion_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = ME_HUN_hiddenModifier_v1
+					duration = 18250
+					hidden = yes
+				}
+				set_country_flag = ME_HUN_heathenWar_flag
+			}
+		}
+	}
+
+	ME_HUN_hunAscend_mission = {
+		icon = me_mission_ottomans_seize_hungary
+		required_missions = {
+			ME_HUN_masterAxes_mission
+			ME_HUN_avengeVarna_mission
+		}
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				NOT = { great_power_rank = 2 }
+			}
+			else = {
+				total_development = 1500
+			}
+			all_country = {
+				NOT = { army_size = ROOT }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_HUN_paxHungarica_modifier
+				duration = -1
+			}
+		}
+	}
+}
+
+ME_HUN_branch4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	ME_HUN_polRelations_mission = {
+        position = 1
+        icon = polish_diplomacy
+        required_missions = { }
+		provinces_to_highlight = {
+			area = central_poland_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = PLC }
+			NOT = { exists = POL }
+		}
+        trigger = {
+			if = {
+				limit = {
+					exists = PLC
+				}
+				OR = {
+					is_enemy = PLC
+					is_rival = PLC
+					alliance_with = PLC
+					overlord_of = PLC
+					NOT = { exists = PLC }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = POL
+				}
+				OR = {
+					is_enemy = POL
+					is_rival = POL
+					alliance_with = POL
+					overlord_of = POL
+					NOT = { exists = POL }
+				}
+			}
+			else = {
+				central_poland_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+        }
+        effect = {
+			custom_tooltip = ME_HUN_polishRelations_tt
+            if = {
+                limit = {
+					OR = {
+						alliance_with = PLC
+						alliance_with  = POL
+					}
+                }
+                add_country_modifier = {
+                    name = ME_Hungary_northAlliance
+                    duration = 7300
+                }
+            }
+            else = {
+                add_country_modifier = {
+                    name = ME_Hungary_innerReconcil
+                    duration = 7300
+                }
+            }
+            wallachia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+            moldavia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+        }
+    }
+
+	ME_HUN_romaQuestion_mission = {
+        position = 2
+        icon = ME_HUN_romaniaMoldavia_icon
+        required_missions = {
+            ME_HUN_polRelations_mission
+        }
+        provinces_to_highlight = {
+            OR = {
+				area = wallachia_area
+				AND = {
+					area = moldavia_area
+					ROOT = {
+						NOT = { alliance_with = PLC }
+						NOT = { alliance_with = POL }
+					}
+				}
+			}
+            NOT = { owned_by = ROOT }
+        }
+        trigger = {
+            if = {
+                limit = {
+					OR = {
+						alliance_with = PLC
+						alliance_with = POL
+					}
+                }
+                wallachia_area = {
+					type = all
+					owned_by = ROOT
+				}
+            }
+            else = {
+                wallachia_area = {
+					type = all
+					owned_by = ROOT
+				}
+				moldavia_area = {
+					type = all
+					owned_by = ROOT
+				}
+            }
+        }
+        effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+			add_mil_power = 50
+			wallachia_area = {
+				add_province_modifier = {
+					name = ME_HUN_danubianFrontier_modifier
+					duration = 10950
+				}
+			}
+            if = {
+				limit = {
+					NOT = { alliance_with = PLC }
+					NOT = { alliance_with = POL }
+				}
+                moldavia_area = {
+                    add_province_modifier = {
+                        name = ME_HUN_danubianFrontier_modifier
+                        duration = 10950
+                    }
+                }
+            }
+        }
+    }
+
+	ME_HUN_warEurope_mission = {
+		icon = chivalry_is_not_dead
+		required_missions = {
+			ME_HUN_romaQuestion_mission
+		}
+		position = 3
+		trigger = {
+			OR = {
+				NOT = { exists = TUR }
+				war_with = TUR
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_hreDom_tt
+			if = {
+				limit = {
+					war_with = TUR
+				}
+				if = {
+					limit = {
+						TUR = {
+							army_strength = {
+								who = ROOT
+								value = 3
+							}
+						}
+					}
+					add_country_modifier = {
+						name = ME_HUN_greatChristian_war_modifier
+						duration = 5475
+					}
+				}
+				else_if = {
+					limit = {
+						TUR = {
+							army_strength = {
+								who = HUN
+								value = 2
+							}
+						}
+					}
+					add_country_modifier = {
+						name = ME_HUN_greatChristian_war_modifier
+						duration = 3650
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = ME_HUN_greatChristian_war_modifier
+						duration = 1825
+					}
+				}
+				add_country_modifier = {
+					name = ME_HUN_greatChristian_war_modifier
+					duration = 1825
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_alreadyLeft_modifier
+					duration = 1825
+				}
+			}
+		}
+	}
+
+	ME_HUN_avengeVarna_mission = {
+		icon = mission_crusade_for_varna
+		required_missions = {
+			ME_HUN_warEurope_mission
+			ME_HUN_mountMount_mission
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = bulgaria_area
+				area = silistria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			silistria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 20
+			add_papal_influence = 30
+			add_patriarch_authority = 0.10
+			balkan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = ME_HUN_avengeVarna_tt
+			if = {
+				limit = {
+					BUL = {
+						is_subject_of = ROOT
+					}
+				}
+				BUL = {
+					add_country_modifier = {
+						name = ME_HUN_bulgariaMarch_modifier
+						duration = 14600
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_reclaimBulgaria_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+
+	ME_HUN_bulEconomy_mission = {
+		icon = kingdom_of_lombardy
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 154
+			154 = {
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { base_production = 6 }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				treasurer = 1
+				master_of_mint = 1
+			}
+			owns = 154
+			154 = {
+				base_production = 6
+			}
+		}
+		effect = {
+			add_inflation = -1
+			add_country_modifier = {
+				name = ME_HUN_hungarianMints_modifier
+				duration = 3650
+			}
+		}
+	}
+
+	ME_HUN_danDev_mission = {
+		icon = mission_secure_khandesh
+		required_missions = {
+			ME_HUN_fiscalReform_mission
+		}
+		position = 8
+		provinces_to_highlight = {
+			area = transdanubia_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 11 }
+			}
+		}
+		trigger = {
+			transdanubia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 11
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			add_country_modifier = {
+				name = ME_HUN_urbanisation_modifier
+				duration = 7300
+			}
+		}
+	}
+}
+
+ME_HUN_branch5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = HUN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	##Mission Start
+	ME_HUN_balkanSecurity_mission = {
+		icon = moravian_arms
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			area = serbia_area
+			NOT = { owned_by = ROOT }
+			NOT = { exists = SER }
+		}
+		trigger = {
+			OR = {
+				AND = {
+					has_spy_network_in = {
+						who = SER
+						value = 65
+					}
+					army_strength = {
+						who = SER
+						value = 2
+					}
+				}
+				AND = {
+					NOT = { exists = SER }
+					serbia_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			serbia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	ME_HUN_revokeBuffer_mission = {
+		icon = fortress_of_belgrade
+		required_missions = {
+			ME_HUN_balkanSecurity_mission
+		}
+		position = 2
+		provinces_to_highlight = {
+			region = balkan_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			ROOT = {
+				NOT = {
+					calc_true_if = {
+						all_owned_province = {
+							is_core = ROOT
+							region = balkan_region
+						}
+						amount = 12
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					is_core = ROOT
+					region = balkan_region
+				}
+				amount = 12
+				desc = ME_HUN_revokeBufferDesc_tt
+			}
+		}
+		effect = {
+			balkan_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = ME_HUN_privRevoked_modifier
+					duration = 5475
+				}
+			}
+			custom_tooltip = ME_HUN_privRevoked_tt
+			hidden_effect = {
+				balkan_region = {
+					limit = {
+						owned_by = TUR
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	ME_HUN_blackArmy_mission = {
+		icon = gory_to_the_black_army
+		required_missions = {
+			ME_HUN_revokeBuffer_mission
+		}
+		position = 3
+		trigger = {
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_tradition = 40
+				army_professionalism = 0.2
+			}
+			else = {
+				army_tradition = 40
+				has_mil_advisor_2 = yes
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Hungary_Events.1
+				days = 1
+			}
+		}
+	}
+
+	ME_HUN_mountMount_mission = {
+		icon = fortress_switzerland
+		required_missions = {
+			ME_HUN_blackArmy_mission
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = rascia_area
+				area = bosnia_area
+				area = east_adriatic_coast_area
+				area = serbia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			serbia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = ME_mountmount_tt
+			hidden_effect = {
+				balkan_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						fort_level = 2
+					}
+					add_province_modifier = {
+						name = ME_HUN_frontierTown_modifier
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+
+	ME_HUN_fiscalReform_mission = {
+		icon = mission_african_gold
+		required_missions = {
+			ME_HUN_bulEconomy_mission
+		}
+		position = 7
+		trigger = {
+			stability = 1
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 50
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 60
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 50
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 50
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 50
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 50
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_HUN_ficsalReform_tt
+			remove_country_modifier = ME_HUN_hungarianMints_modifier
+			if = {
+				limit = {
+					has_idea = national_bank
+				}
+				add_country_modifier = {
+					name = ME_HUN_hungarianMintsImproved_modifier
+					duration = 27375
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_hungarianMints3_modifier
+					duration = 27375
+				}
+			}
+		}
+	}
+
+	ME_HUN_fosterCroa_mission = {
+		icon = a_strong_government
+		required_missions = {
+			ME_HUN_fiscalReform_mission
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = slavonia_area
+				area = croatia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 7 }
+				NOT = { is_state_core = ROOT }
+			}
+		}
+		trigger = {
+			NOT = { exists = CRO }
+			slavonia_area = {
+				type = all
+				owned_by = ROOT
+				development = 7
+				is_state_core = ROOT
+			}
+			croatia_area = {
+				type = all
+				owned_by = ROOT
+				development = 7
+				is_state_core = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = croatian
+			slavonia_area = {
+				add_province_modifier = {
+					name = ME_HUN_mergedCrown_modifier
+					duration = 10950
+				}
+			}
+			croatia_area = {
+				add_province_modifier = {
+					name = ME_HUN_mergedCrown_modifier
+					duration = 10950
+				}
+			}
+		}
+	}
+}

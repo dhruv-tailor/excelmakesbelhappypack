@@ -205,6 +205,7 @@ ahmed_column_2 = {
 		}
 		position = 5
 		trigger = {
+			NOT = { exists = GUJ }
 			504 = {
 				trade_share = {
 					country = ROOT
@@ -217,9 +218,9 @@ ahmed_column_2 = {
 					share = 50
 				}
 			}
-			NOT = { exists = GUJ }
 		}
 		effect = {
+			add_mercantilism = 3
 			random_owned_province = {
 				limit = { is_core = ROOT }
 				add_base_production = 1
@@ -233,7 +234,6 @@ ahmed_column_2 = {
 				add_base_production = 1
 				add_base_manpower = 1
 			}
-			add_mercantilism = 3
 		}
 	}
 
@@ -290,7 +290,7 @@ ahmed_column_3 = {
 		tag = AHM
 	}
 	has_country_shield = yes
-	
+
 	ahmed_five_cities_five_successors = {
 		icon = mission_the_battle_for_raichur
 		required_missions = {  }
@@ -395,34 +395,6 @@ ahmed_column_3 = {
 			}
 		}
 		trigger = {
-			OR = {
-				NOT = { exists = VIJ }
-				VIJ = {
-					NOT = { total_development = ROOT }
-				}
-				VIJ = {
-					is_subject_of = ROOT
-				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
-				}
-			}
-			OR = {
-				NOT = { exists = KHD }
-				KHD = {
-					NOT = { total_development = ROOT }
-				}
-				KHD = {
-					is_subject_of = ROOT
-				}
-				NOT = {
-					india_superregion = {
-						owned_by = KHD
-					}
-				}
-			}
 			rayalaseema_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -434,6 +406,32 @@ ahmed_column_3 = {
 			berar_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = KHD }
+				}
 			}
 		}
 		effect = {
@@ -459,6 +457,12 @@ ahmed_column_3 = {
 			}
 		}
 		trigger = {
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VIJ }
 				VIJ = {
@@ -467,10 +471,9 @@ ahmed_column_3 = {
 				VIJ = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
 				}
 			}
 			OR = {
@@ -481,17 +484,10 @@ ahmed_column_3 = {
 				BAH = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = BAH
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = BAH }
 				}
-			}
-			NOT = { average_unrest = 2 }
-			religious_unity = 1
-			deccan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -514,13 +510,13 @@ ahmed_column_3 = {
 			province_id = 542
 			OR = {
 				NOT = { owned_by = ROOT }
-				has_building = cathedral
+				NOT = { has_building = cathedral }
 			}
 		}
 		trigger = {
 			NOT = { average_unrest = 2 }
 			treasury = 500
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 75
 			stability = 3
 			542 = {
@@ -530,10 +526,10 @@ ahmed_column_3 = {
 		}
 		effect = {
 			add_treasury = -500
+			country_event = { id = ME_Deccani_Events.5 }
 			542 = { #Golconda
 				change_province_name = "Hyderabad"
 			}
-			country_event = { id = ME_Deccani_Events.5 }
 		}
 	}
 }
@@ -550,7 +546,7 @@ ahmed_column_4 = {
 	ahmed_survey_the_land = {
 		icon = mission_a_million_rice_fields
 		required_missions = { }
-		trigger = {	
+		trigger = {
 			grown_by_development = 20
 			NOT = { average_unrest = 2 }
 			num_of_owned_provinces_with = {
@@ -567,12 +563,11 @@ ahmed_column_4 = {
 			}
 		}
 	}
+
 	ahmed_school_of_architecture = {
 		icon = mission_growth_of_ahmedabad
 		required_missions = { ahmed_survey_the_land }
 		position = 2
-		provinces_to_highlight = {
-		}
 		trigger = {
 			artist = 3
 			prestige = 50
@@ -594,6 +589,7 @@ ahmed_column_4 = {
 			}
 		}
 	}
+
 	ahmed_tombs_of_the_giants = {
 		icon = mission_sindh_campaign
 		required_missions = {
@@ -612,7 +608,7 @@ ahmed_column_4 = {
 		}
 		trigger = {
 			artist = 3
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			544 = {
 				owned_by = ROOT
 				is_capital = yes
@@ -640,9 +636,14 @@ ahmed_column_4 = {
 		}
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				province_id = 544
+				province_id = 545
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			num_of_loans = 0
+			NOT = { num_of_loans = 1 }
 			NOT = { corruption = 0.02 }
 			total_development = 500
 			if = {
@@ -663,6 +664,8 @@ ahmed_column_4 = {
 					value = 2
 				}
 			}
+			owns_or_non_sovereign_subject_of = 544
+			owns_or_non_sovereign_subject_of = 545
 		}
 		effect = {
 			544 = {
@@ -756,12 +759,12 @@ ahmed_column_5 = {
 		tag = AHM
 	}
 	has_country_shield = yes
-	
+
 	ahmed_stop_court_intrigue = {
 		icon = mission_restore_faith_in_the_throne
 		required_missions = {  }
 		trigger = {
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			NOT = { average_unrest = 2 }
 			NOT = { corruption = 0.02 }
 		}
@@ -770,11 +773,18 @@ ahmed_column_5 = {
 			add_years_of_income = 0.75
 		}
 	}
+
 	ahmed_school_of_art = {
 		icon = mission_deccanis
 		required_missions = { ahmed_stop_court_intrigue }
 		position = 3
 		provinces_to_highlight = {
+			province_id = 544
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 18 }
+				NOT = { has_production_building_trigger = yes }
+			}
 		}
 		trigger = {
 			artist = 3
@@ -785,11 +795,11 @@ ahmed_column_5 = {
 			}
 		}
 		effect = {
+			add_years_of_income = 1
 			add_country_modifier = {
 				name = "ahmed_school_of_art_blooming"
 				duration = 10950 #30 Years
 			}
-			add_years_of_income = 1.0
 		}
 	}
 

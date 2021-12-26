@@ -34,6 +34,7 @@ bijapur_column_1 = {
 			add_mercantilism = 3
 		}
 	}
+
 	bijapur_a_protected_capital = {
 		icon = mission_fortify_rajputana
 		required_missions = { bijapur_solidify_the_economy }
@@ -41,6 +42,7 @@ bijapur_column_1 = {
 		provinces_to_highlight = {
 			province_id = 569
 			OR = {
+				NOT = { is_capital_of = ROOT }
 				NOT = { development = 20 }
 				AND = {
 					NOT = { has_building = fort_15th }
@@ -87,7 +89,7 @@ bijapur_column_1 = {
 		}
 		trigger = {
 			treasury = 200
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 25
 			569 = {
 				is_capital_of = ROOT
@@ -125,17 +127,17 @@ bijapur_column_2 = {
 			grown_by_development = 20
 		}
 		effect = {
-			capital_scope = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
 			define_advisor = {
 				type = treasurer
 				culture = kannada
 				religion = shiite
 				skill = 2
 				discount = yes
+			}
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
 			}
 		}
 	}
@@ -147,6 +149,7 @@ bijapur_column_2 = {
 		provinces_to_highlight = {
 			province_id = 542
 			OR = {
+				NOT = { owned_by = ROOT }
 				NOT = { development = 15 }
 				NOT = { has_production_building_trigger = yes }
 			}
@@ -154,6 +157,7 @@ bijapur_column_2 = {
 		trigger = {
 			share_of_starting_income = 3.5
 			NOT = { corruption = 0.02 }
+			owns = 542
 			542 = {
 				development = 15
 				has_production_building_trigger = yes
@@ -166,33 +170,23 @@ bijapur_column_2 = {
 			}
 		}
 	}
+
 	bijapur_markets_and_workshops = {
 		icon = mission_dominate_persian_gulf
 		required_missions = { bijapur_a_protected_capital }
 		position = 4
 		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_production_building_trigger = yes }
-			NOT = { has_trade_building_trigger = yes }
-			ROOT = {
-				NOT = {
-					num_of_owned_provinces_with = {
-						value = 5
-						has_production_building_trigger = yes
-					}
-				}
-			}
-			ROOT = {
-				NOT = {
-					num_of_owned_provinces_with = {
-						value = 5
-						has_trade_building_trigger = yes
-					}
-				}
+			province_id = 569
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { has_production_building_trigger = yes }
 			}
 		}
 		trigger = {
 			capital = 569
+			569 = {
+				has_production_building_trigger = yes
+			}
 			num_of_owned_provinces_with = {
 				value = 5
 				has_production_building_trigger = yes
@@ -200,9 +194,6 @@ bijapur_column_2 = {
 			num_of_owned_provinces_with = {
 				value = 5
 				has_trade_building_trigger = yes
-			}
-			569 = {
-				has_production_building_trigger = yes
 			}
 		}
 		effect = {
@@ -226,20 +217,18 @@ bijapur_column_2 = {
 		required_missions = { bijapur_markets_and_workshops }
 		position = 5
 		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_building = university }
-			ROOT = {
-				NOT = {
-					num_of_owned_provinces_with = {
-						value = 3
-						has_building = university
-					}
-				}
+			province_id = 569
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { has_building = university }
 			}
 		}
 		trigger = {
 			capital = 569
-			legitimacy = 100
+			569 = {
+				has_building = university
+			}
+			legitimacy_equivalent = 100
 			prestige = 75
 			employed_advisor = {
 				category = ADM
@@ -254,11 +243,12 @@ bijapur_column_2 = {
 				value = 3
 				has_building = university
 			}
-			569 = {
-				has_building = university
-			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = "bijapur_blooming_of_education"
+				duration = 9125 #25 Years
+			}
 			capital_scope = {
 				add_base_tax = 1
 			}
@@ -267,10 +257,6 @@ bijapur_column_2 = {
 					name = "bijapur_new_varanasi_baghdad"
 					duration = -1
 				}
-			}
-			add_country_modifier = {
-				name = "bijapur_blooming_of_education"
-				duration = 9125 #25 Years
 			}
 		}
 	}
@@ -284,7 +270,7 @@ bijapure_column_3 = {
 		tag = BIJ
 	}
 	has_country_shield = yes
-		
+
 	bijapur_five_cities_five_successors = {
 		icon = mission_the_battle_for_raichur
 		required_missions = {  }
@@ -297,8 +283,9 @@ bijapure_column_3 = {
 				province_id = 548
 				province_id = 1948
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
@@ -347,6 +334,7 @@ bijapure_column_3 = {
 			}
 		}
 	}
+
 	bijapur_the_battle_of_talikota = {
 		icon = mission_control_the_ganges_delta
 		required_missions = { bijapur_five_cities_five_successors }
@@ -360,7 +348,7 @@ bijapure_column_3 = {
 		trigger = {
 			raichur_doab_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -389,6 +377,18 @@ bijapure_column_3 = {
 			}
 		}
 		trigger = {
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			khandesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VIJ }
 				VIJ = {
@@ -397,10 +397,9 @@ bijapure_column_3 = {
 				VIJ = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
 				}
 			}
 			OR = {
@@ -411,23 +410,10 @@ bijapure_column_3 = {
 				KHD = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = KHD
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = KHD }
 				}
-			}
-			rayalaseema_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			khandesh_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			berar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}
 		effect = {
@@ -453,6 +439,12 @@ bijapure_column_3 = {
 			}
 		}
 		trigger = {
+			NOT = { average_unrest = 2 }
+			religious_unity = 1
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VIJ }
 				VIJ = {
@@ -461,10 +453,9 @@ bijapure_column_3 = {
 				VIJ = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = VIJ
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = VIJ }
 				}
 			}
 			OR = {
@@ -475,17 +466,10 @@ bijapure_column_3 = {
 				BAH = {
 					is_subject_of = ROOT
 				}
-				NOT = {
-					india_superregion = {
-						owned_by = BAH
-					}
+				india_superregion = {
+					type = all
+					NOT = { owned_by = BAH }
 				}
-			}
-			NOT = { average_unrest = 2 }
-			religious_unity = 1
-			deccan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}
 		effect = {
@@ -514,7 +498,7 @@ bijapure_column_3 = {
 		trigger = {
 			NOT = { average_unrest = 2 }
 			treasury = 500
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 75
 			stability = 3
 			542 = {
@@ -524,10 +508,10 @@ bijapure_column_3 = {
 		}
 		effect = {
 			add_treasury = -500
+			country_event = { id = ME_Deccani_Events.5 }
 			542 = { #Golconda
 				change_province_name = "Hyderabad"
 			}
-			country_event = { id = ME_Deccani_Events.5 }
 		}
 	}
 }
@@ -545,25 +529,16 @@ bijapur_column_4 = {
 		icon = mission_sufi_shrines
 		required_missions = { bijapur_seperate_but_allies }
 		position = 2
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_tax_building_trigger = yes }
-			ROOT = {
-				NOT = {
-					num_of_owned_provinces_with = {
-						value = 3
-						has_tax_building_trigger = yes
-					}
-				}
-			}
-		}
 		trigger = {
+			religious_unity = 1.0
+			OR = {
+				piety = -0.25
+				NOT = { religion_group = muslim }
+			}
 			num_of_owned_provinces_with = {
 				value = 3
 				has_tax_building_trigger = yes
 			}
-			religious_unity = 1.0
-			piety = -0.25
 		}
 		effect = {
 			add_piety = -0.25
@@ -614,8 +589,6 @@ bijapur_column_4 = {
 			bijapur_worthy_subjects
 		}
 		position = 4
-		provinces_to_highlight = {
-		}
 		trigger = {
 			army_size = 50
 			num_of_non_tributary_subjects = 2
@@ -642,17 +615,30 @@ bijapur_column_4 = {
 		required_missions = { bijapur_the_battle_of_talikota }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				province_id = 532
+				province_id = 2033
+				province_id = 4428
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { has_manpower_building_trigger = yes }
+			}
 		}
 		trigger = {
 			is_at_war = no
+			owns = 532
 			532 = {
 				has_tax_building_trigger = yes
 				has_manpower_building_trigger = yes
 			}
+			owns = 2033
 			2033 = {
 				has_tax_building_trigger = yes
 				has_manpower_building_trigger = yes
 			}
+			owns = 4428
 			4428 = {
 				has_tax_building_trigger = yes
 				has_manpower_building_trigger = yes
@@ -686,6 +672,7 @@ bijapur_column_5 = {
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = building_alliances.tooltip
+				num_of_allies = 2
 				calc_true_if = {
 					amount = 2
 					all_ally = {
@@ -713,7 +700,10 @@ bijapur_column_5 = {
 		}
 		position = 3
 		trigger = {
-			num_of_royal_marriages = 4
+			OR = {
+				num_of_royal_marriages = 4
+				NOT = { government = monarchy }
+			}
 			num_of_non_tributary_subjects = 2
 		}
 		effect = {
@@ -728,8 +718,25 @@ bijapur_column_5 = {
 		icon = mission_unite_the_deccan
 		required_missions = { bijapur_worthy_subjects }
 		position = 5
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = marathi
+			OR = {
+				local_autonomy = 30
+				unrest = 2
+			}
+		}
 		trigger = {
 			stability = 3
+			if = {
+				limit = {
+					has_estate = estate_maratha
+				}
+				estate_loyalty = {
+					estate = estate_maratha
+					loyalty = 70
+				}
+			}
 			custom_trigger_tooltip = {
 				tooltip = MARATHI_LOYALTY
 				NOT = {
@@ -740,15 +747,6 @@ bijapur_column_5 = {
 							unrest = 2
 						}
 					}
-				}
-			}
-			if = {
-				limit = {
-					has_estate = estate_maratha
-				}
-				estate_loyalty = {
-					estate = estate_maratha
-					loyalty = 70
 				}
 			}
 		}
