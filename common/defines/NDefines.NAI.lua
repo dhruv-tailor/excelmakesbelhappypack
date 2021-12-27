@@ -38,7 +38,6 @@ NDefines.NAI.DEVELOPMENT_CAP_MULT = 5  --set to 1 manually if using dev-click se
 
 	--Forts
 NDefines.NAI.FORT_BUDGET_FRACTION = 0.6 -- AI will spend a maximum of this fraction of monthly income on forts
-NDefines.NAI.FORT_MAINTENANCE_CHEAT = 1 -- Set to 0 to disable AI fort maintenance cheating. Warning: Will make AI suck.
 
 	--Estates
 NDefines.NAI.ESTATE_PRIVILEGE_REVOKE_THRESHOLD = 5.1
