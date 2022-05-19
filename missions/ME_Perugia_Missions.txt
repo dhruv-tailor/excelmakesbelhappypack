@@ -1,0 +1,1270 @@
+perugia_mission_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PGA
+			AND = {
+				was_tag = PGA
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pga_military_campaign = {
+		icon = mercenary_companies
+		required_missions = { }
+		position = 5
+		trigger = {
+			num_of_mercenaries = 1
+			OR = {
+				MIL = 3
+				has_mil_advisor_2 = yes
+				monthly_mil = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_military_conducts
+				duration = 18250
+			}
+		}
+	}
+
+	pga_conquest_tuscany = {
+		icon = control_the_means_of_transaction
+		required_missions = { pga_monti_appennini }
+		position = 7
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 10 }
+			add_dip_power = 25
+		}
+	}
+
+	pga_trading_florence = {
+		icon = medici_bank_ledgers
+		required_missions = { pga_conquest_tuscany }
+		position = 8
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = TUS }
+				overlord_of = TUS
+				italy_region = {
+					type = all
+					NOT = { owned_by = TUS }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_tuscan_baking_secrets
+				duration = 7300
+			}
+		}
+	}
+}
+
+perugia_mission_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PGA
+			AND = {
+				was_tag = PGA
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pga_great_patrons = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 1
+		trigger = {
+			has_institution = renaissance
+			OR = {
+				artist = 2
+				ADM = 3
+				monthly_adm = 8
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_greatest_court
+				duration = 9125
+			}
+			define_advisor = {
+				type = philosopher
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	pga_colleggio_san_girolamo = {
+		icon = secure_the_succession
+		required_missions = {
+			pga_great_patrons
+			pga_baglioni_ruling
+		}
+		position = 2
+		trigger = {
+			2976 = {
+				has_building = university
+			}
+		}
+		effect = {
+			add_prestige = 10
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 50
+			}
+			else = {
+				add_adm_power = 50
+			}
+			add_country_modifier = {
+				name = pga_studium_generale_civitatis_perusii
+				duration = -1
+			}
+		}
+	}
+
+	pga_ward_save = {
+		icon = friends_in_high_places
+		required_missions = { }
+		position = 4
+		trigger = {
+			OR = {
+				num_of_allies = 4
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						OR = {
+							army_strength = {
+								who = ROOT
+								value = 1.5
+							}
+							total_development = ROOT
+						}
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_supreme_diplomacy
+				duration = 9125
+			}
+			define_advisor = {
+				type = diplomat
+				skill = 2
+				cost_multiplier = 0.25
+			}
+			lazio_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pga_monti_appennini = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			pga_military_campaign
+			pga_ward_save
+		}
+		position = 6
+		provinces_to_highlight = {
+			area = lazio_area
+			NOT = { province_id = 118 }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lazio_area = {
+				type = all
+				OR = {
+					province_id = 118
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			naples_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_italy_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pga_city_ancona = {
+		icon = reclaim_the_aegean
+		required_missions = { pga_monti_appennini }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 119
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 119
+		}
+		effect = {
+			add_years_of_income = 1.5
+			119 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	pga_glory_etruria = {
+		icon = establish_client_states
+		required_missions = {
+			pga_trading_florence
+			pga_thousand_sigils
+			pga_city_ancona
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = naples_area
+				area = central_italy_area
+				area = lazio_area
+				area = tuscany_area
+			}
+			NOT = { province_id = 118 }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { unrest = 1 }
+			}
+		}
+		trigger = {
+			naples_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			central_italy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			lazio_area = {
+				type = all
+				OR = {
+					province_id = 118
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_reign_central_italy
+				duration = 9125
+			}
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pga_genoan_wealth = {
+		icon = secure_the_republic
+		required_missions = {
+			pga_glory_etruria
+		}
+		position = 12
+		provinces_to_highlight = {
+			province_id = 101
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mlo_genoan_trade_school
+				duration = 7300
+			}
+			1298 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 10
+					key = mlo_genoan_trade_school
+				}
+			}
+		}
+	}
+}
+
+perugia_mission_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PGA
+			AND = {
+				was_tag = PGA
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pga_baglioni_ruling = {
+		icon = reform_bergordnung
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_manpower = 5
+			add_treasury = 100
+			add_stability_or_adm_power = yes
+			if = {
+				limit = {
+					exists = PAP
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = PAP
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = URB
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = URB
+					months = 300
+				}
+			}
+			capital_scope = {
+				area = {
+					add_prosperity = 25
+				}
+			}
+		}
+	}
+
+	pga_signoria_perugina = {
+		icon = reaffirm_civil_values
+		required_missions = { pga_baglioni_ruling }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 2976
+			NOT = { owned_by = ROOT }
+			NOT = { num_of_times_improved = 3 }
+			NOT = { development = 10 }
+		}
+		trigger = {
+			2976 = {
+				owned_by = ROOT
+				OR = {
+					num_of_times_improved = 3
+					development = 10
+				}
+			}
+		}
+		effect = {
+			2976 = {
+				add_permanent_province_modifier = {
+					name = pga_rinascimento_baglioni_modifier
+					duration = 18250
+				}
+			}
+		}
+	}
+
+	pga_rinascimento_baglioni = {
+		icon = mission_early_modern_university
+		required_missions = { pga_signoria_perugina }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 2976
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				renaissance = 100
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					NOT = { prosperity = 15 }
+				}
+				else = {
+					devastation = 1
+				}
+			}
+		}
+		trigger = {
+			2976 = {
+				owned_by = ROOT
+				development = 15
+				renaissance = 100
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					prosperity = 15
+				}
+				else = {
+					NOT = { devastation = 1 }
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			change_adm = 1
+			change_dip = 1
+			change_mil = 1
+		}
+	}
+
+	pga_rocca_paolina = {
+		icon = take_the_bishoprics
+		required_missions = { pga_rinascimento_baglioni }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2976
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 10 }
+				NOT = { fort_level = 1 }
+			}
+		}
+		trigger = {
+			2976 = {
+				owned_by = ROOT
+				base_manpower = 10
+				fort_level = 1
+			}
+		}
+		effect = {
+			2976 = {
+				add_permanent_province_modifier = {
+					name = pga_rocca_paolina_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	pga_war_campania = {
+		icon = establish_a_standing_army
+		required_missions = { pga_monti_appennini }
+		position = 7
+		provinces_to_highlight = {
+			area = naples_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			naples_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_mil_power = 25
+		}
+	}
+
+	pga_thousand_sigils = {
+		icon = union_with_naples
+		required_missions = { pga_war_campania }
+		position = 8
+		provinces_to_highlight = {
+			area = naples_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			naples_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = NAP }
+				overlord_of = NAP
+				italy_region = {
+					type = all
+					NOT = { owned_by = NAP }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_constitutio_amalfitana
+				duration = 9125
+			}
+		}
+	}
+
+	pga_clavis_regni_videbatur = {
+		icon = king_of_poland
+		required_missions = {
+			pga_glory_etruria
+			pga_nor_heaven_nor_hell
+		}
+		position = 10
+		trigger = {
+			NOT = { average_autonomy = 30 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_braccio_montone
+				duration = -1
+			}
+			custom_tooltip = ME_MERC_NO_PROFESSIONALISM_TT
+			set_country_flag = me_mercenary_professionalism
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lombardy_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	pga_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = {
+			pga_genoan_wealth
+			pga_clavis_regni_videbatur
+			pga_fall_visconti
+		}
+		position = 13
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ITALY_CONQUEST_ROME_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = 1
+						total_development = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+			capital_scope = {
+				add_development_scaled_on_monthly_monarch_power = yes
+			}
+			add_mana_scaled_on_monthly_monarch_power = yes
+			complete_conquest_of_rome_missions = yes
+		}
+	}
+}
+
+perugia_mission_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PGA
+			AND = {
+				was_tag = PGA
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pga_papal_state = {
+		icon = catholic_volunteers
+		required_missions = { }
+		position = 3
+		trigger = {
+			OR = {
+				owns = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_PAPAL_RELATIONS_TT
+					PAP = {
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
+					}
+					118 = {
+						owner = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+					}
+					any_country = {
+						is_papal_controller = yes
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_papal_influence = 15
+			define_advisor = {
+				type = theologian
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	pga_ercolano_perugia = {
+		icon = connect_further_austria
+		required_missions = {
+			pga_papal_state
+			pga_signoria_perugina
+		}
+		position = 4
+		trigger = {
+			2976 = {
+				num_of_times_improved = 5
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				if = {
+					limit = {
+						2976 = {
+							has_cardinal = no
+						}
+					}
+					2976 = {
+						add_cardinal = yes
+					}
+				}
+				else = {
+					random_owned_province = {
+						limit = {
+							has_cardinal = no
+						}
+						add_cardinal = yes
+					}
+				}
+			}
+			2976 = {
+				add_permanent_province_modifier = {
+					name = pga_chiesa_sant_ercolano
+					duration = -1
+				}
+			}
+		}
+	}
+
+	pga_raspanti = {
+		icon = purely_for_commerce
+		required_missions = { pga_rinascimento_baglioni }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 2976
+			OR = {
+				NOT = { base_production = 10 }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			2976 = {
+				base_production = 10
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			2976 = {
+				add_permanent_province_modifier = {
+					name = pga_governo_artigiano
+					duration = -1
+				}
+			}
+		}
+	}
+
+	pga_plains_emilia = {
+		icon = jageillonian_union
+		required_missions = { pga_clavis_regni_videbatur }
+		position = 11
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_grazing_fields_emilia
+				duration = 9125
+			}
+			emilia_romagna_area = {
+				add_province_modifier = {
+					name = man_grazing_fields
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	pga_fall_visconti = {
+		icon = italian_riches
+		required_missions = { pga_plains_emilia }
+		position = 12
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = MLO }
+				overlord_of = MLO
+				italy_region = {
+					type = all
+					NOT = { owned_by = MLO }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_milanese_knowledge
+				duration = 9125
+			}
+		}
+	}
+}
+
+perugia_mission_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PGA
+			AND = {
+				was_tag = PGA
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	pga_imperial_fiefdom = {
+		icon = join_the_empire
+		required_missions = { }
+		position = 2
+		trigger = {
+			if = {
+				limit = { hre_size = 1 }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+						is_subject_of_type = imperial_feud_subject
+					}
+				}
+				else = {
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ITALY_CONQUEST_ROME_TT
+					NOT = {
+						any_country = {
+							culture_group = latin
+							capital_scope = {
+								region = italy_region
+							}
+							army_size = 1
+							total_development = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_imperial_consecration
+				duration = 7300
+			}
+			if = {
+				limit = { hre_size = 1 }
+				custom_tooltip = MAN_IMPERIAL_CONSECRATION
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							OR = {
+								capital_scope = {
+									region = italy_region
+								}
+								is_elector = yes
+								is_emperor = yes
+							}
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+					}
+				}
+			}
+		}
+	}
+
+	pga_choosing_side = {
+		icon = protect_against_austria
+		required_missions = {
+			pga_papal_state
+			pga_imperial_fiefdom
+		}
+		position = 4
+		trigger = {
+			OR = {
+				controls = 134
+				controls = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE
+					AND = {
+						OR = {
+							emperor = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							HAB = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							134 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
+						}
+						OR = {
+							PAP = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							118 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE_SECOND
+					AND = {
+						OR = {
+							emperor = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							HAB = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							134 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
+							}
+						}
+						OR = {
+							PAP = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							118 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_guelph_ghibelline
+				duration = 5475
+			}
+		}
+	}
+
+	pga_guerra_sale = {
+		icon = reform_the_monte
+		required_missions = {
+			pga_monti_appennini
+			pga_choosing_side
+		}
+		position = 7
+		trigger = {
+			OR = {
+				controls = 118
+				controls = 134
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_EMPEROR
+					war_score = 50
+					OR = {
+						war_with = emperor
+						war_with = HAB
+						134 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_POPE
+					war_score = 50
+					OR = {
+						war_with = PAP
+						PAP = {
+							war_with = ROOT
+						}
+						118 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							war_with = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_mil_power = 100
+			change_mil = 1
+		}
+	}
+
+	pga_nor_heaven_nor_hell = {
+		icon = end_the_habsburgs
+		required_missions = { pga_guerra_sale }
+		position = 9
+		trigger = {
+			OR = {
+				owns = 118
+				owns = 134
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_EMPEROR
+					OR = {
+						emperor = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						134 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_POPE
+					OR = {
+						PAP = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						118 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_legitimacy_equivalent = { amount = 15 republican_tradition = 7 }
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 15
+			}
+		}
+	}
+}

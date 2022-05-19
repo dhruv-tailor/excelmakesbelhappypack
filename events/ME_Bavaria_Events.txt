@@ -4,114 +4,38 @@ country_event = {
 	id = ME_Bavaria_Events.1
 	title = ME_Bavaria_Events.EVTNAME1
 	desc = ME_Bavaria_Events.EVTDESC1
-	picture = HRE_eventPicture
-	
-	major = yes
-	fire_only_once = yes
-	
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	hidden = yes
+
 	trigger = {
-		mission_completed = bavaria_join_catholic_league
-		is_elector = no
 		OR = {
-			AND = {
-				has_dlc = "Art of War"
-				is_in_league_war = yes
-				any_elector = {
-					is_in_league_war = yes
-					is_league_enemy = ROOT
-					war_with = ROOT
-					capital_scope = {
-						controlled_by = ROOT
-					}
-				}
-			}
-			AND = {
-				NOT = { has_dlc = "Art of War" }
-				any_elector = {
-					war_with = ROOT
-					war_with = emperor
-					NOT = { religion = ROOT }
-					capital_scope = {
-						controlled_by = ROOT
-					}
-				}
-			}
+			tag = BAV
+			was_tag = BAV
 		}
+		has_country_flag = me_bav_the_kingdom_of_bavaria
+		NOT = { government_rank = 2 }
+		total_development = 300
+		is_part_of_hre = yes
+		is_subject = no
+		is_emperor = no
+		is_elector = no
 	}
-	
+
 	mean_time_to_happen = {
-		months = 1
+		days = 1
 	}
-	
+
 	immediate = {
 		hidden_effect = {
-			if = {
-				limit = {
-					has_dlc = "Art of War"
-				}
-				random_elector = {
-					limit = {
-						is_in_league_war = yes
-						is_league_enemy = ROOT
-						war_with = ROOT
-						capital_scope = {
-							controlled_by = ROOT
-						}
-					}
-					save_global_event_target_as = bav_hostile_elector
-				}
-			}
-			else = {
-				random_elector = {
-					limit = {
-						war_with = ROOT
-						war_with = emperor
-						NOT = { religion = ROOT }
-						capital_scope = {
-							controlled_by = ROOT
-						}
-					}
-					save_global_event_target_as = bav_hostile_elector
-				}
-			}
+			set_government_rank_force = 2
 		}
 	}
-	
+
 	option = {
 		name = ME_Bavaria_Events1.EVTOPT1
-		
-		ai_chance = {
-			factor = 0.75
-			
-			modifier = {
-				factor = 0
-				event_target:bav_hostile_elector = {
-					NOT = { tag = PAL }
-				}
-			}
-		}
-		
-		elector = yes
-		custom_tooltip = BAV_ALLOWS_BECOMING_ELECTOR_CAN_BE_REVOKED
-		set_country_flag = bav_allows_becoming_elector_can_be_revoked
-		event_target:bav_hostile_elector = {
-			elector = no
-			add_opinion = {
-				who = ROOT
-				modifier = bavaria_claimed_electorate_opinion
-			}
-		}
-	}
-	
-	option = {
-		name = ME_Bavaria_Events1.EVTOPT2
-		
-		ai_chance = { factor = 0.25 }
-		
-		add_prestige = -5
-		event_target:bav_hostile_elector = {
-			add_prestige = 5
-		}
+
+		ai_chance = { factor = 100 }
 	}
 }
 
@@ -119,37 +43,1745 @@ country_event = {
 	id = ME_Bavaria_Events.2
 	title = ME_Bavaria_Events.EVTNAME2
 	desc = ME_Bavaria_Events.EVTDESC2
-	picture = HRE_eventPicture
-	
+	picture = TRADEGOODS_eventPicture
+
 	major = yes
-	
-	trigger = {
-		has_country_flag = bav_allows_becoming_elector_can_be_revoked
-		is_elector = yes
-		event_target:bav_hostile_elector = {
-			exists = yes
-			is_elector = no
-		}
-		capital_scope = {
-			controlled_by = event_target:bav_hostile_elector
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_global_flag = me_bav_the_oktoberfest
+			random_owned_province = {
+				save_event_target_as = target_province_1
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { province_id = event_target:target_province_1 }
+				}
+				save_event_target_as = target_province_2
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { province_id = event_target:target_province_1 }
+					NOT = { province_id = event_target:target_province_2 }
+				}
+				save_event_target_as = target_province_3
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { province_id = event_target:target_province_1 }
+					NOT = { province_id = event_target:target_province_2 }
+					NOT = { province_id = event_target:target_province_3 }
+				}
+				save_event_target_as = target_province_4
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { province_id = event_target:target_province_1 }
+					NOT = { province_id = event_target:target_province_2 }
+					NOT = { province_id = event_target:target_province_3 }
+					NOT = { province_id = event_target:target_province_4 }
+				}
+				save_event_target_as = target_province_5
+			}
 		}
 	}
-	
+
+	option = {
+		name = ME_Bavaria_Events2.EVTOPT1
+
+		65 = {
+			add_permanent_province_modifier = {
+				name = bavaria_the_oktoberfest_modifier
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				me_bav_is_beer_enabled = yes
+			}
+			change_price = {
+				trade_goods = beer
+				key = bavaria_the_oktoberfest_title
+				value = 0.25
+				duration = -1
+			}
+			add_years_of_owned_provinces_production_income = {
+				years = 10
+				trigger = {
+					trade_goods = beer
+				}
+				custom_tooltip = BAV_INCOME_FROM_BEER_TT
+			}
+		}
+		else = {
+			add_years_of_income = 1
+			event_target:target_province_1 = {
+				add_base_production = 2
+			}
+			if = {
+				limit = {
+					has_saved_event_target = event_target:target_province_2
+				}
+				event_target:target_province_2 = {
+					add_base_production = 2
+				}
+			}
+			if = {
+				limit = {
+					has_saved_event_target = event_target:target_province_3
+				}
+				event_target:target_province_3 = {
+					add_base_production = 2
+				}
+			}
+			if = {
+				limit = {
+					has_saved_event_target = event_target:target_province_4
+				}
+				event_target:target_province_4 = {
+					add_base_production = 2
+				}
+			}
+			if = {
+				limit = {
+					has_saved_event_target = event_target:target_province_5
+				}
+				event_target:target_province_5 = {
+					add_base_production = 2
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.3
+	title = ME_Bavaria_Events.EVTNAME3
+	desc = ME_Bavaria_Events.EVTDESC3
+	picture = TRADEGOODS_eventPicture
+
+	major = yes
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_global_flag = me_bav_muenchner_reinheitsgebot
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events3.EVTOPT1
+
+		if = {
+			limit = {
+				me_bav_is_beer_enabled = yes
+			}
+			change_price = {
+				trade_goods = beer
+				key = bavaria_muenchner_reinheitsgebot_title
+				value = 0.25
+				duration = -1
+			}
+			every_owned_province = {
+				limit = {
+					trade_goods = beer
+				}
+				add_province_modifier = {
+					name = bavaria_muenchner_reinheitsgebot_province_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_province = {
+							NOT = { trade_goods = beer }
+						}
+					}
+					country_event = { id = ME_Bavaria_Events.4 days = 1 random = 9 }
+				}
+			}
+		}
+		else = {
+			custom_tooltip = BAVARIA_MUENCHNER_REINHEITSGEBOT_TT
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = wine
+							trade_goods = grain
+						}
+						development = 10
+						num_of_times_improved_by_owner = 3
+						NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+					}
+					set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+					add_base_production = 1
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = wine
+							trade_goods = grain
+						}
+						development = 10
+						num_of_times_improved_by_owner = 3
+						NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+					}
+					set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+					add_base_production = 1
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = wine
+							trade_goods = grain
+						}
+						development = 10
+						num_of_times_improved_by_owner = 3
+						NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+					}
+					set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+					add_base_production = 1
+				}
+				every_owned_province = {
+					limit = {
+						has_province_flag = bavaria_muenchner_reinheitsgebot_flag
+					}
+					clr_province_flag = bavaria_muenchner_reinheitsgebot_flag
+				}
+			}
+			add_years_of_owned_provinces_production_income = {
+				years = 3
+				trigger = {
+					OR = {
+						trade_goods = wine
+						trade_goods = grain
+					}
+					development = 10
+					num_of_times_improved_by_owner = 3
+				}
+				custom_tooltip = BAV_INCOME_FROM_GRAIN_AND_WINE
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.4
+	title = ME_Bavaria_Events.EVTNAME4
+	desc = ME_Bavaria_Events.EVTDESC4
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		me_bav_is_beer_enabled = yes
+		any_owned_province = {
+			NOT = { trade_goods = beer }
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { province_id = 4711 }
+					NOT = { province_id = 1868 }
+					NOT = { trade_goods = beer }
+				}
+				save_event_target_as = beer_province
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events4.EVTOPT1
+
+		goto = 4711
+
+		trigger = {
+			owns = 4711
+			4711 = {
+				NOT = { trade_goods = beer }
+			}
+		}
+
+		ai_chance = { factor = 100 }
+
+		if = {
+			limit = {
+				me_bav_is_beer_enabled = yes
+			}
+			4711 = {
+				change_trade_goods = beer
+				add_province_modifier = {
+					name = bavaria_muenchner_reinheitsgebot_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events4.EVTOPT2
+
+		goto = 1868
+
+		trigger = {
+			owns = 1868
+			1868 = {
+				NOT = { trade_goods = beer }
+			}
+		}
+
+		ai_chance = { factor = 100 }
+
+		if = {
+			limit = {
+				me_bav_is_beer_enabled = yes
+			}
+			1868 = {
+				change_trade_goods = beer
+				add_province_modifier = {
+					name = bavaria_muenchner_reinheitsgebot_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events4.EVTOPT3
+
+		goto = beer_province
+
+		trigger = {
+			has_saved_event_target = beer_province
+		}
+
+		ai_chance = { factor = 100 }
+
+		if = {
+			limit = {
+				me_bav_is_beer_enabled = yes
+			}
+			event_target:beer_province = {
+				change_trade_goods = beer
+				add_province_modifier = {
+					name = bavaria_muenchner_reinheitsgebot_province_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events4.EVTOPT4
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.5
+	title = ME_Bavaria_Events.EVTNAME5
+	desc = ME_Bavaria_Events.EVTDESC5
+	picture = DIPLOMACY_eventPicture
+
+	major = yes
+	major_trigger = {
+		OR = {
+			tag = BAV
+			AND = {
+				NOT = { exists = BAV }
+				was_tag = BAV
+			}
+			is_emperor = yes
+		}
+	}
+	is_triggered_only = yes
+
+	trigger = {
+		is_subject = no
+	}
+
+	option = {
+		name = ME_Bavaria_Events5.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		set_country_flag = me_bav_the_imperial_city_of_regensburg_accepted
+		add_treasury = 150
+		FROM = {
+			add_treasury = -150
+			vassalize = ROOT
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events5.EVTOPT2
+
+		ai_chance = { factor = 0 }
+
+		capital_scope = {
+			add_core = FROM
+		}
+		reverse_add_casus_belli = {
+			target = FROM
+			type = cb_insult
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.6
+	title = ME_Bavaria_Events.EVTNAME6
+	desc = ME_Bavaria_Events.EVTDESC6
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		has_country_flag = me_bav_the_imperial_city_of_regensburg
+		exists = REG
+		overlord_of = REG
+		REG = {
+			has_country_flag = me_bav_the_imperial_city_of_regensburg_accepted
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 5
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events6.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		inherit = REG
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.7
+	title = ME_Bavaria_Events.EVTNAME7
+	desc = ME_Bavaria_Events.EVTDESC7
+	picture = COURT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events7.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		change_government = monarchy
+		country_event = { id = ME_Bavaria_Events.8 }
+	}
+
+	option = {
+		name = ME_Bavaria_Events7.EVTOPT2
+
+		ai_chance = { factor = 0 }
+
+		add_prestige = 5
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.8
+	title = ME_Bavaria_Events.EVTNAME8
+	desc = ME_Bavaria_Events.EVTDESC8
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events8.EVTOPT1
+
+		ai_chance = { factor = 0.7 }
+
+		if = {
+			limit = {
+				NOT = { dynasty = "von Wittelsbach" }
+				OR = {
+					has_heir = no
+					NOT = { heir_dynasty = "von Wittelsbach" }
+				}
+			}
+			if = {
+				limit = {
+					has_regency = yes
+				}
+				define_ruler = {
+					male = yes
+					claim = 95
+					max_random_adm = 5
+					change_dip = 1
+					max_random_mil = 3
+					dynasty = "von Wittelsbach"
+				}
+			}
+			else = {
+				set_dynasty = "von Wittelsbach"
+			}
+		}
+		if = {
+			limit = {
+				has_regency = yes
+				has_heir = yes
+			}
+			if = {
+				limit = {
+					heir_dip = 6
+				}
+				add_dip_power = 50
+			}
+			else = {
+				change_heir_dip = 1
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					DIP = 6
+				}
+				add_dip_power = 100
+			}
+			else = {
+				change_dip = 1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = bavaria_dynasty_wittelsbach_tooltip_modifier
+				duration = -1
+				desc = BAVARIA_DYNASTY_WITTELSBACH_TOOLTIP_MODIFIER_TT
+			}
+		}
+		if = {
+			limit = {
+				government = monarchy
+				OR = {
+					tag = BAV
+					AND = {
+						# is_expanded_mod_active = { mod = formables }
+						tag = AUB
+						was_tag = BAV
+					}
+				}
+			}
+			custom_tooltip = BAV_UNLOCK_MISSION_BRANCH_WITTELSBACH
+			hidden_effect = {
+				clr_country_flag = bav_dynasty_welf
+				set_country_flag = bav_dynasty_wittelsbach
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events8.EVTOPT2
+
+		ai_chance = { factor = 0.3 }
+
+		if = {
+			limit = {
+				NOT = { dynasty = "von Welf" }
+				OR = {
+					has_heir = no
+					NOT = { heir_dynasty = "von Welf" }
+				}
+			}
+			define_ruler = {
+				male = yes
+				claim = 50
+				max_random_adm = 5
+				max_random_dip = 4
+				change_mil = 1
+				dynasty = "von Welf"
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = bavaria_dynasty_welf_tooltip_modifier
+				duration = -1
+				desc = BAVARIA_DYNASTY_WELF_TOOLTIP_MODIFIER_TT
+			}
+		}
+		if = {
+			limit = {
+				government = monarchy
+				OR = {
+					tag = BAV
+					AND = {
+						# is_expanded_mod_active = { mod = formables }
+						tag = AUB
+						was_tag = BAV
+					}
+				}
+			}
+			custom_tooltip = BAV_UNLOCK_MISSION_BRANCH_WELF
+			hidden_effect = {
+				remove_heir = { allow_new_heir = no }
+				clr_country_flag = bav_dynasty_wittelsbach
+				set_country_flag = bav_dynasty_welf
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events8.EVTOPT3
+
+		ai_chance = { factor = 0 }
+
+		trigger = {
+			has_regency = no
+			NOT = { dynasty = "von Wittelsbach" }
+			NOT = { dynasty = "von Welf" }
+		}
+
+		add_prestige = 5
+		hidden_effect = {
+			# just in case
+			if = {
+				limit = {
+					government = monarchy
+					OR = {
+						tag = BAV
+						AND = {
+							# is_expanded_mod_active = { mod = formables }
+							tag = AUB
+							was_tag = BAV
+						}
+					}
+					OR = {
+						has_country_flag = bav_dynasty_wittelsbach
+						has_country_flag = bav_dynasty_welf
+					}
+				}
+				clr_country_flag = bav_dynasty_wittelsbach
+				clr_country_flag = bav_dynasty_welf
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.9
+	title = ME_Bavaria_Events.EVTNAME9
+	desc = ME_Bavaria_Events.EVTDESC9
+	picture = RELIGION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events9.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		set_defender_of_the_faith = { who = ROOT }
+	}
+
+	option = {
+		name = ME_Bavaria_Events9.EVTOPT2
+
+		ai_chance = { factor = 0 }
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.10
+	title = ME_Bavaria_Events.EVTNAME10
+	desc = ME_Bavaria_Events.EVTDESC10
+	picture = RELIGION_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = me_bav_emperor_may_give_bavaria_electorate # for HREE
+			random_elector = {
+				limit = {
+					in_league = protestant
+					is_in_league_war = yes
+					is_rival = ROOT
+				}
+				save_event_target_as = elector_to_remove
+			}
+			random_elector = {
+				limit = {
+					in_league = protestant
+					is_in_league_war = yes
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = 0
+						}
+					}
+				}
+				save_event_target_as = elector_to_remove
+			}
+			random_elector = {
+				limit = {
+					in_league = protestant
+					is_in_league_war = yes
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+				save_event_target_as = elector_to_remove
+			}
+			random_elector = {
+				limit = {
+					in_league = protestant
+					is_in_league_war = yes
+				}
+				save_event_target_as = elector_to_remove
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events10.EVTOPT1
+
+		ai_chance = {
+			factor = 0.9
+			modifier = {
+				factor = 0.1
+				is_rival = FROM
+			}
+		}
+
+		event_target:elector_to_remove = {
+			elector = no
+		}
+		FROM = {
+			elector = yes
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events10.EVTOPT2
+
+		ai_chance = {
+			factor = 0.1
+			modifier = {
+				factor = 10
+				is_rival = FROM
+			}
+		}
+
+		add_prestige = -10
+		add_opinion = {
+			who = FROM
+			modifier = bavaria_failed_electorate_opinion
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = bavaria_failed_electorate_opinion
+		}
+	}
+
+	after = {
+		clr_country_flag = me_bav_emperor_may_give_bavaria_electorate
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.11
+	title = ME_Bavaria_Events.EVTNAME11
+	desc = ME_Bavaria_Events.EVTDESC11
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events11.EVTOPT1
+
+		ai_chance = {
+			factor = 0.7
+			modifier = {
+				factor = 3
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 2
+				has_opinion = {
+					who = FROM
+					value = 100
+				}
+			}
+			modifier = {
+				factor = 3
+				has_opinion = {
+					who = FROM
+					value = 150
+				}
+			}
+			modifier = {
+				factor = 0.25
+				is_rival = FROM
+			}
+			modifier = {
+				factor = 0.5
+				is_enemy = FROM
+			}
+			modifier = {
+				factor = 0.5
+				ADM = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 0.5
+				DIP = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 0.5
+				MIL = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 1.5
+				NOT = { legitimacy_equivalent = 50 }
+			}
+			modifier = {
+				factor = 0.75
+				valid_for_personal_unions_trigger = yes
+				any_country = {
+					valid_for_personal_unions_trigger = yes
+					dynasty = ROOT
+					total_development = 150
+				}
+			}
+			modifier = {
+				factor = 3
+				FROM = {
+					army_strength = { who = ROOT value = 3 }
+				}
+			}
+			modifier = {
+				factor = 2
+				OR = {
+					ai_attitude = { who = FROM attitude = attitude_allied }
+					ai_attitude = { who = FROM attitude = attitude_friendly }
+					ai_attitude = { who = FROM attitude = attitude_threatened }
+				}
+			}
+		}
+
+		reverse_add_opinion = {
+			who = FROM
+			modifier = bavaria_heir_from_us_accepted_opinion
+		}
+		if = {
+			limit = {
+				has_regency = yes
+			}
+			define_ruler = {
+				dynasty = FROM
+				male = yes
+				claim = 50
+			}
+			hidden_effect = {
+				remove_heir = { allow_new_heir = no }
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				remove_heir = { allow_new_heir = no }
+			}
+			define_heir = {
+				dynasty = FROM
+				male = yes
+				claim = 50
+				block_disinherit = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events11.EVTOPT2
+
+		ai_chance = {
+			factor = 0.3
+			modifier = {
+				factor = 0.25
+				alliance_with = FROM
+			}
+			modifier = {
+				factor = 3
+				is_rival = FROM
+			}
+			modifier = {
+				factor = 2
+				is_enemy = FROM
+			}
+			modifier = {
+				factor = 2
+				ADM = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 2
+				DIP = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 2
+				MIL = 6
+				has_regency = no
+			}
+			modifier = {
+				factor = 0.75
+				NOT = { legitimacy_equivalent = 50 }
+			}
+			modifier = {
+				factor = 1.5
+				valid_for_personal_unions_trigger = yes
+				any_country = {
+					valid_for_personal_unions_trigger = yes
+					dynasty = ROOT
+					total_development = 150
+				}
+			}
+			modifier = {
+				factor = 1.5
+				army_strength = { who = FROM value = 3 }
+			}
+			modifier = {
+				factor = 1.5
+				OR = {
+					ai_attitude = { who = FROM attitude = attitude_hostile }
+					ai_attitude = { who = FROM attitude = attitude_outraged }
+				}
+			}
+		}
+
+		add_prestige = -10
+		reverse_add_opinion = {
+			who = FROM
+			modifier = bavaria_heir_from_us_declined_opinion
+		}
+		reverse_add_casus_belli = {
+			target = FROM
+			type = cb_insult
+		}
+		if = {
+			limit = {
+				alliance_with = FROM
+			}
+			break_alliance_with = { who = FROM }
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.12
+	title = ME_Bavaria_Events.EVTNAME12
+	desc = ME_Bavaria_Events.EVTDESC12
+	picture = DIPLOMACY_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events12.EVTOPT1
+
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				OR = {
+					army_strength = { who = FROM value = 2 }
+					total_development = FROM
+					is_rival = FROM
+				}
+			}
+		}
+
+		FROM = {
+			vassalize = ROOT
+			country_event = { id = ME_Bavaria_Events.13 }
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events12.EVTOPT2
+
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0
+				NOT = { army_strength = { who = FROM value = 2 } }
+				NOT = { total_development = FROM }
+				NOT = { is_rival = FROM }
+			}
+		}
+
+		add_prestige = -10
+		reverse_add_opinion = {
+			who = FROM
+			modifier = bavaria_ferrara_declined_opinion
+		}
+		reverse_add_casus_belli = {
+			target = FROM
+			type = cb_vassalize_mission
+		}
+		if = {
+			limit = {
+				alliance_with = FROM
+			}
+			break_alliance_with = { who = FROM }
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.13
+	title = ME_Bavaria_Events.EVTNAME13
+	desc = ME_Bavaria_Events.EVTDESC13
+	picture = COURT_eventPicture
+
+	major = yes
+	major_trigger = {
+		tag = FER
+	}
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Bavaria_Events13.EVTOPT1
+
+		trigger = {
+			NOT = { exists = FER }
+		}
+
+		ai_chance = { factor = 0.2 }
+
+		po_valley_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		lombardy_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events13.EVTOPT2
+
+		trigger = {
+			exists = FER
+		}
+
+		ai_chance = { factor = 0.2 }
+
+		po_valley_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		lombardy_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		custom_tooltip = " "
+		FER = {
+			add_liberty_desire = 50
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events13.EVTOPT3
+
+		highlight = yes
+
+		ai_chance = { factor = 0.8 }
+
+		if = {
+			limit = {
+				NOT = { exists = FER }
+			}
+			every_owned_province = {
+				limit = {
+					area = emilia_romagna_area
+				}
+				remove_core = ROOT
+				add_core = FER
+			}
+			release = FER
+			hidden_effect = {
+				FER = {
+					change_government = monarchy
+					change_religion = ROOT
+				}
+			}
+			if = {
+				limit = {
+					valid_for_personal_unions_trigger = yes
+				}
+				create_union = FER
+			}
+			else = {
+				vassalize = FER
+				FER = {
+					define_ruler = {
+						male = yes
+						dynasty = ROOT
+						claim = 80
+					}
+					hidden_effect = {
+						remove_heir = { allow_new_heir = no }
+					}
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					emilia_romagna_area = {
+						owned_by = ROOT
+					}
+				}
+				every_owned_province = {
+					limit = {
+						area = emilia_romagna_area
+					}
+					remove_core = ROOT
+					add_core = FER
+					cede_province = FER
+				}
+			}
+			if = {
+				limit = {
+					valid_for_personal_unions_trigger = yes
+				}
+				FER = {
+					if = {
+						limit = {
+							NOT = { government = monarchy }
+						}
+						change_government = monarchy
+					}
+				}
+				create_union = FER
+			}
+			else = {
+				if = {
+					limit = {
+						FER = {
+							NOT = { vassal_of = ROOT }
+						}
+					}
+					vassalize = FER
+				}
+				FER = {
+					define_ruler = {
+						male = yes
+						dynasty = ROOT
+						claim = 80
+					}
+					hidden_effect = {
+						remove_heir = { allow_new_heir = no }
+					}
+				}
+			}
+		}
+		custom_tooltip = " "
+		emilia_romagna_area = {
+			limit = {
+				NOT = { owned_by = FER }
+				NOT = { is_core = FER }
+			}
+			add_permanent_claim = FER
+		}
+		po_valley_area = {
+			limit = {
+				NOT = { owned_by = FER }
+				NOT = { is_core = FER }
+			}
+			add_permanent_claim = FER
+		}
+		lombardy_area = {
+			limit = {
+				NOT = { owned_by = FER }
+				NOT = { is_core = FER }
+			}
+			add_permanent_claim = FER
+		}
+		piedmont_area = {
+			limit = {
+				NOT = { owned_by = FER }
+				NOT = { is_core = FER }
+			}
+			add_permanent_claim = FER
+		}
+		liguria_area = {
+			limit = {
+				NOT = { owned_by = FER }
+				NOT = { is_core = FER }
+			}
+			add_permanent_claim = FER
+		}
+		custom_tooltip = " "
+		set_country_flag = me_bav_ferrara_subject
+		tooltip = {
+			add_country_modifier = {
+				name = bavaria_ferrara_subject_tooltip_modifier
+				duration = -1
+				desc = BAVARIA_FERRARA_SUBJECT_TOOLTIP_MODIFIER_TT
+			}
+			FER = {
+				add_country_modifier = {
+					name = bavaria_ferrara_fer_subject_tooltip_modifier
+					duration = -1
+					desc = BAVARIA_FERRARA_FER_SUBJECT_TOOLTIP_MODIFIER_TT
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.14
+	title = ME_Bavaria_Events.EVTNAME14
+	desc = ME_Bavaria_Events.EVTDESC14
+	picture = HRE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		OR = {
+			mission_completed = bavaria_the_wittelsbachs_and_the_palatinate
+			mission_completed = bavaria_the_welfs_and_the_palatinate
+		}
+		hre_size = 1
+		NOT = { has_country_flag = me_bav_might_get_elector }
+		PAL = {
+			is_elector = yes
+			is_subject_of = ROOT
+			OR = {
+				is_subject_of_type = vassal
+				is_subject_of_type = personal_union
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = me_bav_might_get_elector
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events14.EVTOPT1
+
+		ai_chance = { factor = 0.8 }
+
+		PAL = {
+			custom_tooltip = legitimate_subject_elector_tt
+			add_country_modifier = {
+				name = legitimate_subject_elector_modifer
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events14.EVTOPT2
+
+		trigger = {
+			is_elector = no
+			is_part_of_hre = yes
+		}
+
+		ai_chance = { factor = 0.2 }
+
+		add_prestige = -10
+		add_legitimacy_equivalent = { amount = -20 republican_tradition = -10 }
+		PAL = {
+			elector = no
+		}
+		elector = yes
+		reverse_add_opinion = {
+			who = PAL
+			modifier = bavaria_took_electorate_from_pal_opinion
+		}
+		if = {
+			limit = {
+				is_emperor = no
+			}
+			emperor = {
+				add_opinion = {
+					who = ROOT
+					modifier = bavaria_took_electorate_from_pal_opinion
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = me_bav_might_get_elector
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.15
+	title = ME_Bavaria_Events.EVTNAME15
+	desc = ME_Bavaria_Events.EVTDESC15
+	picture = TRADEGOODS_eventPicture
+
+	hidden = yes
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		has_global_flag = me_bav_muenchner_reinheitsgebot
+		me_bav_is_beer_enabled = yes
+		any_owned_province = {
+			trade_goods = beer
+			NOT = { has_province_modifier = bavaria_muenchner_reinheitsgebot_province_modifier }
+		}
+	}
+
 	mean_time_to_happen = {
 		months = 1
 	}
-	
-	option = {
-		name = ME_Bavaria_Events2.EVTOPT1
-		
-		ai_chance = { factor = 100 }
-		
-		add_prestige = -5
-		elector = no
-		event_target:bav_hostile_elector = {
-			add_prestige = 5
-			elector = yes
+
+	immediate = {
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					trade_goods = beer
+					NOT = { has_province_modifier = bavaria_muenchner_reinheitsgebot_province_modifier }
+				}
+				add_province_modifier = {
+					name = bavaria_muenchner_reinheitsgebot_province_modifier
+					duration = -1
+				}
+			}
 		}
-		clr_country_flag = bav_allows_becoming_elector_can_be_revoked
+	}
+
+	option = {
+		name = ME_Bavaria_Events15.EVTOPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.16
+	title = ME_Bavaria_Events.EVTNAME16
+	desc = {
+		trigger = {
+			has_global_flag = bav_dynasty_wittelsbach
+		}
+		desc = ME_Bavaria_Events.EVTDESC16.1
+	}
+	desc = {
+		trigger = {
+			has_global_flag = bav_dynasty_welf
+		}
+		desc = ME_Bavaria_Events.EVTDESC16.2
+	}
+	picture = NEW_HEIR_eventPicture
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		NOT = { has_country_flag = me_bav_rejected_heir }
+		OR = {
+			AND = {
+				has_global_flag = bav_dynasty_wittelsbach
+				NOT = { dynasty = "von Wittelsbach" }
+			}
+			AND = {
+				has_global_flag = bav_dynasty_welf
+				NOT = { dynasty = "von Welf" }
+			}
+		}
+		government = monarchy
+		has_heir = no
+		has_regency = no
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	option = {
+		name = ME_Bavaria_Events16.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		if = {
+			limit = {
+				has_global_flag = bav_dynasty_wittelsbach
+			}
+			define_heir = {
+				age = 5
+				male = yes
+				claim = 70
+				dynasty = "von Wittelsbach"
+			}
+		}
+		else = {
+			define_heir = {
+				age = 5
+				male = yes
+				claim = 70
+				dynasty = "von Welf"
+			}
+		}
+		add_country_modifier = {
+			name = bavaria_return_to_dynasty_modifier
+			duration = 3650
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events16.EVTOPT2
+
+		ai_chance = { factor = 0 }
+
+		set_country_flag = me_bav_rejected_heir
+		add_legitimacy = 5
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.17
+	title = ME_Bavaria_Events.EVTNAME17
+	desc = ME_Bavaria_Events.EVTDESC17
+	picture = HRE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		mission_completed = bavaria_the_fate_of_brandenburg
+		hre_size = 1
+		NOT = { has_country_flag = me_bav_might_get_elector }
+		OR = {
+			BRA = {
+				is_elector = yes
+				is_subject_of = ROOT
+				OR = {
+					is_subject_of_type = vassal
+					is_subject_of_type = personal_union
+				}
+			}
+			PRU = {
+				is_elector = yes
+				is_subject_of = ROOT
+				OR = {
+					is_subject_of_type = vassal
+					is_subject_of_type = personal_union
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = me_bav_might_get_elector
+			if = {
+				limit = {
+					PRU = {
+						is_elector = yes
+						is_subject_of = ROOT
+						OR = {
+							is_subject_of_type = vassal
+							is_subject_of_type = personal_union
+						}
+					}
+				}
+				PRU = {
+					save_event_target_as = elector_target
+				}
+			}
+			else = {
+				BRA = {
+					save_event_target_as = elector_target
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events17.EVTOPT1
+
+		ai_chance = { factor = 0.8 }
+
+		if = {
+			limit = {
+				PRU = {
+					is_elector = yes
+					is_subject_of = ROOT
+					OR = {
+						is_subject_of_type = vassal
+						is_subject_of_type = personal_union
+					}
+				}
+			}
+			PRU = {
+				custom_tooltip = legitimate_subject_elector_tt
+				add_country_modifier = {
+					name = legitimate_subject_elector_modifer
+					duration = -1
+					hidden = yes
+				}
+			}
+		}
+		else = {
+			BRA = {
+				custom_tooltip = legitimate_subject_elector_tt
+				add_country_modifier = {
+					name = legitimate_subject_elector_modifer
+					duration = -1
+					hidden = yes
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events17.EVTOPT2
+
+		trigger = {
+			is_elector = no
+			is_part_of_hre = yes
+		}
+
+		ai_chance = { factor = 0.2 }
+
+		add_prestige = -10
+		add_legitimacy_equivalent = { amount = -20 republican_tradition = -10 }
+		if = {
+			limit = {
+				PRU = {
+					is_elector = yes
+					is_subject_of = ROOT
+					OR = {
+						is_subject_of_type = vassal
+						is_subject_of_type = personal_union
+					}
+				}
+			}
+			PRU = {
+				elector = no
+			}
+			reverse_add_opinion = {
+				who = PRU
+				modifier = bavaria_took_electorate_from_pal_opinion
+			}
+		}
+		else = {
+			BRA = {
+				elector = no
+			}
+			reverse_add_opinion = {
+				who = BRA
+				modifier = bavaria_took_electorate_from_pal_opinion
+			}
+		}
+		elector = yes
+		if = {
+			limit = {
+				is_emperor = no
+			}
+			emperor = {
+				add_opinion = {
+					who = ROOT
+					modifier = bavaria_took_electorate_from_pal_opinion
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = me_bav_might_get_elector
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.18
+	title = ME_Bavaria_Events.EVTNAME18
+	desc = ME_Bavaria_Events.EVTDESC18
+	picture = HRE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		mission_completed = bavaria_the_welfs_in_saxony
+		hre_size = 1
+		NOT = { has_country_flag = me_bav_might_get_elector }
+		SAX = {
+			is_elector = yes
+			is_subject_of = ROOT
+			OR = {
+				is_subject_of_type = vassal
+				is_subject_of_type = personal_union
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = me_bav_might_get_elector
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events18.EVTOPT1
+
+		ai_chance = { factor = 0.8 }
+
+		SAX = {
+			custom_tooltip = legitimate_subject_elector_tt
+			add_country_modifier = {
+				name = legitimate_subject_elector_modifer
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events18.EVTOPT2
+
+		trigger = {
+			is_elector = no
+			is_part_of_hre = yes
+		}
+
+		ai_chance = { factor = 0.2 }
+
+		add_prestige = -10
+		add_legitimacy_equivalent = { amount = -20 republican_tradition = -10 }
+		SAX = {
+			elector = no
+		}
+		reverse_add_opinion = {
+			who = SAX
+			modifier = bavaria_took_electorate_from_pal_opinion
+		}
+		elector = yes
+		if = {
+			limit = {
+				is_emperor = no
+			}
+			emperor = {
+				add_opinion = {
+					who = ROOT
+					modifier = bavaria_took_electorate_from_pal_opinion
+				}
+			}
+		}
+	}
+
+	after = {
+		clr_country_flag = me_bav_might_get_elector
+	}
+}
+
+# maybe this fixes the freeze
+country_event = {
+	id = ME_Bavaria_Events.19
+	title = ME_Bavaria_Events.EVTNAME19
+	desc = ME_Bavaria_Events.EVTDESC19
+	picture = HRE_eventPicture
+
+	hidden = yes
+	fire_only_once = yes
+
+	trigger = {
+		NOT = { has_global_flag = bav_former_capital_set }
+	}
+
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_global_flag = bav_former_capital_set
+			if = {
+				limit = {
+					all_countries_including_self = {
+						NOT = { has_country_flag = bav_former_capital_saved }
+					}
+				}
+				65 = {
+					save_global_event_target_as = bav_former_capital
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events19.EVTOPT1
+
+		ai_chance = { factor = 100 }
 	}
 }

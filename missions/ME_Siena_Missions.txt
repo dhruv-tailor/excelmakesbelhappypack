@@ -1,0 +1,720 @@
+siena_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SIE
+			AND = {
+				was_tag = SIE
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	sie_old_rivalries = {
+		icon = florentine_renaissance
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = { exists = LAN }
+				OR = {
+					alliance_with = LAN
+					is_in_trade_league_with = LAN
+					LAN = {
+						has_opinion = {
+							who = ROOT 
+							value = 125
+						}
+					}
+					is_rival = LAN
+					AND = {
+						is_enemy = LAN
+						any_country = {
+							is_enemy = LAN
+							alliance_with = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				NOT = {
+					any_country = {
+						capital_scope = {
+							province_id = 116
+						}
+						army_size = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = LAN
+						is_in_trade_league_with = LAN
+						LAN = {
+							has_opinion = {
+								who = ROOT 
+								value = 125
+							}
+						}
+					}
+				}
+				add_country_modifier = {
+					name = sie_rivalry_diminshed
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = sie_archrival_florence
+					duration = 18250
+				}
+			}
+		}
+	}
+
+	sie_siena_papacy = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			sie_old_rivalries
+		}
+		position = 3
+		trigger = {
+			if = {
+				limit = { exists = PAP }
+				OR = {
+					alliance_with = PAP
+					PAP = {
+						has_opinion = {
+							who = ROOT 
+							value = 125
+						}
+					}
+					is_rival = PAP
+				}
+			}
+			else = {
+				stability = 1
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					PAP = {
+						has_opinion = {
+							who = ROOT 
+							value = 125
+						}
+					}
+				}
+				add_country_modifier = {
+					name = sie_supporting_papacy
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = sie_resisting_papal_influence
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	sie_state_church = {
+		icon = geneva_conventions
+		required_missions = {
+			sie_siena_papacy
+		}
+		position = 5
+		trigger = {
+			OR = {
+				temple = 2
+				cathedral = 2
+			}
+			if = {
+				limit = { religion = catholic }
+				num_of_cardinals = 1
+				papal_influence = 50
+			}
+			else_if = {
+				limit = { has_estate = estate_church }
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 65
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_influencing_church
+				duration = 7300
+			}
+		}
+	}
+
+	sie_sienese_pope = {
+		icon = defender_of_the_faith
+		required_missions = { sie_state_church }
+		position = 6
+		trigger = {
+			if = {
+				limit = { religion = catholic }
+				OR = {
+					is_papal_controller = yes
+					num_of_cardinals = 1
+				}
+			}
+			else = {
+				OR = {
+					owns = 118
+					NOT = {
+						italy_region = {
+							owned_by = PAP
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_pope_siena
+				duration = -1
+			}
+			if = {
+				limit = { religion = catholic }
+				country_event = {
+					id = ME_Siena_Events.1
+				}
+				add_country_modifier = {
+					name = sie_control_papacy
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = sie_chair_st_peter
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+siena_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SIE
+			AND = {
+				was_tag = SIE
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	sie_monte_paschi_siena = {
+		icon = public_works
+		required_missions = {
+			sie_old_rivalries
+			sie_expand_duomo
+		}
+		position = 2
+		trigger = {
+			NOT = { inflation = 0.1 }
+			NOT = { num_of_loans = 1 }
+			monthly_income = 10
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_sienese_banking_industry
+				duration = 7300
+			}
+		}
+	}
+
+	sie_ospedale_santa_maria_scale = {
+		icon = interest_of_holland
+		required_missions = {
+			sie_siena_papacy
+			sie_monte_paschi_siena
+		}
+		position = 4
+		trigger = {
+			had_recent_war = 5
+			if = {
+				limit = { has_estate = estate_church }
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_hospital_via_francigena
+				duration = 7300
+			}
+		}
+	}
+
+	sie_sienese_renaissance = {
+		icon = contracts_of_correspondence
+		required_missions = {
+			sie_ospedale_santa_maria_scale
+		}
+		position = 5
+		trigger = {
+			has_institution = renaissance
+			OR = {
+				full_idea_group = humanist_ideas
+				full_idea_group = innovativeness_ideas
+				any_province = {
+					is_institution_origin = renaissance
+					owned_by = ROOT
+					num_of_times_improved = 3
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_sienese_school
+				duration = 7300
+			}
+			custom_tooltip = SIE_RENAISSANCE_TT
+			hidden_effect = {
+				every_owned_province = {
+					add_institution_embracement = {
+						which = renaissance
+						value = 100
+					}
+				}
+			}
+		}
+	}
+}
+
+siena_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SIE
+			AND = {
+				was_tag = SIE
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	sie_expand_duomo = {
+		icon = control_the_church
+		required_missions = {}
+		position = 1
+		provinces_to_highlight = {
+			province_id = 117
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			117 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_adm_power = 50
+			add_papal_influence = 5
+		}
+	}
+
+	sie_refurbish_city_centre = {
+		icon = mission_land_of_churches
+		position = 3
+		required_missions = {
+			sie_expand_duomo
+			sie_mobilize_contrade
+		}
+		trigger = {
+			treasury = 500
+			if = {
+				limit = { has_estate = estate_burghers }
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			any_country = {
+				has_opinion = {
+					who = ROOT
+					value = 125
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Siena_Events.2
+			}
+		}
+	}
+
+	sie_palio_siena = {
+		icon = catholic_confraternity
+		required_missions = {
+			sie_refurbish_city_centre
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 117
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			117 = {
+				owned_by = ROOT
+				development = 30
+			}
+			OR = {
+				any_country = {
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+						}
+					}
+				}
+				commandant = 1
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Siena_Events.3
+			}
+		}
+	}
+
+	sie_triumph_good_governance = {
+		icon = reform_the_monte
+		required_missions = {
+			sie_state_church
+			sie_sienese_renaissance
+			sie_palio_siena
+			sie_take_lucca
+		}
+		position = 5
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				owned_by = ROOT
+			}
+			legitimacy_equivalent = 80
+			army_size = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_sienese_tuscany
+				duration = 7300
+			}
+			hidden_effect = {
+				complete_mission = pis_republic_reunited
+				complete_mission = lan_granducato
+				complete_mission = luc_independence_secured
+			}
+		}
+	}
+}
+
+siena_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SIE
+			AND = {
+				was_tag = SIE
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	sie_lupa_senese = {
+		icon = the_italian_league
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				AND = {
+					army_size_percentage = 0.75
+					manpower_percentage = 0.50
+				}
+			}
+		}
+		effect = {
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	sie_mobilize_contrade = {
+		icon = reclaim_the_aegean
+		required_missions = {
+			sie_lupa_senese
+		}
+		position = 2
+		trigger = {
+			prestige = 30
+		}
+		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = sie_wolf_siena
+				duration = 9125
+			}
+		}
+	}
+
+	sie_conquer_pisa = {
+		icon = make_haste_slowly
+		position = 3
+		required_missions = {
+			sie_mobilize_contrade
+		}
+		provinces_to_highlight = {
+			province_id = 115
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			115 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 15
+		}
+	}
+
+	sie_defeat_florence = {
+		icon = dreams_of_grandeur
+		position = 4
+		required_missions = {
+			sie_conquer_pisa
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 116
+				province_id = 2978
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			116 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2978 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
+		}
+	}
+
+	sie_take_lucca = {
+		icon = tuscan_birthright
+		required_missions = {
+			sie_defeat_florence
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 2980
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2980 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = LUC }
+				LUC = {
+					is_subject_other_than_tributary_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+			add_prestige = 10
+		}
+	}
+}
+
+siena_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = SIE
+			AND = {
+				was_tag = SIE
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	sie_port_siena = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = {
+			sie_mobilize_contrade
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 117
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			117 = {
+				owned_by = ROOT
+				base_production = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_sienese_naval_ambitions
+				duration = 7300
+			}
+		}
+	}
+
+	sie_cristallo_colle_val_elsa = {
+		icon = sources_of_trade
+		required_missions = {
+			sie_defeat_florence
+			sie_port_siena
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 117
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			117 = {
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = sie_elsa_valley_crystals
+				duration = 9125
+			}
+		}
+	}
+}

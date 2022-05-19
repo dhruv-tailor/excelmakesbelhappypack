@@ -181,261 +181,6 @@ italy_missions_1 = {
 			}
 		}
 	}
-
-	ita_military_support = {
-		icon = the_spanish_succession
-		required_missions = { }
-		position = 22
-		trigger = {
-			MIL = 6
-			OR = {
-				full_idea_group = aristocracy_ideas
-				full_idea_group = plutocracy_ideas
-				full_idea_group = offensive_ideas
-				full_idea_group = defensive_ideas
-				full_idea_group = quality_ideas
-				full_idea_group = quantity_ideas
-				full_idea_group = naval_ideas
-			}
-			has_mil_advisor_3 = yes
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_military_base_modifier
-				duration = 9125
-			}
-		}
-	}
-
-	ita_military_base = {
-		icon = a_show_of_strength
-		required_missions = { ita_military_support }
-		position = 23
-		provinces_to_highlight = {
-			region = italy_region
-            OR = {
-                NOT = { country_or_non_sovereign_subject_holds = ROOT }
-                AND = {
-                    NOT = { has_manpower_building_trigger = yes }
-                    NOT = { has_forcelimit_building_trigger = yes }
-                    NOT = { base_manpower = 10 }
-                }
-            }
-		}
-		trigger = {
-			MIL = 6
-			has_mil_advisor_3 = yes
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
-					has_manpower_building_trigger = yes
-					has_forcelimit_building_trigger = yes
-					base_manpower = 10
-				}
-			}
-		}
-		effect = {
-			italy_region = {
-				add_permanent_province_modifier = {
-					name = ita_local_guard
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ita_riforma_ricotti = {
-		icon = edict_of_potsdam
-		required_missions = { ita_military_base }
-		position = 24
-		provinces_to_highlight = {
-			region = italy_region
-			OR = {
-				has_terrain = hills
-				has_terrain = mountain
-			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { base_manpower = 15 }
-			}
-		}
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				OR = {
-					army_professionalism = 0.33
-					army_tradition = 80
-				}
-			}
-			else = {
-				army_tradition = 80
-			}
-			army_size = 100
-			prestige = 50
-			italy_region = {
-				type = all
-				OR = {
-					AND = {
-						NOT = { has_terrain = hills }
-						NOT = { has_terrain = mountain }
-					}
-					AND = {
-						country_or_non_sovereign_subject_holds = ROOT
-						base_manpower = 15
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_alpini
-				duration = -1
-			}
-		}
-	}
-
-	ita_centralised_government = {
-		icon = balance_the_estates
-		required_missions = { }
-		position = 25
-		provinces_to_highlight = {
-			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { development = 20 }
-				local_autonomy = 25
-			}
-		}
-		trigger = {
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 20
-				region = italy_region
-				development = 20
-				NOT = { local_autonomy = 25 }
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					OR = {
-						has_estate = estate_burghers
-						has_estate = estate_church
-						has_estate = estate_nobles
-					}
-				}
-				add_country_modifier = {
-					name = ita_centralisation
-					duration = -1
-				}
-				change_estate_land_share = {
-					estate = all
-					share = -5
-				}
-			}
-			else = {
-				add_adm_power = 100
-			}
-		}
-	}
-
-	ita_renewed_economy = {
-		icon = reform_the_state
-		required_missions = {
-			ita_centralised_government
-			ita_public_culture
-		}
-		position = 27
-		trigger = {
-			years_of_income = 1
-			NOT = { num_of_loans = 1 }
-			NOT = { is_bankrupt = yes }
-			all_country = {
-				OR = {
-					capital_scope = {
-						NOT = { continent = europe }
-					}
-					NOT = { monthly_income = ROOT }
-				}
-			}
-		}
-		effect = {
-			add_inflation = -2
-			add_adm_power = 300
-			add_country_modifier = {
-				name = ita_italian_ambition
-				duration = 7300
-			}
-		}
-	}
-
-	ita_great_monuments = {
-		icon = public_works
-		required_missions = {
-			ita_renewed_economy
-		}
-		position = 30
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Leviathan"
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = great_monuments }
-					}
-					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-						value = 3
-						region = italy_region
-						has_great_project = {
-							type = any
-							tier = 3
-						}
-					}
-				}
-				else = {
-					OR = {
-						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-							value = 3
-							region = italy_region
-							development = 50
-						}
-						any_owned_province = {
-							region = italy_region
-							has_great_project = {
-								type = any
-								tier = 3
-							}
-						}
-					}
-				}
-			}
-			else = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 3
-					region = italy_region
-					development = 50
-				}
-			}
-		}
-		effect = {
-			change_adm = 1
-			change_dip = 1
-			change_mil = 1
-			if = {
-				limit = {
-					has_dlc = "Mandate of Heaven"
-				}
-				add_splendor = 200
-			}
-		}
-	}
 }
 
 italy_missions_2 = {
@@ -609,6 +354,7 @@ italy_missions_2 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -617,6 +363,7 @@ italy_missions_2 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -625,6 +372,7 @@ italy_missions_2 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -633,6 +381,7 @@ italy_missions_2 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -676,6 +425,7 @@ italy_missions_2 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -758,361 +508,6 @@ italy_missions_2 = {
 			}
 		}
 	}
-
-	ita_alessandro_marmora = {
-		icon = establish_the_musketeers
-		required_missions = { ita_military_base }
-		position = 24
-		provinces_to_highlight = {
-			OR = {
-				province_id = 104
-				province_id = 103
-				province_id = 121
-			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { base_manpower = 20 }
-			}
-		}
-		trigger = {
-			104 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_manpower = 20
-			}
-			103 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_manpower = 20
-			}
-			121 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_manpower = 20
-			}
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				OR = {
-					army_professionalism = 0.33
-					army_tradition = 80
-				}
-			}
-			else = {
-				army_tradition = 80
-			}
-			army_size = 100
-			legitimacy_equivalent = 75
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_bersaglieri
-				duration = -1
-			}
-		}
-	}
-
-	ita_military_hegemon = {
-		icon = the_russian_campaign
-		required_missions = {
-			ita_riforma_ricotti
-			ita_alessandro_marmora
-		}
-		position = 24
-		trigger = {
-			army_tradition = 75
-			OR = {
-				full_idea_group = quantity_ideas
-				full_idea_group = quality_ideas
-			}
-			NOT = {
-				any_country = {
-					army_strength = {
-						who = ROOT
-						value = 0.5
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_domus_terrae
-				duration = -1
-			}
-		}
-	}
-
-	ita_public_culture = {
-		icon = feast_of_pheasants
-		required_missions = {
-		}
-		position = 26
-		provinces_to_highlight = {
-			OR = {
-				AND = {
-					OR = {
-						province_id = 4730
-						province_id = 105
-						province_id = 106
-						province_id = 4729
-						province_id = 121
-						province_id = 117
-						province_id = 119
-						province_id = 118
-						province_id = 2976
-						province_id = 116
-						province_id = 115
-						province_id = 113
-						province_id = 103
-						province_id = 124
-						province_id = 101
-						province_id = 2977
-						province_id = 127
-						province_id = 2986
-						province_id = 125
-						province_id = 104
-					}
-					OR = {
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
-						NOT = { has_building = university }
-					}
-				}
-				AND = {
-					region = italy_region
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				}
-			}
-		}
-		trigger = {
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			custom_trigger_tooltip = {
-				tooltip = ITA_PUBLIC_CULTURE_TRIGGER_TT
-				4730 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				105 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				106 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				4729 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				121 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				117 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				119 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				118 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				2976 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				116 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				115 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				113 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				103 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				124 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				101 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				2977 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				127 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				2986 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				125 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-				104 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_building = university
-				}
-			}
-			italy_region = {
-				type = all
-				area_for_scope_province = {
-					has_building = university
-				}
-			}
-		}
-		effect = {
-			add_mana_scaled_on_monarch_skill = yes
-			add_country_modifier = {
-				name = ita_center_technological_innovation
-				duration = -1
-			}
-		}
-	}
-
-	ita_purification_lands = {
-		icon = me_mission_purification_of_land
-		required_missions = {
-			ita_renewed_economy
-			ita_granary_italy
-		}
-		provinces_to_highlight = {
-			region = italy_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		position = 28
-		trigger = {
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			natural_scientist = 3
-			years_of_income = 2.5
-		}
-		effect = {
-			add_years_of_income = -2.5
-			custom_tooltip = ITA_PURIFICATION_LAND_TT
-			tooltip = {
-				add_permanent_province_modifier = {
-					name = ita_bonifica_integrale
-					duration = -1
-				}
-			}
-			hidden_effect = {
-				105 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				106 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				104 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				2978 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				117 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				2976 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				4732 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				1774 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				113 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				122 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-				4735 = {
-					add_permanent_province_modifier = {
-						name = ita_bonifica_integrale
-						duration = -1
-					}
-				}
-			}
-		}
-	}
-
-	ita_cristallo_colle_val_elsa = {
-		icon = bohemian_crystal
-		required_missions = {
-			ita_purification_lands
-		}
-		position = 29
-		provinces_to_highlight = {
-			province_id = 117
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { has_manufactory_trigger = yes }
-			}
-		}
-		trigger = {
-			117 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				has_manufactory_trigger = yes
-			}
-		}
-		effect = {
-			add_years_of_income = 1
-			117 = {
-				add_permanent_province_modifier = {
-					name = ita_elsa_valley
-					duration = 7300
-				}
-			}
-		}
-	}
 }
 
 italy_missions_3 = {
@@ -1141,8 +536,9 @@ italy_missions_3 = {
 			tus_conquest_of_rome
 			fer_conquest_of_rome
 			man_conquest_of_rome
-			mfa_new_empire
 			italian_minor_conquest_of_rome
+			pga_conquest_of_rome
+			vrn_conquest_of_rome
 		}
 		provinces_to_highlight = {
 			province_id = 118
@@ -1162,7 +558,7 @@ italy_missions_3 = {
 			add_splendor = 100
 			add_stability = 1
 			add_mana_scaled_on_monarch_skill = yes
-			capital_scope = { add_development_scaled_on_monarch_skill = yes }
+			capital_scope = { add_development_scaled_on_monthly_monarch_power = yes }
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = ages_and_splendor }
@@ -1186,7 +582,7 @@ italy_missions_3 = {
 				}
 				118 = {
 					add_great_project_tier = {
-						type = gme_rome_altare_patria
+						type = gme_altare_patria
 						tier = 1
 					}
 				}
@@ -1345,6 +741,7 @@ italy_missions_3 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -1353,6 +750,7 @@ italy_missions_3 = {
 					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -1615,396 +1013,6 @@ italy_missions_3 = {
 			add_country_modifier = {
 				name = ita_domus_marium
 				duration = -1
-			}
-		}
-	}
-
-	ita_race_against_world = {
-		icon = balance_of_power
-		required_missions = {
-		}
-		position = 25
-		trigger = {
-			if = {
-				limit = {
-					OR = {
-						has_dlc = "Emperor"
-						has_dlc = "Rights of Man"
-					}
-				}
-				is_great_power = yes
-			}
-			else = {
-				total_development = 500
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_birthplace_knowledge
-				duration = 7300
-			}
-		}
-	}
-
-	ita_granary_italy = {
-		icon = prosperity_for_all
-		required_missions = {
-			ita_prosperity_all
-		}
-		position = 27
-		provinces_to_highlight = {
-			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				AND = {
-					OR = {
-						has_terrain = farmlands
-						has_terrain = grasslands
-						trade_goods = grain
-						trade_goods = livestock
-						trade_goods = fish
-						trade_goods = rice
-						trade_goods = olive_oil
-						trade_goods = cheese
-						trade_goods = potato
-					}
-					NOT = { development = 20 }
-					NOT = { has_production_building_trigger = yes }
-					NOT = { has_manufactory_trigger = yes }
-				}
-			}
-		}
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = ITA_GRANARY_ITALY_TT
-				italy_region = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				italy_region = {
-					type = all
-					OR = {
-						NOT = {
-							has_terrain = farmlands
-							has_terrain = grasslands
-							trade_goods = grain
-							trade_goods = livestock
-							trade_goods = fish
-							trade_goods = rice
-							trade_goods = olive_oil
-							trade_goods = cheese
-							trade_goods = potato
-						}
-						development = 20
-						has_production_building_trigger = yes
-						has_manufactory_trigger = yes
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					NOT = {
-						is_expanded_mod_active = { mod = great_monuments }
-					}
-				}
-				add_country_modifier = {
-					name = ita_supporting_newfounded_state
-					duration = -1
-				}
-			}
-			custom_tooltip = ITA_Bolstering_Production_TT
-			tooltip = {
-				add_permanent_province_modifier = {
-					name = ita_bolstering_production
-					duration = -1
-				}
-			}
-			hidden_effect = {
-				italy_region = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
-						OR = {
-							has_terrain = farmlands
-							has_terrain = grasslands
-							trade_goods = grain
-							trade_goods = livestock
-							trade_goods = fish
-							trade_goods = livestock
-							trade_goods = rice
-							trade_goods = olive_oil
-							trade_goods = cheese
-							trade_goods = potato
-						}
-						OR = {
-							development = 20
-							has_production_building_trigger = yes
-							has_manufactory_trigger = yes
-						}
-					}
-					add_permanent_province_modifier = {
-						name = ita_bolstering_production
-						duration = -1
-					}
-				}
-			}
-		}
-	}
-
-	ita_triangolo_industriale = {
-		icon = industrialized_rhineland
-		required_missions = {
-			ita_industrial_attempts
-		}
-		position = 28
-		provinces_to_highlight = {
-			OR = {
-				province_id = 101
-				province_id = 103
-				province_id = 104
-			}
-			OR = {
-				NOT = { development = 30 }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { has_manufactory_trigger = yes }
-			}
-		}
-		trigger = {
-			101 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
-				has_manufactory_trigger = yes
-			}
-			103 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
-				has_manufactory_trigger = yes
-			}
-			104 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
-				has_manufactory_trigger = yes
-			}
-		}
-		effect = {
-			101 = {
-				add_permanent_province_modifier = {
-					name = ita_to_mi_ge
-					duration = -1
-				}
-			}
-			103 = {
-				add_permanent_province_modifier = {
-					name = ita_to_mi_ge
-					duration = -1
-				}
-			}
-			104 = {
-				add_permanent_province_modifier = {
-					name = ita_to_mi_ge
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ita_means_production = {
-		icon = mission_grand_trunk_road_mug
-		required_missions = {
-			ita_triangolo_industriale
-		}
-		position = 29
-		provinces_to_highlight = {
-			OR = {
-				province_id = 101
-				province_id = 2981
-				province_id = 2979
-				province_id = 4739
-				province_id = 107
-				province_id = 4729
-				province_id = 108
-				province_id = 103
-				province_id = 104
-			}
-			OR = {
-				NOT = { base_production = 10 }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			}
-		}
-		trigger = {
-			101 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			2981 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			2979 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			4739 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			107 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			4729 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			108 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			103 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-			104 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_production = 10
-			}
-		}
-		effect = {
-			custom_tooltip = ITA_FERROVIE_TT
-			tooltip = {
-				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
-					duration = -1
-				}
-			}
-			hidden_effect = {
-				101 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				2981 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				2979 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				4739 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				107 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				4729 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				108 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				103 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-				104 = {
-					add_permanent_province_modifier = {
-						name = ita_ferrovie_italiane
-						duration = -1
-					}
-				}
-			}
-			venetia_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			lombardy_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			piedmont_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			tuscany_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			liguria_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			emilia_romagna_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			central_italy_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			lazio_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
-			}
-			po_valley_area = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				remove_province_modifier = ita_italian_prosperity_1
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_final
-					duration = -1
-				}
 			}
 		}
 	}
@@ -2413,198 +1421,6 @@ italy_missions_4 = {
 			}
 		}
 	}
-
-	ita_prosperity_all = {
-		icon = develop_the_south
-		required_missions = {
-			ita_race_against_world
-			ita_questione_meridionale
-		}
-		position = 26
-		provinces_to_highlight = {
-			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				AND = {
-					has_dlc = "Mandate of Heaven"
-					NOT = { prosperity = 100 }
-				}
-				AND = {
-					NOT = { has_dlc = "Mandate of Heaven" }
-					OR = {
-						devastation = 1
-						unrest = 1
-						local_autonomy = 5
-					}
-				}
-			}
-		}
-		trigger = {
-			ADM = 5
-			has_adm_advisor_3 = yes
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			if = {
-				limit = {
-					has_dlc = "Mandate of Heaven"
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 20
-					region = italy_region
-					prosperity = 100
-				}
-			}
-			else = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 20
-					region = italy_region
-					NOT = { devastation = 1 }
-					NOT = { unrest = 1 }
-					NOT = { local_autonomy = 5 }
-				}
-			}
-		}
-		effect = {
-			italy_region = {
-				limit = { country_or_non_sovereign_subject_holds = ROOT }
-				add_permanent_province_modifier = {
-					name = ita_italian_prosperity_1
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ita_industrial_attempts = {
-		icon = mission_industria_sedera
-		required_missions = {
-			ita_prosperity_all
-		}
-		position = 27
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Rule Britannia"
-				}
-				OR = {
-					has_institution = manufactories
-					any_owned_province = {
-						trade_goods = coal
-						development = 20
-					}
-				}
-			}
-			else = {
-				has_institution = manufactories
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ita_coal_race
-				duration = 5475
-			}
-		}
-	}
-
-	ita_napoli_salerno = {
-		icon = develop_naples
-		required_missions = {
-			ita_industrial_attempts
-			ita_develop_south
-		}
-		position = 28
-		provinces_to_highlight = {
-			OR = {
-				province_id = 121
-				province_id = 2983
-			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { base_tax = 10 }
-				NOT = { development = 20 }
-				NOT = { has_manufactory_trigger = yes }
-			}
-		}
-		trigger = {
-			121 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_tax = 10
-				development = 20
-				has_manufactory_trigger = yes
-			}
-			2983 = {
-				country_or_non_sovereign_subject_holds = ROOT
-				base_tax = 10
-				development = 20
-				has_manufactory_trigger = yes
-			}
-		}
-		effect = {
-			121 = {
-				add_permanent_province_modifier = {
-					name = ita_napoli_portici
-					duration = -1
-				}
-			}
-			2983 = {
-				add_permanent_province_modifier = {
-					name = ita_napoli_portici
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ita_primo_tutti = {
-		icon = a_real_roman_empire
-		required_missions = {
-			ita_means_production
-			ita_porti_mezzoggiorno
-		}
-		position = 30
-		provinces_to_highlight = {
-			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { development = 30 }
-			}
-		}
-		trigger = {
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
-			}
-			if = {
-				limit = {
-					OR = {
-						has_dlc = "Emperor"
-						has_dlc = "Rights of Man"
-					}
-				}
-				is_great_power = yes
-				NOT = { great_power_rank = 2 }
-			}
-			else = {
-				all_country = {
-					NOT = { total_development = ROOT }
-				}
-			}
-		}
-		effect = {
-			add_mana_scaled_on_monarch_skill = yes
-			add_power_projection = {
-				type = mission_rewards_power_projection
-				amount = 20
-			}
-			add_country_modifier = {
-				name = ita_italian_hegemony_production
-				duration = -1
-			}
-		}
-	}
 }
 
 italy_missions_5 = {
@@ -2802,6 +1618,7 @@ italy_missions_5 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -2893,6 +1710,1319 @@ italy_missions_5 = {
 					power = 25
 					key = ita_alexandria_ambition
 				}
+			}
+		}
+	}
+}
+
+italy_missions_1_military = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_military_support = {
+		icon = the_spanish_succession
+		required_missions = { }
+		position = 22
+		trigger = {
+			MIL = 6
+			OR = {
+				full_idea_group = aristocracy_ideas
+				full_idea_group = plutocracy_ideas
+				full_idea_group = offensive_ideas
+				full_idea_group = defensive_ideas
+				full_idea_group = quality_ideas
+				full_idea_group = quantity_ideas
+				full_idea_group = naval_ideas
+			}
+			has_mil_advisor_3 = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_military_base_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	ita_military_base = {
+		icon = a_show_of_strength
+		required_missions = { ita_military_support }
+		position = 23
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_manpower_building_trigger = yes }
+					NOT = { has_forcelimit_building_trigger = yes }
+					NOT = { base_manpower = 10 }
+				}
+			}
+		}
+		trigger = {
+			MIL = 6
+			has_mil_advisor_3 = yes
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_manpower_building_trigger = yes
+					has_forcelimit_building_trigger = yes
+					base_manpower = 10
+				}
+			}
+		}
+		effect = {
+			italy_region = {
+				add_permanent_province_modifier = {
+					name = ita_local_guard
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ita_riforma_ricotti = {
+		icon = edict_of_potsdam
+		required_missions = { ita_military_base }
+		position = 24
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				has_terrain = hills
+				has_terrain = mountain
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { base_manpower = 15 }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					army_professionalism = 0.33
+					army_tradition = 80
+				}
+			}
+			else = {
+				army_tradition = 80
+			}
+			army_size = 100
+			prestige = 50
+			italy_region = {
+				type = all
+				OR = {
+					AND = {
+						NOT = { has_terrain = hills }
+						NOT = { has_terrain = mountain }
+					}
+					AND = {
+						country_or_non_sovereign_subject_holds = ROOT
+						base_manpower = 15
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_alpini
+				duration = -1
+			}
+		}
+	}
+}
+
+italy_missions_2_military = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_alessandro_marmora = {
+		icon = establish_the_musketeers
+		required_missions = { ita_military_base }
+		position = 24
+		provinces_to_highlight = {
+			OR = {
+				province_id = 104
+				province_id = 103
+				province_id = 121
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { base_manpower = 20 }
+			}
+		}
+		trigger = {
+			104 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_manpower = 20
+			}
+			103 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_manpower = 20
+			}
+			121 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_manpower = 20
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					army_professionalism = 0.33
+					army_tradition = 80
+				}
+			}
+			else = {
+				army_tradition = 80
+			}
+			army_size = 100
+			legitimacy_equivalent = 75
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_bersaglieri
+				duration = -1
+			}
+		}
+	}
+
+	ita_military_hegemon = {
+		icon = the_russian_campaign
+		required_missions = {
+			ita_riforma_ricotti
+			ita_alessandro_marmora
+		}
+		position = 24
+		trigger = {
+			army_tradition = 75
+			OR = {
+				full_idea_group = quantity_ideas
+				full_idea_group = quality_ideas
+			}
+			NOT = {
+				any_country = {
+					army_strength = {
+						who = ROOT
+						value = 0.5
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_domus_terrae
+				duration = -1
+			}
+		}
+	}
+}
+
+italy_missions_1_tall = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_centralised_government = {
+		icon = balance_the_estates
+		required_missions = { }
+		position = 25
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 20 }
+				local_autonomy = 25
+			}
+		}
+		trigger = {
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = italy_region
+				development = 20
+				NOT = { local_autonomy = 25 }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						has_estate = estate_burghers
+						has_estate = estate_church
+						has_estate = estate_nobles
+					}
+				}
+				add_country_modifier = {
+					name = ita_centralisation
+					duration = -1
+				}
+				change_estate_land_share = {
+					estate = all
+					share = -5
+				}
+			}
+			else = {
+				add_adm_power = 100
+			}
+		}
+	}
+
+	ita_renewed_economy = {
+		icon = reform_the_state
+		required_missions = {
+			ita_centralised_government
+			ita_public_culture
+		}
+		position = 27
+		trigger = {
+			years_of_income = 1
+			NOT = { num_of_loans = 1 }
+			NOT = { is_bankrupt = yes }
+			all_country = {
+				OR = {
+					capital_scope = {
+						NOT = { continent = europe }
+					}
+					NOT = { monthly_income = ROOT }
+				}
+			}
+		}
+		effect = {
+			add_inflation = -2
+			add_adm_power = 300
+			add_country_modifier = {
+				name = ita_italian_ambition
+				duration = 7300
+			}
+		}
+	}
+
+	ita_great_monuments = {
+		icon = public_works
+		required_missions = {
+			ita_renewed_economy
+		}
+		position = 30
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = great_monuments }
+					}
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 3
+						region = italy_region
+						has_great_project = {
+							type = any
+							tier = 3
+						}
+					}
+				}
+				else = {
+					OR = {
+						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+							value = 3
+							region = italy_region
+							development = 50
+						}
+						any_owned_province = {
+							region = italy_region
+							has_great_project = {
+								type = any
+								tier = 3
+							}
+						}
+					}
+				}
+			}
+			else = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 3
+					region = italy_region
+					development = 50
+				}
+			}
+		}
+		effect = {
+			change_adm = 1
+			change_dip = 1
+			change_mil = 1
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 200
+			}
+		}
+	}
+}
+
+italy_missions_2_tall = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_public_culture = {
+		icon = feast_of_pheasants
+		required_missions = {
+		}
+		position = 26
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 4730
+						province_id = 105
+						province_id = 106
+						province_id = 4729
+						province_id = 121
+						province_id = 117
+						province_id = 119
+						province_id = 118
+						province_id = 2976
+						province_id = 116
+						province_id = 115
+						province_id = 113
+						province_id = 103
+						province_id = 124
+						province_id = 101
+						province_id = 2977
+						province_id = 127
+						province_id = 2986
+						province_id = 125
+						province_id = 104
+					}
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { has_building = university }
+					}
+				}
+				AND = {
+					region = italy_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
+		}
+		trigger = {
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			custom_trigger_tooltip = {
+				tooltip = ITA_PUBLIC_CULTURE_TRIGGER_TT
+				4730 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				105 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				106 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				4729 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				121 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				117 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				119 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				118 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				2976 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				116 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				115 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				113 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				103 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				124 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				101 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				2977 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				127 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				2986 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				125 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+				104 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_building = university
+				}
+			}
+			italy_region = {
+				type = all
+				area_for_scope_province = {
+					has_building = university
+				}
+			}
+		}
+		effect = {
+			add_mana_scaled_on_monarch_skill = yes
+			add_country_modifier = {
+				name = ita_center_technological_innovation
+				duration = -1
+			}
+		}
+	}
+
+	ita_purification_lands = {
+		icon = me_mission_purification_of_land
+		required_missions = {
+			ita_renewed_economy
+			ita_granary_italy
+		}
+		provinces_to_highlight = {
+			region = italy_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		position = 28
+		trigger = {
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			natural_scientist = 3
+			years_of_income = 2.5
+		}
+		effect = {
+			add_years_of_income = -2.5
+			custom_tooltip = ITA_PURIFICATION_LAND_TT
+			tooltip = {
+				add_permanent_province_modifier = {
+					name = ita_bonifica_integrale
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				105 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				106 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				104 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				2978 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				117 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				2976 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				4732 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				1774 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				113 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				122 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+				4735 = {
+					add_permanent_province_modifier = {
+						name = ita_bonifica_integrale
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	ita_cristallo_colle_val_elsa = {
+		icon = bohemian_crystal
+		required_missions = {
+			ita_purification_lands
+		}
+		position = 29
+		provinces_to_highlight = {
+			province_id = 117
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			117 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 1
+			117 = {
+				add_permanent_province_modifier = {
+					name = ita_elsa_valley
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+italy_missions_3_tall = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_race_against_world = {
+		icon = balance_of_power
+		required_missions = {
+		}
+		position = 25
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				is_great_power = yes
+			}
+			else = {
+				total_development = 500
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_birthplace_knowledge
+				duration = 7300
+			}
+		}
+	}
+
+	ita_granary_italy = {
+		icon = prosperity_for_all
+		required_missions = {
+			ita_prosperity_all
+		}
+		position = 27
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					OR = {
+						has_terrain = farmlands
+						has_terrain = grasslands
+						trade_goods = grain
+						trade_goods = livestock
+						trade_goods = fish
+						trade_goods = rice
+						trade_goods = olive_oil
+						trade_goods = cheese
+						trade_goods = potato
+					}
+					NOT = { development = 20 }
+					NOT = { has_production_building_trigger = yes }
+					NOT = { has_manufactory_trigger = yes }
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ITA_GRANARY_ITALY_TT
+				italy_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				italy_region = {
+					type = all
+					OR = {
+						NOT = {
+							has_terrain = farmlands
+							has_terrain = grasslands
+							trade_goods = grain
+							trade_goods = livestock
+							trade_goods = fish
+							trade_goods = rice
+							trade_goods = olive_oil
+							trade_goods = cheese
+							trade_goods = potato
+						}
+						development = 20
+						has_production_building_trigger = yes
+						has_manufactory_trigger = yes
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						is_expanded_mod_active = { mod = great_monuments }
+					}
+				}
+				add_country_modifier = {
+					name = ita_supporting_newfounded_state
+					duration = -1
+				}
+			}
+			custom_tooltip = ITA_Bolstering_Production_TT
+			tooltip = {
+				add_permanent_province_modifier = {
+					name = ita_bolstering_production
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				italy_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						OR = {
+							has_terrain = farmlands
+							has_terrain = grasslands
+							trade_goods = grain
+							trade_goods = livestock
+							trade_goods = fish
+							trade_goods = livestock
+							trade_goods = rice
+							trade_goods = olive_oil
+							trade_goods = cheese
+							trade_goods = potato
+						}
+						OR = {
+							development = 20
+							has_production_building_trigger = yes
+							has_manufactory_trigger = yes
+						}
+					}
+					add_permanent_province_modifier = {
+						name = ita_bolstering_production
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	ita_triangolo_industriale = {
+		icon = industrialized_rhineland
+		required_missions = {
+			ita_industrial_attempts
+		}
+		position = 28
+		provinces_to_highlight = {
+			OR = {
+				province_id = 101
+				province_id = 103
+				province_id = 104
+			}
+			OR = {
+				NOT = { development = 30 }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+				has_manufactory_trigger = yes
+			}
+			103 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+				has_manufactory_trigger = yes
+			}
+			104 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			101 = {
+				add_permanent_province_modifier = {
+					name = ita_to_mi_ge
+					duration = -1
+				}
+			}
+			103 = {
+				add_permanent_province_modifier = {
+					name = ita_to_mi_ge
+					duration = -1
+				}
+			}
+			104 = {
+				add_permanent_province_modifier = {
+					name = ita_to_mi_ge
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ita_means_production = {
+		icon = mission_grand_trunk_road_mug
+		required_missions = {
+			ita_triangolo_industriale
+		}
+		position = 29
+		provinces_to_highlight = {
+			OR = {
+				province_id = 101
+				province_id = 2981
+				province_id = 2979
+				province_id = 4739
+				province_id = 107
+				province_id = 4729
+				province_id = 108
+				province_id = 103
+				province_id = 104
+			}
+			OR = {
+				NOT = { base_production = 10 }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			2981 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			2979 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			4739 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			107 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			4729 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			108 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			103 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			104 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+		}
+		effect = {
+			custom_tooltip = ITA_FERROVIE_TT
+			tooltip = {
+				add_permanent_province_modifier = {
+					name = ita_ferrovie_italiane
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				101 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				2981 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				2979 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				4739 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				107 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				4729 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				108 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				103 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				104 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+			}
+			venetia_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			lombardy_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			piedmont_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			tuscany_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			liguria_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			emilia_romagna_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			central_italy_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			lazio_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			po_valley_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+italy_missions_4_tall = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+
+	ita_prosperity_all = {
+		icon = develop_the_south
+		required_missions = {
+			ita_race_against_world
+			ita_questione_meridionale
+		}
+		position = 26
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { prosperity = 100 }
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					OR = {
+						devastation = 1
+						unrest = 1
+						local_autonomy = 5
+					}
+				}
+			}
+		}
+		trigger = {
+			ADM = 5
+			has_adm_advisor_3 = yes
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 20
+					region = italy_region
+					prosperity = 100
+				}
+			}
+			else = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 20
+					region = italy_region
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
+					NOT = { local_autonomy = 5 }
+				}
+			}
+		}
+		effect = {
+			italy_region = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_1
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ita_industrial_attempts = {
+		icon = mission_industria_sedera
+		required_missions = {
+			ita_prosperity_all
+		}
+		position = 27
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					has_institution = manufactories
+					any_owned_province = {
+						trade_goods = coal
+						development = 20
+					}
+				}
+			}
+			else = {
+				has_institution = manufactories
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ita_coal_race
+				duration = 5475
+			}
+		}
+	}
+
+	ita_napoli_salerno = {
+		icon = develop_naples
+		required_missions = {
+			ita_industrial_attempts
+			ita_develop_south
+		}
+		position = 28
+		provinces_to_highlight = {
+			OR = {
+				province_id = 121
+				province_id = 2983
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { base_tax = 10 }
+				NOT = { development = 20 }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			121 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_tax = 10
+				development = 20
+				has_manufactory_trigger = yes
+			}
+			2983 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_tax = 10
+				development = 20
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			121 = {
+				add_permanent_province_modifier = {
+					name = ita_napoli_portici
+					duration = -1
+				}
+			}
+			2983 = {
+				add_permanent_province_modifier = {
+					name = ita_napoli_portici
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ita_primo_tutti = {
+		icon = a_real_roman_empire
+		required_missions = {
+			ita_means_production
+			ita_porti_mezzoggiorno
+		}
+		position = 30
+		provinces_to_highlight = {
+			region = italy_region
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			italy_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+			}
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				is_great_power = yes
+				NOT = { great_power_rank = 2 }
+			}
+			else = {
+				all_country = {
+					NOT = { total_development = ROOT }
+				}
+			}
+		}
+		effect = {
+			add_mana_scaled_on_monarch_skill = yes
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 20
+			}
+			if = {
+				limit = { has_global_flag = historical_national_ideas_mod_active }
+				add_country_modifier = {
+					name = ita_italian_hegemony_production_hni
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ita_italian_hegemony_production
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+italy_missions_5_tall = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = ITA
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
 			}
 		}
 	}

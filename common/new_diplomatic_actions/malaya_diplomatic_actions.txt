@@ -1,0 +1,189 @@
+ME_tributary_state_interaction = {
+	category = influence
+
+	alert_index = 6
+	alert_tooltip = ME_tributary_state_interaction_tooltip
+
+	require_acceptance = yes
+
+	is_visible = {
+		has_country_flag = MSA_tributary_interaction_enabled
+		FROM = {
+			is_subject_of = ROOT
+			is_subject_of_type = vassal
+		}
+	}
+
+	is_allowed = {
+		FROM = {
+			years_in_vassalage_under = {
+				who = ROOT
+				years = 30
+			}
+		}
+		is_at_war = no
+		dip_power = 100
+		FROM = { is_at_war = no }
+	}
+
+	on_accept = {
+		if = {
+			limit = {
+				has_country_flag = MSA_tributary_interaction_enabled
+				FROM = {
+					is_subject_of = ROOT
+					is_subject_of_type = vassal
+					years_in_vassalage_under = {
+						who = ROOT
+						years = 30
+					}
+					NOT = { liberty_desire = 5 }
+				}
+			}
+			FROM = {
+				create_subject = {
+					subject = ROOT
+					subject_type = tributary_state
+				}
+			}
+			add_dip_power = -100
+		}
+	}
+
+	on_decline = {
+		if = {
+			limit = {
+				FROM = {
+					is_subject = no
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = agricultural_march
+					}
+				}
+				is_at_war = no
+				FROM = { is_at_war = no }
+			}
+			FROM = {
+				clr_country_flag = declined_become_agricultural_march_@ROOT
+				set_country_flag = declined_become_agricultural_march_@ROOT
+			}
+			add_opinion = {
+				who = FROM
+				modifier = declined_ask_to_become_agricultural_march
+			}
+		}
+	}
+
+	ai_acceptance = {
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 4 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = ROOT_IS_VASSAL_FOR_AT_LEAST_10_YEARS
+			limit = {
+				years_in_vassalage_under = {
+					who = FROM
+					years = 10
+					all_subject_country = yes
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_IS_NOT_A_NEIGHBOR_OF_FROMS_RIVALS
+			limit = {
+				NOT = {
+					any_neighbor_country = {
+						OR = {
+							is_rival = FROM
+							is_enemy = FROM
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_MORE_THAN_25_PERCENT_OF_OVERLORD_DEVELOPMENT
+			limit = {
+				development_of_overlord_fraction = 0.25
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_TOO_FEW_PRODUCTION_INCOME
+			limit = {
+				OR = {
+					NOT = { monthly_income = 20 }
+					NOT = { production_income_percentage = 0.35 }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = ROOT_HAS_TOO_FEW_MAX_MANPOWER
+			limit = {
+				NOT = { max_manpower = 20 }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+
+	ai_will_do = {
+		NOT = { liberty_desire = 50 }
+		NOT = { is_different_march_subject = yes }
+		army_size = 20
+		OR = {
+			is_subject_of_type = march
+			FROM = { ai = no }
+		}
+		production_income_percentage = 0.2
+		any_neighbor_country = {
+			OR = {
+				is_rival = FROM
+				is_enemy = FROM
+			}
+		}
+		FROM = {
+			OR = {
+				NOT = { has_country_flag = declined_become_agricultural_march_@ROOT }
+				had_country_flag = { flag = declined_become_agricultural_march_@ROOT days = 1825 }
+			}
+		}
+	}
+}

@@ -1,0 +1,693 @@
+MLC_generic_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = KED #Kedah
+			tag = PAT #Pattani
+			tag = PRK #Perak
+			tag = KEL #Kelantan
+			tag = PAH #Pahang
+			tag = JOH #Johor
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = KED #Kedah
+					was_tag = PAT #Pattani
+					was_tag = PRK #Perak
+					was_tag = KEL #Kelantan
+					was_tag = PAH #Pahang
+					was_tag = KED #Johor
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MLC_generic_navy = {
+		icon = mission_arabian_sea_trade
+		required_missions = { }
+		position = 2
+		trigger = {
+			OR = {
+				num_of_light_ship = 10
+				num_of_galley = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_generic_laksamana
+				duration = 7300
+			}
+			MSA_claims_borneo = yes
+			#first nation to complete gets 60 tradition admiral
+			custom_tooltip = MLC_generic_first
+			tooltip = {
+				create_admiral = { tradition = 80 }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_global_flag = MLC_generic_mission_flag }
+					}
+					create_admiral = { tradition = 80 }
+					set_global_flag = MLC_generic_mission_flag
+				}
+			}
+		}
+	}
+
+	MLC_generic_borneo = {
+		icon = me_mission_malay_ruler
+		required_missions = { MLC_generic_navy }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = brunei_area
+				area = kalimantan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = brunei_area
+							area = kalimantan_area
+						}
+						value = 3
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = brunei_area
+					area = kalimantan_area
+				}
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_ambitions_overseas
+				duration = 9125
+			}
+			add_navy_tradition = 15
+		}
+	}
+
+	MLC_generic_kalimantan = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { MLC_generic_borneo }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_borneo = yes
+						value = 13
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 13
+			}
+		}
+		effect = {
+			add_accepted_culture_or_dip_power = { culture = bornean }
+			MSA_claims_sulawesi = yes
+		}
+	}
+}
+
+MLC_generic_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = KED #Kedah
+			tag = PAT #Pattani
+			tag = PRK #Perak
+			tag = KEL #Kelantan
+			tag = PAH #Pahang
+			tag = JOH #Johor
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = KED #Kedah
+					was_tag = PAT #Pattani
+					was_tag = PRK #Perak
+					was_tag = KEL #Kelantan
+					was_tag = PAH #Pahang
+					was_tag = KED #Johor
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MLC_generic_defeat_siam = {
+		icon = me_mission_garuda
+		required_missions = { MLC_generic_protect_against_malaka }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 600
+			NOT = { owned_by = ROOT }
+			owner = {
+				ROOT = {
+					NOT = { has_won_war_against = { who = PREV } }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns = 600
+				600 = {
+					owner = {
+						custom_trigger_tooltip = {
+							tooltip = MLC_won_war_against_owner_of_600
+							ROOT = {
+								has_won_war_against = { who = PREV }
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			create_general = {
+				tradition = 60
+				add_manuever = 1
+				add_shock = 1
+			}
+			custom_tooltip = MLC_general_pips
+			add_country_modifier = {
+				name = MLC_generic_independent
+				duration = 9125
+			}
+		}
+	}
+
+	MLC_generic_control_the_strait = {
+		icon = mission_dharma_mission_arabian_trade
+		required_missions = { MLC_generic_navy }
+		position = 3
+		trigger = {
+			1361 = {
+				trade_share = {
+					country = ROOT
+					share = 10
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_trade_is_right
+				duration = 7300
+			}
+		}
+	}
+
+	MLC_generic_make_alliances = {
+		icon = mission_deccanis
+		required_missions = { MLC_generic_control_the_strait }
+		position = 4
+		trigger = {
+			MSA_orang_laut_trigger = yes
+		}
+		effect = {
+			MSA_orang_laut_effect = yes
+		}
+	}
+
+	MLC_generic_sulawesi = {
+		icon = mission_mnd_maj_cloves
+		required_missions = { MLC_generic_kalimantan }
+		position = 6
+		provinces_to_highlight = {
+			MSA_is_in_sulawesi = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sulawesi = yes
+						value = 5
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 5
+			}
+		}
+		effect = {
+			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
+		}
+	}
+}
+
+MLC_generic_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = KED #Kedah
+			tag = PAT #Pattani
+			tag = PRK #Perak
+			tag = KEL #Kelantan
+			tag = PAH #Pahang
+			tag = JOH #Johor
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = KED #Kedah
+					was_tag = PAT #Pattani
+					was_tag = PRK #Perak
+					was_tag = KEL #Kelantan
+					was_tag = PAH #Pahang
+					was_tag = JOH #Johor
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MLC_generic_protect_against_malaka = {
+		icon = mission_subjugate_saurashtra
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size_percentage = 0.9
+				army_size = MLC
+			}
+			OR = {
+				num_of_generals = 1
+				army_tradition = 40
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_to_defy_the_giant
+				duration = 7300
+			}
+			MSA_claims_malaya = yes
+		}
+	}
+
+	MLC_generic_malay_peninsula = {
+		icon = mission_malayan_viceroyalty
+		required_missions = { MLC_generic_defeat_malacca MLC_generic_protect_against_malaka }
+		position = 3
+		provinces_to_highlight = {
+			MSA_is_in_malaya = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_malaya = yes
+						value = 10
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_malaya = yes
+				value = 10
+			}
+		}
+		effect = {
+			malacca_area = { add_local_autonomy = -25 }
+			north_malaya_area = { add_local_autonomy = -25 }
+			malaya_area = { add_local_autonomy = -25 }
+			johor_area = { add_local_autonomy = -25 }
+			add_stability_or_adm_power = yes
+			MSA_claims_sumatra = yes
+		}
+	}
+
+	MLC_generic_heir_of_srivijaya = {
+		icon = mission_mnd_khm_resurgence
+		required_missions = { MLC_generic_malay_peninsula }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_sumatra = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sumatra = yes
+						value = 15
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sumatra = yes
+				value = 15
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_srivijaya
+				duration = -1
+			}
+			add_accepted_culture_or_dip_power = { culture = sumatran }
+			MSA_claims_java = yes
+			custom_tooltip = MLC_if_we_are_buddhist
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_generic_srivijaya
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						religion_group = eastern
+					}
+					add_country_modifier = {
+						name = MLC_generic_srivijaya
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	MLC_generic_treachorous_waters = {
+		icon = mission_look_west
+		required_missions = { MLC_generic_heir_of_srivijaya }
+		position = 6
+		provinces_to_highlight = {
+			MSA_is_in_java = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_java = yes
+						value = 8
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 8
+			}
+		}
+		effect = {
+			MSA_java_reward = yes
+		}
+	}
+
+	MLC_generic_malaya_generic = {
+		icon = mission_renovate_kannauj
+		required_missions = { MLC_generic_treachorous_waters MLC_generic_sulawesi }
+		position = 7
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+MLC_generic_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = KED #Kedah
+			tag = PAT #Pattani
+			tag = PRK #Perak
+			tag = KEL #Kelantan
+			tag = PAH #Pahang
+			tag = JOH #Johor
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = KED #Kedah
+					was_tag = PAT #Pattani
+					was_tag = PRK #Perak
+					was_tag = KEL #Kelantan
+					was_tag = PAH #Pahang
+					was_tag = KED #Johor
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MLC_generic_defeat_malacca = {
+		icon = me_mission_sack_malacca
+		required_missions = { MLC_generic_protect_against_malaka }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 596
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 596
+		}
+		effect = {
+			add_army_tradition_or_mil_power = { amount = 10 }
+			add_adm_power = 50
+			custom_tooltip = MLC_generic_upgrade_596
+			hidden_effect = {
+				if = {
+					limit = {
+						596 = {
+							NOT = { province_has_center_of_trade_of_level = 2 }
+						}
+					}
+					596 = { add_center_of_trade_level = 1 }
+				}
+			}
+		}
+	}
+
+	MLC_generic_entrepot = {
+		icon = mission_south_indian_trade
+		required_missions = { MLC_generic_challenge_malaccan_authority MLC_generic_defeat_malacca }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 596
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { province_trade_power = 15 }
+			}
+			ROOT = {
+				NOT = {
+					any_owned_province = {
+						province_trade_power = 10
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				596 = {
+					owned_by = ROOT
+					province_trade_power = 15
+				}
+				any_owned_province = {
+					NOT = { province_id = 596 }
+					province_trade_power = 10
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = MLC_if_malaka
+			tooltip = {
+				596 = {
+					custom_tooltip = MLC_add_or_upgrade_center_of_trade
+				}
+			}
+			custom_tooltip = MLC_if_every_other_province
+			tooltip = {
+				add_mercantilism = 2
+				custom_tooltip = MLC_other_province
+				custom_tooltip = MLC_add_or_upgrade_center_of_trade
+				add_province_modifier = {
+					name = MLC_port_rival_to_malacca
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						any_owned_province = {
+							NOT = { province_id = 596 }
+							province_trade_power = 10
+						}
+					}
+					add_mercantilism = 2
+					random_owned_province = {
+						limit = {
+							NOT = { province_id = 596 }
+							province_trade_power = 10
+						}
+						create_or_add_center_of_trade_level = { level = 1 }
+						add_province_modifier = {
+							name = MLC_port_rival_to_malacca
+							duration = -1
+						}
+					}
+				}
+				else = {
+					596 = {
+						create_or_add_center_of_trade_level = { level = 1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+MLC_generic_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = KED #Kedah
+			tag = PAT #Pattani
+			tag = PRK #Perak
+			tag = KEL #Kelantan
+			tag = PAH #Pahang
+			tag = JOH #Johor
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = KED #Kedah
+					was_tag = PAT #Pattani
+					was_tag = PRK #Perak
+					was_tag = KEL #Kelantan
+					was_tag = PAH #Pahang
+					was_tag = KED #Johor
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MLC_generic_challenge_malaccan_authority = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { }
+		position = 2
+		trigger = {
+			OR = {
+				num_of_cities = MLC
+				num_of_cities = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_generic_challenging
+				duration = 9125
+			}
+			add_prestige_or_monarch_power = { amount = 10 }
+		}
+	}
+
+	MLC_generic_golden_chersonese = {
+		icon = mission_restore_pagodas
+		required_missions = { MLC_generic_challenge_malaccan_authority MLC_generic_entrepot }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = malacca_area
+				area = malaya_area
+				area = north_malaya_area
+				area = johor_area
+			}
+		}
+		trigger = {
+			malacca_area = {
+				type = all
+				owned_by = ROOT
+			}
+			malaya_area = {
+				type = all
+				owned_by = ROOT
+			}
+			north_malaya_area = {
+				type = all
+				owned_by = ROOT
+			}
+			johor_area = {
+				type = all
+				owned_by = ROOT
+			}
+			development_in_provinces = {
+				OR = {
+					area = malacca_area
+					area = malaya_area
+					area = north_malaya_area
+					area = johor_area
+				}
+				value = 150
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			custom_tooltip = MLC_highlighted_area
+			tooltip = {
+				add_province_modifier = {
+					name = MLC_golden_peninsula_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				malaya_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				johor_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				north_malaya_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				malacca_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}

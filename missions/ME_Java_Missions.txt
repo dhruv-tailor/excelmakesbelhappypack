@@ -1,0 +1,1101 @@
+Javan_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				OR = {
+					tag = GLU #Galuh
+					tag = BLM #Blambangan
+					tag = BLI #Bali
+					tag = MTR #Mataram
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = GLU
+							was_tag = BLI
+							was_tag = MTR 
+							was_tag = BAN
+							was_tag = BLM
+						}
+					}
+				}
+			}
+			AND = {
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				OR = {
+					tag = SUN #Sunda
+					tag = CRB #Cirebon
+					tag = BAN #Banten
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = BAN
+						}
+					}
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	JAV_bedil = {
+		icon = mission_gunpowder_warfare
+		required_missions = { JAV_army }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			army_size = 25
+			army_tradition = 40
+			mil_tech = 6 #Arquebus
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_bedil
+				duration = 7300
+			}
+		}
+	}
+	
+	JAV_importing_iron = {
+		icon = mission_portuguese_malacca
+		required_missions = { JAV_bedil JAV_sulawesi }
+		position = 4
+		provinces_to_highlight = {
+			trade_goods = iron
+			owned_by = ROOT
+		}
+		trigger = {
+			any_owned_province = {
+				trade_goods = iron
+				has_production_building_trigger = yes
+				development = 20
+			}
+		}
+		effect = {
+			custom_tooltip = MSA_random_province_fulfilling_the_requirements
+			tooltip = {
+				add_province_modifier = {
+					name = JAV_foundry
+					duration = -1
+				}
+			}
+			
+			add_mercantilism = 3
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						trade_goods = iron
+						has_production_building_trigger = yes
+						development = 20
+					}
+					add_province_modifier = {
+						name = JAV_foundry
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	
+	JAV_javan_religion = {
+		icon = mission_interfaith_relations
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				theologian = 1
+				inquisitor = 1
+				custom_trigger_tooltip = {
+					tooltip = JAV_converted_a_province
+					check_variable = { which = num_converted_religion value = 1 }
+				}
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = JAV_in_face_of_new_era
+				duration = -1
+			}
+		}
+	}
+	
+	JAV_temple = {
+		icon = mission_mnd_maj_candi_shrines
+		required_missions = { JAV_javan_religion }
+		position = 8
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				AND = {
+					religion = ROOT
+					NOT = { has_tax_building_trigger = yes }
+				}
+				AND = {
+					has_tax_building_trigger = yes
+					NOT = { religion = ROOT }
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				religion = ROOT
+				value = 5
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion_group = muslim
+				}
+				
+				add_country_modifier = {
+					name = JAV_converting_candi
+					duration = 9125
+				}
+				
+				add_dip_power = 50
+			}
+			else = {
+				add_country_modifier = {
+					name = JAV_spiritual_awakening
+					duration = 10950
+				}
+				
+				add_stability_or_adm_power = yes
+			}
+		}
+	}
+}
+
+Javan_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				OR = {
+					tag = GLU #Galuh
+					tag = BLM #Blambangan
+					tag = BLI #Bali
+					tag = MTR #Mataram
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = GLU
+							was_tag = BLI
+							was_tag = MTR 
+							was_tag = BAN
+							was_tag = BLM
+						}
+					}
+				}
+			}
+			AND = {
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				OR = {
+					tag = SUN #Sunda
+					tag = CRB #Cirebon
+					tag = BAN #Banten
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = BAN
+						}
+					}
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	JAV_army = {
+		icon = mission_annex_prome
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size_percentage = 0.85
+		}
+		effect = {
+			MSA_claims_java = yes
+			add_country_modifier = {
+				name = MSA_against_majapahit
+				duration = 7300
+			}
+		}
+	}
+	
+	JAV_sulawesi = {
+		icon = me_mission_malay_alliance
+		required_missions = { JAV_java }
+		position = 3
+		provinces_to_highlight = {
+			MSA_is_in_sulawesi = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			641 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 5
+			}
+		}
+		effect = {
+			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
+		}
+	}
+	
+	JAV_funnel_spice = {
+		icon = mission_rb_colonise_spice_islands
+		required_missions = { JAV_sulawesi }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_spice_islands = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_spice_islands = yes
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAV_trade_steering
+				duration = 14600
+			}
+		}
+	}
+	
+	JAV_spread = {
+		icon = mission_prosperity_in_bengal
+		required_missions = { JAV_javan_religion }
+		position = 7
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MAJ_has_converted_5_provinces
+				check_variable = { which = num_converted_religion value = 5 }
+			}
+			OR = {
+				has_adm_advisor_2 = yes
+				inquisitor = 1
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = hindu
+				}
+				
+				custom_tooltip = MAJ_immunity_from_spread
+				set_country_flag = MAJ_immunity_from_spread
+				
+				add_country_modifier = {
+					name = MAJ_conversion
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = JAV_spreading_islam
+					duration = -1
+				}
+				
+				add_stability_or_adm_power = yes
+			}
+		}
+	}
+}
+
+Javan_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				OR = {
+					tag = GLU #Galuh
+					tag = BLM #Blambangan
+					tag = BLI #Bali
+					tag = MTR #Mataram
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = GLU
+							was_tag = BLI
+							was_tag = MTR 
+							was_tag = BAN
+							was_tag = BLM
+						}
+					}
+				}
+			}
+			AND = {
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				OR = {
+					tag = SUN #Sunda
+					tag = CRB #Cirebon
+					tag = BAN #Banten
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = BAN
+						}
+					}
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	JAV_java = {
+		icon = me_mission_garuda
+		required_missions = { JAV_navy JAV_army }
+		position = 2
+		provinces_to_highlight = {
+			MSA_is_in_java = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 10
+			}
+		}
+		effect = {
+			MSA_java_reward = yes
+			MSA_claims_sulawesi = yes
+			central_sumatra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jambi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malacca_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malaya_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			johor_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_sumatra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banjar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kalimantan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	JAV_borneo = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { JAV_java }
+		position = 3
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 3
+			}
+		}
+		effect = {
+			MSA_claims_borneo = yes
+			add_accepted_culture_or_dip_power = { culture = bornean }
+		}
+	}
+	
+	JAV_brunei = {
+		icon = me_mission_brunei_flag
+		required_missions = { JAV_borneo }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 12
+			}
+			636 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			MSA_borneo_reward = yes
+			MSA_claims_philippines = yes
+		}
+	}
+	
+	JAV_hegemon = {
+		icon = me_mission_sea_throne_room
+		required_missions = { JAV_brunei JAV_funnel_spice JAV_collect_spice }
+		position = 6 
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1361
+				province_id = 1357
+			}
+			NOT = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+		}
+		trigger = {
+			1361 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1357 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+		}
+		effect = {
+			set_government_rank = 3
+			add_country_modifier = {
+				name = JAV_hegemon_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	JAV_alam_melayu = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = { JAV_hegemon }
+		position = 7 
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+Javan_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				OR = {
+					tag = GLU #Galuh
+					tag = BLM #Blambangan
+					tag = BLI #Bali
+					tag = MTR #Mataram
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = GLU
+							was_tag = BLI
+							was_tag = MTR 
+							was_tag = BAN
+							was_tag = BLM
+						}
+					}
+				}
+			}
+			AND = {
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				OR = {
+					tag = SUN #Sunda
+					tag = CRB #Cirebon
+					tag = BAN #Banten
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = BAN
+						}
+					}
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	JAV_navy = {
+		icon = mission_conquer_arakan
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			navy_size_percentage = 0.85
+			num_of_light_ship = 6
+		}
+		effect = {
+			add_country_modifier = {
+				name = JAV_javanese_malangbangs
+				duration = 7300
+			}
+			
+			add_navy_tradition = 10
+		}
+	}
+	
+	JAV_strait = {
+		icon = me_mission_sack_malacca
+		required_missions = { JAV_java }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = central_sumatra_area
+				area = jambi_area
+				area = malacca_area
+				area = johor_area
+				area = malaya_area
+				area = south_sumatra_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = central_sumatra_area
+					area = jambi_area
+					area = malacca_area
+					area = johor_area
+					area = malaya_area
+					area = south_sumatra_area
+				}
+				value = 11
+			}
+		}
+		effect = {
+			create_general = { tradition = 50 }
+			MSA_claims_malaya = yes
+			MSA_claims_sumatra = yes
+		}
+	}
+	
+	JAV_collect_spice = {
+		icon = me_mission_malay_ruler
+		required_missions = { JAV_strait }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				MSA_is_in_malaya = yes
+				MSA_is_in_sumatra = yes
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					MSA_is_in_malaya = yes
+					MSA_is_in_sumatra = yes
+				}
+				value = 25
+			}
+		}
+		effect = {
+			MSA_malaya_reward = yes
+			add_country_modifier = {
+				name = JAV_trade_eff
+				duration = 14600
+			}
+		}
+	}
+	
+	JAV_building_up_a_reserve = {
+		icon = mission_bijapur_karnatak
+		required_missions = { JAV_rice_fields }
+		position = 7
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_manpower_building_trigger = yes }
+		}
+		trigger = {
+			OR = {
+				manpower_percentage = 0.75
+				manpower = 25
+			}
+			capital_scope = {
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_manpower_building = yes
+			}
+			add_country_modifier = {
+				name = JAV_javan_manpower_might
+				duration = -1
+			}
+			
+			add_country_modifier = {
+				name = JAV_reserves
+				duration = 7300
+			}
+		}
+	}
+}
+
+Javan_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				OR = {
+					tag = GLU #Galuh
+					tag = BLM #Blambangan
+					tag = BLI #Bali
+					tag = MTR #Mataram
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = GLU
+							was_tag = BLI
+							was_tag = MTR 
+							was_tag = BAN
+							was_tag = BLM
+						}
+					}
+				}
+			}
+			AND = {
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				OR = {
+					tag = SUN #Sunda
+					tag = CRB #Cirebon
+					tag = BAN #Banten
+					AND = {
+						tag = MSA
+						OR = {
+							was_tag = SUN
+							was_tag = CRB
+							was_tag = BAN
+						}
+					}
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	JAV_naval_empires = {
+		icon = mission_dominate_trade_in_aden
+		required_missions = { JAV_navy }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			num_of_galley = 10
+		}
+		effect = {
+			create_admiral = {
+				tradition = 40
+			}
+			add_yearly_sailors = 1
+		}
+	}
+	
+	JAV_immense_wealth = {
+		icon = mission_mnd_maj_cloves
+		required_missions = { JAV_naval_empires JAV_strait }
+		position = 4
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					AND = {
+						trade_goods = nutmeg
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = nutmeg
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = cloves
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = cloves
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = vanilla
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = vanilla
+									value = 0.25
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				trade_goods = spices
+				NOT = {
+					ROOT = {
+						trading_part = {
+							trade_goods = spices
+							value = 0.25
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			share_of_starting_income = 5
+			monthly_income = 15
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.25
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.25
+				}
+			}
+		}
+		effect = {
+			add_years_of_trade_income = { years = 1 }
+			custom_tooltip = JAV_trade_income
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
+			
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
+			
+			1357 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
+		}
+	}
+	
+	JAV_rice_fields = {
+		icon = mission_a_million_rice_fields
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			has_terrain = grasslands
+			MSA_is_in_java = yes
+			OR = {
+				NOT = { has_production_building_trigger = yes }
+				NOT = { development = 10 }
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_terrain = grasslands
+				MSA_is_in_java = yes
+				has_production_building_trigger = yes
+				development = 10
+				value = 5
+			}
+		}
+		effect = {
+			custom_tooltip = MAJ_distribute_15_manpower
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = MAJ_rice_provs
+			}
+			else = {
+				custom_tooltip = MAJ_provinces_fulfilling_triggers
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = MAJ_rice_fields
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				for = {
+					amount = 15
+					effect = "
+						random_owned_province = {
+							limit = {
+								MSA_is_in_java = yes
+							}
+							add_base_manpower = 1
+						}
+					"
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					east_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+				}
+				else = { #inefficient use of space but eh
+					east_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+				}
+			}
+			
+		}
+	}
+	
+	JAV_bountiful_island = {
+		icon = mission_mnd_maj_negara_agung
+		required_missions = { JAV_rice_fields }
+		position = 8
+		provinces_to_highlight = {
+			MSA_is_in_java = yes
+		}
+		trigger = {
+			owns_all_provinces = {
+				MSA_is_in_java = yes
+			}
+			development_in_provinces = {
+				MSA_is_in_java = yes
+				value = 250
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			custom_tooltip = MLC_highlighted_area
+			tooltip = {
+				add_province_modifier = {
+					name = JAV_mancanegara
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				east_java_area = {
+					add_province_modifier = {
+						name = JAV_mancanegara
+						duration = -1
+					}
+				}
+				central_java_area = {
+					add_province_modifier = {
+						name = JAV_mancanegara
+						duration = -1
+					}
+				}
+				west_java_area = {
+					add_province_modifier = {
+						name = JAV_mancanegara
+						duration = -1
+					}
+				}
+				surabaya_area = {
+					add_province_modifier = {
+						name = JAV_mancanegara
+						duration = -1
+					}
+				}
+				banten_area = {
+					add_province_modifier = {
+						name = JAV_mancanegara
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}

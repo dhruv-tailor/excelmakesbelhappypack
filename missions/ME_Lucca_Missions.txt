@@ -1,0 +1,643 @@
+lucca_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	luc_legacy_castruccio_castracani = {
+		icon = me_mission_get_pu
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				army_size = 25
+			}
+			manpower_percentage = 0.75
+		}
+		effect = {
+			add_army_tradition = 10
+			if = {
+				limit = { has_dlc = "Cradle of Civilization" }
+				add_army_professionalism = 0.05
+			}
+			else = {
+				add_mil_power = 50
+			}
+		}
+	}
+
+	luc_walls_lucca = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			luc_legacy_castruccio_castracani
+		}
+		position = 3
+		trigger = {
+			stability = 1
+			treasury = 300
+			OR = {
+				calc_true_if = {
+					amount = 3
+					all_country = {
+						is_rival = ROOT
+					}
+				}
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						is_enemy = ROOT
+					}
+				}
+				any_country = {
+					has_guaranteed = ROOT
+				}
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						alliance_with = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			capital_scope = {	
+				add_province_modifier = {
+					name = luc_luccan_city_walls
+					duration = 9125
+				}
+			}
+		}
+	}
+
+	luc_luccan_trading_ports = {
+		icon = geneva_conventions
+		required_missions = {
+			luc_walls_lucca
+			luc_take_pisa
+		}
+		position = 5
+		trigger = {
+			OR = {
+				marketplace = 1
+				trade_depot = 1
+				stock_exchange = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_ports_lucca
+				duration = 7300
+			}
+		}
+	}
+
+	luc_tutta_seta_porta_lucca = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { luc_luccan_trading_ports }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_luccan_silk_trade
+				duration = 9125
+			}
+		}
+	}
+}
+
+lucca_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	luc_northern_allies = {
+		icon = public_works
+		required_missions = { }
+		position = 2
+		trigger = {
+			OR = {
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						capital_scope = {
+							OR = {
+								area = piedmont_area
+								area = liguria_area
+								area = lombardy_area
+								area = po_valley_area
+								area = venetia_area
+								area = emilia_romagna_area
+							}
+						}
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+				}
+				AND = {
+					is_year = 1494
+					is_part_of_hre = yes
+				}
+				alliance_with = LAN
+				is_in_trade_league_with = LAN
+				LAN = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	luc_take_pisa = {
+		icon = interest_of_holland
+		required_missions = {
+			luc_northern_allies
+			luc_marmo_carrara
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 115
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			115 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 15
+		}
+	}
+
+	luc_end_florence = {
+		icon = contracts_of_correspondence
+		required_missions = {
+			luc_take_pisa
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 116
+				province_id = 2978
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			116 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2978 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_end_florentine_threat
+				duration = 7300
+			}
+		}
+	}
+}
+
+lucca_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	luc_volto_santo_lucca = {
+		icon = control_the_church
+		required_missions = {}
+		position = 1
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			2980 = {
+				add_province_modifier = {
+					name = luc_holy_face_lucca
+					duration = 18250
+				}
+			}
+			country_event = {
+				id = ME_Lucca_Events.1
+			}
+		}
+	}
+
+	luc_marmo_carrara = {
+		icon = mission_land_of_churches
+		position = 3
+		required_missions = {
+			luc_volto_santo_lucca
+		}
+		trigger = {
+			num_of_galley = 5
+			num_of_light_ship = 5
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_office_marble
+				duration = 9125
+			}
+		}
+	}
+
+	luc_city_siena = {
+		icon = catholic_confraternity
+		required_missions = { luc_take_pisa }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 117
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			117 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_secured_southern_tuscany
+				duration = 7300
+			}
+		}
+	}
+
+	luc_independence_secured = {
+		icon = reform_the_monte
+		required_missions = {
+			luc_luccan_trading_ports
+			luc_end_florence
+			luc_city_siena
+			luc_luccan_reinassance
+		}
+		position = 6
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				owned_by = ROOT
+			}
+			legitimacy_equivalent = 80
+			army_size = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_libertas_secured
+				duration = 7300
+			}
+			hidden_effect = {
+				complete_mission = pis_republic_reunited
+				complete_mission = lan_granducato
+				complete_mission = sie_triumph_good_governance
+			}
+		}
+	}
+}
+
+lucca_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	luc_cavalieri_tau = {
+		icon = the_italian_league
+		required_missions = {
+			luc_volto_santo_lucca
+			luc_papal_diplomacy
+		}
+		position = 2
+		trigger = {
+			army_tradition = 40
+			manpower = 12
+			OR = {
+				is_year = 1500
+				AND = {
+					is_year = 1459
+					custom_trigger_tooltip = {
+						tooltip = LUC_ITALIAN_WARS_FIRED_TT
+						has_global_flag =  italian_wars_global_flag
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_knights_tau
+				duration = 7300
+			}
+		}
+	}
+
+	luc_bagni_lucca = {
+		icon = reclaim_the_aegean
+		required_missions = {
+			luc_marmo_carrara
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
+		trigger = {
+			OR = {
+				2980 = {
+					owned_by = ROOT
+					has_production_building_trigger = yes
+				}
+				diplomat = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_luccan_spring_water
+				duration = 7300
+			}
+			country_event = {
+				id = ME_Lucca_Events.2
+			}
+		}
+	}
+}
+
+lucca_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
+	}
+	has_country_shield = yes
+
+	luc_papal_diplomacy = {
+		icon = sources_of_trade
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				OR = {
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+					alliance_with = PAP
+					is_rival = PAP
+					is_enemy = PAP
+					NOT = {
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = -50
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					papal_influence = 50
+					is_excommunicated = yes
+					NOT = { religion = catholic }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						alliance_with = PAP
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+						papal_influence = 50
+					}
+				}
+				add_country_modifier = {
+					name = luc_legacy_lucius_iii
+					duration = 7300
+				}
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 100
+			}
+		}
+	}
+
+	luc_luccan_reinassance = {
+		icon = florentine_renaissance
+		required_missions = {
+			luc_papal_diplomacy
+		}
+		position = 5
+		trigger = {
+			has_institution = renaissance
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_luccan_art_schoool
+				duration = 7300
+			}
+		}
+	}
+
+	luc_university_lucca = {
+		icon = interest_of_holland
+		required_missions = {
+			luc_luccan_reinassance
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_building = university
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_university_lucca
+				duration = 7300
+			}
+		}
+	}
+}

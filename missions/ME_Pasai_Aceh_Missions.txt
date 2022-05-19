@@ -1,0 +1,906 @@
+PSA_ATJ_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PSA
+			tag = ATJ
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = PSA
+					was_tag = ATJ
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PSA_ATJ_minangkabau = {
+		icon = mission_end_tamil_insurgency
+		required_missions = { PSA_ATJ_sword_of_islam }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4817
+				province_id = 4811
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion_group = ROOT }
+			}
+			NOT = {
+				OR = {
+					4817 = {
+						country_or_non_sovereign_subject_holds = ROOT
+						religion_group = ROOT
+					}
+					4811 = {
+						religion_group = ROOT
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				4817 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					religion_group = ROOT
+				}
+				4811 = {
+					religion_group = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			2684 = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 100
+				}
+				else_if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			PSA_ATJ_modifier_extension = yes
+		}
+	}
+
+	PSA_ATJ_borneo = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { PSA_ATJ_sumatra }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 4
+			}
+		}
+		effect = {
+			MSA_claims_borneo = yes
+			add_mil_power = 100
+			add_army_tradition_or_mil_power = { amount = 20 }
+		}
+	}
+
+	PSA_ATJ_brunei = {
+		icon = mission_entrepot_of_india
+		required_missions = { PSA_ATJ_borneo }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 636
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			636 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			MSA_borneo_reward = yes
+			MSA_claims_philippines = yes
+			add_country_modifier = {
+				name = PSA_ATJ_brunei_modifier
+				duration = 7300
+			}
+		}
+	}
+
+	PSA_ATJ_philippines = {
+		icon = mission_tear_down_spanish_strongholds
+		required_missions = { PSA_ATJ_brunei }
+		position = 7
+		provinces_to_highlight = {
+			MSA_is_in_philippines = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_philippines = yes
+				value = 5
+			}
+		}
+		effect = {
+			PSA_ATJ_modifier_extension = yes
+			add_country_modifier = {
+				name = PSA_ATJ_the_grand_quest_2
+				duration = -1
+			}
+		}
+	}
+}
+
+PSA_ATJ_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PSA
+			tag = ATJ
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = PSA
+					was_tag = ATJ
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PSA_ATJ_sword_of_islam = {
+		icon = mission_demand_garjat_fealty
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size = 10
+				army_size_percentage = 0.85
+			}
+		}
+		effect = {
+			MSA_claims_sumatra = yes
+			custom_tooltip = PSA_ATJ_acehnese_jihad
+			set_country_flag = PSA_ATJ_cb_sumatra
+			capital_scope = {
+				add_province_modifier = {
+					name = PSA_ATJ_holy_war
+					duration = 5475
+				}
+			}
+		}
+	}
+
+	PSA_ATJ_palembang = {
+		icon = mission_riches_of_golconda
+		required_missions = { PSA_ATJ_sword_of_islam }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 622
+		}
+		trigger = {
+			622 = {
+				owner = {
+					religion_group = ROOT
+				}
+			}
+		}
+		effect = {
+			PSA_ATJ_modifier_extension = yes #extends BEI_humble_rise_to_greatness by 10 years
+			create_general = { tradition = 60 }
+		}
+	}
+
+	PSA_ATJ_sumatra = {
+		icon = me_mission_malay_ruler
+		required_missions = { PSA_ATJ_palembang PSA_ATJ_minangkabau }
+		position = 3
+		provinces_to_highlight = {
+			MSA_is_in_sumatra = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sumatra = yes
+				value = 15
+			}
+		}
+		effect = {
+			override_country_name = PSA_ATJ_sumadera
+			PSA_ATJ_modifier_extension = yes
+			#country_event = { id = ME_Pasai_Aceh_Events.1 } #Forging a Sword
+			MSA_claims_java = yes
+			MSA_claims_malaya = yes
+			add_accepted_culture_or_dip_power = { culture = sumatran }
+			banjar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kalimantan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	PSA_ATJ_islamize_java = {
+		icon = mission_prosperity_in_bengal
+		required_missions = { PSA_ATJ_sumatra }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_java = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 9
+			}
+		}
+		effect = {
+			MSA_java_reward = yes
+			PSA_ATJ_modifier_extension = yes
+			MSA_claims_sulawesi = yes
+		}
+	}
+
+	PSA_ATJ_sulawesi = {
+		icon = mission_mnd_maj_cloves
+		required_missions = { PSA_ATJ_brunei PSA_ATJ_islamize_java }
+		position = 6
+		provinces_to_highlight = {
+			MSA_is_in_sulawesi = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 5
+			}
+		}
+		effect = {
+			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
+			PSA_ATJ_modifier_extension = yes
+		}
+	}
+
+	PSA_ATJ_spice_islands = {
+		icon = mission_subjugate_saurashtra
+		required_missions = { PSA_ATJ_sulawesi }
+		position = 7
+		provinces_to_highlight = {
+			MSA_is_in_spice_islands = yes
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				religion = ROOT
+				MSA_is_in_spice_islands = yes
+				value = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PSA_ATJ_the_grand_quest
+				duration = -1
+			}
+			PSA_ATJ_modifier_extension = yes
+		}
+	}
+}
+
+PSA_ATJ_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PSA
+			tag = ATJ
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = PSA
+					was_tag = ATJ
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PSA_ATJ_rival = {
+		icon = me_mission_sack_malacca
+		required_missions = { PSA_ATJ_sword_of_islam }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 596
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { exists = MLC }
+				ROOT = {
+					NOT = { has_won_war_against = { who = MLC } }
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = MLC
+				}
+				OR = {
+					has_won_war_against = { who = MLC }
+					owns = 596
+				}
+			}
+			else = {
+				owns = 596
+			}
+		}
+		effect = {
+			set_country_flag = PSA_ATJ_cb_malaya
+			custom_tooltip = PSA_ATJ_malaya
+			add_mercantilism = 2
+		}
+	}
+
+	PSA_ATJ_malaya = {
+		icon = mission_arabian_sea_trade
+		required_missions = { PSA_ATJ_sumatra PSA_ATJ_rival }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_malaya = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_malaya = yes
+				value = 8
+			}
+		}
+		effect = {
+			MSA_malaya_reward = yes
+		}
+	}
+
+	PSA_ATJ_alam_melayu = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = { PSA_ATJ_sulawesi PSA_ATJ_malaya }
+		position = 7
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+PSA_ATJ_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PSA
+			tag = ATJ
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = PSA
+					was_tag = ATJ
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PSA_ATJ_export_malay_customs = {
+		icon = mission_deccanis
+		required_missions = { PSA_ATJ_tip }
+		position = 2
+		trigger = {
+			num_of_light_ship = 15
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PSA_ATJ_trade_language
+				duration = 9125
+			}
+			custom_tooltip = PSA_ATJ_every_muslim_ally
+			tooltip = {
+				add_country_modifier = {
+					name = PSA_ATJ_lingua_franca
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				every_ally = {
+					limit = {
+						culture_group = malay
+						religion_group = muslim
+					}
+					country_event = { id = ME_Pasai_Aceh_Events.3 }
+				}
+			}
+		}
+	}
+
+	PSA_ATJ_seek_foreign_support = {
+		icon = mission_ottoman_diplomacy
+		required_missions = { PSA_ATJ_reach_out }
+		position = 3
+		trigger = {
+			OR = {
+				MAM = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+					alliance_with = ROOT
+				}
+				TUR = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+					alliance_with = ROOT
+				}
+				any_ally = {
+					total_development = 300
+					religion_group = ROOT
+					NOT = { culture_group = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			add_country_modifier = {
+				name = PSA_ATJ_supplied_with_foreign_arms
+				duration = 7300
+			}
+			custom_tooltip = PSA_ATJ_the_nation_fulfilling_the_triggers
+			hidden_effect = {
+				if = {
+					limit = {
+						TUR = {
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+							alliance_with = ROOT
+						}
+					}
+					TUR = {
+						country_event = { id = ME_Pasai_Aceh_Events.4 }
+					}
+				}
+				else_if = {
+					limit = {
+						MAM = {
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+							alliance_with = ROOT
+						}
+					}
+					MAM = {
+						country_event = { id = ME_Pasai_Aceh_Events.4 }
+					}
+				}
+				else = {
+					random_ally = {
+						limit = {
+							total_development = 300
+							religion_group = ROOT
+							NOT = { culture_group = ROOT }
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+						country_event = { id = ME_Pasai_Aceh_Events.4 }
+					}
+				}
+			}
+		}
+	}
+
+	PSA_ATJ_naval_superiority = {
+		icon = mission_defeat_jaunpur
+		required_missions = { }
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			OR = {
+				navy_size = 15
+				AND = {
+					navy_size = 10
+					navy_size = MLC
+				}
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_shipyard_building = yes
+			}
+			add_country_modifier = {
+				name = PSA_ATJ_port_management
+				duration = 10950
+			}
+		}
+	}
+
+	PSA_ATJ_orang_laut_alliances = {
+		icon = mission_portuguese_malacca
+		required_missions = { PSA_ATJ_naval_superiority }
+		position = 5
+		trigger = {
+			MSA_orang_laut_trigger = yes
+		}
+		effect = {
+			MSA_orang_laut_effect = yes
+		}
+	}
+
+	PSA_ATJ_spices = {
+		icon = mission_dominate_persian_gulf
+		required_missions = { PSA_ATJ_orang_laut_alliances }
+		position = 5
+		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 25
+					country = ROOT
+				}
+				has_most_province_trade_power = ROOT
+			}
+			num_of_owned_provinces_with = {
+				trade_goods = spices
+				has_production_building_trigger = yes
+				value = 5
+			}
+		}
+		effect = {
+			add_years_of_owned_provinces_production_income = {
+				years = 5
+				trigger = {
+					OR = {
+						trade_goods = spices
+						trade_goods = nutmeg
+						trade_goods = cloves
+						trade_goods = vanilla
+					}
+				}
+				custom_tooltip = MSA_from_spice_production_TGE
+			}
+			add_country_modifier = {
+				name = MSA_spice_production
+				duration = 7300
+			}
+		}
+	}
+}
+
+PSA_ATJ_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = PSA
+			tag = ATJ
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = PSA
+					was_tag = ATJ
+				}
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PSA_ATJ_tip = {
+		icon = mission_secure_hajj_ports
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			area = north_sumatra_area
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 16 }
+				NOT = { has_trade_building_trigger = yes }
+			}
+			NOT = {
+				north_sumatra_area = {
+					province_has_center_of_trade_of_level = 1
+					country_or_non_sovereign_subject_holds = ROOT
+					development = 16
+					has_trade_building_trigger = yes
+				}
+			}
+		}
+		trigger = {
+			north_sumatra_area = {
+				province_has_center_of_trade_of_level = 1
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 16
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = PSA_ATJ_islands_tip
+				duration = 9125
+			}
+		}
+	}
+
+	PSA_ATJ_reach_out = {
+		icon = mission_portuguese_oman
+		required_missions = { PSA_ATJ_tip }
+		position = 2
+		provinces_to_highlight = {
+			owner = {
+				religion_group = ROOT
+				NOT = { culture_group = ROOT }
+			}
+		}
+		trigger = {
+			num_of_allies = 1
+			any_ally = {
+				religion_group = ROOT
+				NOT = { culture_group = ROOT }
+			}
+		}
+		effect = {
+			define_foreign_advisor = {
+				type = natural_scientist
+				name = "Shaykh Nur ad-Din"
+				skill = 2
+				cost_multiplier = 0.5
+				culture = 385
+				religion = 385
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 2
+			}
+		}
+	}
+
+	PSA_ATJ_porch_of_mecca = {
+		icon = mission_reclaim_morocco
+		required_missions = { PSA_ATJ_reach_out }
+		position = 4
+		provinces_to_highlight = {
+			area = north_sumatra_area
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+				NOT = { development = 30 }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+				AND = {
+					NOT = { has_province_modifier = MSA_muslim_center }
+					has_global_flag = MSA_muslim_center_flag
+				}
+			}
+			NOT = {
+				north_sumatra_area = {
+					owned_by = ROOT
+					province_has_center_of_trade_of_level = 1
+					development = 30
+					has_tax_building_trigger = yes
+					has_trade_building_trigger = yes
+					fort_level = 2
+					OR = {
+						has_province_modifier = MSA_muslim_center
+						custom_trigger_tooltip = {
+							tooltip = BEI_no_muslim_center_exists
+							NOT = { has_global_flag = MSA_muslim_center_flag }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_estate_agendas_completed = {
+				estate = estate_burghers
+				value = 2
+			}
+			north_sumatra_area = {
+				owned_by = ROOT
+				province_has_center_of_trade_of_level = 1
+				development = 30
+				has_tax_building_trigger = yes
+				has_trade_building_trigger = yes
+				fort_level = 2
+				OR = {
+					has_province_modifier = MSA_muslim_center
+					custom_trigger_tooltip = {
+						tooltip = BEI_no_muslim_center_exists
+						NOT = { has_global_flag = MSA_muslim_center_flag }
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = MSA_random_province_fulfilling_the_requirements
+			tooltip = {
+				add_prosperity = 100
+				add_or_upgrade_tax_building = yes
+				add_or_upgrade_trade_building = yes
+				add_province_modifier = {
+					name = PSA_ATJ_porch_of_mecca_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						area = north_sumatra_area
+						province_has_center_of_trade_of_level = 1
+						development = 30
+						has_tax_building_trigger = yes
+						has_trade_building_trigger = yes
+						fort_level = 2
+						OR = {
+							has_province_modifier = MSA_muslim_center
+							custom_trigger_tooltip = {
+								tooltip = BEI_no_muslim_center_exists
+								NOT = { has_global_flag = MSA_muslim_center_flag }
+							}
+						}
+					}
+					add_prosperity = 100
+					add_or_upgrade_tax_building = yes
+					add_or_upgrade_trade_building = yes
+					add_province_modifier = {
+						name = PSA_ATJ_porch_of_mecca_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	PSA_ATJ_curb = {
+		icon = mission_restore_trade_superiority
+		required_missions = { PSA_ATJ_naval_superiority }
+		position = 5
+		trigger = {
+			OR = {
+				absolutism = 20
+				AND = {
+					has_estate = estate_nobles
+					OR = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 80
+						}
+						NOT = {
+							estate_influence = {
+								estate = estate_nobles
+								influence = 40
+							}
+						}
+						NOT = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = POL_the_noble_privileges
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 4
+							}
+						}
+					}
+					if = {
+						limit = {
+							NOT = {
+								num_of_estate_privileges = {
+									estate = estate_nobles
+									value = 3
+								}
+							}
+						}
+						if = {
+							limit = {
+								NOT = {
+									num_of_estate_privileges = {
+										estate = estate_nobles
+										value = 2
+									}
+								}
+							}
+							if = {
+								limit = {
+									NOT = {
+										num_of_estate_privileges = {
+											estate = estate_nobles
+											value = 1
+										}
+									}
+								}
+								add_mil_power = 100
+							}
+							else = { add_mil_power = 75 }
+						}
+						else = { add_mil_power = 50 }
+					}
+					else = { add_mil_power = 25 }
+				}
+			}
+			add_country_modifier = {
+				name = PSA_ATJ_orang_kaya_curbed
+				duration = 9125
+			}
+		}
+	}
+}

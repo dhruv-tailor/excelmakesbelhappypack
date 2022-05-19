@@ -65,20 +65,29 @@ country_decisions = {
 			owns_core_province = 730		#Girin
 			730 = {							#Girin
 				is_state = yes
-			}			
-			custom_trigger_tooltip = {
-				tooltip = manchu_manchuria_decision.tooltip
-				num_of_owned_provinces_with = {
+			}		
+			num_of_owned_provinces_with = {
+				custom_trigger_tooltip = {
+					tooltip = manchu_manchuria_decision.tooltip
 					is_core = ROOT
 					OR = {
 						culture = manchu_new
 						culture = manchu
 					}
-					value = 20
 				}
+				value = 20
 			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 25 }
+			change_tag = MCH
+			swap_non_generic_missions = yes
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
 			change_primary_culture = manchu_new
 			set_ruler_culture = manchu_new
 			if = {
@@ -93,6 +102,17 @@ country_decisions = {
 					consort_culture = manchu
 				}
 				set_consort_culture = manchu_new
+			}
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				overlord = {
+					country_event = {
+						id = flavor_mch.8
+					}
+				}
+				grant_independence = yes
 			}
 			hidden_effect = {
 				every_province = {
@@ -121,6 +141,21 @@ country_decisions = {
 						set_consort_culture = manchu_new
 					}
 				}
+				if = {
+					limit = {
+						KOR = { 
+							exists = yes
+							is_subject = yes
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+					KOR = {
+						country_event = {
+							id = flavor_kor.13
+							days = 20
+						}
+					}
+				}
 			}
 			custom_tooltip = manchu_culture_tt
 			730 = {
@@ -133,22 +168,16 @@ country_decisions = {
 				}
 				add_core = MCH
 			}
-			add_prestige = 25
-			change_tag = MCH
-			swap_non_generic_missions = yes
-			if = {
-				limit = {
-					NOT = { government_rank = 2 }
-				}
-				set_government_rank = 2
-			}
 			set_country_flag = formed_manchu_flag
 			if = {
-				limit = { has_custom_ideas = no }
+				limit = { 
+					has_custom_ideas = no
+					NOT = { has_idea_group = MCH_ideas }
+				}
 				country_event = { id = ideagroups.1 } #Swap Ideas
 			}
 		}
-		ai_importance = 500		
+		ai_importance = 5000
 	}
 
 	form_manchu_dynasty = {
@@ -265,7 +294,7 @@ country_decisions = {
 				change_religion = confucianism
 				add_harmonized_religion = tengri_pagan_reformed
 			}
-			add_prestige = 10
+			add_prestige_or_monarch_power = { amount = 10 }
 			set_country_flag = manchu_dynasty_formed
 			if = {
 				limit = { has_custom_ideas = no }
@@ -309,7 +338,7 @@ country_decisions = {
 	#	}
 		#effect = {
 			#set_country_flag = green_standard_army
-			#add_prestige = 10
+			#add_prestige_or_monarch_power = { amount = 10 }
 		#	reverse_add_opinion = { who = MNG modifier = opinion_green_standard }
 		#	MNG = { add_manpower = -8 }
 			#infantry = 725

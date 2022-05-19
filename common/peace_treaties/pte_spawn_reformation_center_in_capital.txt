@@ -1,7 +1,7 @@
 pte_spawn_reformation_center_in_capital = {
 	category = 6
 	power_projection = no
-	power_cost_base = 0.75
+	power_cost_base = 0.16
 	prestige_base = 0.25
 	ae_base = 0
 	warscore_cost = {
@@ -32,6 +32,11 @@ pte_spawn_reformation_center_in_capital = {
 			num_of_cities = 2
 			capital_scope = {
 				continent = europe
+				NOT = { has_province_modifier = pte_spawn_reformation_center_in_capital_triggered_modifier }
+				OR = {
+					NOT = { has_province_flag = pte_spawn_reformation_center_in_capital_used }
+					had_province_flag = { flag = pte_spawn_reformation_center_in_capital_used days = 9125 }
+				}
 				NOT = { province_id = 118 }
 				is_reformation_center = no
 				is_island = no
@@ -51,31 +56,45 @@ pte_spawn_reformation_center_in_capital = {
 			}
 		}
 		NOT = {
-			calc_true_if = {
-				all_province = {
-					religion = ROOT
-					is_reformation_center = yes
-				}
-				amount = 5
+			any_province = {
+				religion = ROOT
+				has_province_modifier = pte_spawn_reformation_center_in_capital_triggered_modifier
 			}
 		}
 	}
 	is_allowed = {
-		has_idea = deus_vult
+		OR = {
+			has_idea = deus_vult
+			cb_on_religious_enemies = yes
+		}
 	}
 	effect = {
 		FROM = {
 			capital_scope = {
 				change_religion = ROOT
-				add_reform_center = ROOT
+				clr_province_flag = pte_spawn_reformation_center_in_capital_used
+				set_province_flag = pte_spawn_reformation_center_in_capital_used
+				clr_province_flag = custom_cor_created_first_half_of_year
+				clr_province_flag = custom_cor_created_second_half_of_year
 				if = {
 					limit = {
-						has_province_modifier = religious_zeal_at_conv
+						NOT = { is_month = 6 }
 					}
-					extend_province_modifier = { name = religious_zeal_at_conv duration = 1825 }
+					set_province_flag = custom_cor_created_first_half_of_year
 				}
 				else = {
-					add_province_modifier = { name = religious_zeal_at_conv duration = 1825 }
+					set_province_flag = custom_cor_created_second_half_of_year
+				}
+				add_province_triggered_modifier = pte_spawn_reformation_center_in_capital_triggered_modifier
+				if = {
+					limit = {
+						NOT = { has_province_modifier = religious_zeal_at_conv }
+					}
+					set_province_flag = can_remove_religious_zeal_at_conv
+					add_province_modifier = {
+						name = religious_zeal_at_conv
+						duration = 1
+					}
 				}
 			}
 		}
@@ -95,6 +114,9 @@ pte_spawn_reformation_center_in_capital = {
 					}
 					amount = 3
 				}
+			}
+			FROM = {
+				num_of_cities = 5
 			}
 		}
 	}

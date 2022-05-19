@@ -1,0 +1,1417 @@
+pte_start_border_friction = {
+	category = covert
+
+	require_acceptance = no
+
+	is_visible = {
+		is_neighbor_of = FROM
+		is_free_or_tributary_trigger = yes
+		FROM = {
+			is_free_or_tributary_trigger = yes
+		}
+		NOT = { overlord_of = FROM }
+		NOT = { is_subject_of = FROM }
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			is_neighbor_of = FROM
+			is_free_or_tributary_trigger = yes
+			FROM = {
+				is_free_or_tributary_trigger = yes
+			}
+			NOT = { overlord_of = FROM }
+			NOT = { is_subject_of = FROM }
+		}
+		if = {
+			limit = {
+				has_global_flag = extended_timeline_mod
+			}
+			if = {
+				limit = {
+					started_in = 1400.1.1
+				}
+				dip_tech = 50
+			}
+			else = {
+				dip_tech = 30
+			}
+		}
+		else = {
+			dip_tech = 5
+		}
+		NOT = { corruption = 100 }
+		has_spy_network_in = {
+			who = FROM
+			value = 60
+		}
+		NOT = { war_with = FROM }
+		NOT = { truce_with = FROM }
+		NOT = { alliance_with = FROM }
+		FROM = {
+			NOT = { guaranteed_by = ROOT }
+		}
+		NOT = {
+			has_casus_belli = {
+				target = FROM
+				type = cb_pte_border_friction
+			}
+		}
+	}
+
+	on_accept = {
+		if = {
+			limit = {
+				is_neighbor_of = FROM
+				is_free_or_tributary_trigger = yes
+				FROM = {
+					is_free_or_tributary_trigger = yes
+				}
+				NOT = { overlord_of = FROM }
+				NOT = { is_subject_of = FROM }
+				OR = {
+					AND = {
+						has_global_flag = extended_timeline_mod
+						OR = {
+							AND = {
+								started_in = 1444.11.11
+								dip_tech = 50
+							}
+							AND = {
+								NOT = { started_in = 1444.11.11 }
+								dip_tech = 30
+							}
+						}
+					}
+					AND = {
+						NOT = { has_global_flag = extended_timeline_mod }
+						dip_tech = 5
+					}
+				}
+				NOT = { corruption = 100 }
+				has_spy_network_in = {
+					who = FROM
+					value = 60
+				}
+				NOT = { war_with = FROM }
+				NOT = { truce_with = FROM }
+				NOT = { alliance_with = FROM }
+				FROM = {
+					NOT = { guaranteed_by = ROOT }
+				}
+				NOT = {
+					has_casus_belli = {
+						target = FROM
+						type = cb_pte_border_friction
+					}
+				}
+			}
+			add_corruption = 2
+			add_spy_network_in = {
+				who = FROM
+				value = -60
+			}
+			add_casus_belli = {
+				target = FROM
+				type = cb_pte_border_friction
+			}
+		}
+	}
+
+	ai_will_do = {
+		NOT = { has_casus_belli_against = FROM }
+		NOT = { claim = FROM }
+		NOT = { core_claim = FROM }
+		FROM = {
+			num_of_owned_provinces_with = {
+				value = 5
+				any_neighbor_province = {
+					owned_by = ROOT
+				}
+			}
+		}
+	}
+}
+
+pte_start_succession_crisis = {
+	category = covert
+
+	alert_index = 33
+	alert_tooltip = pte_start_succession_crisis_alert_tooltip
+
+	require_acceptance = yes
+
+	is_visible = {
+		is_subject = no
+		valid_for_personal_unions_trigger = yes
+		FROM = {
+			is_subject = yes
+			NOT = { is_subject_of = ROOT }
+			is_subject_of_type = personal_union
+			NOT = { war_with = ROOT }
+			overlord = {
+				is_subject = no
+				valid_for_personal_unions_trigger = yes
+				NOT = { war_with = ROOT }
+				PREV = {
+					NOT = {
+						years_in_union_under = {
+							who = PREV
+							years = 15
+						}
+					}
+				}
+			}
+		}
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			is_subject = no
+			valid_for_personal_unions_trigger = yes
+			FROM = {
+				is_subject = yes
+				NOT = { is_subject_of = ROOT }
+				is_subject_of_type = personal_union
+				NOT = { war_with = ROOT }
+				overlord = {
+					is_subject = no
+					valid_for_personal_unions_trigger = yes
+					NOT = { war_with = ROOT }
+					PREV = {
+						NOT = {
+							years_in_union_under = {
+								who = PREV
+								years = 15
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_global_flag = extended_timeline_mod
+			}
+			if = {
+				limit = {
+					started_in = 1400.1.1
+				}
+				adm_tech = 57
+			}
+			else = {
+				adm_tech = 40
+			}
+		}
+		else = {
+			adm_tech = 12
+		}
+		custom_trigger_tooltip = {
+			tooltip = PTE_NOT_START_SUCCESSION_CRISIS_USED_TT
+			OR = {
+				NOT = { has_country_flag = pte_start_succession_crisis_used }
+				had_country_flag = { flag = pte_start_succession_crisis_used days = 3650 }
+			}
+		}
+		is_at_war = no
+		legitimacy = 90
+		has_regency = no
+		if = {
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = { prestige = 0 }
+					}
+				}
+			}
+			prestige = 0
+		}
+		else = {
+			custom_trigger_tooltip = {
+				tooltip = PTE_AT_LEAST_EQUAL_PRESTIGE_AS_FROM_OVERLORD_TT
+				FROM = {
+					overlord = {
+						ROOT = { prestige = PREV }
+					}
+				}
+			}
+		}
+		OR = {
+			AND = {
+				custom_trigger_tooltip = {
+					tooltip = PTE_HAS_SUCCESSION_CLAIM_ON_FROM_TT
+					OR = {
+						succession_claim = FROM
+						has_country_flag = valid_to_claim_succession_war_against_@FROM
+						FROM = {
+							overlord = {
+								dynasty = ROOT
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_10_YEARS_TT
+					FROM = {
+						overlord = {
+							PREV = {
+								NOT = {
+									years_in_union_under = {
+										who = PREV
+										years = 10
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			AND = {
+				custom_trigger_tooltip = {
+					tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+					FROM = {
+						overlord = {
+							is_enemy = ROOT
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_5_YEARS_TT
+					FROM = {
+						overlord = {
+							PREV = {
+								NOT = {
+									years_in_union_under = {
+										who = PREV
+										years = 5
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = PTE_AT_LEAST_90_SPYNETWORK_IN_FROM_OVERLORD_TT
+			FROM = {
+				overlord = {
+					has_spy_network_from = {
+						who = ROOT
+						value = 90
+					}
+				}
+			}
+		}
+		NOT = { is_supporting_independence_of = FROM }
+		NOT = { truce_with = FROM }
+		custom_trigger_tooltip = {
+			tooltip = PTE_NO_TRUCE_WITH_FROM_OVERLORD_TT
+			FROM = {
+				overlord = {
+					ROOT = {
+						NOT = { truce_with = PREV }
+					}
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = PTE_NOT_ALLIED_TO_FROM_OVERLORD_TT
+			FROM = {
+				overlord = {
+					NOT = { alliance_with = ROOT }
+				}
+			}
+		}
+		custom_trigger_tooltip = {
+			tooltip = PTE_NOT_GUARANTEEING_FROM_OVERLORD_TT
+			FROM = {
+				overlord = {
+					NOT = { guaranteed_by = ROOT }
+				}
+			}
+		}
+		OR = {
+			reverse_has_opinion = {
+				who = FROM
+				value = 150
+			}
+			AND = {
+				reverse_has_opinion = {
+					who = FROM
+					value = 100
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+					FROM = {
+						overlord = {
+							is_enemy = ROOT
+						}
+					}
+				}
+			}
+		}
+		OR = {
+			custom_trigger_tooltip = {
+				tooltip = PTE_AT_LEAST_TWICE_ARMY_SIZE_OF_FROM_OVERLORD_TT
+				FROM = {
+					overlord = {
+						ROOT = {
+							army_strength = { who = PREV value = 2 }
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = PTE_AT_LEAST_EQUAL_DEVELOPMENT_AS_FROM_OVERLORD_TT
+				FROM = {
+					overlord = {
+						ROOT = {
+							total_development = PREV
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "Rights of Man"
+					has_dlc = "Emperor"
+				}
+				is_great_power = yes
+				FROM = {
+					overlord = {
+						is_great_power = yes
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = PTE_HIGHER_GP_RANK_THAN_FROM_OVERLORD_TT
+				FROM = {
+					overlord = {
+						ROOT = { NOT = { great_power_rank = PREV } }
+					}
+				}
+			}
+		}
+	}
+
+	on_accept = {
+		if = {
+			limit = {
+				is_subject = no
+				valid_for_personal_unions_trigger = yes
+				FROM = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+					is_subject_of_type = personal_union
+					NOT = { war_with = ROOT }
+					overlord = {
+						is_subject = no
+						valid_for_personal_unions_trigger = yes
+						NOT = { war_with = ROOT }
+						PREV = {
+							NOT = {
+								years_in_union_under = {
+									who = PREV
+									years = 15
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_global_flag = extended_timeline_mod
+					}
+					if = {
+						limit = {
+							started_in = 1400.1.1
+						}
+						adm_tech = 57
+					}
+					else = {
+						adm_tech = 40
+					}
+				}
+				else = {
+					adm_tech = 12
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_START_SUCCESSION_CRISIS_USED_TT
+					OR = {
+						NOT = { has_country_flag = pte_start_succession_crisis_used }
+						had_country_flag = { flag = pte_start_succession_crisis_used days = 3650 }
+					}
+				}
+				is_at_war = no
+				legitimacy = 90
+				has_regency = no
+				if = {
+					limit = {
+						FROM = {
+							overlord = {
+								NOT = { prestige = 0 }
+							}
+						}
+					}
+					prestige = 0
+				}
+				else = {
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_EQUAL_PRESTIGE_AS_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = { prestige = PREV }
+							}
+						}
+					}
+				}
+				OR = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = PTE_HAS_SUCCESSION_CLAIM_ON_FROM_TT
+							OR = {
+								succession_claim = FROM
+								has_country_flag = valid_to_claim_succession_war_against_@FROM
+								FROM = {
+									overlord = {
+										dynasty = ROOT
+									}
+								}
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_10_YEARS_TT
+							FROM = {
+								overlord = {
+									PREV = {
+										NOT = {
+											years_in_union_under = {
+												who = PREV
+												years = 10
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+							FROM = {
+								overlord = {
+									is_enemy = ROOT
+								}
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_5_YEARS_TT
+							FROM = {
+								overlord = {
+									PREV = {
+										NOT = {
+											years_in_union_under = {
+												who = PREV
+												years = 5
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_AT_LEAST_90_SPYNETWORK_IN_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 90
+							}
+						}
+					}
+				}
+				NOT = { is_supporting_independence_of = FROM }
+				NOT = { truce_with = FROM }
+				custom_trigger_tooltip = {
+					tooltip = PTE_NO_TRUCE_WITH_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							ROOT = {
+								NOT = { truce_with = PREV }
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_ALLIED_TO_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							NOT = { alliance_with = ROOT }
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_GUARANTEEING_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							NOT = { guaranteed_by = ROOT }
+						}
+					}
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = FROM
+						value = 150
+					}
+					AND = {
+						reverse_has_opinion = {
+							who = FROM
+							value = 100
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+							FROM = {
+								overlord = {
+									is_enemy = ROOT
+								}
+							}
+						}
+					}
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_TWICE_ARMY_SIZE_OF_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = {
+									army_strength = { who = PREV value = 2 }
+								}
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_EQUAL_DEVELOPMENT_AS_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = {
+									total_development = PREV
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_dlc = "Rights of Man"
+							has_dlc = "Emperor"
+						}
+						is_great_power = yes
+						FROM = {
+							overlord = {
+								is_great_power = yes
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = PTE_HIGHER_GP_RANK_THAN_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = { NOT = { great_power_rank = PREV } }
+							}
+						}
+					}
+				}
+			}
+			add_opinion = {
+				who = FROM
+				modifier = pte_start_succession_crisis_opinion_positive
+			}
+			reverse_add_opinion = {
+				who = FROM
+				modifier = pte_start_succession_crisis_opinion_positive
+			}
+			clr_country_flag = pte_start_succession_crisis_used
+			set_country_flag = pte_start_succession_crisis_used
+			clr_country_flag = pte_start_succession_crisis_used_against_@FROM
+			set_country_flag = pte_start_succession_crisis_used_against_@FROM
+			FROM = {
+				overlord = {
+					add_spy_network_from = {
+						who = ROOT
+						value = -90
+					}
+					ROOT = {
+						create_succession_crisis = {
+							attacker = ROOT
+							defender = PREV
+							target = FROM
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_decline = {
+		if = {
+			limit = {
+				is_subject = no
+				valid_for_personal_unions_trigger = yes
+				FROM = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+					is_subject_of_type = personal_union
+					NOT = { war_with = ROOT }
+					overlord = {
+						is_subject = no
+						valid_for_personal_unions_trigger = yes
+						NOT = { war_with = ROOT }
+						PREV = {
+							NOT = {
+								years_in_union_under = {
+									who = PREV
+									years = 15
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						has_global_flag = extended_timeline_mod
+					}
+					if = {
+						limit = {
+							started_in = 1400.1.1
+						}
+						adm_tech = 57
+					}
+					else = {
+						adm_tech = 40
+					}
+				}
+				else = {
+					adm_tech = 12
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_START_SUCCESSION_CRISIS_USED_TT
+					OR = {
+						NOT = { has_country_flag = pte_start_succession_crisis_used }
+						had_country_flag = { flag = pte_start_succession_crisis_used days = 3650 }
+					}
+				}
+				is_at_war = no
+				legitimacy = 90
+				has_regency = no
+				if = {
+					limit = {
+						FROM = {
+							overlord = {
+								NOT = { prestige = 0 }
+							}
+						}
+					}
+					prestige = 0
+				}
+				else = {
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_EQUAL_PRESTIGE_AS_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = { prestige = PREV }
+							}
+						}
+					}
+				}
+				OR = {
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = PTE_HAS_SUCCESSION_CLAIM_ON_FROM_TT
+							OR = {
+								succession_claim = FROM
+								has_country_flag = valid_to_claim_succession_war_against_@FROM
+								FROM = {
+									overlord = {
+										dynasty = ROOT
+									}
+								}
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_10_YEARS_TT
+							FROM = {
+								overlord = {
+									PREV = {
+										NOT = {
+											years_in_union_under = {
+												who = PREV
+												years = 10
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					AND = {
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+							FROM = {
+								overlord = {
+									is_enemy = ROOT
+								}
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_IS_A_UNION_SINCE_LESS_THAN_5_YEARS_TT
+							FROM = {
+								overlord = {
+									PREV = {
+										NOT = {
+											years_in_union_under = {
+												who = PREV
+												years = 5
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_AT_LEAST_90_SPYNETWORK_IN_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 90
+							}
+						}
+					}
+				}
+				NOT = { is_supporting_independence_of = FROM }
+				NOT = { truce_with = FROM }
+				custom_trigger_tooltip = {
+					tooltip = PTE_NO_TRUCE_WITH_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							ROOT = {
+								NOT = { truce_with = PREV }
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_ALLIED_TO_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							NOT = { alliance_with = ROOT }
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PTE_NOT_GUARANTEEING_FROM_OVERLORD_TT
+					FROM = {
+						overlord = {
+							NOT = { guaranteed_by = ROOT }
+						}
+					}
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = FROM
+						value = 150
+					}
+					AND = {
+						reverse_has_opinion = {
+							who = FROM
+							value = 100
+						}
+						custom_trigger_tooltip = {
+							tooltip = PTE_FROM_OVERLORD_IS_OUR_RIVAL_TT
+							FROM = {
+								overlord = {
+									is_enemy = ROOT
+								}
+							}
+						}
+					}
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_TWICE_ARMY_SIZE_OF_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = {
+									army_strength = { who = PREV value = 2 }
+								}
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = PTE_AT_LEAST_EQUAL_DEVELOPMENT_AS_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = {
+									total_development = PREV
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_dlc = "Rights of Man"
+							has_dlc = "Emperor"
+						}
+						is_great_power = yes
+						FROM = {
+							overlord = {
+								is_great_power = yes
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = PTE_HIGHER_GP_RANK_THAN_FROM_OVERLORD_TT
+						FROM = {
+							overlord = {
+								ROOT = { NOT = { great_power_rank = PREV } }
+							}
+						}
+					}
+				}
+			}
+			clr_country_flag = pte_start_succession_crisis_used
+			set_country_flag = pte_start_succession_crisis_used
+			add_prestige = -20
+			add_opinion = {
+				who = FROM
+				modifier = pte_start_succession_crisis_opinion_negative
+			}
+			reverse_add_opinion = {
+				who = FROM
+				modifier = pte_start_succession_crisis_opinion_negative
+			}
+		}
+	}
+
+	ai_acceptance = {
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+			divide_variable = { which = ai_value value = 6.66 }
+		}
+		add_entry = {
+			name = MODIFIER_DIPLO_SKILL
+			export_to_variable = {
+				which = ai_value
+				value = modifier:diplomatic_reputation
+			}
+			multiply_variable = { which = ai_value value = 5 }
+		}
+		add_entry = {
+			name = LIBERTY_DESIRE_PLAIN
+			limit = {
+				FROM = {
+					NOT = { liberty_desire = 50 }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 50 }
+		}
+		add_entry = {
+			name = LIBERTY_DESIRE_PLAIN
+			limit = {
+				FROM = {
+					liberty_desire = 50
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:liberty_desire
+				who = FROM
+			}
+			subtract_variable = { which = ai_value value = 50 }
+			divide_variable = { which = ai_value value = 2 }
+		}
+		add_entry = {
+			name = BORDER_DISTANCE
+			limit = {
+				NOT = { is_neighbor_of = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = 150
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = 100
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = 100
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = 50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = 50
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = 0
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 15
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = 0
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = -50
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = -50
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = -100
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = -100
+							}
+						}
+						reverse_has_opinion = {
+							who = PREV
+							value = -150
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 30
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OPINION_WITH_OVERLORD
+			limit = {
+				FROM = {
+					overlord = {
+						NOT = {
+							reverse_has_opinion = {
+								who = PREV
+								value = -150
+							}
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_OVERLORD_COMPARED_LEGITIMACY
+			export_to_variable = {
+				which = ai_value
+				value = trigger_value:legitimacy
+			}
+			export_to_variable = {
+				which = ai_value_2
+				value = trigger_value:legitimacy
+				who = FROM
+			}
+			subtract_variable = { which = ai_value which = ai_value_2 }
+			divide_variable = { which = ai_value value = 2.5 }
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_OVERLORD_ARMY_STRENGTH
+			limit = {
+				FROM = {
+					overlord = {
+						ROOT = {
+							army_strength = { who = PREV value = 3 }
+							NOT = { army_strength = { who = PREV value = 4 } }
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_OVERLORD_ARMY_STRENGTH
+			limit = {
+				FROM = {
+					overlord = {
+						ROOT = {
+							army_strength = { who = PREV value = 4 }
+							NOT = { army_strength = { who = PREV value = 5 } }
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_OVERLORD_ARMY_STRENGTH
+			limit = {
+				FROM = {
+					overlord = {
+						ROOT = {
+							army_strength = { who = PREV value = 5 }
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 15
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_ARE_HISTORICAL_FRIENDS
+			limit = {
+				FROM = {
+					historical_friend_with = ROOT
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_FROM_ARE_HISTORICAL_RIVALS
+			limit = {
+				FROM = {
+					historical_rival_with = ROOT
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_FROM_OVERLORD_HAS_REGENCY
+			limit = {
+				FROM = {
+					overlord = {
+						has_regency = yes
+						has_consort_regency = no
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OVERLORD_HAS_REGENCY
+			limit = {
+				FROM = {
+					overlord = {
+						has_consort_regency = yes
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OVERLORD_HAS_WEAK_OR_NO_HEIR
+			limit = {
+				FROM = {
+					overlord = {
+						OR = {
+							has_heir = no
+							NOT = { heir_claim = 33 }
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_OVERLORD_NOT_GREAT_POWER
+			limit = {
+				OR = {
+					has_dlc = "Rights of Man"
+					has_dlc = "Emperor"
+				}
+				is_great_power = yes
+				FROM = {
+					overlord = {
+						is_great_power = no
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = PTE_ROOT_NOT_GREAT_POWER
+			limit = {
+				OR = {
+					has_dlc = "Rights of Man"
+					has_dlc = "Emperor"
+				}
+				is_great_power = no
+				FROM = {
+					overlord = {
+						is_great_power = yes
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 20
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_ROOT_POWER_PROJECTION
+			limit = {
+				power_projection = 50
+				FROM = {
+					overlord = {
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								which = our_pp
+								value = trigger_value:power_projection
+								who = ROOT
+							}
+							export_to_variable = {
+								which = their_pp
+								value = trigger_value:power_projection
+							}
+							check_variable = { which = our_pp which = their_pp }
+						}
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_hostile }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_outraged }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 25
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_neutral }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = PTE_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_friendly }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 5
+			}
+		}
+		add_entry = {
+			name = PTE_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_threatened }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+	}
+
+	ai_will_do = {
+		OR = {
+			is_neighbor_of = FROM
+			NOT = {
+				border_distance = {
+					who = FROM
+					distance = 500
+				}
+			}
+		}
+		FROM = {
+			total_development = 150
+			overlord = {
+				OR = {
+					is_at_war = no
+					NOT = {
+						any_country = {
+							has_country_flag = pte_start_succession_crisis_used_against_@FROM
+							NOT = { had_country_flag = { flag = pte_start_succession_crisis_used_against_@FROM days = 3650 } }
+							is_in_war = {
+								attacker_leader = THIS
+								defender_leader = PREV
+								defenders = FROM
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

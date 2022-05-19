@@ -1,0 +1,1313 @@
+MAJ_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "Leviathan" }
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		OR = {
+			tag = MAJ
+			AND = {
+				tag = MSA
+				was_tag = MAJ
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MAJ_sunda = {
+		icon = mnd_maj_sunda_relations
+		required_missions = { MAJ_recover_strength }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2687
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				OR = {
+					AND = {
+						is_enemy = SUN
+						NOT = {
+							reverse_has_opinion = {
+								who = SUN
+								value = 0
+							}
+						}
+					}
+					AND = {
+						NOT = { is_enemy = SUN }
+						NOT = {
+							reverse_has_opinion = {
+								who = SUN
+								value = 100
+							}
+						}
+					}
+				}
+			}
+			SUN = {
+				NOT = {
+					is_subject_of = ROOT
+					is_subject_of_type = vassal
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_enemy = SUN
+				}
+				OR = {
+					reverse_has_opinion = {
+						who = SUN
+						value = 0
+					}
+					SUN = {
+						is_subject_of = ROOT
+						is_subject_of_type = vassal
+					}
+					2687 = { owned_by = ROOT }
+				}
+			}
+			else = {
+				OR = {
+					reverse_has_opinion = {
+						who = SUN
+						value = 100
+					}
+					SUN = {
+						is_subject_of = ROOT
+						is_subject_of_type = vassal
+					}
+					2687 = { owned_by = ROOT }
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = MAJ_reward_if_opinion
+			tooltip = {
+				country_event = { id = ME_Majapahit_Events.103 } #Ask peacefully
+			}
+			custom_tooltip = MAJ_reward_if_subject
+			tooltip = {
+				country_event = { id = ME_Majapahit_Events.100 } #force the sunda into the relation
+			}
+			custom_tooltip = MAJ_reward_if_conquest
+			tooltip = { #conquest done, just give a reward for boring conquest.
+				add_prestige_or_monarch_power = { amount = 20 }
+				add_country_modifier = {
+					name = MAJ_sunda_conquered
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						if = {
+							limit = {
+								is_enemy = SUN
+							}
+							reverse_has_opinion = {
+								who = SUN
+								value = 0
+							}
+						}
+						else = {
+							reverse_has_opinion = {
+								who = SUN
+								value = 100
+							}
+						}
+					}
+					country_event = { id = ME_Majapahit_Events.103 } #Ask peacefully
+				}
+				else_if = {
+					limit = {
+						SUN = {
+							is_subject_of = ROOT
+							is_subject_of_type = vassal
+						}
+					}
+					country_event = { id = ME_Majapahit_Events.100 } #force the sunda into the relation
+				}
+				else = {
+					add_prestige_or_monarch_power = { amount = 20 }
+
+					add_country_modifier = {
+						name = MAJ_sunda_conquered
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+
+	MAJ_naval_prowess = {
+		icon = mission_coromandel_expansion
+		required_missions = { }
+		position = 3
+		trigger = {
+			num_of_light_ship = 10
+			num_of_admirals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_shipbuilding
+				duration = 9125
+			}
+			create_admiral = {
+				tradition = 60
+			}
+		}
+	}
+
+	MAJ_secure_spice_trade = {
+		icon = mission_mnd_maj_cloves
+		required_missions = { MAJ_naval_prowess }
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.25
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.25
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_spice_flow
+				duration = 7300
+			}
+			add_mercantilism = 3
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
+			1357 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
+		}
+	}
+
+	MAJ_trade_links = {
+		icon = mission_dominate_trade_in_aden
+		required_missions = { MAJ_secure_spice_trade MAJ_javan_relevancy }
+		position = 6
+		trigger = {
+			monthly_income = 50
+			num_of_allies = 2
+			calc_true_if = {
+				amount = 2
+				all_ally = {
+					custom_trigger_tooltip = {
+						tooltip = MAJ_10_power
+						home_trade_node = {
+							trade_share = {
+								country = ROOT
+								share = 10
+							}
+						}
+					}
+				}
+				#desc = MAJ_10_power
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_trade_links_modifier
+				duration = -1
+			}
+			add_years_of_income = 0.5
+		}
+	}
+
+	MAJ_mancanegara = {
+		icon = me_mission_malay_farmers
+		required_missions = { MAJ_blessed_fields }
+		position = 7
+		trigger = {
+			development_in_provinces = {
+				OR = {
+					area = east_java_area
+					area = central_java_area
+					area = surabaya_area
+				}
+				value = 225
+			}
+		}
+		effect = {
+			custom_tooltip = MAJ_every_owned_province
+			tooltip = {
+				add_province_modifier = {
+					name = MAJ_mancanegara_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				east_java_area = {
+					limit = { owned_by = ROOT }
+					add_province_modifier = {
+						name = MAJ_mancanegara_modifier
+						duration = -1
+					}
+				}
+				central_java_area = {
+					limit = { owned_by = ROOT }
+					add_province_modifier = {
+						name = MAJ_mancanegara_modifier
+						duration = -1
+					}
+				}
+				surabaya_area = {
+					limit = { owned_by = ROOT }
+					add_province_modifier = {
+						name = MAJ_mancanegara_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+MAJ_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "Leviathan" }
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		OR = {
+			tag = MAJ
+			AND = {
+				tag = MSA
+				was_tag = MAJ
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MAJ_recover_strength = {
+		icon = mission_mnd_maj_end_disaster
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size = 14
+		}
+		effect = {
+			add_adm_power = 50
+			add_army_tradition_or_mil_power = { amount = 10 }
+			west_java_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banten_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	MAJ_bedil = {
+		icon = mission_gunpowder_warfare
+		required_missions = { MAJ_recover_strength }
+		position = 2
+		trigger = {
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			army_size = 25
+			army_tradition = 40
+			mil_tech = 6 #Arquebus
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_bedil
+				duration = 7300
+			}
+			country_event = { id = ME_Majapahit_Events.101 } #Selling firearms (Malaccan Malays obtained those from Java)
+		}
+	}
+
+	MAJ_cetbangs = {
+		icon = mission_asian_cannon
+		required_missions = { MAJ_bedil }
+		position = 3
+		trigger = {
+			num_of_artillery = 6
+			army_tradition = 60
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_cetbangs_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	MAJ_settling_nusa = {
+		icon = mission_rein_in_the_velamas
+		required_missions = { MAJ_naval_prowess }
+		position = 4
+		trigger = {
+			num_of_light_ship = 20
+		}
+		effect = {
+			set_country_flag = MAJ_nusa_tenggara_settling
+			custom_tooltip = MAJ_nusa_tenggara_settling
+		}
+	}
+
+	MAJ_javan_relevancy = {
+		icon = mission_renovate_kannauj
+		required_missions = { }
+		position = 5
+		trigger = {
+			OR = {
+				power_projection = 15
+				any_owned_province = {
+					province_has_center_of_trade_of_level = 1
+					has_trade_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_back_in_business
+				duration = 10950
+			}
+		}
+	}
+
+	MAJ_blessed_fields = {
+		icon = mission_a_million_rice_fields
+		required_missions = { MAJ_javan_relevancy }
+		position = 6
+		trigger = {
+			num_of_owned_provinces_with = {
+				has_terrain = grasslands
+				MSA_is_in_java = yes
+				has_production_building_trigger = yes
+				development = 10
+				value = 5
+			}
+		}
+		effect = {
+			custom_tooltip = MAJ_distribute_15_manpower
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = MAJ_rice_provs
+			}
+			else = {
+				custom_tooltip = MAJ_provinces_fulfilling_triggers
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = MAJ_rice_fields
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				for = {
+					amount = 15
+					effect = "
+						random_owned_province = {
+							limit = {
+								MSA_is_in_java = yes
+							}
+							add_base_manpower = 1
+						}
+					"
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					east_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+				}
+				else = { #inefficient use of space but eh
+					east_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+				}
+			}
+		}
+	}
+
+	MAJ_negara_agung = {
+		icon = mission_mnd_maj_negara_agung
+		required_missions = { MAJ_blessed_fields }
+		position = 7
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { development = 40 }
+				NOT = { num_of_buildings_in_province = 5 }
+			}
+		}
+		trigger = {
+			capital_scope = {
+				development = 40
+				num_of_buildings_in_province = 5
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = MAJ_trowulan_rebuilt
+					duration = -1
+				}
+			}
+			add_adm_power = 100
+			change_government_reform_progress = 25
+		}
+	}
+}
+
+MAJ_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "Leviathan" }
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		OR = {
+			tag = MAJ
+			AND = {
+				tag = MSA
+				was_tag = MAJ
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MAJ_great_works = {
+		icon = mission_conquer_lower_burma_tau
+		required_missions = { MAJ_candi }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2690
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Leviathan"
+					NOT = {
+						has_great_project = {
+							type = monument
+							tier = 1
+						}
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Leviathan" }
+					OR = {
+						NOT = { development = 30 }
+						NOT = { num_of_buildings_in_province = 4 }
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 2690
+			2690 = {
+				if = {
+					limit = {
+						has_dlc = "Leviathan"
+					}
+					has_great_project = {
+						type = monument
+						tier = 1
+					}
+				}
+				else = {
+					development = 30
+					num_of_buildings_in_province = 4
+				}
+			}
+			num_of_owned_provinces_with = {
+				num_of_times_improved = 10
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				value = 5
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				2690 = {
+					add_province_modifier = {
+						name = MAJ_kotagede
+						duration = -1
+					}
+				}
+				custom_tooltip = MAJ_every_state_with_a_great_project
+				tooltip = {
+					add_province_modifier = {
+						name = MAJ_great_power_surroundings
+						duration = 9125
+					}
+				}
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							area_for_scope_province = {
+								has_great_project = {
+									type = any
+									tier = 0
+								}
+								owned_by = ROOT
+							}
+						}
+						add_province_modifier = {
+							name = MAJ_great_power_surroundings
+							duration = 9125
+						}
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MAJ_monuments
+					duration = 10950
+				}
+				add_prestige_or_monarch_power = { amount = 50 }
+			}
+		}
+	}
+
+	MAJ_borneo = {
+		icon = me_mission_malay_tribute
+		required_missions = { MAJ_gajah_madas_oath }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 638
+				province_id = 639
+			}
+			NOT = { country_or_subject_holds = ROOT }
+		}
+		trigger = {
+			638 = { country_or_subject_holds = ROOT }
+			639 = { country_or_subject_holds = ROOT }
+		}
+		effect = {
+			MSA_claims_borneo = yes
+			add_country_modifier = {
+				name = MAJ_preserving_remaining_tributaries
+				duration = 10950
+			}
+			create_general = { tradition = 60 }
+		}
+	}
+
+	MAJ_berune = {
+		icon = me_mission_brunei_flag
+		required_missions = { MAJ_borneo }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 636
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			636 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = BEI }
+				BEI = { is_subject_of = ROOT }
+				has_won_war_against = { who = BEI }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_unruly_subject_defeated
+				duration = -1
+			}
+		}
+	}
+
+	MAJ_tanjungnagara = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { MAJ_berune }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_borneo = yes
+						value = 18
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 18
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_strategic_island_secured
+				duration = 7300
+			}
+			add_army_tradition_or_mil_power = { amount = 10 }
+		}
+	}
+
+	MAJ_majapahit = {
+		icon = me_mission_malay_leader
+		required_missions = { MAJ_tanjungnagara MAJ_strait }
+		position = 7
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			custom_tooltip = MAJ_merge_modifiers
+			hidden_effect = {
+				remove_country_modifier = MAJ_temasik_defeated
+				remove_country_modifier = MAJ_unruly_subject_defeated
+				remove_country_modifier = MAJ_suvarnadvipa
+				add_country_modifier = {
+					name = MAJ_empire
+					duration = -1
+				}
+			}
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+MAJ_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "Leviathan" }
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		OR = {
+			tag = MAJ
+			AND = {
+				tag = MSA
+				was_tag = MAJ
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MAJ_candi = { #yum, candi!
+		icon = mission_mnd_maj_candi_shrines
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_tax_building_trigger = yes }
+		}
+		trigger = {
+			capital_scope = {
+				has_tax_building_trigger = yes
+			}
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_majapahit_architecture
+				duration = 9125
+			}
+			add_stability_or_adm_power = yes
+		}
+	}
+
+	MAJ_gajah_madas_oath = {
+		icon = mission_mnd_maj_gaja_madas_oath
+		required_missions = { }
+		position = 2
+		trigger = {
+			OR = {
+				land_forcelimit = 18
+				custom_trigger_tooltip = {
+					tooltip = MAJ_is_no_longer_in_disaster
+					OR = {
+						has_country_flag = MAJ_resolved_disaster
+						calc_true_if = {
+							has_country_flag = MAJ_resolved_monetary_issues
+							has_country_flag = MAJ_resolved_adipati
+							has_country_flag = MAJ_resolved_trade
+							has_country_flag = MAJ_resolved_faith_in_throne
+							amount = 2
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			#make this an event?
+			set_country_flag = MAJ_palapa_campaigns_cb
+			custom_tooltip = MAJ_palapa_campaigns_cb
+			add_country_modifier = {
+				name = MAJ_we_will_taste_spice
+				duration = -1
+				desc = MAJ_until_end_of_discovery
+			}
+			MSA_claims_sulawesi = yes
+			kutai_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banjar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kalimantan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			minangkabau_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_sumatra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jambi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	MAJ_tributaries = {
+		icon = mission_mnd_khm_protect_the_cham
+		required_missions = { MAJ_gajah_madas_oath }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 622
+				AND = {
+					MSA_is_in_sumatra = yes
+					ROOT = {
+						NOT = { num_of_subjects = 5 }
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_sumatra = yes
+								value = 5
+							}
+						}
+					}
+				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			622 = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				num_of_subjects = 5
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					MSA_is_in_sumatra = yes
+					value = 5
+				}
+			}
+		}
+		effect = {
+			MSA_claims_sumatra = yes
+			MSA_claims_malaya = yes
+			custom_tooltip = MAJ_lose_5_autonomy_everywhere
+			hidden_effect = {
+				every_owned_province = {
+					add_local_autonomy = -5
+				}
+			}
+			custom_tooltip = MAJ_for_every_tributary
+			hidden_effect = {
+				if = {
+					limit = {
+						tributary_state = 5
+					}
+					add_adm_power = 100
+					add_dip_power = 100
+					add_mil_power = 100
+				}
+				else = {
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = tributary_state
+						}
+						add_adm_power = 20
+						add_dip_power = 20
+						add_mil_power = 20
+					}
+				}
+			}
+		}
+	}
+
+	MAJ_swarnadwipa = {
+		icon = mission_entrepot_of_india
+		required_missions = { MAJ_tributaries }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_sumatra = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sumatra = yes
+						value = 11
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sumatra = yes
+				value = 11
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_suvarnadvipa
+				duration = -1
+			}
+			add_years_of_income = 0.5
+		}
+	}
+
+	MAJ_strait = {
+		icon = mission_rb_colonise_spice_islands
+		required_missions = { MAJ_swarnadwipa MAJ_temasek }
+		position = 6
+		trigger = {
+			navy_size = 40
+			1361 = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+		}
+		effect = {
+			1361 = {
+				add_trade_node_income = 60
+			}
+			add_mercantilism = 3
+			#if we own malacca, upgrade the trade center?
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
+			custom_tooltip = MAJ_if_we_own_malaka
+			tooltip = {
+				596 = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			hidden_effect = {
+				596 = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						create_or_add_center_of_trade_level = { level = 1 }
+					}
+				}
+			}
+		}
+	}
+}
+
+MAJ_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			NOT = { has_dlc = "Leviathan" }
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
+		OR = {
+			tag = MAJ
+			AND = {
+				tag = MSA
+				was_tag = MAJ
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MAJ_halt_the_spread = {
+		icon = mission_mnd_maj_porch_of_mecca
+		required_missions = { }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MAJ_has_converted_5_provinces
+				check_variable = { which = num_converted_religion value = 5 }
+			}
+			OR = {
+				has_adm_advisor_2 = yes
+				inquisitor = 1
+			}
+		}
+		effect = {
+			custom_tooltip = MAJ_immunity_from_spread
+			set_country_flag = MAJ_immunity_from_spread
+			add_country_modifier = {
+				name = MAJ_conversion
+				duration = -1
+			}
+		}
+	}
+
+	MAJ_shiva = {
+		icon = mission_mnd_maj_enforce_loyalty
+		required_missions = { MAJ_halt_the_spread MAJ_candi }
+		position = 2
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MAJ_less_than_25_provinces
+				NOT = {
+					calc_true_if = {
+						all_province = {
+							OR = {
+								region = indonesia_region
+								region = malaya_region
+							}
+							owner = {
+								religion_group = muslim
+							}
+						}
+						amount = 25
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = TEU_ttf_tooltip
+				has_global_modifier_value = {
+					which = tolerance_own
+					value = 6 #this thing works but always shows up as +600.0% Tolerance of true faith
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_a_call_of_shiva
+				duration = 9125
+			}
+			add_army_tradition_or_mil_power = { amount = 10 }
+		}
+	}
+
+	MAJ_sakasanusa = {
+		icon = mission_mnd_maj_subjugate_makassar
+		required_missions = { MAJ_gajah_madas_oath }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 641
+				AND = {
+					MSA_is_in_sulawesi = yes
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_sulawesi = yes
+								value = 4
+							}
+						}
+					}
+				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			641 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 4
+			}
+		}
+		effect = {
+			1357 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = MAJ_pillar_island_control
+				}
+			}
+			add_country_modifier = {
+				name = MAJ_securing_important_territories
+				duration = 10950
+			}
+			MSA_claims_spice_islands = yes
+			custom_tooltip = MAJ_lose_5_autonomy_everywhere
+			hidden_effect = {
+				every_owned_province = {
+					add_local_autonomy = -5
+				}
+			}
+		}
+	}
+
+	MAJ_maluku = {
+		icon = mission_mnd_maj_prepare_eastern_campaigns
+		required_missions = { MAJ_sakasanusa }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 650
+				province_id = 649
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			650 = { country_or_non_sovereign_subject_holds = ROOT }
+			649 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_maluku_cloves
+				duration = 9125
+			}
+			add_mercantilism = 2
+			650 = {
+				add_province_modifier = {
+					name = MAJ_cloves
+					duration = -1
+				}
+			}
+			649 = {
+				add_province_modifier = {
+					name = MAJ_cloves
+					duration = -1
+				}
+			}
+		}
+	}
+
+	MAJ_temasek = {
+		icon = me_mission_malay_ruler
+		required_missions = { MAJ_tributaries }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4815
+				province_id = 596
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			4815 = { country_or_non_sovereign_subject_holds = ROOT }
+			596 = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { exists = MLC }
+				MLC = { is_subject_of = ROOT }
+				has_won_war_against = { who = MLC }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_temasik_defeated
+				duration = -1
+			}
+			country_event = { id = ME_Majapahit_Events.102 }
+		}
+	}
+
+	MAJ_hujung_medini = {
+		icon = mission_found_udaipur
+		required_missions = { MAJ_temasek }
+		position = 7
+		provinces_to_highlight = {
+			MSA_is_in_malaya = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_malaya = yes
+						value = 12
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_malaya = yes
+				value = 12
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MAJ_verge_of_the_empire
+				duration = 9125
+			}
+		}
+	}
+}

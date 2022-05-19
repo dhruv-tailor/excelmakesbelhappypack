@@ -6,7 +6,6 @@ country_event = {
 	desc = ME_Hannover_Events.1.d
 	picture = BORDER_TENSION_eventPicture
 
-	fire_only_once = yes
 	is_triggered_only = yes
 	
 	option = {
@@ -14,13 +13,44 @@ country_event = {
 		
 		ai_chance = { factor = 1 }
 		
-		1874 = {
-			change_trade_goods = naval_supplies
-			add_province_modifier = {
-				name = han_lumber
-				duration = -1
+		neumark_area = {
+			limit = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cede_province = BRA
+		}
+		mittelmark_area = {
+			limit = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cede_province = BRA
+		}
+		BRA = {
+			define_ruler = {
+				dynasty = "Askanier"
+				adm = 5
+				dip = 4
+				mil = 4
+				age = 20
+				claim = 95
 			}
 		}
+		if = {
+			limit = {
+				has_dlc = "Art of War"
+			}
+			create_subject = {
+				subject = BRA
+				subject_type = march
+			}
+		}
+		else = {
+			create_subject = {
+				subject = BRA
+				subject_type = vassal
+			}
+		}
+		custom_tooltip = HAN_as_long_as
 	}
 	
 	option = {
@@ -28,93 +58,401 @@ country_event = {
 		
 		ai_chance = { factor = 0 }
 		
-		add_prestige = 5
 	}
-	
 }
+
 country_event = {
 	id = ME_Hannover_Events.2
 	title = ME_Hannover_Events.2.t
 	desc = ME_Hannover_Events.2.d
 	picture = BORDER_TENSION_eventPicture
 
-	fire_only_once = yes
 	is_triggered_only = yes
 	
-	option = { #cash
+	option = {
 		name = ME_Hannover_Events.2.a
 		
-		ai_chance = { factor = 0.5 }
+		ai_chance = { factor = 1 }
 		
-		add_years_of_income = -2
-		weser_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		braunschweig_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		53 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		56 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		1931 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
+		custom_tooltip = HAN_this_will_take_40_years
+		set_country_flag = HAN_40_year_stud
 	}
 	
-	option = { #military
+	option = {
 		name = ME_Hannover_Events.2.b
 		
-		ai_chance = { factor = 0.5 }
+		ai_chance = { factor = 0 }
 		
-		add_yearly_manpower = -3
-		weser_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
+		add_years_of_income = -2
+		custom_tooltip = HAN_this_will_take_20_years
+		set_country_flag = HAN_20_year_stud
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.3
+	title = ME_Hannover_Events.3.t
+	desc = ME_Hannover_Events.3.d
+	picture = BORDER_TENSION_eventPicture
+
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		tag = HAN
+		owns = 4772
+		OR = {
+			had_country_flag = {
+				flag = HAN_20_year_stud
+				days = 7300
 			}
-		}
-		braunschweig_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		53 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		56 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		1931 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
+			had_country_flag = {
+				flag = HAN_40_year_stud
+				days = 14600
 			}
 		}
 	}
 	
+	option = {
+		name = ME_Hannover_Events.3.a
+		
+		ai_chance = { factor = 1 }
+		
+		set_country_flag = HAN_completed_stud
+		clr_country_flag = HAN_20_year_stud
+		clr_country_flag = HAN_40_year_stud
+		if = {
+			limit = {
+				owns = 4772
+			}
+			4772 = {
+				add_province_modifier = {
+					name = HAN_stud
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					change_trade_goods = horses
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				add_province_modifier = {
+					name = HAN_stud
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					change_trade_goods = horses
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.4
+	title = ME_Hannover_Events.4.t
+	desc = ME_Hannover_Events.4.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hannover_Events.4.a
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HAN_unlock_electorship_mission
+		set_country_flag = HAN_electorship_mission
+		swap_non_generic_missions = yes
+		add_country_modifier = {
+			name = HAN_salic_law_abolished
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.4.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_country_modifier = {
+			name = HAN_salic_law_dynasty
+			duration = -1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.5
+	title = ME_Hannover_Events.5.t
+	desc = ME_Hannover_Events.5.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	immediate = {
+		random_province = {
+			limit = {
+				region = low_countries_region
+			}
+			owner = {
+				save_event_target_as = ME_Hanover_Target_1
+			}
+		}
+		pick_best_tags = {
+			1 = yes
+			global_trigger = "capital_scope = { region = low_countries_region }"
+			event_target_name = "ME_Hanover_Target"
+			scale = "total_development"
+		}
+	}
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			AND = {
+				tag = GBR
+				GBR = { junior_union_with = HAN }
+			}
+			AND = {
+				tag = ENG
+				ENG = { junior_union_with = HAN }
+			}
+			tag = event_target:ME_Hanover_Target_1
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.5.a
+		
+		ai_chance = { factor = 1 }
+		
+		add_years_of_income = 1
+		if = {
+			limit = {
+				senior_union_with = GBR
+			}
+			GBR = {
+				add_country_modifier = {
+					name = HAN_agrarian_trade
+					duration = 10950
+				}
+			}
+		}
+		else_if = {	
+			limit = {
+				senior_union_with = ENG
+			}
+			ENG = {
+				add_country_modifier = {
+					name = HAN_agrarian_trade
+					duration = 10950
+				}
+			}
+		}
+		else = {
+			236 = {
+				area = {
+					add_province_modifier = {
+						name = HAN_agrarian_trade_province
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.5.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_years_of_income = 1.25
+		event_target:ME_Hanover_Target_1 = {
+			add_country_modifier = {
+				name = HAN_agrarian_trade
+				duration = 10950
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.6
+	title = ME_Hannover_Events.6.t
+	desc = ME_Hannover_Events.6.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hannover_Events.6.a
+		
+		ai_chance = { factor = 1 }
+		
+		add_country_modifier = {
+			name = HAN_munzverein
+			duration = 7300
+		}
+		custom_tooltip = HAN_every_germanic_neighbor
+		add_country_modifier = {
+			name = HAN_cooperating_with_hanover
+			duration = 9125
+		}
+		hidden_effect ={ 
+			every_neighbor_country = {
+				limit = {
+					culture_group = germanic
+				}
+				country_event = { id = ME_Hannover_Events.7 }
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.6.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_country_modifier = {
+			name = HAN_munzverein
+			duration = 10950
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.6.c
+		
+		ai_chance = { factor = 0 }
+		
+		add_country_modifier = {
+			name = HAN_maintain_the_status_quo
+			duration = 10950
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.7
+	title = ME_Hannover_Events.7.t
+	desc = ME_Hannover_Events.7.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = { tag = FROM }
+	
+	option = {
+		name = ME_Hannover_Events.7.a
+		
+		ai_chance = { factor = 1 }
+		
+		capital_scope = {
+			add_trade_modifier = {
+				who = FROM
+				duration = 9125
+				power = 10
+				key = HAN_influences
+			}
+		}
+		add_country_modifier = {
+			name = HAN_cooperating_with_hanover
+			duration = 9125
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.7.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_prestige_or_monarch_power = { amount = 10 }
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.8
+	title = ME_Hannover_Events.8.t
+	desc = ME_Hannover_Events.8.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			tag = FROM
+			is_part_of_hre = yes
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.8.a
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				NOT = { num_of_electors = 7 }
+			}
+			FROM = { elector = yes }
+		}
+		add_imperial_influence = 5
+	}
+	
+	option = {
+		name = ME_Hannover_Events.8.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_prestige = -5
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.9
+	title = ME_Hannover_Events.9.t
+	desc = ME_Hannover_Events.9.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+
+	trigger = {
+		has_consort = no
+	}
+	
+	major = yes
+	major_trigger = {
+		tag = FROM
+	}
+	
+	option = {
+		name = ME_Hannover_Events.9.a
+		
+		ai_chance = { factor = 1 }
+		
+		define_consort = {
+			country_of_origin = FROM
+			dynasty = FROM
+			religion = FROM
+			culture = FROM
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.9.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_dip_power = 5
+	}
 }

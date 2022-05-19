@@ -1,170 +1,367 @@
-generic_hansa_missions_1 = {
+HNS_Generic_missions_1_secede = {
+	slot = 1
+	generic = no 
+	ai = yes
+	potential = {
+		NOT = { has_country_flag = HNS_loyal }
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_contest_lubeck_hegemony = {
+		icon = challenge_spanish_power
+		required_missions = { HNS_secede_from_the_league }
+		position = 2
+		trigger = {
+			power_projection = 15
+			army_tradition = 20
+			if = {
+				limit = {
+					exists = HSA
+				}
+				navy_size = HSA
+				army_size = HSA
+				has_won_war_against = {
+					who = HSA
+				}
+			}
+			else = {
+				NOT = { exists = HSA }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HNS_supremacy_of_the_new_league
+				duration = 10950
+			}
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 15
+			}
+		}
+	}
+	
+	HNS_a_new_leader = {
+		icon = king_of_kings
+		required_missions = { HNS_contest_lubeck_hegemony HNS_new_hansa }
+		position = 3
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { province_trade_power = 50 }
+		}
+		trigger = {
+			capital_scope = {
+				province_trade_power = 50
+			}
+			monthly_income = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = HNS_new_hansa_leader
+				duration = -1
+			}
+			
+			custom_tooltip = HNS_hansetage
+			set_country_flag = HNS_hansetage
+		}
+	}
+}
+
+HNS_Generic_missions_1_loyal = {
+	slot = 1
+	generic = no 
+	ai = yes
+	potential = {
+		has_country_flag = HNS_loyal
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_queen_of_the_league = {
+		icon = mission_rb_monopolize_the_channel
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 45
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			45 = { owned_by = ROOT }
+		}
+		effect = {
+			45 = {
+				add_nationalism = -10
+				add_local_autonomy = -25
+			}
+			add_country_modifier = {
+				name = HNS_conquered_lubeck
+				duration = 9125
+			}
+		}
+	}
+	
+	HNS_burgtor = {
+		icon = mission_golden_century
+		required_missions = { HNS_queen_of_the_league HNS_project_power }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { num_of_buildings_in_province = 2 }
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 5 }
+			}
+		}
+		trigger = {
+			army_tradition = 20
+			45 = {
+				num_of_buildings_in_province = 2
+				owned_by = ROOT
+				base_manpower = 5
+			}
+		}
+		effect = {
+			45 = {
+				add_province_modifier = {
+					name = HSA_burgtor
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	HNS_holstentor = {
+		icon = imperial_capitals
+		required_missions = { HNS_burgtor }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 4 }
+				NOT = { base_manpower = 7 }
+			}
+		}
+		trigger = {
+			fortification_expert = 1
+			45 = {
+				owned_by = ROOT
+				fort_level = 4
+				base_manpower = 7
+			}
+		}
+		effect = {
+			add_army_tradition_or_mil_power = { amount = 15 }
+			45 = {
+				remove_province_modifier = HSA_burgtor
+				add_province_modifier = {
+					name = HSA_holstentor
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+HNS_Generic_missions_1 = {
 	slot = 1
 	generic = no 
 	ai = yes
 	potential = {
 		OR = {
 			tag = HAM
-			tag = DNZ
-			tag = OLD
-			tag = LUN
-			tag = RIG
 			tag = BRE
-			tag = MAG
-			tag = GOT
-			tag = KRA
 		}
 	}
 	has_country_shield = yes
 	
-	generic_hsa_conquer_gotland = {
-		icon = mission_invade_island
-		required_missions = { generic_hsa_united_hansa_idea }
-		position = 4
+	HNS_new_trade_deal = {
+		icon = interest_of_holland
+		required_missions = { HNS_leverage_deals }
+		position = 5
 		provinces_to_highlight = {
-			province_id = 25
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+			owner = {
+				NOT = { alliance_with = ROOT }
+				home_trade_node = {
+					trade_share = {
+						country = PREV
+						share = 10
+					}
+				}
 			}
 		}
 		trigger = {
-			owns_core_province = 25
+			calc_true_if = {
+				all_ally = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_10_percent_trade_share
+						home_trade_node = {
+							trade_share = {
+								country = PREV
+								share = 10
+							}
+						}
+					}
+				}
+				amount = 2
+			}
 		}
 		effect = {
-			add_adm_power = 75
-			add_prestige = 10
+			custom_tooltip = HSA_every_trade_node_fulfilling_conditions
+			tooltip = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = HSA_new_trade_deals
+				}
+			}
+			hidden_effect = {
+				every_ally = {
+					limit = {
+						home_trade_node = {
+							trade_share = {
+								country = PREV
+								share = 10
+							}
+						}
+					}
+					home_trade_node_effect_scope = {
+						add_trade_modifier = {
+							who = ROOT
+							duration = 9125
+							power = 15
+							key = HSA_new_trade_deals
+						}
+					}
+				}
+			}
 		}
 	}
 }
 
-generic_hansa_missions_2 = {
+HNS_Generic_missions_2_secede = {
 	slot = 2
 	generic = no 
 	ai = yes
 	potential = {
+		NOT = { has_country_flag = HNS_loyal }
 		OR = {
 			tag = HAM
-			tag = DNZ
-			tag = OLD
-			tag = LUN
-			tag = RIG
 			tag = BRE
-			tag = MAG
-			tag = GOT
-			tag = KRA
 		}
 	}
 	has_country_shield = yes
 	
-	generic_hsa_development = {
-		icon = mission_early_game_buildings
-		provinces_to_highlight = {
-			is_capital_of = ROOT
-			NOT = { development = 25 }
-		}
+	HNS_secede_from_the_league = {
+		icon = adjust_the_general_means
+		required_missions = { }
+		position = 1
 		trigger = {
-			capital_scope = {
-				development = 25
-			}
+			NOT = { is_in_trade_league_with = HSA }
+			NOT = { alliance_with = HSA }
 		}
 		effect = {
-			add_country_modifier = {
-				name = generic_hsa_booming_dev
-				duration = 5475
+			country_event = { id = ME_Hansa_Events.11 }
+			
+			custom_tooltip = HNS_this_will_lock_out_loyal
+			set_country_flag = HNS_secede
+			hidden_effect = {
+				swap_non_generic_missions = yes
 			}
 		}
 	}
 	
-	generic_hsa_baltic_sea_trade = {
-		icon = mission_galleys_in_port
-		required_missions = { generic_hsa_development }
-		position = 3
+	HNS_new_hansa = {
+		icon = expand_the_confederacy
+		required_missions = { HNS_secede_from_the_league }
+		position = 2
+		provinces_to_highlight = {
+			owner = {
+				num_of_cities = 1
+				NOT = {
+					OR = {
+						alliance_with = ROOT
+						is_in_trade_league_with = ROOT
+					}
+				}
+			}
+		}
 		trigger = {
-			home_trade_node = {
-				trade_share = {
-					country = ROOT
-					share = 25
+			if = {
+				limit = {
+					has_dlc = "Wealth of Nations"
+				}
+				calc_true_if = {
+					all_country = {
+						is_in_trade_league_with = ROOT
+					}
+					amount = 4
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_ally = {
+						num_of_cities = 1
+					}
+					amount = 4
 				}
 			}
 		}
 		effect = {
-			add_dip_power = 50
+			add_mercantilism = 5
 			add_country_modifier = {
-				name = generic_hsa_trade_dominance
-				duration = 7300
+				name = HNS_struggle_for_recognition
+				duration = 9125
 			}
-		}
-	}
-	
-	generic_hsa_conquer_danzig = {
-		icon = mission_teutonic_knights
-		required_missions = { generic_hsa_united_hansa_idea }
-		position = 4
-		provinces_to_highlight = {
-			province_id = 43
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+			custom_tooltip = HNS_lubeck_no_trade
+			tooltip = {
+				add_country_modifier = {
+					name = HNS_eclipsed_lubeck
+					duration = 7300
+				}
 			}
-		}
-		trigger = {
-			owns_core_province = 43
-		}
-		effect = {
-			add_adm_power = 75
-			add_prestige = 10
 		}
 	}
 }
-	
 
-generic_hansa_missions_3 = {
-	slot = 3
+HNS_Generic_missions_2_loyal = {
+	slot = 2
 	generic = no 
 	ai = yes
 	potential = {
+		has_country_flag = HNS_loyal
 		OR = {
 			tag = HAM
-			tag = DNZ
-			tag = OLD
-			tag = LUN
-			tag = RIG
 			tag = BRE
-			tag = MAG
-			tag = GOT
-			tag = KRA
 		}
 	}
 	has_country_shield = yes
-	
-	generic_hsa_army = {
-		icon = mission_build_up_to_force_limit
-		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.6
-			num_of_generals = 1
+
+	HNS_project_power = {
+		icon = protect_against_austria
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
 		}
-		effect = {
-			add_country_modifier = {
-				name = generic_hsa_prepared_for_anything
-				duration = 10950
+		trigger = {
+			OR = {
+				num_of_mercenaries = 1
+				army_size_percentage = 0.9
 			}
 		}
-	}
-	
-	generic_hsa_conquer_neighbors = {
-		icon = mission_rb_hanseatic_east
-		required_missions = { generic_hsa_army generic_hsa_development }
-		position = 2
-		trigger = {
-			num_of_provinces_in_states = 3
-		}
 		effect = {
-			43 = {
+			add_mil_power = 50
+			45 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
@@ -173,34 +370,7 @@ generic_hansa_missions_3 = {
 			44 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			45 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			38 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			25 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
@@ -209,7 +379,7 @@ generic_hansa_missions_3 = {
 			1874 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
@@ -218,184 +388,800 @@ generic_hansa_missions_3 = {
 		}
 	}
 	
-	generic_hsa_united_hansa_idea = {
-		icon = mission_heart_of_the_hansa
-		required_missions = { generic_hsa_conquer_neighbors }
-		position = 3
+	HNS_old_salt_road = {
+		icon = construct_the_kiel_canal
+		required_missions = { HNS_project_power }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 45
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_trade_building_trigger = yes }
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 53
+						province_id = 1857
+					}
+					NOT  ={
+						OR = {
+							owner = {
+								OR = {
+									alliance_with = ROOT
+									is_in_trade_league_with = ROOT
+								}
+							}
+							AND = {
+								has_trade_building_trigger = yes
+								owned_by = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			45 = {
+				custom_trigger_tooltip = {
+					tooltip = HSA_owned_and_trade_building
+					AND = {
+						has_trade_building_trigger = yes
+						owned_by = ROOT
+					}
+				}
+			}
+			53 = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			1857 = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			45 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			53 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			1857 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+	
+HNS_Generic_missions_2 = {
+	slot = 2
+	generic = no 
+	ai = yes
+	potential = {
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_leverage_deals = {
+		icon = medici_bank_ledgers
+		required_missions = { }
+		position = 4
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Mare Nostrum"
+					has_estate = estate_burghers
 				}
-				NOT = { is_in_trade_league_with = HSA }
+				OR = {
+					num_of_estate_privileges = {
+						estate = estate_burghers
+						value = 4
+					}
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
 			}
-			NOT = { alliance_with = HSA }
-			land_forcelimit = 10
+			else = {
+				is_ahead_of_time_in_specific_tech = { type = dip }
+			}
 		}
 		effect = {
 			if = {
 				limit = {
-					exists = HSA
+					has_estate = estate_burghers
 				}
-				HSA = {
-					every_ally = {
-						add_opinion = {
-							who = ROOT
-							modifier = me_angry_hansa
+				custom_tooltip = HNS_25_dip_power_for_each_priv
+				hidden_effect = {
+					if = {
+						limit = {
+							num_of_estate_privileges = {
+								estate = estate_burghers
+								value = 1
+							}
 						}
-					}
-					add_opinion = {
-						who = ROOT
-						modifier = me_angry_hansa
+						if = {
+							limit = {
+								num_of_estate_privileges = {
+									estate = estate_burghers
+									value = 2
+								}
+							}
+							if = {
+								limit = {
+									num_of_estate_privileges = {
+										estate = estate_burghers
+										value = 3
+									}
+								}
+								if = {
+									limit = {
+										num_of_estate_privileges = {
+											estate = estate_burghers
+											value = 4
+										}
+									}
+									add_dip_power = 25
+								}
+								add_dip_power = 25
+							}
+							add_dip_power = 25
+						}
+						add_dip_power = 25
 					}
 				}
 			}
 			add_country_modifier = {
-				name = generic_hsa_conquerors_zeal
-				duration = 18250
+				name = HNS_proper_internal_politics
+				duration = 9125
 			}
-		}
-	}
-	
-	generic_hsa_conquer_hamburg = {
-		icon = mission_seize_north_sea_trade
-		required_missions = { generic_hsa_united_hansa_idea }
-		position = 4
-		provinces_to_highlight = {
-			province_id = 44
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 44
-		}
-		effect = {
-			add_adm_power = 75
-			add_prestige = 10
-		}
-	}
-	
-	generic_hsa_conquer_lubeck = {
-		icon = mission_rb_control_the_hansa
-		required_missions = { generic_hsa_conquer_hamburg generic_hsa_conquer_gotland generic_hsa_conquer_bremen generic_hsa_conquer_danzig generic_hsa_conquer_riga }
-		position = 5
-		provinces_to_highlight = {
-			province_id = 45
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 45
-		}
-		effect = {
-			set_country_flag = can_form_hansa
-			custom_tooltip = me_can_form_hansa_tt
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
 		}
 	}
 }
 
-generic_hansa_missions_4 = {
+HNS_Generic_missions_3 = {
+	slot = 3
+	generic = no 
+	ai = yes
+	potential = {
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+	
+	HNS_our_roots = {
+		icon = purely_for_commerce
+		required_missions = { }
+		position = 2
+		trigger = {
+			num_of_light_ship = 10
+		}
+		effect = {
+			add_mercantilism = 2
+			add_country_modifier = {
+				name = HNS_purely_commerce
+				duration = 7300
+			}
+		}
+	}
+	
+	HNS_leadership = {
+		icon = unite_the_league
+		required_missions = { HNS_our_roots }
+		position = 4
+		trigger = {
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 40
+				}
+			}
+			calc_true_if = {
+				all_country = {
+					OR = {
+						alliance_with = ROOT
+						is_in_trade_league_with = ROOT
+					}
+				}
+				amount = 7
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
+			custom_tooltip = HNS_decision_for_hansa
+			set_country_flag = HNS_decision
+			custom_tooltip = HNS_we_may_inherit_bremen_and_hamburg
+			
+			hidden_effect = {
+				every_country = {
+					limit = {
+						is_in_trade_league_with = ROOT
+						OR = {
+							owns = 45
+							owns = 44
+							owns = 1874
+						}
+					}
+					country_event = { id = ME_Hansa_Events.17 }
+				}
+				Hansa_complete_leadership_missions = yes
+			}
+		}
+	}
+}
+
+HNS_Generic_missions_4_loyal = {
+	slot = 4
+	generic = no 
+	ai = yes
+	potential = {
+		NOT = { has_country_flag = HNS_secede }
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+	
+	HNS_stay_loyal_to_the_league = {
+		icon = standardize_relazioni
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			owned_by = HSA
+		}
+		trigger = {
+			reverse_has_opinion = {
+				who = HSA
+				value = 150
+			}
+			HSA = {
+				is_in_trade_league_with = ROOT
+				is_trade_league_leader = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HNS_loyalty_rewards
+				duration = 7300
+			}
+			
+			add_stability_or_adm_power = yes
+			
+			custom_tooltip = HNS_this_will_lock_out_secede
+			set_country_flag = HNS_loyal
+			hidden_effect = {
+				swap_non_generic_missions = yes
+			}
+		}
+	}
+	
+	HNS_grow_the_influence = {
+		icon = sources_of_trade
+		required_missions = { HNS_stay_loyal_to_the_league }
+		position = 2
+		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 10
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			home_trade_node_effect_scope = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 25
+					key = HNS_market_domination
+				}
+			}
+			add_years_of_income = 0.5
+		}
+	}
+}
+
+HNS_Generic_missions_4_secede = {
+	slot = 4
+	generic = no 
+	ai = yes
+	potential = {
+		has_country_flag = HNS_secede
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_project_power_2 = {
+		icon = protect_against_austria
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				num_of_mercenaries = 1
+				army_size_percentage = 0.9
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			45 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			44 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1874 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	HNS_old_salt_road_2 = {
+		icon = construct_the_kiel_canal
+		required_missions = { HNS_project_power_2 }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 45
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_trade_building_trigger = yes }
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 53
+						province_id = 1857
+					}
+					NOT  ={
+						OR = {
+							owner = {
+								OR = {
+									alliance_with = ROOT
+									is_in_trade_league_with = ROOT
+								}
+							}
+							AND = {
+								has_trade_building_trigger = yes
+								owned_by = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			45 = {
+				custom_trigger_tooltip = {
+					tooltip = HSA_owned_and_trade_building
+					AND = {
+						has_trade_building_trigger = yes
+						owned_by = ROOT
+					}
+				}
+			}
+			53 = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			1857 = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			45 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			53 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			1857 = {
+				add_permanent_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+HNS_Generic_missions_4 = {
 	slot = 4
 	generic = no 
 	ai = yes
 	potential = {
 		OR = {
 			tag = HAM
-			tag = DNZ
-			tag = OLD
-			tag = LUN
-			tag = RIG
 			tag = BRE
-			tag = MAG
-			tag = GOT
-			tag = KRA
+		}
+	}
+	has_country_shield = yes
+
+	HNS_entrepot = {
+		icon = defend_the_city
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { 
+					AND = {
+						province_has_center_of_trade_of_level = 1
+						has_dlc = "Dharma"
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+				}
+				NOT = { has_trade_building_trigger = yes } 
+			}
+		}
+		trigger = {
+			capital_scope = {
+				if = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						has_dlc = "Dharma"
+					}
+					province_has_center_of_trade_of_level = 2
+				}
+				has_trade_building_trigger = yes 
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
+			
+			add_mercantilism = 2
+		}
+	}
+}
+
+HNS_Generic_missions_5_loyal = {
+	slot = 5
+	generic = no 
+	ai = yes
+	potential = {
+		NOT = { has_country_flag = HNS_secede }
+		OR = {
+			tag = HAM
+			tag = BRE
 		}
 	}
 	has_country_shield = yes
 	
-	generic_hsa_foster_mercenaries = {
-		icon = mission_landsknecht_soldier
-		required_missions = { generic_hsa_army }
+	HNS_rival_the_queen = {
+		icon = defender_of_the_faith
+		required_missions = { HNS_stay_loyal_to_the_league }
 		position = 2
+		provinces_to_highlight = {
+			owned_by = HSA
+		}
 		trigger = {
-			OR = {
-				barracks = 1
-				training_fields = 1
+			if = {
+				limit = {
+					exists = HSA
+				}
+				navy_size = HSA
+				army_size = HSA
 			}
-			num_of_mercenaries = 5
+			else = {
+				NOT = { exists = HSA }
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = generic_hsa_hanseatic_mercenaries
+				name = HNS_powerful_member
+				duration = 10950
+			}
+		}
+	}
+	
+	HNS_king_of_the_league = {
+		icon = regal_splendour
+		required_missions = { HNS_grow_the_influence HNS_rival_the_queen }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = HSA
+					NOT = {
+						owner = {
+							reverse_has_opinion = {
+								who = HSA
+								value = 200
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 45
+					NOT = {
+						owner = {
+							capital_scope = { higher_development_than = 45 }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			reverse_has_opinion = {
+				who = HSA
+				value = 200
+			}
+			capital_scope = { higher_development_than = 45 }
+		}
+		effect = {
+			if = {
+				limit = {
+					HSA = {
+						is_in_trade_league_with = ROOT
+						is_trade_league_leader = yes
+					}
+				}
+				custom_tooltip = HNS_become_new_leader_of_the_league
+				HSA = {
+					country_event = { id = ME_Hansa_Events.13 } #King of the League
+				}
+			}
+			add_country_modifier = {
+				name = HNS_king_of_the_league
 				duration = -1
 			}
 		}
 	}
 	
-	generic_hsa_conquer_bremen = {
-		icon = mission_danzig_or_war
-		required_missions = { generic_hsa_united_hansa_idea }
-		position = 4
+}
+
+HNS_Generic_missions_5_secede = {
+	slot = 5
+	generic = no 
+	ai = yes
+	potential = {
+		has_country_flag = HNS_secede
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_queen_of_the_league_2 = {
+		icon = mission_rb_monopolize_the_channel
+		required_missions = { }
+		position = 1
 		provinces_to_highlight = {
-			province_id = 1874
+			province_id = 45
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			45 = { owned_by = ROOT }
+		}
+		effect = {
+			45 = {
+				add_nationalism = -10
+				add_local_autonomy = -25
+			}
+			add_country_modifier = {
+				name = HNS_conquered_lubeck
+				duration = 9125
+			}
+		}
+	}
+	
+	HNS_burgtor_2 = {
+		icon = mission_golden_century
+		required_missions = { HNS_queen_of_the_league_2 HNS_project_power_2 }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 45
 			OR = {
+				NOT = { num_of_buildings_in_province = 2 }
 				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				NOT = { base_manpower = 5 }
 			}
 		}
 		trigger = {
-			owns_core_province = 1874
+			army_tradition = 20
+			45 = {
+				num_of_buildings_in_province = 2
+				owned_by = ROOT
+				base_manpower = 5
+			}
 		}
 		effect = {
-			add_adm_power = 75
-			add_prestige = 10
+			45 = {
+				add_province_modifier = {
+					name = HSA_burgtor
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	HNS_holstentor_2 = {
+		icon = imperial_capitals
+		required_missions = { HNS_burgtor_2 }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 4 }
+				NOT = { base_manpower = 7 }
+			}
+		}
+		trigger = {
+			fortification_expert = 1
+			45 = {
+				owned_by = ROOT
+				fort_level = 4
+				base_manpower = 7
+			}
+		}
+		effect = {
+			add_army_tradition_or_mil_power = { amount = 15 }
+			45 = {
+				remove_province_modifier = HSA_burgtor
+				add_province_modifier = {
+					name = HSA_holstentor
+					duration = -1
+				}
+			}
 		}
 	}
 }
 
-generic_hansa_missions_5 = {
+HNS_Generic_missions_5 = {
 	slot = 5
 	generic = no 
 	ai = yes
 	potential = {
 		OR = {
 			tag = HAM
-			tag = DNZ
-			tag = OLD
-			tag = LUN
-			tag = RIG
 			tag = BRE
-			tag = MAG
-			tag = GOT
-			tag = KRA
 		}
 	}
 	has_country_shield = yes
 	
-	generic_hsa_conquer_riga = {
-		icon = mission_conquer_riga
-		required_missions = { generic_hsa_united_hansa_idea }
-		position = 4
+	HNS_renaissance = {
+		icon = levee_the_arno
+		required_missions = { HNS_entrepot }
+		position = 5
 		provinces_to_highlight = {
-			province_id = 38
+			is_capital_of = ROOT
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				NOT = { renaissance = 100 }
+				NOT = { num_of_buildings_in_province = 3 }
 			}
 		}
 		trigger = {
-			owns_core_province = 38
+			capital_scope = {
+				num_of_buildings_in_province = 3
+				renaissance = 100
+				owned_by = ROOT
+			}
 		}
 		effect = {
-			add_adm_power = 75
-			add_prestige = 10
+			add_country_modifier = {
+				name = HSA_gothic
+				duration = 9125
+			}
+			capital_scope = {
+				add_prosperity = 100
+			}
 		}
 	}
 }

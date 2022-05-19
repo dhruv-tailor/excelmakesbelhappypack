@@ -1,0 +1,704 @@
+MKS_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MKS
+			tag = BNE
+			tag = LUW
+			tag = BTN
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = MKS #Makassar
+					was_tag = BNE #Bone
+					was_tag = LUW #Luwu
+					was_tag = BTN #Buton
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MKS_send_settlers = {
+		icon = mission_mnd_khm_protect_the_cham
+		required_missions = { MKS_leading_kingdom }
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 642
+				province_id = 2716
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 642
+			owns = 2716
+		}
+		effect = {
+			4796 = {
+				if = {
+					limit = { is_empty = yes }
+					add_siberian_construction = 20
+				}
+				else = {
+					add_core = ROOT
+				}
+			}
+			add_dip_power = 25
+		}
+	}
+
+	MKS_kalimantan = {
+		icon = mission_rajputana_frontier
+		required_missions = { MKS_unite_island }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = kutai_area
+				area = banjar_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = kutai_area
+					area = banjar_area
+				}
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MKS_ambitions_outwards
+				duration = 9125
+			}
+			MSA_claims_borneo = yes
+		}
+	}
+	
+	MKS_borneo = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { MKS_kalimantan }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 12
+			}
+		}
+		effect = {
+			add_accepted_culture_or_dip_power = { culture = bornean }
+			MSA_claims_malaya = yes
+		}
+	}
+	
+	MKS_sail_south = {
+		icon = mission_arabian_sea_trade
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2728
+		}
+		trigger = {
+			OR = {
+				num_of_light_ship = 10
+				has_discovered = 2728
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			MSA_discover_tiwi = yes
+		}
+	}
+	
+	MKS_trade_with_tiwi = {
+		icon = mission_polynesian_navy_build
+		required_missions = { MKS_sail_south }
+		position = 8
+		provinces_to_highlight = {
+			area = top_end_area
+		}
+		trigger = {	
+			OR = {
+				owns = 2728
+				top_end_area = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 75
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = MKS_trade_deal
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MKS_trade_deal_non_GE
+					duration = 7300
+				}
+			}
+			custom_tooltip = MKS_if_we_are_the_first
+			tooltip = {
+				add_country_modifier = {
+					name = MKS_trade_with_australia
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_global_flag = MKS_trade_with_tiwi }
+					}
+					set_global_flag = MKS_trade_with_tiwi
+					add_country_modifier = {
+						name = MKS_trade_with_australia
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+}
+
+MKS_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MKS
+			tag = BNE
+			tag = LUW
+			tag = BTN
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = MKS #Makassar
+					was_tag = BNE #Bone
+					was_tag = LUW #Luwu
+					was_tag = BTN #Buton
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MKS_leading_kingdom = {
+		icon = mission_persianate_empire
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				num_of_cities = 3
+				army_size = 7
+			}
+		}
+		effect = {
+			MSA_claims_sulawesi = yes
+			create_general = { tradition = 40 }
+		}
+	}
+	
+	MKS_unite_island = {
+		icon = mission_order_in_the_domain
+		required_missions = { MKS_leading_kingdom }
+		position = 2
+		provinces_to_highlight = {
+			MSA_is_in_sulawesi = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			641 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 6
+			}
+		}
+		effect = {
+			set_country_flag = MKS_colonize_decision
+			custom_tooltip = MKS_colonization
+			custom_tooltip = MSA_space_lol
+			MSA_claims_java = yes
+			MSA_claims_spice_islands = yes
+			kutai_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banjar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	MKS_defeat_majapahit = {
+		icon = mission_mnd_maj_end_disaster
+		required_missions = { MKS_unite_island }
+		position = 4
+		provinces_to_highlight = {
+			MSA_is_in_java = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 9
+			}
+		}
+		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 25
+			}
+			add_mil_power = 50
+			MSA_claims_sumatra = yes
+		}
+	}
+	
+	MKS_malay = {
+		icon = mission_reduce_champaner
+		required_missions = { MKS_borneo MKS_sumatra }
+		position = 6
+		provinces_to_highlight = {
+			MSA_is_in_malaya = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_malaya = yes
+				value = 8
+			}
+		}
+		effect = {
+			#Event to get a second capital here?
+			add_mil_power = 100
+			add_stability_or_adm_power = yes
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = MKS_gateway
+				}
+			}
+		}
+	}
+}
+
+MKS_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MKS
+			tag = BNE
+			tag = LUW
+			tag = BTN
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = MKS #Makassar
+					was_tag = BNE #Bone
+					was_tag = LUW #Luwu
+					was_tag = BTN #Buton
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MKS_melayu_islands = {
+		icon = mission_look_west
+		required_missions = { MKS_unite_island }
+		position = 3
+		provinces_to_highlight = {
+			area = spice_islands_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				area = spice_islands_area
+				value = 2
+			}
+		}
+		effect = {
+			add_accepted_culture_or_dip_power = { culture = moluccan }
+			spice_islands_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				add_local_autonomy = -25
+			}
+			add_years_of_income = 0.5
+		}
+	}
+	
+	MKS_sumatra = {
+		icon = mission_riches_of_golconda
+		required_missions = { MKS_defeat_majapahit }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_sumatra = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sumatra = yes
+				value = 15
+			}
+		}
+		effect = {
+			MSA_claims_malaya = yes
+			add_army_tradition_or_mil_power = { amount = 10 }
+			#If ?
+		}
+	}
+	
+	MKS_alam_melayu = {
+		icon = mission_defeat_jaunpur
+		required_missions = { MKS_malay }
+		position = 7
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+MKS_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MKS
+			tag = BNE
+			tag = LUW
+			tag = BTN
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = MKS #Makassar
+					was_tag = BNE #Bone
+					was_tag = LUW #Luwu
+					was_tag = BTN #Buton
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	MKS_spice_control = {
+		icon = mission_rb_colonise_spice_islands
+		required_missions = { MKS_pillar_island }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					home_trade_node = {
+						trade_share = {
+							country = ROOT
+							share = 15
+						}
+					}
+					trading_part = {
+						trade_goods = nutmeg
+						value = 0.1
+					}
+				}
+			}
+			else = {
+				OR = {
+					home_trade_node = {
+						trade_share = {
+							country = ROOT
+							share = 15
+						}
+					}
+					trading_part = {
+						trade_goods = cloves
+						value = 0.15
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 3
+			add_country_modifier = {
+				name = MKS_spice_control_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	MKS_tolls = {
+		icon = mission_dominate_trade_in_bengal
+		required_missions = { MKS_spice_control MKS_melayu_islands }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+			641 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+			649 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_production_building_trigger = yes
+			}
+			650 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			641 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				add_or_upgrade_trade_building = yes
+			}
+			add_years_of_income = 0.5
+		}
+	}
+	
+	MKS_seas = {
+		icon = mission_malayan_viceroyalty
+		required_missions = { MKS_maritime_empire }
+		position = 7
+		provinces_to_highlight = {
+		}
+		trigger = {
+			navy_tradition = 30
+			OR = {
+				naval_reformer = 1
+				has_dip_advisor_2 = yes
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_shipyard_building = yes
+			}
+			
+			add_country_modifier = {
+				name = MKS_mastery_of_the_seas
+				duration = 9125
+			}
+		}
+	}
+}
+
+MKS_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = MKS
+			tag = BNE
+			tag = LUW
+			tag = BTN
+			AND = {
+				tag = MSA
+				OR = {
+					was_tag = MKS #Makassar
+					was_tag = BNE #Bone
+					was_tag = LUW #Luwu
+					was_tag = BTN #Buton
+				}
+			}
+		}
+	}
+	has_country_shield = yes
+
+	MKS_pillar_island = {
+		icon = mission_rb_take_gibraltar
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {	
+			navy_size_percentage = 0.8
+		}
+		effect = {
+			add_country_modifier = {
+				name = MKS_pillar_island_modifier
+				duration = 9125
+			}
+			add_yearly_sailors = 1
+		}
+	}
+	
+	MKS_island_of_iron = {
+		icon = mission_portuguese_malacca
+		required_missions = { MKS_pillar_island }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 642
+					OR = {
+						NOT = { has_production_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+					}
+				} 
+				AND = {
+					province_id = 2715
+					OR = {
+						NOT = { development = 12 }
+						NOT = { owned_by = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {	
+			642 = { #Kolaka
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			2715 = {
+				development = 12
+				owned_by = ROOT
+			}#Palapa
+		}
+		effect = {
+			country_event = { id = ME_Sulawesi_Events.1 } #Iron Trade Good
+			642 = {
+				add_province_modifier = {
+					name = MKS_iron_extraction
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	MKS_makassar_foundry = {
+		icon = mission_gunpowder_warfare
+		required_missions = { MKS_island_of_iron }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 641
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
+		trigger = {	
+			num_of_artillery = 10
+			641 = {
+				owned_by = ROOT
+				development = 20
+				has_production_building_trigger = yes
+			} #Makassar
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				#country_event = { id = ME_Sulawesi_Events.2 } #Cannon trade good
+			}
+			641 = {
+				add_province_modifier = {
+					name = MKS_artillery_foundry
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	MKS_maritime_empire = {
+		icon = mission_defeat_mewar
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			has_mil_advisor_2 = yes
+			army_tradition = 40
+		}
+		effect = {
+			country_event = { id = ME_Sulawesi_Events.4 }
+			add_yearly_manpower = 1
+		}
+	}
+	
+	MKS_overseas_subjects = {
+		icon = mission_dominate_trade_in_aden
+		required_missions = { MKS_maritime_empire }
+		position = 8
+		provinces_to_highlight = {
+			island = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				island = yes
+				value = 15
+			}
+			navy_size = 20
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				num_of_admirals_with_traits = 1
+			}
+			else = {
+				num_of_admirals = 2
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					create_flagship = {	
+						type = light_ship
+					}
+				}
+			}
+			
+			add_country_modifier = {
+				name = MKS_naval_empire
+				duration = -1
+			}
+		}
+	}
+}

@@ -1,0 +1,358 @@
+country_decisions = {
+	MSA_foreign_investment_concessions = {
+		major = yes
+		potential = {
+			has_country_flag = MSA_foreign_investment
+		}
+		allow = {
+			MSA_has_available_concession_trigger = yes
+		}
+		effect = {
+			country_event = { id = ME_Malaya_Events.66 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	MSA_foreign_investment_requests = {
+		major = yes
+		potential = {
+			has_country_flag = MSA_foreign_investment
+		}
+		allow = {
+			MSA_has_available_request_trigger = yes
+		}
+		effect = {
+			country_event = { id = ME_Malaya_Events.67 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	MSA_rival_center = {
+		major = yes
+		potential = {
+			has_global_flag = MSA_muslim_center_flag
+			NOT = { 
+				event_target:ME_MSA_muslim_center_target = {
+					owned_by = ROOT
+				}
+			}
+			culture_group = malay
+			religion_group = muslim
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = MSA_noone_is_eclipsing
+				NOT = { has_global_flag = MSA_muslim_center_flag_being_rivalled }
+			}
+			capital_scope = {
+				religion_group = muslim
+				culture_group = malay
+				OR = {
+					higher_development_than = event_target:ME_MSA_muslim_center_target
+					development = 30
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = MSA_more_prestige_than_muslim_center_owner
+				event_target:ME_MSA_muslim_center_target = {
+					owner = {
+						NOT = { prestige = ROOT }
+					}
+				}
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+		}
+		effect = {
+			capital_scope = {
+				province_event = { id = ME_Malaya_Events.69 }
+			}
+		}
+		ai_will_do = {
+			factor = 1 
+		}
+	}
+	
+	MSA_stop = {
+		major = yes
+		potential = {
+			has_global_flag = MSA_muslim_center_flag
+			event_target:ME_MSA_muslim_center_target = {
+				owned_by = ROOT
+			}
+			has_global_flag = MSA_muslim_center_flag_being_rivalled
+		}
+		allow = {
+			event_target:ME_MSA_muslim_center_target = {
+				religion_group = muslim
+				culture_group = malay
+				OR = {
+					higher_development_than = event_target:ME_MSA_muslim_center_target_rival
+					development = 30
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = MSA_more_prestige_than_muslim_center_owner
+				event_target:ME_MSA_muslim_center_target_rival = {
+					owner = {
+						NOT = { prestige = ROOT }
+					}
+				}
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+		}
+		effect = {
+			country_event = { id = ME_Malaya_Events.70 }
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	MSA_move_muslim_center_to_capital = {
+		major = yes
+		potential = {
+			has_global_flag = MSA_muslim_center_flag
+			event_target:ME_MSA_muslim_center_target = {
+				owned_by = ROOT
+				NOT = { is_capital_of = ROOT }
+			}
+			NOT = { has_global_flag = MSA_muslim_center_flag_being_rivalled }
+		}
+		allow = {
+			capital_scope = {
+				religion_group = muslim
+				culture_group = malay
+			}
+		}
+		effect = {
+			hidden_effect = {
+				event_target:ME_MSA_muslim_center_target = {
+					remove_province_modifier = MSA_muslim_center
+				}
+				capital_scope = {
+					save_global_event_target_as = ME_MSA_muslim_center_target
+					add_permanent_province_modifier = {
+						name = MSA_muslim_center
+						duration = -1
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	
+	MSA_switch_religion_bonus = {
+		potential = {
+			OR = {
+				has_country_modifier = MSA_low_piety
+				has_country_modifier = MSA_high_piety
+			}
+		}
+		allow = {
+			always = yes
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = MSA_low_piety
+				}
+				remove_country_modifier = MSA_low_piety
+				add_country_modifier = {
+					name = MSA_high_piety
+					duration = -1
+				}
+			}
+			else = {
+				remove_country_modifier = MSA_high_piety
+				add_country_modifier = {
+					name = MSA_low_piety
+					duration = -1
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_chinese_expedition_status = {
+		potential = {
+			has_country_flag = MSA_chinese_expedition_in_tag
+		}
+		allow = {
+			always = yes
+		}
+		effect = {
+			custom_tooltip = MSA_chinese_expedition_help
+			custom_tooltip = MSA_absolutely_loyal_tt
+			MSA_absolutely_loyal_bonus = { tooltip = yes }
+			custom_tooltip = MSA_swayed_tt
+			MSA_swayed_bonus = { tooltip = yes }
+			custom_tooltip = MSA_neutral_tt
+			MSA_neutral_bonus = { tooltip = yes }
+			custom_tooltip = MSA_in_defiance_tt
+			MSA_in_defiance_bonus = { tooltip = yes }
+			custom_tooltip = MSA_insulting_tt
+			MSA_insulting_bonus = { tooltip = yes }
+			
+			if = {
+				limit = {
+					has_country_flag = MSA_expedition_tooltip_off
+				}
+				clr_country_flag = MSA_expedition_tooltip_off
+			}
+			else = {
+				set_country_flag = MSA_expedition_tooltip_off
+			}
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_import_crops = {
+		potential = {
+			has_country_flag = MSA_choose_provinces
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = MSA_counter_tooltip
+				OR = {
+					check_variable = {
+						which = MSA_coffee_provinces
+						value = 1
+					}
+					check_variable = {
+						which = MSA_cocoa_provinces
+						value = 1
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Malaya_Events.88 }
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_change_diety = {
+		potential = {
+			has_country_flag = MSA_hindu_decision_flag
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = MSA_10_years
+				OR = {
+					NOT = { has_country_flag = MSA_hindu_decision }
+					had_country_flag = {
+						flag = MSA_hindu_decision
+						days = 3650
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = hindu_events.1 }
+			clr_country_flag = MSA_hindu_decision
+			set_country_flag = MSA_hindu_decision
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_tributary_interaction = {
+		potential = {	
+			always = no #TO DO: Finish
+			primary_culture = malay
+			has_dlc = "Mandate of Heaven"
+			capital_scope = {
+				OR = {
+					region = malaya_region
+					region = indonesia_region
+					region = moluccas_region
+				}
+			}
+			NOT = { has_country_flag = MSA_tributary_interaction_enabled }
+		}
+		allow = {
+			calc_true_if = {
+				all_subject_country = {
+					NOT = { liberty_desire = 25 }
+					is_subject_of_type = tributary_state
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			set_country_flag = MSA_tributary_interaction_enabled
+			custom_tooltip = MSA_tributary_interaction_tooltip
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_restrict_trade = {
+		potential = {
+			culture_group = malay
+			NOT = { religion_group = muslim }
+			NOT = { has_country_flag = MSA_restricted_trade_flag }
+			has_country_flag = MSA_enabled_spread_of_islam_decision
+		}
+		allow = {
+			adm_power = 50
+		}
+		effect = {
+			add_adm_power = -50
+			custom_tooltip = MSA_space_lol
+			custom_tooltip = MSA_restrict_trade_tt
+			add_country_modifier = {
+				name = MSA_restricted_trade
+				duration = -1
+				desc = MSA_decision_is_repealed
+			}
+			hidden_effect = { set_country_flag = MSA_restricted_trade_flag }
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	MSA_repeal_restrictions = {
+		potential = {
+			has_country_flag = MSA_restricted_trade_flag
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = MSA_repeal_restrictions_trigger
+				had_country_flag = {
+					flag = MSA_restricted_trade_flag
+					days = 1825
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = MSA_repeal_restrictions_tt
+			remove_country_modifier = MSA_restricted_trade
+			hidden_effect = { clr_country_flag = MSA_restricted_trade_flag }
+		}
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}

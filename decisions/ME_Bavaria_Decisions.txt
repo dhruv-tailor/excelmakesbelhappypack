@@ -1,0 +1,149 @@
+country_decisions = {
+	me_bavaria_ferrara_form_italy = {
+		major = yes
+		potential = {
+			tag = FER
+			NOT = { exists = ITA }
+			NOT = { has_country_flag = formed_italy_flag }
+			is_subject = yes
+			overlord = {
+				has_country_flag = me_bav_ferrara_subject_can_form_italy
+			}
+			OR = {
+				ai = no
+				AND = {
+					ai = yes
+					num_of_cities = 15
+				}
+			}
+		}
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = italy_region
+					root = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 30
+								region = italy_region
+								is_core = root
+							}
+						}
+						owns_core_province = 101
+						owns_core_province = 104
+						owns_core_province = 116
+						owns_core_province = 118
+					}
+				}
+				province_id = 101	# Genoa
+				province_id = 104	# Milan
+				province_id = 116	# Firenze
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		allow = {
+			adm_tech = 8
+			is_at_war = no
+			owns_core_province = 101	# Genoa
+			owns_core_province = 104	# Milan
+			owns_core_province = 116	# Firenze
+			num_of_owned_provinces_with = {
+				value = 30
+				region = italy_region
+				is_core = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_part_of_hre = yes
+					is_elector = no
+					is_emperor = no
+					overlord = {
+						is_emperor = no
+						is_part_of_hre = no
+					}
+				}
+				emperor = {
+					add_opinion = {
+						who = ROOT
+						modifier = opinion_left_empire
+					}
+				}
+				set_in_empire = no
+				emperor = {
+					country_event = { id = hre_event.5 }
+				}
+			}
+			if = {
+				limit = {
+					is_lesser_in_union = yes
+				}
+				set_government_rank_force = 2
+			}
+			change_tag = ITA
+			add_prestige = 25
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			swap_non_generic_missions = yes
+			set_country_flag = formed_italy_flag
+		}
+		ai_will_do = {
+			factor = 10
+		}
+		ai_importance = 100
+	}
+
+	me_bavaria_ai_do_not_annex_fer = {
+		potential = {
+			OR = {
+				tag = BAV
+				was_tag = BAV
+			}
+			ai = yes
+			has_country_flag = me_bav_ferrara_subject
+			overlord_of = FER
+			NOT = { exists = ITA }
+		}
+		allow = {
+			always = no
+		}
+		effect = {
+			add_prestige = 1
+		}
+		ai_will_do = {
+			factor = 1
+		}
+		do_not_integrate = FER
+	}
+
+	me_bavaria_ai_do_not_annex_ita = {
+		potential = {
+			OR = {
+				tag = BAV
+				was_tag = BAV
+			}
+			ai = yes
+			OR = {
+				has_country_flag = me_bav_ferrara_subject
+				has_country_flag = me_bav_ferrara_subject_can_form_italy
+			}
+			overlord_of = ITA
+		}
+		allow = {
+			always = no
+		}
+		effect = {
+			add_prestige = 1
+		}
+		ai_will_do = {
+			factor = 1
+		}
+		do_not_integrate = ITA
+	}
+}

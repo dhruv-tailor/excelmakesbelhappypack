@@ -1,0 +1,369 @@
+persia_indian_hegemony_decision_march_effect = {
+	if = {
+		limit = {
+			owns = $province$
+		}
+		if = {
+			limit = {
+				NOT = { exists = $tag_1$ }
+			}
+			$tag_1$ = {
+				custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_release_march
+				hidden_effect = {
+					save_event_target_as = persia_march_target
+				}
+			}
+		}
+		[[tag_2]
+			else_if = {
+				limit = {
+					NOT = { exists = $tag_2$ }
+				}
+				$tag_2$ = {
+					custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_release_march
+					hidden_effect = {
+						save_event_target_as = persia_march_target
+					}
+				}
+			}
+		]
+		[[tag_3]
+			else_if = {
+				limit = {
+					NOT = { exists = $tag_3$ }
+				}
+				$tag_3$ = {
+					custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_release_march
+					hidden_effect = {
+						save_event_target_as = persia_march_target
+					}
+				}
+			}
+		]
+		[[tag_4]
+			else_if = {
+				limit = {
+					NOT = { exists = $tag_4$ }
+				}
+				$tag_4$ = {
+					custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_release_march
+					hidden_effect = {
+						save_event_target_as = persia_march_target
+					}
+				}
+			}
+		]
+		[[tag_5]
+			else_if = {
+				limit = {
+					NOT = { exists = $tag_5$ }
+				}
+				$tag_5$ = {
+					custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_release_march
+					hidden_effect = {
+						save_event_target_as = persia_march_target
+					}
+				}
+			}
+		]
+		hidden_effect = {
+			$province$ = {
+				cede_province = event_target:persia_march_target
+				add_core = event_target:persia_march_target
+				add_unrest = -10
+				if = {
+					limit = {
+						is_core = ROOT
+					}
+					remove_core = ROOT
+				}
+			}
+			event_target:persia_march_target = {
+				set_capital = $province$
+				change_government = monarchy
+				add_government_reform = feudalism_reform
+				change_religion = ROOT
+				$province$ = {
+					PREV = { change_primary_culture = PREV }
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+						ROOT = {
+							can_create_subject_type = {
+								subject = PREV
+								subject_type = persian_satrapy
+							}
+						}
+					}
+					ROOT = {
+						create_subject = {
+							subject = PREV
+							subject_type = persian_satrapy
+						}
+					}
+				}
+				else = {
+					ROOT = {
+						create_march = PREV
+					}
+				}
+			}
+		}
+	}
+	else = {
+		random_subject_country = {
+			limit = {
+				owns = $province$
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+					ROOT = {
+						can_create_subject_type = {
+							subject = PREV
+							subject_type = persian_satrapy
+						}
+					}
+				}
+				ROOT = {
+					create_subject = {
+						subject = PREV
+						subject_type = persian_satrapy
+					}
+				}
+			}
+			else = {
+				ROOT = {
+					create_march = PREV
+				}
+			}
+			custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_cede_provinces_outside_of_tc_region
+			hidden_effect = {
+				save_event_target_as = persia_march_target
+				every_owned_province = {
+					limit = {
+						NOT = { trade_company_region = $trade_company_region$ }
+					}
+					cede_province = ROOT
+					if = {
+						limit = {
+							is_territorial_core = PREV
+						}
+						add_territorial_core = ROOT
+						remove_core = PREV
+					}
+					else_if = {
+						limit = {
+							is_core = PREV
+						}
+						add_core = ROOT
+						remove_core = PREV
+					}
+				}
+			}
+		}
+	}
+	custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_cede_tc_region
+	custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_march_gets_claims
+	custom_tooltip = persia_indian_hegemony_decision_march_$province$_tt_bonus_info
+	hidden_effect = {
+		event_target:persia_march_target = {
+			set_country_flag = me_persia_indian_hegemony_mechanic_subject
+		}
+		$trade_company_region$ = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = event_target:persia_march_target
+			if = {
+				limit = {
+					is_territorial_core = ROOT
+				}
+				add_territorial_core = event_target:persia_march_target
+				remove_core = ROOT
+			}
+			else_if = {
+				limit = {
+					is_core = ROOT
+				}
+				add_core = event_target:persia_march_target
+				remove_core = ROOT
+			}
+			event_target:persia_march_target = {
+				add_liberty_desire = -1
+			}
+		}
+		$trade_company_region$ = {
+			limit = {
+				NOT = { is_core = event_target:persia_march_target }
+				NOT = { is_permanent_claim = event_target:persia_march_target }
+			}
+			add_permanent_claim = event_target:persia_march_target
+		}
+	}
+}
+
+persia_indian_hegemony_decision_coup_effect = {
+	if = {
+		limit = {
+			monthly_income = 135
+		}
+		add_treasury = -5000
+	}
+	else = {
+		add_years_of_income = -3
+	}
+	custom_tooltip = persia_indian_hegemony_decision_coup_tt_manpower_cost
+	custom_tooltip = persia_indian_hegemony_decision_coup_tt_opinion_change
+	hidden_effect = {
+		export_to_variable = {
+			which = manpower_to_pay_var
+			value = trigger_value:max_manpower
+		}
+		multiply_variable = { which = manpower_to_pay_var value = 0.25 }
+		while = {
+			limit = {
+				check_variable = { which = manpower_to_pay_var value = 1 }
+			}
+			add_manpower = -1
+			change_variable = { which = manpower_to_pay_var value = -1 }
+		}
+		while = {
+			limit = {
+				check_variable = { which = manpower_to_pay_var value = 0.1 }
+			}
+			add_manpower = -0.1
+			change_variable = { which = manpower_to_pay_var value = -0.1 }
+		}
+		set_variable = { which = manpower_to_pay_var value = 0 }
+		every_country = {
+			limit = {
+				NOT = { is_subject_of = ROOT }
+				capital_scope = {
+					superregion = india_superregion
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = persia_coup_in_india
+			}
+		}
+		$province$ = {
+			owner = {
+				save_event_target_as = persia_coup_target
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { exists = $tag_1$ }
+		}
+		$tag_1$ = {
+			custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_independence
+			hidden_effect = {
+				save_event_target_as = persia_independence_target
+			}
+		}
+	}
+	[[tag_2]
+		else_if = {
+			limit = {
+				NOT = { exists = $tag_2$ }
+			}
+			$tag_2$ = {
+				custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_independence
+				hidden_effect = {
+					save_event_target_as = persia_independence_target
+				}
+			}
+		}
+	]
+	[[tag_3]
+		else_if = {
+			limit = {
+				NOT = { exists = $tag_3$ }
+			}
+			$tag_3$ = {
+				custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_independence
+				hidden_effect = {
+					save_event_target_as = persia_independence_target
+				}
+			}
+		}
+	]
+	[[tag_4]
+		else_if = {
+			limit = {
+				NOT = { exists = $tag_4$ }
+			}
+			$tag_4$ = {
+				custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_independence
+				hidden_effect = {
+					save_event_target_as = persia_independence_target
+				}
+			}
+		}
+	]
+	[[tag_5]
+		else_if = {
+			limit = {
+				NOT = { exists = $tag_5$ }
+			}
+			$tag_5$ = {
+				custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_independence
+				hidden_effect = {
+					save_event_target_as = persia_independence_target
+				}
+			}
+		}
+	]
+	custom_tooltip = persia_indian_hegemony_decision_coup_$province$_tt_war
+	hidden_effect = {
+		$province$ = {
+			cede_province = event_target:persia_independence_target
+			add_core = event_target:persia_independence_target
+			add_unrest = -10
+		}
+		event_target:persia_independence_target = {
+			set_capital = $province$
+			change_government = monarchy
+			add_government_reform = feudalism_reform
+			$province$ = {
+				PREV = {
+					change_primary_culture = PREV
+					change_religion = PREV
+				}
+			}
+			capital_scope = {
+				build_to_forcelimit = {
+					infantry = 0.7
+					cavalry = 0.2
+					artillery = 0.1
+				}
+				region = {
+					discover_country = event_target:persia_independence_target
+					if = {
+						limit = {
+							has_port = yes
+						}
+						every_neighbor_sea_zone = {
+							discover_country = event_target:persia_independence_target
+						}
+					}
+				}
+			}
+			save_global_event_target_as = me_persia_indian_hegemony_mechanic_coup_target
+			ROOT = {
+				declare_war_with_cb = {
+					who = event_target:persia_coup_target
+					casus_belli = cb_persia_indian_hegemony_coup
+				}
+			}
+			join_all_offensive_wars_of = ROOT
+		}
+		event_target:persia_coup_target = {
+			country_event = { id = ME_Persia_Events.18 }
+		}
+	}
+}

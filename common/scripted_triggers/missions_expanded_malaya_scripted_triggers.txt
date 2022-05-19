@@ -1,0 +1,275 @@
+MSA_is_in_borneo = {
+	OR = {
+		area = banjar_area
+		area = kutai_area
+		area = palawan_area
+		area = kalimantan_area
+		area = sabah_area
+		area = brunei_area
+	}
+}
+
+MSA_is_in_sumatra = {
+	OR = {
+		area = central_sumatra_area
+		area = jambi_area
+		area = minangkabau_area
+		area = north_sumatra_area
+		area = south_sumatra_area
+		area = batak_area
+	}
+}
+
+MSA_is_in_java = {
+	OR = {
+		area = east_java_area
+		area = central_java_area
+		area = west_java_area
+		area = surabaya_area
+		area = banten_area
+	}
+}
+
+MSA_is_in_sulawesi = {
+	OR = {
+		area = south_sulawesi_area
+		area = sulawesi_area
+		area = makassar_area
+	}
+}
+
+MSA_is_in_malaya = {
+	OR = {
+		area = malacca_area
+		area = malaya_area
+		area = north_malaya_area
+		area = johor_area
+	}
+}
+
+MSA_is_in_spice_islands = {
+	OR = {
+		area = molluca_area
+		area = spice_islands_area
+	}
+}
+
+MSA_is_in_philippines = {
+	OR = {
+		area = visayas_area
+		area = luzon_area
+		area = southern_luzon_area
+		area = mindanao_area
+		area = west_mindanao_area
+	}
+}
+
+MSA_is_tag = {
+	OR = {
+		tag = $tag$
+		AND = {
+			tag = MSA
+			was_tag = $tag$
+		}
+	}
+}
+
+MSA_malaya_trigger = {
+	num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+		OR = {
+			region = malaya_region
+			region = indonesia_region
+		}
+		value = 60
+	}
+}
+
+MSA_malaya_pth = {
+	OR = {
+		region = malaya_region
+		region = indonesia_region
+	}
+	NOT = { country_or_non_sovereign_subject_holds = ROOT }
+}
+
+MSA_affected_by_spread_of_islam = {
+	OR = {
+		region = malaya_region
+		region = indonesia_region
+		region = moluccas_region
+	}
+	owner = {
+		culture_group = malay
+	}
+}
+
+MSA_orang_laut_trigger = {
+	calc_true_if = {
+		has_estate_privilege = estate_burghers_orang_laut_alliances 
+		estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 65
+		}
+		navy_tradition = 30
+		custom_trigger_tooltip = {
+			tooltip = MSA_10_dip
+			OR = { monthly_dip = 10 } # To the future developer (Lim or not): This OR is required. 
+		}
+		amount = 2
+	}
+}
+
+MSA_TID_TER_cost_trigger = {
+	if = {
+		limit = {
+			check_variable = { which = MSA_num_of_colonies value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = MSA_num_of_colonies value = 2 }
+			}
+			if = {
+				limit = {
+					check_variable = { which = MSA_num_of_colonies value = 3 }
+				}
+				if = {
+					limit = {
+						check_variable = { which = MSA_num_of_colonies value = 4 }
+					}
+					treasury = 150
+				}
+				else = { treasury = 125 }
+			}
+			else = { treasury = 100 }
+		}
+		else = { treasury = 75 }
+	}
+	else = { treasury = 50 }
+}
+
+MSA_has_available_concession_trigger = {
+	OR = {
+		NOT = { has_country_modifier = MSA_concession_guard }
+		NOT = { has_country_modifier = MSA_concession_trade_efficiency }
+		any_ally = {
+			capital_scope = {
+				continent = europe
+			}
+		}
+		# any_owned_province = {
+			# province_has_center_of_trade_of_level = 1
+		# }
+	}
+}
+
+MSA_has_available_request_trigger = {
+	custom_trigger_tooltip = {
+		tooltip = MSA_any_request_available
+		OR = {
+			AND = {
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 10
+				}
+				OR = {
+					NOT = { has_country_flag = MSA_investment_a_cooldown }
+					had_country_flag = {
+						flag = MSA_investment_a_cooldown
+						days = 3650
+					}
+				}
+			}
+			AND = {
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 10
+				}
+				NOT = { has_country_modifier = MSA_mercenary_investment_modifier }
+			}
+			AND = {
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 5
+				}
+				OR = {
+					NOT = { has_country_flag = MSA_investment_e_cooldown }
+					had_country_flag = {
+						flag = MSA_investment_e_cooldown
+						days = 1825
+					}
+				}
+			}
+			AND = {
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 10
+				}
+				any_ally = {
+					capital_scope = {
+						continent = europe
+					}
+				}
+				OR = {
+					NOT = { has_country_flag = MSA_investment_f_cooldown }
+					had_country_flag = {
+						flag = MSA_investment_f_cooldown
+						days = 3650
+					}
+				}
+			}
+			AND = {
+				has_country_flag = MSA_invest_in_production
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 20
+				}
+				OR = {
+					NOT = { has_country_flag = MSA_investment_g_cooldown }
+					had_country_flag = {
+						flag = MSA_investment_g_cooldown
+						days = 5475
+					}
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					any_owned_province = {
+						OR = {
+							trade_goods = spices
+							trade_goods = cloves
+							trade_goods = nutmeg
+							trade_goods = vanilla
+						}
+						NOT = { has_province_modifier = MSA_enhanced_spice_production }
+					}
+				}
+				else = {
+					any_owned_province = {
+						OR = {
+							trade_goods = spices
+							trade_goods = cloves
+						}
+						NOT = { has_province_modifier = MSA_enhanced_spice_production }
+					}
+				}
+			}
+			AND = {
+				check_variable = {
+					which = MSA_foreign_investment_amount
+					value = 15
+				}
+				OR = {
+					NOT = { has_country_flag = MSA_investment_c_cooldown }
+					had_country_flag = {
+						flag = MSA_investment_c_cooldown
+						days = 5475
+					}
+				}
+				any_owned_province = {
+					NOT = { trade_goods = coffee } #wtf?
+				}
+			}
+		}
+	}
+}

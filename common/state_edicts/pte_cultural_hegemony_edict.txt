@@ -1,0 +1,67 @@
+pte_cultural_hegemony_edict = {
+	potential = {
+		has_country_modifier = pte_culture_group_hegemony_modifier
+		NOT = { is_variable_equal = { which = pte_culture_group_hegemony_var value = 0 } }
+	}
+
+	allow = {
+		FROM = {
+			hidden_trigger = {
+				culture_group = variable:Root:pte_culture_group_hegemony_var
+			}
+			all_province_in_state = {
+				culture_group = variable:Root:pte_culture_group_hegemony_var
+			}
+		}
+	}
+
+	modifier = {
+		local_prosperity_growth = 0.5
+		local_production_efficiency = 0.1
+	}
+
+	color = { 255 200 40 }
+
+	ai_will_do = {
+		factor = 10
+		modifier = {
+			factor = 10
+			has_state_edict = pte_cultural_hegemony_edict
+		}
+		modifier = {
+			factor = 10
+			NOT = { has_state_edict = pte_cultural_hegemony_edict }
+			is_prosperous = no
+			owner = {
+				development_in_provinces = {
+					value = 30
+					OR = {
+						province_id = ROOT
+						any_province_in_state = {
+							province_id = ROOT
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 0
+			OR = {
+				is_prosperous = yes
+				owner = {
+					NOT = {
+						development_in_provinces = {
+							value = 25
+							OR = {
+								province_id = ROOT
+								any_province_in_state = {
+									province_id = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -2,11 +2,11 @@ pte_demand_aides_mil = {
 	category = 6
 	power_projection = no
 	power_cost_base = 0
-	prestige_base = 0.3
+	prestige_base = 0.25
 	ae_base = 0
 	warscore_cost = {
 		all_provinces = 0.0
-		no_provinces = 50.0
+		no_provinces = 60.0
 		owner_keeps = 0.0
 		conquered = 0.0
 		returned_core = 0.0
@@ -25,11 +25,33 @@ pte_demand_aides_mil = {
 		}
 		NOT = { MIL = 6 }
 		NOT = { has_ruler_flag = used_pte_demand_aides_mil }
-		NOT = { government = republic }
 	}
 	is_allowed = {
 		FROM = {
 			MIL = 5
+		}
+		if = {
+			limit = {
+				OR = {
+					has_dlc = "Rights of Man"
+					has_dlc = "Emperor"
+				}
+				is_great_power = yes
+			}
+			FROM = {
+				OR = {
+					is_great_power = yes
+					total_development = 200
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				total_development = 500
+			}
+			FROM = {
+				total_development = 200
+			}
 		}
 	}
 	effect = {
@@ -47,14 +69,25 @@ pte_demand_aides_mil = {
 		limit = {
 			OR = {
 				NOT = { MIL = 3 }
-				FROM = {
-					NOT = {
-						num_of_owned_provinces_with = {
-							value = 3
-							OR = {
-								is_claim = ROOT
-								is_core = ROOT
+				AND = {
+					FROM = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 3
+								OR = {
+									is_claim = ROOT
+									is_core = ROOT
+								}
 							}
+						}
+					}
+					OR = {
+						border_distance = {
+							who = FROM
+							distance = 300
+						}
+						FROM = {
+							num_of_cities = 5
 						}
 					}
 				}

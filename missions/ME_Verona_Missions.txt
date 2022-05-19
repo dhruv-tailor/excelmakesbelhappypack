@@ -1,0 +1,1396 @@
+verona_mission_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = VRN
+			AND = {
+				was_tag = VRN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	vrn_plains_emilia = {
+		icon = jageillonian_union
+		required_missions = { vrn_ward_save }
+		position = 3
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_grazing_fields_emilia
+				duration = 9125
+			}
+			emilia_romagna_area = {
+				add_province_modifier = {
+					name = man_grazing_fields
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	vrn_military_campaign = {
+		icon = mercenary_companies
+		required_missions = { }
+		position = 5
+		trigger = {
+			num_of_mercenaries = 1
+			OR = {
+				MIL = 3
+				has_mil_advisor_2 = yes
+				monthly_mil = 7
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_military_conducts
+				duration = 18250
+			}
+		}
+	}
+
+	vrn_conquest_venetia = {
+		icon = control_the_means_of_transaction
+		required_missions = { vrn_po_valley }
+		position = 7
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			venetia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 10 }
+			add_dip_power = 25
+		}
+	}
+
+	vrn_trading_venice = {
+		icon = nuova_promissione_ducale
+		required_missions = { vrn_conquest_venetia }
+		position = 9
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = VEN }
+				overlord_of = VEN
+				italy_region = {
+					type = all
+					NOT = { owned_by = VEN }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_venetian_trading_secret
+				duration = 9125
+			}
+		}
+	}
+
+	vrn_conquest_tuscany = {
+		icon = mission_early_modern_university
+		required_missions = { vrn_lombardo_veneto }
+		position = 11
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 10 }
+			add_dip_power = 25
+		}
+	}
+
+	vrn_trading_florence = {
+		icon = medici_bank_ledgers
+		required_missions = { vrn_conquest_tuscany }
+		position = 12
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = TUS }
+				overlord_of = TUS
+				italy_region = {
+					type = all
+					NOT = { owned_by = TUS }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_tuscan_baking_secrets
+				duration = 7300
+			}
+		}
+	}
+}
+
+verona_mission_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = VRN
+			AND = {
+				was_tag = VRN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	vrn_ward_save = {
+		icon = friends_in_high_places
+		required_missions = {
+			vrn_scaligeri_verona
+		}
+		position = 2
+		trigger = {
+			OR = {
+				num_of_allies = 4
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						OR = {
+							army_strength = {
+								who = ROOT
+								value = 1.5
+							}
+							total_development = ROOT
+						}
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_supreme_diplomacy
+				duration = 9125
+			}
+			define_advisor = {
+				type = diplomat
+				skill = 2
+				cost_multiplier = 0.25
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			po_valley_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	vrn_po_valley = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			vrn_military_campaign
+			vrn_ward_save
+		}
+		position = 6
+		trigger = {
+			po_valley_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_yearly_manpower = 1
+			lombardy_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			venetia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	vrn_gonzaga_ruling = {
+		icon = confront_the_lombards
+		required_missions = { vrn_po_valley }
+		position = 8
+		trigger = {
+			108 = {
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_berberi_mantovani
+				duration = 7300
+			}
+		}
+	}
+
+	vrn_lombardo_veneto = {
+		icon = expand_the_terraferma
+		required_missions = {
+			vrn_trading_venice
+			vrn_gonzaga_ruling
+			vrn_fall_visconti
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = lombardy_area
+				area = po_valley_area
+				area = emilia_romagna_area
+				area = venetia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { unrest = 1 }
+			}
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			po_valley_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 1 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_reign_northern_italy
+				duration = 7300
+			}
+		}
+	}
+}
+
+verona_mission_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = VRN
+			AND = {
+				was_tag = VRN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	vrn_scaligeri_verona = {
+		icon = reform_bergordnung
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			add_manpower = 5
+			add_treasury = 150
+			capital_scope = {
+				area = {
+					add_prosperity = 25
+				}
+			}
+			if = {
+				limit = {
+					exists = MLO
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = VEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = VEN
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = FER
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = FER
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = MAN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MAN
+					months = 300
+				}
+			}
+		}
+	}
+
+	vrn_imperial_fiefdom = {
+		icon = join_the_empire
+		required_missions = { vrn_scaligeri_verona }
+		position = 3
+		trigger = {
+			if = {
+				limit = { hre_size = 1 }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+						is_subject_of_type = imperial_feud_subject
+					}
+				}
+				else = {
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ITALY_CONQUEST_ROME_TT
+					NOT = {
+						any_country = {
+							culture_group = latin
+							capital_scope = {
+								region = italy_region
+							}
+							army_size = 1
+							total_development = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_imperial_consecration
+				duration = 7300
+			}
+			if = {
+				limit = { hre_size = 1 }
+				custom_tooltip = MAN_IMPERIAL_CONSECRATION
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							OR = {
+								capital_scope = {
+									region = italy_region
+								}
+								is_elector = yes
+								is_emperor = yes
+							}
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+					}
+				}
+			}
+		}
+	}
+
+	vrn_choosing_side = {
+		icon = protect_against_austria
+		required_missions = {
+			vrn_papal_state
+			vrn_imperial_fiefdom
+		}
+		position = 4
+		trigger = {
+			OR = {
+				controls = 134
+				controls = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE
+					AND = {
+						OR = {
+							emperor = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							HAB = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							134 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
+						}
+						OR = {
+							PAP = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							118 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE_SECOND
+					AND = {
+						OR = {
+							emperor = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							HAB = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							134 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
+							}
+						}
+						OR = {
+							PAP = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							118 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = pga_guelph_ghibelline
+				duration = 5475
+			}
+		}
+	}
+
+	vrn_final_offense = {
+		icon = reform_the_monte
+		required_missions = {
+			vrn_choosing_side
+		}
+		position = 6
+		trigger = {
+			OR = {
+				controls = 118
+				controls = 134
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_EMPEROR
+					war_score = 50
+					OR = {
+						war_with = emperor
+						war_with = HAB
+						134 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_POPE
+					war_score = 50
+					OR = {
+						war_with = PAP
+						PAP = {
+							war_with = ROOT
+						}
+						118 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							war_with = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_stability = 1
+			add_mil_power = 100
+			change_mil = 1
+		}
+	}
+
+	vrn_war_lombardy = {
+		icon = all_roads_lead_to_milan
+		required_missions = { vrn_po_valley }
+		position = 7
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_mil_power = 25
+		}
+	}
+
+	vrn_fall_visconti = {
+		icon = italian_riches
+		required_missions = { vrn_war_lombardy }
+		position = 9
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = MLO }
+				overlord_of = MLO
+				italy_region = {
+					type = all
+					NOT = { owned_by = MLO }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_milanese_knowledge
+				duration = 9125
+			}
+		}
+	}
+
+	vrn_stella_forte = {
+		icon = king_of_poland
+		required_missions = {
+			vrn_lombardo_veneto
+			vrn_welfen
+		}
+		position = 11
+		trigger = {
+			NOT = { average_autonomy = 30 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = vrn_notabili_fier_opere_sue
+				duration = -1
+			}
+		}
+	}
+
+	vrn_conquest_of_rome = {
+		icon = sway_the_pope
+		required_missions = {
+			vrn_trading_florence
+			vrn_stella_forte
+		}
+		position = 13
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ITALY_CONQUEST_ROME_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = 1
+						total_development = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			118 = { add_core = ROOT }
+			capital_scope = {
+				add_development_scaled_on_monthly_monarch_power = yes
+			}
+			add_mana_scaled_on_monthly_monarch_power = yes
+			complete_conquest_of_rome_missions = yes
+		}
+	}
+}
+
+verona_mission_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = VRN
+			AND = {
+				was_tag = VRN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	vrn_papal_state = {
+		icon = catholic_volunteers
+		required_missions = { }
+		position = 3
+		trigger = {
+			OR = {
+				owns = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_PAPAL_RELATIONS_TT
+					PAP = {
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
+					}
+					118 = {
+						owner = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+					}
+					any_country = {
+						is_papal_controller = yes
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_papal_influence = 15
+			define_advisor = {
+				type = theologian
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	vrn_santa_maria_antica = {
+		icon = connect_further_austria
+		required_missions = { vrn_papal_state }
+		position = 5
+		trigger = {
+			108 = {
+				num_of_times_improved = 5
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				if = {
+					limit = {
+						108 = {
+							has_cardinal = no
+						}
+					}
+					108 = {
+						add_cardinal = yes
+					}
+				}
+				else = {
+					random_owned_province = {
+						limit = {
+							has_cardinal = no
+						}
+						add_cardinal = yes
+					}
+				}
+			}
+			108 = {
+				add_permanent_province_modifier = {
+					name = vrn_chiesa_santa_maria_antica
+					duration = -1
+				}
+			}
+		}
+	}
+
+	vrn_casa_mercanti = {
+		icon = purely_for_commerce
+		required_missions = { vrn_signoria_veronese }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 108
+			OR = {
+				NOT = { base_production = 10 }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			108 = {
+				base_production = 10
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			108 = {
+				add_permanent_province_modifier = {
+					name = vrn_domus_mercatorum
+					duration = -1
+				}
+			}
+		}
+	}
+
+	vrn_rex_itali = {
+		icon = end_the_habsburgs
+		required_missions = { vrn_final_offense }
+		position = 7
+		trigger = {
+			OR = {
+				owns = 118
+				owns = 134
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_EMPEROR
+					OR = {
+						emperor = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						134 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_POPE
+					OR = {
+						PAP = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						118 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_legitimacy_equivalent = { amount = 15 republican_tradition = 7 }
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 15
+			}
+		}
+	}
+
+	vrn_welfen = {
+		icon = unite_the_wittelsbachs
+		required_missions = {
+			vrn_game_of_thrones
+		}
+		position = 10
+		trigger = {
+			legitimacy_equivalent = 75
+			if = {
+				limit = {
+					exists = BAV
+				}
+				BAV = {
+					marriage_with = ROOT
+				}
+			}
+			else = {
+				65 = {
+					owner = {
+						NOT = { total_development = ROOT }
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = BAV
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					target = BAV
+				}
+			}
+			else = {
+				lower_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				upper_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				east_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	vrn_baroni_randazzo = {
+		icon = king_of_sicily
+		required_missions = {
+			vrn_stella_forte
+		}
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = western_sicily_area
+				AND = {
+					area = sicily_area
+					NOT = { province_id = 126 }
+				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			western_sicily_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sicily_area = {
+				NOT = { province_id = 126 }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_sicilian_knights
+				duration = 9125
+			}
+		}
+	}
+}
+
+verona_mission_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = VRN
+			AND = {
+				was_tag = VRN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	vrn_great_patrons = {
+		icon = florentine_renaissance
+		required_missions = { vrn_scaligeri_verona }
+		position = 2
+		trigger = {
+			has_institution = renaissance
+			OR = {
+				artist = 2
+				ADM = 3
+				monthly_adm = 8
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_greatest_court
+				duration = 9125
+			}
+			define_advisor = {
+				type = philosopher
+				skill = 2
+				cost_multiplier = 0.25
+			}
+		}
+	}
+
+	vrn_signoria_veronese = {
+		icon = reaffirm_civil_values
+		required_missions = { vrn_great_patrons }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 108
+			NOT = { owned_by = ROOT }
+			NOT = { num_of_times_improved = 3 }
+			NOT = { development = 10 }
+		}
+		trigger = {
+			108 = {
+				owned_by = ROOT
+				OR = {
+					num_of_times_improved = 3
+					development = 10
+				}
+			}
+		}
+		effect = {
+			108 = {
+				add_permanent_province_modifier = {
+					name = vrn_rinascimento_scaligeri
+					duration = 18250
+				}
+			}
+		}
+	}
+
+	vrn_mura_scaligere_verona = {
+		icon = take_the_bishoprics
+		required_missions = { vrn_signoria_veronese }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 108
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 10 }
+				NOT = { fort_level = 1 }
+			}
+		}
+		trigger = {
+			108 = {
+				owned_by = ROOT
+				base_manpower = 10
+				fort_level = 1
+			}
+		}
+		effect = {
+			108 = {
+				add_permanent_province_modifier = {
+					name = vrn_epoca_scaligera
+					duration = -1
+				}
+			}
+		}
+	}
+
+	vrn_game_of_thrones = {
+		icon = king_of_kings
+		position = 9
+		required_missions = { }
+		trigger = {
+			if = {
+				limit = { hre_size = 1 }
+				if = {
+					limit = {
+						emperor = {
+							NOT = { tag = HAB }
+						}
+					}
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						HAB = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						any_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+				}
+				else = {
+					OR = {
+						HAB = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						any_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+				}
+			}
+			if = {
+				limit = { exists = PAP }
+				PAP = {
+					OR = {
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
+			any_country = {
+				NOT = { is_emperor = yes }
+				NOT = { tag = HAB }
+				NOT = { tag = PAP }
+				total_development = ROOT
+				OR = {
+					alliance_with = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = man_court_intrigue
+				duration = 9125
+			}
+		}
+	}
+
+	vrn_bavaria = {
+		icon = regal_splendour
+		required_missions = {
+			vrn_welfen
+		}
+		position = 11
+		trigger = {
+			OR = {
+				overlord_of = BAV
+				AND = {
+					lower_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					upper_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					east_bavaria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fer_munich_unifaction
+				duration = 7300
+			}
+		}
+	}
+}

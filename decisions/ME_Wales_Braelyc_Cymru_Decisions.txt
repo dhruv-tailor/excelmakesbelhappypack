@@ -1,0 +1,652 @@
+country_decisions = {
+	wls_braelyc = {
+		major = yes
+		potential = {
+			tag = CYR
+			normal_or_historical_nations = yes
+			was_never_end_game_tag_trigger = yes
+			NOT = { has_country_flag = formed_brl_flag }
+			OR = {
+				ai = no
+				is_playing_custom_nation = no
+			}
+		}
+		allow = {
+			IRE = {
+				NOT = { num_of_cities = 23 } #13 (ireland) + 10
+			}
+			SCO = {
+				NOT = { num_of_cities = 24 } #14 (scotland) + 10
+			}
+			KOI = {
+				NOT = { num_of_cities = 6 } #mann + 5
+			}
+			CRN = {
+				NOT = { num_of_cities = 6 } #cornwall + 5
+			}
+			BRI = {
+				NOT = { num_of_cities = 15 } #5 (brittany) + 10
+			}
+			GAL = {
+				NOT = { num_of_cities = 13 } #3 (asturias) + 10
+			}
+			adm_tech = 10
+			is_subject = no
+			is_nomad = no
+			stability = 3
+			is_at_war = no
+			AND = {
+				senior_union_with = IRE
+				had_country_flag = {
+					flag = wls_made_ire
+					days = 10950
+				}
+			}
+			AND = {
+				senior_union_with = SCO
+				had_country_flag = {
+					flag = wls_made_lba
+					days = 10950
+				}
+			}
+			AND = {
+				senior_union_with = KOI
+				had_country_flag = {
+					flag = wls_made_koi
+					days = 10950
+				}
+			}
+			AND = {
+				senior_union_with = CRN
+				had_country_flag = {
+					flag = wls_made_crn
+					days = 10950
+				}
+			}
+			AND = {
+				senior_union_with = BRI
+				had_country_flag = {
+					flag = wls_made_bri
+					days = 10950
+				}
+			}
+			AND = {
+				senior_union_with = GAL
+				had_country_flag = {
+					flag = wls_made_gal
+					days = 10950
+				}
+			}
+		}
+		effect = {
+			change_tag = BRL
+			inherit = IRE
+			inherit = SCO
+			inherit = KOI
+			inherit = CRN
+			inherit = BRI
+			inherit = GAL
+			swap_non_generic_missions = yes
+			remove_non_electors_emperors_from_empire_effect = yes
+			if = {
+				limit = { NOT = { government_rank = 3 } }
+				set_government_rank = 3
+			}
+			if = {
+				limit = {
+					british_isles_region = {
+						NOT = { owned_by = CYR }
+						NOT = { owned_by = IRE }
+						NOT = { owned_by = SCO }
+						NOT = { owned_by = CRN }
+						NOT = { owned_by = KOI }
+						NOT = { owned_by = GAL }
+						NOT = { owned_by = BRI }
+					}
+				}
+				british_isles_region = {
+					limit = {
+						NOT = { owned_by = BRL }
+						NOT = { is_core = BRL }
+					}
+					add_permanent_claim = BRL
+				}
+			}
+			set_country_flag = formed_brl_flag
+			add_prestige_or_monarch_power = { amount = 25 }
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 }
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+		ai_importance = 400
+	}
+	
+	#exact same effect as the event
+	wls_create_cornwall = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_crn
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			233 = {
+				owned_by = ROOT
+			}
+			OR = {
+				NOT = { exists = CRN }
+				overlord_of = CRN
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_crn
+			}
+			233 = {
+				remove_core = ROOT
+				add_core = CRN
+				cede_province = CRN
+				add_base_manpower = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				change_culture = cornish
+			}
+			create_subject = {
+				subject = CRN
+				subject_type = permanent_union
+			}
+			CRN = {
+				add_country_modifier = {
+					name = wls_crn_subj
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_crn_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+					change_primary_culture = cornish
+				}
+			}
+			add_country_modifier = {
+				name = wls_crn_union
+				duration = -1
+			}
+			custom_tooltip = wls_crn_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_crn_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_crn
+			}
+		}
+	}
+	
+	wls_create_mann = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_man
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			4365 = {
+				owned_by = ROOT
+			}
+			OR = {
+				NOT = { exists = KOI }
+				overlord_of = KOI
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_man
+			}
+			4365 = {
+				remove_core = ROOT
+				add_core = KOI
+				cede_province = KOI
+				add_base_production = 3
+				add_base_manpower = 3
+				change_culture = manx
+			}
+			create_subject = {
+				subject_type = permanent_union
+				subject = KOI
+			}
+			KOI = {
+				add_country_modifier = {
+					name = wls_man_subj
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_mann_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+					change_primary_culture = manx
+				}
+			}
+			add_country_modifier = {
+				name = wls_man_union
+				duration = -1
+			}
+			custom_tooltip = wls_man_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_man_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_koi
+			}
+		}
+	}
+	
+	wls_create_ireland = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_ire
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			num_of_owned_provinces_with = {
+				value = 1
+				OR = {
+					area = munster_area
+					area = connacht_area
+					area = leinster_area
+					area = ulster_area
+				}
+			}
+			OR = {
+				NOT = { exists = IRE }
+				overlord_of = IRE
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_ire
+			}
+			custom_tooltip = wls_ire_cede_tooltip
+			hidden_effect = {
+				munster_area = {
+					add_core = IRE
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = IRE
+						remove_core = ROOT
+					}
+				}
+				connacht_area = {
+					add_core = IRE
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = IRE
+						remove_core = ROOT
+					}
+				}
+				leinster_area = {
+					add_core = IRE
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = IRE
+						remove_core = ROOT
+					}
+				}
+				ulster_area = {
+					add_core = IRE
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = IRE
+						remove_core = ROOT
+					}
+				}
+			}
+			create_subject = {
+				subject = IRE
+				subject_type = permanent_union
+			}
+			IRE = {
+				add_country_modifier = {
+					name = wls_ireland_union
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_ireland_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+				}
+			}
+			add_country_modifier = {
+				name = wls_ire_client
+				duration = -1
+			}
+			custom_tooltip = wls_ire_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_ire_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_ire
+			}
+		}
+	}
+	
+	wls_create_scotland = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_sco
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			num_of_owned_provinces_with = {
+				value = 1
+				OR = {
+					area = scottish_marches_area
+					area = lowlands_area
+					area = highlands_area
+					province_id = 4364
+					province_id = 253
+				}
+			}
+			OR = {
+				NOT = { exists = SCO }
+				overlord_of = SCO
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_sco
+			}
+			custom_tooltip = wls_sco_cede_tooltip
+			hidden_effect = {
+				scottish_marches_area = {
+					add_core = SCO
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = SCO
+						remove_core = ROOT
+					}
+				}
+				lowlands_area = {
+					add_core = SCO
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = SCO
+						remove_core = ROOT
+					}
+				}
+				highlands_area = {
+					add_core = SCO
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = SCO
+						remove_core = ROOT
+					}
+				}
+				4364 = {
+					add_core = SCO
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = SCO
+						remove_core = ROOT
+					}
+				}
+				253 = {
+					add_core = SCO
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						cede_province = SCO
+						remove_core = ROOT
+					}
+				}
+			}
+			create_subject = {
+				subject = SCO
+				subject_type = permanent_union
+			}
+			custom_tooltip = wls_sco_culture_tooltip
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = scottish
+					}
+					change_culture = scottish_celtic
+				}
+				every_province = {
+					limit = {
+						culture = highland_scottish
+					}
+					change_culture = scottish_celtic
+				}
+			}
+			SCO = {
+				add_country_modifier = {
+					name = wls_scotland_union
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_scotland_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+					change_primary_culture = scottish_celtic
+				}
+			}
+			add_country_modifier = {
+				name = wls_sco_client
+				duration = -1
+			}
+			custom_tooltip = wls_sco_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_sco_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_lba
+			}
+		}
+	}
+	
+	wls_create_brittany = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_bri
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			num_of_owned_provinces_with = {
+				value = 1
+				area = brittany_area
+			}
+			OR = {
+				NOT = { exists = BRI }
+				overlord_of = BRI
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_bri
+			}
+			brittany_area = {
+				if = {
+					limit = {
+						NOT = { is_core = BRI }
+					}
+					add_core = BRI
+				}
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					cede_province = BRI
+				}
+			}
+			custom_tooltip = wls_bri_to_celt_tooltip
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = breton
+					}
+					change_culture = breton_celtic
+				}
+			}
+			create_subject = {
+				subject = BRI
+				subject_type = permanent_union
+			}
+			BRI = {
+				add_country_modifier = {
+					name = wls_bri_subj
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_bri_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+					change_primary_culture = breton_celtic
+				}
+			}
+			add_country_modifier = {
+				name = wls_bri_union
+				duration = -1
+			}
+			custom_tooltip = wls_bri_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_bri_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_bri
+			}
+		}
+	}
+	
+	wls_create_galicia = {
+		major = yes
+		potential = {
+			has_country_flag = wls_can_make_gal
+		}
+		allow = {
+			prestige = 25
+			stability = 1
+			is_at_war = no
+			num_of_owned_provinces_with = {
+				value = 1
+				area = asturias_area
+			}
+			OR = {
+				NOT = { exists = GAL }
+				overlord_of = GAL
+			}
+		}
+		effect = {
+			hidden_effect = {
+				clr_country_flag = wls_can_make_gal
+			}
+			asturias_area = {
+				if = {
+					limit = {
+						NOT = { is_core = GAL }
+					}
+					add_core = GAL
+				}
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					cede_province = GAL
+				}
+			}
+			custom_tooltip = wls_gal_to_celt_tooltip
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = galician
+					}
+					change_culture = galician_celtic
+				}
+			}
+			create_subject = {
+				subject = GAL
+				subject_type = permanent_union
+			}
+			GAL = {
+				add_country_modifier = {
+					name = wls_gal_subj
+					duration = -1
+				}
+				add_country_modifier = {
+					name = wls_gal_buff
+					duration = -1
+				}
+				hidden_effect = {
+					change_government = monarchy
+					add_government_reform = feudalism_reform
+					add_government_reform = parliamentary_reform
+					change_primary_culture = galician_celtic
+				}
+			}
+			add_country_modifier = {
+				name = wls_gal_union
+				duration = -1
+			}
+			custom_tooltip = wls_gal_ideas_tooltip
+			hidden_effect = {
+				add_country_modifier = {
+					name = wls_gal_lessons
+					duration = -1
+				}
+				set_country_flag = wls_made_gal
+			}
+		}
+	}
+}

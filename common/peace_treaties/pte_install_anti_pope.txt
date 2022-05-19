@@ -1,0 +1,187 @@
+pte_install_anti_pope = {
+	category = 6
+	power_projection = no
+	power_cost_base = 0.5
+	prestige_base = 0.4
+	ae_base = 0.055
+	warscore_cost = {
+		all_provinces = 0.0
+		no_provinces = 50.0
+		owner_keeps = 0.0
+		conquered = 0.0
+		returned_core = 0.0
+		released_nation = 0.0
+		cancelled_subject = 0.0
+		concede_colonial_region = 0.0
+	}
+	warscore_cap = -1
+	requires_demand_independence = yes
+	is_make_subject = yes
+	requires_is_allowed = no
+
+	is_visible = {
+		religion = catholic
+		is_papal_controller = no
+		FROM = {
+			tag = PAP
+			religion = catholic
+			papacy_active = yes
+			NOT = { has_ruler_flag = anti_pope_by_@ROOT }
+		}
+		OR = {
+			AND = {
+				OR = {
+					has_dlc = "Rights of Man"
+					has_dlc = "Emperor"
+				}
+				is_great_power = yes
+			}
+			AND = {
+				NOT = { has_dlc = "Rights of Man" }
+				NOT = { has_dlc = "Emperor" }
+				NOT = {
+					calc_true_if = {
+						all_country = {
+							total_own_and_non_tributary_subject_development = ROOT
+						}
+						amount = 8
+					}
+				}
+			}
+		}
+		total_own_and_non_tributary_subject_development = 300
+		OR = {
+			NOT = { is_expanded_mod_active = { mod = holy_roman_empire } }
+			AND = {
+				is_expanded_mod_active = { mod = holy_roman_empire }
+				OR = {
+					is_emperor = no
+					is_religion_enabled = protestant
+				}
+			}
+		}
+	}
+	is_allowed = {
+		invested_papal_influence = 20
+		custom_trigger_tooltip = {
+			tooltip = PTE_FROM_CAPITAL_CONTROLLED_BY_OUR_SIDE
+			FROM = {
+				capital_scope = {
+					controller = {
+						OR = {
+							is_in_war = {
+								attackers = THIS
+								attackers = ROOT
+								defenders = FROM
+							}
+							is_in_war = {
+								defenders = THIS
+								defenders = ROOT
+								attackers = FROM
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	effect = {
+		clr_global_flag = pte_anti_pope_used
+		set_global_flag = pte_anti_pope_used
+		FROM = {
+			define_ruler = {
+				religion = catholic
+				culture = ROOT
+				min_age = 60
+				max_age = 80
+				claim = 30
+			}
+			set_ruler_flag = is_anti_pope
+			set_ruler_flag = anti_pope_by_@ROOT
+			add_ruler_modifier = {
+				name = pte_anti_pope_modifier
+				duration = -1
+			}
+			if = {
+				limit = {
+					devotion = 30
+				}
+				add_devotion = -100
+				add_devotion = 30
+			}
+		}
+		add_opinion = {
+			who = FROM
+			modifier = pte_anti_pope_opinion_positive
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = pte_anti_pope_opinion_positive
+		}
+		every_country = {
+			limit = {
+				religion = catholic
+				NOT = { tag = ROOT }
+				NOT = { tag = FROM }
+				NOT = { is_subject_of = ROOT }
+				NOT = { is_subject_of = FROM }
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = pte_anti_pope_opinion_negative
+			}
+		}
+	}
+	ai_weight = {
+		export_to_variable = {
+			variable_name = ai_value
+			value = 1
+		}
+		limit = {
+			OR = {
+				NOT = { has_global_flag = pte_anti_pope_used }
+				had_global_flag = { flag = pte_anti_pope_used days = 7300 } # AI shouldn't use this too often, just in case
+			}
+			OR = {
+				AND = {
+					is_excommunicated = yes
+					NOT = {
+						any_ally = {
+							is_papal_controller = yes
+						}
+					}
+				}
+				AND = {
+					invested_papal_influence = 50
+					NOT = {
+						any_country = {
+							invested_papal_influence = ROOT
+						}
+					}
+					OR = {
+						FROM = {
+							num_of_cities = 2
+						}
+						AND = {
+							NOT = { culture_group = latin }
+							capital_scope = {
+								NOT = { region = italy_region }
+							}
+						}
+					}
+					FROM = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 5
+								OR = {
+									is_core = ROOT
+									is_claim = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

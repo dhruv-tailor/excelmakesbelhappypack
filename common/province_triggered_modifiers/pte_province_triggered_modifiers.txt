@@ -1,0 +1,105 @@
+pte_spawn_reformation_center_in_capital_triggered_modifier = {
+	potential = {
+		always = yes
+	}
+
+	trigger = {
+		OR = {
+			AND = {
+				has_province_flag = custom_cor_created_first_half_of_year
+				NOT = { is_month = 6 }
+			}
+			AND = {
+				has_province_flag = custom_cor_created_second_half_of_year
+				is_month = 6
+			}
+		}
+	}
+
+	hidden = yes
+
+	on_activation = {
+		if = {
+			limit = {
+				has_province_modifier = pte_spawn_reformation_center_in_capital_modifier
+			}
+			if = {
+				limit = {
+					NOT = { religion = variable:pte_custom_cor_religion }
+				}
+				change_religion = variable:pte_custom_cor_religion
+			}
+			change_variable = { which = pte_custom_cor_num_converted value = 1 }
+			set_variable = { which = pte_custom_cor_duration_display value = 10 }
+			subtract_variable = { which = pte_custom_cor_duration_display which = pte_custom_cor_num_converted }
+			divide_variable = { which = pte_custom_cor_duration_display value = 2 }
+			province_event = { id = pte_events.6 }
+			if = {
+				limit = {
+					check_variable = { which = pte_custom_cor_num_converted value = 10 }
+				}
+				clr_province_flag = custom_cor_created_first_half_of_year
+				clr_province_flag = custom_cor_created_second_half_of_year
+				set_variable = { which = pte_custom_cor_num_converted value = 0 }
+				set_variable = { which = pte_custom_cor_duration_display value = 0 }
+				set_variable = { which = pte_custom_cor_religion value = 0 }
+				remove_province_modifier = pte_spawn_reformation_center_in_capital_modifier
+				remove_province_triggered_modifier = pte_spawn_reformation_center_in_capital_triggered_modifier
+				province_event = { id = pte_events.8 days = 25 }
+			}
+		}
+		else = {
+			set_variable = { which = pte_custom_cor_num_converted value = 0 }
+			set_variable = { which = pte_custom_cor_duration_display value = 10 }
+			subtract_variable = { which = pte_custom_cor_duration_display which = pte_custom_cor_num_converted }
+			divide_variable = { which = pte_custom_cor_duration_display value = 2 }
+			export_to_variable = {
+				which = pte_custom_cor_religion
+				value = trigger_value:religion
+			}
+			add_permanent_province_modifier = {
+				name = pte_spawn_reformation_center_in_capital_modifier
+				duration = -1
+			}
+			if = {
+				limit = {
+					has_province_flag = can_remove_religious_zeal_at_conv
+				}
+				clr_province_flag = can_remove_religious_zeal_at_conv
+				remove_province_modifier = religious_zeal_at_conv
+			}
+		}
+	}
+
+	on_deactivation = {
+		if = {
+			limit = {
+				has_province_modifier = pte_spawn_reformation_center_in_capital_modifier
+			}
+			if = {
+				limit = {
+					NOT = { religion = variable:pte_custom_cor_religion }
+				}
+				change_religion = variable:pte_custom_cor_religion
+			}
+			change_variable = { which = pte_custom_cor_num_converted value = 1 }
+			set_variable = { which = pte_custom_cor_duration_display value = 10 }
+			subtract_variable = { which = pte_custom_cor_duration_display which = pte_custom_cor_num_converted }
+			divide_variable = { which = pte_custom_cor_duration_display value = 2 }
+			province_event = { id = pte_events.6 }
+			if = {
+				limit = {
+					check_variable = { which = pte_custom_cor_num_converted value = 10 }
+				}
+				clr_province_flag = custom_cor_created_first_half_of_year
+				clr_province_flag = custom_cor_created_second_half_of_year
+				set_variable = { which = pte_custom_cor_num_converted value = 0 }
+				set_variable = { which = pte_custom_cor_duration_display value = 0 }
+				set_variable = { which = pte_custom_cor_religion value = 0 }
+				remove_province_modifier = pte_spawn_reformation_center_in_capital_modifier
+				remove_province_triggered_modifier = pte_spawn_reformation_center_in_capital_triggered_modifier
+				province_event = { id = pte_events.8 days = 25 }
+			}
+		}
+	}
+}

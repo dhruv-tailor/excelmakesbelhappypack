@@ -16,6 +16,7 @@ cb_pte_lift_excommunication = {
 		po_revoke_cores
 		po_release_vassals
 		po_release_annexed
+		po_return_cores
 		po_change_religion
 		po_form_personal_union
 		po_become_vassal
@@ -26,6 +27,7 @@ cb_pte_lift_excommunication = {
 		po_trade_power
 		po_humiliate
 		po_enforce_rebel_demands
+		pte_spawn_reformation_center_in_capital
 	}
 
 	war_goal = pte_lift_excommunication_war_goal
@@ -43,7 +45,13 @@ cb_pte_ban_slavery = {
 			OR = {
 				slaves = 1
 				any_subject_country = {
-					is_colonial_nation = yes
+					OR = {
+						is_colonial_nation = yes
+						AND = {
+							is_expanded_mod_active = { mod = subjects }
+							is_subject_of_type = dominion_tc
+						}
+					}
 					is_subject_other_than_tributary_trigger = yes
 					NOT = { has_country_modifier = the_abolish_slavery_act }
 					slaves = 1
@@ -57,10 +65,12 @@ cb_pte_ban_slavery = {
 		po_revoke_cores
 		po_release_vassals
 		po_release_annexed
+		po_return_cores
 		po_change_religion
 		po_form_personal_union
 		po_become_vassal
 		po_subjugate_vassal
+		pte_spawn_reformation_center_in_capital
 	}
 
 	war_goal = pte_ban_slavery_war_goal
@@ -75,10 +85,13 @@ cb_pte_protect_religious_bretheren = {
 		NOT = { religion = FROM }
 		OR = {
 			is_neighbor_of = FROM
-			NOT = {
-				border_distance = {
-					who = FROM
-					distance = 500
+			AND = {
+				ai = no
+				NOT = {
+					border_distance = {
+						who = FROM
+						distance = 500
+					}
 				}
 			}
 		}
@@ -154,6 +167,16 @@ cb_pte_liberation = {
 				capital_scope = {
 					region_for_scope_province = {
 						is_capital_of = FROM
+					}
+				}
+			}
+		}
+		FROM = {
+			OR = {
+				num_of_subjects = 1
+				any_owned_province = {
+					any_core_country = {
+						NOT = { tag = FROM }
 					}
 				}
 			}
@@ -369,4 +392,81 @@ cb_pte_anti_coalition = {
 	}
 
 	war_goal = pte_anti_coalition_war_goal
+}
+
+cb_pte_border_friction = {
+	is_triggered_only = yes
+	months = 24
+
+	ai_peace_desire = 10
+
+	prerequisites = {
+		is_neighbor_of = FROM
+		is_free_or_tributary_trigger = yes
+		FROM = {
+			is_free_or_tributary_trigger = yes
+		}
+		NOT = { overlord_of = FROM }
+		NOT = { is_subject_of = FROM }
+	}
+
+	war_goal = pte_border_friction_war_goal
+}
+
+cb_pte_take_monument = {
+	prerequisites = {
+		has_dlc = "Leviathan"
+		is_free_or_tributary_trigger = yes
+		NOT = { overlord_of = FROM }
+		NOT = { is_subject_of = FROM }
+		NOT = { truce_with = FROM }
+		NOT = { alliance_with = FROM }
+		OR = {
+			is_neighbor_of = FROM
+			NOT = {
+				border_distance = {
+					who = FROM
+					distance = 100
+				}
+			}
+			FROM = {
+				is_subject_other_than_tributary_trigger = yes
+				overlord = {
+					OR = {
+						is_neighbor_of = ROOT
+						NOT = {
+							border_distance = {
+								who = FROM
+								distance = 100
+							}
+						}
+					}
+				}
+			}
+		}
+		FROM = {
+			any_owned_province = {
+				is_city = yes
+				pte_has_moveable_monument_usable_by = { who = ROOT }
+			}
+		}
+	}
+
+	attacker_disabled_po = {
+		po_demand_provinces
+		po_release_vassals
+		po_release_annexed
+		po_return_cores
+		po_change_religion
+		po_form_personal_union
+		po_become_vassal
+		po_subjugate_vassal
+		po_annul_treaties
+		po_change_government
+		po_revoke_elector
+		po_trade_power
+		pte_spawn_reformation_center_in_capital
+	}
+
+	war_goal = pte_take_monument_war_goal
 }

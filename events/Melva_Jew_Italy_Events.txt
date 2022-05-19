@@ -389,19 +389,19 @@ province_event = {
 			add_years_of_income = 0.166
 			add_mil_power = 15
 		}
-		remove_development_third_monarch_skill = yes
+		remove_development_third_monarch_skill_fee = yes
 		change_variable = {
 			which = Melva_JEW_CITY_OPPOSE
-			value = 5
+			value = 10
 		}
-		add_devastation = 10
+		add_devastation = 25
 		random_neighbor_province = {
 			random_list = {
 				25 = {
 					add_development_third_monarch_skill = yes
 				}
 				75 = {
-					add_devastation = 10
+					add_devastation = 25
 				}
 			}
 		}
@@ -457,7 +457,6 @@ province_event = {
 	desc = Melva_Jew_Italy_Events.5.D
 	picture = RELIGIOUS_TURMOIL_eventPicture
 
-	fire_only_once = yes
 	trigger = {
 		is_year = 1492
 		NOT = { is_year = 1524 }
@@ -466,6 +465,13 @@ province_event = {
 			area = sicily_area
 		}
 		NOT = { province_id = 126 }
+		NOT = { has_province_flag = melva_jew_expulsion_1492 }
+		owner = {
+			had_country_flag = {
+				flag = melva_jew_expulsion_1492_country
+				days = 730
+			}
+		}
 	}
 
 	major = yes
@@ -479,6 +485,16 @@ province_event = {
 
 	mean_time_to_happen = {
 		years = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = melva_jew_expulsion_1492
+			owner = {
+				clr_country_flag = melva_jew_expulsion_1492_country
+				set_country_flag = melva_jew_expulsion_1492_country
+			}
+		}
 	}
 
 	option = {
@@ -508,7 +524,7 @@ province_event = {
 			add_papal_influence = 5
 			add_mil_power = -10
 		}
-		remove_development_third_monarch_skill = yes
+		remove_development_third_monarch_skill_fee = yes
 		if = {
 			limit = {
 				has_province_modifier = italian_jew_allowed_stay
@@ -516,11 +532,16 @@ province_event = {
 			remove_province_modifier = italian_jew_allowed_stay
 			add_permanent_province_modifier = {
 				name = italian_jew_province
+				duration = -1
 			}
 		}
 		change_variable = {
 			which = Melva_JEW_CITY_OPPOSE
 			value = 15
+		}
+		set_variable = {
+			which = Melva_JEW_CITY_APPROVE
+			value = -25
 		}
 		random_list = {
 			33 = {
@@ -576,10 +597,9 @@ province_event = {
 		owner = {
 			add_dip_power = 10
 		}
+
 		if = {
-			limit = {
-				has_province_modifier = italian_jew_allowed_stay
-			}
+			limit = { has_province_modifier = italian_jew_allowed_stay }
 			remove_province_modifier = italian_jew_allowed_stay
 			add_permanent_province_modifier = {
 				name = italian_jew_allowed_stay_2
@@ -587,6 +607,10 @@ province_event = {
 			}
 		}
 		else = {
+			if = {
+				limit = { has_province_modifier = italian_jew_province }
+				remove_province_modifier = italian_jew_province
+			}
 			add_permanent_province_modifier = {
 				name = italian_jew_allowed_stay
 				duration = -1
@@ -594,7 +618,580 @@ province_event = {
 		}
 		change_variable = {
 			which = Melva_JEW_CITY_APPROVE
-			value = 15
+			value = 25
+		}
+		set_variable = {
+			which = Melva_JEW_CITY_OPPOSE
+			value = -25
+		}
+	}
+}
+
+#Jews of Naples
+province_event = {
+	id = Melva_Jew_Italy_Events.6
+	title = Melva_Jew_Italy_Events.6.T
+	desc = Melva_Jew_Italy_Events.6.D
+	picture = RELIGIOUS_TURMOIL_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		province_id = 121
+		NOT = { is_year = 1473 }
+		NOT = { has_province_flag = melva_jew_naples_event }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = melva_jew_naples_event
+			owner = {
+				if = {
+					limit = {
+						NOT = { has_country_modifier = melva_jews_value }
+					}
+					add_country_modifier = {
+						name = melva_jews_value
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = italian_jew_province }
+					NOT = { has_province_modifier = italian_jew_allowed_stay }
+					NOT = { has_province_modifier = italian_jew_allowed_stay_2 }
+				}
+				add_permanent_province_modifier = {
+					name = italian_jew_province
+					duration = -1
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.6.OPT1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.125
+				owner = {
+					check_variable = {
+						which = Melva_JEW_OPPOSE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.125
+				owner = { religious_ideas = 3 }
+			}
+		}
+
+		custom_tooltip = Melva_JEW_START_OPPOSE_TT
+		owner = {
+			add_mil_power = 25
+			change_variable = {
+				which = Melva_JEW_OPPOSE
+				value = 10
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.6.OPT2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 4
+				owner = {
+					check_variable = {
+						which = Melva_JEW_APPROVE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.75
+				owner = { religious_ideas = 3 }
+			}
+			modifier = {
+				factor = 2.5
+				owner = { humanist_ideas = 3 }
+			}
+		}
+
+		custom_tooltip = Melva_JEW_START_APPROVE_TT
+		
+		owner = {
+			add_dip_power = 25
+			change_variable = {
+				which = Melva_JEW_APPROVE
+				value = 10
+			}
+		}
+	}
+}
+
+#Stamperia del 1473
+province_event = {
+	id = Melva_Jew_Italy_Events.7
+	title = Melva_Jew_Italy_Events.7.T
+	desc = Melva_Jew_Italy_Events.7.D
+	picture = RELIGIOUS_TURMOIL_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		province_id = 121
+		is_year = 1473
+		NOT = { has_province_flag = melva_jew_naples_stamperia }
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = melva_jew_naples_stamperia
+			owner = {
+				if = {
+					limit = {
+						NOT = { has_country_modifier = melva_jews_value }
+					}
+					add_country_modifier = {
+						name = melva_jews_value
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_province_modifier = italian_jew_province }
+					NOT = { has_province_modifier = italian_jew_allowed_stay }
+					NOT = { has_province_modifier = italian_jew_allowed_stay_2 }
+				}
+				add_permanent_province_modifier = {
+					name = italian_jew_province
+					duration = -1
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.6.OPT1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.125
+				owner = {
+					check_variable = {
+						which = Melva_JEW_OPPOSE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.125
+				owner = { religious_ideas = 3 }
+			}
+		}
+
+		owner = {
+			add_prestige = 5
+			add_papal_influence = 15
+			add_mil_power = 25
+			change_variable = {
+				which = Melva_JEW_OPPOSE
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = italian_jew_allowed_stay_2
+			}
+			remove_province_modifier = italian_jew_allowed_stay_2
+		}
+		if = {
+			limit = {
+				has_province_modifier = italian_jew_allowed_stay
+			}
+			remove_province_modifier = italian_jew_allowed_stay
+		}
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.6.OPT2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 4
+				owner = {
+					check_variable = {
+						which = Melva_JEW_APPROVE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.75
+				owner = { religious_ideas = 3 }
+			}
+			modifier = {
+				factor = 2.5
+				owner = { humanist_ideas = 3 }
+			}
+		}
+
+		owner = {
+			add_legitimacy_equivalent = { amount = 3 republican_tradition = 3 }
+			add_treasury = -100
+			change_variable = {
+				which = Melva_JEW_APPROVE
+				value = 10
+			}
+		}
+		add_base_production = 2
+		if = {
+			limit = {
+				owner = { owns = 2983 }
+			}
+			2983 = {
+				add_base_production = 2
+			}
+		}
+
+		remove_province_modifier = italian_jew_province
+		add_permanent_province_modifier = {
+			name = italian_jew_allowed_stay
+			duration = -1
+		}
+		add_permanent_province_modifier = {
+			name = italian_jew_stamperia_naples
+			duration = 18250
+		}
+		change_variable = {
+			which = Melva_JEW_CITY_APPROVE
+			value = 10
+		}
+	}
+}
+
+#Profughi del 1492 of Root.GetName
+province_event = {
+	id = Melva_Jew_Italy_Events.8
+	title = Melva_Jew_Italy_Events.8.T
+	desc = Melva_Jew_Italy_Events.8.D
+	picture = RELIGIOUS_TURMOIL_eventPicture
+
+	trigger = {
+		is_year = 1492
+		NOT = { is_year = 1540 }
+		OR = {
+			area = naples_area
+			area = calabria_area
+			area = apulia_area
+		}
+		NOT = { has_province_flag = melva_jew_naples_profughes }
+	}
+
+	mean_time_to_happen = {
+		years = 5
+	}
+
+	goto = ROOT
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = melva_jew_naples_profughes
+			owner = {
+				if = {
+					limit = {
+						NOT = { has_country_modifier = melva_jews_value }
+					}
+					add_country_modifier = {
+						name = melva_jews_value
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.8.OPT1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				owner = {
+					check_variable = {
+						which = Melva_JEW_OPPOSE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				owner = { culture_group = iberian }
+			}
+		}
+		custom_tooltip = REJECT_JEWS_TT
+
+		owner = {
+			add_prestige = 3
+			add_papal_influence = 10
+			add_mil_power = 10
+			change_variable = {
+				which = Melva_JEW_OPPOSE
+				value = 5
+			}
+		}
+		change_variable = {
+			which = Melva_JEW_CITY_OPPOSE
+			value = 10
+		}
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.8.OPT2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				owner = {
+					check_variable = {
+						which = Melva_JEW_APPROVE
+						value = 30
+					}
+				}
+			}
+		}
+		custom_tooltip = ACCEPT_JEWS_TT
+
+		if = {
+			limit = { 
+				owner = { ADM = 3 }
+			}
+			add_base_tax = 1
+		}
+		if = {
+			limit = { 
+				owner = { DIP = 3 }
+			}
+			add_base_production = 1
+		}
+		if = {
+			limit = { 
+				owner = { MIL = 3 }
+			}
+			add_base_manpower = 1
+		}
+		remove_province_modifier = italian_jew_province
+		add_permanent_province_modifier = {
+			name = italian_jew_allowed_stay
+			duration = -1
+		}
+		change_variable = {
+			which = Melva_JEW_CITY_APPROVE
+			value = 10
+		}
+	}
+}
+
+#Espulsion del 1540
+province_event = {
+	id = Melva_Jew_Italy_Events.9
+	title = Melva_Jew_Italy_Events.9.T
+	desc = Melva_Jew_Italy_Events.9.D
+	picture = RELIGIOUS_TURMOIL_eventPicture
+	
+	trigger = {
+		OR = {
+			area = naples_area
+			area = calabria_area
+			area = apulia_area
+		}
+		is_year = 1540
+		NOT = { has_province_flag = melva_jew_expulsion_1540 }
+		OR = {
+			has_province_modifier = italian_jew_province
+			has_province_modifier = italian_jew_allowed_stay
+			has_province_modifier = italian_jew_allowed_stay_2
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = melva_jew_expulsion_1540
+			owner = {
+				if = {
+					limit = {
+						NOT = {
+							check_variable = {
+								which = Melva_JEW_OPPOSE
+								value = 0
+							}
+						}
+						check_variable = {
+							which = Melva_JEW_OPPOSE
+							value = 0
+						}
+					}
+					set_variable = {
+						which = Melva_JEW_OPPOSE
+						value = 0
+					}
+					set_variable = {
+						which = Melva_JEW_APPROVE
+						value = 0
+					}
+				}
+				if = {
+					limit = {
+						NOT = { has_country_modifier = melva_jews_value }
+					}
+					add_country_modifier = {
+						name = melva_jews_value
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.9.OPT1
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 1.125
+				owner = {
+					check_variable = {
+						which = Melva_JEW_OPPOSE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 1.25
+				owner = { culture_group = iberian }
+			}
+			modifier = {
+				factor = 1.25
+				owner = {
+					OR = {
+						is_subject_of = ARA
+						is_subject_of = CAS
+						is_subject_of = SPA
+					}
+				}
+			}
+			modifier = {
+				factor = 1.125
+				owner = { religious_ideas = 3 }
+			}
+		}
+
+		owner = {
+			add_prestige = 5
+			add_papal_influence = 15
+			add_mil_power = 25
+			change_variable = {
+				which = Melva_JEW_OPPOSE
+				value = 10
+			}
+		}
+		if = {
+			limit = {
+				has_province_modifier = italian_jew_allowed_stay_2
+			}
+			remove_province_modifier = italian_jew_allowed_stay_2
+		}
+		if = {
+			limit = {
+				has_province_modifier = italian_jew_allowed_stay
+			}
+			remove_province_modifier = italian_jew_allowed_stay
+		}
+		change_variable = {
+			which = Melva_JEW_CITY_OPPOSE
+			value = 25
+		}
+		set_variable = {
+			which = Melva_JEW_CITY_APPROVE
+			value = -25
+		}
+	}
+
+	option = {
+		name = Melva_Jew_Italy_Events.9.OPT2
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 4
+				owner = {
+					check_variable = {
+						which = Melva_JEW_APPROVE
+						value = 30
+					}
+				}
+			}
+			modifier = {
+				factor = 0.95
+				owner = { religious_ideas = 3 }
+			}
+			modifier = {
+				factor = 2.5
+				owner = { humanist_ideas = 3 }
+			}
+		}
+
+		owner = {
+			add_legitimacy_equivalent = { amount = 3 republican_tradition = 3 }
+			add_treasury = -100
+			change_variable = {
+				which = Melva_JEW_APPROVE
+				value = 10
+			}
+		}
+
+		if = {
+			limit = { has_province_modifier = italian_jew_allowed_stay }
+			remove_province_modifier = italian_jew_allowed_stay
+			add_permanent_province_modifier = {
+				name = italian_jew_allowed_stay_2
+				duration = -1
+			}
+		}
+		else = {
+			if = {
+				limit = { has_province_modifier = italian_jew_province }
+				remove_province_modifier = italian_jew_province
+			}
+			add_permanent_province_modifier = {
+				name = italian_jew_allowed_stay
+				duration = -1
+			}
+		}
+		change_variable = {
+			which = Melva_JEW_CITY_APPROVE
+			value = 25
+		}
+		set_variable = {
+			which = Melva_JEW_CITY_OPPOSE
+			value = -25
 		}
 	}
 }

@@ -3,63 +3,250 @@ MLC_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = MLC
-			tag = MSA
-			tag = SRE
-		}
+		MSA_is_tag = { tag = MLC }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	malacca_malaccan_rebirth = {
-		icon = mission_golden_century
+	MLC_naval_superiority = {
+		icon = mission_subjugate_saurashtra
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			owner = {
+				navy_size = ROOT
+			}
+		}
 		trigger = {
-			mil_tech = 5
-			has_institution = renaissance
+			num_of_admirals = 1
+			navy_size = 10
+			custom_trigger_tooltip = {
+				tooltip = MLC_bigger_fleet_than_borneo
+				NOT = {
+					OR = {
+						brunei_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+						palawan_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+						sabah_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+						kalimantan_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+						kutai_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+						banjar_area = {
+							is_capital = yes
+							owner = {
+								navy_size = ROOT
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = malacca_malaccan_rebirth_modifier
-				duration = 9125
+			set_country_flag = ME_flavorMLC_bypass_flag
+			country_event = { id = flavor_mlc.6 }
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					num_of_total_ports = 1
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					create_flagship = {
+						name = "Mendam Berahi"
+						type = galley
+					}
+				}
 			}
-			capital_scope = {
-				add_base_tax = 2
-				add_base_production = 1
-				add_base_manpower = 2
+			brunei_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sabah_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kalimantan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	malacca_expansion_of_the_diplomatic_corps = {
-		icon = mission_alliances
-		required_missions = { malacca_malaccan_rebirth }
-		position = 2
+
+	MLC_defeat_brunei = {
+		icon = mission_restore_rule_over_mysore
+		required_missions = { MLC_naval_superiority }
+		position = 3
+		provinces_to_highlight = {
+			area = brunei_area
+			NOT = { owned_by = ROOT }
+			NOT = {
+				brunei_area = {
+					owned_by = ROOT
+				}
+			}
+			ROOT = {
+				NOT = { has_won_war_against = { who = BEI } }
+			}
+		}
 		trigger = {
 			OR = {
-				natural_scientist = 3
-				diplomat = 3
+				has_won_war_against = { who = BEI }
+				brunei_area = { owned_by = ROOT }
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = malacca_expansion_of_the_diplomatic_corps_modifier
-				duration = 5475
+			home_trade_node_effect_scope = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 20
+					key = MSA_brunei_sultanate
+				}
+				add_trade_node_income = 12
+			}
+			palawan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kutai_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banjar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	malacca_the_grand_knights = {
-		icon = me_mission_dark_knight
-		required_missions = { malacca_expansion_of_the_diplomatic_corps }
-		position = 4
+
+	MLC_conquer_borneo = {
+		icon = mission_mnd_maj_rein_in_brunei
+		required_missions = { MLC_defeat_brunei }
+		position = 5
+		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_borneo = yes
+						value = 13
+					}
+				}
+			}
+		}
 		trigger = {
-			army_tradition = 50
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 13
+			}
 		}
 		effect = {
-			country_event = { id = ME_Malacca_Events.1 }
+			add_accepted_culture_or_dip_power = { culture = bornean }
+			south_sulawesi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sulawesi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			makassar_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	MLC_import_firearms = {
+		icon = mission_gunpowder_warfare
+		required_missions = { }
+		position = 7
+		trigger = {
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			mil_tech = 6 #Arquebus
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_firearms_imported
+				duration = 9125
+			}
+		}
+	}
+
+	MLC_malay_lela = {
+		icon = mission_new_army
+		required_missions = { MLC_import_firearms }
+		position = 8
+		trigger = {
+			num_of_artillery = 10
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 10
+			}
+			army_tradition = 45
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_pioneering_new_cannon_technologies
+				duration = 10950
+			}
+			add_mil_power = 50
 		}
 	}
 }
@@ -69,230 +256,196 @@ MLC_missions_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = MLC
-			tag = MSA
-			tag = SRE
-		}
+		MSA_is_tag = { tag = MLC }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	malacca_chinese_kin = {
-		icon = mission_chinese_general_riding
-		required_missions = { }
-		position = 1
+	MLC_intervene_in_siak = {
+		icon = mission_demand_garjat_fealty
+		required_missions = { MLC_succession }
+		position = 2
 		provinces_to_highlight = {
-			province_id = 1816
-			NOT = { has_dlc = "Mandate of Heaven" }
-			NOT = { owned_by = ROOT }
-			owner = {
+			OR = {
+				area = jambi_area
+				area = central_sumatra_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
 				NOT = {
-					has_opinion = {
-						who = ROOT
-						value = 100
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = jambi_area
+							area = central_sumatra_area
+						}
+						value = 4
 					}
 				}
 			}
 		}
 		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Mandate of Heaven"
-				}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				OR = {
-					is_emperor_of_china = yes
-					any_country = {
-						is_emperor_of_china = yes
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
+					area = jambi_area
+					area = central_sumatra_area
+				}
+				value = 4
+			}
+		}
+		effect = {
+			jambi_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_nationalism = -10
+			}
+			central_sumatra_area = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_nationalism = -10
+			}
+			add_country_modifier = {
+				name = MLC_enforcing_zealotry
+				duration = 9125
+			}
+			minangkabau_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_sumatra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_sumatra_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			batak_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	MLC_conquer_sumatra = {
+		icon = mission_assert_control_over_delhi
+		required_missions = { MLC_intervene_in_siak }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 622
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 				}
-			}
-			else = {
-				OR = {
-					owns = 1816
-					1816 = {
-						owner = {
-							has_opinion = {
-								who = ROOT
-								value = 100
+				AND = {
+					MSA_is_in_sumatra = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_sumatra = yes
+								value = 15
 							}
 						}
 					}
 				}
 			}
 		}
+		trigger = {
+			owns_core_province = 622
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sumatra = yes
+				value = 15
+			}
+		}
 		effect = {
 			add_country_modifier = {
-				name = malacca_chinese_kin_modifier
-				duration = 5475
+				name = MLC_srivijaya
+				duration = -1
+			}
+			add_accepted_culture_or_dip_power = { culture = sumatran }
+			east_java_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_java_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_java_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			surabaya_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banten_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	malacca_heavenly_aspirations = {
-		icon = mission_japanese_fort
-		required_missions = { malacca_chinese_kin }
-		position = 2
-		trigger = {
-			OR = {
-				theologian = 2
-				natural_scientist = 2
-				philosopher = 2
-			}
-		}
-		effect = {
-			country_event = { id = ME_Malacca_Events.2 }
-		}
-	}
-	
-	malacca_holy_mission = {
-		icon = mission_mosque
-		required_missions = { malacca_expansion_of_the_diplomatic_corps malacca_heavenly_aspirations }
-		position = 3
+
+	MLC_sulawesi = {
+		icon = mission_mnd_maj_cloves
+		required_missions = { MLC_conquer_borneo }
+		position = 6
 		provinces_to_highlight = {
-			area = minangkabau_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				AND = {
-					ROOT = {
-						NOT = { religion = confucianism }
-						NOT = { religion = buddhism }
+			MSA_is_in_sulawesi = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sulawesi = yes
+						value = 5
 					}
-					has_owner_religion = no
-				}
-				AND = {
-					ROOT = {
-						OR = {
-							religion = confucianism
-							religion = buddhism
-						}
-					}
-					unrest = 1
 				}
 			}
 		}
 		trigger = {
-			minangkabau_area = {
-				type = all
-				owned_by = ROOT
-			}
-			if = {
-				limit = {
-					NOT = { religion = confucianism }
-					NOT = { religion = buddhism }
-				}
-				minangkabau_area = {
-					type = all
-					has_owner_religion = yes
-				}
-			}
-			else = {
-				minangkabau_area = {
-					type = all
-					NOT = { unrest = 1 }
-				}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_sulawesi = yes
+				value = 5
 			}
 		}
 		effect = {
-			add_prestige = 15
-			add_country_modifier = {
-				name = malacca_holy_mission_modifier
-				duration = 5475
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 25
 			}
-		}
-	}
-	
-	malacca_devine_recompense = {
-		icon = mission_assemble_an_army
-		required_missions = { malacca_the_grand_knights malacca_holy_mission malacca_the_fearful_elephant }
-		position = 5
-		provinces_to_highlight = {
-			area = north_tenasserim_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				AND = {
-					ROOT = {
-						NOT = { religion = confucianism }
-						NOT = { religion = buddhism }
-					}
-					has_owner_religion = no
-				}
-				AND = {
-					ROOT = {
-						OR = {
-							religion = confucianism
-							religion = buddhism
-						}
-					}
-					unrest = 1
-				}
-			}
-		}
-		trigger = {
-			north_tenasserim_area = {
-				type = all
-				owned_by = ROOT
-			}
-			if = {
-				limit = {
-					NOT = { religion = confucianism }
-					NOT = { religion = buddhism }
-				}
-				north_tenasserim_area = {
-					type = all
-					has_owner_religion = yes
-				}
-			}
-			else = {
-				north_tenasserim_area = {
-					type = all
-					NOT = { unrest = 1 }
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_devine_recompense_modifier
-				duration = 7300
-			}
-		}
-	}
-	
-	malacca_englightened_empire = {
-		icon = mission_hands_praying
-		required_missions = { malacca_devine_recompense }
-		position = 7
-		trigger = {
-			religious_unity = 1
-		}
-		effect = {
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-					NOT = { religion_group = muslim }
-				}
-				set_country_flag = mlc_unlocks_propagate_religion_for_other_religions
-				custom_tooltip = MLC_UNLOCKS_PROPAGATE_RELIGION_FOR_OTHER_RELIGIONS
-			}
-			else = {
-				define_advisor = {
-					type = theologian
-					skill = 3
-					discount = yes
-				}
-				add_country_modifier = {
-					name = malacca_englightened_empire_modifier_1
-					duration = 7300
-				}
-				add_country_modifier = {
-					name = malacca_englightened_empire_modifier_2
-					duration = 1825
-				}
-			}
+			MSA_claims_spice_islands = yes
 		}
 	}
 }
@@ -302,48 +455,265 @@ MLC_missions_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = MLC
-			tag = MSA
-			tag = SRE
-		}
+		MSA_is_tag = { tag = MLC }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	malacca_malaysian_bottleneck = {
-		icon = mission_malayan_viceroyalty
+	MLC_succession = {
+		icon = me_mission_malay_ruler
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-			area = north_malaya_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			north_malaya_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				army_size = 10
+				army_size_percentage = 0.9
 			}
+			NOT = { has_ruler = "Ibrahim" }
 		}
 		effect = {
-			add_country_modifier = {
-				name = malacca_malaysian_bottleneck_modifier
-				duration = 3650
-			}
-			tenasserim_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
+					exists = SAK
+					SAK = { is_subject = no }
+				}
+				add_casus_belli = {
+					target = SAK
+					months = 120
+					type = cb_vassalize_mission
+				}
+			}
+			central_sumatra_area = {
+				limit = {
 					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jambi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malaya_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_malaya_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	malacca_spicy_munition = {
-		icon = mission_cannons_firing
-		required_missions = { malacca_malaysian_bottleneck malacca_northern_trust }
+
+	MLC_dominate_malay_peninsula = {
+		icon = mission_shipyards_of_gujarat
+		required_missions = { MLC_succession }
+		position = 2
+		provinces_to_highlight = {
+			area = malaya_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			malaya_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 25
+			add_country_modifier = {
+				name = MLC_quest_for_hegemony
+				duration = 9125
+			}
+		}
+	}
+
+	MLC_kedah_pattani = {
+		icon = me_mission_conquer_malay_states
+		required_missions = { MLC_dominate_malay_peninsula }
 		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2394
+				province_id = 594
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2394 = { country_or_non_sovereign_subject_holds = ROOT }
+			594 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			tooltip = {
+				if = {
+					limit = {
+						4812 = {
+							NOT = { fort_level = 2 }
+						}
+					}
+					4812 = { add_or_upgrade_fort_building = yes }
+				}
+				else = {
+					594 = { add_or_upgrade_fort_building = yes }
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						4812 = {
+							country_or_non_sovereign_subject_holds = ROOT
+							NOT = { fort_level = 2 }
+						}
+					}
+					4812 = { add_or_upgrade_fort_building = yes }
+				}
+				else = {
+					594 = { add_or_upgrade_fort_building = yes }
+				}
+			}
+			tenasserim_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_tenasserim_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					2391 = {
+						NOT = { is_core = ROOT }
+						religion_group = muslim
+					}
+				}
+				2391 = {
+					add_core = ROOT
+				}
+			}
+		}
+	}
+
+	MLC_majapahit = {
+		icon = mission_mnd_maj_end_disaster
+		required_missions = { MLC_conquer_sumatra }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 628
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					MSA_is_in_java = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_java = yes
+								value = 10
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 628
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 10
+			}
+		}
+		effect = {
+			country_event = { id = ME_Malacca_Events.3 }
+			add_prestige_or_monarch_power = { amount = 10 }
+		}
+	}
+
+	MLC_malaya = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = { MLC_majapahit MLC_sulawesi }
+		position = 7
+		provinces_to_highlight = {
+			MSA_malaya_pth = yes
+		}
+		trigger = {
+			MSA_malaya_trigger = yes
+		}
+		effect = {
+			MSA_malaya_effect = yes
+		}
+	}
+}
+
+MLC_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		MSA_is_tag = { tag = MLC }
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	MLC_resist_the_siamese_invasion = {
+		icon = me_mission_garuda
+		required_missions = { MLC_tun_perak }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 600
+			NOT = { owned_by = ROOT }
+			owner = {
+				ROOT = {
+					NOT = { has_won_war_against = { who = PREV } }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns = 600
+				600 = {
+					owner = {
+						custom_trigger_tooltip = {
+							tooltip = MLC_won_war_against_owner_of_600
+							ROOT = {
+								has_won_war_against = { who = PREV }
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			create_general = {
+				tradition = 60
+				add_manuever = 1
+				add_shock = 1
+			}
+			custom_tooltip = MLC_general_pips
+			add_army_tradition_or_mil_power = { amount = 15 }
+		}
+	}
+
+	MLC_punitive_campaign = {
+		icon = mission_spoils_of_war
+		required_missions = { MLC_resist_the_siamese_invasion MLC_kedah_pattani }
+		position = 4
 		provinces_to_highlight = {
 			area = tenasserim_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -355,651 +725,184 @@ MLC_missions_3 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = malacca_spicy_munition_modifier
-				duration = 5475
-			}
-			north_tenasserim_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			tenasserim_area = {
+				add_province_modifier = {
+					name = MLC_integrating_the_panhandle
+					duration = 9125
 				}
-				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = MLC_siam_defeated
+				duration = -1
 			}
 		}
 	}
-	
-	malacca_the_fearful_elephant = {
-		icon = mission_a_million_elephants
-		required_missions = { malacca_spicy_munition }
-		position = 4
-		provinces_to_highlight = {
-			area = north_tenasserim_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			north_tenasserim_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_the_fearful_elephant_modifier
-				duration = 9125
-			}
-			1365 = {
-				add_trade_modifier = {
-					who = ROOT
-					power = 15
-					duration = 5475
-					key = malacca_the_fearful_elephant_trade_modifier
-				}
-			}
-			lower_burma_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			central_thai_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			sukhothai_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			khorat_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			cambodia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_the_bold_mouse = {
-		icon = me_mission_army
-		required_missions = { malacca_the_fearful_elephant }
+
+	MLC_orang_laut = {
+		icon = mission_seize_the_bengal_coast
+		required_missions = { MLC_entrepot }
 		position = 5
-		provinces_to_highlight = {
-			OR = {
-				area = lower_burma_area
-				area = central_thai_area
-				area = cambodia_area
-				area = sukhothai_area
-				area = khorat_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			lower_burma_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			central_thai_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			cambodia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			MSA_orang_laut_trigger = yes
 		}
 		effect = {
-			add_country_modifier = {
-				name = malacca_the_bold_mouse_modifier
-				duration = 9125
-			}
-			mekong_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			champa_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			tay_nguyen_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			angkor_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
+			MSA_orang_laut_effect = yes
 		}
 	}
-	
-	malacca_the_ancient_kingdoms = {
-		icon = me_mission_khmer_flag
-		required_missions = { malacca_the_bold_mouse }
+
+	MLC_welcoming_traders = {
+		icon = mission_rajput_trade_guilds
+		required_missions = { }
 		position = 6
-		provinces_to_highlight = {
-			OR = {
-				area = mekong_area
-				area = champa_area
-				area = tay_nguyen_area
-				area = angkor_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			mekong_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			champa_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			tay_nguyen_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			angkor_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 3
-			add_country_modifier = {
-				name = malacca_the_ancient_kingdoms_modifier
-				duration = 9125
-			}
-			vietnam_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			home_trade_node = {
+				trade_share = {
+					share = 25
+					country = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
-			red_river_delta_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_the_last_swipe = {
-		icon = mission_conquer_50_development
-		required_missions = { malacca_the_ancient_kingdoms }
-		position = 7
-		provinces_to_highlight = {
 			OR = {
-				area = mekong_area
-				area = champa_area
-				area = tay_nguyen_area
-				area = angkor_area
-			}
-			NOT = { has_dlc = "Mandate of Heaven" }
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Mandate of Heaven"
-				}
-				OR = {
-					is_emperor_of_china = yes
-					AND = {
-						is_emperor_of_china = no
-						any_neighbor_country = {
-							is_emperor_of_china = yes
-							NOT = { imperial_mandate = 20 }
-						}
-					}
-				}
-			}
-			else = {
-				mekong_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				champa_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				tay_nguyen_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				angkor_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
+				has_dip_advisor_2 = yes
+				trader = 1
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = malacca_the_last_swipe_modifier
-				duration = 18250
+				name = MLC_foreign_merchants_in_our_lands
+				duration = 10950
 			}
-			1816 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			4196 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			684 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			667 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
+			add_mercantilism = 2
 		}
 	}
-	
-	malacca_mercantile_jihad = {
+
+	MLC_chinese_expedition = {
 		icon = mission_open_up_china
-		required_missions = { malacca_englightened_empire malacca_the_last_swipe malacca_filipino_doctrine }
+		required_missions = { MLC_welcoming_traders }
 		position = 7
 		provinces_to_highlight = {
-			OR = {
-				province_id = 1816
-				province_id = 1821
-			}
+			is_capital_of = ROOT
+			NOT = { province_trade_power = 50 }
 			OR = {
 				NOT = { has_dlc = "Mandate of Heaven" }
-				ROOT = {
+				is_emperor_of_china = yes
+				all_countries_including_self = {
 					is_emperor_of_china = no
 				}
+				AND = {
+					NOT = { has_country_flag = MSA_insulting_flag }
+					NOT = { has_country_flag = MSA_in_defiance_flag }
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_swayed_flag }
+					NOT = { has_country_flag = MSA_absolutely_loyal_flag }
+				}
 			}
-			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MLC_chinese_expedition_has_concluded
+				has_country_flag = MSA_chinese_expedition_concluded
+			}
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
+					OR = {
+						has_country_flag = MSA_insulting_flag
+						has_country_flag = MSA_in_defiance_flag
+					}
 				}
-				OR = {
-					is_emperor_of_china = yes
-					AND = {
-						owns = 1816
-						owns = 1821
+				event_target:EmperorOfChina = {
+					has_been_insulted_by_root = yes
+				}
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
+					OR = {
+						has_country_flag = MSA_swayed_flag
+						has_country_flag = MSA_absolutely_loyal_flag
+					}
+				}
+				event_target:EmperorOfChina = {
+					has_opinion = {
+						who = ROOT
+						value = 100
 					}
 				}
 			}
 			else = {
-				owns = 1816
-				owns = 1821
+				capital_scope = {
+					province_trade_power = 50
+				}
 			}
 		}
 		effect = {
-			country_event = { id = ME_Malacca_Events.3 }
-		}
-	}
-}
-
-MLC_missions_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLC
-			tag = MSA
-			tag = SRE
-		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	malacca_prepare_sumatran_invasion = {
-		icon = mission_invade_island
-		required_missions = { }
-		position = 1
-		provinces_to_highlight = {
-			area = central_sumatra_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			central_sumatra_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			custom_tooltip = MLC_if_we_were_swayed
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_diplomats
+					duration = 9125
+				}
+				add_dip_power = 50
 			}
-		}
-		effect = {
-			add_mercantilism = 3
-			596 = {
+			custom_tooltip = MLC_if_we_were_insulting
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_harm_to_injury
+					duration = 7300
+				}
+				add_mil_power = 50
+			}
+			custom_tooltip = MLC_if_we_were_neutral
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_careful_distancing
+					duration = 9125
+				}
+				add_adm_power = 50
+			}
+			hidden_effect = {
 				if = {
 					limit = {
-						NOT = { province_has_center_of_trade_of_level = 1 }
+						OR = {
+							has_country_flag = MSA_swayed_flag
+							has_country_flag = MSA_absolutely_loyal_flag
+						}
 					}
-					center_of_trade = 3
+					add_country_modifier = {
+						name = MLC_diplomats
+						duration = 9125
+					}
+					add_dip_power = 50
 				}
 				else_if = {
 					limit = {
-						NOT = { province_has_center_of_trade_of_level = 3 }
-					}
-					add_center_of_trade_level = 2
-				}
-			}
-			batak_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			north_sumatra_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_northern_trust = {
-		icon = mission_have_two_subjects
-		required_missions = { malacca_prepare_sumatran_invasion }
-		position = 2
-		provinces_to_highlight = {
-			OR = {
-				area = batak_area
-				area = north_sumatra_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			batak_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			north_sumatra_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_northern_trust_modifier
-				duration = 5475
-			}
-			minangkabau_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			west_java_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			banten_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			south_sumatra_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			jambi_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_indonesian_ambition = {
-		icon = me_mission_globe_map
-		required_missions = { malacca_northern_trust }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				area = north_sumatra_area
-				area = batak_area
-				area = minangkabau_area
-				area = central_sumatra_area
-				area = south_sumatra_area
-				area = jambi_area
-			}
-			is_empty = no
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			north_sumatra_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-			batak_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-			minangkabau_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-			central_sumatra_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-			south_sumatra_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-			jambi_area = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					is_empty = yes
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_indonesian_ambition_modifier
-				duration = 10950
-			}
-		}
-	}
-	
-	malacca_borneo_landing = {
-		icon = mission_to_the_south_china_sea
-		required_missions = { malacca_indonesian_ambition }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = kalimantan_area
-				area = banjar_area
-			}
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				kalimantan_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				banjar_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_borneo_landing_modifier
-				duration = -1
-			}
-			kutai_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			sabah_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_brunei_doctrine = {
-		icon = mission_establish_high_seas_navy
-		required_missions = { malacca_borneo_landing }
-		position = 5
-		provinces_to_highlight = {
-			OR = {
-				area = kutai_area
-				area = sabah_area
-			}
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			army_size = 16
-			num_of_light_ship = 25
-			kutai_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			sabah_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_brunei_doctrine_modifier
-				duration = 5475
-			}
-			640 = {
-				if = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					if = {
-						limit = {
-							NOT = { has_building = fort_15th }
+						OR = {
+							has_country_flag = MSA_insulting_flag
+							has_country_flag = MSA_in_defiance_flag
 						}
-						add_building = fort_15th
 					}
-					else = {
-						add_base_manpower = 1
+					add_country_modifier = {
+						name = MLC_harm_to_injury
+						duration = 7300
 					}
+					add_mil_power = 50
 				}
-			}
-			brunei_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				else = {
+					add_country_modifier = {
+						name = MLC_careful_distancing
+						duration = 9125
+					}
+					add_adm_power = 50
 				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_powerful_insurrection = {
-		icon = mission_cannons_firing
-		required_missions = { malacca_brunei_doctrine }
-		position = 6
-		provinces_to_highlight = {
-			area = brunei_area
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			brunei_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 15
-			add_country_modifier = {
-				name = malacca_powerful_insurrection_modifier
-				duration = 5475
 			}
 		}
 	}
@@ -1010,305 +913,311 @@ MLC_missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = MLC
-			tag = MSA
-			tag = SRE
-		}
+		MSA_is_tag = { tag = MLC }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
-	malacca_rightful_heir_to_srivijaya = {
-		icon = mission_empire
+	MLC_tun_perak = {
+		icon = mission_abu_saids_dream
 		required_missions = { }
 		position = 1
 		trigger = {
-			stability = 3
-			legitimacy_equivalent = 100
-			prestige = 15
-		}
-		effect = {
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
-			add_country_modifier = {
-				name = malacca_rightful_heir_to_srivijaya_modifier
-				duration = 5475
-			}
-		}
-	}
-	
-	malacca_a_mercantile_tradition = {
-		icon = mission_trade_company_region_abroad
-		required_missions = { malacca_rightful_heir_to_srivijaya }
-		position = 2
-		trigger = {
-			num_of_light_ship = 20
-		}
-		effect = {
-			add_mercantilism = 2
-			add_country_modifier = {
-				name = malacca_a_mercantile_tradition_modifier
-				duration = 5475
-			}
-		}
-	}
-	
-	malacca_grand_inhibition = {
-		icon = mission_assemble_an_army
-		required_missions = { malacca_northern_trust malacca_a_mercantile_tradition }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				area = west_java_area
-				area = banten_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			banten_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			west_java_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_grand_inhibition_modifier
-				duration = 9125
-			}
-			1357 = {
-				add_trade_modifier = {
-					who = ROOT
-					power = 30
-					duration = 9125
-					key = malacca_grand_inhibition_trade_modifier
-				}
-			}
-			central_java_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			surabaya_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			east_java_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_nailing_the_coffin = {
-		icon = mission_steer_trade_to_bengal
-		required_missions = { malacca_grand_inhibition }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = central_java_area
-				area = east_java_area
-				area = surabaya_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			central_java_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			east_java_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			surabaya_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_mercantilism = 5
-			1361 = {
-				add_trade_modifier = {
-					who = ROOT
-					power = 50
-					duration = 5475
-					key = malacca_nailing_the_coffin_trade_modifier
-				}
-			}
-			630 = {
-				if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 1 }
-					}
-					center_of_trade = 3
-				}
-				else_if = {
-					limit = {
-						NOT = { province_has_center_of_trade_of_level = 3 }
-					}
-					add_center_of_trade_level = 2
-				}
-			}
-			sulawesi_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			south_sulawesi_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			makassar_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_sulawesi_doctrine = {
-		icon = me_mission_venice_small_ship_in_port
-		required_missions = { malacca_nailing_the_coffin }
-		position = 5
-		provinces_to_highlight = {
-			OR = {
-				area = sulawesi_area
-				area = south_sulawesi_area
-				area = makassar_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			sulawesi_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			south_sulawesi_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			makassar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			sulawesi_area = {
-				add_province_modifier = {
-					name = malacca_sulawesi_doctrine_province_modifier
-					duration = -1
-				}
-			}
-			south_sulawesi_area = {
-				add_province_modifier = {
-					name = malacca_sulawesi_doctrine_province_modifier
-					duration = -1
-				}
-			}
-			west_mindanao_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			mindanao_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			visayas_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	malacca_filipino_doctrine = {
-		icon = mission_assemble_an_army
-		required_missions = { malacca_sulawesi_doctrine }
-		position = 7
-		provinces_to_highlight = {
-			OR = {
-				area = west_mindanao_area
-				area = mindanao_area
-				area = visayas_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			west_mindanao_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			mindanao_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			visayas_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1397 = {
-				trade_share = {
-					country = ROOT
-					share = 75
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = malacca_filipino_doctrine_modifier
-				duration = -1
-			}
+			legitimacy_equivalent = 75
 			if = {
 				limit = {
-					any_owned_province = {
-						culture = filipino
+					has_estate = estate_nobles
+				}
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					monthly_mil = 10
+				}
+			}
+			else = {
+				monthly_mil = 11 
+			}
+		}
+		effect = {
+			country_event = { id = ME_Malacca_Events.2 }
+		}
+	}
+
+	MLC_malaccan_bendahara = {
+		icon = mission_reliable_allies
+		required_missions = { MLC_tun_perak }
+		position = 2
+		trigger = {
+			OR = {
+				statesman = 1
+				diplomat = 1
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			custom_tooltip = MLC_bendahara_events
+			set_country_flag = MLC_bendahara_events
+			country_event = { id = ME_Malacca_Events.6 }
+		}
+	}
+
+	MLC_temenggung = {
+		icon = mission_conquer_rajputana
+		required_missions = { MLC_malaccan_bendahara }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				OR = {
+					num_of_estate_agendas_completed = {
+						estate = estate_nobles
+						value = 4
+					}
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 90
 					}
 				}
-				every_owned_province = {
+			}
+			else = {
+				ME_has_completed_all_reforms = yes
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
 					limit = {
-						culture = filipino
+						num_of_estate_privileges = {
+							estate = estate_nobles
+							value = 1
+						}
 					}
+					if = {
+						limit = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 2
+							}
+						}
+						if = {
+							limit = {
+								num_of_estate_privileges = {
+									estate = estate_nobles
+									value = 3
+								}
+							}
+							if = {
+								limit = {
+									num_of_estate_privileges = {
+										estate = estate_nobles
+										value = 4
+									}
+								}
+								add_mil_power = 25
+							}
+							add_mil_power = 25
+						}
+						add_mil_power = 25
+					}
+					add_mil_power = 25
+				}
+			}
+			custom_tooltip = POL_25_mil_power_per_privilege
+			custom_tooltip = MLC_temenggung_triggered
+			set_country_flag = MLC_temenggung
+		}
+	}
+
+	MLC_entrepot = {
+		icon = me_mission_malacca
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 596
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { development = 18 }
+				AND = {
+					has_dlc = "Dharma"
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+			}
+		}
+		trigger = {
+			owns = 596
+			596 = {
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					province_has_center_of_trade_of_level = 2
+				}
+				has_trade_building_trigger = yes
+				development = 18
+			}
+		}
+		effect = {
+			596 = {
+				add_province_modifier = {
+					name = MLC_entrepot
+					duration = -1
+				}
+			}
+		}
+	}
+
+	MLC_restore_singapura = {
+		icon = mission_subdue_rajputana
+		required_missions = { MLC_entrepot }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 4815
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 18 }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { higher_development_than = 628 }
+			}
+		}
+		trigger = {
+			4815 = {
+				owned_by = ROOT
+				if = {
+					limit = {
+						ROOT = { ai = yes }
+					}
+					development = 10
+				}
+				else = {
+					development = 18
+					has_trade_building_trigger = yes
+					higher_development_than = 628
+				}
+			}
+		}
+		effect = {
+			4815 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			country_event = { id = ME_Malacca_Events.4 }
+		}
+	}
+
+	MLC_golden_peninsula = {
+		icon = mission_restore_pagodas
+		required_missions = { MLC_restore_singapura MLC_orang_laut }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = malacca_area
+				area = malaya_area
+				area = north_malaya_area
+				area = johor_area
+			}
+		}
+		trigger = {
+			malacca_area = {
+				type = all
+				owned_by = ROOT
+			}
+			malaya_area = {
+				type = all
+				owned_by = ROOT
+			}
+			north_malaya_area = {
+				type = all
+				owned_by = ROOT
+			}
+			johor_area = {
+				type = all
+				owned_by = ROOT
+			}
+			development_in_provinces = {
+				OR = {
+					area = malacca_area
+					area = malaya_area
+					area = north_malaya_area
+					area = johor_area
+				}
+				value = 150
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			custom_tooltip = MLC_highlighted_area
+			tooltip = {
+				add_province_modifier = {
+					name = MLC_golden_peninsula_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				malaya_area = {
 					add_province_modifier = {
-						name = malacca_filipino_doctrine_province_modifier
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				johor_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				north_malaya_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
+						duration = -1
+					}
+				}
+				malacca_area = {
+					add_province_modifier = {
+						name = MLC_golden_peninsula_modifier
 						duration = -1
 					}
 				}
 			}
-			taiwan_area = {
+		}
+	}
+
+	MLC_tin = {
+		icon = dominant_economy
+		required_missions = { MLC_welcoming_traders }
+		position = 7
+		trigger = {
+			master_of_mint = 1
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					is_expanded_mod_active = { mod = trade_goods }
 				}
-				add_permanent_claim = ROOT
+				any_owned_province = {
+					trade_goods = tin
+					has_production_building_trigger = yes
+				}
+			}
+			else = {
+				any_owned_province = {
+					trade_goods = copper
+					has_production_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_tin_ingots
+				duration = 9125
+			}
+			custom_tooltip = MLC_if_we_have_level_2_mom
+			hidden_effect = {
+				if = {
+					limit = { master_of_mint = 2 }
+					add_inflation = -2
+				}
 			}
 		}
 	}
