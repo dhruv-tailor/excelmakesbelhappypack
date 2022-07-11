@@ -1,4 +1,4 @@
-ME_austria_missions_1 = {
+ME_hab_slot_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -15,197 +15,584 @@ ME_austria_missions_1 = {
 		}
 	}
 	has_country_shield = yes
-	
-	austria_build_imperial_army = {
-		icon = mission_assemble_an_army
-		position = 1
-		required_missions = { }
+
+	ME_hab_enemies_of_the_empire = {
+		icon = shift_the_balance
+		position = 2
+		required_missions = { ME_hab_aeiou }
 		trigger = {
-			army_size_percentage = 0.9
+			all_rival_country = {
+				NOT = { army_size = ROOT }
+			}
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				is_emperor = yes
+				custom_trigger_tooltip = {
+					tooltip = me_hab_no_one_to_threaten_us_trigger_tooltip
+					NOT = {
+						any_country = {
+							NOT = { tag = root }
+							NOT = { is_subject_of = ROOT }
+							is_part_of_hre = yes
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 14
+								continent = europe
+							}
+						}
+					}
+				}
+				calc_true_if = {
+					desc = emp_hab_no_one_to_threaten_us_trigger2_tooltip
+					amount = 10
+					all_country = {
+						has_reform = free_city
+					}
+				}
+			}
+			else = {
+				army_size = 50
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_the_imperial_army"
-				duration = 7300
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
+			if = {
+				limit = {
+					is_emperor = yes
+				}
+				add_imperial_influence = 5
+			}
+			add_dip_power = 50
+			add_mil_power = 50
+			add_adm_power = 50
+		}
+	}
+
+	ME_hab_steps_of_reform = {
+		icon = the_imperial_border
+		position = 3
+		required_missions = { ME_hab_enemies_of_the_empire }
+		provinces_to_highlight = {
+			OR = {
+				region = north_german_region
+				region = south_german_region
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { hre_size = 1 }
+		}
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				if = {
+					limit = {
+						has_dlc = "Emperor"
+					}
+					hre_reform_passed = emperor_reichsregiment
+				}
+				else = {
+					hre_reform_passed = reichsregiment
+				}
+				calc_true_if = {
+					all_elector = {
+						preferred_emperor = ROOT
+					}
+					amount = 6
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 30
+					OR = {
+						region = north_german_region
+						region = south_german_region
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_imperial_influence = 10
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							NOT = { tag = ROOT }
+							capital_scope = {
+								is_part_of_hre = yes
+							}
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = me_hab_successful_reform
+						}
+					}
+				}
+				custom_tooltip = me_hab_every_hre_memeber
+			}
+			else = {
+				add_yearly_manpower = 2
 			}
 		}
 	}
-	austria_conquer_romania = {
-		icon = mission_conquer_5_states
+
+	ME_hab_a_realm_reborn = {
+		icon = lead_the_empire
 		position = 5
-		required_missions = { austria_reconquest_of_hungary }
+		required_missions = { ME_hab_steps_of_reform ME_hab_redraw_imperial_borders }
 		provinces_to_highlight = {
 			OR = {
-				area = wallachia_area
-				area = moldavia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			wallachia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			moldavia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			bulgaria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				province_id = 50
+				province_id = 57
+				province_id = 65
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 75 }
+						NOT = { owns_core_province = 41 }
+					}
+					OR = {
+						province_id = 75
+						province_id = 41
+					}
 				}
-				add_permanent_claim = ROOT
-			}
-			silistria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 1868 }
+						NOT = { owns_core_province = 70 }
+					}
+					OR = {
+						province_id = 1868
+						province_id = 70
+					}
 				}
-				add_permanent_claim = ROOT
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 1876 }
+						NOT = { owns_core_province = 67 }
+					}
+					OR = {
+						province_id = 1876
+						province_id = 67
+					}
+				}
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 1762 }
+						NOT = { owns_core_province = 85 }
+					}
+					OR = {
+						province_id = 1762
+						province_id = 85
+					}
+				}
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 41 }
+						NOT = { owns_core_province = 75 }
+					}
+					OR = {
+						province_id = 41
+						province_id = 75
+					}
+				}
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 44 }
+						NOT = { owns_core_province = 45 }
+					}
+					OR = {
+						province_id = 44
+						province_id = 45
+					}
+				}
+				AND = {
+					ROOT = {
+						NOT = { owns_core_province = 61 }
+						NOT = { owns_core_province = 63 }
+					}
+					OR = {
+						province_id = 61
+						province_id = 63
+					}
+				}
+				AND = {
+					OR = {
+						region = north_german_region
+						region = south_german_region
+					}
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								is_core = ROOT
+								OR = {
+									region = north_german_region
+									region = south_german_region
+								}
+								value = 50
+							}
+						}
+					}
+				}
 			}
-		}
-	}
-	
-	austria_conquer_bulgaria = {
-		icon = mission_assemble_an_army
-		position = 6
-		required_missions = { austria_conquer_romania }
-		provinces_to_highlight = {
 			OR = {
-				area = bulgaria_area
-				area = silistria_area
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			bulgaria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			silistria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			thrace_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					hre_size = 1
 				}
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						has_dlc = "Emperor"
+					}
+					OR = {
+						hre_reform_passed =	emperor_reichskrieg
+						hre_reform_passed =	emperor_privilegia_de_non_appelando
+					}
+				}
+				else = {
+					hre_reform_passed = privilegia_de_non_appelando
+				}
 			}
-		}
-	}
-	
-	austria_scourge_of_europe = {
-		icon = mission_non-western_soldiers
-		position = 8
-		required_missions = {
-			austria_conquer_bulgaria
-			austria_conquer_greece
-		}
-		provinces_to_highlight = {
-			region = balkan_region
-			country_or_non_sovereign_subject_holds = TUR
-		}
-		trigger = {
-			balkan_region = {
-				type = all
-				NOT = { country_or_non_sovereign_subject_holds = TUR }
+			else = {
+				owns_core_province = 50	# Berlin
+				owns_core_province = 57	# Brunswick
+				owns_core_province = 65	# München
+				OR = {
+					owns_core_province = 1868 # Augsburg
+					owns_core_province = 70 # Wurttemberg
+				}
+				OR = {
+					owns_core_province = 67	# Nürnberg
+					owns_core_province = 1876 # Frankfurt
+				}
+				OR = {
+					owns_core_province = 1762 # Niederhessen
+					owns_core_province = 85	# Köln
+				}
+				OR = {
+					owns_core_province = 41	# Königsberg
+					owns_core_province = 75	# Strassburg
+				}
+				OR = {
+					owns_core_province = 44	# Hamburg
+					owns_core_province = 45	# Lubeck
+				}
+				OR = {
+					owns_core_province = 61	# Dresden
+					owns_core_province = 63	# Thüringen
+				}
+				num_of_owned_provinces_with = {
+					is_core = ROOT
+					OR = {
+						region = north_german_region
+						region = south_german_region
+					}
+					value = 50
+				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_victory_against_ottomans"
-				duration = 7300
+			if = {
+				limit = {
+					hre_reform_passed = emperor_reichskrieg
+				}
+				add_country_modifier = {
+					name = me_hab_imperial_war_leader
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { hre_size = 1 }
+				}
+				set_country_flag = me_hab_easier_german_formation
+				custom_tooltip = me_hab_easier_german_formation
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+					add_base_manpower = 2
+					add_base_production = 2
+					add_base_tax = 2
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+					add_base_manpower = 2
+					add_base_production = 2
+					add_base_tax = 2
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+					add_base_manpower = 2
+					add_base_production = 2
+					add_base_tax = 2
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+					add_base_manpower = 2
+					add_base_production = 2
+					add_base_tax = 2
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+					add_base_manpower = 2
+					add_base_production = 2
+					add_base_tax = 2
+				}
+				add_power_projection = {
+					type = mission_rewards_power_projection
+					amount = 25
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_the_empire_stands_triumphant
+					duration = -1
+				}
 			}
 		}
 	}
-	
-	austria_control_venice = {
-		icon = mission_invade_island
-		position = 10
-		required_missions = { }
+
+	ME_hab_management_of_the_estates = {
+		icon = appease_the_estates
+		position = 9
+		required_missions = { ME_hab_unite_the_realm }
 		trigger = {
-			112 = {
-				has_most_province_trade_power = ROOT
+			if = {
+				limit = {
+					OR = {
+						has_estate = estate_church
+						has_estate = estate_burghers
+						has_estate = estate_nobles
+					}
+				}
+				OR = {
+					num_of_estate_agendas_completed = {
+						value = 10
+						estate = estate_church
+					}
+					num_of_estate_agendas_completed = {
+						value = 10
+						estate = estate_burghers
+					}
+					num_of_estate_agendas_completed = {
+						value = 10
+						estate = estate_nobles
+					}
+				}
+				crown_land_share = 40
+				estate_loyalty = {
+					estate = all
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_adm = 8
+				monthly_dip = 8
+				monthly_mil = 8
+				legitimacy_equivalent = 100
+				all_owned_province = {
+					NOT = { unrest = 1 }
+				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_east_adriatic_control"
-				duration = 5475
+			if = {
+				limit = {
+					OR = {
+						has_estate = estate_church
+						has_estate = estate_burghers
+						has_estate = estate_nobles
+					}
+				}
+				country_event = { id = ME_Austria_Events.16 }
+			}
+			else = {
+				add_years_of_income = 2
 			}
 		}
 	}
-	
-	austria_control_ragusa = {
-		icon = mission_galleys_in_port
+
+	ME_hab_our_westward_enemy = {
+		icon = mission_the_french_menace
 		position = 11
-		required_missions = { austria_control_venice }
+		required_missions = { ME_hab_burgundian_inheritance }
+		provinces_to_highlight = {
+			province_id = 183
+			NOT = { owned_by = ROOT }
+			NOT = { exists = FRA }
+		}
 		trigger = {
-			137 = {
-				has_most_province_trade_power = ROOT
+			if = {
+				limit = {
+					exists = FRA
+				}
+				war_score_against = {
+					who = FRA
+					value = 50
+				}
+			}
+			else = {
+				183 = {
+					owned_by = ROOT
+				}
 			}
 		}
 		effect = {
-			151 = {				# Constantinople
-				add_trade_modifier = {
-					who = ROOT
-					duration = 7300
-					power = 20
-					key = austria_control_of_ragusa
+			ME_give_claims = { region = france_region }
+		}
+	}
+
+	ME_hab_balkanize_france = {
+		icon = centralize_france
+		position = 12
+		required_missions = { ME_hab_our_westward_enemy }
+		provinces_to_highlight = {
+			region = france_region
+			NOT = { is_part_of_hre = yes }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 30
+						region = france_region
+					}
+				}
+				NOT = {
+					calc_true_if = {
+						france_region = {
+							type = all
+							is_part_of_hre = yes
+						}
+						amount = 30
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 30
+					region = france_region
+				}
+				calc_true_if = {
+					france_region = {
+						type = all
+						is_part_of_hre = yes
+					}
+					amount = 30
+				}
+			}
+		}
+		effect = {
+			#will show the other modifiers, add custom tooltip like in the hungary mission here
+			if = {
+				limit = {
+					is_emperor = yes
+					calc_true_if = {
+						france_region = {
+							type = all
+							is_part_of_hre = yes
+						}
+						amount = 30
+					}
+				}
+				add_imperial_influence = 30
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_westwards_expansion
+					duration = 10950
 				}
 			}
 		}
 	}
-	
-	austria_control_constantinople = {
-		icon = mission_sea_battles
-		position = 12
-		required_missions = { austria_control_ragusa }
+
+	ME_hab_secure_lubeck = {
+		icon = unite_the_league
+		position = 17
+		required_missions = { ME_hab_talks_with_the_hansa }
+		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_trade_building_trigger = yes }
+					NOT = { province_trade_power = 40 }
+					NOT = {
+						trade_share = {
+							country = ROOT
+							share = 40
+						}
+					}
+				}
+			}
+		}
 		trigger = {
-			151 = {
-				has_most_province_trade_power = ROOT
+			45 = {
+				owned_by = ROOT
+				OR = {
+					has_trade_building_trigger = yes
+					province_trade_power = 40
+					trade_share = {
+						country = ROOT
+						share = 40
+					}
+				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "austria_control_of_silk_road"
-				duration = 7300
+				name = me_hab_control_of_the_hansa
+				duration = 9125
 			}
-		}
-	}
-	
-	austria_global_trade = {
-		icon = mission_dominate_home_trade_node
-		position = 13
-		required_missions = {
-			austria_control_constantinople
-			austria_build_manufactories
-			austria_colonial_empire
-		}
-		trigger = {
-			home_trade_node = {
-				highest_value_trade_node = yes
-				trade_share = {
-					country = ROOT
-					share = 75
-				}
+			45 = {
+				add_or_upgrade_trade_building = yes
 			}
-		}
-		effect = {
-			add_years_of_income = 1
-			add_prestige_or_monarch_power = { amount = 50 }
 		}
 	}
 }
 
-ME_austria_missions_2 = {
+ME_hab_slot_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -222,410 +609,765 @@ ME_austria_missions_2 = {
 		}
 	}
 	has_country_shield = yes
-	
-	austria_decline_of_hungary = {
-		icon = me_mission_hungary_flag
-		position = 2
-		required_missions = { austria_control_electors }
+
+	ME_hab_the_imperial_edges = {
+		icon = claim_the_borderlands
+		position = 3
+		required_missions = { ME_hab_enemies_of_the_empire ME_hab_secure_elector_votes }
 		trigger = {
-			OR = {
-				AND = {
-					is_emperor = yes
-					marriage_with = HUN
+			if = {
+				limit = {
+					hre_size = 1
 				}
-				overlord_of = HUN
-				NOT = { exists = HUN }
+				is_emperor = yes
+				custom_trigger_tooltip = {
+					tooltip = no_hre_province_owned_by_non_hre_member_or_overlord_trigger
+					NOT = { num_of_foreign_hre_provinces = 1 }
+				}
 			}
-			OR = {
-				AND = {
-					total_development = HUN
-					total_development = 200
-				}
-				AND = {
-					TUR = {
-						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-							value = 5
-							OR = {
-								area = transylvania_area
-								area = southern_transylvania_area
-								area = alfold_area
-							}
-							is_city = yes
-						}
+			else = {
+				north_german_region = {
+					type = all
+					owner = {
+						culture_group = ROOT
 					}
-					total_development = HUN
+				}
+				south_german_region = {
+					type = all
+					owner = {
+						culture_group = ROOT
+					}
 				}
 			}
 		}
 		effect = {
 			if = {
 				limit = {
-					exists = HUN
-					is_subject = no
-					HUN = {
-						is_subject = no
+					hre_size = 1
+				}
+				hidden_effect = {
+					every_province = {
+						limit = {
+							is_part_of_hre = yes
+						}
+						set_province_flag = me_hab_part_of_hre
 					}
 				}
-				add_casus_belli = {
-					type = cb_restore_personal_union
-					months = 300
-					target = HUN
+				add_country_modifier = {
+					name = me_hab_empire_secured
+					duration = 3650
 				}
 			}
 			else = {
-				slovakia_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				transdanubia_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				alfold_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+				change_mil = 2
+				add_mil_power = 100
 			}
 		}
 	}
-	
-	austria_union_hungary = {
-		icon = mission_have_two_subjects
-		position = 3
-		required_missions = { austria_decline_of_hungary }
-		provinces_to_highlight = {
-			ROOT = {
-				NOT = { senior_union_with = HUN }
-			}
-			OR = {
-				area = slovakia_area
-				area = transdanubia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				senior_union_with = HUN
-				AND = {
-					slovakia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					transdanubia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_habsburg_triumph"
-				duration = 7300
-			}
-			transylvania_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			southern_transylvania_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			croatia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			east_adriatic_coast_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			slavonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	austria_reconquest_of_hungary = {
-		icon = mission_cannons_firing
+
+	ME_hab_redraw_imperial_borders = {
+		icon = avoid_fragmentation
 		position = 4
-		required_missions = { austria_union_hungary }
+		required_missions = { ME_hab_the_imperial_edges }
 		provinces_to_highlight = {
 			OR = {
-				area = transylvania_area
-				area = southern_transylvania_area
-				area = croatia_area
-				area = east_adriatic_coast_area
-				area = alfold_area
-				area = transdanubia_area
-				area = slovakia_area
-				area = slavonia_area
+				AND = {
+					hre_size = 1
+					is_part_of_hre = no
+					NOT = { has_province_flag = me_hab_part_of_hre }
+					ROOT = {
+						NOT = {
+							calc_true_if = {
+								all_province = {
+									is_part_of_hre = yes
+									NOT = {
+										has_province_flag = me_hab_part_of_hre
+									}
+								}
+								amount = 20
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { hre_size = 1 }
+					NOT = { region = north_german_region }
+					NOT = { region = south_german_region }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 20
+								NOT = { region = north_german_region }
+								NOT = { region = south_german_region }
+							}
+						}
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			transylvania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				custom_trigger_tooltip = {
+					tooltip = ME_HAB_EXPAND_EMPIRE
+					calc_true_if = {
+						all_province = {
+							is_part_of_hre = yes
+							NOT = {
+								has_province_flag = me_hab_part_of_hre
+							}
+						}
+						amount = 20
+					}
+				}
 			}
-			southern_transylvania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			croatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			east_adriatic_coast_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			slavonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			alfold_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			transdanubia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			slovakia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			else = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 20
+					NOT = { region = north_german_region }
+					NOT = { region = south_german_region }
+				}
 			}
 		}
 		effect = {
-			bosnia_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					hre_size = 1
 				}
-				add_permanent_claim = ROOT
+				hidden_effect = {
+					every_province = {
+						limit = {
+							is_part_of_hre = yes
+							NOT = {
+								has_province_flag = me_hab_part_of_hre
+							}
+						}
+						add_province_modifier = {
+							name = me_hab_bestow_imperial_privileges
+							duration = 9125
+						}
+					}
+				}
+				custom_tooltip = me_hab_every_province_that_was_added_in_hre
+				tooltip = {
+					add_province_modifier = {
+						name = me_hab_bestow_imperial_privileges
+						duration = 9125
+					}
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_imperial_influence = 10
+				}
 			}
-			wallachia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			else = {
+				add_country_modifier = {
+					name = me_hab_austrian_imperialism
+					duration = 7300
 				}
-				add_permanent_claim = ROOT
-			}
-			moldavia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			red_ruthenia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	austria_conquer_bosnia = {
-		icon = mission_build_up_to_force_limit
-		position = 5
-		required_missions = { austria_reconquest_of_hungary }
-		provinces_to_highlight = {
-			area = bosnia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			bosnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_bulwark_against_islam"
-				duration = 9125
-			}
-		}
-	}
-	
-	austria_conquer_serbia = {
-		icon = mission_cannons_firing
+
+	ME_hab_barbarossas_legacy = {
+		icon = holy_state
 		position = 6
-		required_missions = { austria_conquer_bosnia }
+		required_missions = { ME_hab_redraw_imperial_borders }
 		provinces_to_highlight = {
 			OR = {
-				area = serbia_area
-				area = rascia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			serbia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			rascia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			albania_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
+				AND = {
+					hre_size = 1
+					continent = europe
+					is_part_of_hre = no
+					ROOT = {
+						NOT = {
+							calc_true_if = {
+								europe = {
+									type = all
+									is_part_of_hre = yes
+								}
+								amount = 200
+							}
+						}
+					}
 				}
-				add_permanent_claim = ROOT
-			}
-			macedonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
+				AND = {
+					NOT = { hre_size = 1 }
+					OR = {
+						region = north_german_region
+						region = south_german_region
+					}
+					NOT = { owned_by = ROOT }
 				}
-				add_permanent_claim = ROOT
 			}
-		}
-	}
-	
-	austria_conquer_greece = {
-		icon = mission_invade_island
-		position = 7
-		required_missions = { austria_conquer_serbia }
-		provinces_to_highlight = {
-			OR = {
-				area = albania_area
-				area = macedonia_area
-				area = northern_greece_area
-				area = morea_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			albania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			macedonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			northern_greece_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			morea_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			aegean_archipelago_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
+					hre_size = 1
 				}
-				add_permanent_claim = ROOT
+				calc_true_if = {
+					europe = {
+						type = all
+						is_part_of_hre = yes
+					}
+					amount = 250
+				}
 			}
-		}
-	}
-	
-	ausria_conquer_balkans = {
-		icon = mission_unite_home_region
-		position = 9
-		required_missions = {
-			austria_scourge_of_europe
-			austria_conquer_greece
-		}
-		provinces_to_highlight = {
-			region = balkan_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			balkan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			else = {
+				north_german_region = {
+					type = all
+					owned_by = ROOT
+				}
+				south_german_region = {
+					type = all
+					owned_by = ROOT
+				}
 			}
 		}
 		effect = {
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
-		}
-	}
-	
-	austria_build_buildings = {
-		icon = mission_early_game_buildings
-		position = 10
-		required_missions = { }
-		trigger = {
-			OR = {
-				temple = 5
-				cathedral = 5
+			if = {
+				limit = {
+					ADM = 6
+				}
+				add_adm_power = 100
 			}
-			OR = {
-				workshop = 5
-				counting_house = 5
+			else = {
+				change_adm = 1
 			}
-		}
-		effect = {
+			if = {
+				limit = {
+					DIP = 6
+				}
+				add_dip_power = 100
+			}
+			else = {
+				change_dip = 1
+			}
+			if = {
+				limit = {
+					MIL = 6
+				}
+				add_mil_power = 100
+			}
+			else = {
+				change_mil = 1
+			}
 			add_country_modifier = {
-				name = "austria_improved_economy"
+				name = me_hab_a_new_iron_emperor
 				duration = 9125
 			}
 		}
 	}
-	
-	austria_build_treasury = {
-		icon = mission_war_chest
-		position = 11
-		required_missions = {
-			austria_build_buildings
-			austria_control_venice
-		}
+
+	ME_hab_a_magnificent_court = {
+		icon = immaculate_government
+		position = 7
+		required_missions = {  }
 		trigger = {
-			treasury = 2000
+			prestige = 20
+			has_mil_advisor = yes
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			total_development = 180
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_control_economy"
-				duration = 7300
+			custom_tooltip = ME_HAB_UNLOCK_HABSBURG_GLORY
+			set_country_flag = habsburg_glory_unlocked
+			HAB_change_habsburg_glory = { amount = 10 }
+			country_event = { id = ME_Austria_Events.36 }
+			ME_give_claims = { id = 4751 }
+			ME_give_claims = { id = 110 }
+		}
+	}
+
+	ME_hab_unite_the_realm = {
+		icon = adjust_the_general_means
+		position = 8
+		required_missions = { ME_hab_a_magnificent_court }
+		provinces_to_highlight = {
+			OR = {
+				area = tirol_area
+				area = inner_austria_area
+				area = austria_proper_area
+			}
+			OR = {
+				is_core = TIR
+				is_core = STY
+			}
+		}
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = me_hab_less_than_4_province_have_core_of_styria_and_tirol
+					NOT = {
+						num_of_owned_provinces_with = {
+							OR = {
+								is_core = TIR
+								is_core = STY
+							}
+							value = 4
+						}	
+					}
+				}
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 3 }
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							area = tirol_area
+							area = inner_austria_area
+							area = austria_proper_area
+							area = carinthia_area
+						}
+					}
+					add_province_modifier = {
+						name = me_hab_one_crown_one_ruler
+						duration = 7300
+					}
+				}
+			}
+			custom_tooltip = me_hab_every_province_in_austria_owned_by_us
+			tooltip = {
+				add_province_modifier = {
+					name = me_hab_one_crown_one_ruler
+					duration = 7300
+				}
 			}
 		}
 	}
-	
-	austria_build_manufactories = {
-		icon = mission_have_manufactories
-		position = 12
-		required_missions = { austria_build_treasury }
+
+	ME_hab_settling_a_score = {
+		icon = answer_the_roman_question
+		position = 9
+		required_missions = { ME_hab_unite_the_realm }
+		provinces_to_highlight = {
+			province_id = 118
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				OR = {
+					AND = {
+						is_papal_controller = no
+						NOT = { invested_papal_influence = 50 }
+					}
+					is_emperor = no
+					PAP = {
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = 200
+							}
+						}
+					}
+					NOT = { alliance_with = PAP }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					OR = {
+						is_papal_controller = yes
+						invested_papal_influence = 50
+					}
+					is_emperor = yes
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 200
+						}
+					}
+					alliance_with = PAP
+				}
+				118 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					118 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				country_event = { id = ME_Austria_Events.19 }
+			}
+			else = {
+				country_event = { id = ME_Austria_Events.18 }
+			}
+		}
+	}
+
+	ME_hab_burgundian_inheritance = {
+		icon = the_crown_of_lothair
+		position = 10
+		required_missions = {  }
+		provinces_to_highlight = {
+			OR = {
+				area = wallonia_area
+				area = brabant_area
+				area = holland_area
+				area = north_brabant_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			owner = {
+				OR = {
+					is_part_of_hre = no
+					is_subject = yes
+				}
+			}
+			ROOT = {
+				NOT = { senior_union_with = BUR }
+			}
+		}
+		trigger = {
+			OR = {
+				senior_union_with = BUR
+				AND = {
+					wallonia_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+					brabant_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+					holland_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+					north_brabant_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					senior_union_with = BUR
+				}
+				add_country_modifier = {
+					name = me_hab_eyes_on_the_west
+					duration = 5475
+				}
+				BUR = {
+					add_country_modifier = {
+						name = me_hab_eyes_on_the_west
+						duration = 5475
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					west_burgundy_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+					bourgogne_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+					flanders_area = {
+						type = all
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								is_part_of_hre = yes
+								is_subject = no
+							}
+						}
+					}
+				}
+				wallonia_area = {
+					add_local_autonomy = -15
+				}
+				brabant_area = {
+					add_local_autonomy = -15
+				}
+				holland_area = {
+					add_local_autonomy = -15
+				}
+				north_brabant_area = {
+					add_local_autonomy = -15
+				}
+				west_burgundy_area = {
+					add_local_autonomy = -15
+				}
+				bourgogne_area = {
+					add_local_autonomy = -15
+				}
+				flanders_area = {
+					add_local_autonomy = -15
+				}
+				add_country_modifier = {
+					name = me_hab_lotharingia_into_the_fold
+					duration = 5475
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_balance_of_power
+					duration = 7300
+				}
+				BUR = {
+					add_country_modifier = {
+						name = me_hab_kingdom_of_lotharingia
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	ME_hab_papal_relations = {
+		icon = support_the_orders
+		position = 15
+		required_missions = { ME_hab_shadowbringer }
+		provinces_to_highlight = {
+			OR = {
+				area = central_italy_area
+				province_id = 119
+				province_id = 2977
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					OR = {
+						AND = {
+							is_emperor = yes
+							PAP = {
+								has_opinion = {
+									who = ROOT
+									value = 200
+								}
+							}
+						}
+						AND = {
+							is_emperor = yes
+							PAP = {
+								capital_scope = {
+									is_part_of_hre = yes
+								}
+							}
+							papal_influence = 50
+						}
+						AND = {
+							num_of_owned_provinces_with = {
+								value = 4
+								OR = {
+									area = central_italy_area
+									province_id = 119
+									province_id = 2977
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					is_emperor = yes
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 200
+						}
+					}
+				}
+				AND = {
+					is_emperor = yes
+					PAP = {
+						capital_scope = {
+							is_part_of_hre = yes
+						}
+					}
+					papal_influence = 50
+				}
+				AND = {
+					num_of_owned_provinces_with = {
+						value = 4
+						OR = {
+							area = central_italy_area
+							province_id = 119
+							province_id = 2977
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_emperor = yes
+					PAP = {
+						capital_scope = {
+							is_part_of_hre = yes
+						}
+					}
+					papal_influence = 50
+				}
+				add_country_modifier = {
+					name = me_hab_papal_authority
+					duration = 5475
+				}
+			}
+			else_if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 4
+						OR = {
+							area = central_italy_area
+							province_id = 119
+							province_id = 2977
+						}
+					}
+				}
+				central_italy_area = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = me_hab_under_new_management
+						duration = 5475
+					}
+				}
+				119 = {
+					if = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = me_hab_under_new_management
+							duration = 5475
+						}
+					}
+				}
+				2977 = {
+					if = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = me_hab_under_new_management
+							duration = 5475
+						}
+					}
+				}
+			}
+			else = {
+				PAP = {
+					country_event = { id = ME_Austria_Events.23 }
+				}
+			}
+		}
+	}
+
+	ME_hab_talks_with_the_hansa = {
+		icon = return_visby_to_the_league
+		position = 16
+		required_missions = {  }
+		provinces_to_highlight = {
+			province_id = 45
+			NOT = { owned_by = ROOT }
+			owner = {
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				45 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+				45 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						45 = {
+							owned_by = ROOT
+						}
+					}
+				}
+				add_years_of_income = 0.5
+				ME_give_claims = { id = 45 }
+			}
+			else = {
+				45 = {
+					add_province_modifier = {
+						name = me_hab_the_seat_of_trade
+						duration = 18250
+					}
+				}
+			}
+		}
+	}
+
+	ME_hab_early_industralization = {
+		icon = explore_caribbean
+		position = 18
+		required_missions = { ME_hab_secure_lubeck ME_hab_expand_bohemian_cities }
 		trigger = {
 			calc_true_if = {
+				desc = build_manufactories_mission_tooltip
 				all_owned_province = {
 					OR = {
 						has_building = mills
@@ -635,59 +1377,63 @@ ME_austria_missions_2 = {
 						has_building = textile
 						has_building = weapons
 						has_building = wharf
+						has_building = furnace
 					}
 				}
 				amount = 20
 			}
+			calc_true_if = {
+				all_owned_province = {
+					base_production = 10
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 10
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_proto_industrialization"
-				duration = 7300	
+			add_years_of_income = 2
+			custom_tooltip = ME_hab_early_industralization_tt
+			tooltip = {
+				add_province_modifier = {
+					name = me_hab_a_push_to_industralisation
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						base_production = 10
+						OR = {
+							has_building = mills
+							has_building = farm_estate
+							has_building = tradecompany
+							has_building = plantations
+							has_building = textile
+							has_building = weapons
+							has_building = wharf
+							has_building = furnace
+						}
+					}
+					add_province_modifier = {
+						name = me_hab_a_push_to_industralisation
+						duration = 7300
+					}
+				}
 			}
 		}
 	}
 }
 
-ME_austria_missions_2_RB = {
-	slot = 2
-	generic = no
-	ai = yes
-	potential_on_load = {
-		has_dlc = "Rule Britannia"
-	}
-	potential = {
-		OR = {
-			AND = {
-				tag = HAB
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-			AND = {
-				tag = AUB
-				primary_culture = austrian
-			}
-		}
-		has_dlc = "Rule Britannia"
-	}
-	has_country_shield = yes
-	
-	austria_build_furnaces = {
-		icon = me_mission_manufactory_furnace
-		position = 13
-		required_missions = { austria_build_manufactories }
-		trigger = {
-			furnace = 10
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_industrialization"
-				duration = 7300
-			}
-		}
-	}
-}
-
-ME_austria_missions_3 = {
+ME_hab_slot_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -704,329 +1450,110 @@ ME_austria_missions_3 = {
 		}
 	}
 	has_country_shield = yes
-	
-	austria_control_electors = {
-		icon = mission_have_two_subjects
+
+	ME_hab_aeiou = {
+		icon = a.e.i.o.u.
 		position = 1
 		required_missions = { }
 		trigger = {
-			is_emperor = yes
-			custom_trigger_tooltip = {
-				tooltip = secure_the_imperial_crown.tooltip
+			army_size = 25
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_imperial_influence_modifier
+				duration = 7300
+			}
+			every_elector = {
+				add_opinion = {
+					who = ROOT
+					modifier = me_hab_rising_imperial_influence
+				}
+			}
+		}
+	}
+
+	ME_hab_secure_elector_votes = {
+		icon = catholic_confraternity
+		position = 2
+		required_missions = { ME_hab_aeiou }
+		trigger = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
 				calc_true_if = {
 					all_elector = {
 						preferred_emperor = ROOT
-						has_opinion = { who = ROOT value = 100 }
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
 					}
-					amount = 3
+					amount = 5
 				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_controlling_electors"
-				duration = 7300
-			}
-			76 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	austria_conquer_venetia = {
-		icon = mission_galleys_in_port
-		position = 3
-		required_missions = { austria_control_electors }
-		provinces_to_highlight = {
-			OR = {
-				province_id = 108
-				province_id = 111
-				province_id = 1774
-				province_id = 4729
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			108 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			111 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1774 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4729 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			112 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			lombardy_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = "austria_expansion_of_ship_building_industries"
-				duration = 7300
-			}
-		}
-	}
-	
-	austria_conquer_venice = {
-		icon = mission_invade_island
-		position = 4
-		required_missions = { austria_conquer_venetia }
-		provinces_to_highlight = {
-			province_id = 112
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			112 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			112 = {				# Venice
-				add_trade_modifier = {
-					who = ROOT
-					duration = 9125
-					power = 25
-					key = austria_take_venice
-				}
-			}
-		}
-	}
-	
-	austria_lombardy_venetia = {
-		icon = mission_alliances
-		position = 7
-		required_missions = { austria_conquer_venice }
-		provinces_to_highlight = {
-			OR = {
-				area = venetia_area
-				area = lombardy_area
-				area = po_valley_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			venetia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lombardy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			po_valley_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_italian_ambition_modifier"
-				duration = 7300
-			}
-		}
-	}
-	
-	
-	austria_control_the_empire = {
-		icon = mission_have_two_subjects
-		position = 10
-		required_missions = {
-			austria_lombardy_venetia
-			austria_control_religion
-		}
-		trigger = {
-			is_emperor = yes
-			if = {
-				limit = {
-					has_dlc = "Emperor"
-				}
-				hre_reform_passed = emperor_perpetual_diet 
 			}
 			else = {
-				hre_reform_passed = landfriede 
-			}
-			custom_trigger_tooltip = {
-				tooltip = austria_control_the_empire.tooltip
-				all_province = {
-					OR = {
-						is_part_of_hre = no
-						owner = { is_part_of_hre = yes }
-					}
-				}
+
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "austria_control_of_empire"
+				name = me_hab_successful_bid_for_the_imperial_crown
 				duration = 5475
 			}
-		}
-	}
-	
-	austria_develop_capital = {
-		icon = mission_conquer_50_development
-		position = 11
-		required_missions = { austria_build_buildings }
-		provinces_to_highlight = {
-			is_capital_of = ROOT
-			NOT = { num_of_times_improved = 5 }
-		}
-		trigger = {
-			capital_scope = {
-				num_of_times_improved = 5
-			}
-		}
-		effect = {
-			add_adm_power = 50
-			capital_scope = {
-				area = {
-					limit = { owned_by = ROOT }
-					add_province_modifier = {
-						name = "growth_of_capital"
-						duration = 9125 #25 years
-					}
-				}
-			}
-		}
-	}
-	
-	austria_build_universities = {
-		icon = me_mission_generic_old_university
-		position = 12
-		required_missions = { austria_develop_capital }
-		trigger = {
-			university = 5
-		}
-		effect = {
-			if = {
-				limit = {
-					has_dlc = "Rule Britannia"
-				}
-				change_innovativeness = 5
-			}
-			else = {
-				add_adm_power = 25
-				add_dip_power = 25
-				add_mil_power = 25
-			}
-		}
-	}
-}
-
-ME_austria_missions_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			AND = {
-				tag = HAB
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-			AND = {
-				tag = AUB
-				primary_culture = austrian
-			}
-		}
-	}
-	has_country_shield = yes
-	
-	austria_secure_bohemia = {
-		icon = me_mission_bohemia_flag
-		position = 2
-		required_missions = { austria_control_electors }
-		trigger = {
-			OR = {
-				AND = {
-					is_emperor = yes
-					BOH = {
-						preferred_emperor = ROOT
-						has_opinion = { who = ROOT value = 100 }
-					}
-					marriage_with = BOH
-				}
-				overlord_of = BOH
-				NOT = { exists = BOH }
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = BOH
-					is_subject = no
-					BOH = {
-						is_subject = no
-					}
-				}
+			custom_tooltip = HAB_if_completed_by_valid_personal_union_boh
+			tooltip = {
 				add_casus_belli = {
 					type = cb_restore_personal_union
 					months = 300
 					target = BOH
 				}
+				custom_tooltip = ME_cb_25
 			}
-			else = {
-				bohemia_area = {
+			custom_tooltip = HAB_if_completed_by_valid_personal_union_boh_not
+			tooltip = {
+				ME_give_claims = { area = bohemia_area }
+				ME_give_claims = { area = erzgebirge_area }
+				ME_give_claims = { area = moravia_area }
+			}
+			hidden_effect = {
+				if = {
 					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT }
+						exists = BOH
+						valid_for_personal_unions_trigger = yes
+						BOH = {
+							valid_for_personal_unions_trigger = yes
+						}
 					}
-					add_permanent_claim = ROOT
+					add_casus_belli = {
+						type = cb_restore_personal_union
+						months = 300
+						target = BOH
+					}
 				}
-				erzgebirge_area = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				moravia_area = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+				else = {
+					ME_give_claims = { area = bohemia_area }
+					ME_give_claims = { area = erzgebirge_area }
+					ME_give_claims = { area = moravia_area }
 				}
 			}
 		}
 	}
-	
-	austria_union_bohemia = {
-		icon = mission_have_two_subjects
-		position = 3
-		required_missions = { austria_secure_bohemia }
+
+	ME_hab_secure_bohemia = {
+		icon = reformatio_sigismundi
+		position = 4
+		required_missions = { ME_hab_secure_elector_votes }
 		provinces_to_highlight = {
-			ROOT = { 
-				NOT = { senior_union_with = BOH }
-			}
 			OR = {
 				area = bohemia_area
 				area = erzgebirge_area
 				area = moravia_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = { senior_union_with = BOH }
+			}
 		}
 		trigger = {
 			OR = {
@@ -1048,335 +1575,1578 @@ ME_austria_missions_4 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					senior_union_with = BOH
-				}
-				country_event = { id = ME_Austria_Events.1 }
-			}
 			add_country_modifier = {
-				name = "austria_habsburg_triumph"
+				name = me_hab_kingdom_of_bohemia
+				duration = 5475
+			}
+			
+			country_event = { id = ME_Austria_Events.37 }
+		}
+	}
+
+	ME_hab_the_polish_realm = {
+		icon = polish_diplomacy
+		position = 5
+		required_missions = { ME_hab_secure_bohemia ME_hab_the_castles_of_transylvania }
+		provinces_to_highlight = {
+			
+		}
+		trigger = {
+			#lordv you probably wanna make the mision depend on the event choices in ME_Austria_Events.37
+			
+			#HAB_may_balkanize_poland country flag for balkanization
+			# HAB_chose_to_conquer_poland for the conquest of sandomierz, malopolska and red ruthenia areas
+		}
+		effect = {
+			
+		}
+	}
+
+	ME_hab_the_mainland = {
+		icon = claim_tirol
+		position = 8
+		required_missions = { ME_hab_a_magnificent_court }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4751
+				province_id = 110
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_buildings_in_province = 2 }
+				NOT = { development = 15 }
+			}
+		}
+		trigger = {
+			4751 = {
+				owned_by = ROOT
+				num_of_buildings_in_province = 2
+				development = 15
+			}
+			110 = {
+				owned_by = ROOT
+				num_of_buildings_in_province = 2
+				development = 15
+			}
+		}
+		effect = {
+			4751 = {
+				add_province_modifier = {
+					name = me_hab_integration_to_the_realm
+					duration = 18250
+				}
+				change_culture = ROOT
+			}
+			110 = {
+				add_province_modifier = {
+					name = me_hab_integration_to_the_realm
+					duration = 18250
+				}
+				change_culture = ROOT
+			}
+			add_years_of_income = 1
+		}
+	}
+
+	ME_hab_the_austrian_culture = {
+		icon = invest_in_the_provinces
+		position = 9
+		required_missions = { ME_hab_the_mainland }
+		provinces_to_highlight = {
+			culture = ROOT
+			ROOT = {
+				NOT = {
+					development_in_provinces = {
+						value = 200
+						culture = ROOT
+					}
+				}
+			}
+		}
+		trigger = {
+			development_in_provinces = {
+				value = 200
+				culture = ROOT
+			}
+		}
+		effect = {
+			custom_tooltip = ME_hab_the_austrian_culture_tt
+			tooltip = {
+				add_province_modifier = {
+					name = me_hab_cultural_enthusiasm
+					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						culture = ROOT
+						num_of_times_improved_by_owner = 7
+					}
+					add_province_modifier = {
+						name = me_hab_cultural_enthusiasm
+						duration = 10950
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					culture = ROOT
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			random_owned_province = {
+				limit = {
+					culture = ROOT
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			random_owned_province = {
+				limit = {
+					culture = ROOT
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+		}
+	}
+
+	ME_hab_germanization = {
+		icon = promote_urbanization
+		position = 10
+		required_missions = { ME_hab_the_austrian_culture ME_hab_the_cultures_of_the_realm }
+		trigger = {
+			OR = {
+				current_age = age_of_absolutism
+				has_institution = enlightenment
+			} #is this really necessary? Yes Stiopa, it is. I don't want people to rush the mission. It is meant to be a late game thing
+			num_of_owned_provinces_with = {
+				value = 50
+				has_owner_accepted_culture = yes
+				NOT = { culture_group = ROOT }
+				is_overseas = no
+			}
+			bohemia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			erzgebirge_area = {
+				type = all
+				owned_by = ROOT
+			}
+			moravia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			transdanubia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			alfold_area = {
+				type = all
+				owned_by = ROOT
+			}
+			slovakia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			set_country_flag = me_hab_start_germanization
+			custom_tooltip = me_hab_germanization_tt
+			hidden_effect = {
+				set_variable = {
+					which = germanization
+					value = 0
+				}
+			}
+		}
+	}
+
+	ME_hab_spread_our_dynasty = {
+		icon = glory_to_von_habsburg
+		position = 11
+		required_missions = { ME_hab_burgundian_inheritance ME_hab_the_iberian_peninsula }
+		trigger = {
+			calc_true_if = {
+				all_country = {
+					dynasty = ROOT
+					is_subject = no
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			every_country = {
+				limit = {
+					dynasty = ROOT
+					NOT = { tag = ROOT }
+				}
+				add_country_modifier = {
+					name = me_hab_ties_with_austria
+					duration = 1825
+				}
+			} #TO DO STIOPA: add a tooltip for this
+			add_country_modifier = {
+				name = me_hab_spread_our_dynastic_seeds
 				duration = 7300
 			}
-			silesia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			add_dip_power = 50
+			add_dip_power = 100
 		}
 	}
-	
-	austria_conquer_silesia = {
-		icon = mission_conquer_50_development
-		position = 4
-		required_missions = { austria_union_bohemia }
+
+	ME_hab_a_von_habsburg_europe = {
+		icon = peace_in_europe
+		position = 12
+		required_missions = { ME_hab_our_westward_enemy ME_hab_spread_our_dynasty }
 		provinces_to_highlight = {
-			area = silesia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			continent = europe
+			NOT = {
+				owner = {
+					dynasty = ROOT
+				}
+			}
 		}
 		trigger = {
-			silesia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			malopolska_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			sandomierz_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			red_ruthenia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	austria_conquer_lesser_poland = {
-		icon = mission_cossack_cavalry
-		position = 5
-		required_missions = {
-			austria_conquer_silesia
-			austria_reconquest_of_hungary
-		}
-		provinces_to_highlight = {
-			OR = {
-				area = malopolska_area
-				area = red_ruthenia_area
-				area = sandomierz_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			malopolska_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			red_ruthenia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			sandomierz_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_polish_cossacks"
-				duration = 9125
-			}
-		}
-	}
-	
-	austria_conquer_burgundy = {
-		icon = mission_conquer_50_development
-		position = 6
-		required_missions = { austria_burgundian_inheritance }
-		provinces_to_highlight = {
-			area = bourgogne_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			bourgogne_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			champagne_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			183 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+			calc_true_if = {
+				europe = {
+					type = all
+					owner = {
+						dynasty = ROOT
 					}
-					add_permanent_claim = ROOT
+				}
+				amount = 210
+			}
+		}
+		effect = {
+			disable_annexation_penalty = yes
+			add_country_modifier = {
+				name = me_hab_diplomatic_hegemony
+				duration = -1
+			}
+		}
+	}
+
+	ME_hab_foreign_trade = {
+		icon = purely_for_commerce
+		position = 13
+		required_missions = { ME_hab_the_spanish_throne }
+		trigger = {
+			1147 = {
+				trade_share = {
+					country = ROOT
+					share = 50
 				}
 			}
-			add_accepted_culture = burgundian
-		}
-	}
-	
-	austria_obliterate_france = {
-		icon = mission_assemble_an_army
-		position = 7
-		required_missions = { austria_conquer_burgundy }
-		provinces_to_highlight = {
-			OR = {
-				area = bourgogne_area
-				area = savoy_dauphine_area
-				area = lorraine_area
-				area = picardy_area
-				area = ile_de_france_area
-				area = champagne_area
-				area = romandie_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			bourgogne_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			savoy_dauphine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lorraine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			picardy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			ile_de_france_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			champagne_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			romandie_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "austria_victory_over_france"
-				duration = 9125
+				name = me_hab_extending_our_influence
+				duration = 18250
 			}
 		}
 	}
-	
-	austria_christian_bastion = {
-		icon = mission_european_church
-		position = 8
+
+	ME_hab_shadowbringer = {
+		icon = me_mission_shiny_crown_hre
+		position = 14
 		required_missions = { }
-		trigger = {
-			has_country_modifier = counter_reformation
-			is_defender_of_faith = yes
-			religious_unity = 0.85
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_christian_bastion_modifier"
-				duration = 5475
-			}
-		}
-	}
-	
-	austria_control_religion = {
-		icon = mission_hands_praying
-		position = 9
-		required_missions = { austria_christian_bastion }
-		trigger = {
-			is_emperor = yes
-			custom_trigger_tooltip = {
-				tooltip = austria_control_religion.tooltip
-				all_country = {
-					OR = {
-						is_part_of_hre = no
-						AND = {
-							religion = catholic
-							hre_religion = catholic
-						}
-						AND = {
-							religion = protestant
-							hre_religion = protestant
-						}
-						AND = {
-							religion = reformed
-							hre_religion = reformed
-						}
+		provinces_to_highlight = {
+			region = italy_region
+			NOT = { owned_by = ROOT }
+			NOT = { has_global_flag = emperor_trying_to_avert_shadow_kingdom }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						region = italy_region
 					}
 				}
 			}
 		}
-		effect = {
-			add_imperial_influence = 10
-			add_country_modifier = {
-				name = "austria_control_of_religion"
-				duration = 5475
-			}
-		}
-	}
-	
-	austria_germanize_sydtirol = {
-		icon = mission_have_two_subjects
-		position = 10
-		required_missions = { }
-		provinces_to_highlight = {
-			province_id = 110
+		trigger = {
 			OR = {
-				NOT = { culture = austrian }
-				NOT = { owned_by = ROOT }
-			}
-		}
-		trigger = {
-			owns = 110
-			110 = {
-				culture = austrian
+				custom_trigger_tooltip = {
+					tooltip = ME_HAB_SHADOWBRINGERS_TRIGGER
+					has_global_flag = emperor_trying_to_avert_shadow_kingdom
+				}
+				num_of_owned_provinces_with = {
+					value = 10
+					region = italy_region
+				}
 			}
 		}
 		effect = {
-			110 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-		}
-	}
-	
-	austria_centralize_the_empire = {
-		icon = mission_have_two_subjects
-		position = 11
-		required_missions = { austria_control_the_empire }
-		trigger = {
-			is_emperor = yes
 			if = {
 				limit = {
-					has_dlc = "Emperor"
+					num_of_owned_provinces_with = {
+						value = 10
+						region = italy_region
+					}
 				}
-				OR = {
-					hre_reform_passed = emperor_renovatio  
-					hre_reform_passed = emperor_reichskrieg  
+				italy_region = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_nationalism = -10
+					add_unrest = -2
 				}
 			}
 			else = {
-				hre_reform_passed = privilegia_de_non_appelando  
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_loyal_subjects"
-				duration = 7300
+				country_event = { id = ME_Austria_Events.1 }
 			}
 		}
 	}
-	
-	austria_build_navy = {
-		icon = mission_galleys_in_port
-		position = 12
+
+	ME_hab_reward_and_punishment = {
+		icon = up_the_adige
+		position = 15
+		required_missions = { ME_hab_shadowbringer }
+		provinces_to_highlight = {
+			OR = {
+				area = po_valley_area
+				area = lombardy_area
+				area = tuscany_area
+				area = piedmont_area
+				area = liguria_area
+				province_id = 105
+				province_id = 113
+				province_id = 106
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					OR = {
+						is_part_of_hre = no
+						owner = {
+							is_part_of_hre = no
+						}
+					}
+				}
+				ROOT = {
+					NOT = { has_country_flag = shadow_kingdom_early_success }
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = ME_HAB_REINED_IN_ITALY
+						has_country_flag = shadow_kingdom_early_success
+					}
+					custom_trigger_tooltip = {
+						tooltip = ME_HAB_NO_PROVINCE_IN_ITALY_IS_OWNED_BY_A_FOREIGNER
+						po_valley_area = {
+							type = all
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						lombardy_area = {
+							type = all
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						tuscany_area = {
+							type = all
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						piedmont_area = {
+							type = all
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						liguria_area = {
+							type = all
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						105 = {
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						113 = {
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+						106 = {
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+							}
+						}
+					}
+				}
+				AND = {
+					po_valley_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					lombardy_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					tuscany_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					piedmont_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					liguria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					105 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					113 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					106 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = me_hab_shadow_kingdom_peaceful
+				}
+				every_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						capital_scope = {
+							region = italy_region
+							is_part_of_hre = yes
+						}
+					}
+					add_country_modifier = {
+						name = me_hab_imperial_privilege
+						duration = 10950
+					}
+				}
+				add_country_modifier = {
+					name = me_hab_averted_shadow_kingdom
+					duration = 7300
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_flag = me_hab_shadow_kingdom_military
+				}
+				add_country_modifier = {
+					name = me_hab_iron_fist_in_italy
+					duration = 7300
+				}
+			}
+			else = {
+				custom_tooltip = ME_hab_reward_and_punishment_tt
+				tooltip = {
+					add_province_modifier = {
+						name = me_hab_province_privilege
+						duration = 7300
+					}
+				}
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							region = italy_region
+						}
+						add_province_modifier = {
+							name = me_hab_province_privilege
+							duration = 7300
+						}
+					}
+				}
+			}
+		}
+	}
+
+	ME_hab_expand_southwards = {
+		icon = develop_the_south
+		position = 14
+		required_missions = { ME_hab_papal_relations ME_hab_reward_and_punishment ME_hab_reorganize_the_kingdom }
+		provinces_to_highlight = {
+			OR = {
+				area = apulia_area
+				area = naples_area
+				area = calabria_area
+			}
+			OR = {
+				AND = {
+					is_part_of_hre = no
+					ROOT = {
+						is_emperor = yes
+					}
+					OR = {
+						apulia_area = {
+							NOT = { owned_by = ROOT }
+						}
+						naples_area = {
+							NOT = { owned_by = ROOT }
+						}
+						calabria_area = {
+							NOT = { owned_by = ROOT }
+						}
+					}
+				}
+				AND = {
+					NOT = { owned_by = ROOT }
+					OR = {
+						ROOT = {
+							is_emperor = no
+						}
+						apulia_area = {
+							is_part_of_hre = no
+						}
+						naples_area = {
+							is_part_of_hre = no
+						}
+						calabria_area = {
+							is_part_of_hre = no
+						}
+					}
+				}
+			}
+			ROOT = {
+				NOT = { senior_union_with = NAP }
+			}
+		}
+		trigger = {
+			OR = {
+				senior_union_with = NAP
+				AND = {
+					is_emperor = yes
+					apulia_area = {
+						type = all
+						is_part_of_hre = yes
+					}
+					naples_area = {
+						type = all
+						is_part_of_hre = yes
+					}
+					calabria_area = {
+						type = all
+						is_part_of_hre = yes
+					}
+				}
+				AND = {
+					apulia_area = {
+						type = all
+						owned_by = ROOT
+					}
+					naples_area = {
+						type = all
+						owned_by = ROOT
+					}
+					calabria_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					senior_union_with = NAP
+				}
+				NAP = {
+					country_event = { id = ME_Austria_Events.2 }
+				}
+			}
+			else_if = {
+				limit = {
+					apulia_area = {
+						type = all
+						owned_by = ROOT
+					}
+					naples_area = {
+						type = all
+						owned_by = ROOT
+					}
+					calabria_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+				apulia_area = {
+					add_nationalism = -10
+					add_local_autonomy = -25
+				}
+				naples_area = {
+					add_nationalism = -10
+					add_local_autonomy = -25
+				}
+				calabria_area = {
+					add_nationalism = -10
+					add_local_autonomy = -25
+				}
+			}
+			else = {
+				add_imperial_influence = 5
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+		}
+	}
+
+	ME_hab_expand_bohemian_cities = {
+		icon = bohemian_commonwealth
+		position = 15
+		required_missions = { ME_hab_talks_with_the_hansa ME_hab_inward_perfection }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 266
+					NOT = { development = 30 }
+				}
+				AND = {
+					OR = {
+						area = bohemia_area
+						area = erzgebirge_area
+						area = moravia_area
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							NOT = { development = 17 }
+							ROOT = {
+								NOT = {
+									num_of_owned_provinces_with = {
+										value = 5
+										OR = {
+											area = bohemia_area
+											area = erzgebirge_area
+											area = moravia_area
+										}
+										development = 17
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			bohemia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			erzgebirge_area = {
+				type = all
+				owned_by = ROOT
+			}
+			moravia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					area = bohemia_area
+					area = erzgebirge_area
+					area = moravia_area
+				}
+				development = 17
+			}
+			266 = {
+				development = 30
+			}
+		}
+		effect = {
+			bohemia_area = {
+				limit = {
+					development = 15
+				}
+				add_province_modifier = {
+					name = me_hab_foundation_of_new_cities
+					duration = 9125
+				}
+			}
+			erzgebirge_area = {
+				limit = {
+					development = 15
+				}
+				add_province_modifier = {
+					name = me_hab_foundation_of_new_cities
+					duration = 9125
+				}
+			}
+			moravia_area = {
+				limit = {
+					development = 15
+				}
+				add_province_modifier = {
+					name = me_hab_foundation_of_new_cities
+					duration = 9125
+				}
+			}
+			2967 = {
+				province_event = { id = ME_Austria_Events.3 }
+			}
+		}
+	}
+
+	ME_hab_people_of_the_realm = {
+		icon = develop_konigsberg
+		position = 19
+		required_missions = { ME_hab_early_industralization ME_hab_provinces_of_the_realm }
+		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = erzgebirge_area
+				area = moravia_area
+				area = lusatia_area
+				area = transdanubia_area
+				area = slovakia_area
+				area = alfold_area
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+			ROOT = {
+				NOT = {
+					development_in_provinces = {
+						value = 500
+						OR = {
+							area = bohemia_area
+							area = erzgebirge_area
+							area = moravia_area
+							area = lusatia_area
+							area = transdanubia_area
+							area = slovakia_area
+							area = alfold_area
+							area = transylvania_area
+							area = southern_transylvania_area
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			development_in_provinces = {
+				value = 500
+				OR = {
+					area = bohemia_area
+					area = erzgebirge_area
+					area = moravia_area
+					area = lusatia_area
+					area = transdanubia_area
+					area = slovakia_area
+					area = alfold_area
+					area = transylvania_area
+					area = southern_transylvania_area
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Austria_Events.4 }
+		}
+	}
+}
+
+ME_hab_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+
+	ME_hab_seize_croatia = {
+		icon = take_the_bishoprics
+		position = 3
+		required_missions = { ME_hab_decline_of_hungary }
+		provinces_to_highlight = {
+			OR = {
+				area = slavonia_area
+				area = croatia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 20
+			}
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 7
+						OR = {
+							area = croatia_area
+							area = slavonia_area
+						}
+						NOT = { local_autonomy = 20 }
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 7
+				OR = {
+					area = croatia_area
+					area = slavonia_area
+				}
+				NOT = { local_autonomy = 20 }
+			}
+		}
+		effect = {
+			4752 = {
+				hidden_effect = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						create_or_add_center_of_trade_level = { level = 1 }
+						add_base_production = 2
+					}
+				}
+				custom_tooltip = HAB_if_owned_by_root_or_non_sovereign
+				tooltip = {
+					create_or_add_center_of_trade_level = { level = 1 }
+					add_base_production = 2
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_distribute_3_manpower_in_croatia
+			hidden_effect = {
+				for = {
+					amount = 3
+					effect = "
+						random_province = {
+							limit = {
+								OR = {
+									area = croatia_area
+									area = slavonia_area
+								}
+								country_or_non_sovereign_subject_holds = ROOT
+							}
+							add_base_manpower = 1
+						}
+					"
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_if_seize_croatia_has_been_completed
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = ME_hab_the_kingdom_of_hungary
+					}
+					ME_give_claims = { area = southern_transylvania_area }
+					ME_give_claims = { area = transylvania_area }
+				}
+			}
+		}
+	}
+
+	ME_hab_the_castles_of_transylvania = {
+		icon = alpine_defenses
+		position = 4
+		required_missions = { ME_hab_seize_croatia ME_hab_the_kingdom_of_hungary }
+		provinces_to_highlight = {
+			OR = {
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				custom_tooltip = HAB_upgrade_bran_castle
+				hidden_effect = {
+					4128 = {
+						if = {
+							limit = {
+								owner = {
+									OR = {
+										accepted_culture = carpathian
+										primary_culture = carpathian
+									}
+								}
+								OR = {
+									has_great_project = {
+										type = bran_castle
+										tier = 1
+									}
+									has_great_project = {
+										type = bran_castle
+										tier = 2
+									}
+								}
+							}
+							add_great_project_tier = { type = bran_castle tier = 1 }
+						}
+					}
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_every_fort_in_carpathia
+			tooltip = {
+				add_province_modifier = {
+					name = me_hab_unshakable_fortresses
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				carpathia_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						fort_level = 2
+					}
+					add_province_modifier = {
+						name = me_hab_unshakable_fortresses
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	ME_hab_the_dracula_at_romania = {
+		icon = despot_stefans_legacy
+		position = 5
+		required_missions = { ME_hab_the_castles_of_transylvania }
+		provinces_to_highlight = {
+			OR = {
+				area = wallachia_area
+				area = moldavia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			wallachia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			moldavia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						transylvania_area = {
+							type = all
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						southern_transylvania_area = {
+							type = all
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+					country_event = { id = ME_Austria_Events.5 }
+				}
+			}
+			custom_tooltip = HAB_if_we_also_own_transylvania
+			tooltip = {
+				country_event = { id = ME_Austria_Events.5 }
+			}
+			custom_tooltip = " "
+			add_country_modifier = {
+				name = me_hab_order_of_the_dragon
+				duration = 5475
+			}
+		}
+	}
+
+	ME_hab_footfalls_of_an_empire = {
+		icon = eastern_catholicization
+		position = 6
+		required_missions = { ME_hab_the_dracula_at_romania ME_hab_the_polish_realm }
+		provinces_to_highlight = {
+			area = red_ruthenia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			total_development = 500
+			red_ruthenia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			red_ruthenia_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_province_modifier = {
+					name = me_hab_german_settlers
+					duration = 18250
+				}
+			}
+		}
+	}
+
+	ME_hab_the_austrian_empire = {
+		icon = powerhouse_of_the_north
+		position = 7
+		required_missions = { ME_hab_footfalls_of_an_empire }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_capital_of = ROOT
+					NOT = { development = 30 }
+				}
+				AND = {
+					owned_by = ROOT
+					NOT = { culture = ROOT }
+					ROOT = {
+						NOT = { num_accepted_cultures = 5 }
+						NOT = {
+							num_of_owned_provinces_with = {
+								culture = ROOT
+								value = 30
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			total_development = 1000
+			capital_scope = {
+				development = 30
+			}
+			army_size = 150
+			OR = {
+				num_accepted_cultures = 5
+				num_of_owned_provinces_with = {
+					culture = ROOT
+					value = 30
+				}
+			}
+		}
+		effect = {
+			override_country_name = AUSTRIAN_EMPIRE
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+					government = monarchy
+				}
+				set_government_rank = 3
+			}
+			add_country_modifier = {
+				name = me_hab_aeiou_modifier
+				duration = -1
+			}
+		}
+	}
+
+	ME_hab_the_false_empire = {
+		icon = take_constantinople
+		position = 8
+		required_missions = { ME_hab_crusade }
+		provinces_to_highlight = {
+			province_id = 151
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
+		}
+		trigger = {
+			151 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+			OR = {
+				NOT = { exists = BYZ }
+				overlord_of = BYZ
+			}
+		}
+		effect = {
+			country_event = { id = ME_Austria_Events.6 }
+		}
+	}
+
+	ME_hab_the_cultures_of_the_realm = {
+		icon = multicultural_empire
+		position = 9
 		required_missions = { }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { culture_group = ROOT }
+			has_owner_accepted_culture = yes
+			OR = {
+				local_autonomy = 10
+				unrest = 1
+				nationalism = 1
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						has_owner_accepted_culture = yes
+						NOT = { culture_group = ROOT }
+						NOT = { local_autonomy = 10 }
+						NOT = { unrest = 1 }
+						NOT = { nationalism = 1 }
+						value = 15
+					}
+				}
+			}
+		}
 		trigger = {
-			naval_forcelimit = 15
-			navy_size_percentage = 0.9
+			num_accepted_cultures = 4
+			num_of_owned_provinces_with = {
+				has_owner_accepted_culture = yes
+				NOT = { culture_group = ROOT }
+				NOT = { local_autonomy = 10 }
+				NOT = { unrest = 1 }
+				NOT = { nationalism = 1 }
+				value = 15
+			}
 		}
 		effect = {
-			add_dip_power = 40
-			add_navy_tradition = 10
-			add_country_modifier = {
-				name = "austria_naval_armament"
-				duration = 7300
+			country_event = { id = ME_Austria_Events.7 }
+		}
+	}
+
+	ME_hab_the_iberian_peninsula = {
+		icon = mission_restore_faith_in_the_throne
+		position = 10
+		required_missions = { }
+		provinces_to_highlight = {
+			region = iberia_region
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					OR = {
+						AND = {
+							exists = SPA
+							SPA = {
+								dynasty = ROOT
+							}
+							NOT = { is_rival = SPA }
+							NOT = { is_enemy = SPA }
+							alliance_with = SPA
+							marriage_with = SPA
+						}
+						AND = {
+							NOT = { exists = SPA }
+							exists = CAS
+							CAS = {
+								dynasty = ROOT
+							}
+							NOT = { is_rival = CAS }
+							NOT = { is_enemy = CAS }
+							alliance_with = CAS
+							marriage_with = CAS
+						}
+						num_of_owned_provinces_with = {
+							value = 20
+							region = iberia_region
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			#TODO: Idk how to even 'fix' this
+			OR = {
+				AND = {
+					exists = SPA
+					SPA = {
+						dynasty = ROOT
+					}
+					NOT = { is_rival = SPA }
+					NOT = { is_enemy = SPA }
+					alliance_with = SPA
+					marriage_with = SPA
+				}
+				AND = {
+					NOT = { exists = SPA }
+					exists = CAS
+					CAS = {
+						dynasty = ROOT
+					}
+					NOT = { is_rival = CAS }
+					NOT = { is_enemy = CAS }
+					alliance_with = CAS
+					marriage_with = CAS
+				}
+				num_of_owned_provinces_with = {
+					value = 20
+					region = iberia_region
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 20
+						region = iberia_region
+					}
+				}
+				ME_give_claims = { region = iberia_region }
+			}
+			else = {
+				country_event = {
+					id = ME_Austria_Events.24
+				}
 			}
 		}
 	}
-	
-	austria_dominate_seas = {
-		icon = mission_establish_high_seas_navy
-		position = 13
-		required_missions = { austria_build_navy }
+
+	ME_hab_the_spanish_throne = {
+		icon = mission_intervene_in_castile
+		position = 12
+		required_missions = { ME_hab_the_iberian_peninsula }
+		provinces_to_highlight = {
+			region = iberia_region
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 40
+						region = iberia_region
+					}
+				}
+			}
+		}
 		trigger = {
-			navy_size_percentage = 0.9
-			num_of_heavy_ship = 20
-			num_of_light_ship = 40
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 40
+					region = iberia_region
+				}
+				CAS = {
+					junior_union_with = ROOT
+					NOT = {
+						liberty_desire = 20
+					}
+				}
+				SPA = {
+					junior_union_with = ROOT
+					NOT = {
+						liberty_desire = 20
+					}
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					overlord_of = SPA
+				}
+				SPA = {
+					add_country_modifier = {
+						name = me_hab_habsburg_domination
+						duration = 18250
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					overlord_of = CAS
+				}
+				CAS = {
+					add_country_modifier = {
+						name = me_hab_habsburg_domination
+						duration = 18250
+					}
+				}
+			}
 			add_country_modifier = {
-				name = "austria_large_navy"
-				duration = 7300
+				name = me_hab_domination_of_iberia
+				duration = -1
 			}
 		}
 	}
 }
 
-ME_austria_missions_5 = {
+ME_hab_slot_4_catholic = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		NOT = {
+			has_country_flag = me_hab_protestant_austria
+		}
+	}
+	has_country_shield = yes
+
+	ME_hab_rally_the_men = {
+		icon = mission_guilds_of_barcelona
+		position = 13
+		required_missions = { ME_hab_loyalty_to_the_pope }
+		trigger = {
+			OR = {
+				calc_true_if = {
+					all_country = {
+						OR = {
+							religion = protestant
+							religion = reformed
+							religion = anglican
+						}
+						ROOT = {
+							has_won_war_against = { who = PREV }
+						}
+					}
+					amount = 3
+				}
+				all_country = {
+					OR = {
+						is_subject = yes
+						AND = {
+							NOT = { religion = protestant }
+							NOT = { religion = reformed }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			set_country_flag = me_hab_reformation_cb
+			custom_tooltip = me_hab_unlock_order_in_empire_cb
+			add_yearly_manpower = 1
+		}
+	}
+}
+
+ME_hab_slot_4_protestant = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_country_flag = me_hab_protestant_austria
+	}
+	has_country_shield = yes
+
+	ME_hab_spread_the_religion = {
+		icon = mission_guilds_of_barcelona
+		position = 13
+		required_missions = { ME_hab_fall_from_grace }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_20_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 20 }
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = me_hab_forge_ahead
+				duration = -1
+			}
+		}
+	}
+}
+
+ME_hab_slot_4_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+
+	ME_hab_reorganize_the_kingdom = {
+		icon = mission_guilds_of_barcelona
+		position = 15
+		required_missions = { ME_hab_shadowbringer }
+		provinces_to_highlight = {
+			OR = {
+				area = venetia_area
+				area = po_valley_area
+				area = lombardy_area
+				area = emilia_romagna_area
+				area = tuscany_area
+				area = liguria_area
+				area = piedmont_area
+				area = lazio_area
+				province_id = 2977
+				province_id = 119
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					is_emperor = yes
+					#this trigger requires all provinces in the highlighting to fulfill the triggers, when editing the trigger or highlighting change the other one too!
+					custom_trigger_tooltip = {
+						tooltip = HAB_all_highlighted_provs_are_hre
+						HAB_reorganize_the_kingdom_group_trigger = {
+							trigger = " is_part_of_hre = yes "
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = HAB_all_highlighted_provs_are_country_or_non_sov_owned
+					HAB_reorganize_the_kingdom_group_trigger = {
+						trigger = "
+							country_or_non_sovereign_subject_holds = ROOT
+						"
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Austria_Events.8 }
+		}
+	}
+
+	ME_hab_inward_perfection = {
+		icon = dominant_economy
+		position = 16
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 73
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 8 }
+			}
+		}
+		trigger = {
+			mission_completed = ME_hab_unite_the_realm
+			num_of_owned_provinces_with = {
+				value = 4
+				num_of_times_improved_by_owner = 5
+			}
+			73 = {
+				owned_by = ROOT
+				base_production = 8
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						owns = 73
+						73 = {
+							NOT = { has_province_modifier = hab_schwaz_mine }
+						}
+					}
+					country_event = { id = ME_Austria_Events.21 }
+				}
+			}
+			custom_tooltip = me_hab_if_is_between_year_1460_and_1480
+			tooltip = {
+				country_event = { id = ME_Austria_Events.21 }
+			}
+			73 = {
+				add_province_modifier = {
+					name = me_hab_the_austrian_economy
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ME_hab_provinces_of_the_realm = {
+		icon = the_ostend_company
+		position = 18
+		required_missions = { ME_hab_expand_bohemian_cities ME_hab_strengthen_our_capital }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 266
+				province_id = 153
+				province_id = 131
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 40 }
+			}
+		}
+		trigger = {
+			266 = {
+				owned_by = ROOT
+				development = 40
+			}
+			153 = {
+				owned_by = ROOT
+				development = 40
+			}
+			131 = {
+				owned_by = ROOT
+				development = 40
+			}
+		}
+		effect = {
+			country_event = { id = ME_Austria_Events.9 }
+		}
+	}
+}
+
+ME_hab_slot_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -1393,317 +3163,1019 @@ ME_austria_missions_5 = {
 		}
 	}
 	has_country_shield = yes
-	
-	austria_subjugate_salzburg = {
-		icon = mission_have_two_subjects
+
+	ME_hab_decline_of_hungary = {
+		icon = the_hungarian_question
 		position = 2
-		required_missions = { austria_control_electors }
+		required_missions = { ME_hab_aeiou }
+		trigger = {
+			total_own_and_non_tributary_subject_development = HUN
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = ME_HAB_LADISLAUS_RULER
+					has_country_flag = hab_ladislaus_postumus_king
+				}
+				mission_completed = ME_hab_unite_the_realm
+			}
+			OR = {
+				total_own_and_non_tributary_subject_development = 250
+				alliance_with = HUN
+			}
+		}
+		effect = {
+			ME_give_claims = { area = croatia_area }
+			ME_give_claims = { area = slavonia_area }
+			custom_tooltip = HAB_if_completed_by_alliance
+			tooltip = {
+				HUN = {
+					country_event = { id = ME_Austria_Events.10 }
+				}
+				custom_tooltip = HAB_if_hungary_declines
+				custom_tooltip = " "
+			}
+			custom_tooltip = HAB_if_completed_by_valid_personal_union
+			tooltip = {
+				add_casus_belli = {
+					target = HUN
+					type = cb_restore_personal_union
+					months = 300
+				}
+				custom_tooltip = ME_cb_25
+				custom_tooltip = " "
+			}
+			custom_tooltip = HAB_if_completed_by_neither_of_above
+			tooltip = {
+				ME_give_claims = { area = slovakia_area }
+				ME_give_claims = { area = transdanubia_area }
+				ME_give_claims = { area = alfold_area }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						alliance_with = HUN
+					}
+					HUN = {
+						country_event = { id = ME_Austria_Events.10 }
+					}
+				} #TODO Tooltip, of course
+				else_if = {
+					limit = {
+						exists = HUN
+						HUN = {
+							valid_for_personal_unions_trigger = yes
+						}
+						valid_for_personal_unions_trigger = yes
+					}
+					add_casus_belli = {
+						target = HUN
+						type = cb_restore_personal_union
+						months = 300
+					}
+					custom_tooltip = ME_cb_25
+				}
+				else = {
+					ME_give_claims = { area = slovakia_area }
+					ME_give_claims = { area = transdanubia_area }
+					ME_give_claims = { area = alfold_area }
+				}
+			}
+		}
+	}
+
+	ME_hab_the_kingdom_of_hungary = {
+		icon = a_strong_government
+		position = 3
+		required_missions = { ME_hab_decline_of_hungary }
 		provinces_to_highlight = {
-			province_id = 76
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				area = slovakia_area
+				area = transdanubia_area
+				area = alfold_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 20
+			}
 		}
 		trigger = {
-			76 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				HUN = {
+					junior_union_with = ROOT
+				}
+				num_of_owned_provinces_with = {
+					value = 12
+					OR = {
+						area = slovakia_area
+						area = transdanubia_area
+						area = alfold_area
+					}
+					NOT = { local_autonomy = 20 }
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = HAB_if_seize_croatia_has_been_completed
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = ME_hab_seize_croatia
+					}
+					ME_give_claims = { area = southern_transylvania_area }
+					ME_give_claims = { area = transylvania_area }
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_if_completed_by_pu_with_hun
+			tooltip = {
+				country_event = { id = ME_Austria_Events.11 }
+				custom_tooltip = " "
+			}
+			custom_tooltip = HAB_if_completed_province_ownership
+			tooltip = {
+				add_country_modifier = {
+					name = royal_hungary
+					duration = 5475
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						HUN = {
+							junior_union_with = ROOT
+						}
+					}
+					country_event = { id = ME_Austria_Events.11 }
+				}
+				else = {
+					add_country_modifier = {
+						name = royal_hungary
+						duration = 5475
+					}
+				}
+			}
+		}
+	}
+
+	ME_hab_avenge_christedom = {
+		icon = revenge_for_nicopolis
+		position = 5
+		required_missions = { ME_hab_the_castles_of_transylvania }
+		provinces_to_highlight = {
+			region = carpathia_region
+			country_or_non_sovereign_subject_holds = TUR
+		}
+		trigger = {
+			if = {
+				limit = {
+					TUR = {
+						exists = yes
+					}
+				}
+				army_size = TUR
+				carpathia_region = {
+					type = all
+					NOT = { country_or_non_sovereign_subject_holds = TUR }
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ME_HAB_STRONGEST_ARMY_IN_BALKANS
+					NOT = {
+						any_country = {
+							capital_scope = { region = balkan_region }
+							army_size = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_under_a_new_banner
+				duration = 9125
+			}
+			if = {
+				limit = {
+					religion = catholic
+					exists = PAP
+				}
+				PAP = {
+					country_event = { id = ME_Austria_Events.12 }
+				}
+			}
+		}
+	}
+
+	ME_hab_crusade = {
+		icon = the_holy_league
+		position = 7
+		required_missions = { ME_hab_avenge_christedom }
+		provinces_to_highlight = {
+			OR = {
+				area = bulgaria_area
+				area = silistria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = TUR }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				offensive_war_with = TUR
+				war_score_against = {
+					who = TUR
+					value = 50
+				}
+			}
+			else = {
+				bulgaria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				silistria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
 			if = {
 				limit = {
-					exists = SLZ
-					overlord_of = SLZ
+					exists = TUR
 				}
-				add_country_modifier = {
-					name = "austria_subjugation_salzburg"
-					duration = 5475
+				custom_tooltip = HAB_gain_claim_on_turkish_balkans
+				hidden_effect = {
+					balkan_region = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+							owned_by = TUR
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 			}
 			else = {
-				add_prestige = 10
-				add_legitimacy_equivalent = { amount = 5 republican_tradition = 5 }
+				ME_give_claims = { area = thrace_area }
+				ME_give_claims = { area = macedonia_area }
 			}
+			add_yearly_manpower = 1
 		}
 	}
-	
-	austria_burgundian_inheritance = {
-		icon = mission_monarch_in_throne_room
-		position = 5
-		required_missions = { austria_subjugate_salzburg }
+
+	ME_hab_endwalker = {
+		icon = defend_the_city
+		position = 8
+		required_missions = { ME_hab_crusade }
 		provinces_to_highlight = {
+			region = balkan_region
 			OR = {
-				area = lorraine_area
-				area = flanders_area
-				area = holland_area
-				province_id = 193
-				province_id = 94
-				province_id = 1866
-				province_id = 91
-				province_id = 92
-				province_id = 1743
-				province_id = 95
-				province_id = 4764
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			193 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			94 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1866 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			91 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			92 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1743 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			95 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4764 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lorraine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			flanders_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			holland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "austria_control_of_low_countries"
-				duration = 9125
-			}
-		}
-	}
-	
-	austria_union_spain = {
-		icon = mission_empire
-		position = 6
-		required_missions = { austria_burgundian_inheritance }
-		provinces_to_highlight = {
-			ROOT = {
-				NOT = { senior_union_with = SPA }
-				NOT = { senior_union_with = CAS }
-			}
-			OR = {
-				area = aragon_area
-				area = catalonia_area
-				area = valencia_area
-				area = lower_andalucia_area
-				area = upper_andalucia_area
-				area = castille_area
-				area = toledo_area
-				area = asturias_area
-				area = leon_area
-				province_id = 209
-				province_id = 210
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				senior_union_with = SPA
-				senior_union_with = CAS
+				country_or_non_sovereign_subject_holds = TUR
+				religion_group = muslim
 				AND = {
-					aragon_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					catalonia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					valencia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					lower_andalucia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					upper_andalucia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					castille_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					toledo_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					asturias_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					leon_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					209 = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					210 = {
-						country_or_non_sovereign_subject_holds = ROOT
+					NOT = { owned_by = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 30
+								region = balkan_region
+							}
+						}
 					}
 				}
 			}
 		}
-		effect = {
-			add_dip_power = 50
-			add_adm_power = 50
-			add_country_modifier = {
-				name = "austria_habsburg_triumph"
-				duration = 7300
-			}
-		}
-	}
-	
-	austria_kingdom_of_naples = {
-		icon = mission_monarch_in_throne_room
-		position = 8
-		required_missions = {
-			austria_lombardy_venetia
-			austria_union_spain
-		}
-		provinces_to_highlight = {
-			OR = {
-				area = apulia_area
-				area = calabria_area
-				province_id = 120
-				province_id = 121
-				province_id = 2983
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			apulia_area = {
+			balkan_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { country_or_non_sovereign_subject_holds = TUR }
+				NOT = { religion_group = muslim }
 			}
-			calabria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			120 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			121 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2983 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_owned_provinces_with = {
+				value = 30
+				region = balkan_region
 			}
 		}
 		effect = {
-			add_dip_power = 40
+			custom_tooltip = every_country_in_europe
+			tooltip = {
+				country_event = { id = ME_Austria_Events.22 }
+			}
+			hidden_effect = {
+				balkan_region = {
+					remove_core = TUR
+				}
+				every_country = {
+					limit = {
+						capital_scope = {
+							region = europe
+						}
+					}
+					country_event = { id = ME_Austria_Events.22 }
+				}
+			}
 		}
 	}
-	
-	austria_discover_america = {
-		icon = mission_establish_high_seas_navy
-		position = 9
-		required_missions = { }
+
+	ME_hab_habsburg_magnificence = {
+		icon = imperial_ascendancy
+		position = 10
+		required_missions = { ME_hab_the_cultures_of_the_realm }
+		trigger = {
+			has_institution = enlightenment
+			prestige = 50
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				is_great_power = yes
+				NOT = { great_power_rank = 4 }
+			} #TODO: scripted trigger this
+			has_mil_advisor_3 = yes
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_our_seat_in_the_world
+				duration = -1
+			}
+		}
+	}
+
+	ME_hab_rising_unrest = {
+		icon = catholic_confraternity
+		position = 11
+		required_missions = {  }
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = obj_discover_america_tooltip
-				OR = {
-					north_america = { has_discovered = ROOT }
-					south_america = { has_discovered = ROOT }
+				tooltip = me_hab_reformation_started
+				has_global_flag = reformation_started
+			}
+			OR = {
+				religion = protestant
+				religion = reformed
+				has_country_modifier = counter_reformation
+			}
+		}
+		effect = {
+			custom_tooltip = me_hab_get_new_missions
+			if = {
+				limit = {
+					NOT = { religion = catholic }
 				}
+				set_country_flag = me_hab_protestant_austria
+			}
+			swap_non_generic_missions = yes
+			add_prestige_or_monarch_power = { amount = 20 }
+		}
+	}
+}
+
+ME_hab_slot_5_catholic = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		NOT = {
+			has_country_flag = me_hab_protestant_austria
+		}
+	}
+	has_country_shield = yes
+
+	ME_hab_loyalty_to_the_pope = {
+		icon = sway_the_pope
+		position = 12
+		required_missions = { ME_hab_rising_unrest }
+		trigger = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				PAP = {
+					has_opinion = {
+						who = ROOT
+						value = 10
+					}
+				}
+			}
+			else = {
+				is_papal_controller = yes
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			else = {
+				papal_influence = 50
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "austria_colonial_range"
+				name = me_hab_papal_approval
 				duration = 7300
 			}
 		}
 	}
-	
-	austria_colonial_ventures = {
-		icon = mission_colonial
-		position = 10
-		required_missions = { austria_discover_america }
+
+	ME_hab_cleanse_the_unbelievers = {
+		icon = mission_religious
+		position = 13
+		required_missions = { ME_hab_loyalty_to_the_pope }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_20_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 20 }
+			}
+			religious_unity = 1
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = me_hab_bulward_against_the_reformation
+				duration = -1
+			}
+		}
+	}
+
+	ME_hab_heavensward = {
+		icon = mission_european_church
+		position = 14
+		required_missions = { ME_hab_cleanse_the_unbelievers ME_hab_rally_the_men }
+		trigger = {
+			OR = {
+				temple = 20
+				cathedral = 20
+			}
+			OR = {
+				full_idea_group = religious_ideas
+				has_estate_privilege = estate_church_one_faith_one_culture
+			}
+		}
+		effect = {
+			add_papal_influence = 20
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				add_curia_treasury = 300
+			}
+		}
+	}
+}
+
+ME_hab_slot_5_catholic_dlc = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Art of War"
+	}
+	potential = {
+		has_dlc = "Art of War"
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		NOT = {
+			has_country_flag = me_hab_protestant_austria
+		}
+	}
+	has_country_shield = yes
+
+	ME_hab_stormblood_catholic = {
+		icon = me_mission_army
+		position = 15
+		required_missions = { ME_hab_heavensward }
+		trigger = {
+			OR = {
+				AND = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				AND = {
+					hre_religion_locked = yes
+					hre_religion = ROOT
+				}
+				AND = {
+					hre_religion_treaty = yes
+					OR = {
+						is_emperor = yes
+						emperor = {
+							religion = ROOT
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = obj_religious_league_war_on_winning_side_tooltip
+					has_country_flag = religious_league_war_on_winning_side
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				add_country_modifier = {
+					name = me_hab_born_from_blood
+					duration = 3650
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							hre_religion_locked = yes
+							hre_religion = ROOT
+						}
+						AND = {
+							hre_religion_treaty = yes
+							OR = {
+								is_emperor = yes
+								emperor = {
+									religion = ROOT
+								}
+							}
+						}
+					}
+				}
+				add_ruler_modifier = {
+					name = me_hab_end_of_a_conflict
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_country_modifier = {
+						name = me_hab_peace_in_the_empire
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_explot_the_german_discord
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+ME_hab_slot_5_protestant = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_country_flag = me_hab_protestant_austria
+	}
+	has_country_shield = yes
+
+	ME_hab_fall_from_grace = {
+		icon = sway_the_pope
+		position = 12
+		required_missions = { ME_hab_rising_unrest }
+		trigger = {
+			religious_unity = 0.75
+			calc_true_if = {
+				all_country = {
+					has_opinion = {
+						who = ROOT
+						value = 70
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_regain_our_seat
+				duration = -1
+			}
+			custom_tooltip = me_hab_modifier_will_go_away
+		}
+	}
+
+	ME_hab_we_fall = {
+		icon = mission_religious
+		position = 13
+		required_missions = { ME_hab_fall_from_grace }
+		provinces_to_highlight = {
+			province_id = 118
+			NOT = { controlled_by = ROOT }
+			ROOT = {
+				NOT = {
+					OR = {
+						calc_true_if = {
+							all_elector = {
+								religion = ROOT
+								reverse_has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+							amount = 1
+						}
+						any_elector = {
+							religion = catholic
+							capital_scope = {
+								controlled_by = ROOT
+							}
+						}
+						118 = {
+							owner = {
+								OR = {
+									has_opinion_modifier = {
+										who = ROOT
+										modifier = insulted
+									}
+									has_opinion_modifier = {
+										who = ROOT
+										modifier = scornfully_insulted
+									}
+								}
+							}
+						}
+						118 = {
+							controlled_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				calc_true_if = {
+					all_elector = {
+						religion = ROOT
+						reverse_has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					amount = 1
+				}
+				any_elector = {
+					religion = catholic
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+				118 = {
+					owner = {
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
+					}
+				}
+				118 = {
+					controlled_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 0.8
+			every_known_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					religion = ROOT
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = me_hab_champion_of_reformation
+				}
+			}
+		}
+	}
+
+	ME_hab_steps_of_faith = {
+		icon = mission_european_church
+		position = 14
+		required_missions = { ME_hab_we_fall ME_hab_spread_the_religion }
 		provinces_to_highlight = {
 			OR = {
-				continent = north_america
-				continent = south_america
-				continent = oceania
+				region = north_german_region
+				region = south_german_region
 			}
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { religion = ROOT }
+			ROOT = {
+				NOT = {
+					calc_true_if = {
+						all_country = {
+							capital_scope = {
+								continent = europe
+							}
+							religion = ROOT
+							total_development = 200
+						}
+						amount = 5
+					}
+				}
+			}
 		}
 		trigger = {
 			OR = {
-				north_america = {
-					country_or_non_sovereign_subject_holds = ROOT
+				calc_true_if = {
+					all_country = {
+						capital_scope = {
+							continent = europe
+						}
+						religion = ROOT
+						total_development = 200
+					}
+					amount = 5
 				}
-				south_america = {
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				oceania = {
-					country_or_non_sovereign_subject_holds = ROOT
+				AND = {
+					north_german_region = {
+						type = all
+						religion = ROOT
+					}
+					south_german_region = {
+						type = all
+						religion = ROOT
+					}
 				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_colonial_enthusiasm"
-				duration = 9125
+			every_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					NOT = { religion = ROOT }
+					religion_group = christian
+					capital_scope = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+				}
+				country_event = { id = ME_Austria_Events.30 }
 			}
 		}
 	}
-	
-	austria_new_world_colony = {
-		icon = mission_trade_company_region_abroad
-		position = 11
-		required_missions = { austria_colonial_ventures }
+}
+
+ME_hab_slot_5_protestant_dlc = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Art of War"
+	}
+	potential = {
+		has_dlc = "Art of War"
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_country_flag = me_hab_protestant_austria
+	}
+	has_country_shield = yes
+
+	ME_hab_stormblood_protestant = {
+		icon = me_mission_army
+		position = 15
+		required_missions = { ME_hab_steps_of_faith }
 		trigger = {
-			calc_true_if = {
-				amount = 1
-				all_subject_country = {
-					is_colonial_nation = yes
+			OR = {
+				AND = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				AND = {
+					hre_religion_locked = yes
+					hre_religion = ROOT
+				}
+				AND = {
+					hre_religion_treaty = yes
+					OR = {
+						is_emperor = yes
+						emperor = {
+							religion = ROOT
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = obj_religious_league_war_on_winning_side_tooltip
+					has_country_flag = religious_league_war_on_winning_side
 				}
 			}
 		}
 		effect = {
-			add_dip_power = 40
+			if = {
+				limit = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				add_country_modifier = {
+					name = me_hab_born_from_blood
+					duration = 3650
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							hre_religion_locked = yes
+							hre_religion = ROOT
+						}
+						AND = {
+							hre_religion_treaty = yes
+							OR = {
+								is_emperor = yes
+								emperor = {
+									religion = ROOT
+								}
+							}
+						}
+					}
+				}
+				add_ruler_modifier = {
+					name = me_hab_end_of_a_conflict
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_country_modifier = {
+						name = me_hab_peace_in_the_empire
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_explot_the_german_discord
+					duration = 7300
+				}
+			}
 		}
 	}
-	
-	austria_colonial_empire = {
-		icon = mission_have_two_subjects
-		position = 12
-		required_missions = { austria_new_world_colony }
-		trigger = {
-			calc_true_if = {
-				amount = 5
-				all_subject_country = {
-					is_colonial_nation = yes
-				}
+}
+
+ME_hab_slot_5_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
 			}
 		}
+	}
+	has_country_shield = yes
+
+	ME_hab_strengthen_our_capital = {
+		icon = the_viennese_waltz
+		position = 17
+		required_missions = { ME_hab_inward_perfection }
+		provinces_to_highlight = {
+			province_id = 134
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+				NOT = { num_of_buildings_in_province = 4 }
+				north_german_region = {
+                    higher_development_than = 134
+                }
+				south_german_region = {
+					NOT = { province_id = 134 }
+                    higher_development_than = 134
+                }
+			}
+		}
+		trigger = {
+			134 = {
+				num_of_buildings_in_province = 4
+				development = 30
+				owned_by = ROOT
+			}
+			custom_trigger_tooltip = {
+                tooltip = ME_HAB_VIENNA_BEST_GERMAN_PROVINCE
+                north_german_region = {
+                    type = all
+					NOT = { higher_development_than = 134 }
+                }
+				south_german_region = {
+                    type = all
+                    OR = {
+						province_id = 134
+                        NOT = { higher_development_than = 134 }
+                    }
+                }
+            }
+		}
 		effect = {
-			add_country_modifier = {
-				name = "austria_colonial_empire_modifier"
-				duration = 7300
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+					is_expanded_mod_active = { mod = great_monuments }
+					134 = {
+						NOT = {
+							has_great_project = {
+								type = gme_schonbrunn
+								tier = 3
+							}
+						}
+					}
+				}
+				134 = {
+					add_great_project_tier = {
+						type = gme_schonbrunn
+						tier = 1
+					}
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+			add_estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 10
+			}
+			if = {
+				limit = {
+					has_regency = no
+					NOT = { DIP = 6 }
+				}
+				change_dip = 1
+			}
+			else = {
+				add_dip_power = 100
+			}
+			if = {
+				limit = {
+					has_heir = yes
+					NOT = { heir_dip = 6 }
+				}
+				change_heir_dip = 1
+			}
+			else = {
+				add_dip_power = 100
 			}
 		}
 	}

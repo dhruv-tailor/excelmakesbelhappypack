@@ -1,0 +1,251 @@
+austria_increase_relations = {
+	category = influence
+
+	require_acceptance = no
+
+	is_visible = {
+		has_country_flag = habsburg_glory_unlocked
+		dynasty = "von Habsburg"
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = habsburg_glory_unlocked
+			dynasty = "von Habsburg"
+		}
+		check_variable = {
+			which = habsburg_glory
+			value = 20
+		}
+	}
+
+	on_accept = {
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = me_hab_spent_glory
+			}
+		}
+		HAB_change_habsburg_glory = { amount = -20 }
+		clr_country_flag = me_hab_improved_relations
+		set_country_flag = me_hab_improved_relations
+	}
+
+	ai_will_do = {
+		check_variable = {
+			which = habsburg_glory
+			value = 60
+		}
+		FROM = {
+			is_elector = yes
+			NOT = { preferred_emperor = ROOT }
+		}
+		OR = {
+			NOT = { has_country_flag = me_hab_improved_relations }
+			had_country_flag = { flag = me_hab_improved_relations days = 1825 }
+		}
+	}
+}
+
+austria_put_relative_as_heir = {
+	category = influence
+
+	require_acceptance = yes
+
+	is_visible = {
+		has_country_flag = habsburg_glory_unlocked
+		dynasty = "von Habsburg"
+		FROM = {
+			government = monarchy
+			has_government_attribute = heir
+			religion_group = ROOT
+			NOT = { dynasty = ROOT }
+		}
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = habsburg_glory_unlocked
+			dynasty = "von Habsburg"
+			FROM = {
+				government = monarchy
+				has_government_attribute = heir
+				religion_group = ROOT
+				NOT = { dynasty = ROOT }
+			}
+		}
+		check_variable = {
+			which = habsburg_glory
+			value = 81 #The actual interaction requires the last tier of Habsburg Glory, hence why this
+		}
+		FROM = {
+			has_heir = no
+		}
+	}
+
+	on_accept = {
+		FROM = {
+			define_heir = {
+				dynasty = ROOT
+				culture = ROOT
+				religion = ROOT
+				claim = 50
+				male = yes
+				adm = 2
+				dip = 2
+				mil = 2
+				hidden = yes
+				block_disinherit = yes
+			}
+		}
+		HAB_change_habsburg_glory = { amount = -50 }
+	}
+
+	on_decline = {
+		FROM = {
+			clr_country_flag = declined_heir_from_@ROOT
+			set_country_flag = declined_heir_from_@ROOT
+		}
+	}
+
+	ai_acceptance = {
+		add_entry = {
+			name = HAB_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_allied }
+						ai_attitude = { who = ROOT attitude = attitude_friendly }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+		}
+		add_entry = {
+			name = HAB_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					ai_attitude = { who = ROOT attitude = attitude_threatened }
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 60
+			}
+		}
+		add_entry = {
+			name = HAB_FROM_ATTITUDE_TOWARDS_ROOT
+			limit = {
+				FROM = {
+					OR = {
+						ai_attitude = { who = ROOT attitude = attitude_hostile }
+						ai_attitude = { who = ROOT attitude = attitude_rivalry }
+						ai_attitude = { who = ROOT attitude = attitude_outraged }
+					}
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = HAB_FROM_ROOT_ARE_RIVALS
+			limit = {
+				OR = {
+					is_rival = FROM
+					is_enemy = FROM
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 1000
+			}
+			divide_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = HAB_FROM_HAS_MARRIAGE_WITH_ROOT
+			limit = {
+				marriage_with = FROM
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = HAB_ROOT_FROM_NOT_SAME_RELIGION
+			limit = {
+				NOT = { religion = FROM }
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 50
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+		add_entry = {
+			name = OPINION
+			export_to_variable = {
+				which = ai_value
+				value = opinion
+				who = FROM
+				with = ROOT
+			}
+		}
+		add_entry = {
+			name = HAB_ROOT_FROM_ARE_HISTORICAL_FRIENDS
+			limit = {
+				FROM = {
+					historical_friend_with = ROOT
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 10
+			}
+		}
+		add_entry = {
+			name = HAB_ROOT_FROM_ARE_HISTORICAL_RIVALS
+			limit = {
+				FROM = {
+					historical_rival_with = ROOT
+				}
+			}
+			export_to_variable = {
+				which = ai_value
+				value = 100
+			}
+			multiply_variable = { which = ai_value value = -1 }
+		}
+	}
+
+	ai_will_do = {
+		check_variable = {
+			which = habsburg_glory
+			value = 100
+		}
+		FROM = {
+			total_development = 200
+			religion = ROOT
+			NOT = {
+				historical_rival_with = ROOT
+				is_rival = ROOT
+				is_enemy = ROOT
+			}
+			OR = {
+				ai_attitude = { who = ROOT attitude = attitude_allied }
+				ai_attitude = { who = ROOT attitude = attitude_friendly }
+				ai_attitude = { who = ROOT attitude = attitude_threatened }
+			}
+			OR = {
+				NOT = { has_country_flag = declined_heir_from_@ROOT }
+				had_country_flag = { flag = declined_heir_from_@ROOT days = 1825 }
+			}
+		}
+	}
+}

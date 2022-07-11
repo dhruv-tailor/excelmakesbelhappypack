@@ -1,0 +1,418 @@
+HAB_change_habsburg_glory = { #amount
+	tooltip = {
+		change_variable = {
+			which = habsburg_glory
+			value = $amount$
+		}
+	}
+	
+	hidden_effect = {
+		change_variable = {
+			which = habsburg_glory
+			value = $amount$
+		}
+		HAB_determine_habsburg_glory_bonus = yes
+	}
+}
+
+HAB_determine_habsburg_glory_bonus = {
+	remove_country_modifier = HAB_habsburg_glory_21_40
+	remove_country_modifier = HAB_habsburg_glory_41_60
+	remove_country_modifier = HAB_habsburg_glory_61_80
+	remove_country_modifier = HAB_habsburg_glory_81_100
+	
+	if = {
+		limit = {
+			check_variable = {
+				which = habsburg_glory
+				value = 81
+			}
+		}
+		add_country_modifier = {
+			name = HAB_habsburg_glory_81_100
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = habsburg_glory
+				value = 61
+			}
+		}
+		add_country_modifier = {
+			name = HAB_habsburg_glory_61_80
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = habsburg_glory
+				value = 41
+			}
+		}
+		add_country_modifier = {
+			name = HAB_habsburg_glory_41_60
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = habsburg_glory
+				value = 21
+			}
+		}
+		add_country_modifier = {
+			name = HAB_habsburg_glory_21_40
+			duration = -1
+		}
+	}
+	else = { }
+}
+
+HAB_balkanize_poland_into_hre_effect = {
+	#Deal with Polish subjects - the ones in the german region are to be released and the rest inherited. Leave Lithuania (they are important to the end)
+	
+	$Poland$ = {
+		every_subject_country = {
+			limit = {
+				NOT = {
+					tag = LIT
+				}
+			}
+			if = {
+				limit = {
+					capital_scope = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+				}
+				grant_independence = yes
+			}
+			else = {
+				overlord = {
+					inherit = PREV
+				}
+			}
+		}
+		
+		every_owned_province = { #Get rid of those provinces.
+			limit = {
+				OR = {
+					region = north_german_region
+					region = south_german_region
+				}
+			}
+			random_core_country = {
+				limit = {
+					NOT = { exists = yes }
+				}
+				save_event_target_as = HAB_temp
+				PREV = {
+					$Poland$ = {
+						release = event_target:HAB_temp
+					}
+				}
+			} #try again
+			if = {
+				limit = {
+					owned_by = $Poland$
+				}
+				random_core_country = {
+					limit = {
+						exists = yes
+						is_part_of_hre = yes
+					}
+					every_core_province = {
+						limit = {
+							owned_by = $poland$
+						}
+						cede_province = PREV
+					}
+				}
+			}
+			#omg try again
+			if = {
+				limit = {
+					owned_by = $Poland$
+				}
+				random_core_country = {
+					limit = {
+						exists = yes
+					}
+					every_core_province = {
+						limit = {
+							owned_by = $poland$
+						}
+						cede_province = PREV
+					}
+				}
+			}
+			#at this point I give up
+		}
+	}
+	
+	$Poland$ = {
+		every_owned_province = {
+			set_province_flag = HAB_set_hre
+		}
+	}
+	#Now let us handle individual provinces
+	if = {
+		limit = {
+			NOT = {
+				exists = KRA
+			}
+		}
+		262 = {
+			if = {
+				limit = {
+					owned_by = $Poland$
+				}
+				add_core = KRA
+			}
+		}
+		$Poland$ = { 
+			release = KRA
+		}
+	}
+	else = {
+		262 = {
+			add_core = LRP
+		}
+	}
+	
+	sandomierz_area = {
+		limit = {
+			owned_by = $Poland$
+		}
+		add_core = LRP
+	}
+	malopolska_area = {
+		limit = {
+			owned_by = $Poland$
+		}
+		add_core = LRP
+	}
+	
+	$Poland$ = {
+		release = LRP
+	}
+	
+	4526 = {
+		if = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = GNE
+		}
+	}
+	4533 = {
+		if = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = GNE
+		}
+	}
+	258 = {
+		if = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = GNE
+		}
+	}
+	1939 = {
+		if = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = GNE
+		}
+	}
+	$Poland$ = {
+		release = GNE
+	}
+	
+	wielkopolska_area = {
+		limit = {
+			owned_by = $Poland$
+		}
+		add_core = GRP
+	}
+	
+	2997 = {
+		if = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = GRP
+		}
+	}
+	
+	$Poland$ = {
+		release = GRP
+	}
+	
+	if = {
+		limit = {
+			NOT = { 
+				exists = MAZ
+			}
+		}
+		mazovia_area = {
+			limit = {
+				owned_by = $Poland$
+			}
+			add_core = MAZ
+		}
+		red_ruthenia_area = {
+			remove_core = MAZ
+		}
+	}
+	$Poland$ = {
+		release = MAZ
+	}
+	
+	kuyavia_area = {
+		limit = {
+			owned_by = $Poland$
+		}
+		add_core = KUY
+	}
+	
+	$Poland$ = {
+		release = KUY
+	}
+	
+	if = {
+		limit = {
+			NOT = { exists = DNZ }
+		}
+		43 = {
+			if = {
+				limit = {
+					owned_by = $Poland$
+				}
+				add_core = DNZ
+				$Poland$ = {
+					release = DNZ
+				}
+			}
+		}
+	}
+	else = {
+		43 = {
+			if = {
+				limit = {
+					owned_by = $Poland$
+				}
+				add_core = WRM
+			}
+		}
+	}
+	
+	1841 = {
+		if = {
+			limit = { 
+				owned_by = $Poland$
+			}
+			add_core = WRM
+		}
+	}
+	42 = {
+		if = {
+			limit = { 
+				owned_by = $Poland$
+			}
+			add_core = WRM
+		}
+	}
+	
+	$Poland$ = {
+		release = WRM 
+	}
+	
+	east_prussia_area = {
+		limit = {
+			owned_by = $Poland$
+		}
+		add_core = PRU
+	}
+	$Poland$ = {
+		release = PRU
+	}
+	
+	$Poland$ = {
+		every_owned_province = {
+			clr_province_flag = HAB_set_hre
+		}
+	}
+	
+	every_province = {
+		limit = {
+			has_province_flag = HAB_set_hre
+		}
+		clr_province_flag = HAB_set_hre
+		set_in_empire = yes
+		add_core = LIT
+	}
+	
+	$Poland$ = {
+		save_event_target_as = HAB_target_pol
+	}
+	WRM = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	GNE = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	LRP = {
+		change_religion =  event_target:HAB_target_pol
+		change_primary_culture =  event_target:HAB_target_pol
+	}
+	GRP = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	KUY = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	DNZ = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	PRU = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+	}
+	MAZ = {
+		change_religion = event_target:HAB_target_pol
+		change_primary_culture = event_target:HAB_target_pol
+		define_ruler = {
+			name = "Bartlomiej I 'Zlewikk'"
+			dynasty = "Zalewski"
+			change_adm = 3
+			change_dip = 3
+			change_mil = 3
+			max_random_adm = 3
+			max_random_dip = 3
+			max_random_mil = 3
+			age = 20
+			claim = 100
+		}
+	}
+	
+	LIT = {
+		inherit = $Poland$
+		change_tag = PLC
+	}
+}
